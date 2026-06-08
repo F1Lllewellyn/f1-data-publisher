@@ -1,12 +1,22 @@
 {
-"year": 2026,
-"event_name": "Spanish Grand Prix",
-"country_name": "Spain",
-"sessions": ["FP1", "FP2", "FP3", "Q", "R"],
-"include_openf1": true,
-"include_fastf1": true,
-"include_team_radio": true,
-"include_car_data": false,
-"publish_latest": true,
-"publish_history": true
+  "year": 2026,
+  "auto_event": true,
+  "auto_event_lead_hours": 48,
+  "auto_event_lag_hours": 36,
+  "auto_event_next_days": 10,
+  "auto_event_recent_days": 3,
+  "fastf1_match_threshold": 0.55,
+  "sessions": [
+    "FP1",
+    "FP2",
+    "FP3",
+    "Q",
+    "R"
+  ],
+  "include_openf1": true,
+  "include_fastf1": true,
+  "include_team_radio": true,
+  "include_car_data": false,
+  "publish_latest": true,
+  "publish_history": true
 }
