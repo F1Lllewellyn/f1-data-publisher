@@ -1,83 +1,79 @@
 name: F1 hands-free public data publisher
 
 on:
-workflow_dispatch:
-inputs:
-year:
-description: "Season year"
-required: true
-default: "2026"
-event_name:
-description: "FastF1 event name"
-required: true
-default: "Spanish Grand Prix"
-country_name:
-description: "OpenF1 country name"
-required: true
-default: "Spain"
-sessions:
-description: "Comma-separated sessions"
-required: true
-default: "FP3,Q,R"
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "Season year"
+        required: true
+        default: "2026"
+      event_name:
+        description: "FastF1 event name"
+        required: true
+        default: "Spanish Grand Prix"
+      country_name:
+        description: "OpenF1 country name"
+        required: true
+        default: "Spain"
+      sessions:
+        description: "Comma-separated sessions"
+        required: true
+        default: "FP3,Q,R"
 
-schedule:
-- cron: "17 */4 * * 5,6,0,1"
+  schedule:
+    - cron: "17 */4 * * 5,6,0,1"
 
 permissions:
-contents: read
-pages: write
-id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-group: f1-public-data-publisher
-cancel-in-progress: false
+  group: f1-public-data-publisher
+  cancel-in-progress: false
 
 jobs:
-publish-data:
-runs-on: ubuntu-latest
-timeout-minutes: 50
+  publish-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
 
-environment:
-name: github-pages
-url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-- name: Set up Pages
-uses: actions/configure-pages@v5
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
 
-- name: Set up Python
-uses: actions/setup-python@v6
-with:
-python-version: "3.11"
-cache: "pip"
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
-- name: Install dependencies
-run: |
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-- name: Run manual public publisher
-if: github.event_name == 'workflow_dispatch'
-run: |
-python scripts/publish_f1_data.py \
---year "${{ inputs.year }}" \
---event-name "${{ inputs.event_name }}" \
---country-name "${{ inputs.country_name }}" \
---sessions "${{ inputs.sessions }}"
+      - name: Run manual public publisher
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python scripts/publish_f1_data.py             --year "${{ inputs.year }}"             --event-name "${{ inputs.event_name }}"             --country-name "${{ inputs.country_name }}"             --sessions "${{ inputs.sessions }}"
 
-- name: Run scheduled public publisher
-if: github.event_name == 'schedule'
-run: |
-python scripts/publish_f1_data.py --config config/race_config.json
+      - name: Run scheduled public publisher
+        if: github.event_name == 'schedule'
+        run: |
+          python scripts/publish_f1_data.py --config config/race_config.json
 
-- name: Upload Pages artifact
-uses: actions/upload-pages-artifact@v3
-with:
-path: public
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
 
-- name: Deploy to GitHub Pages
-id: deployment
-uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
