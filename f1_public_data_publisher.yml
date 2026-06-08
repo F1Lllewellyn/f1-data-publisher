@@ -1,0 +1,29 @@
+# ChatGPT Fetch Recipe
+
+After the GitHub Pages site is live, provide this URL once:
+
+```text
+https://<owner>.github.io/<repo>/latest/latest_manifest.json
+```
+
+Then future prompts can be:
+
+```text
+Fetch the latest published F1 data and update the Barcelona model layer.
+```
+
+Expected fetch flow:
+1. Read `latest_manifest.json`.
+2. Check `readiness.overall`.
+3. Download `latest/latest.zip` if readiness is usable.
+4. Validate `combined_source_manifest.csv`.
+5. Convert into model-ready summaries.
+6. Update workbook/model layer.
+
+Best readiness values:
+- `model_ready_primary_openf1`
+- `model_ready_primary_fastf1`
+
+Caution values:
+- `result_only_crosscheck`
+- `not_ready`
