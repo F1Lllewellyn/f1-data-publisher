@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-F1 public data publisher.
+F1 public data publisher v2.
 
-Runs in GitHub Actions and publishes a public/latest data bundle for ChatGPT to fetch.
-Sources:
-- OpenF1 for row-level session data
-- FastF1 for independent results/lap/weather/race-control cross-check when available
+Fixes:
+- Strict session selection so "R" does not accidentally match "Practice".
+- OpenF1 404s for future/unavailable detailed endpoints are logged as empty_or_unavailable, not hard errors.
+- Adds selected session diagnostics.
+- Publishes latest_manifest.json, data_readiness.json, combined_source_manifest.csv, and latest.zip.
 """
 
 from __future__ import annotations
@@ -17,7 +18,7 @@ import time
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 import requests
@@ -44,19 +45,23 @@ OPENF1_ENDPOINTS = [
     "team_radio",
 ]
 
-SESSION_ALIASES = {
-    "FP1": ["practice 1", "free practice 1", "fp1"],
-    "FP2": ["practice 2", "free practice 2", "fp2"],
-    "FP3": ["practice 3", "free practice 3", "fp3"],
-    "Q": ["qualifying", "q"],
-    "SQ": ["sprint qualifying", "sprint shootout", "sq"],
-    "S": ["sprint", "sprint race", "s"],
-    "R": ["race", "grand prix", "r"],
+SESSION_CODE_TO_NAMES = {
+    "FP1": {"practice 1", "free practice 1"},
+    "FP2": {"practice 2", "free practice 2"},
+    "FP3": {"practice 3", "free practice 3"},
+    "Q": {"qualifying"},
+    "SQ": {"sprint qualifying", "sprint shootout"},
+    "S": {"sprint", "sprint race"},
+    "R": {"race"},
 }
 
 
 def slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", str(value).lower()).strip("_")
+
+
+def norm(value: str) -> str:
+    return re.sub(r"\s+", " ", str(value).strip().lower())
 
 
 def now_tag() -> str:
@@ -77,18 +82,27 @@ def save_json(obj: Any, path: Path) -> None:
     path.write_text(json.dumps(obj, indent=2, default=str), encoding="utf-8")
 
 
-def get_json(url: str, params: Optional[Dict[str, Any]] = None, retries: int = 3) -> Any:
+def get_json(
+    url: str,
+    params: Optional[Dict[str, Any]] = None,
+    retries: int = 3,
+    allow_404_empty: bool = False,
+) -> Tuple[Any, Optional[int]]:
     params = {k: v for k, v in (params or {}).items() if v not in [None, ""]}
     last_error = None
+
     for attempt in range(1, retries + 1):
         try:
             response = requests.get(url, params=params, timeout=90)
+            if response.status_code == 404 and allow_404_empty:
+                return [], 404
             response.raise_for_status()
-            return response.json()
+            return response.json(), response.status_code
         except Exception as exc:
             last_error = exc
             print(f"[WARN] {url} attempt {attempt}/{retries} failed: {exc}")
             time.sleep(attempt)
+
     raise RuntimeError(f"GET failed: {url} params={params} error={last_error}")
 
 
@@ -98,30 +112,43 @@ def to_df(data: Any) -> pd.DataFrame:
     return pd.DataFrame(data or [])
 
 
-def openf1(endpoint: str, params: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
-    return to_df(get_json(f"{OPENF1_BASE}/{endpoint}", params=params))
+def openf1(endpoint: str, params: Optional[Dict[str, Any]] = None, allow_404_empty: bool = False) -> Tuple[pd.DataFrame, Optional[int]]:
+    data, status_code = get_json(f"{OPENF1_BASE}/{endpoint}", params=params, allow_404_empty=allow_404_empty)
+    return to_df(data), status_code
 
 
 def parse_sessions(value: str | List[str]) -> List[str]:
     if isinstance(value, str):
-        return [x.strip() for x in value.split(",") if x.strip()]
-    return [str(x).strip() for x in value if str(x).strip()]
+        return [x.strip().upper() for x in value.split(",") if x.strip()]
+    return [str(x).strip().upper() for x in value if str(x).strip()]
 
 
-def session_name_matches(session_name: str, requested: str) -> bool:
-    name = slug(session_name)
-    aliases = SESSION_ALIASES.get(requested.upper(), [requested])
-    return any(slug(alias) == name or slug(alias) in name for alias in aliases)
+def session_name_matches(session_name: str, requested_code: str) -> bool:
+    """
+    Strict matching. Do not use one-letter substring matching:
+    "R" must match "Race", not "Practice".
+    """
+    requested_code = requested_code.upper()
+    session_norm = norm(session_name)
+    allowed_names = SESSION_CODE_TO_NAMES.get(requested_code)
+
+    if allowed_names:
+        return session_norm in allowed_names
+
+    # Fallback for unusual user input: exact normalized string only.
+    return session_norm == norm(requested_code)
 
 
 def select_sessions(session_df: pd.DataFrame, requested: List[str]) -> pd.DataFrame:
     if session_df.empty or "session_name" not in session_df.columns:
         return session_df
+
     mask = pd.Series([False] * len(session_df))
     for req in requested:
         mask = mask | session_df["session_name"].astype(str).apply(lambda x: session_name_matches(x, req))
+
     selected = session_df[mask.values].copy()
-    return selected if not selected.empty else session_df.copy()
+    return selected
 
 
 def run_openf1(outdir: Path, year: int, event_name: str, country_name: str, sessions: List[str]) -> List[Dict[str, Any]]:
@@ -130,19 +157,42 @@ def run_openf1(outdir: Path, year: int, event_name: str, country_name: str, sess
     source_dir.mkdir(parents=True, exist_ok=True)
 
     try:
-        meetings = openf1("meetings", {"year": year, "country_name": country_name})
+        meetings, _ = openf1("meetings", {"year": year, "country_name": country_name})
         save_csv(meetings, source_dir / "openf1_meetings.csv")
-        manifest.append({"source": "openf1", "table": "meetings", "rows": len(meetings), "status": "ok" if len(meetings) else "empty"})
+        manifest.append({
+            "source": "openf1",
+            "table": "meetings",
+            "rows": len(meetings),
+            "status": "ok" if len(meetings) else "empty",
+            "message": "",
+        })
 
         if meetings.empty:
             return manifest
 
         meeting_key = int(meetings.iloc[0]["meeting_key"])
-        all_sessions = openf1("sessions", {"meeting_key": meeting_key})
+        all_sessions, _ = openf1("sessions", {"meeting_key": meeting_key})
         save_csv(all_sessions, source_dir / "openf1_sessions.csv")
         selected = select_sessions(all_sessions, sessions)
         save_csv(selected, source_dir / "openf1_selected_sessions.csv")
-        manifest.append({"source": "openf1", "table": "sessions", "rows": len(all_sessions), "status": "ok" if len(all_sessions) else "empty"})
+
+        manifest.append({
+            "source": "openf1",
+            "table": "sessions",
+            "rows": len(all_sessions),
+            "status": "ok" if len(all_sessions) else "empty",
+            "message": "",
+        })
+        manifest.append({
+            "source": "openf1",
+            "table": "selected_sessions",
+            "rows": len(selected),
+            "status": "ok" if len(selected) else "empty",
+            "message": f"requested={sessions}; selected={selected['session_name'].tolist() if not selected.empty and 'session_name' in selected.columns else []}",
+        })
+
+        if selected.empty:
+            return manifest
 
         for _, s in selected.iterrows():
             session_key = int(s["session_key"])
@@ -151,19 +201,32 @@ def run_openf1(outdir: Path, year: int, event_name: str, country_name: str, sess
 
             for endpoint in OPENF1_ENDPOINTS:
                 try:
-                    df = openf1(endpoint, {"session_key": session_key})
+                    # Detailed endpoints often 404 before the session has happened/populated.
+                    df, status_code = openf1(endpoint, {"session_key": session_key}, allow_404_empty=(endpoint != "drivers"))
                     filename = f"openf1_{year}_{slug(event_name)}_{session_slug}_{endpoint}.csv"
                     save_csv(df, source_dir / filename)
+
+                    if len(df):
+                        status = "ok"
+                        message = ""
+                    elif status_code == 404:
+                        status = "empty_or_unavailable"
+                        message = "404 from OpenF1; likely future/unpopulated endpoint for this session."
+                    else:
+                        status = "empty_or_unavailable"
+                        message = ""
+
                     manifest.append({
                         "source": "openf1",
                         "session": session_name,
                         "table": endpoint,
                         "rows": len(df),
                         "columns": len(df.columns),
-                        "status": "ok" if len(df) else "empty_or_unavailable",
+                        "status": status,
                         "filename": f"openf1/{filename}",
+                        "message": message,
                     })
-                    print(f"[OpenF1] {session_name} {endpoint}: {len(df)} rows")
+                    print(f"[OpenF1] {session_name} {endpoint}: {len(df)} rows ({status})")
                     time.sleep(0.15)
                 except Exception as exc:
                     manifest.append({
@@ -213,6 +276,7 @@ def run_fastf1(outdir: Path, year: int, event_name: str, sessions: List[str]) ->
 
     cache_dir = outdir / "fastf1_cache"
     cache_dir.mkdir(parents=True, exist_ok=True)
+
     try:
         fastf1.Cache.enable_cache(str(cache_dir))
     except Exception as exc:
@@ -221,20 +285,23 @@ def run_fastf1(outdir: Path, year: int, event_name: str, sessions: List[str]) ->
     try:
         schedule = fastf1.get_event_schedule(year)
         save_csv(schedule, source_dir / f"fastf1_{year}_event_schedule.csv")
-        manifest.append({"source": "fastf1", "table": "event_schedule", "rows": len(schedule), "status": "ok"})
+        manifest.append({"source": "fastf1", "table": "event_schedule", "rows": len(schedule), "status": "ok", "message": ""})
     except Exception as exc:
         manifest.append({"source": "fastf1", "table": "event_schedule", "rows": 0, "status": "error", "message": str(exc)})
 
     for code in sessions:
         try:
             session = fastf1.get_session(year, event_name, code)
+            load_message = ""
+
             try:
                 session.load(laps=True, telemetry=False, weather=True, messages=True)
-            except Exception:
+            except Exception as first_exc:
+                load_message = f"primary_load_failed={first_exc}"
                 try:
                     session.load()
-                except Exception as exc:
-                    print(f"[FastF1 WARN] load failed for {code}: {exc}")
+                except Exception as second_exc:
+                    load_message += f"; fallback_load_failed={second_exc}"
 
             prefix = f"fastf1_{year}_{slug(event_name)}_{slug(code)}"
             tables = {
@@ -260,6 +327,7 @@ def run_fastf1(outdir: Path, year: int, event_name: str, sessions: List[str]) ->
                     "columns": len(df.columns),
                     "status": "ok" if len(df) else "empty_or_unavailable",
                     "filename": f"fastf1/{filename}",
+                    "message": load_message if not len(df) else "",
                 })
                 print(f"[FastF1] {code} {table_name}: {len(df)} rows")
         except Exception as exc:
@@ -283,6 +351,7 @@ def readiness(manifest: List[Dict[str, Any]]) -> Dict[str, Any]:
     openf1_weather = rows("openf1", "weather")
     fastf1_laps = rows("fastf1", "laps")
     fastf1_results = rows("fastf1", "results")
+    openf1_sessions = rows("openf1", "selected_sessions")
 
     if openf1_laps > 0 and openf1_weather > 0:
         overall = "model_ready_primary_openf1"
@@ -293,12 +362,16 @@ def readiness(manifest: List[Dict[str, Any]]) -> Dict[str, Any]:
     elif fastf1_results > 0:
         overall = "result_only_crosscheck"
         rec = "Use as results cross-check only; rerun later for timing/weather."
+    elif openf1_sessions > 0:
+        overall = "scheduled_but_not_populated"
+        rec = "Meeting/sessions exist, but row-level timing endpoints are not populated yet. Rerun after session completion or later propagation."
     else:
         overall = "not_ready"
         rec = "Rerun later or inspect source errors."
 
     return {
         "overall": overall,
+        "openf1_selected_sessions": openf1_sessions,
         "openf1_laps": openf1_laps,
         "openf1_weather": openf1_weather,
         "fastf1_laps": fastf1_laps,
