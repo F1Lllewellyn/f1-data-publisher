@@ -1,0 +1,12 @@
+{
+"year": 2026,
+"event_name": "Spanish Grand Prix",
+"country_name": "Spain",
+"sessions": ["FP3", "Q", "R"],
+"include_openf1": true,
+"include_fastf1": true,
+"include_team_radio": true,
+"include_car_data": false,
+"publish_latest": true,
+"publish_history": true
+}
