@@ -1,0 +1,4 @@
+path,type,purpose
+scripts/elite/download_latest_openf1_artifacts.py,script,Fixes GitHub artifact redirect download authentication
+.github/workflows/elite-weekend-engine-run.yml,workflow,Uploads diagnostics and avoids secondary no-files failure
+docs/F1_ELITE_V2_ARTIFACT_DOWNLOAD_401_HOTFIX.md,docs,Hotfix documentation

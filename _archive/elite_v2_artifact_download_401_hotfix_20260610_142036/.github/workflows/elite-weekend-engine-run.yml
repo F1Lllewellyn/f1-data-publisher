@@ -66,8 +66,6 @@ jobs:
         if: always()
         with:
           name: ${{ env.ELITE_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
-          path: |
-            ${{ env.ELITE_OUTPUT_DIR }}
-            ${{ env.ELITE_INPUT_DIR }}/manifests
+          path: ${{ env.ELITE_OUTPUT_DIR }}
           retention-days: 90
-          if-no-files-found: warn
+          if-no-files-found: error
