@@ -1,0 +1,16 @@
+path,type,purpose
+configs/forecast/forecast_consumption_policy.json,config,Forecast-consumption guardrails and decision rules
+scripts/admin/create_automation_baseline_snapshot.py,script,Creates lightweight release baseline snapshot artifact
+scripts/admin/create_baseline_tag.ps1,script,Local helper to create and push release tag after commit
+scripts/elite/download_latest_elite_artifact.py,script,Downloads latest Elite v2 artifact for downstream workflows
+scripts/workbook/build_workbook_control_room_bridge.py,script,Builds workbook-ready bridge package from Elite artifact
+scripts/forecast/build_dry_forecast_cycle.py,script,Builds dry forecast consumption package
+.github/workflows/f1-automation-baseline-snapshot.yml,workflow,Manual lightweight baseline snapshot workflow
+.github/workflows/f1-workbook-control-room-bridge.yml,workflow,Builds workbook bridge after Elite/manual
+.github/workflows/f1-dry-forecast-cycle.yml,workflow,Builds dry forecast package after bridge/manual
+docs/F1_AUTOMATION_RELEASE_BASELINE_2026-06-10_READY.md,docs,Release baseline note
+docs/F1_FORECAST_CONSUMPTION_RULES_2026-06-10.md,docs,Forecast-consumption rules
+docs/F1_OPERATIONAL_USE_RUNBOOK_2026-06-10.md,docs,Operational runbook
+docs/F1_WORKBOOK_BRIDGE_IMPORT_GUIDE_2026-06-10.md,docs,Workbook import guide
+docs/F1_DRY_FORECAST_CYCLE_GUIDE_2026-06-10.md,docs,Dry forecast cycle guide
+CURRENT_CANONICAL_FILES_OPERATIONAL_USE_PATCH_2026-06-10.md,sidecar,Canonical file register

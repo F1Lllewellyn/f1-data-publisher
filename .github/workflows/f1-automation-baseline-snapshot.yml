@@ -1,0 +1,47 @@
+name: F1 Automation Baseline Snapshot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  BASELINE_NAME: "F1_Automation_Baseline_2026-06-10_READY"
+  OUTPUT_DIR: "output/f1_automation_baseline_snapshot"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  baseline_snapshot:
+    name: Create operational baseline snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create baseline snapshot
+        run: |
+          python scripts/admin/create_automation_baseline_snapshot.py \
+            --repo-root "." \
+            --output-dir "$OUTPUT_DIR" \
+            --baseline-name "$BASELINE_NAME"
+
+      - name: Add run summary
+        run: |
+          cat "$OUTPUT_DIR/baseline_snapshot_report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload baseline snapshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BASELINE_NAME }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 180
+          if-no-files-found: error

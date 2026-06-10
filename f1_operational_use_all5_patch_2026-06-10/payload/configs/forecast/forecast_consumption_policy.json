@@ -1,0 +1,32 @@
+{
+  "policy_name": "F1 Forecast Consumption Policy",
+  "version": "2026-06-10",
+  "source_requirements": {
+    "elite_status_required_for_forecast_use": ["READY", "READY_WITH_POSTRACE_SIGNAL_WARNING"],
+    "green_source_readiness": "eligible_input",
+    "missing_source": "do_not_consume",
+    "pass_with_warnings": "consume_for_context_only"
+  },
+  "rank_change_guardrails": {
+    "stable_race_p1_p20_automatic_reorder_allowed": false,
+    "qualifying_p1_p5_automatic_reorder_allowed": false,
+    "fantasy_automatic_transfer_allowed": false,
+    "promotion_requires_human_review": true,
+    "promotion_requires_backtest_or_locked_future_proof": true
+  },
+  "signal_usage": {
+    "source_readiness_board": "eligibility_and_data_quality",
+    "reliability_warning_board": "confidence_and_risk_flags_only",
+    "dnf_all_precursor_board": "advisory_precursor_search_only",
+    "fantasy_risk_board": "avoid_hold_monitor_flags_only",
+    "model_disagreement_board": "confidence_and_review_priority",
+    "promotion_gate": "blocks_automatic_stable_changes"
+  },
+  "standing_rules": {
+    "public_proxy_only": true,
+    "no_private_internal_sensor_dependency": true,
+    "dnf_all_broad_precursor_search": true,
+    "visible_outcome_labels_are_metadata_only": true,
+    "no_drs_2026_assumption": true
+  }
+}

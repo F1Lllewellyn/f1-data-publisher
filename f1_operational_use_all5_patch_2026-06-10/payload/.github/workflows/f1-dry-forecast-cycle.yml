@@ -1,0 +1,62 @@
+name: F1 Dry Forecast Cycle
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["F1 Workbook Control Room Bridge"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  OUTPUT_DIR: "output/f1_dry_forecast_cycle"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  dry_forecast_cycle:
+    name: Build dry forecast package from latest Elite artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas requests pyarrow numpy python-dateutil tabulate
+
+      - name: Download latest Elite artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/elite/download_latest_elite_artifact.py \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Build dry forecast cycle package
+        run: |
+          python scripts/forecast/build_dry_forecast_cycle.py \
+            --elite-artifact-dir "$OUTPUT_DIR/elite_artifact" \
+            --policy configs/forecast/forecast_consumption_policy.json \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Add run summary
+        run: |
+          cat "$OUTPUT_DIR/reports/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dry forecast cycle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-dry-forecast-cycle-2026-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: error
