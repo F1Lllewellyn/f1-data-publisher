@@ -1,0 +1,13 @@
+USE THIS FIXED VERSION
+
+The prior PowerShell installer had a report-formatting syntax problem on some Windows PowerShell versions.
+
+Use this file instead:
+
+installer\RUN_FIXED_CLEAN_INSTALLER_WINDOWS.bat
+
+When asked for the repo path, paste ONLY:
+
+C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+
+Do not paste the full powershell command at the prompt.

@@ -1,0 +1,94 @@
+name: OpenF1 High-Frequency Auto Ingest
+
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "Season year"
+        required: true
+        default: "2026"
+      mode:
+        description: "Ingest mode: race, prerace, or all"
+        required: true
+        default: "prerace"
+        type: choice
+        options:
+          - race
+          - prerace
+          - all
+      fetch_mode:
+        description: "OpenF1 fetch mode"
+        required: true
+        default: "driver_full_session"
+        type: choice
+        options:
+          - driver_full_session
+          - chunked_then_fallback
+
+  schedule:
+    # Runs daily at 09:15 UTC. Adjust after race weekends if desired.
+    - cron: "15 9 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: openf1-high-frequency-ingest-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: Pull OpenF1 high-frequency data and build reliability metrics
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    env:
+      YEAR: ${{ github.event.inputs.year || '2026' }}
+      MODE: ${{ github.event.inputs.mode || 'prerace' }}
+      FETCH_MODE: ${{ github.event.inputs.fetch_mode || 'driver_full_session' }}
+      OPENF1_TOKEN: ${{ secrets.OPENF1_TOKEN }}
+      OUTPUT_DIR: output/openf1_high_frequency
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas pyarrow tqdm python-dateutil numpy
+
+      - name: Run OpenF1 high-frequency ingest
+        run: |
+          python scripts/openf1/openf1_high_frequency_auto_ingest.py \
+            --year "$YEAR" \
+            --mode "$MODE" \
+            --fetch-mode "$FETCH_MODE" \
+            --output-dir "$OUTPUT_DIR" \
+            --request-sleep 0.35 \
+            --warning-threshold 0.80 \
+            --strict-threshold 0.90
+
+      - name: Validate output
+        run: |
+          python tests/validate_openf1_high_frequency_output.py \
+            --output-dir "$OUTPUT_DIR" \
+            --mode "$MODE"
+
+      - name: Upload compact ingest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openf1-high-frequency-${{ env.YEAR }}-${{ env.MODE }}-${{ github.run_number }}
+          path: |
+            output/openf1_high_frequency/**/*.csv
+            output/openf1_high_frequency/**/*.json
+            output/openf1_high_frequency/**/*.md
+            output/openf1_high_frequency/**/*.parquet
+          retention-days: 30
+          if-no-files-found: error

@@ -1,0 +1,2 @@
+event,asset_type,asset,recommendation_type,risk_band,price,expected_points,actual_points,price_change,chip_used,transfer_action,dnf_all,pattern_warnings,points_delta,avoided_dnf_value,price_growth_delta,chip_value_delta,transfer_value_delta,decision_grade
+example,driver,Driver A,avoid,warning,10.0,8,0,-0.2,,avoid,True,REL_DNF_ALL_CLUSTER_001,,,,,,pending

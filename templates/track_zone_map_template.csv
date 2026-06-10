@@ -1,0 +1,3 @@
+track,zone_id,zone_name,zone_type,sector,x_min,x_max,y_min,y_max,notes
+example_track,Z01,Main straight,straight,S1,,,,,Seed manually or generate from location clustering
+example_track,Z02,Turn 1 braking,braking_zone,S1,,,,,Used for braking/energy/thermal reliability patterns

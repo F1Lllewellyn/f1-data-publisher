@@ -1,0 +1,8 @@
+workbook_tab,source_file,module,refresh_stage
+Run Orchestrator,output/elite_weekend_run/*status.json,FULL7_01,pre_event/post_event/maintenance
+Locked Forecast Ledger v2,ledgers/locked_forecast_ledger_v2.jsonl,FULL7_02,forecast_lock/post_event_score
+DNF_ALL Precursor Board,templates/dnf_all_precursor_board_template.csv,FULL7_03,post_event
+Track Zone Intelligence,templates/track_zone_map_template.csv,FULL7_04,pre_event/post_event
+Fantasy Value Backtest,templates/fantasy_value_backtester_template.csv,FULL7_05,post_event
+Model Disagreement Board,templates/model_disagreement_board_template.csv,FULL7_06,pre_event
+Promotion Controller,templates/promotion_demotion_controller_template.csv,FULL7_07,post_event/maintenance

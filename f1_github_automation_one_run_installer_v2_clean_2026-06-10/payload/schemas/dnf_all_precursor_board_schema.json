@@ -1,0 +1,17 @@
+{
+  "primary_target": "DNF_ALL",
+  "visible_outcome_labels": [
+    "visible_mechanical",
+    "visible_crash_or_contact",
+    "visible_damage",
+    "visible_strategy_retirement",
+    "unknown_or_unclear"
+  ],
+  "rule": "All DNF_ALL cases require precursor search. Visible labels are metadata, not filters.",
+  "allowed_outputs": [
+    "race_report_early_warning",
+    "fantasy_risk",
+    "pattern_value_ledger",
+    "confidence_overlay"
+  ]
+}

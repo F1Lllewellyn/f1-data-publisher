@@ -1,0 +1,31 @@
+{
+  "schema": "automatic_promotion_demotion_controller_v1",
+  "purpose": "Evaluate layer/pattern authority from evidence, not narrative.",
+  "promotion_requirements": [
+    "locked_forward_or_blind_replay_proof",
+    "positive_ablation_delta",
+    "decision_value_delta_positive",
+    "false_positive_rate_within_authority_tolerance",
+    "no_stable_rank_degradation",
+    "source_readiness_pass",
+    "confounder_survival_pass"
+  ],
+  "demotion_triggers": [
+    "false_positive_spike",
+    "unscorable_or_confounded_majority",
+    "rank_degradation",
+    "post_hoc_only_signal",
+    "private_sensor_inference_needed",
+    "silent_override_attempt"
+  ],
+  "authority_ladder": [
+    "note_only",
+    "watch",
+    "risk_only",
+    "confidence_overlay",
+    "scenario_branch",
+    "candidate_rank_influence",
+    "promoted_rank_influence"
+  ],
+  "default_reliability_layer_authority": "risk_only"
+}

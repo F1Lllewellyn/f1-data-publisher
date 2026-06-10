@@ -1,0 +1,2 @@
+ledger_id,timestamp_utc,event,session,forecast_stage,model_version,data_available_at_lock,forecast_type,prediction_payload_ref,confidence_payload_ref,risk_flags,pattern_warnings,fantasy_recommendations,source_readiness,authority_status,lineage_hash,post_event_score
+example,,Spain,Race,pre_event,Engine_x,,race_p1_p20,,,reliability_warning:medium,REL_DNF_ALL_CLUSTER_001,,go,stable/risk_only,,pending

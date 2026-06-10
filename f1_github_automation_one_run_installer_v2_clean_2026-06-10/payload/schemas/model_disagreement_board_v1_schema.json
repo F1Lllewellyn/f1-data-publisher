@@ -1,0 +1,18 @@
+{
+  "schema": "model_disagreement_board_v1",
+  "purpose": "Expose disagreements between stable, specialist, reliability, fantasy, pattern, and external benchmark layers.",
+  "fields": [
+    "event",
+    "session",
+    "driver",
+    "stable_rank",
+    "qualifying_specialist_rank",
+    "race_specialist_rank",
+    "reliability_risk_band",
+    "fantasy_action",
+    "external_benchmark_rank",
+    "disagreement_score",
+    "decision_note"
+  ],
+  "use": "Higher disagreement triggers manual review, risk flag, or scenario branch."
+}

@@ -1,0 +1,2 @@
+layer_or_pattern_id,current_authority,requested_authority,locked_events,blind_replay_events,hit_rate,precision,recall,false_positive_rate,decision_value_delta,ablation_delta,rank_degradation,source_readiness,confounder_survival,controller_decision,reason
+REL_DNF_ALL_CLUSTER_001,risk_only,confidence_overlay,,,,,,,,,false,pass,pass,hold,Need future locked proof

@@ -1,0 +1,62 @@
+name: OpenF1 Post-Event Reliability Metric
+
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "Season year"
+        required: true
+        default: "2026"
+      event_name:
+        description: "Optional event/country filter, e.g. Spain"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  post_event_reliability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+
+    env:
+      YEAR: ${{ github.event.inputs.year || '2026' }}
+      EVENT_NAME: ${{ github.event.inputs.event_name }}
+      OPENF1_TOKEN: ${{ secrets.OPENF1_TOKEN }}
+      OUTPUT_DIR: output/openf1_post_event_reliability
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas pyarrow tqdm python-dateutil numpy
+
+      - name: Pull and score post-event reliability layer
+        run: |
+          python scripts/openf1/openf1_high_frequency_auto_ingest.py \
+            --year "$YEAR" \
+            --mode all \
+            --event-filter "$EVENT_NAME" \
+            --fetch-mode driver_full_session \
+            --output-dir "$OUTPUT_DIR" \
+            --request-sleep 0.35
+
+      - name: Validate output
+        run: |
+          python tests/validate_openf1_high_frequency_output.py \
+            --output-dir "$OUTPUT_DIR" \
+            --mode all
+
+      - name: Upload post-event reliability artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openf1-post-event-reliability-${{ env.YEAR }}-${{ github.run_number }}
+          path: output/openf1_post_event_reliability/**
+          retention-days: 90
+          if-no-files-found: error

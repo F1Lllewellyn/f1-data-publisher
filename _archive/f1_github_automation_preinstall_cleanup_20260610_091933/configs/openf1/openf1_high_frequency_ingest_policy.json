@@ -1,0 +1,55 @@
+{
+  "year": 2026,
+  "cancelled_events_expected_zero": [
+    "Bahrain",
+    "Saudi Arabia",
+    "Saudi Arabian"
+  ],
+  "modes": {
+    "race": {
+      "session_types": [
+        "Race",
+        "Sprint"
+      ],
+      "purpose": "race-specialist reliability/anomaly detection and DNF/managed-fault early-warning scoring"
+    },
+    "prerace": {
+      "session_types": [
+        "Practice",
+        "Qualifying",
+        "Sprint Qualifying"
+      ],
+      "purpose": "FP/Q first-warning to later DNF metric and fantasy/reporting risk handoff"
+    },
+    "all": {
+      "session_types": [
+        "Practice",
+        "Qualifying",
+        "Sprint Qualifying",
+        "Race",
+        "Sprint"
+      ],
+      "purpose": "full reliability layer refresh"
+    }
+  },
+  "endpoints": [
+    "car_data",
+    "location"
+  ],
+  "fetch_mode_default": "driver_full_session",
+  "request_sleep_seconds": 0.35,
+  "warning_threshold": 0.8,
+  "strict_threshold": 0.9,
+  "authority": {
+    "stable_race_p1_p20_rank_change_allowed": false,
+    "qualifying_p1_p5_rank_change_allowed": false,
+    "risk_handoff_allowed": true,
+    "fantasy_risk_allowed": true,
+    "race_report_reliability_section_allowed": true
+  },
+  "storage_policy": {
+    "commit_raw_parquet_to_git": false,
+    "github_actions_artifact_retention_days": 30,
+    "large_data_strategy": "workflow_artifacts_or_external_storage_not_normal_git"
+  }
+}

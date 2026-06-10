@@ -1,0 +1,38 @@
+{
+  "schema": "locked_forecast_ledger_v2",
+  "format": "jsonl_append_only",
+  "required_fields": [
+    "ledger_id",
+    "timestamp_utc",
+    "event",
+    "session",
+    "forecast_stage",
+    "model_version",
+    "data_available_at_lock",
+    "forecast_type",
+    "prediction_payload",
+    "confidence_payload",
+    "risk_flags",
+    "pattern_warnings",
+    "fantasy_recommendations",
+    "source_readiness",
+    "authority_status",
+    "lineage_hash",
+    "post_event_score"
+  ],
+  "forecast_type_values": [
+    "race_p1_p20",
+    "qualifying_p1_p20",
+    "qualifying_top5",
+    "fantasy_recommendation",
+    "risk_board",
+    "report_forecast"
+  ],
+  "authority_status_defaults": {
+    "stable_p1_p20": "stable",
+    "qualifying_top5_specialist": "governed",
+    "race_specialist": "shadow",
+    "reliability": "risk_only",
+    "pattern_intelligence": "risk_only"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "fantasy_value_backtester_v1",
+  "purpose": "Score whether model recommendations improved fantasy points, avoided DNFs, protected budget, and improved chip/transfer timing.",
+  "input_fields": [
+    "event",
+    "driver",
+    "constructor",
+    "recommendation_type",
+    "risk_band",
+    "price",
+    "expected_points",
+    "actual_points",
+    "price_change",
+    "chip_used",
+    "transfer_action",
+    "dnf_all",
+    "pattern_warnings"
+  ],
+  "output_metrics": [
+    "points_delta",
+    "avoided_dnf_value",
+    "price_growth_delta",
+    "chip_value_delta",
+    "transfer_value_delta",
+    "constructor_risk_value",
+    "decision_grade"
+  ]
+}

@@ -1,0 +1,18 @@
+
+# --- F1 Prediction Engine generated outputs ---
+output/
+data/raw/
+data/openf1/high_frequency/
+*.parquet
+*.zip
+*.jsonl.tmp
+# Keep lightweight engine assets
+!scripts/
+!configs/
+!docs/
+!templates/
+!schemas/
+!workbook_bridge/
+!ledgers/
+# --- end F1 Prediction Engine generated outputs ---
+

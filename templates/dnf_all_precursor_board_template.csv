@@ -1,0 +1,2 @@
+event,race_session,driver,team,dnf_all,visible_outcome_label,precursor_search_required,first_warning_phase,first_warning_session,first_warning_time_or_lap,signal_family,cluster_score,confounder_status,teammate_relative_class,race_persistence,evidence_grade,post_event_grade,fantasy_impact,reporting_note
+example,Race,Driver A,Team X,True,crash_or_contact,True,Practice,FP2,,short_shift+thermal+efficiency,0.82,clean,car_specific_anomaly,yes,medium,hit,avoid/caution value,Visible crash does not block precursor analysis

@@ -1,0 +1,48 @@
+{
+  "module": "Weekend Run Orchestrator",
+  "entrypoint": "scripts/weekend_run_orchestrator.py",
+  "stages": [
+    "discover_completed_and_upcoming_sessions",
+    "ingest_openf1_high_frequency",
+    "refresh_feature_marts",
+    "score_pattern_intelligence",
+    "update_dnf_all_precursor_board",
+    "update_fantasy_value_backtester",
+    "run_qualifying_and_race_simulations",
+    "build_model_disagreement_board",
+    "lock_forecast_snapshot",
+    "export_workbook_control_room_tables",
+    "run_health_checks"
+  ],
+  "mode_defaults": {
+    "pre_event": [
+      "discover",
+      "ingest_prerace",
+      "score_patterns",
+      "fantasy_risk",
+      "simulations",
+      "lock_forecast"
+    ],
+    "post_event": [
+      "ingest_all",
+      "score_actuals",
+      "dnf_all_board",
+      "fantasy_backtest",
+      "promotion_controller",
+      "health_sweep"
+    ],
+    "maintenance": [
+      "validate_artifacts",
+      "schema_checks",
+      "authority_checks",
+      "cleanup_dry_run"
+    ]
+  },
+  "output_root": "output/elite_weekend_run",
+  "guardrails": [
+    "No deletion of source files.",
+    "No stable rank-change without promotion proof.",
+    "No private/internal sensor inference.",
+    "DNF_ALL precursor search remains required."
+  ]
+}

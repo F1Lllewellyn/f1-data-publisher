@@ -1,0 +1,33 @@
+{
+  "schema": "track_zone_map_v1",
+  "purpose": "Convert raw OpenF1 x/y/z location into named racing zones for explainable pattern detection.",
+  "zone_types": [
+    "straight",
+    "braking_zone",
+    "corner_entry",
+    "apex",
+    "corner_exit",
+    "traction_zone",
+    "sector_micro_zone",
+    "cooling_sensitive_zone",
+    "energy_deployment_zone"
+  ],
+  "fields": [
+    "track",
+    "zone_id",
+    "zone_name",
+    "zone_type",
+    "sector",
+    "x_min",
+    "x_max",
+    "y_min",
+    "y_max",
+    "notes"
+  ],
+  "outputs": [
+    "zone_specific_loss",
+    "zone_teammate_delta",
+    "zone_reliability_cluster",
+    "zone_report_text"
+  ]
+}
