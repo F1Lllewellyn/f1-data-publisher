@@ -1,0 +1,97 @@
+name: F1 Live Source Feed Capture Experimental
+
+on:
+  workflow_dispatch:
+    inputs:
+      capture_mode:
+        description: "manual or auto_window"
+        required: true
+        default: "manual"
+        type: choice
+        options:
+          - manual
+          - auto_window
+      duration_minutes:
+        description: "Manual capture duration in minutes. Keep short for tests. Race default should be controlled by policy."
+        required: false
+        default: "20"
+      session_label:
+        description: "Optional label, e.g. Barcelona_Race_Test"
+        required: false
+        default: "manual_test"
+      commit_outputs:
+        description: "Commit latest/history outputs back to repo"
+        required: true
+        default: true
+        type: boolean
+  schedule:
+    # Experimental watchdog. Script exits quickly unless policy allows a capture window.
+    # Keep this conservative; adjust only after first validation.
+    - cron: "*/15 * * 5,6,0"
+
+permissions:
+  contents: write
+
+env:
+  LIVE_CAPTURE_POLICY: configs/live_capture/live_source_feed_capture_policy.json
+
+jobs:
+  live-source-feed-capture:
+    name: live-source-feed-capture-experimental
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    concurrency:
+      group: f1-live-source-feed-capture-${{ github.ref }}-${{ github.run_id }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9 for FastF1 live timing compatibility
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "fastf1>=3.3,<4" pandas requests python-dateutil
+
+      - name: Run live source feed capture layer
+        run: |
+          python scripts/live_capture/run_live_source_feed_capture.py \
+            --policy "$LIVE_CAPTURE_POLICY" \
+            --capture-mode "${{ github.event.inputs.capture_mode || 'auto_window' }}" \
+            --duration-minutes "${{ github.event.inputs.duration_minutes || '' }}" \
+            --session-label "${{ github.event.inputs.session_label || '' }}" \
+            --github-run-id "${{ github.run_id }}" \
+            --github-run-attempt "${{ github.run_attempt }}"
+
+      - name: Upload live source feed artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-live-source-feed-capture-experimental
+          path: |
+            latest/live_source_feed_capture/**
+            history/live_source_feed_capture/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit live source feed outputs
+        if: ${{ always() && (github.event.inputs.commit_outputs == 'true' || github.event_name == 'schedule') }}
+        run: |
+          if [ -d "latest/live_source_feed_capture" ] || [ -d "history/live_source_feed_capture" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add latest/live_source_feed_capture history/live_source_feed_capture || true
+            if ! git diff --cached --quiet; then
+              git commit -m "Add live source feed capture outputs"
+              git push
+            else
+              echo "No live source feed output changes to commit."
+            fi
+          else
+            echo "No live source feed output folders found."
+          fi

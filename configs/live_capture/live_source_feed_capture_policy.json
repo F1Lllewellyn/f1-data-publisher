@@ -1,0 +1,57 @@
+{
+  "schema_version": "2026-06-10.v0.experimental",
+  "module_name": "F1_Live_Source_Feed_Capture_Layer_v0_EXPERIMENTAL",
+  "status": "experimental_not_stable",
+  "purpose": "Record live F1 timing source feed packets for post-session replay, snapshot extraction, and Method E proof-loop reconciliation.",
+  "guardrails": {
+    "do_not_promote_to_stable": true,
+    "do_not_change_canonical_workbook": true,
+    "do_not_claim_accuracy_gain": true,
+    "do_not_mix_live_capture_with_post_session_api_without_source_labels": true,
+    "no_drs_2026_assumption": true,
+    "github_is_archive_and_orchestrator_not_truth_without_reconciliation": true
+  },
+  "capture": {
+    "enabled_for_schedule": true,
+    "manual_test_default_minutes": 20,
+    "auto_window_default_minutes": 145,
+    "pre_session_buffer_minutes": 8,
+    "post_session_buffer_minutes": 20,
+    "max_capture_minutes": 170,
+    "overlap_design_note": "Use overlapping scheduled/manual captures around race windows if later validation shows delayed starts or dropped connections.",
+    "avoid_heavy_live_processing": true,
+    "raw_file_mode": "w"
+  },
+  "schedule_detection": {
+    "source": "openf1_sessions_endpoint",
+    "season": 2026,
+    "session_name_allowlist": [
+      "Practice 1",
+      "Practice 2",
+      "Practice 3",
+      "Qualifying",
+      "Sprint Qualifying",
+      "Sprint",
+      "Race"
+    ],
+    "scheduled_runs_exit_if_no_active_window": true
+  },
+  "outputs": {
+    "latest_dir": "latest/live_source_feed_capture",
+    "history_dir": "history/live_source_feed_capture",
+    "raw_capture_filename": "live_timing_raw.txt",
+    "manifest_filename": "live_source_feed_capture_manifest.json",
+    "readiness_filename": "live_source_feed_capture_readiness.json",
+    "packet_index_filename": "live_source_feed_packet_index.csv",
+    "capture_report_filename": "live_source_feed_capture_report.md",
+    "zip_filename": "live_source_feed_capture_package.zip"
+  },
+  "reconciliation_targets": [
+    "latest/openf1_lightweight_source_closure/latest_manifest.json",
+    "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
+    "latest/latest_manifest.json",
+    "official_fia_f1_classification_where_available"
+  ],
+  "team_radio_policy": "opportunistic_only",
+  "created_utc": "2026-06-10T00:00:00Z"
+}
