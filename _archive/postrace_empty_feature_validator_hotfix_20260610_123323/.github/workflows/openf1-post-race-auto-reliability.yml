@@ -20,7 +20,6 @@ env:
   OUTPUT_DIR: "output/openf1_post_race_auto"
   CHECKPOINT_ARTIFACT: "openf1-post-race-auto-checkpoint"
   FINAL_ARTIFACT: "openf1-post-race-auto-final"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   extract_and_checkpoint:
@@ -102,8 +101,7 @@ jobs:
         run: |
           python tests/validate_openf1_high_frequency_output.py \
             --output-dir "$OUTPUT_DIR" \
-            --mode "$MODE" \
-            --allow-empty-features
+            --mode "$MODE"
 
       - name: Add run summary
         if: always()
