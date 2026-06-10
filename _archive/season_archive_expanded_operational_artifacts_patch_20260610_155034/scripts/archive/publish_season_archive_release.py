@@ -4,16 +4,13 @@ F1 Season Archive Publisher.
 
 Creates a long-term GitHub Release archive from compact derived outputs.
 
-Expanded operational archive profile:
+This intentionally avoids depending on 90-day GitHub Actions artifact retention.
+It packages latest compact artifacts into a release asset:
 - Elite Weekend Engine v2 outputs
 - Workbook Control Room Bridge outputs
 - Dry Forecast Cycle outputs
-- Forecast Use Dry Review outputs
-- Race Weekend Operating Rhythm outputs
-- Post-Race Scoring Loop outputs
-- Automation Baseline Snapshot
+- Automation baseline snapshot
 
-This intentionally avoids relying on 90-day GitHub Actions artifact retention.
 It does not re-run OpenF1 extraction and does not archive raw high-frequency
 car_data/location by default.
 """
@@ -26,6 +23,8 @@ import hashlib
 import json
 import mimetypes
 import os
+import shutil
+import sys
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -38,9 +37,6 @@ DEFAULT_PREFIXES = {
     "elite_outputs": ["elite-weekend-engine-v2"],
     "workbook_bridge": ["f1-workbook-control-room-bridge"],
     "dry_forecast_cycle": ["f1-dry-forecast-cycle"],
-    "forecast_use_dry_review": ["f1-forecast-use-dry-review"],
-    "race_weekend_operating_rhythm": ["f1-race-weekend-operating-rhythm"],
-    "post_race_scoring_loop": ["f1-post-race-scoring-loop"],
     "baseline_snapshot": ["F1_Automation_Baseline_2026-06-10_READY"],
 }
 
@@ -65,12 +61,7 @@ def gh_request_json(method: str, url: str, token: str, body: dict | None = None)
     data = None
     if body is not None:
         data = json.dumps(body).encode("utf-8")
-    req = Request(
-        url,
-        data=data,
-        method=method,
-        headers=gh_headers(token, "application/json" if body is not None else None),
-    )
+    req = Request(url, data=data, method=method, headers=gh_headers(token, "application/json" if body is not None else None))
     with urlopen(req, timeout=120) as r:
         return json.loads(r.read().decode("utf-8"))
 
@@ -162,6 +153,7 @@ def safe_extract(zip_path: Path, dest: Path):
 
 
 def create_or_get_release(repo: str, token: str, tag_name: str, release_name: str, body: str, target_commitish: str):
+    # Try get existing release by tag first.
     get_url = f"https://api.github.com/repos/{repo}/releases/tags/{tag_name}"
     try:
         return gh_request_json("GET", get_url, token)
@@ -177,7 +169,7 @@ def create_or_get_release(repo: str, token: str, tag_name: str, release_name: st
         "body": body,
         "draft": False,
         "prerelease": False,
-        "make_latest": "false",
+        "make_latest": "false"
     }
     return gh_request_json("POST", create_url, token, payload)
 
@@ -192,7 +184,7 @@ def upload_release_asset(upload_url_template: str, token: str, asset_path: Path)
         url,
         data=asset_path.read_bytes(),
         method="POST",
-        headers=gh_headers(token, content_type),
+        headers=gh_headers(token, content_type)
     )
     with urlopen(req, timeout=900) as r:
         return json.loads(r.read().decode("utf-8"))
@@ -221,9 +213,10 @@ def main():
     release_name = args.release_name or f"F1 {args.season_year} Season Archive — {stamp} run {run_number}"
 
     out = Path(args.output_dir)
+    staging = out / "staging"
     downloads = out / "downloads"
     archive_root = out / f"F1_{args.season_year}_Season_Archive"
-    for d in [downloads, archive_root]:
+    for d in [staging, downloads, archive_root]:
         d.mkdir(parents=True, exist_ok=True)
 
     artifacts = list_artifacts(repo, token)
@@ -284,9 +277,6 @@ def main():
         writer.writeheader()
         writer.writerows(source_rows)
 
-    archived_count = sum(1 for r in source_rows if r["status"] == "ARCHIVED")
-    missing_count = sum(1 for r in source_rows if r["status"] == "MISSING")
-
     policy = {
         "generated_utc": now_utc().isoformat(),
         "season_year": args.season_year,
@@ -297,18 +287,15 @@ def main():
         "retention_strategy": "github_release_assets_long_term_archive",
         "raw_high_frequency_data_included": False,
         "raw_data_policy": "Excluded by default. Archive raw only for explicit forensic/end-of-season snapshots.",
-        "artifact_profile_count": len(source_rows),
-        "artifact_profiles_archived": archived_count,
-        "artifact_profiles_missing": missing_count,
         "guardrails": {
             "public_proxy_only": True,
             "no_private_internal_sensor_dependency": True,
             "no_stable_race_p1_p20_automatic_change": True,
             "no_qualifying_p1_p5_automatic_change": True,
             "dnf_all_broad_precursor_search": True,
-            "no_drs_2026_assumption": True,
+            "no_drs_2026_assumption": True
         },
-        "artifact_profiles": source_rows,
+        "artifact_profiles": source_rows
     }
     policy_path = manifests / "season_archive_manifest.json"
     policy_path.write_text(json.dumps(policy, indent=2), encoding="utf-8")
@@ -319,7 +306,6 @@ def main():
         f"Generated UTC: {policy['generated_utc']}",
         f"Release tag: `{release_tag}`",
         f"Archive scope: `{args.archive_scope}`",
-        f"Artifact profiles archived: `{archived_count}/{len(source_rows)}`",
         "",
         "## Source artifacts",
         "",
@@ -335,7 +321,7 @@ def main():
         "",
         "This archive is published as a GitHub Release asset so it is not dependent on GitHub Actions artifact retention.",
         "",
-        "Raw high-frequency OpenF1 data is not included by default. Compact derived outputs, ledgers, workbook bridge exports, forecast reviews, post-race scoring packages, validation summaries, and manifests are included.",
+        "Raw high-frequency OpenF1 data is not included by default. Compact derived outputs, ledgers, workbook bridge exports, dry forecast packages, validation summaries, and manifests are included.",
         "",
         "## Guardrails",
         "",
@@ -349,12 +335,13 @@ def main():
     report_path = manifests / "season_archive_report.md"
     report_path.write_text("\n".join(report_lines), encoding="utf-8")
 
-    archive_zip = out / f"F1_{args.season_year}_Season_Archive_COMPACT_EXPANDED_{stamp}_run{run_number}.zip"
+    archive_zip = out / f"F1_{args.season_year}_Season_Archive_COMPACT_{stamp}_run{run_number}.zip"
     zip_dir(archive_root, archive_zip)
 
     checksum_path = out / f"{archive_zip.name}.sha256.txt"
     checksum_path.write_text(f"{sha256(archive_zip)}  {archive_zip.name}\n", encoding="utf-8")
 
+    # Upload report/manifest/checksum/archive to GitHub Release.
     release_body = "\n".join(report_lines)
     release = create_or_get_release(repo, token, release_tag, release_name, release_body, args.target_commitish)
 
@@ -363,6 +350,7 @@ def main():
         try:
             uploaded_assets.append(upload_release_asset(release["upload_url"], token, asset))
         except HTTPError as e:
+            # If asset already exists, keep going with warning; release may have been retried.
             if e.code == 422:
                 print(f"Asset may already exist, skipping: {asset.name}")
             else:
@@ -377,7 +365,7 @@ def main():
         "archive_sha256": sha256(archive_zip),
         "uploaded_assets": [a.get("name") for a in uploaded_assets],
         "source_artifacts": source_rows,
-        "status": "PUBLISHED",
+        "status": "PUBLISHED"
     }
     (out / "season_archive_publish_summary.json").write_text(json.dumps(publish_summary, indent=2), encoding="utf-8")
 
@@ -387,7 +375,6 @@ def main():
         f"- Release tag: `{release_tag}`",
         f"- Archive: `{archive_zip.name}`",
         f"- SHA256: `{publish_summary['archive_sha256']}`",
-        f"- Artifact profiles archived: `{archived_count}/{len(source_rows)}`",
         f"- Raw high-frequency data included: `false`",
         "",
         "### Source artifacts",

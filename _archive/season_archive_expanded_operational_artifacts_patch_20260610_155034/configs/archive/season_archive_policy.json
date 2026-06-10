@@ -1,6 +1,6 @@
 {
   "policy_name": "F1 Season Archive Policy",
-  "version": "2026-06-10-expanded-operational-artifacts",
+  "version": "2026-06-10",
   "default_season_year": 2026,
   "archive_scope": "compact_derived_outputs_only",
   "long_term_archive_target": "github_releases",
@@ -9,9 +9,6 @@
     "elite-weekend-engine-v2",
     "f1-workbook-control-room-bridge",
     "f1-dry-forecast-cycle",
-    "f1-forecast-use-dry-review",
-    "f1-race-weekend-operating-rhythm",
-    "f1-post-race-scoring-loop",
     "F1_Automation_Baseline_2026-06-10_READY"
   ],
   "exclude_by_default": [

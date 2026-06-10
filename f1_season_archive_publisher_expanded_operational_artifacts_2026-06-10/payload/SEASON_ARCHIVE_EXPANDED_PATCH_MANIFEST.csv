@@ -1,0 +1,6 @@
+path,type,purpose
+scripts/archive/publish_season_archive_release.py,script,Expanded season archive publisher with operational artifacts
+configs/archive/season_archive_policy.json,config,Expanded archive policy
+docs/F1_SEASON_ARCHIVE_EXPANDED_OPERATIONAL_ARTIFACTS_2026-06-10.md,docs,Patch explanation
+CURRENT_CANONICAL_FILES_SEASON_ARCHIVE_EXPANDED_2026-06-10.md,sidecar,Canonical file register
+SEASON_ARCHIVE_EXPANDED_PATCH_MANIFEST.csv,manifest,Patch manifest
