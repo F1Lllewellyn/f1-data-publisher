@@ -1,0 +1,73 @@
+name: Elite Weekend Engine Run
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "05 11 * * 5"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: elite-weekend-engine-run-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  YEAR: "2026"
+  ELITE_INPUT_DIR: "output/elite_weekend_engine_v2"
+  ELITE_OUTPUT_DIR: "output/elite_weekend_engine_v2/elite_outputs"
+  ELITE_ARTIFACT: "elite-weekend-engine-v2"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  elite_engine_run:
+    name: Consume latest OpenF1 artifacts and build elite control outputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas pyarrow numpy python-dateutil tabulate
+
+      - name: Download latest OpenF1 autopilot artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/elite/download_latest_openf1_artifacts.py \
+            --output-dir "$ELITE_INPUT_DIR" \
+            --include-post-race-warning
+
+      - name: Build Elite Weekend Engine v2 outputs
+        run: |
+          python scripts/elite/elite_weekend_engine_v2.py \
+            --input-dir "$ELITE_INPUT_DIR" \
+            --output-dir "$ELITE_OUTPUT_DIR"
+
+      - name: Add run summary
+        if: always()
+        run: |
+          if [ -f "$ELITE_OUTPUT_DIR/reports/github_step_summary.md" ]; then
+            cat "$ELITE_OUTPUT_DIR/reports/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload elite engine artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.ELITE_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
+          path: |
+            ${{ env.ELITE_OUTPUT_DIR }}
+            ${{ env.ELITE_INPUT_DIR }}/manifests
+          retention-days: 90
+          if-no-files-found: warn

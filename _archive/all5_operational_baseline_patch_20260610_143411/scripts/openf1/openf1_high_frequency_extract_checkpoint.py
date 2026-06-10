@@ -2,9 +2,8 @@
 """
 OpenF1 high-frequency extraction checkpoint runner.
 
-Runs the expensive OpenF1 extraction/build stage and uploads a checkpoint before
-reporting. In race/post-race mode, if the normal feature mart is empty despite
-successful extraction, it invokes a robust public-data fallback feature builder.
+Runs the expensive extraction/build stage and intentionally stops before final
+Markdown reporting so GitHub can upload a checkpoint artifact first.
 """
 
 import argparse
@@ -27,19 +26,20 @@ from openf1_high_frequency_auto_ingest import (  # noqa: E402
     build_metrics,
 )
 
-from openf1_feature_fallback import build_feature_mart_fallback  # noqa: E402
-
 
 def filter_recent_sessions(sessions: pd.DataFrame, recent_days: int) -> pd.DataFrame:
     if not recent_days or recent_days <= 0 or sessions.empty:
         return sessions
+
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(days=recent_days)
+
     dt_col = None
     for candidate in ["date_end_dt", "date_start_dt"]:
         if candidate in sessions.columns:
             dt_col = candidate
             break
+
     if dt_col is None:
         return sessions
 
@@ -50,16 +50,19 @@ def filter_recent_sessions(sessions: pd.DataFrame, recent_days: int) -> pd.DataF
             x = x.replace(tzinfo=timezone.utc)
         return x >= cutoff
 
-    return sessions[sessions[dt_col].apply(keep_dt)].copy().reset_index(drop=True)
+    out = sessions[sessions[dt_col].apply(keep_dt)].copy()
+    return out.reset_index(drop=True)
 
 
 def filter_latest_meeting(sessions: pd.DataFrame) -> pd.DataFrame:
     if sessions.empty or "meeting_key" not in sessions.columns:
         return sessions
+
     sort_cols = [c for c in ["date_end_dt", "date_start_dt", "meeting_key", "session_key"] if c in sessions.columns]
     ordered = sessions.sort_values(sort_cols).reset_index(drop=True)
     latest_meeting = ordered.iloc[-1]["meeting_key"]
-    return ordered[ordered["meeting_key"] == latest_meeting].copy().reset_index(drop=True)
+    out = ordered[ordered["meeting_key"] == latest_meeting].copy()
+    return out.reset_index(drop=True)
 
 
 def main():
@@ -85,6 +88,7 @@ def main():
 
     sessions = discover_sessions(client, args.year, args.mode, event_filter=args.event_filter)
     original_session_count = len(sessions)
+
     sessions = filter_recent_sessions(sessions, args.recent_days)
     after_recent_count = len(sessions)
 
@@ -112,19 +116,7 @@ def main():
         return
 
     session_drivers, manifest = extract_raw(client, sessions, output_dir, args.fetch_mode)
-
-    fallback_feature_builder_used = False
-    normal_feature_rows = 0
     fm = build_feature_mart(output_dir, sessions, session_drivers)
-    normal_feature_rows = 0 if fm is None or fm.empty else len(fm)
-
-    if args.mode == "race" and normal_feature_rows == 0:
-        print("Normal race-mode feature mart is empty; invoking robust post-race fallback feature builder.")
-        fm_fallback = build_feature_mart_fallback(output_dir, sessions, session_drivers)
-        if fm_fallback is not None and not fm_fallback.empty:
-            fm = fm_fallback
-            fallback_feature_builder_used = True
-
     build_metrics(output_dir, args.mode, fm, client, args.year)
 
     policy = {
@@ -140,7 +132,6 @@ def main():
         "stable_rank_change_allowed": False,
         "fantasy_and_reporting_use": True,
         "checkpoint_before_report": True,
-        "postrace_feature_fallback_enabled": True,
         "generated_utc": datetime.now(timezone.utc).isoformat(),
     }
     (output_dir / "openf1_auto_ingest_run_policy.json").write_text(json.dumps(policy, indent=2), encoding="utf-8")
@@ -149,7 +140,9 @@ def main():
     if manifest is not None and not manifest.empty and "rows" in manifest.columns:
         total_rows = int(pd.to_numeric(manifest["rows"], errors="coerce").fillna(0).sum())
 
-    feature_rows = 0 if fm is None or fm.empty else len(fm)
+    feature_rows = 0
+    if fm is not None and not fm.empty:
+        feature_rows = len(fm)
 
     summary = {
         "status": "EXTRACTION_CHECKPOINT_COMPLETE",
@@ -162,9 +155,7 @@ def main():
         "after_recent_filter_session_count": after_recent_count,
         "selected_session_count": len(sessions),
         "total_high_frequency_rows": total_rows,
-        "normal_feature_rows": int(normal_feature_rows),
-        "fallback_feature_builder_used": bool(fallback_feature_builder_used),
-        "feature_rows": int(feature_rows),
+        "feature_rows": feature_rows,
         "generated_utc": datetime.now(timezone.utc).isoformat(),
     }
     (output_dir / "manifests" / "extraction_checkpoint_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
