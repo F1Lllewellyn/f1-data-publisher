@@ -1,0 +1,12 @@
+# F1 high-frequency OpenF1 outputs
+output/
+data/raw/
+data/openf1/high_frequency/
+*.parquet
+*.zip
+
+# Keep lightweight configs/reports, not raw high-frequency telemetry
+!configs/
+!docs/
+!scripts/
+!tests/
