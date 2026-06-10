@@ -1,0 +1,62 @@
+name: F1 Post-Race Scoring Loop
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["OpenF1 Post-Race Auto Reliability", "Elite Weekend Engine Run"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  OUTPUT_DIR: "output/f1_post_race_scoring_loop"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  post_race_scoring_loop:
+    name: Build post-race scoring package
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas requests pyarrow numpy python-dateutil tabulate
+
+      - name: Download latest Elite artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/elite/download_latest_elite_artifact.py \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Build post-race scoring loop package
+        run: |
+          python scripts/scoring/build_post_race_scoring_loop.py \
+            --elite-artifact-dir "$OUTPUT_DIR/elite_artifact" \
+            --policy configs/scoring/post_race_scoring_policy.json \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Add run summary
+        run: |
+          cat "$OUTPUT_DIR/reports/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload post-race scoring loop artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-post-race-scoring-loop-2026-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: error

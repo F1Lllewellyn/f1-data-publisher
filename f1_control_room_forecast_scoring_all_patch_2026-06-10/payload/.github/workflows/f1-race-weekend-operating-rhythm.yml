@@ -1,0 +1,62 @@
+name: F1 Race Weekend Operating Rhythm
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 13 * * 4"
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  OUTPUT_DIR: "output/f1_race_weekend_operating_rhythm"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  operating_rhythm:
+    name: Publish race-weekend operating checklist
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build operating rhythm summary
+        run: |
+          mkdir -p "$OUTPUT_DIR/reports"
+          cat > "$OUTPUT_DIR/reports/race_weekend_operating_rhythm.md" <<'EOF'
+          # F1 Race Weekend Operating Rhythm
+
+          ## Order of operations
+
+          1. OpenF1 Pre-Race Auto Ingest
+          2. Elite Weekend Engine Run
+          3. F1 Workbook Control Room Bridge
+          4. F1 Dry Forecast Cycle
+          5. F1 Forecast Use Dry Review
+          6. Human prediction/fantasy review
+          7. OpenF1 Post-Race Auto Reliability
+          8. F1 Post-Race Scoring Loop
+          9. F1 Season Archive Publisher for milestone archive
+
+          ## Guardrails
+
+          - No automatic stable race P1-P20 reorder.
+          - No automatic qualifying P1-P5 reorder.
+          - No automatic fantasy transfer.
+          - Public/proxy data only.
+          - DNF_ALL broad precursor search.
+          - 2026 no-DRS rule preserved.
+          EOF
+
+          cat "$OUTPUT_DIR/reports/race_weekend_operating_rhythm.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload operating rhythm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-race-weekend-operating-rhythm-2026-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: error

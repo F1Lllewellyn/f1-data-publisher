@@ -1,0 +1,23 @@
+{
+  "policy_name": "Forecast Use Dry Review Policy",
+  "version": "2026-06-10",
+  "workbook_name": "F1_2026_Prediction_Model_Data_Workbook_OPERATIONAL_CONTROL_ROOM_READY_2026-06-10.xlsx",
+  "rules": {
+    "stable_race_p1_p20_automatic_reorder_allowed": false,
+    "qualifying_p1_p5_automatic_reorder_allowed": false,
+    "fantasy_automatic_transfer_allowed": false,
+    "reliability_signals": "confidence_and_risk_flags_only",
+    "dnf_all_signals": "advisory_precursor_search_only",
+    "promotion_gate": "hold_stable_unless_reviewed"
+  },
+  "required_elite_statuses": [
+    "READY",
+    "READY_WITH_POSTRACE_SIGNAL_WARNING"
+  ],
+  "standing_project_rules": {
+    "public_proxy_only": true,
+    "no_private_internal_sensor_dependency": true,
+    "dnf_all_broad_precursor_search": true,
+    "no_drs_2026_assumption": true
+  }
+}

@@ -1,0 +1,15 @@
+path,type,purpose
+workbooks/F1_2026_Prediction_Model_Data_Workbook_OPERATIONAL_CONTROL_ROOM_READY_2026-06-10.xlsx,workbook,Operational control-room workbook under date/function naming
+configs/forecast/forecast_review_policy.json,config,Forecast review guardrails
+configs/scoring/post_race_scoring_policy.json,config,Post-race scoring rules
+scripts/forecast/build_forecast_use_dry_review.py,script,Builds forecast-use dry review package
+scripts/scoring/build_post_race_scoring_loop.py,script,Builds post-race scoring package
+.github/workflows/f1-forecast-use-dry-review.yml,workflow,Forecast-use dry review
+.github/workflows/f1-post-race-scoring-loop.yml,workflow,Post-race scoring loop
+.github/workflows/f1-race-weekend-operating-rhythm.yml,workflow,Race weekend operating rhythm checklist
+docs/F1_OPERATIONAL_CONTROL_ROOM_WORKBOOK_READY_2026-06-10.md,docs,Workbook ready note
+docs/F1_FORECAST_USE_DRY_REVIEW_READY_2026-06-10.md,docs,Forecast review ready note
+docs/F1_POST_RACE_SCORING_LOOP_READY_2026-06-10.md,docs,Post-race scoring ready note
+docs/F1_RACE_WEEKEND_OPERATING_RHYTHM_READY_2026-06-10.md,docs,Race weekend rhythm ready note
+docs/F1_NO_V_VERSION_WORKBOOK_NAMING_NOTE_2026-06-10.md,docs,Naming correction note
+CURRENT_CANONICAL_FILES_CONTROL_ROOM_FORECAST_SCORING_2026-06-10.md,sidecar,Canonical file register

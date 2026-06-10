@@ -1,0 +1,28 @@
+{
+  "policy_name": "Post-Race Scoring Loop Policy",
+  "version": "2026-06-10",
+  "scoring_targets": [
+    "source_readiness_quality",
+    "reliability_warning_value",
+    "dnf_all_precursor_value",
+    "fantasy_risk_value",
+    "model_disagreement_value",
+    "promotion_gate_correctness"
+  ],
+  "score_scale": {
+    "helped_decision": 1,
+    "neutral": 0,
+    "false_positive": -1,
+    "missed_signal": -1
+  },
+  "promotion_rules": {
+    "automatic_promotion_allowed": false,
+    "requires_review": true,
+    "requires_locked_future_or_backtest_proof": true
+  },
+  "standing_project_rules": {
+    "visible_outcome_labels_are_metadata_only": true,
+    "dnf_all_broad_precursor_search": true,
+    "no_drs_2026_assumption": true
+  }
+}
