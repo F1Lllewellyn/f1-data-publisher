@@ -1,0 +1,11 @@
+path,type,purpose
+configs/archive/season_archive_policy.json,config,Long-term season archive policy
+scripts/archive/publish_season_archive_release.py,script,Builds compact archive and publishes GitHub Release assets
+scripts/admin/create_baseline_tag.ps1,script,Local fallback for pushing baseline tag
+.github/workflows/f1-create-automation-baseline-tag.yml,workflow,Creates/pushes automation baseline tag from GitHub
+.github/workflows/f1-season-archive-publisher.yml,workflow,Publishes compact season archive to GitHub Releases
+docs/F1_SEASON_ARCHIVE_RETENTION_POLICY_2026-06-10.md,docs,Retention policy
+docs/F1_SEASON_ARCHIVE_PUBLISHER_RUNBOOK_2026-06-10.md,docs,Publisher runbook
+docs/F1_LONG_TERM_DATA_ARCHIVE_GUIDE_2026-06-10.md,docs,Long-term archive guide
+docs/F1_BASELINE_TAG_GUIDE_2026-06-10.md,docs,Baseline tag guide
+CURRENT_CANONICAL_FILES_SEASON_ARCHIVE_PUBLISHER_2026-06-10.md,sidecar,Canonical file register

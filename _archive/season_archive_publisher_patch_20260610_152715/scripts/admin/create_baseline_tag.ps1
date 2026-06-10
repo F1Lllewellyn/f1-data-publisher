@@ -20,14 +20,9 @@ function Find-Git {
 }
 
 $git = Find-Git
-
 Push-Location $Repo
 
-Write-Host "Using git: $git"
-Write-Host "Repo: $Repo"
-Write-Host "Tag: $TagName"
-
-& $git fetch --tags origin
+& $git status
 
 $existing = & $git tag --list $TagName
 if ($existing -eq $TagName) {

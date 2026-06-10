@@ -1,0 +1,36 @@
+{
+  "policy_name": "F1 Season Archive Policy",
+  "version": "2026-06-10",
+  "default_season_year": 2026,
+  "archive_scope": "compact_derived_outputs_only",
+  "long_term_archive_target": "github_releases",
+  "do_not_depend_on_actions_artifact_retention": true,
+  "include_artifact_profiles": [
+    "elite-weekend-engine-v2",
+    "f1-workbook-control-room-bridge",
+    "f1-dry-forecast-cycle",
+    "F1_Automation_Baseline_2026-06-10_READY"
+  ],
+  "exclude_by_default": [
+    "raw_openf1_high_frequency_car_data",
+    "raw_openf1_high_frequency_location",
+    "full_historical_raw_parquet_payloads"
+  ],
+  "raw_snapshot_policy": {
+    "archive_raw_only_for": [
+      "season_opening_baseline",
+      "major_schema_change",
+      "end_of_season_full_historical_extract",
+      "race_weekend_forensic_deep_dive"
+    ],
+    "requires_explicit_manual_workflow_input": true
+  },
+  "guardrails": {
+    "public_proxy_only": true,
+    "no_private_internal_sensor_dependency": true,
+    "no_stable_race_p1_p20_automatic_change": true,
+    "no_qualifying_p1_p5_automatic_change": true,
+    "dnf_all_broad_precursor_search": true,
+    "no_drs_2026_assumption": true
+  }
+}

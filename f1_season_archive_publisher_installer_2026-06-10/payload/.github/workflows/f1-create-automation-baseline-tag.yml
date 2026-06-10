@@ -1,0 +1,43 @@
+name: F1 Create Automation Baseline Tag
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TAG_NAME: "F1_Automation_Baseline_2026-06-10_READY"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  create_tag:
+    name: Create and push automation baseline tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create tag if missing
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --tags origin
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag already exists: $TAG_NAME"
+          else
+            git tag -a "$TAG_NAME" -m "F1 automation operational baseline READY 2026-06-10"
+            git push origin "$TAG_NAME"
+            echo "Created and pushed tag: $TAG_NAME"
+          fi
+
+      - name: Add run summary
+        run: |
+          echo "## F1 automation baseline tag" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tag: \`$TAG_NAME\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: created or already existed" >> "$GITHUB_STEP_SUMMARY"

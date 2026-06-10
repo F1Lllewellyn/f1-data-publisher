@@ -1,0 +1,81 @@
+name: F1 Season Archive Publisher
+
+on:
+  workflow_dispatch:
+    inputs:
+      season_year:
+        description: "Season year to archive"
+        required: true
+        default: "2026"
+      archive_scope:
+        description: "Archive scope"
+        required: true
+        default: "compact"
+        type: choice
+        options:
+          - compact
+  schedule:
+    - cron: "20 12 1 * *"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-season-archive-publisher-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  OUTPUT_DIR: "output/f1_season_archive_publisher"
+
+jobs:
+  publish_archive:
+    name: Publish compact season archive release
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set archive inputs
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "SEASON_YEAR=${{ github.event.inputs.season_year }}" >> "$GITHUB_ENV"
+            echo "ARCHIVE_SCOPE=${{ github.event.inputs.archive_scope }}" >> "$GITHUB_ENV"
+          else
+            echo "SEASON_YEAR=2026" >> "$GITHUB_ENV"
+            echo "ARCHIVE_SCOPE=compact" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Publish season archive release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/archive/publish_season_archive_release.py \
+            --season-year "$SEASON_YEAR" \
+            --archive-scope "$ARCHIVE_SCOPE" \
+            --output-dir "$OUTPUT_DIR" \
+            --target-commitish "main"
+
+      - name: Add run summary
+        if: always()
+        run: |
+          if [ -f "$OUTPUT_DIR/github_step_summary.md" ]; then
+            cat "$OUTPUT_DIR/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload archive publisher diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f1-season-archive-publisher-diagnostics-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: warn
