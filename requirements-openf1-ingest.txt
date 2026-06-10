@@ -1,6 +1,8 @@
-requests
+﻿requests
 pandas
 pyarrow
 tqdm
 python-dateutil
 numpy
+tabulate
+

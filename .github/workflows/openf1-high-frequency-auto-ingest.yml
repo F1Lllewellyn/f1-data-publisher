@@ -1,4 +1,4 @@
-name: OpenF1 High-Frequency Auto Ingest
+﻿name: OpenF1 High-Frequency Auto Ingest
 
 on:
   workflow_dispatch:
@@ -62,7 +62,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests pandas pyarrow tqdm python-dateutil numpy
+          pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
 
       - name: Run OpenF1 high-frequency ingest
         run: |
@@ -92,3 +92,4 @@ jobs:
             output/openf1_high_frequency/**/*.parquet
           retention-days: 30
           if-no-files-found: error
+

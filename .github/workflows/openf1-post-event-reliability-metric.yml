@@ -1,4 +1,4 @@
-name: OpenF1 Post-Event Reliability Metric
+﻿name: OpenF1 Post-Event Reliability Metric
 
 on:
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
 
       - run: |
           python -m pip install --upgrade pip
-          pip install requests pandas pyarrow tqdm python-dateutil numpy
+          pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
 
       - name: Pull and score post-event reliability layer
         run: |
@@ -60,3 +60,4 @@ jobs:
           path: output/openf1_post_event_reliability/**
           retention-days: 90
           if-no-files-found: error
+
