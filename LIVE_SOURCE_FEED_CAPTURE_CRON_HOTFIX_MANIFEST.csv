@@ -1,0 +1,4 @@
+path,action,purpose
+.github/workflows/f1-live-source-feed-capture-experimental.yml,replace,Fix invalid four-field cron expression to valid five-field GitHub Actions schedule
+docs/F1_LIVE_SOURCE_FEED_CAPTURE_CRON_HOTFIX_2026-06-10.md,add,Plain-English hotfix documentation
+CURRENT_CANONICAL_FILES_LIVE_SOURCE_FEED_CAPTURE_CRON_HOTFIX_2026-06-10.md,add,Canonical file register for this hotfix

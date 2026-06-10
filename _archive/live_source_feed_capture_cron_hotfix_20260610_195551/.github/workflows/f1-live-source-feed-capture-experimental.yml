@@ -27,7 +27,7 @@ on:
   schedule:
     # Experimental watchdog. Script exits quickly unless policy allows a capture window.
     # Keep this conservative; adjust only after first validation.
-    - cron: "*/15 * * * 5,6,0"
+    - cron: "*/15 * * 5,6,0"
 
 permissions:
   contents: write
