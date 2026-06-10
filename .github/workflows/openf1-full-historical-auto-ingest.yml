@@ -1,0 +1,118 @@
+name: OpenF1 Full Historical Auto Ingest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 10 * * 3"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: openf1-full-historical-auto-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  YEAR: "2026"
+  MODE: "all"
+  FETCH_MODE: "driver_full_session"
+  OUTPUT_DIR: "output/openf1_full_historical_auto"
+  CHECKPOINT_ARTIFACT: "openf1-full-historical-auto-checkpoint"
+  FINAL_ARTIFACT: "openf1-full-historical-auto-final"
+
+jobs:
+  extract_and_checkpoint:
+    name: Extract OpenF1 data and upload checkpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 480
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
+
+      - name: Extract and build checkpoint
+        run: |
+          python scripts/openf1/openf1_high_frequency_extract_checkpoint.py \
+            --year "$YEAR" \
+            --mode "$MODE" \
+            --fetch-mode "$FETCH_MODE" \
+            --output-dir "$OUTPUT_DIR" \
+            --request-sleep 0.35 \
+            --warning-threshold 0.80 \
+            --strict-threshold 0.90 
+
+      - name: Upload extraction checkpoint artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: error
+
+  validate_report_and_upload:
+    name: Validate checkpoint, write report, upload final artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs: extract_and_checkpoint
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
+
+      - name: Download extraction checkpoint artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+
+      - name: Write report without re-extracting
+        run: |
+          python scripts/openf1/openf1_high_frequency_report_only.py \
+            --year "$YEAR" \
+            --mode "$MODE" \
+            --output-dir "$OUTPUT_DIR" \
+            --workflow-label "OpenF1 Full Historical Auto Ingest"
+
+      - name: Validate output
+        run: |
+          python tests/validate_openf1_high_frequency_output.py \
+            --output-dir "$OUTPUT_DIR" \
+            --mode "$MODE"
+
+      - name: Add run summary
+        if: always()
+        run: |
+          if [ -f "$OUTPUT_DIR/reports/github_step_summary.md" ]; then
+            cat "$OUTPUT_DIR/reports/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload final validated artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.FINAL_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
+          path: ${{ env.OUTPUT_DIR }}
+          retention-days: 90
+          if-no-files-found: error

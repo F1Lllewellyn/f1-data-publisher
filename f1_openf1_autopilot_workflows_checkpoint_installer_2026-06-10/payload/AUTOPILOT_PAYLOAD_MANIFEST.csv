@@ -1,0 +1,7 @@
+path,type,purpose
+.github/workflows/openf1-prerace-auto-ingest.yml,workflow,Dedicated automated pre-race high-frequency ingest
+.github/workflows/openf1-full-historical-auto-ingest.yml,workflow,Dedicated automated full historical high-frequency ingest
+.github/workflows/openf1-post-race-auto-reliability.yml,workflow,Dedicated automated post-race reliability ingest
+scripts/openf1/openf1_high_frequency_extract_checkpoint.py,script,Extraction-only checkpoint runner
+scripts/openf1/openf1_high_frequency_report_only.py,script,Report-only runner for downloaded checkpoints
+docs/README_OPENF1_AUTOPILOT_WORKFLOWS.md,docs,Workflow operating instructions
