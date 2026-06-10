@@ -1,32 +1,31 @@
-name: OpenF1 Full Historical Auto Ingest
+name: OpenF1 Pre-Race Auto Ingest
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "10 10 * * 3"
+    - cron: "15 9 * * *"
 
 permissions:
   contents: read
   actions: read
 
 concurrency:
-  group: openf1-full-historical-auto-${{ github.ref }}
+  group: openf1-prerace-auto-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   YEAR: "2026"
-  MODE: "all"
+  MODE: "prerace"
   FETCH_MODE: "driver_full_session"
-  OUTPUT_DIR: "output/openf1_full_historical_auto"
-  CHECKPOINT_ARTIFACT: "openf1-full-historical-auto-checkpoint"
-  FINAL_ARTIFACT: "openf1-full-historical-auto-final"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  OUTPUT_DIR: "output/openf1_prerace_auto"
+  CHECKPOINT_ARTIFACT: "openf1-prerace-auto-checkpoint"
+  FINAL_ARTIFACT: "openf1-prerace-auto-final"
 
 jobs:
   extract_and_checkpoint:
     name: Extract OpenF1 data and upload checkpoint
     runs-on: ubuntu-latest
-    timeout-minutes: 480
+    timeout-minutes: 360
 
     steps:
       - name: Checkout repo
@@ -59,7 +58,7 @@ jobs:
         with:
           name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
-          retention-days: 90
+          retention-days: 60
           if-no-files-found: error
 
   validate_report_and_upload:
@@ -94,7 +93,7 @@ jobs:
             --year "$YEAR" \
             --mode "$MODE" \
             --output-dir "$OUTPUT_DIR" \
-            --workflow-label "OpenF1 Full Historical Auto Ingest"
+            --workflow-label "OpenF1 Pre-Race Auto Ingest"
 
       - name: Validate output
         run: |
@@ -115,5 +114,5 @@ jobs:
         with:
           name: ${{ env.FINAL_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
-          retention-days: 90
+          retention-days: 60
           if-no-files-found: error

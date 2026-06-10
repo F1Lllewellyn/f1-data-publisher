@@ -2,8 +2,10 @@
 """
 OpenF1 high-frequency report-only runner.
 
-Runs after a checkpoint artifact is downloaded. Writes reports without
-re-extracting OpenF1 data and without relying on pandas.to_markdown.
+Purpose:
+- Runs after the extraction checkpoint artifact is downloaded.
+- Writes Markdown reports without re-pulling OpenF1 data.
+- Avoids pandas.to_markdown/tabulate dependency fragility by writing Markdown tables manually.
 """
 
 import argparse
@@ -29,13 +31,18 @@ def fmt_value(v):
 def markdown_table(df: pd.DataFrame, max_rows: int = 20) -> list[str]:
     if df is None or df.empty:
         return ["_No rows._"]
+
     d = df.head(max_rows).copy()
     cols = list(d.columns)
-    lines = ["| " + " | ".join(cols) + " |", "| " + " | ".join(["---"] * len(cols)) + " |"]
+    lines = []
+    lines.append("| " + " | ".join(cols) + " |")
+    lines.append("| " + " | ".join(["---"] * len(cols)) + " |")
     for _, row in d.iterrows():
         lines.append("| " + " | ".join(fmt_value(row[c]) for c in cols) + " |")
+
     if len(df) > max_rows:
-        lines += ["", f"_Showing first {max_rows} of {len(df)} rows._"]
+        lines.append("")
+        lines.append(f"_Showing first {max_rows} of {len(df)} rows._")
     return lines
 
 
@@ -57,14 +64,20 @@ def main():
     report_dir = root / "reports"
     report_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest = read_csv_if_exists(root / "manifests" / "high_frequency_extraction_manifest.csv")
-    feature_manifest = read_csv_if_exists(root / "manifests" / "feature_manifest.csv")
-    sessions = read_csv_if_exists(root / "manifests" / "completed_sessions_selected.csv")
-    metrics = read_csv_if_exists(root / "metrics" / "pre_race_first_warning_to_dnf_aggregate.csv")
-    phase = read_csv_if_exists(root / "metrics" / "pre_race_first_warning_phase_breakdown.csv")
+    manifest_path = root / "manifests" / "high_frequency_extraction_manifest.csv"
+    feature_manifest_path = root / "manifests" / "feature_manifest.csv"
+    sessions_path = root / "manifests" / "completed_sessions_selected.csv"
+    checkpoint_summary_path = root / "manifests" / "extraction_checkpoint_summary.json"
+    metrics_path = root / "metrics" / "pre_race_first_warning_to_dnf_aggregate.csv"
+    phase_path = root / "metrics" / "pre_race_first_warning_phase_breakdown.csv"
+
+    manifest = read_csv_if_exists(manifest_path)
+    feature_manifest = read_csv_if_exists(feature_manifest_path)
+    sessions = read_csv_if_exists(sessions_path)
+    metrics = read_csv_if_exists(metrics_path)
+    phase = read_csv_if_exists(phase_path)
 
     checkpoint_summary = {}
-    checkpoint_summary_path = root / "manifests" / "extraction_checkpoint_summary.json"
     if checkpoint_summary_path.exists():
         try:
             checkpoint_summary = json.loads(checkpoint_summary_path.read_text(encoding="utf-8"))
@@ -99,8 +112,12 @@ def main():
         "## Selected sessions",
         "",
     ]
-    lines += markdown_table(sessions[[c for c in ["country_name", "meeting_name", "session_name", "session_type", "session_key", "date_start"] if c in sessions.columns]], max_rows=30)
+    lines += markdown_table(sessions[[
+        c for c in ["country_name", "meeting_name", "session_name", "session_type", "session_key", "date_start"]
+        if c in sessions.columns
+    ]], max_rows=30)
     lines += ["", "## Extraction status by endpoint", ""]
+
     if not manifest.empty and "endpoint" in manifest.columns:
         endpoint_summary = (
             manifest.assign(rows_num=pd.to_numeric(manifest.get("rows", 0), errors="coerce").fillna(0))
@@ -113,7 +130,10 @@ def main():
         lines += ["_No extraction manifest found._"]
 
     lines += ["", "## Pre-race / DNF warning metric", ""]
-    lines += markdown_table(metrics, max_rows=20) if not metrics.empty else ["_No pre-race aggregate metric produced for this mode._"]
+    if not metrics.empty:
+        lines += markdown_table(metrics, max_rows=20)
+    else:
+        lines += ["_No pre-race aggregate metric produced for this mode._"]
 
     if not phase.empty:
         lines += ["", "## First warning phase breakdown", ""]
@@ -147,6 +167,7 @@ def main():
         "",
     ]
     (report_dir / "github_step_summary.md").write_text("\n".join(summary_lines), encoding="utf-8")
+
     print(f"Report written: {report_path}")
 
 

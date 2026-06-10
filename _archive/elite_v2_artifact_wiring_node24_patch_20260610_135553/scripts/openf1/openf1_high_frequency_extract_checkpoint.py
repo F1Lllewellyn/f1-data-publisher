@@ -2,8 +2,12 @@
 """
 OpenF1 high-frequency extraction checkpoint runner.
 
-Runs the expensive extraction/build stage and intentionally stops before final
-Markdown reporting so GitHub can upload a checkpoint artifact first.
+Purpose:
+- Runs the expensive OpenF1 extraction/build steps.
+- Deliberately skips final Markdown report generation.
+- Allows GitHub Actions to upload an extraction checkpoint before validation/reporting.
+
+This avoids losing a long extraction if the later report/validation job fails.
 """
 
 import argparse

@@ -1,32 +1,32 @@
-name: OpenF1 Full Historical Auto Ingest
+name: OpenF1 Post-Race Auto Reliability
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "10 10 * * 3"
+    - cron: "35 10 * * 1"
 
 permissions:
   contents: read
   actions: read
 
 concurrency:
-  group: openf1-full-historical-auto-${{ github.ref }}
+  group: openf1-post-race-auto-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   YEAR: "2026"
-  MODE: "all"
+  MODE: "race"
   FETCH_MODE: "driver_full_session"
-  OUTPUT_DIR: "output/openf1_full_historical_auto"
-  CHECKPOINT_ARTIFACT: "openf1-full-historical-auto-checkpoint"
-  FINAL_ARTIFACT: "openf1-full-historical-auto-final"
+  OUTPUT_DIR: "output/openf1_post_race_auto"
+  CHECKPOINT_ARTIFACT: "openf1-post-race-auto-checkpoint"
+  FINAL_ARTIFACT: "openf1-post-race-auto-final"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   extract_and_checkpoint:
     name: Extract OpenF1 data and upload checkpoint
     runs-on: ubuntu-latest
-    timeout-minutes: 480
+    timeout-minutes: 300
 
     steps:
       - name: Checkout repo
@@ -51,7 +51,9 @@ jobs:
             --output-dir "$OUTPUT_DIR" \
             --request-sleep 0.35 \
             --warning-threshold 0.80 \
-            --strict-threshold 0.90 
+            --strict-threshold 0.90 \
+            --recent-days 14 \
+            --latest-meeting-only
 
       - name: Upload extraction checkpoint artifact
         uses: actions/upload-artifact@v4
@@ -94,13 +96,14 @@ jobs:
             --year "$YEAR" \
             --mode "$MODE" \
             --output-dir "$OUTPUT_DIR" \
-            --workflow-label "OpenF1 Full Historical Auto Ingest"
+            --workflow-label "OpenF1 Post-Race Auto Reliability"
 
       - name: Validate output
         run: |
           python tests/validate_openf1_high_frequency_output.py \
             --output-dir "$OUTPUT_DIR" \
-            --mode "$MODE"
+            --mode "$MODE" \
+            --allow-empty-features
 
       - name: Add run summary
         if: always()

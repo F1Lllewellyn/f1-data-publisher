@@ -1,0 +1,10 @@
+path,type,purpose
+.github/workflows/openf1-prerace-auto-ingest.yml,workflow,Node24 opt-in plus checkpointed pre-race autopilot workflow
+.github/workflows/openf1-full-historical-auto-ingest.yml,workflow,Node24 opt-in plus checkpointed full historical autopilot workflow
+.github/workflows/openf1-post-race-auto-reliability.yml,workflow,Node24 opt-in plus post-race PASS_WITH_WARNINGS validator call
+.github/workflows/elite-weekend-engine-run.yml,workflow,Elite v2 workflow that downloads latest OpenF1 artifacts and builds real control outputs
+scripts/openf1/openf1_high_frequency_extract_checkpoint.py,script,Extraction-only checkpoint runner
+scripts/openf1/openf1_high_frequency_report_only.py,script,Report-only checkpoint consumer
+scripts/elite/download_latest_openf1_artifacts.py,script,Downloads latest OpenF1 artifacts from GitHub Actions using GITHUB_TOKEN
+scripts/elite/elite_weekend_engine_v2.py,script,Consumes artifacts and creates control-room outputs
+docs/F1_ELITE_V2_ARTIFACT_WIRING_NODE24_PATCH.md,docs,Patch documentation

@@ -20,7 +20,6 @@ env:
   OUTPUT_DIR: "output/openf1_full_historical_auto"
   CHECKPOINT_ARTIFACT: "openf1-full-historical-auto-checkpoint"
   FINAL_ARTIFACT: "openf1-full-historical-auto-final"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   extract_and_checkpoint:
