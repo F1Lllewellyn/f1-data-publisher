@@ -1,0 +1,37 @@
+{
+  "name": "forecast_bundle_locker_v1_scheduler_guard_hotfix",
+  "date": "2026-06-11",
+  "purpose": "Prevent scheduled forecast-bundle locker runs from committing placeholder bundles when no real event/gate forecast source rows exist.",
+  "gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result"
+  ],
+  "lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ],
+  "scheduled_guard": {
+    "enabled": true,
+    "scheduled_runs_require_forecast_source_rows": true,
+    "excluded_as_source_for_scheduled_runs": [
+      "latest/forecast_bundles/**"
+    ],
+    "allowed_source_roots": [
+      "latest/forecasts/**",
+      "latest/forecast_outputs/**",
+      "latest/method_e_control_room/forecasts/**"
+    ],
+    "no_source_behavior": "write _runtime guard report, exit 0, create no latest/history bundles, commit no changes"
+  },
+  "manual_runs": {
+    "unchanged": true,
+    "can_create_structural_missing_source_bundles": true,
+    "reason": "Manual gate locking is a deliberate operator action and remains useful for controlled validation setup."
+  },
+  "promotion_gate": "unchanged; promotion remains blocked until scored blind/session-gated performance satisfies criteria",
+  "stable_engine_touched": false,
+  "canonical_workbook_touched": false
+}
