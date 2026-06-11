@@ -1,0 +1,34 @@
+{
+  "generated_utc": "2026-06-11T00:09:47.529716Z",
+  "verdict": "Fail",
+  "decision": {
+    "should_capture": true,
+    "reason": "manual_dispatch",
+    "session_label": "manual_test",
+    "duration_minutes": 20,
+    "session_key": null,
+    "meeting_key": null,
+    "session_name": "manual_test",
+    "country_name": null,
+    "date_start": null,
+    "date_end": null
+  },
+  "recording_result": {
+    "recording_attempted": true,
+    "recording_started_utc": "2026-06-11T00:09:47.121423Z",
+    "recording_finished_utc": "2026-06-11T00:09:47.529639Z",
+    "duration_minutes_requested": 20,
+    "raw_path": "_live_source_feed_capture_work/20260611_000947_manual_test/live_timing_raw.txt",
+    "fastf1_import_ok": false,
+    "recording_status": "fastf1_import_failed",
+    "error": "TypeError(\"unsupported operand type(s) for |: 'NoneType' and 'type'\")"
+  },
+  "packet_summary": {
+    "raw_exists": false,
+    "raw_size_bytes": 0,
+    "line_count": 0,
+    "topic_counts": {},
+    "index_created": false
+  },
+  "operator_note": "If this is a manual test outside an active F1 live timing window, zero raw bytes may be expected. If recording_status is recording_error or fastf1_import_failed, inspect the error field and patch before race-weekend use."
+}
