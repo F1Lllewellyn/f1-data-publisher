@@ -1,0 +1,25 @@
+{
+  "model_name": "Experimental Challenger v2.1 \u2014 Calibrated Gate-Aware Specialist Stack",
+  "model_id": "experimental_challenger_v2_1_calibrated_gate_aware_stack",
+  "created_utc": "2026-06-11T23:52:51.199913+00:00",
+  "stable_engine_changed": false,
+  "stable_exact_p1_p20_overwrite_allowed": false,
+  "promotion_allowed": false,
+  "promotion_block_reason": "Actual saved live gate-locked forecast bundles are not complete across all gates/lanes.",
+  "main_changes": [
+    "P1/podium conversion selector",
+    "stricter source-readiness confidence caps",
+    "track-class conversion modifiers",
+    "microdelta contradiction scoring",
+    "feature leak-risk register",
+    "model disagreement audit triggers"
+  ],
+  "evidence_class": "retrospective/supportive rescore + black-box supportive only, not blind validation",
+  "required_for_promotion": [
+    "actual_saved_live_forecast_bundles",
+    "post_event_scoring",
+    "leakage_audit_pass",
+    "stable_vs_challenger_delta_review",
+    "Promotion Gate pass"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "module": "Cross-Car Microdelta Forensics + Pattern Discovery Layer v0",
+  "status": "experimental",
+  "comparison_principle": "Run all structurally valid comparisons; examples are not boundaries.",
+  "promotion_policy": {
+    "stable_promotion": "blocked until blind/session-gated validation",
+    "report_usage": "allowed immediately with source-confidence language",
+    "prediction_feed": "experimental challenger/watchlist only"
+  },
+  "comparison_thresholds": {
+    "z_outlier": 1.25,
+    "high_divergence_z": 1.5,
+    "reliability_watch_combo_z": 1.0
+  },
+  "gated_inputs": [
+    "corner_type_microdelta",
+    "straight_line_clipping",
+    "braking_zone_instability",
+    "throttle_exit_trace",
+    "gear_rpm_behavior",
+    "live_source_feed_packets"
+  ],
+  "required_outputs": [
+    "microdelta_driver_signal_matrix.csv",
+    "teammate_divergence_map.csv",
+    "team_pair_platform_fingerprint_map.csv",
+    "race_engineer_findings_ranked.csv"
+  ]
+}

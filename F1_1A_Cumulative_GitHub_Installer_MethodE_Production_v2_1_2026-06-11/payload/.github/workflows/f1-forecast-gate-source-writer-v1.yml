@@ -1,0 +1,75 @@
+name: F1 Forecast Gate Source Writer v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: 'Event id, e.g. 2026_spanish_gp or manual_validation'
+        required: true
+        default: 'manual_validation'
+      gate:
+        description: 'Gate to normalize forecast rows for'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - pre_weekend
+          - post_fp3
+          - post_qualifying
+          - race_result
+          - post_event
+      lane:
+        description: 'Engine lane'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - stable_baseline
+          - control_room_overlay
+          - experimental_challenger
+      commit_outputs:
+        description: 'Commit normalized forecast-row outputs and audit files'
+        required: true
+        default: 'true'
+        type: choice
+        options: ['true','false']
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  forecast-gate-source-writer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run forecast gate source writer
+        run: |
+          python scripts/forecast_bundles/write_gate_forecast_rows_v1.py             --repo-root .             --event-id "${{ github.event.inputs.event_id }}"             --gate "${{ github.event.inputs.gate }}"             --lane "${{ github.event.inputs.lane }}"
+      - name: Upload forecast gate source writer audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-forecast-gate-source-writer-v1
+          path: |
+            latest/forecast_bundle_gap_closure/${{ github.event.inputs.event_id }}/
+            latest/forecasts/${{ github.event.inputs.event_id }}/
+          if-no-files-found: warn
+      - name: Commit forecast gate source writer outputs
+        if: ${{ github.event.inputs.commit_outputs == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/forecast_bundle_gap_closure/${{ github.event.inputs.event_id }}/ latest/forecasts/${{ github.event.inputs.event_id }}/ || true
+          if git diff --cached --quiet; then
+            echo "No forecast source writer changes to commit."
+          else
+            git commit -m "Add forecast gate source writer outputs for ${{ github.event.inputs.event_id }}"
+            git push
+          fi

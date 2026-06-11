@@ -1,0 +1,23 @@
+{
+  "name": "black_box_temporal_validation_policy_v1",
+  "rules": {
+    "actual_saved_bundle_definition": "forecast rows locked before outcome and hash-manifested at gate",
+    "black_box_replay_definition": "historical replay with temporal cutoffs, outcome quarantine and leakage audit",
+    "promotion_rule": "black-box replay can support but cannot alone satisfy stable promotion",
+    "stable_separation": "stable exact P1-P20 outputs may not be overwritten by control-room overlay or challenger",
+    "feature_embargo": "exclude race-result, post-event and event-derived features from earlier gates",
+    "output_labeling": "always label actual saved, black-box temporal replay, open retrospective replay, or post-event forensic"
+  },
+  "gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ]
+}

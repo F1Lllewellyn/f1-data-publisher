@@ -1,0 +1,72 @@
+name: F1 Cross-Car Microdelta Forensics Experimental
+
+on:
+  workflow_dispatch:
+    inputs:
+      input_path:
+        description: 'Path or folder containing specialist driver summary CSV. Default searches repo.'
+        required: false
+        default: '.'
+      commit_outputs:
+        description: 'Commit outputs back to repo'
+        required: true
+        default: 'true'
+        type: choice
+        options: ['true','false']
+  workflow_run:
+    workflows: ["F1 OpenF1 Lightweight Source Closure"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  cross-car-microdelta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas numpy
+
+      - name: Run cross-car microdelta forensics
+        run: |
+          TS=$(date -u +'%Y%m%d_%H%M%S')
+          OUT_DIR="history/cross_car_microdelta_forensics/${TS}"
+          INPUT_PATH="${{ github.event.inputs.input_path || '.' }}"
+          python scripts/microdelta/run_cross_car_microdelta_forensics_v0.py --input-dir "$INPUT_PATH" --output-dir "$OUT_DIR"
+          mkdir -p latest/cross_car_microdelta_forensics
+          cp -R "$OUT_DIR"/* latest/cross_car_microdelta_forensics/
+          echo "OUT_DIR=$OUT_DIR" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: f1-cross-car-microdelta-forensics-v0
+          path: |
+            latest/cross_car_microdelta_forensics/**
+            history/cross_car_microdelta_forensics/**
+
+      - name: Commit outputs
+        if: ${{ github.event.inputs.commit_outputs == 'true' || github.event_name == 'workflow_run' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add latest/cross_car_microdelta_forensics history/cross_car_microdelta_forensics || true
+          if git diff --cached --quiet; then
+            echo "No cross-car microdelta output changes to commit."
+          else
+            git commit -m "Add cross-car microdelta forensics outputs"
+            git push
+          fi

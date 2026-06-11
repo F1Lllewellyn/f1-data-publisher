@@ -1,0 +1,33 @@
+{
+  "version": "forecast_gate_source_writer_v1",
+  "created_utc": "2026-06-11T22:49:28.063641+00:00",
+  "purpose": "Close the saved forecast bundle gap by writing normalized forecast source rows for all gates and lanes, then allowing the Forecast Bundle Locker to create actual gate-locked bundles.",
+  "gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "engine_lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ],
+  "strict_rules": {
+    "do_not_fabricate_blind_history": true,
+    "stable_exact_p1_p20_overwrite_allowed": false,
+    "control_room_overlay_may_not_overwrite_stable": true,
+    "promotion_blocked_unless_gate_locked_and_scored": true,
+    "manual_runs_allowed": true,
+    "scheduled_runs_require_real_source_rows": true
+  },
+  "source_search_paths": [
+    "latest/forecasts/{event_id}/{gate}/{lane}/forecast_rows.csv",
+    "latest/forecast_outputs/{event_id}/{gate}/{lane}/forecast_rows.csv",
+    "latest/method_e_control_room/forecasts/{event_id}/{gate}/{lane}.csv",
+    "history/forecast_outputs/{event_id}/{gate}/{lane}/forecast_rows.csv"
+  ],
+  "output_path": "latest/forecasts/{event_id}/{gate}/{lane}/forecast_rows.csv",
+  "bundle_locker_expected_followup": "F1 Forecast Bundle Locker v1"
+}
