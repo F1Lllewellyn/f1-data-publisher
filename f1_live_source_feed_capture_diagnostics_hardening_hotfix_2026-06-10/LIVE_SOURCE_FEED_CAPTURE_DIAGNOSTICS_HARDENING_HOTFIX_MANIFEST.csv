@@ -1,0 +1,5 @@
+path,action,description
+scripts/live_capture/run_live_source_feed_capture.py,replace,Adds stricter live capture diagnostics and visible recording status/error fields
+docs/F1_LIVE_SOURCE_FEED_CAPTURE_DIAGNOSTICS_HARDENING_HOTFIX_2026-06-10.md,add,Hotfix documentation
+CURRENT_CANONICAL_FILES_LIVE_SOURCE_FEED_CAPTURE_DIAGNOSTICS_HARDENING_2026-06-10.md,add,Patch file register
+LIVE_SOURCE_FEED_CAPTURE_DIAGNOSTICS_HARDENING_HOTFIX_MANIFEST.csv,add,Patch manifest

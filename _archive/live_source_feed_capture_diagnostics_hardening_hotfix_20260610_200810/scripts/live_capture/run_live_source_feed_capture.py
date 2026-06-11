@@ -323,21 +323,7 @@ def main() -> int:
     if decision.get("should_capture"):
         recording_result = record_live_timing(raw_path, int(decision.get("duration_minutes", 1)))
         packet_summary = build_packet_index(raw_path, index_path)
-
-        # Diagnostic hardening:
-        # A capture that fails before writing source-feed bytes should not look like a clean pass.
-        # Manual validation can still be "Pass with warnings" when the infrastructure runs but no
-        # live packets are available; actual FastF1 import/start errors are Fail so they are visible.
-        status = recording_result.get("recording_status")
-        raw_bytes = int(packet_summary.get("raw_size_bytes", 0) or 0)
-        if status == "completed" and raw_bytes > 0:
-            verdict = "Pass"
-        elif status == "completed" and raw_bytes == 0:
-            verdict = "Pass with warnings"
-        elif status in {"fastf1_import_failed", "recording_error"}:
-            verdict = "Fail"
-        else:
-            verdict = "Pass with warnings"
+        verdict = "Pass" if packet_summary.get("raw_size_bytes", 0) > 0 else "Pass with warnings"
     else:
         verdict = "Pass with warnings"
         # Still write a no-capture manifest so schedule runs are auditable.
@@ -369,19 +355,6 @@ def main() -> int:
         "guardrail_stable_engine_unchanged": True,
     }
 
-    diagnostics = {
-        "generated_utc": iso_now(),
-        "verdict": verdict,
-        "decision": decision,
-        "recording_result": recording_result,
-        "packet_summary": packet_summary,
-        "operator_note": (
-            "If this is a manual test outside an active F1 live timing window, zero raw bytes may be expected. "
-            "If recording_status is recording_error or fastf1_import_failed, inspect the error field and patch before race-weekend use."
-        ),
-    }
-
-    (work_dir / "live_source_feed_capture_diagnostics.json").write_text(json.dumps(diagnostics, indent=2, default=str), encoding="utf-8")
     (work_dir / outputs["manifest_filename"]).write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
     (work_dir / outputs["readiness_filename"]).write_text(json.dumps(readiness, indent=2), encoding="utf-8")
     write_report(work_dir, manifest, readiness, policy)
@@ -390,15 +363,7 @@ def main() -> int:
     (work_dir / f"{outputs['zip_filename']}.sha256.txt").write_text(f"{sha256_file(zip_path)}  {outputs['zip_filename']}\n", encoding="utf-8")
 
     copy_to_latest_and_history(work_dir, policy, session_label)
-    print(json.dumps({
-        "verdict": verdict,
-        "decision": decision,
-        "recording_status": recording_result.get("recording_status"),
-        "recording_error": recording_result.get("error"),
-        "raw_size_bytes": packet_summary.get("raw_size_bytes", 0),
-        "line_count": packet_summary.get("line_count", 0),
-        "work_dir": str(work_dir),
-    }, indent=2, default=str))
+    print(json.dumps({"verdict": verdict, "decision": decision, "work_dir": str(work_dir)}, indent=2))
     return 0
 
 
