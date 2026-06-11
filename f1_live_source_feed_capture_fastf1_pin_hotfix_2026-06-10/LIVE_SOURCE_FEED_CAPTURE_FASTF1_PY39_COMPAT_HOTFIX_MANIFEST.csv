@@ -1,0 +1,6 @@
+path,action,purpose
+.github/workflows/f1-live-source-feed-capture-experimental.yml,replace,Pin FastF1 below 3.7 and keep corrected cron/manual validation defaults
+scripts/live_capture/run_live_source_feed_capture.py,replace,Add FastF1/Python version diagnostics and import-failure hints
+docs/F1_LIVE_SOURCE_FEED_CAPTURE_FASTF1_PY39_COMPAT_HOTFIX_2026-06-10.md,add,"Explain failure, fix, and validation steps"
+CURRENT_CANONICAL_FILES_LIVE_SOURCE_FEED_CAPTURE_FASTF1_PY39_COMPAT_2026-06-10.md,add,Canonical file register
+LIVE_SOURCE_FEED_CAPTURE_FASTF1_PY39_COMPAT_HOTFIX_MANIFEST.csv,add,Patch manifest

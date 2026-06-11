@@ -17,7 +17,6 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
-import importlib.metadata as importlib_metadata
 import json
 import os
 import re
@@ -71,13 +70,6 @@ def sha256_file(path: Path) -> str:
 def safe_slug(text: str) -> str:
     text = re.sub(r"[^A-Za-z0-9_.-]+", "_", text.strip())
     return text.strip("_") or "session"
-
-
-def get_package_version(package_name: str) -> str:
-    try:
-        return importlib_metadata.version(package_name)
-    except Exception as exc:
-        return f"unavailable: {exc!r}"
 
 
 def load_policy(path: Path) -> Dict[str, Any]:
@@ -177,12 +169,9 @@ def record_live_timing(raw_path: Path, duration_minutes: int) -> Dict[str, Any]:
         "recording_finished_utc": None,
         "duration_minutes_requested": duration_minutes,
         "raw_path": str(raw_path),
-        "python_version": sys.version,
-        "fastf1_installed_version": get_package_version("fastf1"),
         "fastf1_import_ok": False,
         "recording_status": "not_started",
         "error": None,
-        "diagnostic_hint": None,
     }
     try:
         from fastf1.livetiming.client import SignalRClient  # type: ignore
@@ -190,12 +179,6 @@ def record_live_timing(raw_path: Path, duration_minutes: int) -> Dict[str, Any]:
     except Exception as exc:
         result["recording_status"] = "fastf1_import_failed"
         result["error"] = repr(exc)
-        result["diagnostic_hint"] = (
-            "FastF1 import failed before live capture could start. "
-            "For Python 3.9, use a FastF1 version known to be Python-3.9 compatible "
-            "(the workflow pins fastf1>=3.3,<3.7). If this still fails, inspect "
-            "fastf1_installed_version and Python version in diagnostics."
-        )
         result["recording_finished_utc"] = iso_now()
         return result
 
@@ -412,9 +395,6 @@ def main() -> int:
         "decision": decision,
         "recording_status": recording_result.get("recording_status"),
         "recording_error": recording_result.get("error"),
-        "diagnostic_hint": recording_result.get("diagnostic_hint"),
-        "python_version": recording_result.get("python_version"),
-        "fastf1_installed_version": recording_result.get("fastf1_installed_version"),
         "raw_size_bytes": packet_summary.get("raw_size_bytes", 0),
         "line_count": packet_summary.get("line_count", 0),
         "work_dir": str(work_dir),
