@@ -1,0 +1,5 @@
+path,action,purpose
+scripts/live_capture/run_live_source_feed_capture.py,replace,Patch UTC compatibility for Python 3.9 FastF1 live capture runner
+docs/F1_LIVE_SOURCE_FEED_CAPTURE_UTC_COMPAT_HOTFIX_2026-06-10.md,add,Explain GitHub failure cause and hotfix
+CURRENT_CANONICAL_FILES_LIVE_SOURCE_FEED_CAPTURE_UTC_COMPAT_2026-06-10.md,add,Record active files after hotfix
+LIVE_SOURCE_FEED_CAPTURE_UTC_COMPAT_HOTFIX_MANIFEST.csv,add,Patch manifest

@@ -29,11 +29,7 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-# Python compatibility:
-# - Python 3.11+ exposes datetime.UTC
-# - FastF1 live timing compatibility currently drives us toward Python 3.9,
-#   where datetime.UTC does not exist. Use timezone.utc as fallback.
-UTC = getattr(dt, "UTC", dt.timezone.utc)
+UTC = dt.UTC
 
 OPENF1_SESSIONS_URL = "https://api.openf1.org/v1/sessions"
 
