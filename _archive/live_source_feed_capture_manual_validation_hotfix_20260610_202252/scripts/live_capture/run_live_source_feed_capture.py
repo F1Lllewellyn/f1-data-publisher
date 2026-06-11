@@ -94,21 +94,15 @@ def fetch_openf1_sessions(season: int) -> List[Dict[str, Any]]:
     return data
 
 
-def choose_active_window(policy: Dict[str, Any], capture_mode: str, manual_label: str, manual_minutes: Optional[int], manual_validation_mode: str = "infrastructure_only") -> Dict[str, Any]:
+def choose_active_window(policy: Dict[str, Any], capture_mode: str, manual_label: str, manual_minutes: Optional[int]) -> Dict[str, Any]:
     capture_cfg = policy.get("capture", {})
     sched_cfg = policy.get("schedule_detection", {})
 
     if capture_mode == "manual":
         minutes = manual_minutes or int(capture_cfg.get("manual_test_default_minutes", 20))
-        validation_mode = manual_validation_mode or "infrastructure_only"
-        # For manual validation outside an active F1 session, do not require a live SignalR source-feed connection.
-        # This lets us validate GitHub plumbing, artifact publishing, manifests, and permissions without creating false failures.
-        # Use manual_validation_mode=force_source_feed during an actual live session if you want to test packet capture.
-        should_capture = validation_mode == "force_source_feed"
         return {
-            "should_capture": should_capture,
-            "reason": "manual_dispatch_infrastructure_only" if not should_capture else "manual_dispatch_force_source_feed",
-            "manual_validation_mode": validation_mode,
+            "should_capture": True,
+            "reason": "manual_dispatch",
             "session_label": manual_label or "manual_test",
             "duration_minutes": max(1, min(minutes, int(capture_cfg.get("max_capture_minutes", 170)))),
             "session_key": None,
@@ -216,21 +210,8 @@ def record_live_timing(raw_path: Path, duration_minutes: int) -> Dict[str, Any]:
             time.sleep(5)
         result["recording_status"] = "completed"
     except Exception as exc:
-        # FastF1/SignalR can raise JSONDecodeError when the upstream live timing negotiation
-        # returns an empty/non-JSON response. Outside an active F1 live-timing window, this is
-        # usually a source-feed availability/handshake condition, not a workflow plumbing failure.
-        if exc.__class__.__name__ == "JSONDecodeError":
-            result["recording_status"] = "source_feed_handshake_unavailable"
-            result["error"] = repr(exc)
-            result["diagnostic_hint"] = (
-                "FastF1 imported and started, but the live timing source-feed handshake returned "
-                "an empty/non-JSON response. For manual tests outside a live F1 session this is "
-                "expected/pass-with-warnings. During an active session it may indicate upstream "
-                "blocking, endpoint unavailability, or a FastF1 live timing compatibility issue."
-            )
-        else:
-            result["recording_status"] = "recording_error"
-            result["error"] = repr(exc)
+        result["recording_status"] = "recording_error"
+        result["error"] = repr(exc)
     finally:
         try:
             if client is not None:
@@ -338,12 +319,11 @@ def main() -> int:
     ap.add_argument("--session-label", default="")
     ap.add_argument("--github-run-id", default="")
     ap.add_argument("--github-run-attempt", default="")
-    ap.add_argument("--manual-validation-mode", default="infrastructure_only", choices=["infrastructure_only", "force_source_feed"])
     args = ap.parse_args()
 
     policy = load_policy(Path(args.policy))
     manual_minutes = int(args.duration_minutes) if str(args.duration_minutes).strip().isdigit() else None
-    decision = choose_active_window(policy, args.capture_mode, args.session_label, manual_minutes, args.manual_validation_mode)
+    decision = choose_active_window(policy, args.capture_mode, args.session_label, manual_minutes)
 
     session_label = decision.get("session_label", "no_capture")
     run_stamp = now_utc().strftime("%Y%m%d_%H%M%S")
@@ -371,14 +351,6 @@ def main() -> int:
             verdict = "Pass"
         elif status == "completed" and raw_bytes == 0:
             verdict = "Pass with warnings"
-        elif status == "source_feed_handshake_unavailable":
-            # Manual forced-feed attempts outside a true live F1 timing window should not be treated
-            # as an engine failure. In scheduled active windows, however, a source-feed handshake
-            # miss is a real live-capture failure.
-            if decision.get("reason") == "manual_dispatch_force_source_feed":
-                verdict = "Pass with warnings"
-            else:
-                verdict = "Fail"
         elif status in {"fastf1_import_failed", "recording_error"}:
             verdict = "Fail"
         else:
@@ -387,19 +359,6 @@ def main() -> int:
         verdict = "Pass with warnings"
         # Still write a no-capture manifest so schedule runs are auditable.
         packet_summary = {"raw_exists": False, "raw_size_bytes": 0, "line_count": 0, "topic_counts": {}, "index_created": False}
-        recording_result = {
-            "recording_attempted": False,
-            "recording_status": "manual_infrastructure_only" if decision.get("reason") == "manual_dispatch_infrastructure_only" else "no_active_capture_window",
-            "recording_started_utc": None,
-            "recording_finished_utc": iso_now(),
-            "duration_minutes_requested": decision.get("duration_minutes"),
-            "raw_path": str(raw_path),
-            "python_version": sys.version,
-            "fastf1_installed_version": get_package_version("fastf1"),
-            "fastf1_import_ok": None,
-            "error": None,
-            "diagnostic_hint": "Infrastructure-only manual validation: GitHub workflow, manifests, artifact upload, and commit path are tested without attempting live SignalR capture." if decision.get("reason") == "manual_dispatch_infrastructure_only" else "No active capture window was detected."
-        }
 
     manifest = {
         "schema_version": policy.get("schema_version"),
@@ -451,7 +410,6 @@ def main() -> int:
     print(json.dumps({
         "verdict": verdict,
         "decision": decision,
-        "manual_validation_mode": args.manual_validation_mode,
         "recording_status": recording_result.get("recording_status"),
         "recording_error": recording_result.get("error"),
         "diagnostic_hint": recording_result.get("diagnostic_hint"),

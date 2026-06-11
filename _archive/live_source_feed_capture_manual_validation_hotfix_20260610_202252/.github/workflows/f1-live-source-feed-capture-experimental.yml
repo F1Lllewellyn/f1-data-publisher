@@ -19,14 +19,6 @@ on:
         description: "Optional label, e.g. Barcelona_Race_Test"
         required: false
         default: "manual_test"
-      manual_validation_mode:
-        description: "For manual tests: infrastructure_only avoids live feed connection; force_source_feed attempts FastF1 stream"
-        required: true
-        default: "infrastructure_only"
-        type: choice
-        options:
-          - infrastructure_only
-          - force_source_feed
       commit_outputs:
         description: "Commit latest/history outputs back to repo"
         required: true
@@ -77,8 +69,7 @@ jobs:
 
       - name: Run live source feed capture layer
         run: |
-          echo "Manual validation mode: ${{ github.event.inputs.manual_validation_mode || 'infrastructure_only' }}"
-          python scripts/live_capture/run_live_source_feed_capture.py             --policy "$LIVE_CAPTURE_POLICY"             --capture-mode "${{ github.event.inputs.capture_mode || 'auto_window' }}"             --duration-minutes "${{ github.event.inputs.duration_minutes || '' }}"             --session-label "${{ github.event.inputs.session_label || '' }}"             --github-run-id "${{ github.run_id }}"             --github-run-attempt "${{ github.run_attempt }}"             --manual-validation-mode "${{ github.event.inputs.manual_validation_mode || 'infrastructure_only' }}"
+          python scripts/live_capture/run_live_source_feed_capture.py             --policy "$LIVE_CAPTURE_POLICY"             --capture-mode "${{ github.event.inputs.capture_mode || 'auto_window' }}"             --duration-minutes "${{ github.event.inputs.duration_minutes || '' }}"             --session-label "${{ github.event.inputs.session_label || '' }}"             --github-run-id "${{ github.run_id }}"             --github-run-attempt "${{ github.run_attempt }}"
 
       - name: Upload live source feed artifact
         if: always()
