@@ -1,0 +1,11 @@
+{
+  "generated_utc": "2026-06-11T00:02:32.861318Z",
+  "verdict": "Pass with warnings",
+  "should_capture": true,
+  "reason": "manual_dispatch",
+  "raw_capture_evidence_bearing": false,
+  "packet_index_created": false,
+  "requires_post_session_reconciliation": true,
+  "team_radio_policy": "opportunistic_only",
+  "guardrail_stable_engine_unchanged": true
+}
