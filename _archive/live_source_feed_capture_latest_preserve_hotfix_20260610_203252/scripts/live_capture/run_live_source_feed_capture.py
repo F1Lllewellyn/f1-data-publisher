@@ -319,59 +319,15 @@ def zip_output(out_dir: Path, zip_path: Path) -> None:
                 z.write(p, p.relative_to(out_dir))
 
 
-def copy_to_latest_and_history(
-    work_dir: Path,
-    policy: Dict[str, Any],
-    session_label: str,
-    update_latest: bool,
-    latest_status_payload: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """Copy outputs to history always, and to latest only when evidence-bearing or explicitly allowed.
-
-    Important safety rule:
-    - Infrastructure-only tests and no-active-window checks must not replace/delete the latest
-      evidence-bearing live capture folder. They are audit events, not live evidence.
-    - These validation runs are preserved in history and summarized in a small latest status file.
-    """
+def copy_to_latest_and_history(work_dir: Path, policy: Dict[str, Any], session_label: str) -> None:
     latest_dir = Path(policy["outputs"]["latest_dir"])
     history_root = Path(policy["outputs"]["history_dir"])
-    status_dir = latest_dir.parent / "live_source_feed_capture_status"
     stamp = now_utc().strftime("%Y%m%d_%H%M%S")
     hist_dir = history_root / f"{stamp}_{safe_slug(session_label)}"
-
-    if hist_dir.exists():
-        shutil.rmtree(hist_dir)
-    hist_dir.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(work_dir, hist_dir)
-
-    latest_updated = False
-    latest_preserved = False
-    if update_latest:
-        if latest_dir.exists():
-            shutil.rmtree(latest_dir)
-        latest_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(work_dir, latest_dir)
-        latest_updated = True
-    else:
-        latest_preserved = latest_dir.exists()
-        status_dir.mkdir(parents=True, exist_ok=True)
-        payload = latest_status_payload or {}
-        payload.update({
-            "generated_utc": iso_now(),
-            "history_output_dir": str(hist_dir),
-            "latest_evidence_dir": str(latest_dir),
-            "latest_evidence_preserved": latest_preserved,
-            "latest_update_skipped_reason": "non_evidence_bearing_validation_run",
-        })
-        (status_dir / "latest_validation_status.json").write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
-
-    return {
-        "history_output_dir": str(hist_dir),
-        "latest_output_dir": str(latest_dir),
-        "latest_updated": latest_updated,
-        "latest_preserved": latest_preserved,
-        "status_dir": str(status_dir),
-    }
+    for target in [latest_dir, hist_dir]:
+        if target.exists():
+            shutil.rmtree(target)
+        shutil.copytree(work_dir, target)
 
 
 def main() -> int:
@@ -491,24 +447,7 @@ def main() -> int:
     zip_output(work_dir, zip_path)
     (work_dir / f"{outputs['zip_filename']}.sha256.txt").write_text(f"{sha256_file(zip_path)}  {outputs['zip_filename']}\n", encoding="utf-8")
 
-    evidence_bearing = packet_summary.get("raw_size_bytes", 0) > 0
-    # Preserve latest evidence for non-evidence validation/no-window runs.
-    # Manual infrastructure tests prove plumbing only and should not delete the last live capture.
-    update_latest = bool(evidence_bearing)
-    copy_result = copy_to_latest_and_history(
-        work_dir,
-        policy,
-        session_label,
-        update_latest=update_latest,
-        latest_status_payload={
-            "verdict": verdict,
-            "reason": decision.get("reason"),
-            "recording_status": recording_result.get("recording_status"),
-            "raw_size_bytes": packet_summary.get("raw_size_bytes", 0),
-            "line_count": packet_summary.get("line_count", 0),
-            "manual_validation_mode": args.manual_validation_mode,
-        },
-    )
+    copy_to_latest_and_history(work_dir, policy, session_label)
     print(json.dumps({
         "verdict": verdict,
         "decision": decision,
@@ -520,9 +459,6 @@ def main() -> int:
         "fastf1_installed_version": recording_result.get("fastf1_installed_version"),
         "raw_size_bytes": packet_summary.get("raw_size_bytes", 0),
         "line_count": packet_summary.get("line_count", 0),
-        "evidence_bearing": evidence_bearing,
-        "latest_update_policy": "updated_latest_only_for_evidence_bearing_capture",
-        "copy_result": copy_result,
         "work_dir": str(work_dir),
     }, indent=2, default=str))
     return 0

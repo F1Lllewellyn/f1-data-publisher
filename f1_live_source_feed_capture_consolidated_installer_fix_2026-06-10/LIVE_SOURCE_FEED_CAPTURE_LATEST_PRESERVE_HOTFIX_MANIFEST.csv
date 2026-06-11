@@ -1,0 +1,7 @@
+path,role,action
+.github/workflows/f1-live-source-feed-capture-experimental.yml,workflow,replace/install cumulative stabilized workflow
+scripts/live_capture/run_live_source_feed_capture.py,capture script,replace/install cumulative stabilized script
+docs/F1_LIVE_SOURCE_FEED_CAPTURE_CONSOLIDATED_VALIDATION_PATCH_2026-06-10.md,documentation,add
+CURRENT_CANONICAL_FILES_LIVE_SOURCE_FEED_CAPTURE_CONSOLIDATED_2026-06-10.md,canonical register,add
+installer/RUN_F1_LIVE_SOURCE_FEED_CAPTURE_CONSOLIDATED_VALIDATION_PATCH_WINDOWS.bat,installer launcher,add
+installer/Install-F1-Live-Source-Feed-Capture-Consolidated-Validation-Patch.ps1,installer logic,add
