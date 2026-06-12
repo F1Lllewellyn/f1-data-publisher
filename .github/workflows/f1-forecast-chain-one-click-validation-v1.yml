@@ -1,0 +1,93 @@
+name: F1 Forecast Chain One-Click Validation v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: "Forecast run label. Leave default for the current manual validation run."
+        required: false
+        default: "manual_forecast_producer_validation"
+      race_name:
+        description: "Readable validation name"
+        required: false
+        default: "Manual Forecast Producer Validation"
+      commit_outputs:
+        description: "Commit outputs when actual forecast rows exist"
+        required: false
+        default: "true"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  one-click-forecast-chain-validation:
+    runs-on: ubuntu-latest
+    env:
+      EVENT_ID: ${{ github.event.inputs.event_id || 'manual_forecast_producer_validation' }}
+      RACE_NAME: ${{ github.event.inputs.race_name || 'Manual Forecast Producer Validation' }}
+      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Show single shared label
+        run: |
+          echo "All chain steps will use this forecast event label: ${EVENT_ID}"
+
+      - name: Run source writer
+        run: |
+          args=(--event-id "${EVENT_ID}" --gate all --lane all)
+          if [ "${COMMIT_OUTPUTS}" = "true" ]; then args+=(--commit-outputs); fi
+          python scripts/forecast_bundles/write_gate_forecast_rows_v1.py "${args[@]}"
+
+      - name: Run readiness validator
+        run: |
+          args=(--event-id "${EVENT_ID}" --gate all --lane all)
+          if [ "${COMMIT_OUTPUTS}" = "true" ]; then args+=(--commit-outputs); fi
+          python scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py "${args[@]}"
+
+      - name: Run bundle locker
+        run: |
+          args=(--event-id "${EVENT_ID}" --race-name "${RACE_NAME}" --gate all)
+          if [ "${COMMIT_OUTPUTS}" = "true" ]; then args+=(--commit-outputs); fi
+          python scripts/forecast_bundles/create_forecast_bundles_v1.py "${args[@]}"
+
+      - name: Upload one-click validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-forecast-chain-one-click-validation-v1
+          path: |
+            latest/forecast_outputs/${{ env.EVENT_ID }}/**
+            latest/forecast_chain_readiness/${{ env.EVENT_ID }}/**
+            latest/forecast_bundles/${{ env.EVENT_ID }}/**
+            history/forecast_outputs/${{ env.EVENT_ID }}/**
+            history/forecast_chain_readiness/${{ env.EVENT_ID }}/**
+            history/forecast_bundles/${{ env.EVENT_ID }}/**
+            _runtime/**
+          if-no-files-found: ignore
+
+      - name: Commit chain outputs
+        if: ${{ env.COMMIT_OUTPUTS == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          paths=()
+          for d in latest/forecast_outputs/${EVENT_ID} latest/forecast_chain_readiness/${EVENT_ID} latest/forecast_bundles/${EVENT_ID} history/forecast_outputs/${EVENT_ID} history/forecast_chain_readiness/${EVENT_ID} history/forecast_bundles/${EVENT_ID}; do
+            [ -d "$d" ] && paths+=("$d")
+          done
+          [ ${#paths[@]} -gt 0 ] && git add "${paths[@]}" || true
+          if git diff --cached --quiet; then
+            echo "No forecast chain changes to commit."
+          else
+            git commit -m "forecast: one-click chain validation for ${EVENT_ID}"
+            git push
+          fi
