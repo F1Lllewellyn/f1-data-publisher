@@ -1,0 +1,2 @@
+event_id,gate,metric,stable_baseline_value,control_room_overlay_value,experimental_challenger_value,overlay_delta_vs_stable,challenger_delta_vs_stable,promotion_gate_relevance,notes
+2026_next_event,race_result,pending_cross_lane_delta,,,,,,pending,Computed after all lane bundles are present.
