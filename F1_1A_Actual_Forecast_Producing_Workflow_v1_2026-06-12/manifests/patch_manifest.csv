@@ -1,0 +1,7 @@
+relative_path,purpose
+.github/workflows/f1-actual-forecast-producer-v1.yml,GitHub Actions workflow that produces actual forecast rows.
+scripts/forecasts/produce_actual_forecast_rows_v1.py,Stdlib Python forecast-row generator for all gates/lanes.
+configs/forecasts/actual_forecast_producer_policy_v1.json,"Policy/configuration for source use, guardrails, gates, and lanes."
+docs/F1_ACTUAL_FORECAST_PRODUCER_V1_PATCH_2026-06-12.md,Patch documentation.
+installer/RUN_F1_ACTUAL_FORECAST_PRODUCER_V1_PATCH_WINDOWS.bat,Windows one-click installer launcher.
+installer/Install-F1-Actual-Forecast-Producer-v1-Patch.ps1,No-git PowerShell installer.

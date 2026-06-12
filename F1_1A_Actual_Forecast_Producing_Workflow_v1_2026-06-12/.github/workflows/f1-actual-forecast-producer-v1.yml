@@ -1,0 +1,110 @@
+name: F1 Actual Forecast Producer v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: Event identifier for forecast rows
+        required: true
+        default: manual_forecast_producer_validation
+      race_name:
+        description: Race/event display name
+        required: true
+        default: Manual Forecast Producer Validation
+      gate:
+        description: Gate to produce rows for
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - pre_weekend
+          - post_fp3
+          - post_qualifying
+          - race_result
+          - post_event
+      lane:
+        description: Engine lane to produce rows for
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - stable_baseline
+          - control_room_overlay
+          - experimental_challenger
+      strict_source:
+        description: Fail if no usable source rows exist
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      commit_outputs:
+        description: Commit generated forecast rows when actual rows are created
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: write
+
+env:
+  PYTHONUNBUFFERED: '1'
+
+jobs:
+  produce-forecast-rows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Produce actual forecast rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            --event-id "${{ inputs.event_id }}"
+            --race-name "${{ inputs.race_name }}"
+            --gate "${{ inputs.gate }}"
+            --lane "${{ inputs.lane }}"
+            --repo-root "."
+          )
+          if [[ "${{ inputs.strict_source }}" == "true" ]]; then
+            args+=(--strict-source)
+          fi
+          python scripts/forecasts/produce_actual_forecast_rows_v1.py "${args[@]}"
+
+      - name: Upload runtime audit
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: f1-actual-forecast-producer-v1-runtime
+          path: |
+            _runtime/actual_forecast_producer_v1/**
+          if-no-files-found: warn
+
+      - name: Commit actual forecast rows
+        if: ${{ inputs.commit_outputs == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Commit only actual forecast rows and related metadata. Runtime audit files are artifact-only.
+          if git status --porcelain latest/forecasts latest/forecast_outputs history/forecasts history/forecast_outputs 2>/dev/null | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add latest/forecasts latest/forecast_outputs history/forecasts history/forecast_outputs
+            git commit -m "forecast: produce actual forecast rows for ${{ inputs.event_id }} ${{ inputs.gate }} ${{ inputs.lane }}"
+            git push
+          else
+            echo "No actual forecast row changes to commit."
+          fi
