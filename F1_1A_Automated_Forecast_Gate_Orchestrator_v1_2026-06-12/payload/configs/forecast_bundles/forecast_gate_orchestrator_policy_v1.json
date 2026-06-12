@@ -1,0 +1,45 @@
+{
+  "module": "Automated Forecast Gate Orchestrator v1",
+  "status": "experimental_production_automation",
+  "purpose": "Automate source closure, actual forecast row production, source writing, readiness validation, and bundle locking at real forecast gates without manual event_id coordination.",
+  "stable_engine_protection": true,
+  "promotion_allowed": false,
+  "allow_structural_placeholders_default": false,
+  "manual_validation_label": "manual_forecast_producer_validation",
+  "gate_windows_minutes": {
+    "pre_weekend_start_before_first_session": 2880,
+    "pre_weekend_end_before_first_session": 60,
+    "post_fp3_start_after_fp3": 5,
+    "post_fp3_end_before_qualifying": 10,
+    "post_qualifying_start_after_qualifying": 5,
+    "post_qualifying_end_before_race": 10,
+    "race_result_start_after_race": 10,
+    "race_result_end_after_race": 180,
+    "post_event_start_after_race": 180,
+    "post_event_end_after_race": 1440
+  },
+  "required_scripts": [
+    "scripts/openf1/publish_openf1_lightweight_source_closure.py",
+    "scripts/forecasts/produce_actual_forecast_rows_v1.py",
+    "scripts/forecast_bundles/write_gate_forecast_rows_v1.py",
+    "scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py",
+    "scripts/forecast_bundles/create_forecast_bundles_v1.py"
+  ],
+  "gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ],
+  "notes": [
+    "Scheduled runs no-op if no real gate window is detected.",
+    "Manual force_validation remains available for system testing only.",
+    "The bundle locker remains guarded against no-source placeholder commits."
+  ]
+}

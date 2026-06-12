@@ -1,0 +1,165 @@
+name: F1 Automated Forecast Gate Orchestrator v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'auto = detect real gate; force_validation = run all validation gates; dry_run = detect only.'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - force_validation
+          - dry_run
+      event_id:
+        description: 'Optional. Leave auto for real gates or default validation label for force_validation.'
+        required: false
+        default: 'auto'
+      race_name:
+        description: 'Optional human-readable race/test name.'
+        required: false
+        default: 'auto'
+      gate:
+        description: 'auto is recommended. force_validation may use all.'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - all
+          - pre_weekend
+          - post_fp3
+          - post_qualifying
+          - race_result
+          - post_event
+      run_source_closure:
+        description: 'Run OpenF1 lightweight source closure before producing forecasts.'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      commit_outputs:
+        description: 'Commit outputs back to the repo.'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+  schedule:
+    # Offset cadence avoids exact top-of-hour congestion while still checking race-weekend gates frequently.
+    - cron: '7,22,37,52 * * * 5,6,0'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-automated-forecast-gate-orchestrator-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  automated-forecast-gate-orchestrator:
+    runs-on: ubuntu-latest
+    env:
+      MODE: ${{ github.event_name == 'schedule' && 'auto' || github.event.inputs.mode || 'auto' }}
+      EVENT_ID: ${{ github.event.inputs.event_id || 'auto' }}
+      RACE_NAME: ${{ github.event.inputs.race_name || 'auto' }}
+      GATE: ${{ github.event.inputs.gate || 'auto' }}
+      RUN_SOURCE_CLOSURE: ${{ github.event.inputs.run_source_closure || 'true' }}
+      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install lightweight dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests
+
+      - name: Run automated gate orchestrator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py \
+            --mode "${MODE}" \
+            --event-id "${EVENT_ID}" \
+            --race-name "${RACE_NAME}" \
+            --gate "${GATE}" \
+            --run-source-closure "${RUN_SOURCE_CLOSURE}" \
+            --season 2026
+
+      - name: Upload orchestrator artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-automated-forecast-gate-orchestrator-v1
+          path: |
+            _runtime/forecast_gate_orchestrator/**
+            latest/openf1_lightweight_source_closure/**
+            latest/forecasts/**
+            latest/forecast_outputs/**
+            latest/forecast_chain_readiness/**
+            latest/forecast_bundles/**
+            history/openf1_lightweight_source_closure/**
+            history/forecasts/**
+            history/forecast_outputs/**
+            history/forecast_chain_readiness/**
+            history/forecast_bundles/**
+          if-no-files-found: ignore
+
+      - name: Commit orchestrator outputs
+        if: ${{ success() && env.COMMIT_OUTPUTS == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          candidates=(
+            "latest/openf1_lightweight_source_closure"
+            "history/openf1_lightweight_source_closure"
+            "latest/forecasts"
+            "latest/forecast_outputs"
+            "latest/forecast_chain_readiness"
+            "latest/forecast_bundles"
+            "history/forecasts"
+            "history/forecast_outputs"
+            "history/forecast_chain_readiness"
+            "history/forecast_bundles"
+            "_runtime/forecast_gate_orchestrator"
+          )
+
+          added=0
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              git add "$p"
+              added=1
+            fi
+          done
+
+          if [ "$added" = "0" ]; then
+            echo "No orchestrator output paths exist to commit."
+            exit 0
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No orchestrator changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: automated forecast gate orchestration outputs"
+          git push
