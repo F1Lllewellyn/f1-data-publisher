@@ -1,0 +1,2 @@
+attribution_id,gate,engine_lane,feature_family,input_source,directional_effect,weight_class,confidence,proof_loop_status,notes
+manual_forecast_producer_validation__post_fp3__experimental_challenger__20260612T014702Z__ATTR,post_fp3,experimental_challenger,bundle_lock,/home/runner/work/f1-data-publisher/f1-data-publisher/latest/forecasts/manual_forecast_producer_validation/post_fp3/experimental_challenger/forecast_rows.csv,locked,source,high,ready_for_scoring,

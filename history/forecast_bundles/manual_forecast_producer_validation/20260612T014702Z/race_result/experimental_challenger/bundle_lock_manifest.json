@@ -1,0 +1,15 @@
+{
+  "bundle_id": "manual_forecast_producer_validation__race_result__experimental_challenger__20260612T014702Z",
+  "bundle_status": "locked",
+  "event_id": "manual_forecast_producer_validation",
+  "season": "2026",
+  "round": "",
+  "race_name": "Manual Forecast Producer Validation",
+  "gate": "race_result",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-06-12T01:47:02Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

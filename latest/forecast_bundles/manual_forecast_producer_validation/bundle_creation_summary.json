@@ -1,0 +1,131 @@
+{
+  "created_utc": "2026-06-12T01:47:02Z",
+  "event_id": "manual_forecast_producer_validation",
+  "race_name": "Manual Forecast Producer Validation",
+  "gate": "all",
+  "scheduled_run": false,
+  "detected_sources": [],
+  "skipped_missing_sources": [],
+  "bundles": [
+    {
+      "bundle_id": "manual_forecast_producer_validation__pre_weekend__stable_baseline__20260612T014702Z",
+      "gate": "pre_weekend",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/pre_weekend/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__pre_weekend__control_room_overlay__20260612T014702Z",
+      "gate": "pre_weekend",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/pre_weekend/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__pre_weekend__experimental_challenger__20260612T014702Z",
+      "gate": "pre_weekend",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/pre_weekend/experimental_challenger",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_fp3__stable_baseline__20260612T014702Z",
+      "gate": "post_fp3",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_fp3/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_fp3__control_room_overlay__20260612T014702Z",
+      "gate": "post_fp3",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_fp3/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_fp3__experimental_challenger__20260612T014702Z",
+      "gate": "post_fp3",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_fp3/experimental_challenger",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_qualifying__stable_baseline__20260612T014702Z",
+      "gate": "post_qualifying",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_qualifying/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_qualifying__control_room_overlay__20260612T014702Z",
+      "gate": "post_qualifying",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_qualifying/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_qualifying__experimental_challenger__20260612T014702Z",
+      "gate": "post_qualifying",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_qualifying/experimental_challenger",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__race_result__stable_baseline__20260612T014702Z",
+      "gate": "race_result",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/race_result/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__race_result__control_room_overlay__20260612T014702Z",
+      "gate": "race_result",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/race_result/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__race_result__experimental_challenger__20260612T014702Z",
+      "gate": "race_result",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/race_result/experimental_challenger",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_event__stable_baseline__20260612T014702Z",
+      "gate": "post_event",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_event__control_room_overlay__20260612T014702Z",
+      "gate": "post_event",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "manual_forecast_producer_validation__post_event__experimental_challenger__20260612T014702Z",
+      "gate": "post_event",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/experimental_challenger",
+      "latest_dir": ""
+    }
+  ]
+}
