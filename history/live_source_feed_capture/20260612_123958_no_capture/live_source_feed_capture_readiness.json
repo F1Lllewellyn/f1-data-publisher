@@ -1,0 +1,11 @@
+{
+  "generated_utc": "2026-06-12T12:39:58.597203Z",
+  "verdict": "Pass with warnings",
+  "should_capture": false,
+  "reason": "schedule_lookup_failed: 401 Client Error: Unauthorized for url: https://api.openf1.org/v1/sessions?year=2026",
+  "raw_capture_evidence_bearing": false,
+  "packet_index_created": false,
+  "requires_post_session_reconciliation": false,
+  "team_radio_policy": "opportunistic_only",
+  "guardrail_stable_engine_unchanged": true
+}
