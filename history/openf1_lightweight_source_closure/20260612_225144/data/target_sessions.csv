@@ -1,0 +1,49 @@
+session_key,session_type,session_name,date_start,date_end,meeting_key,circuit_key,circuit_short_name,country_key,country_code,country_name,location,gmt_offset,year,is_cancelled,_completed_session
+11465,Practice,Day 1,2026-02-11T07:00:00+00:00,2026-02-11T16:00:00+00:00,1304,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11466,Practice,Day 2,2026-02-12T07:00:00+00:00,2026-02-12T16:00:00+00:00,1304,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11467,Practice,Day 3,2026-02-13T07:00:00+00:00,2026-02-13T16:00:00+00:00,1304,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11470,Practice,Day 1,2026-02-18T07:00:00+00:00,2026-02-18T16:00:00+00:00,1305,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11469,Practice,Day 2,2026-02-19T07:00:00+00:00,2026-02-19T16:00:00+00:00,1305,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11468,Practice,Day 3,2026-02-20T07:00:00+00:00,2026-02-20T16:00:00+00:00,1305,63,Sakhir,36,BRN,Bahrain,Bahrain,03:00:00,2026,False,True
+11227,Practice,Practice 1,2026-03-06T01:30:00+00:00,2026-03-06T02:30:00+00:00,1279,10,Melbourne,5,AUS,Australia,Melbourne,11:00:00,2026,False,True
+11228,Practice,Practice 2,2026-03-06T05:00:00+00:00,2026-03-06T06:00:00+00:00,1279,10,Melbourne,5,AUS,Australia,Melbourne,11:00:00,2026,False,True
+11229,Practice,Practice 3,2026-03-07T01:30:00+00:00,2026-03-07T02:30:00+00:00,1279,10,Melbourne,5,AUS,Australia,Melbourne,11:00:00,2026,False,True
+11230,Qualifying,Qualifying,2026-03-07T05:00:00+00:00,2026-03-07T06:00:00+00:00,1279,10,Melbourne,5,AUS,Australia,Melbourne,11:00:00,2026,False,True
+11234,Race,Race,2026-03-08T04:00:00+00:00,2026-03-08T06:00:00+00:00,1279,10,Melbourne,5,AUS,Australia,Melbourne,11:00:00,2026,False,True
+11235,Practice,Practice 1,2026-03-13T03:30:00+00:00,2026-03-13T04:30:00+00:00,1280,49,Shanghai,53,CHN,China,Shanghai,08:00:00,2026,False,True
+11236,Qualifying,Sprint Qualifying,2026-03-13T07:30:00+00:00,2026-03-13T08:14:00+00:00,1280,49,Shanghai,53,CHN,China,Shanghai,08:00:00,2026,False,True
+11240,Race,Sprint,2026-03-14T03:00:00+00:00,2026-03-14T04:00:00+00:00,1280,49,Shanghai,53,CHN,China,Shanghai,08:00:00,2026,False,True
+11241,Qualifying,Qualifying,2026-03-14T07:00:00+00:00,2026-03-14T08:00:00+00:00,1280,49,Shanghai,53,CHN,China,Shanghai,08:00:00,2026,False,True
+11245,Race,Race,2026-03-15T07:00:00+00:00,2026-03-15T09:00:00+00:00,1280,49,Shanghai,53,CHN,China,Shanghai,08:00:00,2026,False,True
+11246,Practice,Practice 1,2026-03-27T02:30:00+00:00,2026-03-27T03:30:00+00:00,1281,46,Suzuka,4,JPN,Japan,Suzuka,09:00:00,2026,False,True
+11247,Practice,Practice 2,2026-03-27T06:00:00+00:00,2026-03-27T07:00:00+00:00,1281,46,Suzuka,4,JPN,Japan,Suzuka,09:00:00,2026,False,True
+11248,Practice,Practice 3,2026-03-28T02:30:00+00:00,2026-03-28T03:30:00+00:00,1281,46,Suzuka,4,JPN,Japan,Suzuka,09:00:00,2026,False,True
+11249,Qualifying,Qualifying,2026-03-28T06:00:00+00:00,2026-03-28T07:00:00+00:00,1281,46,Suzuka,4,JPN,Japan,Suzuka,09:00:00,2026,False,True
+11253,Race,Race,2026-03-29T05:00:00+00:00,2026-03-29T07:00:00+00:00,1281,46,Suzuka,4,JPN,Japan,Suzuka,09:00:00,2026,False,True
+11254,Practice,Practice 1,2026-04-10T11:30:00+00:00,2026-04-10T12:30:00+00:00,1282,63,Sakhir,36,BRN,Bahrain,Sakhir,03:00:00,2026,True,True
+11255,Practice,Practice 2,2026-04-10T15:00:00+00:00,2026-04-10T16:00:00+00:00,1282,63,Sakhir,36,BRN,Bahrain,Sakhir,03:00:00,2026,True,True
+11256,Practice,Practice 3,2026-04-11T12:30:00+00:00,2026-04-11T13:30:00+00:00,1282,63,Sakhir,36,BRN,Bahrain,Sakhir,03:00:00,2026,True,True
+11257,Qualifying,Qualifying,2026-04-11T16:00:00+00:00,2026-04-11T17:00:00+00:00,1282,63,Sakhir,36,BRN,Bahrain,Sakhir,03:00:00,2026,True,True
+11261,Race,Race,2026-04-12T15:00:00+00:00,2026-04-12T17:00:00+00:00,1282,63,Sakhir,36,BRN,Bahrain,Sakhir,03:00:00,2026,True,True
+11262,Practice,Practice 1,2026-04-17T13:30:00+00:00,2026-04-17T14:30:00+00:00,1283,149,Jeddah,153,KSA,Saudi Arabia,Jeddah,03:00:00,2026,True,True
+11263,Practice,Practice 2,2026-04-17T17:00:00+00:00,2026-04-17T18:00:00+00:00,1283,149,Jeddah,153,KSA,Saudi Arabia,Jeddah,03:00:00,2026,True,True
+11264,Practice,Practice 3,2026-04-18T13:30:00+00:00,2026-04-18T14:30:00+00:00,1283,149,Jeddah,153,KSA,Saudi Arabia,Jeddah,03:00:00,2026,True,True
+11265,Qualifying,Qualifying,2026-04-18T17:00:00+00:00,2026-04-18T18:00:00+00:00,1283,149,Jeddah,153,KSA,Saudi Arabia,Jeddah,03:00:00,2026,True,True
+11269,Race,Race,2026-04-19T17:00:00+00:00,2026-04-19T19:00:00+00:00,1283,149,Jeddah,153,KSA,Saudi Arabia,Jeddah,03:00:00,2026,True,True
+11270,Practice,Practice 1,2026-05-01T16:00:00+00:00,2026-05-01T17:30:00+00:00,1284,151,Miami,19,USA,United States,Miami Gardens,-04:00:00,2026,False,True
+11271,Qualifying,Sprint Qualifying,2026-05-01T20:30:00+00:00,2026-05-01T21:14:00+00:00,1284,151,Miami,19,USA,United States,Miami Gardens,-04:00:00,2026,False,True
+11275,Race,Sprint,2026-05-02T16:00:00+00:00,2026-05-02T17:00:00+00:00,1284,151,Miami,19,USA,United States,Miami Gardens,-04:00:00,2026,False,True
+11276,Qualifying,Qualifying,2026-05-02T20:00:00+00:00,2026-05-02T21:00:00+00:00,1284,151,Miami,19,USA,United States,Miami Gardens,-04:00:00,2026,False,True
+11280,Race,Race,2026-05-03T17:00:00+00:00,2026-05-03T19:00:00+00:00,1284,151,Miami,19,USA,United States,Miami Gardens,-04:00:00,2026,False,True
+11281,Practice,Practice 1,2026-05-22T16:30:00+00:00,2026-05-22T17:30:00+00:00,1285,23,Montreal,46,CAN,Canada,Montréal,-04:00:00,2026,False,True
+11282,Qualifying,Sprint Qualifying,2026-05-22T20:30:00+00:00,2026-05-22T21:14:00+00:00,1285,23,Montreal,46,CAN,Canada,Montréal,-04:00:00,2026,False,True
+11286,Race,Sprint,2026-05-23T16:00:00+00:00,2026-05-23T17:00:00+00:00,1285,23,Montreal,46,CAN,Canada,Montréal,-04:00:00,2026,False,True
+11287,Qualifying,Qualifying,2026-05-23T20:00:00+00:00,2026-05-23T21:00:00+00:00,1285,23,Montreal,46,CAN,Canada,Montréal,-04:00:00,2026,False,True
+11291,Race,Race,2026-05-24T20:00:00+00:00,2026-05-24T22:00:00+00:00,1285,23,Montreal,46,CAN,Canada,Montréal,-04:00:00,2026,False,True
+11292,Practice,Practice 1,2026-06-05T11:30:00+00:00,2026-06-05T12:30:00+00:00,1286,22,Monte Carlo,114,MON,Monaco,Monte Carlo,02:00:00,2026,False,True
+11293,Practice,Practice 2,2026-06-05T15:00:00+00:00,2026-06-05T16:00:00+00:00,1286,22,Monte Carlo,114,MON,Monaco,Monte Carlo,02:00:00,2026,False,True
+11294,Practice,Practice 3,2026-06-06T10:30:00+00:00,2026-06-06T11:30:00+00:00,1286,22,Monte Carlo,114,MON,Monaco,Monte Carlo,02:00:00,2026,False,True
+11295,Qualifying,Qualifying,2026-06-06T14:00:00+00:00,2026-06-06T15:00:00+00:00,1286,22,Monte Carlo,114,MON,Monaco,Monte Carlo,02:00:00,2026,False,True
+11299,Race,Race,2026-06-07T13:00:00+00:00,2026-06-07T15:00:00+00:00,1286,22,Monte Carlo,114,MON,Monaco,Monte Carlo,02:00:00,2026,False,True
+11300,Practice,Practice 1,2026-06-12T11:30:00+00:00,2026-06-12T12:30:00+00:00,1287,15,Catalunya,1,ESP,Spain,Barcelona,02:00:00,2026,False,True
+11301,Practice,Practice 2,2026-06-12T15:00:00+00:00,2026-06-12T16:00:00+00:00,1287,15,Catalunya,1,ESP,Spain,Barcelona,02:00:00,2026,False,True
