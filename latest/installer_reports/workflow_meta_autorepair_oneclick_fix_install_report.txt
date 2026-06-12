@@ -1,0 +1,15 @@
+﻿F1 Workflow Meta-AutoRepair One-Click Fix install report
+Installed UTC: 2026-06-12T23:48:55.4216361Z
+Repo: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+
+Installed:
+ - fixed f1-workbook-kpi-refresh-scheduled.yml
+ - scripts/ops/safe_git_push_rebase_retry.sh
+ - scripts/ops/f1_workflow_meta_health_check_v1.py
+ - F1 Workflow Meta-Health - Safe Test Button
+
+Stable engine modified: false
+Canonical workbook overwritten: false
+Promotion allowed: false
+
+INSTALL CHECK PASSED

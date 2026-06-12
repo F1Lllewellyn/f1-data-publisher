@@ -1,0 +1,14 @@
+# Validation Report — Workflow Meta-AutoRepair One-Click Fix
+
+Verdict: Pass with warnings.
+
+Local package validation performed:
+- Fixed scheduled workflow contains safe push helper.
+- Fixed scheduled workflow contains balanced bash `if/fi` blocks.
+- Safe push helper shell syntax validated with `bash -n`.
+- Workflow meta-health checker Python syntax compiled.
+- No canonical workbook files included.
+- No stable engine files included.
+- Promotion remains blocked.
+
+Warning: Full GitHub validation requires running the new Workflow Meta-Health Safe Test and rerunning the scheduled Workbook/KPI workflow.
