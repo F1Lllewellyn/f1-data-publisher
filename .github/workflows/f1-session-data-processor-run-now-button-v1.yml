@@ -1,4 +1,4 @@
-name: F1 Session Data Processor - Run Now Button
+﻿name: F1 Session Data Processor - Run Now Button
 
 on:
   workflow_dispatch:
@@ -6,6 +6,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   run-now:
@@ -85,4 +89,4 @@ jobs:
             exit 0
           fi
           git commit -m "chore: update session processor readiness artifacts"
-          git push
+          bash scripts/ops/safe_git_push_rebase_retry.sh

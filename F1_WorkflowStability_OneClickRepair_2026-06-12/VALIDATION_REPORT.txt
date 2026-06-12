@@ -1,0 +1,34 @@
+# Validation Report — F1 Workflow Stability One-Click Repair
+
+## Local package validation
+
+Validated in sandbox package build:
+- Required payload files present.
+- Shell helper syntax passed `bash -n`.
+- Python microdelta script compiled successfully.
+- Installer contains no local Python requirement.
+- Installer quotes Windows paths with spaces.
+
+## Targeted log diagnosis
+
+### logs_73851730986.zip
+Workflow: scheduled workbook/KPI refresh.
+Failure:
+`error: failed to push some refs ... fetch first`
+
+Diagnosis:
+Not a model failure. Not a source-ingest failure. The refresh created source-backed workbook/KPI outputs, committed locally, then remote `main` had moved because another workflow pushed first.
+
+Fix:
+Safe push/rebase/retry helper plus write-workflow serialization patch.
+
+### logs_73851194930.zip
+Workflow: cross-car microdelta forensics.
+Failure:
+`FileNotFoundError: No preferred driver/session summary CSV found. Provide --input-csv.`
+
+Diagnosis:
+The experimental workflow was too brittle. It should not fail when no preferred source exists.
+
+Fix:
+Microdelta source-discovery guard emits a no-action report and exits 0 when no suitable source exists.

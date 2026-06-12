@@ -1,4 +1,4 @@
-name: F1 Forecast Gate Source Writer v1
+﻿name: F1 Forecast Gate Source Writer v1
 
 on:
   workflow_dispatch:
@@ -23,6 +23,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   write-gate-forecast-rows:
@@ -81,5 +85,5 @@ jobs:
             echo "No forecast source-writer changes to commit."
           else
             git commit -m "forecast: write gate source rows for ${EVENT_ID}"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

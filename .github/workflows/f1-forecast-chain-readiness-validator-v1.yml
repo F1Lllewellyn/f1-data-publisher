@@ -1,4 +1,4 @@
-name: F1 Forecast Chain Readiness Validator v1
+﻿name: F1 Forecast Chain Readiness Validator v1
 
 on:
   workflow_dispatch:
@@ -27,6 +27,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   validate-forecast-chain-readiness:
@@ -90,5 +94,5 @@ jobs:
             echo "No readiness validator changes to commit."
           else
             git commit -m "forecast: validate chain readiness for ${EVENT_ID}"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

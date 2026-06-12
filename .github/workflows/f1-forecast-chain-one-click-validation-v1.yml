@@ -1,4 +1,4 @@
-name: F1 Forecast Chain One-Click Validation v1
+﻿name: F1 Forecast Chain One-Click Validation v1
 
 on:
   workflow_dispatch:
@@ -31,6 +31,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   one-click-forecast-chain-validation:
@@ -181,4 +185,4 @@ jobs:
           fi
 
           git commit -m "chore: one-click forecast chain validation outputs (${EVENT_ID})"
-          git push
+          bash scripts/ops/safe_git_push_rebase_retry.sh

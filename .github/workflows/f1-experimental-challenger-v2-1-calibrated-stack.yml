@@ -15,6 +15,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   challenger-v2-1:
     runs-on: ubuntu-latest
@@ -47,6 +51,6 @@ jobs:
             echo "No Challenger v2.1 output changes to commit."
           else
             git commit -m "Add Experimental Challenger v2.1 policy validation outputs"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
 

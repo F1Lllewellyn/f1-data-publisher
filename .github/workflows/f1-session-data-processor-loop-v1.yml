@@ -1,4 +1,4 @@
-name: F1 Session Data Processor Loop v1
+﻿name: F1 Session Data Processor Loop v1
 
 on:
   workflow_dispatch:
@@ -114,4 +114,4 @@ jobs:
             exit 0
           fi
           git commit -m "chore: update session data processor artifacts"
-          git push
+          bash scripts/ops/safe_git_push_rebase_retry.sh

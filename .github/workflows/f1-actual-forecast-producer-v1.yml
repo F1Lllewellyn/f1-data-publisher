@@ -1,4 +1,4 @@
-name: F1 Actual Forecast Producer v1
+﻿name: F1 Actual Forecast Producer v1
 
 on:
   workflow_dispatch:
@@ -56,6 +56,10 @@ permissions:
 env:
   PYTHONUNBUFFERED: '1'
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   produce-forecast-rows:
     runs-on: ubuntu-latest
@@ -104,7 +108,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add latest/forecasts latest/forecast_outputs history/forecasts history/forecast_outputs
             git commit -m "forecast: produce actual forecast rows for ${{ inputs.event_id }} ${{ inputs.gate }} ${{ inputs.lane }}"
-            git push
-          else
+            bash scripts/ops/safe_git_push_rebase_retry.sh
             echo "No actual forecast row changes to commit."
           fi
+

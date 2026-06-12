@@ -1,4 +1,4 @@
-name: F1 Auto-Repair - Scheduled Session Workbook Recovery
+﻿name: F1 Auto-Repair - Scheduled Session Workbook Recovery
 
 on:
   schedule:
@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   scheduled-recovery:
@@ -60,5 +64,5 @@ jobs:
             echo "No auto-repair changes to commit."
           else
             git commit -m "chore: scheduled auto-repair session workbook chain"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

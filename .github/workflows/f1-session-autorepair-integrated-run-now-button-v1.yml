@@ -1,4 +1,4 @@
-name: F1 Session Auto-Repair Integrated - Run Now Button
+﻿name: F1 Session Auto-Repair Integrated - Run Now Button
 
 on:
   workflow_dispatch:
@@ -84,5 +84,5 @@ jobs:
             echo "No integrated Auto-Repair changes to commit."
           else
             git commit -m "chore: integrated session auto-repair workbook KPI refresh"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

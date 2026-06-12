@@ -1,4 +1,4 @@
-name: F1 Automated Forecast Gate Orchestrator v1
+﻿name: F1 Automated Forecast Gate Orchestrator v1
 
 on:
   workflow_dispatch:
@@ -171,4 +171,4 @@ jobs:
           fi
 
           git commit -m "chore: automated forecast gate orchestration outputs"
-          git push
+          bash scripts/ops/safe_git_push_rebase_retry.sh

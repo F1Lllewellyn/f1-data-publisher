@@ -19,6 +19,10 @@ permissions:
 env:
   PYTHONUNBUFFERED: "1"
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   black_box_temporal_validation:
     runs-on: ubuntu-latest
@@ -51,6 +55,6 @@ jobs:
             echo "No black-box validation changes to commit."
           else
             git commit -m "Add black-box temporal validation outputs for ${{ github.event.inputs.event_id }}"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
 

@@ -1,0 +1,12 @@
+# Implementation Scorecard — Workflow Stability One-Click Repair
+
+| Area | Result |
+|---|---|
+| Push race resilience | Improved |
+| Concurrent writer guard | Added by installer scan |
+| Microdelta no-source behavior | Safe no-action |
+| Stable engine protection | Pass |
+| Canonical workbook protection | Pass |
+| Local Python requirement | Removed |
+| Local Git requirement | Removed |
+| Promotion | Blocked / not applicable |

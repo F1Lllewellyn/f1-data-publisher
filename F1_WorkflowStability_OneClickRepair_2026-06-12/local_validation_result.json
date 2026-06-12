@@ -1,0 +1,18 @@
+{
+  "safe_push_bash_syntax": true,
+  "safe_push_bash_stderr": "",
+  "microdelta_py_compile": true,
+  "microdelta_py_compile_stderr": "Spreadsheet runtime warmup failed during python startup\nTraceback (most recent call last):\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py\", line 26, in warm_spreadsheet_runtime_on_startup\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/spreadsheet_warmup.py\", line 785, in warm_spreadsheet_runtime\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/spreadsheet_warmup.py\", line 720, in _warm_feature_flows\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/spreadsheet_warmup.py\", line 704, in _warm_collaboration_flows\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/generated/interface/models.py\", line 48821, in hydrate_crdt_from_proto\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/rpc/remote.py\", line 747, in __call__\n  File \"/tmp/tmp.9eeVjt35CN/artifact_tool_v2-2.7.5/artifact_tool/rpc/client.py\", line 150, in call\nartifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document.\n",
+  "microdelta_no_source_exits_zero": true,
+  "microdelta_no_source_status": {
+    "status": "no_action",
+    "reason": "no_driver_session_summary_csv_with_required_schema",
+    "searched_root": "/mnt/data/tmp_microdelta_no_source_test",
+    "candidate_count": 0,
+    "candidate_examples": [],
+    "stable_engine_modified": false,
+    "canonical_workbook_overwrite": false,
+    "promotion_allowed": false,
+    "created_utc": "2026-06-12T23:33:34.614196+00:00"
+  }
+}

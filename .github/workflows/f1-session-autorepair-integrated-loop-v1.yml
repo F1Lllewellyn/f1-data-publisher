@@ -1,4 +1,4 @@
-name: F1 Session Processor + Auto-Repair Integrated Loop v1
+﻿name: F1 Session Processor + Auto-Repair Integrated Loop v1
 
 on:
   workflow_dispatch:
@@ -147,5 +147,5 @@ jobs:
             echo "No integrated Auto-Repair changes to commit."
           else
             git commit -m "chore: integrated session processor auto-repair workbook KPI refresh"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

@@ -23,6 +23,10 @@ permissions:
   contents: write
   actions: read
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   openf1-lightweight-source-closure:
     runs-on: ubuntu-latest
@@ -65,6 +69,6 @@ jobs:
             echo "No source-closure changes to commit."
           else
             git commit -m "Update OpenF1 lightweight source closure artifacts"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
 

@@ -1,4 +1,4 @@
-name: F1 Forecast Automation - Run Now Button
+﻿name: F1 Forecast Automation - Run Now Button
 
 on:
   workflow_dispatch:
@@ -113,4 +113,4 @@ jobs:
           fi
 
           git commit -m "chore: no-code forecast automation run outputs"
-          git push
+          bash scripts/ops/safe_git_push_rebase_retry.sh

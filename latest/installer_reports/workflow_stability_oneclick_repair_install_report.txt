@@ -1,0 +1,38 @@
+﻿F1 Workflow Stability One-Click Repair install report
+Installed UTC: 2026-06-12T23:35:06.5996079Z
+Repo: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+
+Files copied:
+ - scripts/ops/safe_git_push_rebase_retry.sh
+ - scripts/microdelta/run_cross_car_microdelta_forensics_v0.py
+ - .github/workflows/f1-cross-car-microdelta-forensics-v0-experimental.yml
+
+Workflow files patched for safe push / write serialization:
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-actual-forecast-producer-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-automated-forecast-gate-orchestrator-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-autorepair-run-now-button-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-autorepair-scheduled-session-workbook-recovery-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-black-box-temporal-validation-harness-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-create-automation-baseline-tag.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-experimental-challenger-v2-1-calibrated-stack.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-automation-run-now-button-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-bundle-locker-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-chain-one-click-validation-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-chain-readiness-validator-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-fantasy-readiness-dashboard-run-now.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-fantasy-readiness-dashboard-scheduled.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-forecast-gate-source-writer-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-live-source-feed-capture-experimental.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-openf1-lightweight-source-closure.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-session-autorepair-integrated-loop-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-session-autorepair-integrated-run-now-button-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-session-data-processor-loop-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-session-data-processor-run-now-button-v1.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-workbook-kpi-refresh-run-now-button.yml
+ - C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\.github\workflows\f1-workbook-kpi-refresh-scheduled.yml
+
+Stable engine modified: false
+Canonical workbook overwritten: false
+Promotion allowed: false
+
+INSTALL CHECK PASSED

@@ -10,6 +10,10 @@ env:
   TAG_NAME: "F1_Automation_Baseline_2026-06-10_READY"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   create_tag:
     name: Create and push automation baseline tag
@@ -31,7 +35,7 @@ jobs:
             echo "Tag already exists: $TAG_NAME"
           else
             git tag -a "$TAG_NAME" -m "F1 automation operational baseline READY 2026-06-10"
-            git push origin "$TAG_NAME"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
             echo "Created and pushed tag: $TAG_NAME"
           fi
 
@@ -41,4 +45,5 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "- Tag: \`$TAG_NAME\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- Status: created or already existed" >> "$GITHUB_STEP_SUMMARY"
+
 

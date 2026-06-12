@@ -1,4 +1,4 @@
-name: F1 Auto-Repair - Run Now Button
+﻿name: F1 Auto-Repair - Run Now Button
 
 on:
   workflow_dispatch:
@@ -6,6 +6,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   run-now:
@@ -89,5 +93,5 @@ jobs:
             echo "No auto-repair changes to commit."
           else
             git commit -m "chore: auto-repair session to workbook KPI refresh chain"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+

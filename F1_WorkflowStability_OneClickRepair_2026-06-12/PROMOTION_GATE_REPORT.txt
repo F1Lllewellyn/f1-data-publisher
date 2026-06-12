@@ -1,0 +1,7 @@
+# Promotion Gate Report — Workflow Stability One-Click Repair
+
+Decision: NOT PROMOTED.
+
+This patch is workflow stability infrastructure only. It does not modify stable model logic, canonical workbook logic, or prediction ranking logic.
+
+Promotion remains blocked until separate blind/session-gated validation supports any model change.

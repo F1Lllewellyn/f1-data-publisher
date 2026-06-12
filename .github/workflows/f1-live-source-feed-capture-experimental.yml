@@ -43,6 +43,10 @@ permissions:
 env:
   LIVE_CAPTURE_POLICY: configs/live_capture/live_source_feed_capture_policy.json
 
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
 jobs:
   live-source-feed-capture:
     name: live-source-feed-capture-experimental
@@ -100,11 +104,11 @@ jobs:
             git add latest/live_source_feed_capture history/live_source_feed_capture || true
             if ! git diff --cached --quiet; then
               git commit -m "Add live source feed capture outputs"
-              git push
-            else
+              bash scripts/ops/safe_git_push_rebase_retry.sh
               echo "No live source feed output changes to commit."
             fi
           else
             echo "No live source feed output folders found."
           fi
+
 

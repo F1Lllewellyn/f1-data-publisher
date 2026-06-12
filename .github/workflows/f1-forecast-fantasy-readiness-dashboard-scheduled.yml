@@ -1,4 +1,4 @@
-name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
+﻿name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
 
 on:
   schedule:
@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
   actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
 
 jobs:
   scheduled-dashboard-refresh:
@@ -47,5 +51,5 @@ jobs:
             echo "No dashboard changes to commit."
           else
             git commit -m "Scheduled forecast/fantasy readiness dashboard refresh"
-            git push
-          fi
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
