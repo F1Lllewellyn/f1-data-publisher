@@ -1,0 +1,79 @@
+{
+  "actions": [
+    {
+      "details": {
+        "cmd": [
+          "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
+          "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py",
+          "--repo-root",
+          "/home/runner/work/f1-data-publisher/f1-data-publisher"
+        ],
+        "finished_utc": "2026-06-12T22:34:48.432305+00:00",
+        "ok": true,
+        "returncode": 0,
+        "started_utc": "2026-06-12T22:34:48.169398+00:00",
+        "stderr_tail": "",
+        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"source_status\": \"needs_manual_review\",\n  \"material_change\": true,\n  \"warnings\": [\n    \"source_classification=needs_manual_review\"\n  ],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20260612T223448Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T223448Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n"
+      },
+      "name": "initial_workbook_kpi_refresh_attempt",
+      "status": "passed"
+    }
+  ],
+  "commit_allowed": true,
+  "created_utc": "2026-06-12T22:34:48.504584+00:00",
+  "discovered_scripts": {
+    "session_processor": "scripts/session_data_processor/session_data_processor_loop_v1.py",
+    "workbook_kpi_refresh_applier": "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py"
+  },
+  "final_workbook_status": {
+    "canonical_workbook_overwrite": false,
+    "commit_allowed": true,
+    "history_output_root": "history/workbook_kpi_refresh_applier/20260612T223448Z",
+    "latest_output_root": "latest/workbook_kpi_refresh_applier",
+    "material_change": true,
+    "promotion_allowed": false,
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T223448Z.xlsx",
+    "source_status": "needs_manual_review",
+    "stable_engine_modified": false,
+    "status": "refresh_applied",
+    "warnings": [
+      "source_classification=needs_manual_review"
+    ]
+  },
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "force_push": false,
+    "promotion_allowed": false,
+    "stable_engine_modified": false
+  },
+  "initial_workbook_status": {
+    "canonical_workbook_overwrite": false,
+    "commit_allowed": true,
+    "history_output_root": "history/workbook_kpi_refresh_applier/20260612T223448Z",
+    "latest_output_root": "latest/workbook_kpi_refresh_applier",
+    "material_change": true,
+    "promotion_allowed": false,
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T223448Z.xlsx",
+    "source_status": "needs_manual_review",
+    "stable_engine_modified": false,
+    "status": "refresh_applied",
+    "warnings": [
+      "source_classification=needs_manual_review"
+    ]
+  },
+  "mode": "run_now",
+  "protected_paths_touched": [],
+  "repair_attempted": false,
+  "repair_domain": "session_workbook_recovery",
+  "repair_succeeded": false,
+  "run_id": "20260612T223448Z",
+  "session_processor_status": {
+    "classification": null,
+    "data_readiness_present": true,
+    "latest_manifest_present": true,
+    "status": "latest_readiness_found"
+  },
+  "verdict": "Pass",
+  "warnings": []
+}
