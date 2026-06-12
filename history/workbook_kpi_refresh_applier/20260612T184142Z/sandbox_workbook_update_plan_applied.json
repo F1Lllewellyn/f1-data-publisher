@@ -1,0 +1,13 @@
+{
+  "applied": true,
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": false,
+  "source_plan": {},
+  "source_status": "missing"
+}
