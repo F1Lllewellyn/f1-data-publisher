@@ -1,0 +1,13 @@
+{
+  "canonical_workbook_modified": false,
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+  "overall_status": "needs_manual_review",
+  "producer": "session_data_processor_loop_v1",
+  "promotion_allowed": false,
+  "schema_version": "latest_manifest_v2_session_processor",
+  "session_key": 11301,
+  "session_name": "Practice 2",
+  "stable_engine_modified": false,
+  "updated_utc": "2026-06-12T18:29:55.968363Z"
+}
