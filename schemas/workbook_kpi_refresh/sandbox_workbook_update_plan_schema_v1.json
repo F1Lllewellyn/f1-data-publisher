@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "F1 Sandbox Workbook Update Plan v1",
+  "type": "object",
+  "required": [
+    "run_id",
+    "event",
+    "session",
+    "classification",
+    "artifacts",
+    "governance"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer"
+        },
+        "race_name": {
+          "type": "string"
+        },
+        "round": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "circuit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "session_name": {
+          "type": "string"
+        },
+        "session_key": {
+          "type": [
+            "integer",
+            "string",
+            "null"
+          ]
+        },
+        "date_start_utc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "date_end_utc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "clean",
+        "partial",
+        "late",
+        "conflicting",
+        "needs_manual_review",
+        "missing"
+      ]
+    },
+    "artifacts": {
+      "type": "object"
+    },
+    "kpi_updates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "governance": {
+      "type": "object"
+    }
+  }
+}

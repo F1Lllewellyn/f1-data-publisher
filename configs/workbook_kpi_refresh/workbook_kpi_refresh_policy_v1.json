@@ -1,0 +1,44 @@
+{
+  "sandbox_branch": "Engine_2026-06-11_SANDBOX_WorkbookKPIRefreshApplier",
+  "stable_engine_protected": "Engine_2026-06-07_STABLE",
+  "canonical_workbook_protected": true,
+  "allow_canonical_overwrite": false,
+  "allow_stable_prediction_overwrite": false,
+  "allow_model_promotion": false,
+  "allow_delete_old_files": false,
+  "output_mode": "dated_sandbox_artifacts_only",
+  "latest_output_root": "latest/workbook_kpi_refresh_applier",
+  "history_output_root": "history/workbook_kpi_refresh_applier",
+  "required_session_processor_artifacts": [
+    "sandbox_workbook_update_plan.json",
+    "workbook_kpi_readiness.json",
+    "workbook_kpi_readiness.csv",
+    "forecast_bundle_ledger_snapshot.json"
+  ],
+  "recommended_source_manifests": [
+    "latest/latest_manifest.json",
+    "latest/data_readiness.json",
+    "latest/combined_source_manifest.json"
+  ],
+  "classification_values": [
+    "clean",
+    "partial",
+    "late",
+    "conflicting",
+    "needs_manual_review",
+    "missing"
+  ],
+  "material_change_thresholds": {
+    "readiness_status_change": true,
+    "session_key_change": true,
+    "row_count_delta_min": 1,
+    "forecast_bundle_ledger_snapshot_change": true
+  },
+  "governor_gates": {
+    "promotion_gate": "blocked",
+    "stable_vs_experimental_separation_gate": "enforced",
+    "deletion_cleanup_gate": "blocked",
+    "data_first_gate": "enforced",
+    "accuracy_objective_lock": "no_accuracy_claim_without_blind_gate_evidence"
+  }
+}

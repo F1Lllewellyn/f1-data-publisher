@@ -1,0 +1,5 @@
+source,status,rows,classification,session_key,session_name,updated_utc
+drivers,clean,22,clean,11301,Practice 2,2026-06-12T13:25:00Z
+laps,clean,586,clean,11301,Practice 2,2026-06-12T13:25:00Z
+weather,clean,85,clean,11301,Practice 2,2026-06-12T13:25:00Z
+intervals,missing,0,needs_manual_review,11301,Practice 2,2026-06-12T13:25:00Z

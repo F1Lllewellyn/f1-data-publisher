@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "F1 Workbook KPI Refresh Manifest v1",
+  "type": "object",
+  "required": [
+    "run_id",
+    "created_utc",
+    "source_status",
+    "outputs",
+    "governance"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "created_utc": {
+      "type": "string"
+    },
+    "source_status": {
+      "type": "string"
+    },
+    "source_artifacts": {
+      "type": "array"
+    },
+    "outputs": {
+      "type": "array"
+    },
+    "material_change": {
+      "type": "boolean"
+    },
+    "governance": {
+      "type": "object"
+    }
+  }
+}
