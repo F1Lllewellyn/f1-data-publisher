@@ -1,0 +1,7 @@
+{
+  "bundle_id": "manual_forecast_producer_validation__race_result__experimental_challenger__20260612T014702Z",
+  "gate": "race_result",
+  "engine_lane": "experimental_challenger",
+  "source_found": true,
+  "proof_loop_status": "ready_for_post_event_scoring"
+}

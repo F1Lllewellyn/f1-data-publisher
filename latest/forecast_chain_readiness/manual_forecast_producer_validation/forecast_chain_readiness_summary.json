@@ -1,0 +1,17 @@
+{
+  "run_timestamp_utc": "2026-06-12T01:47:01Z",
+  "event_id": "manual_forecast_producer_validation",
+  "gate_request": "all",
+  "lane_request": "all",
+  "validation_basis": "actual_forecast_rows_only",
+  "required_combinations": 15,
+  "actual_forecast_sources_found": 15,
+  "pending_actual_forecast_rows": 0,
+  "invalid_sources": 0,
+  "status": "pass",
+  "promotion_allowed": false,
+  "notes": [
+    "This validator does not fabricate bundles.",
+    "If sources are pending, run the forecast-producing workflow/source writer first."
+  ]
+}

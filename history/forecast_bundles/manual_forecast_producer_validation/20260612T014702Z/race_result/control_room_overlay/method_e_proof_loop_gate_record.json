@@ -1,0 +1,7 @@
+{
+  "bundle_id": "manual_forecast_producer_validation__race_result__control_room_overlay__20260612T014702Z",
+  "gate": "race_result",
+  "engine_lane": "control_room_overlay",
+  "source_found": true,
+  "proof_loop_status": "ready_for_post_event_scoring"
+}

@@ -1,0 +1,5 @@
+{
+  "bundle_id": "manual_forecast_producer_validation__post_fp3__stable_baseline__20260612T014702Z",
+  "promotion_gate_status": "blocked",
+  "reason": "Promotion requires scored blind/session-gated performance improvement. Bundle lock alone is not enough."
+}
