@@ -1,0 +1,17 @@
+{
+  "ready_for_use": true,
+  "latest_session_state": "needs_manual_review",
+  "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
+  "generated_at_utc": "2026-06-12T23:22:48Z",
+  "source_status": "needs_manual_review",
+  "event_name": "Spain - Barcelona - Catalunya",
+  "session_name": {
+    "date_end": "2026-06-12T16:00:00+00:00",
+    "date_start": "2026-06-12T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1287,
+    "session_key": 11301,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  }
+}
