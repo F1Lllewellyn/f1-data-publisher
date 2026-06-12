@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_next_event__pre_weekend__control_room_overlay__20260612T001324Z",
+  "bundle_status": "missing_forecast_source",
+  "event_id": "2026_next_event",
+  "season": "2026",
+  "round": "",
+  "race_name": "Next F1 Event",
+  "gate": "pre_weekend",
+  "engine_lane": "control_room_overlay",
+  "engine_lane_config": "MethodE_ControlRoom_Overlay",
+  "forecast_lock_utc": "2026-06-12T00:13:24Z",
+  "blind_validation_eligible": false,
+  "source_forecast_found": false,
+  "promotion_gate_status": "blocked"
+}

@@ -1,0 +1,7 @@
+{
+  "bundle_id": "2026_next_event__race_result__control_room_overlay__20260612T001324Z",
+  "gate": "race_result",
+  "engine_lane": "control_room_overlay",
+  "source_found": false,
+  "proof_loop_status": "blocked_missing_forecast_source"
+}
