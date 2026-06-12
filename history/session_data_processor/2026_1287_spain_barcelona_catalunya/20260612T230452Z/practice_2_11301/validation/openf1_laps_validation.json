@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 275105,
+    "ok": true,
+    "sha256": "717b4f1dc300b5efb92502933edd9b44d5a8004513c85b255417dcf3c3ea8633",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_laps.json",
+  "json_sha256": "3b2ebadccad95e1dd6be2ce4218ec7a7ce13d84ab33afe8ff281c220ffe64ce3",
+  "max_lap_number": 34.0,
+  "missing_required_columns": [],
+  "rows": 586,
+  "status": "clean",
+  "timestamp_rows": 584
+}
