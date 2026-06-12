@@ -1,0 +1,14 @@
+{
+  "status": "refresh_applied",
+  "source_status": "needs_manual_review",
+  "material_change": true,
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ],
+  "latest_output_root": "latest/workbook_kpi_refresh_applier",
+  "history_output_root": "history/workbook_kpi_refresh_applier/20260612T183640Z",
+  "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_Practice_2_20260612T183640Z.xlsx",
+  "canonical_workbook_overwrite": false,
+  "stable_engine_modified": false,
+  "promotion_allowed": false
+}

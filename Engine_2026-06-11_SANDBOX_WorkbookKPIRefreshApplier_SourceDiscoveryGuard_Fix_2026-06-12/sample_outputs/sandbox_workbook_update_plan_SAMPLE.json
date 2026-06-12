@@ -1,0 +1,41 @@
+{
+  "run_id": "sample_20260612T000000Z",
+  "event": {
+    "year": 2026,
+    "race_name": "Spain",
+    "round": 10,
+    "circuit": "Barcelona-Catalunya"
+  },
+  "session": {
+    "session_name": "Practice 2",
+    "session_key": 11301,
+    "date_start_utc": "2026-06-12T12:00:00Z",
+    "date_end_utc": "2026-06-12T13:00:00Z"
+  },
+  "classification": "needs_manual_review",
+  "artifacts": {
+    "laps_rows": 586,
+    "drivers_rows": 22,
+    "weather_rows": 85,
+    "session_result_rows": 22
+  },
+  "kpi_updates": [
+    {
+      "source": "laps",
+      "status": "clean",
+      "rows": 586,
+      "classification": "clean"
+    },
+    {
+      "source": "intervals",
+      "status": "missing",
+      "rows": 0,
+      "classification": "needs_manual_review"
+    }
+  ],
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "stable_engine_modified": false,
+    "promotion_allowed": false
+  }
+}
