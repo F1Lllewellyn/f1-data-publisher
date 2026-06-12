@@ -2,7 +2,7 @@
   "event_id": "manual_validation",
   "gate": "all",
   "lane": "all",
-  "created_utc": "2026-06-12T00:58:30Z",
+  "created_utc": "2026-06-12T01:08:10Z",
   "rows_files_written": [],
   "rows_files_written_count": 0,
   "audit_path": "/home/runner/work/f1-data-publisher/f1-data-publisher/latest/forecast_bundle_gap_closure/manual_validation/forecast_gate_source_writer_audit.csv",
