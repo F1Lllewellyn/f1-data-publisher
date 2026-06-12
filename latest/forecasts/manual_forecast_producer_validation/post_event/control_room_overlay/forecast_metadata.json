@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "control_room_overlay",
+  "event_id": "manual_forecast_producer_validation",
+  "gate": "post_event",
+  "generated_utc": "2026-06-12T01:27:28Z",
+  "promotion_allowed": false,
+  "race_name": "Manual Forecast Producer Validation",
+  "row_count": 22,
+  "run_id": "20260612T012728Z",
+  "source_counts": {
+    "drivers": 479,
+    "intervals": 28324,
+    "pit": 29,
+    "position": 10179,
+    "race_control": 1239,
+    "source_readiness": 9,
+    "starting_grid": 0,
+    "stints": 2187,
+    "weather": 4195
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
