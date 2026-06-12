@@ -1,0 +1,21 @@
+{
+  "status": "no_action",
+  "reason": "no_driver_session_summary_csv_with_required_schema",
+  "searched_root": ".",
+  "candidate_count": 9,
+  "candidate_examples": [
+    "latest/workbook_kpi_refresh_applier/refreshed_workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/workbook_kpi_readiness.csv",
+    "history/workbook_kpi_refresh_applier/20260612T184747Z/refreshed_workbook_kpi_readiness.csv",
+    "history/workbook_kpi_refresh_applier/20260612T225059Z/refreshed_workbook_kpi_readiness.csv",
+    "history/workbook_kpi_refresh_applier/20260612T223448Z/refreshed_workbook_kpi_readiness.csv",
+    "history/workbook_kpi_refresh_applier/20260612T184142Z/refreshed_workbook_kpi_readiness.csv",
+    "history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/workbook_kpi_readiness.csv",
+    "history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T225046Z/practice_2_11301/workbook_kpi_readiness.csv",
+    "history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T230452Z/practice_2_11301/workbook_kpi_readiness.csv"
+  ],
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "created_utc": "2026-06-12T23:37:48.078551+00:00"
+}
