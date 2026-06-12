@@ -1,0 +1,88 @@
+name: F1 Session Auto-Repair Integrated - Run Now Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-session-autorepair-integrated-run-now-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run-now:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Run session ingest then Auto-Repair recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/autorepair/health_check_autorepair_scheduled_integration_v1.py
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode run_now --season 2026 --session-filter auto
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode run_now --repo-root "$GITHUB_WORKSPACE" --timeout 1200
+      - name: Print Auto-Repair plain-English report
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "_runtime/autorepair/session_workbook_recovery/autorepair_report.md" ]; then
+            echo "----- AUTO-REPAIR REPORT START -----"
+            cat _runtime/autorepair/session_workbook_recovery/autorepair_report.md
+            echo "----- AUTO-REPAIR REPORT END -----"
+          else
+            echo "No Auto-Repair report was produced."
+          fi
+      - name: Upload integrated diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-session-autorepair-integrated-run-now-runtime
+          path: |
+            _runtime/autorepair_integrated_health/**
+            _runtime/autorepair/**
+            _runtime/session_data_processor/**
+            _runtime/workbook_kpi_refresh_status.json
+            latest/session_data_processor/**
+            latest/workbook_kpi_refresh_applier/**
+            latest/autorepair/**
+          if-no-files-found: ignore
+      - name: Commit source-backed integrated outputs only
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          COMMIT_ALLOWED="false"
+          if [ -f "_runtime/autorepair/session_workbook_recovery/commit_allowed.txt" ]; then
+            COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
+          fi
+          echo "commit_allowed=$COMMIT_ALLOWED"
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            echo "No source-backed integrated outputs to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in latest/session_data_processor history/session_data_processor latest/latest_manifest.json latest/data_readiness.json latest/combined_source_manifest.json latest/forecast_bundle_ledger history/forecast_bundle_ledger latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier latest/autorepair history/autorepair; do
+            if [ -e "$p" ] && ! git check-ignore -q "$p"; then git add "$p"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "No integrated Auto-Repair changes to commit."
+          else
+            git commit -m "chore: integrated session auto-repair workbook KPI refresh"
+            git push
+          fi

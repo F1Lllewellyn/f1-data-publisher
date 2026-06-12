@@ -1,0 +1,10 @@
+{
+  "status": "Pass with warnings",
+  "created_utc": "2026-06-12T22:39:40.172031+00:00",
+  "package": "Engine_2026-06-11_SANDBOX_AutoRepairScheduledIntegration_2026-06-12",
+  "required_files_present": true,
+  "canonical_workbook_overwrite": false,
+  "stable_engine_modified": false,
+  "promotion_allowed": false,
+  "warning": "GitHub live validation still required."
+}

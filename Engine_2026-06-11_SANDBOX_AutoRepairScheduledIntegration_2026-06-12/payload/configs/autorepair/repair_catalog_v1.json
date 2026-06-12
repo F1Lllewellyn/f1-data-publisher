@@ -1,0 +1,72 @@
+{
+  "catalog_version": "v1",
+  "sandbox_branch": "Engine_2026-06-11_SANDBOX_AutoRepairOrchestrator",
+  "repair_domain": "session_workbook_recovery",
+  "allowed_auto_repairs": [
+    {
+      "id": "workbook_source_missing_run_session_processor_then_rerun_workbook_refresh",
+      "symptoms": [
+        "source_status=missing",
+        "reason=session_processor_sources_missing_or_incomplete",
+        "commit_allowed=false"
+      ],
+      "actions": [
+        "run_session_data_processor",
+        "rerun_workbook_kpi_refresh",
+        "commit_only_if_source_backed"
+      ],
+      "risk_level": "low_to_moderate",
+      "authority": "sandbox_outputs_only"
+    },
+    {
+      "id": "runtime_diagnostics_not_committed",
+      "symptoms": [
+        "_runtime is gitignored",
+        "pathspec _runtime did not match"
+      ],
+      "actions": [
+        "upload_runtime_as_artifact",
+        "exclude_runtime_from_git_add"
+      ],
+      "risk_level": "low",
+      "authority": "workflow_commit_filter_only"
+    }
+  ],
+  "blocked_repairs": [
+    "modify Engine_2026-06-07_STABLE",
+    "overwrite canonical workbook",
+    "delete source artifacts",
+    "promote experimental model",
+    "change GitHub secrets or permissions",
+    "force push",
+    "silently rewrite stable P1-P20"
+  ],
+  "script_discovery": {
+    "session_processor_preferred": [
+      "scripts/session_data_processor/session_data_processor_loop_v1.py"
+    ],
+    "workbook_applier_preferred": [
+      "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py"
+    ]
+  },
+  "commit_policy": {
+    "commit_allowed_only_if": [
+      "final_workbook_status.commit_allowed == true",
+      "final_workbook_status.source_status in clean/partial/late/conflicting/needs_manual_review",
+      "protected_paths_touched == false"
+    ],
+    "commit_paths": [
+      "latest/session_data_processor",
+      "history/session_data_processor",
+      "latest/latest_manifest.json",
+      "latest/data_readiness.json",
+      "latest/combined_source_manifest.json",
+      "latest/forecast_bundle_ledger",
+      "history/forecast_bundle_ledger",
+      "latest/workbook_kpi_refresh_applier",
+      "history/workbook_kpi_refresh_applier",
+      "latest/autorepair",
+      "history/autorepair"
+    ]
+  }
+}

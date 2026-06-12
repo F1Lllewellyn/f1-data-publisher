@@ -1,0 +1,44 @@
+name: F1 Session Auto-Repair Integrated - Safe Test Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  safe-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Run integrated safe test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/autorepair/health_check_autorepair_scheduled_integration_v1.py
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode safe_test --season 2026 --session-filter auto
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode safe_test --repo-root "$GITHUB_WORKSPACE" --timeout 900
+      - name: Upload safe-test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-session-autorepair-integrated-safe-test-runtime
+          path: |
+            _runtime/autorepair_integrated_health/**
+            _runtime/autorepair/**
+            _runtime/session_data_processor/**
+          if-no-files-found: ignore
