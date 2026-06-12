@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-06-12T18:29:55.967312Z",
+  "created_utc": "2026-06-12T22:50:58.876586Z",
   "event_id": "2026_1287_spain_barcelona_catalunya",
   "forecast_state_changed": false,
   "overall_status": "needs_manual_review",
@@ -16,6 +16,6 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
