@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 18332,
+    "ok": true,
+    "sha256": "2ee71c979104d35ffa54b9800d32224e934c5a91aad985f5c27e3217b329a9c5",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_weather.json",
+  "json_sha256": "41ced3063c24f4dbfaf9a96ce799d85b44fe8bbbcee3840b09c393a1f0914c31",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 85,
+  "status": "clean",
+  "timestamp_rows": 85
+}
