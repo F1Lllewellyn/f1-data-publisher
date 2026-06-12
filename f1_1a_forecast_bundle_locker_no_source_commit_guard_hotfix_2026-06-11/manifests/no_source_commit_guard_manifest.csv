@@ -1,0 +1,3 @@
+source,destination,purpose
+payload/.github/workflows/f1-forecast-bundle-locker-v1.yml,.github/workflows/f1-forecast-bundle-locker-v1.yml,Adds manual no-source commit guard and allow_structural_placeholders input.
+payload/scripts/forecast_bundles/create_forecast_bundles_v1.py,scripts/forecast_bundles/create_forecast_bundles_v1.py,Skips missing-source bundles by default and only creates actual-source bundles unless explicitly allowed.

@@ -6,8 +6,6 @@ It never fabricates forecasts: if a lane forecast source is missing during a man
 or detected-gate lock, the bundle is structurally complete but marked
 missing_forecast_source. Scheduled runs are guarded: they do not create or commit
 placeholder bundles unless actual forecast source rows are detected first.
-Manual runs are also guarded by default after validation: they will not create
-missing-source placeholder bundles unless --allow-structural-placeholders is set.
 """
 from __future__ import annotations
 import argparse, csv, datetime as dt, hashlib, json, os, shutil
@@ -222,7 +220,6 @@ def main():
     ap.add_argument('--commit-latest', action='store_true')
     ap.add_argument('--scheduled-run', action='store_true')
     ap.add_argument('--require-scheduled-source', action='store_true')
-    ap.add_argument('--allow-structural-placeholders', action='store_true', help='Allow creation of missing_forecast_source structural bundles when actual forecast rows are absent. Default is false to avoid placeholder commits.')
     args=ap.parse_args()
     repo=Path(args.repo_root).resolve()
     source_root=Path(args.source_root).resolve()
@@ -240,30 +237,16 @@ def main():
         details=[]
 
     rows=[]
-    skipped=[]
     for event_id, gate in targets:
         race_name = args.race_name if not args.scheduled_run else event_id.replace('_',' ').title()
         for lane in LANES:
-            has_source = source_has_rows(source_root, event_id, gate, lane)
-            if (not has_source) and (not args.allow_structural_placeholders):
-                skipped.append({'event_id': event_id, 'gate': gate, 'engine_lane': lane, 'reason': 'missing_actual_forecast_rows'})
-                continue
             rows.append(create_bundle(repo, event_id, args.season, args.round, race_name, gate, lane, source_root, args.commit_latest, include_existing_bundles=not args.scheduled_run))
 
-    if not rows:
-        write_scheduler_guard_report(
-            repo,
-            'No actual forecast source rows detected. No latest/history forecast bundles created. Re-run with --allow-structural-placeholders only if you intentionally want structural placeholders.',
-            gates,
-            skipped
-        )
-        return
-
-    # Write summary only when bundles are actually created. This avoids latest churn on guarded no-source runs.
+    # Write summary only when bundles are actually created. This avoids latest churn on guarded scheduled no-op runs.
     summary_event = args.event_id if not args.scheduled_run else 'scheduled_detected_sources'
     out=repo/'latest'/'forecast_bundles'/summary_event/'bundle_creation_summary.json'
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps({'created_utc':utcnow(),'event_id':args.event_id,'race_name':args.race_name,'gate':args.gate,'scheduled_run':args.scheduled_run,'detected_sources':details,'skipped_missing_sources':skipped,'bundles':rows}, indent=2), encoding='utf-8')
+    out.write_text(json.dumps({'created_utc':utcnow(),'event_id':args.event_id,'race_name':args.race_name,'gate':args.gate,'scheduled_run':args.scheduled_run,'detected_sources':details,'bundles':rows}, indent=2), encoding='utf-8')
     print(json.dumps({'created':len(rows),'source_found':sum(1 for r in rows if r['source_found']),'summary':str(out)}, indent=2))
 
 if __name__=='__main__':
