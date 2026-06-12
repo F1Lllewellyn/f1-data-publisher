@@ -1,0 +1,11 @@
+{
+  "blocked_actions": [
+    "overwrite canonical workbook",
+    "alter Engine_2026-06-07_STABLE",
+    "promote model layer"
+  ],
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-06-12T18:29:55.966826Z",
+  "recommended_action": "consume workbook_kpi_readiness.json/csv into the workbook-control-room or create an explicitly named sandbox workbook copy",
+  "schema_version": "sandbox_workbook_update_plan_v1"
+}

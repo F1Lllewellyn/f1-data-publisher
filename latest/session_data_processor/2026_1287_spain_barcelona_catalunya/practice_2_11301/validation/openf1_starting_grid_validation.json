@@ -1,0 +1,23 @@
+{
+  "anomalies": [],
+  "columns": [],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_starting_grid.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 0,
+    "error": "<HTTPError 404: 'Not Found'>",
+    "ok": false
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_starting_grid.json",
+  "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "max_lap_number": null,
+  "missing_required_columns": [
+    "session_key",
+    "meeting_key"
+  ],
+  "rows": 0,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}
