@@ -1,0 +1,26 @@
+{
+  "safe_test_returncode": 0,
+  "safe_test_stdout_tail": "{\n  \"status\": \"Pass\",\n  \"commit_allowed\": false,\n  \"repair_attempted\": false,\n  \"repair_succeeded\": false,\n  \"runtime_report\": \"_runtime/autorepair/session_workbook_recovery/autorepair_report.md\"\n}\n",
+  "safe_test_stderr_tail": "",
+  "run_now_returncode": 0,
+  "run_now_stdout_tail": "{\n  \"status\": \"Pass\",\n  \"commit_allowed\": true,\n  \"repair_attempted\": false,\n  \"repair_succeeded\": false,\n  \"runtime_report\": \"_runtime/autorepair/session_workbook_recovery/autorepair_report.md\"\n}\n",
+  "run_now_stderr_tail": "",
+  "runtime_status_exists": true,
+  "latest_autorepair_exists": true,
+  "workbook_refresh_status": {
+    "canonical_workbook_overwrite": false,
+    "commit_allowed": true,
+    "history_output_root": "history/workbook_kpi_refresh_applier/20260612T222238Z",
+    "latest_output_root": "latest/workbook_kpi_refresh_applier",
+    "material_change": true,
+    "promotion_allowed": false,
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_Practice_2_20260612T222238Z.xlsx",
+    "source_status": "needs_manual_review",
+    "stable_engine_modified": false,
+    "status": "refresh_applied",
+    "warnings": [
+      "source_classification=needs_manual_review"
+    ]
+  },
+  "verdict": "PASS"
+}

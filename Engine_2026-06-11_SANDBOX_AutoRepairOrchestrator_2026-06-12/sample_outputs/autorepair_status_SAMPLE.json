@@ -1,0 +1,19 @@
+{
+  "run_id": "SAMPLE",
+  "mode": "run_now",
+  "repair_domain": "session_workbook_recovery",
+  "verdict": "Pass with warnings",
+  "commit_allowed": false,
+  "repair_attempted": true,
+  "repair_succeeded": false,
+  "final_workbook_status": {
+    "status": "no_action",
+    "source_status": "missing",
+    "commit_allowed": false
+  },
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "stable_engine_modified": false,
+    "promotion_allowed": false
+  }
+}

@@ -1,0 +1,33 @@
+name: F1 Auto-Repair - Safe Test Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  safe-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Run Auto-Repair safe test
+        run: |
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode safe_test --repo-root "$GITHUB_WORKSPACE"
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-autorepair-safe-test-runtime
+          path: _runtime/autorepair/**
+          if-no-files-found: ignore

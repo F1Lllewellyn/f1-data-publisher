@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "F1 AutoRepair Report v1",
+  "type": "object",
+  "required": [
+    "run_id",
+    "mode",
+    "repair_domain",
+    "verdict",
+    "commit_allowed",
+    "governance"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "safe_test",
+        "run_now"
+      ]
+    },
+    "repair_domain": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    },
+    "commit_allowed": {
+      "type": "boolean"
+    },
+    "repair_attempted": {
+      "type": "boolean"
+    },
+    "repair_succeeded": {
+      "type": "boolean"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actions": {
+      "type": "array"
+    },
+    "governance": {
+      "type": "object"
+    }
+  }
+}
