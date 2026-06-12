@@ -1,0 +1,54 @@
+name: F1 Forecast Automation - Safe Test Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: f1-forecast-automation-safe-test-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  safe-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install lightweight dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests
+
+      - name: Run safe test only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py \
+            --mode dry_run \
+            --event-id manual_forecast_producer_validation \
+            --race-name "Manual Forecast Producer Validation" \
+            --gate all \
+            --run-source-closure false \
+            --season 2026
+
+      - name: Upload safe-test report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-forecast-automation-safe-test-button
+          path: |
+            _runtime/forecast_gate_orchestrator/**
+          if-no-files-found: ignore

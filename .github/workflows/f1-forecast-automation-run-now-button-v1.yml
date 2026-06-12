@@ -1,0 +1,107 @@
+name: F1 Forecast Automation - Run Now Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-forecast-automation-run-now-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run-now:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install lightweight dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests
+
+      - name: Run automation now
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py \
+            --mode auto \
+            --event-id auto \
+            --race-name auto \
+            --gate auto \
+            --run-source-closure true \
+            --season 2026
+
+      - name: Upload automation report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-forecast-automation-run-now-button
+          path: |
+            _runtime/forecast_gate_orchestrator/**
+            latest/openf1_lightweight_source_closure/**
+            latest/forecasts/**
+            latest/forecast_outputs/**
+            latest/forecast_chain_readiness/**
+            latest/forecast_bundles/**
+            history/openf1_lightweight_source_closure/**
+            history/forecasts/**
+            history/forecast_outputs/**
+            history/forecast_chain_readiness/**
+            history/forecast_bundles/**
+          if-no-files-found: ignore
+
+      - name: Commit automation outputs when present
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          candidates=(
+            "latest/openf1_lightweight_source_closure"
+            "history/openf1_lightweight_source_closure"
+            "latest/forecasts"
+            "latest/forecast_outputs"
+            "latest/forecast_chain_readiness"
+            "latest/forecast_bundles"
+            "history/forecasts"
+            "history/forecast_outputs"
+            "history/forecast_chain_readiness"
+            "history/forecast_bundles"
+            "_runtime/forecast_gate_orchestrator"
+          )
+
+          added=0
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              git add "$p"
+              added=1
+            fi
+          done
+
+          if [ "$added" = "0" ]; then
+            echo "No automation output paths exist to commit."
+            exit 0
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No automation changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: no-code forecast automation run outputs"
+          git push
