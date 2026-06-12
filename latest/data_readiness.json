@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1287_spain_barcelona_catalunya",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "Spain - Barcelona - Catalunya",
@@ -61,5 +61,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-06-12T18:29:55.968478Z"
+  "updated_utc": "2026-06-12T22:50:58.877610Z"
 }
