@@ -1,0 +1,39 @@
+name: F1 Session Data Processor - Safe Test Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  safe-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Run safe test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode safe_test --season 2026
+      - name: Upload safe-test report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-session-data-processor-safe-test
+          path: _runtime/session_data_processor/**
+          if-no-files-found: ignore

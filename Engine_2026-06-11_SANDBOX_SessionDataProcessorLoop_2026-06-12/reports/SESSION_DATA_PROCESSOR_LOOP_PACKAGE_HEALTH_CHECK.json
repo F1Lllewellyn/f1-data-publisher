@@ -1,0 +1,15 @@
+{
+  "canonical_workbook_modified": false,
+  "checked_utc": "2026-06-12T17:39:56.754363Z",
+  "json_config_parse": true,
+  "package_root": "/mnt/data/Engine_2026-06-11_SANDBOX_SessionDataProcessorLoop_2026-06-12",
+  "promotion_allowed": false,
+  "required_files_present": true,
+  "safe_test_verified": true,
+  "script_compile": true,
+  "stable_engine_modified": false,
+  "status": "pass",
+  "warnings": [
+    "Live FP1/FP2 endpoint ingestion not executed in local sandbox because runtime network/API access belongs inside GitHub Actions."
+  ]
+}

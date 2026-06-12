@@ -1,0 +1,88 @@
+name: F1 Session Data Processor - Run Now Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  run-now:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+          python - <<'PY'
+          import pandas, requests, openpyxl
+          print("Session processor dependency preflight passed: pandas, requests, openpyxl")
+          PY
+      - name: Run session data processor now
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode run_now --season 2026 --session-filter auto
+      - name: Upload processor artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-session-data-processor-run-now
+          path: |
+            _runtime/session_data_processor/**
+            latest/session_data_processor/**
+            history/session_data_processor/**
+            latest/latest_manifest.json
+            latest/data_readiness.json
+            latest/combined_source_manifest.json
+            latest/forecast_bundle_ledger/session_data_processor/**
+            history/forecast_bundle_ledger/session_data_processor/**
+          if-no-files-found: ignore
+      - name: Commit processor outputs
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          candidates=(
+            "latest/session_data_processor"
+            "history/session_data_processor"
+            "latest/latest_manifest.json"
+            "latest/data_readiness.json"
+            "latest/combined_source_manifest.json"
+            "latest/forecast_bundle_ledger/session_data_processor"
+            "history/forecast_bundle_ledger/session_data_processor"
+          )
+          added=0
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              if git check-ignore -q "$p"; then
+                echo "Skipping ignored path: $p"
+                continue
+              fi
+              git add "$p"
+              added=1
+            fi
+          done
+          if [ "$added" = "0" ]; then
+            echo "No session processor output paths exist to commit."
+            exit 0
+          fi
+          if git diff --cached --quiet; then
+            echo "No session processor changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: update session processor readiness artifacts"
+          git push

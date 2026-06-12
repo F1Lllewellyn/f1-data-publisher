@@ -1,0 +1,62 @@
+{
+  "branch_name": "Engine_2026-06-11_SANDBOX_SessionDataProcessorLoop",
+  "canonical_workbook_protected": true,
+  "create_sandbox_workbook_update_plan": true,
+  "create_xlsx_sandbox_workbook": false,
+  "default_season": 2026,
+  "delete_authority": false,
+  "forecast_bundle_ledgers": {
+    "block_stable_overwrite": true,
+    "write_history_snapshot": true,
+    "write_latest_snapshot": true
+  },
+  "heavy_endpoints_default_enabled": false,
+  "heavy_openf1_endpoints": [
+    "car_data",
+    "location",
+    "team_radio"
+  ],
+  "late_source_grace_minutes": 60,
+  "material_readiness_delta_threshold": 0.1,
+  "notify_policy": {
+    "notify_on_forecast_state_change": true,
+    "notify_on_needs_manual_review": true,
+    "notify_on_readiness_improvement": true,
+    "only_on_material_change": true
+  },
+  "openf1_endpoints": [
+    "sessions",
+    "drivers",
+    "laps",
+    "intervals",
+    "position",
+    "pit",
+    "stints",
+    "race_control",
+    "weather",
+    "session_result",
+    "starting_grid"
+  ],
+  "promotion_allowed": false,
+  "recent_session_lookback_hours": 36,
+  "schema_version": "session_data_processor_policy_v1",
+  "session_completion_lag_minutes": 8,
+  "session_gates": [
+    "post_fp1",
+    "post_fp2",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "source_classes": [
+    "clean",
+    "partial",
+    "late",
+    "conflicting",
+    "needs_manual_review"
+  ],
+  "stable_engine_protected": true,
+  "write_history_snapshots": true,
+  "write_public_latest_manifests": true
+}

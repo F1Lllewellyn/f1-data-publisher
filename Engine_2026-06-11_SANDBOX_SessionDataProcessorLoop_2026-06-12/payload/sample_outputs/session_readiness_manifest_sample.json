@@ -1,0 +1,44 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-06-12T00:00:00Z",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "forecast_bundle_ledger_snapshot": {
+    "snapshot_written": true,
+    "stable_overwrite_allowed": false
+  },
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "overall_status": "partial",
+  "promotion_allowed": false,
+  "race_name": "Spain - Barcelona - Catalunya",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "gate": "post_fp1",
+    "session_key": 999999,
+    "session_name": "Practice 1"
+  },
+  "sources": {
+    "openf1_laps": {
+      "checksum": "sample",
+      "rows": 850,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "checksum": "sample",
+      "rows": 72,
+      "status": "clean"
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "driver_count": 20,
+    "duplicate_rows": 0,
+    "lap_rows": 850,
+    "manual_review_reasons": []
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "kpi_summary_written": true,
+    "mode": "sandbox_only"
+  }
+}

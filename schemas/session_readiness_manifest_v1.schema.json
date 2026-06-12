@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "canonical_workbook_modified": {
+      "const": false
+    },
+    "created_utc": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "forecast_bundle_ledger_snapshot": {
+      "type": "object"
+    },
+    "forecast_state_changed": {
+      "type": "boolean"
+    },
+    "material_readiness_improved": {
+      "type": "boolean"
+    },
+    "overall_status": {
+      "enum": [
+        "clean",
+        "partial",
+        "late",
+        "conflicting",
+        "needs_manual_review",
+        "no_data"
+      ]
+    },
+    "promotion_allowed": {
+      "const": false
+    },
+    "race_name": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "session_readiness_manifest_v1"
+    },
+    "session": {
+      "type": "object"
+    },
+    "sources": {
+      "type": "object"
+    },
+    "stable_engine_modified": {
+      "const": false
+    },
+    "validation_summary": {
+      "type": "object"
+    },
+    "workbook_kpi_update": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "created_utc",
+    "event_id",
+    "session",
+    "overall_status",
+    "sources",
+    "promotion_allowed"
+  ],
+  "title": "F1 Session Readiness Manifest v1",
+  "type": "object"
+}
