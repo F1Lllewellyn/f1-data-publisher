@@ -1,0 +1,4 @@
+path,action,purpose
+.github/workflows/f1-actual-forecast-producer-v1.yml,replace,Retain workflow with current action versions
+scripts/forecasts/produce_actual_forecast_rows_v1.py,replace,Add /data source discovery and recursive fallback
+docs/F1_ACTUAL_FORECAST_PRODUCER_SOURCE_DISCOVERY_HOTFIX_2026-06-12.md,add,Hotfix documentation

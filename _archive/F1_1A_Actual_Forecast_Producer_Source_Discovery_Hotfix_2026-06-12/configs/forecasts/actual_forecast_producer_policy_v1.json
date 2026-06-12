@@ -1,0 +1,37 @@
+{
+  "name": "F1 Actual Forecast Producer v1",
+  "created_utc": "2026-06-12T01:14:15.646013+00:00",
+  "purpose": "Generate actual gate/lane forecast rows from available source-closure and engine-policy inputs before the Forecast Gate Source Writer and Forecast Bundle Locker run.",
+  "gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ],
+  "output_path": "latest/forecasts/<event_id>/<gate>/<lane>/forecast_rows.csv",
+  "history_path": "history/forecasts/<event_id>/<run_id>/<gate>/<lane>/forecast_rows.csv",
+  "stable_exact_output_overwrite_allowed": false,
+  "promotion_allowed": false,
+  "no_source_behavior": "exit cleanly and create runtime audit artifact only; do not commit placeholder forecast rows",
+  "minimum_source_requirements": [
+    "openf1_drivers.csv or openf1_starting_grid.csv with driver_number"
+  ],
+  "source_search_paths": [
+    "latest/openf1_lightweight_source_closure/",
+    "latest/source_closure/",
+    "latest/openf1/",
+    "data/latest/openf1_lightweight_source_closure/",
+    "data/latest/source_closure/"
+  ],
+  "notes": [
+    "This workflow produces forecast rows, but blind-valid status only exists if the rows are locked before outcome by Forecast Bundle Locker.",
+    "Race-result and post-event gates are scoring/attribution gates and should not rewrite pre-race forecasts.",
+    "Experimental challenger rows are generated as challenger/risk overlay rows only and must not overwrite stable exact P1-P20 outputs."
+  ]
+}
