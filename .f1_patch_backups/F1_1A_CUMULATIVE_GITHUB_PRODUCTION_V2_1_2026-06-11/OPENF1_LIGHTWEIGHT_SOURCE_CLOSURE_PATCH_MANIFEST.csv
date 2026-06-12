@@ -1,7 +1,0 @@
-path,action,purpose
-.github/workflows/f1-openf1-lightweight-source-closure.yml,add_or_replace,GitHub workflow for lightweight OpenF1 source closure
-scripts/openf1/publish_openf1_lightweight_source_closure.py,add_or_replace,Publisher/retrieval script with zero-lane diagnostics
-configs/openf1/openf1_lightweight_source_closure_policy.json,add_or_replace,Source closure policy and lane classification
-docs/F1_OPENF1_LIGHTWEIGHT_SOURCE_CLOSURE_PATCH_2026-06-10.md,add_or_replace,Documentation
-CURRENT_CANONICAL_FILES_OPENF1_LIGHTWEIGHT_SOURCE_CLOSURE_2026-06-10.md,add_or_replace,Canonical file register
-OPENF1_LIGHTWEIGHT_SOURCE_CLOSURE_PATCH_MANIFEST.csv,add_or_replace,Patch manifest

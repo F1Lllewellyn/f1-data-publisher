@@ -1,7 +1,0 @@
-{
-  "bundle_id": "2026_next_event__post_event__experimental_challenger__20260612T001324Z",
-  "gate": "post_event",
-  "engine_lane": "experimental_challenger",
-  "source_found": false,
-  "proof_loop_status": "blocked_missing_forecast_source"
-}

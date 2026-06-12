@@ -1,2 +1,0 @@
-event_id,gate,engine_lane,score_timestamp_utc,actual_source,mae_position,winner_hit,podium_overlap,top10_overlap,dnf_auc,dnf_brier,actual_dnf_count,expected_dnf_count,scoring_status,notes
-2026_next_event,pre_weekend,stable_baseline,,,,,,,,,,,pending_outcome,

@@ -1,3 +1,0 @@
-# Forecast bundle 2026_next_event__pre_weekend__control_room_overlay__20260612T001324Z
-
-Status: missing_forecast_source

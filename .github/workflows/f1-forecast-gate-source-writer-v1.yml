@@ -1,4 +1,4 @@
-name: F1 Forecast Gate Source Writer v1
+﻿name: F1 Forecast Gate Source Writer v1
 
 on:
   workflow_dispatch:
@@ -45,9 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Run forecast gate source writer
@@ -60,7 +60,7 @@ jobs:
             --gate "${{ github.event.inputs.gate }}" \
             --lane "${{ github.event.inputs.lane }}"
       - name: Upload forecast gate source writer audit
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-forecast-gate-source-writer-v1
           path: |
@@ -93,3 +93,4 @@ jobs:
             git commit -m "Add forecast gate source writer outputs for ${{ github.event.inputs.event_id }}"
             git push
           fi
+

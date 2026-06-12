@@ -1,4 +1,4 @@
-name: F1 Forecast Bundle Locker v1
+﻿name: F1 Forecast Bundle Locker v1
 
 on:
   workflow_dispatch:
@@ -49,9 +49,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Determine inputs
@@ -99,7 +99,7 @@ jobs:
           fi
           python scripts/forecast_bundles/create_forecast_bundles_v1.py "${args[@]}"
       - name: Upload forecast bundle artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-forecast-bundles-v1
           if-no-files-found: warn
@@ -131,3 +131,4 @@ jobs:
             git commit -m "Add F1 saved forecast bundles ${{ steps.vars.outputs.event_id }} ${{ steps.vars.outputs.gate }}"
             git push
           fi
+

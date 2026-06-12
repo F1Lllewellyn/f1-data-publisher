@@ -1,4 +1,4 @@
-name: F1 Post-Race Scoring Loop
+﻿name: F1 Post-Race Scoring Loop
 
 on:
   workflow_dispatch:
@@ -23,10 +23,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -54,9 +54,10 @@ jobs:
           cat "$OUTPUT_DIR/reports/github_step_summary.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload post-race scoring loop artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-post-race-scoring-loop-2026-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 90
           if-no-files-found: error
+

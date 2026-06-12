@@ -22,3 +22,6 @@ data/openf1/high_frequency/
 _runtime/
 *.tmp
 # F1 1A local installer backups - generated, do not commit
+# F1 1A local installer backups - do not commit
+**/.f1_patch_backups/
+**/.f1_patch_external_backups/

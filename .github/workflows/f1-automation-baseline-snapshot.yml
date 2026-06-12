@@ -1,4 +1,4 @@
-name: F1 Automation Baseline Snapshot
+﻿name: F1 Automation Baseline Snapshot
 
 on:
   workflow_dispatch:
@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -39,9 +39,10 @@ jobs:
           cat "$OUTPUT_DIR/baseline_snapshot_report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload baseline snapshot artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.BASELINE_NAME }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 180
           if-no-files-found: error
+

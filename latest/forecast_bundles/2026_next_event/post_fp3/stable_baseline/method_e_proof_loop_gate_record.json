@@ -1,7 +1,0 @@
-{
-  "bundle_id": "2026_next_event__post_fp3__stable_baseline__20260612T001324Z",
-  "gate": "post_fp3",
-  "engine_lane": "stable_baseline",
-  "source_found": false,
-  "proof_loop_status": "blocked_missing_forecast_source"
-}

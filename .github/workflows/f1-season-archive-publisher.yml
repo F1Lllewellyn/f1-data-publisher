@@ -1,4 +1,4 @@
-name: F1 Season Archive Publisher
+﻿name: F1 Season Archive Publisher
 
 on:
   workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set archive inputs
         run: |
@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -72,10 +72,11 @@ jobs:
           fi
 
       - name: Upload archive publisher diagnostics
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: f1-season-archive-publisher-diagnostics-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 90
           if-no-files-found: warn
+

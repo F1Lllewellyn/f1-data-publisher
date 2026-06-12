@@ -1,4 +1,4 @@
-name: F1 Black-Box Temporal Validation Harness v1
+﻿name: F1 Black-Box Temporal Validation Harness v1
 
 on:
   workflow_dispatch:
@@ -24,9 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -37,7 +37,7 @@ jobs:
         run: |
           python scripts/validation/run_black_box_temporal_validation_v1.py --repo-root . --event-id "${{ github.event.inputs.event_id }}" --out-dir "latest/black_box_temporal_validation/${{ github.event.inputs.event_id }}"
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-black-box-temporal-validation
           path: latest/black_box_temporal_validation/${{ github.event.inputs.event_id }}/
@@ -53,3 +53,4 @@ jobs:
             git commit -m "Add black-box temporal validation outputs for ${{ github.event.inputs.event_id }}"
             git push
           fi
+

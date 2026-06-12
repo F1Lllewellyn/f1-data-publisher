@@ -1,4 +1,4 @@
-name: F1 Cross-Car Microdelta Forensics Experimental
+﻿name: F1 Cross-Car Microdelta Forensics Experimental
 
 on:
   workflow_dispatch:
@@ -28,10 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -51,7 +51,7 @@ jobs:
           echo "OUT_DIR=$OUT_DIR" >> $GITHUB_ENV
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-cross-car-microdelta-forensics-v0
           path: |
@@ -70,3 +70,4 @@ jobs:
             git commit -m "Add cross-car microdelta forensics outputs"
             git push
           fi
+

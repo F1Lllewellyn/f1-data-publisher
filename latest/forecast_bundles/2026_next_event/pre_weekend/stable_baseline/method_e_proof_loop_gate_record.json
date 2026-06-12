@@ -1,7 +1,0 @@
-{
-  "bundle_id": "2026_next_event__pre_weekend__stable_baseline__20260612T001324Z",
-  "gate": "pre_weekend",
-  "engine_lane": "stable_baseline",
-  "source_found": false,
-  "proof_loop_status": "blocked_missing_forecast_source"
-}

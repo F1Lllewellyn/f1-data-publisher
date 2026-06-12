@@ -1,0 +1,4 @@
+path,purpose
+installer/RUN_F1_1A_NODE24_WORKFLOW_ACTIONS_MAINTENANCE_ASCII_FIX_WINDOWS.bat,Windows launcher
+installer/Install-F1-1A-Node24-Workflow-Actions-Maintenance-ASCII-Fix.ps1,ASCII-safe no-git PowerShell installer
+docs/F1_1A_NODE24_WORKFLOW_ACTIONS_MAINTENANCE_ASCII_FIX_2026-06-12.md,Documentation

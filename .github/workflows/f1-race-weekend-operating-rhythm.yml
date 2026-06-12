@@ -1,4 +1,4 @@
-name: F1 Race Weekend Operating Rhythm
+﻿name: F1 Race Weekend Operating Rhythm
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build operating rhythm summary
         run: |
@@ -54,9 +54,10 @@ jobs:
           cat "$OUTPUT_DIR/reports/race_weekend_operating_rhythm.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload operating rhythm artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: f1-race-weekend-operating-rhythm-2026-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 90
           if-no-files-found: error
+

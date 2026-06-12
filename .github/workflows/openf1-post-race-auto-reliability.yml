@@ -1,4 +1,4 @@
-name: OpenF1 Post-Race Auto Reliability
+﻿name: OpenF1 Post-Race Auto Reliability
 
 on:
   workflow_dispatch:
@@ -30,10 +30,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -56,7 +56,7 @@ jobs:
             --latest-meeting-only
 
       - name: Upload extraction checkpoint artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
@@ -72,10 +72,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -113,10 +113,11 @@ jobs:
           fi
 
       - name: Upload final validated artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: ${{ env.FINAL_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 90
           if-no-files-found: error
+

@@ -1,2 +1,0 @@
-source_id,source_name,source_type,source_path_or_uri,source_timestamp_utc,source_sha256,source_role,gate_allowed,notes
-forecast_source,missing,missing,,2026-06-12T00:13:24Z,,forecast_source,False,Missing source blocks validation.
