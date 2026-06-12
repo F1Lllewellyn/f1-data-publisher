@@ -1,0 +1,19 @@
+# Validation Report — Dashboard Connector No-Local-Python Installer Fix
+
+Verdict: Pass with warnings.
+
+## Local validation performed
+- Payload completeness checked.
+- Python scripts compiled successfully in the build sandbox.
+- Installer rewritten to avoid requiring local Python on the user's Windows machine.
+- Required-file verification retained.
+- GitHub Actions remains responsible for Python runtime validation.
+
+## Governance
+- Canonical workbook: untouched.
+- Engine_2026-06-07_STABLE: untouched.
+- Promotion: blocked.
+- Command-line Git: not required locally.
+
+## Warning
+This validates the installer package structure. The final runtime proof is the GitHub Safe Test Button after commit/push.

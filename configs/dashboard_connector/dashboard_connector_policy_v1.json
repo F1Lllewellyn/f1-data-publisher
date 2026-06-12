@@ -1,0 +1,21 @@
+{
+  "policy_name": "dashboard_connector_policy_v1",
+  "branch_type": "sandbox",
+  "protected_assets": {
+    "canonical_workbook_overwrite_allowed": false,
+    "stable_engine_modification_allowed": false,
+    "promotion_allowed": false,
+    "delete_old_files_allowed": false
+  },
+  "allowed_outputs": [
+    "latest/readiness_dashboards/combined_readiness_dashboard.json",
+    "latest/readiness_dashboards/race_predictions_readiness_state.json",
+    "latest/readiness_dashboards/fantasy_readiness_state.json",
+    "latest/chat_context/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md",
+    "latest/chat_context/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md",
+    "history/readiness_dashboards/<timestamp>/",
+    "history/chat_context/<timestamp>/"
+  ],
+  "safe_source_statuses": ["clean", "partial", "late", "conflicting", "needs_manual_review"],
+  "blocked_source_statuses": ["missing", "unknown", "placeholder", "scheduled_not_populated", "not_found"]
+}

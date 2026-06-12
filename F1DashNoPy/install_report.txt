@@ -1,0 +1,13 @@
+﻿F1 Dashboard Connector No-Local-Python Installer
+Timestamp: 2026-06-12T19:17:21.8000591-04:00
+Repo: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+Result: INSTALL_CHECK_PASSED
+Local Python required: false
+Files installed:
+- .github\workflows\f1-forecast-fantasy-readiness-dashboard-safe-test.yml
+- .github\workflows\f1-forecast-fantasy-readiness-dashboard-run-now.yml
+- .github\workflows\f1-forecast-fantasy-readiness-dashboard-scheduled.yml
+- scripts\dashboard_connector\health_check_dashboard_connector_v1.py
+- scripts\dashboard_connector\publish_forecast_fantasy_readiness_dashboards_v1.py
+- configs\dashboard_connector\dashboard_connector_policy_v1.json
+- schemas\dashboard_connector\dashboard_state_schema_v1.json

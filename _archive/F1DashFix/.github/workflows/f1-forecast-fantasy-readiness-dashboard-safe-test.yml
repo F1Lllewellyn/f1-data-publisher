@@ -1,0 +1,27 @@
+name: F1 Forecast/Fantasy Readiness Dashboard - Safe Test Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  safe-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Health check
+        run: python scripts/dashboard_connector/health_check_dashboard_connector_v1.py
+      - name: Safe test dashboard connector
+        run: python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode safe_test --runtime-dir _runtime/dashboard_connector
+      - name: Upload diagnostics
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: f1-dashboard-connector-safe-test-runtime
+          path: _runtime/dashboard_connector
