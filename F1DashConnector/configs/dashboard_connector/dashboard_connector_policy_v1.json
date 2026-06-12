@@ -1,0 +1,45 @@
+{
+  "sandbox_branch": "Engine_2026-06-11_SANDBOX_ForecastFantasyReadinessDashboardConnector",
+  "canonical_workbook_overwrite_allowed": false,
+  "stable_engine_modification_allowed": false,
+  "promotion_allowed": false,
+  "delete_old_files_allowed": false,
+  "dashboard_state_root": "latest/readiness_dashboards",
+  "chat_context_root": "latest/chat_context",
+  "history_root": "history/readiness_dashboards",
+  "source_status_commit_allowlist": [
+    "clean",
+    "partial",
+    "late",
+    "conflicting",
+    "needs_manual_review"
+  ],
+  "source_status_commit_blocklist": [
+    "missing",
+    "unknown",
+    "placeholder",
+    "scheduled_not_populated",
+    "empty"
+  ],
+  "material_change_fields": [
+    "event_id",
+    "event_name",
+    "session_name",
+    "session_key",
+    "source_status",
+    "latest_workbook_path",
+    "latest_session_processor_path",
+    "data_readiness_hash"
+  ],
+  "race_predictions_required_files": [
+    "race_predictions_readiness_state.json",
+    "race_predictions_latest_session_brief.md"
+  ],
+  "fantasy_required_files": [
+    "fantasy_readiness_state.json",
+    "fantasy_latest_session_brief.md"
+  ],
+  "plain_english_outputs": true,
+  "no_code_workflows": true,
+  "notify_only_on_material_change": true
+}

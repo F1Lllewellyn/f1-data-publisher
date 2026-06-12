@@ -1,0 +1,50 @@
+name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
+
+on:
+  schedule:
+    - cron: '8,23,38,53 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  scheduled-refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Health check
+        run: python scripts/dashboard_connector/health_check_dashboard_connector_v1.py
+      - name: Refresh forecast/fantasy readiness dashboards from latest workbook/KPI artifacts
+        run: python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode run_now --runtime-dir _runtime/dashboard_connector
+      - name: Commit only material dashboard changes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, pathlib, subprocess, sys
+          p = pathlib.Path('_runtime/dashboard_connector/commit_allowed.json')
+          data = json.loads(p.read_text()) if p.exists() else {'commit_allowed': False}
+          print('commit_allowed:', data.get('commit_allowed'), 'status:', data.get('status'), 'source_status:', data.get('source_status'))
+          if not data.get('commit_allowed'):
+              sys.exit(0)
+          subprocess.run(['git','config','user.name','f1-automation-bot'], check=True)
+          subprocess.run(['git','config','user.email','f1-automation-bot@users.noreply.github.com'], check=True)
+          subprocess.run(['git','add','latest/readiness_dashboards','latest/chat_context','history/readiness_dashboards'], check=True)
+          if subprocess.run(['git','diff','--cached','--quiet']).returncode == 0:
+              print('No dashboard changes to commit.')
+              sys.exit(0)
+          subprocess.run(['git','commit','-m','Scheduled forecast/fantasy readiness dashboard refresh'], check=True)
+          subprocess.run(['git','push'], check=True)
+          PY
+      - name: Upload diagnostics
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: f1-dashboard-connector-scheduled-runtime
+          path: _runtime/dashboard_connector

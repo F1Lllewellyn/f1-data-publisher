@@ -1,0 +1,10 @@
+{
+  "health_check_stdout": "{\n  \"status\": \"Pass\",\n  \"missing\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
+  "health_check_stderr": "",
+  "dashboard_stdout": "{\n  \"status\": \"dashboard_refreshed\",\n  \"source_status\": \"needs_manual_review\",\n  \"source_backed\": true,\n  \"material_change\": true,\n  \"commit_allowed\": true,\n  \"event\": {\n    \"event_name\": \"Spain - Barcelona - Catalunya\",\n    \"session_name\": \"Practice 2\",\n    \"session_key\": \"11301\",\n    \"round_number\": \"1287\"\n  },\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false\n}\n",
+  "dashboard_stderr": "",
+  "return_codes": [
+    0,
+    0
+  ]
+}

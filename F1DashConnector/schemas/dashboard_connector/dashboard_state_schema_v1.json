@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "F1 Forecast/Fantasy Readiness Dashboard State v1",
+  "type": "object",
+  "required": [
+    "generated_at_utc",
+    "status",
+    "source_status",
+    "event",
+    "race_predictions",
+    "fantasy",
+    "governance"
+  ],
+  "properties": {
+    "generated_at_utc": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "dashboard_refreshed",
+        "safe_test_pass",
+        "no_action",
+        "blocked"
+      ]
+    },
+    "source_status": {
+      "type": "string"
+    },
+    "material_change": {
+      "type": "boolean"
+    },
+    "event": {
+      "type": "object"
+    },
+    "race_predictions": {
+      "type": "object"
+    },
+    "fantasy": {
+      "type": "object"
+    },
+    "forecast_bundle_ledger": {
+      "type": "object"
+    },
+    "governance": {
+      "type": "object"
+    }
+  }
+}
