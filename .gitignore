@@ -16,3 +16,9 @@ data/openf1/high_frequency/
 !ledgers/
 # --- end F1 Prediction Engine generated outputs ---
 
+# F1 1A local installer backups - never commit generated backup trees
+.f1_patch_backups/
+.f1_patch_external_backups/
+_runtime/
+*.tmp
+# F1 1A local installer backups - generated, do not commit

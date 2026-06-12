@@ -1,0 +1,80 @@
+name: F1 Forecast Chain Readiness Validator v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: "Event id to validate, e.g. 2026_spanish_gp"
+        required: true
+        default: "manual_chain_validation"
+      gate:
+        description: "Gate to validate: all, pre_weekend, post_fp3, post_qualifying, race_result, post_event"
+        required: true
+        default: "all"
+      lane:
+        description: "Lane to validate: all, stable_baseline, control_room_overlay, experimental_challenger"
+        required: true
+        default: "all"
+      strict:
+        description: "Fail if rows are missing"
+        required: true
+        default: "false"
+      commit_outputs:
+        description: "Commit readiness artifacts"
+        required: true
+        default: "true"
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Validate forecast chain readiness
+        run: |
+          args=(
+            --repo .
+            --event-id "${{ github.event.inputs.event_id }}"
+            --gate "${{ github.event.inputs.gate }}"
+            --lane "${{ github.event.inputs.lane }}"
+          )
+          if [[ "${{ github.event.inputs.strict }}" == "true" ]]; then
+            args+=(--strict)
+          fi
+          python scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py "${args[@]}"
+
+      - name: Upload readiness artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-forecast-chain-readiness-validator
+          path: |
+            latest/forecast_chain_readiness/${{ github.event.inputs.event_id }}/
+          if-no-files-found: warn
+
+      - name: Commit readiness artifacts
+        if: ${{ github.event.inputs.commit_outputs == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -d "latest/forecast_chain_readiness/${{ github.event.inputs.event_id }}" ]]; then
+            git add "latest/forecast_chain_readiness/${{ github.event.inputs.event_id }}"
+          fi
+          if git diff --cached --quiet; then
+            echo "No forecast-chain readiness changes to commit."
+          else
+            git commit -m "Add F1 forecast chain readiness validation for ${{ github.event.inputs.event_id }}"
+            git push
+          fi

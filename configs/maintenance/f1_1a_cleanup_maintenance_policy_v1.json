@@ -1,0 +1,34 @@
+{
+  "patch_name": "F1_1A_GitHub_Cleanup_Maintenance_Patch",
+  "date": "2026-06-12",
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "promotion_allowed": false,
+  "placeholder_cleanup_targets": [
+    "latest/forecast_bundles/2026_next_event",
+    "history/forecast_bundles/2026_next_event"
+  ],
+  "node_action_updates": {
+    "actions/checkout": "v6",
+    "actions/setup-python": "v6",
+    "actions/upload-artifact": "v6"
+  },
+  "forecast_chain_required_gates": [
+    "pre_weekend",
+    "post_fp3",
+    "post_qualifying",
+    "race_result",
+    "post_event"
+  ],
+  "forecast_chain_required_lanes": [
+    "stable_baseline",
+    "control_room_overlay",
+    "experimental_challenger"
+  ],
+  "actual_forecast_source_paths": [
+    "latest/forecasts/{event_id}/{gate}/{lane}/forecast_rows.csv",
+    "latest/forecast_outputs/{event_id}/{gate}/{lane}/forecast_rows.csv",
+    "latest/method_e_control_room/forecasts/{event_id}/{gate}/{lane}.csv"
+  ],
+  "guardrail": "Do not fabricate actual saved forecast bundles. If rows are absent, report pending_actual_forecast_rows."
+}

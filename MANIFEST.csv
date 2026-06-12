@@ -1,0 +1,4 @@
+path,purpose
+installer/RUN_F1_1A_GITHUB_LONGPATH_BACKUP_CLEANUP_FIX_WINDOWS.bat,Windows launcher
+installer/Install-F1-1A-GitHub-LongPath-Backup-Cleanup-Fix.ps1,PowerShell cleanup logic
+docs/F1_1A_GITHUB_LONGPATH_BACKUP_CLEANUP_FIX_2026-06-12.md,Documentation

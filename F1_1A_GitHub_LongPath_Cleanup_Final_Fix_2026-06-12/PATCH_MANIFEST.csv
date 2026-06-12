@@ -1,0 +1,5 @@
+path,purpose
+installer/RUN_F1_1A_GITHUB_LONGPATH_CLEANUP_FINAL_FIX_WINDOWS.bat,Windows launcher
+installer/Install-F1-1A-GitHub-LongPath-Cleanup-Final-Fix.ps1,Final robust cleanup installer
+docs/F1_1A_GitHub_LongPath_Cleanup_Final_Fix_2026-06-12.md,Patch documentation
+README.md,Patch documentation
