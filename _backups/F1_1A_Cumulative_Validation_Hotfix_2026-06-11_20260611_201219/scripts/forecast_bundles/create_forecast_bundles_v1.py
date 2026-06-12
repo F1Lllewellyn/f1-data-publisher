@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse, csv, datetime as dt, hashlib, json, os, shutil
 from pathlib import Path
 
-GATES = ["pre_weekend", "post_fp3", "post_qualifying", "race_result", "post_event"]
+GATES = ["pre_weekend", "post_fp3", "post_qualifying", "race_result"]
 LANES = {
     "stable_baseline": "Engine_2026-06-07_STABLE",
     "control_room_overlay": "MethodE_ControlRoom_Overlay",

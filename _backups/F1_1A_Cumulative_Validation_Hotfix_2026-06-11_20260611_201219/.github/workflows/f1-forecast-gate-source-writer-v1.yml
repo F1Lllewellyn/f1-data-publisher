@@ -51,14 +51,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run forecast gate source writer
-        shell: bash
         run: |
-          set -euo pipefail
-          python scripts/forecast_bundles/write_gate_forecast_rows_v1.py \
-            --repo-root . \
-            --event-id "${{ github.event.inputs.event_id }}" \
-            --gate "${{ github.event.inputs.gate }}" \
-            --lane "${{ github.event.inputs.lane }}"
+          python scripts/forecast_bundles/write_gate_forecast_rows_v1.py             --repo-root .             --event-id "${{ github.event.inputs.event_id }}"             --gate "${{ github.event.inputs.gate }}"             --lane "${{ github.event.inputs.lane }}"
       - name: Upload forecast gate source writer audit
         uses: actions/upload-artifact@v4
         with:
@@ -69,24 +63,10 @@ jobs:
           if-no-files-found: warn
       - name: Commit forecast gate source writer outputs
         if: ${{ github.event.inputs.commit_outputs == 'true' }}
-        shell: bash
         run: |
-          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          added_any=false
-          for path in \
-            "latest/forecast_bundle_gap_closure/${{ github.event.inputs.event_id }}/" \
-            "latest/forecasts/${{ github.event.inputs.event_id }}/"; do
-            if [ -e "$path" ]; then
-              git add "$path"
-              added_any=true
-            fi
-          done
-          if [ "$added_any" = "false" ]; then
-            echo "No forecast source writer output paths exist."
-            exit 0
-          fi
+          git add latest/forecast_bundle_gap_closure/${{ github.event.inputs.event_id }}/ latest/forecasts/${{ github.event.inputs.event_id }}/ || true
           if git diff --cached --quiet; then
             echo "No forecast source writer changes to commit."
           else

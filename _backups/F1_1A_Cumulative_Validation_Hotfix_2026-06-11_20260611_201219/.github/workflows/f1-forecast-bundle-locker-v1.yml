@@ -25,7 +25,6 @@ on:
           - post_fp3
           - post_qualifying
           - race_result
-          - post_event
         default: all
       commit_outputs:
         description: 'Commit bundle outputs back to repository'
@@ -43,10 +42,8 @@ jobs:
   lock-forecast-bundles:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Determine inputs
@@ -71,23 +68,14 @@ jobs:
       - name: Create forecast bundles
         shell: bash
         run: |
-          set -euo pipefail
-          args=(
-            --repo-root .
-            --source-root .
-            --event-id "${{ steps.vars.outputs.event_id }}"
-            --race-name "${{ steps.vars.outputs.race_name }}"
-            --season 2026
-            --round "${{ steps.vars.outputs.round }}"
-            --gate "${{ steps.vars.outputs.gate }}"
-          )
+          ARGS="--repo-root . --source-root . --event-id '${{ steps.vars.outputs.event_id }}' --race-name '${{ steps.vars.outputs.race_name }}' --season 2026 --round '${{ steps.vars.outputs.round }}' --gate '${{ steps.vars.outputs.gate }}'"
           if [ "${{ steps.vars.outputs.commit_outputs }}" = "true" ]; then
-            args+=(--commit-latest)
+            ARGS="$ARGS --commit-latest"
           fi
           if [ "${{ steps.vars.outputs.scheduled_run }}" = "true" ]; then
-            args+=(--scheduled-run --require-scheduled-source)
+            ARGS="$ARGS --scheduled-run --require-scheduled-source"
           fi
-          python scripts/forecast_bundles/create_forecast_bundles_v1.py "${args[@]}"
+          python scripts/forecast_bundles/create_forecast_bundles_v1.py $ARGS
       - name: Upload forecast bundle artifact
         uses: actions/upload-artifact@v4
         with:
@@ -101,20 +89,9 @@ jobs:
         if: ${{ steps.vars.outputs.commit_outputs == 'true' }}
         shell: bash
         run: |
-          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          added_any=false
-          for path in latest/forecast_bundles history/forecast_bundles _runtime/forecast_bundle_locker_guard; do
-            if [ -e "$path" ]; then
-              git add "$path"
-              added_any=true
-            fi
-          done
-          if [ "$added_any" = "false" ]; then
-            echo "No forecast bundle output paths exist. Scheduler guard likely exited cleanly."
-            exit 0
-          fi
+          git add latest/forecast_bundles history/forecast_bundles || true
           if git diff --cached --quiet; then
             echo "No forecast bundle changes to commit. Scheduler guard may have exited cleanly with no source rows."
           else
