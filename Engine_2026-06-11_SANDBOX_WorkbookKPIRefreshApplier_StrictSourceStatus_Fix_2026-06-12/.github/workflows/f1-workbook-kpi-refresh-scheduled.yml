@@ -1,0 +1,57 @@
+name: F1 Workbook KPI Refresh - Scheduled Processor
+
+on:
+  schedule:
+    - cron: "12,27,42,57 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  scheduled-refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install openpyxl pandas requests
+
+      - name: Apply sandbox workbook/KPI refresh
+        run: |
+          python scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py --repo-root "$GITHUB_WORKSPACE"
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: workbook-kpi-refresh-scheduled-runtime
+          path: _runtime/
+          if-no-files-found: ignore
+
+      - name: Commit valid sandbox outputs only
+        run: |
+          COMMIT_ALLOWED=$(python -c "import json,pathlib; p=pathlib.Path('_runtime/workbook_kpi_refresh_status.json'); print(str(json.loads(p.read_text()).get('commit_allowed', False)).lower() if p.exists() else 'false')")
+          echo "commit_allowed=$COMMIT_ALLOWED"
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            echo "Workbook/KPI refresh did not allow commit; no valid source-backed outputs to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier
+          if git diff --cached --quiet; then
+            echo "No workbook/KPI refresh changes to commit."
+          else
+            git commit -m "Add source-backed sandbox workbook KPI refresh artifacts"
+            git push
+          fi
