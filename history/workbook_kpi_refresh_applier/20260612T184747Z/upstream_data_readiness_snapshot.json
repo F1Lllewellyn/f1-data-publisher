@@ -1,0 +1,65 @@
+{
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "forecast_state_changed": false,
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
+  "race_name": "Spain - Barcelona - Catalunya",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-06-12T16:00:00+00:00",
+    "date_start": "2026-06-12T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1287,
+    "session_key": 11301,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 586,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 118,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 424,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 52,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 118,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 85,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-06-12T18:29:55.968478Z"
+}
