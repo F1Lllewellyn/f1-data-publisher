@@ -1,0 +1,8 @@
+F1 1B v24 Downstream Consumer Wiring installer started: 2026-06-12T23:53:08.7633823-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+Safety: exact-file add/replace only; no delete; no scan; no .git access; no workbook/engine touch; no commit/push; forecast gate remains off.
+Copied: .github\workflows\f1-1b-output-contract-v16.yml
+Copied: .github\workflows\f1-1b-output-contract-after-control-room-v22.yml
+Copied: scripts\session_data_processor\f1_1b_downstream_consumer_handoff_v24.py
+Copied: scripts\ops\f1_1b_v24_acceptance_tests_v1.py
+Copied: docs\F1_1B_DOWNSTREAM_CONSUMER_WIRING_V24_2026-06-13.md
