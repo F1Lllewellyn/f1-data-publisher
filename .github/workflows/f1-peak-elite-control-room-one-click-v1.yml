@@ -122,7 +122,7 @@ jobs:
           echo "Removing generated Python cache files before staging."
           find . -path ./.git -prune -o -type d -name "__pycache__" -print -exec rm -rf {} + || true
           find . -path ./.git -prune -o -type f \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print -delete || true
-          CACHE_TRACKED="$(git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$' || true)"
+          CACHE_TRACKED="$(git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$|\.pyd$' || true)"
           if [ -n "$CACHE_TRACKED" ]; then
             echo "$CACHE_TRACKED" | while IFS= read -r f; do
               git rm --cached --ignore-unmatch "$f" || true

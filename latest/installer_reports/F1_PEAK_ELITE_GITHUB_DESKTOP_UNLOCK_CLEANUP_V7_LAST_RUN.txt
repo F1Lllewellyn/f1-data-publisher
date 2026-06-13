@@ -1,0 +1,11 @@
+[Fri 06/12/2026 21:09:12.25] Started recovery v7
+[Fri 06/12/2026 21:09:12.26] Repo: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+[Fri 06/12/2026 21:09:12.43] Deleted stale .git\\index.lock
+[Fri 06/12/2026 21:09:12.47] WARNING: Git executable not found. Continuing cleanup without git config.
+[Fri 06/12/2026 21:09:12.49] Mapped repo to P: for long-path cleanup
+[Fri 06/12/2026 21:09:12.50] Deleting bad v5 hygiene backup folders and generated Python caches without backup
+[Fri 06/12/2026 21:09:14.72] Removing accidental installer file from repo root: 1_DOUBLE_CLICK_ME_INSTALL_F1_PEAK_ELITE_HYGIENE_v5_CMD_SAFE.cmd
+[Fri 06/12/2026 21:09:14.74] Removing accidental installer file from repo root: 1_DOUBLE_CLICK_ME_FIX_LONG_PATH_AND_HYGIENE_v6_CMD_SAFE.cmd
+[Fri 06/12/2026 21:09:14.75] Removing accidental installer file from repo root: 1_DOUBLE_CLICK_ME_INSTALL_F1_PEAK_ELITE_SYSTEM_v4_CMD_SAFE.cmd
+[Fri 06/12/2026 21:09:14.82] Confirmed .gitignore bytecode protections
+[Fri 06/12/2026 21:09:14.83] Removed subst mapping P:
