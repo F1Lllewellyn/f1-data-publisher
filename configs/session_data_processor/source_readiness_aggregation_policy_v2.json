@@ -1,0 +1,63 @@
+{
+  "guards": {
+    "canonical_workbook_overwrite": false,
+    "forecast_gate_activation": "unchanged/off unless explicitly enabled by user",
+    "promotion_allowed": false,
+    "stable_engine_modified": false
+  },
+  "practice": {
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "rule": "Practice sessions are usable when core lap/position/driver/weather data is clean. Empty starting_grid and intervals are non-blocking context gaps."
+  },
+  "purpose": "Session-aware aggregation for autonomous Session Data Processor readiness.",
+  "qualifying": {
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "session_result",
+      "weather"
+    ],
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "starting_grid",
+      "stints"
+    ],
+    "rule": "Qualifying remains stricter than practice, but race-grid promotion remains blocked outside forecast gate approval."
+  },
+  "race": {
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "rule": "Race/sprint sessions require result/grid/control/weather core sources before clean readiness."
+  },
+  "schema_version": "source_readiness_aggregation_policy_v2"
+}

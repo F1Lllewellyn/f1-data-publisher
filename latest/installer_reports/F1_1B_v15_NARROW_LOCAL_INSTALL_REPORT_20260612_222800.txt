@@ -1,0 +1,16 @@
+﻿F1 1B v15 Narrow Local Installer
+Started: 2026-06-12T22:28:00.3593335-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+PayloadRoot: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1_1B_v15_2590726904\x\payload
+Purpose: copy exact 1B source-readiness aggregation files and replace the failed temporary patch workflow with a harmless stub.
+No scan, no delete, no .git access, no commit, no push, no forecast gate.
+Installed: .github\workflows\f1-1b-source-readiness-aggregation-narrow-patch-v11.yml
+Installed: scripts\session_data_processor\source_readiness_aggregation_v2.py
+Installed: scripts\session_data_processor\session_data_processor_loop_v1.py
+Installed: scripts\ops\f1_1b_source_readiness_patch_validation_v1.py
+Installed: configs\session_data_processor\source_readiness_aggregation_policy_v2.json
+Installed: docs\F1_1B_SOURCE_READINESS_AGGREGATION_REFINEMENT_2026-06-13_v11.md
+SHA256 verification: pass
+Local Python compile skipped intentionally to avoid generating __pycache__. GitHub Actions will validate.
+Finished: 2026-06-12T22:28:00.5677896-04:00
+Install report saved: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\latest\installer_reports\F1_1B_v15_NARROW_LOCAL_INSTALL_REPORT_20260612_222800.txt

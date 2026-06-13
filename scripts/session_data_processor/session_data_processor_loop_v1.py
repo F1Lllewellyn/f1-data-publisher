@@ -24,11 +24,6 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-try:
-    from source_readiness_classifier_v2 import classify_openf1_endpoint_v2
-except Exception:  # pragma: no cover - safe fallback for older deployments
-    classify_openf1_endpoint_v2 = None
-
 ROOT = Path.cwd()
 POLICY_PATH = ROOT / "configs" / "session_data_processor" / "session_data_processor_policy_v1.json"
 RUNTIME = ROOT / "_runtime" / "session_data_processor"
@@ -268,44 +263,9 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
     else:
         status = "clean"
 
-    classifier: Dict[str, Any] = {
-        "schema_version": "source_readiness_classifier_v1_fallback",
-        "status": status,
-        "baseline_status": status,
-        "criticality": "unknown",
-        "blocking_for_forecast": status in {"conflicting", "needs_manual_review"},
-        "reason": "v2 classifier unavailable; using legacy status logic",
-    }
-    if classify_openf1_endpoint_v2 is not None:
-        try:
-            classifier = classify_openf1_endpoint_v2(
-                endpoint=endpoint,
-                rows=rows,
-                session=session,
-                fetch_meta=fetch_meta,
-                required_missing=missing,
-                anomalies=anomalies,
-                baseline_status=status,
-                expected_late=expected_late,
-            )
-            status = str(classifier.get("status") or status)
-        except Exception as exc:
-            classifier = {
-                "schema_version": "source_readiness_classifier_v2_error",
-                "status": status,
-                "baseline_status": status,
-                "criticality": "unknown",
-                "blocking_for_forecast": status in {"conflicting", "needs_manual_review"},
-                "reason": f"v2 classifier failed; using legacy status logic: {exc!r}",
-            }
-
     return {
         "endpoint": endpoint,
         "status": status,
-        "classifier": classifier,
-        "criticality": classifier.get("criticality"),
-        "empty_classification": classifier.get("empty_classification"),
-        "blocking_for_forecast": classifier.get("blocking_for_forecast"),
         "rows": row_count,
         "columns": sorted(cols),
         "missing_required_columns": missing,
@@ -363,7 +323,9 @@ def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], p
         "sources": {k: {"status": v.get("status"), "rows": v.get("rows")} for k, v in manifest.get("sources", {}).items()},
         "material_readiness_improved": manifest.get("material_readiness_improved", False),
         "forecast_state_changed": manifest.get("forecast_state_changed", False),
-        "needs_manual_review": manifest.get("overall_status") in {"conflicting", "needs_manual_review"},
+        "readiness_quality": manifest.get("readiness_quality"),
+        "source_needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),
+        "needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),
     })
     write_json(ROOT / "latest" / "combined_source_manifest.json", {
         "schema_version": "combined_source_manifest_v2_session_processor",
@@ -376,6 +338,8 @@ def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], p
         "event_id": manifest.get("event_id"),
         "session_key": manifest.get("session", {}).get("session_key"),
         "overall_status": manifest.get("overall_status"),
+        "readiness_quality": manifest.get("readiness_quality"),
+        "source_needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),
         "promotion_allowed": False,
     })
 
@@ -440,7 +404,7 @@ def maybe_write_workbook_kpi_artifacts(out_root: Path, manifest: Dict[str, Any])
         "overall_status": manifest.get("overall_status"),
         "canonical_workbook_modified": False,
         "sandbox_workbook_created": False,
-        "sources": {k: {"status": v.get("status"), "rows": v.get("rows"), "driver_count": v.get("driver_count"), "max_lap_number": v.get("max_lap_number"), "criticality": v.get("criticality"), "empty_classification": v.get("empty_classification"), "blocking_for_forecast": v.get("blocking_for_forecast")} for k, v in manifest.get("sources", {}).items()},
+        "sources": {k: {"status": v.get("status"), "rows": v.get("rows"), "driver_count": v.get("driver_count"), "max_lap_number": v.get("max_lap_number")} for k, v in manifest.get("sources", {}).items()},
     }
     write_json(out_root / "workbook_kpi_readiness.json", readiness)
     csv_path = out_root / "workbook_kpi_readiness.csv"
@@ -589,7 +553,25 @@ def main() -> int:
     if side_loaded:
         sources["side_loaded_public_files"] = {"endpoint": "side_loaded_public_files", "status": "partial", "rows": len(side_loaded), "files": side_loaded, "missing_required_columns": [], "anomalies": []}
 
-    overall = combined_status(sources)
+    # 1B v11: session-aware readiness aggregation keeps expected-empty Practice sources non-blocking.
+    readiness_aggregation = {}
+    try:
+        helper_dir = ROOT / "scripts" / "session_data_processor"
+        if str(helper_dir) not in sys.path:
+            sys.path.insert(0, str(helper_dir))
+        from source_readiness_aggregation_v2 import aggregate_source_readiness
+        readiness_aggregation = aggregate_source_readiness(sources, session)
+        overall = readiness_aggregation.get("overall_status") or combined_status(sources)
+    except Exception as exc:
+        readiness_aggregation = {
+            "schema_version": "source_readiness_aggregation_v2_fallback",
+            "error": repr(exc),
+            "overall_status": combined_status(sources),
+            "readiness_quality": "fallback_legacy_combined_status",
+            "needs_manual_review": combined_status(sources) in {"conflicting", "needs_manual_review"},
+            "promotion_allowed": False,
+        }
+        overall = readiness_aggregation["overall_status"]
     prev = read_json(latest_root / "source_readiness_manifest.json", {})
     materially_improved, delta = material_delta(prev, overall, sources, float(policy.get("material_readiness_delta_threshold", 0.10)))
     forecast_state_changed = materially_improved and overall in {"clean", "partial"}
@@ -610,6 +592,9 @@ def main() -> int:
             "gate": gate,
         },
         "overall_status": overall,
+        "readiness_quality": readiness_aggregation.get("readiness_quality"),
+        "source_needs_manual_review": bool(readiness_aggregation.get("needs_manual_review", overall in {"conflicting", "needs_manual_review"})),
+        "readiness_aggregation": readiness_aggregation,
         "material_readiness_improved": materially_improved,
         "readiness_delta": delta,
         "forecast_state_changed": forecast_state_changed,
@@ -620,9 +605,6 @@ def main() -> int:
             "late_sources": sum(1 for s in sources.values() if s.get("status") == "late"),
             "conflicting_sources": sum(1 for s in sources.values() if s.get("status") == "conflicting"),
             "manual_review_sources": sum(1 for s in sources.values() if s.get("status") == "needs_manual_review"),
-            "blocking_for_forecast_sources": sum(1 for s in sources.values() if s.get("blocking_for_forecast") is True),
-            "expected_empty_sources": sum(1 for s in sources.values() if s.get("empty_classification") == "expected_empty"),
-            "optional_empty_sources": sum(1 for s in sources.values() if s.get("empty_classification") == "optional_empty"),
         },
         "manifest_staleness_before_update": staleness_scan(),
         "stable_engine_modified": False,
@@ -650,6 +632,8 @@ def main() -> int:
         "session_name": session.get("session_name"),
         "gate": gate,
         "overall_status": overall,
+        "readiness_quality": readiness_aggregation.get("readiness_quality"),
+        "source_needs_manual_review": bool(readiness_aggregation.get("needs_manual_review", overall in {"conflicting", "needs_manual_review"})),
         "material_readiness_improved": materially_improved,
         "forecast_state_changed": forecast_state_changed,
         "latest_output": str(latest_root.relative_to(ROOT)),
