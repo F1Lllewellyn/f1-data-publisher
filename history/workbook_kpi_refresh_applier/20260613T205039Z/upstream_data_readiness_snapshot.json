@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Spain - Barcelona - Catalunya",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-06-13T15:00:00+00:00",
+    "date_start": "2026-06-13T14:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1287,
+    "session_key": 11303,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 255,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 89,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1116,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 50,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 89,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 88,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-06-13T15:53:57.647184Z"
+}
