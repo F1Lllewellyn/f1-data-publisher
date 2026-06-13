@@ -1,21 +1,19 @@
 {
   "category_counts": {
-    "active_architecture": 890,
+    "active_architecture": 893,
     "active_or_unknown": 37,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 54
   },
-  "created_utc": "2026-06-13T01:28:24.698229Z",
+  "created_utc": "2026-06-13T01:31:06.451093Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 1671,
+  "file_count": 1674,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
     "removed_cache_files": []
   },
-  "gitignore_added": [
-    "_runtime/**/__pycache__/"
-  ],
+  "gitignore_added": [],
   "long_paths_over_220_chars": [
     "_archive/Engine_2026-06-11_SANDBOX_AutoRepairScheduledIntegration_SafeTestBoolean_Fix_2026-06-12/installer/RUN_F1_AUTOREPAIR_INTEGRATED_SAFETEST_BOOLEAN_FIX_WINDOWS.bat",
     "_archive/Engine_2026-06-11_SANDBOX_AutoRepairScheduledIntegration_SafeTestBoolean_Fix_2026-06-12/payload/scripts/session_data_processor/session_data_processor_loop_v1.py",
@@ -41,13 +39,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 1617,
+    "keep": 1620,
     "recommend_archive_only": 54
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 25516764,
+  "total_bytes": 25835256,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
