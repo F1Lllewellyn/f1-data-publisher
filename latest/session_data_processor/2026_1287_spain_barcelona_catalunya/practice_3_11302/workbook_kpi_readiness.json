@@ -1,0 +1,86 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-06-13T12:54:51.639366Z",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "overall_status": "clean",
+  "race_name": "Spain - Barcelona - Catalunya",
+  "sandbox_workbook_created": false,
+  "schema_version": "workbook_kpi_readiness_v1_session_processor",
+  "session": {
+    "date_end": "2026-06-13T11:30:00+00:00",
+    "date_start": "2026-06-13T10:30:00+00:00",
+    "gate": "post_fp3",
+    "meeting_key": 1287,
+    "session_key": 11302,
+    "session_name": "Practice 3",
+    "session_type": "Practice"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "driver_count": 22,
+      "max_lap_number": 22.0,
+      "rows": 337,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "driver_count": 22,
+      "max_lap_number": 20.0,
+      "rows": 104,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 465,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 44,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 105,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 81,
+      "status": "clean"
+    }
+  }
+}

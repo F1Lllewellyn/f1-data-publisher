@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 53654,
+    "ok": true,
+    "sha256": "fe8dc5a10cc12f4b25c7b1265074be9b13d1a05a4d26ce8f7e4852a43afdbb5f",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/raw/openf1_position.json",
+  "json_sha256": "37f7ec068050fc7cd005065d3cb0f942d8514cbcb3d0d7d498cb8678841d6ee9",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 465,
+  "status": "clean",
+  "timestamp_rows": 465
+}

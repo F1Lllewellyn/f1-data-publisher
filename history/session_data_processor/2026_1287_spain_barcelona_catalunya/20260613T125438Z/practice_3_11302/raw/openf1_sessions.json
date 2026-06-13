@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 15,
+    "circuit_short_name": "Catalunya",
+    "country_code": "ESP",
+    "country_key": 1,
+    "country_name": "Spain",
+    "date_end": "2026-06-13T11:30:00+00:00",
+    "date_start": "2026-06-13T10:30:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Barcelona",
+    "meeting_key": 1287,
+    "session_key": 11302,
+    "session_name": "Practice 3",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]

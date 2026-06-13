@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-06-13T12:54:51.640291Z",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "forecast_state_changed": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Spain - Barcelona - Catalunya",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-06-13T11:30:00+00:00",
+    "date_start": "2026-06-13T10:30:00+00:00",
+    "gate": "post_fp3",
+    "meeting_key": 1287,
+    "session_key": 11302,
+    "session_name": "Practice 3",
+    "session_type": "Practice"
+  },
+  "source_readiness_materially_improved": true,
+  "stable_order_overwrite_allowed": false
+}
