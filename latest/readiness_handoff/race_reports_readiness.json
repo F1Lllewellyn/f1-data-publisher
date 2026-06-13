@@ -1,0 +1,11 @@
+{
+  "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
+  "blocked": true,
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "ready_for_full_report": false,
+  "ready_for_readiness_context": false,
+  "session_type": "Practice",
+  "source_needs_manual_review": false,
+  "source_status": "needs_manual_review",
+  "workbook_source_status": "needs_manual_review"
+}

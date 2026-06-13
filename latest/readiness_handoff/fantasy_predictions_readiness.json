@@ -1,0 +1,10 @@
+{
+  "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
+  "blocked": true,
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "ready_for_use": false,
+  "session_type": "Practice",
+  "source_needs_manual_review": false,
+  "source_status": "needs_manual_review",
+  "workbook_source_status": "needs_manual_review"
+}

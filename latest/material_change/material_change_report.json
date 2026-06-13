@@ -1,0 +1,17 @@
+{
+  "change_reason": "signature_changed",
+  "current_signature": "c210c0f0eb3ae6ab19cec64df67c58134fd1b69887bcd4334ef161d10ba31e2b",
+  "event": {
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "race_name": "Spain - Barcelona - Catalunya",
+    "session_key": 11301,
+    "session_name": "Practice 2"
+  },
+  "generated_at_utc": "2026-06-13T03:13:10Z",
+  "material_change_detected": true,
+  "notification_recommended": false,
+  "previous_signature": null,
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_material_change_v19",
+  "status": "blocked"
+}

@@ -1,0 +1,133 @@
+{
+  "canonical_workbook_overwrite": false,
+  "dashboard": {
+    "manifest_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+    "source_backed": true,
+    "source_status": "needs_manual_review",
+    "status": "dashboard_refreshed"
+  },
+  "event": {
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "race_name": "Spain - Barcelona - Catalunya",
+    "session_key": 11301,
+    "session_name": "Practice 2"
+  },
+  "generated_at_utc": "2026-06-13T03:13:10Z",
+  "handoffs": {
+    "fantasy_predictions": {
+      "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    },
+    "race_predictions": {
+      "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    },
+    "race_reports": {
+      "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_full_report": false,
+      "ready_for_readiness_context": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    }
+  },
+  "input_selection": {
+    "dashboard_candidates": [
+      {
+        "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+        "run_id": "2026-06-12T23:22:48Z",
+        "score": 100,
+        "source_backed": true,
+        "source_status": "needs_manual_review"
+      }
+    ],
+    "source": {
+      "dashboard_candidates": [
+        {
+          "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+          "run_id": "2026-06-12T23:22:48Z",
+          "score": 100,
+          "source_backed": true,
+          "source_status": "needs_manual_review"
+        }
+      ],
+      "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+      "selected_source_manifest": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+      "selection_rule": "prefer_clean_dashboard_backed_state_then_best_source_manifest",
+      "source_candidates": [
+        {
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+          "run_id": "20260612T230452Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        }
+      ]
+    },
+    "workbook": {
+      "dashboard_candidates": [
+        {
+          "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+          "run_id": "2026-06-12T23:22:48Z",
+          "score": 100,
+          "source_backed": true,
+          "source_status": "needs_manual_review"
+        }
+      ],
+      "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+      "selected_workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+      "selection_rule": "prefer_clean_dashboard_backed_workbook_state_then_best_workbook_manifest",
+      "workbook_candidates": [
+        {
+          "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+          "run_id": "20260612T225059Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        },
+        {
+          "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+          "run_id": "20260612T225059Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        }
+      ]
+    }
+  },
+  "promotion_allowed": false,
+  "run_id": "20260613T031310Z",
+  "schema_version": "f1_1b_output_contract_v19",
+  "signature": "c210c0f0eb3ae6ab19cec64df67c58134fd1b69887bcd4334ef161d10ba31e2b",
+  "source": {
+    "manifest_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+    "needs_manual_review": false,
+    "optional_context_gaps": [],
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "source_counts": {},
+    "source_statuses": {},
+    "status": "needs_manual_review"
+  },
+  "source_backed": true,
+  "stable_engine_modified": false,
+  "status": "blocked",
+  "workbook": {
+    "canonical_workbook_overwrite": false,
+    "manifest_path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+    "sandbox_workbook": null,
+    "status": "needs_manual_review"
+  },
+  "workbook_ready": false
+}

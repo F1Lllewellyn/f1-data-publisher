@@ -1,0 +1,47 @@
+{
+  "event": {
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "race_name": "Spain - Barcelona - Catalunya",
+    "session_key": 11301,
+    "session_name": "Practice 2"
+  },
+  "generated_at_utc": "2026-06-13T03:13:10Z",
+  "handoffs": {
+    "fantasy_predictions": {
+      "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    },
+    "race_predictions": {
+      "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    },
+    "race_reports": {
+      "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
+      "blocked": true,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_full_report": false,
+      "ready_for_readiness_context": false,
+      "session_type": "Practice",
+      "source_needs_manual_review": false,
+      "source_status": "needs_manual_review",
+      "workbook_source_status": "needs_manual_review"
+    }
+  },
+  "promotion_allowed": false,
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "f1_1b_combined_readiness_handoff_v19",
+  "source_status": "needs_manual_review",
+  "workbook_status": "needs_manual_review"
+}

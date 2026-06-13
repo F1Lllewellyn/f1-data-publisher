@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "case": "clean_practice_optional_gaps",
+      "status": "pass"
+    },
+    {
+      "case": "no_change_second_run",
+      "status": "pass"
+    },
+    {
+      "case": "missing_critical_source_blocked",
+      "status": "pass"
+    },
+    {
+      "case": "workbook_not_clean_blocks_last_good",
+      "status": "pass"
+    },
+    {
+      "case": "dashboard_clean_state_overrides_stale_blocked_manifest",
+      "status": "pass"
+    }
+  ],
+  "schema_version": "f1_1b_v19_acceptance_tests",
+  "status": "pass"
+}

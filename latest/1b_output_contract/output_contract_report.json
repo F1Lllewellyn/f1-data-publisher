@@ -1,0 +1,85 @@
+{
+  "canonical_workbook_overwrite": false,
+  "generated_at_utc": "2026-06-13T03:13:10Z",
+  "input_selection": {
+    "dashboard_candidates": [
+      {
+        "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+        "run_id": "2026-06-12T23:22:48Z",
+        "score": 100,
+        "source_backed": true,
+        "source_status": "needs_manual_review"
+      }
+    ],
+    "source": {
+      "dashboard_candidates": [
+        {
+          "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+          "run_id": "2026-06-12T23:22:48Z",
+          "score": 100,
+          "source_backed": true,
+          "source_status": "needs_manual_review"
+        }
+      ],
+      "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+      "selected_source_manifest": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+      "selection_rule": "prefer_clean_dashboard_backed_state_then_best_source_manifest",
+      "source_candidates": [
+        {
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+          "run_id": "20260612T230452Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        }
+      ]
+    },
+    "workbook": {
+      "dashboard_candidates": [
+        {
+          "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+          "run_id": "2026-06-12T23:22:48Z",
+          "score": 100,
+          "source_backed": true,
+          "source_status": "needs_manual_review"
+        }
+      ],
+      "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
+      "selected_workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+      "selection_rule": "prefer_clean_dashboard_backed_workbook_state_then_best_workbook_manifest",
+      "workbook_candidates": [
+        {
+          "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+          "run_id": "20260612T225059Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        },
+        {
+          "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+          "run_id": "20260612T225059Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        }
+      ]
+    }
+  },
+  "last_good_state_updated": false,
+  "ledger_snapshot_created": true,
+  "material_change_detected": true,
+  "notification_recommended": false,
+  "outputs": {
+    "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T031310Z/bundle_snapshot.json",
+    "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
+    "last_good_state": null,
+    "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+    "material_change_report": "latest/material_change/material_change_report.json"
+  },
+  "promotion_allowed": false,
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20260613T031310Z",
+  "schema_version": "f1_1b_output_contract_report_v19",
+  "source_status": "needs_manual_review",
+  "stable_engine_modified": false,
+  "status": "pass",
+  "workbook_source_status": "needs_manual_review"
+}
