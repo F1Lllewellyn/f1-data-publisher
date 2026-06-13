@@ -1,0 +1,25 @@
+{
+  "action": "update_context_quiet",
+  "allowed_effect": "readiness, confidence, risk flags, and source-backed context",
+  "allowed_input_paths": {
+    "combined_readiness_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+    "last_good_state": "latest/last_good_state.json",
+    "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+    "material_change_report": "latest/material_change/material_change_report.json",
+    "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
+  },
+  "canonical_workbook_overwrite": false,
+  "consumer": "race_predictions",
+  "consumer_readiness": "ready",
+  "context_path": "latest/chat_context/race_predictions_context.md",
+  "disallowed_effect": "automatic promotion, stable logic change, or hidden model overwrite",
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-06-13T12:36:39Z",
+  "input_manifest_path": "latest/downstream_consumers/race_predictions/consumer_input.json",
+  "promotion_allowed": false,
+  "read_only": true,
+  "ready": true,
+  "reason": "ready state unchanged; no notification needed",
+  "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
+  "stable_engine_modified": false
+}

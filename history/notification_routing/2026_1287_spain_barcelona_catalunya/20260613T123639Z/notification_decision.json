@@ -1,0 +1,24 @@
+{
+  "canonical_workbook_overwrite": false,
+  "decision_mode": "decision_only_no_external_send",
+  "event": {
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "race_name": "Spain - Barcelona - Catalunya",
+    "session_key": 11301,
+    "session_name": "Practice 2"
+  },
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-06-13T12:36:39Z",
+  "notification_recommended": false,
+  "promotion_allowed": false,
+  "reasons": [],
+  "routes": {
+    "fantasy_predictions_context": "latest/chat_context/fantasy_predictions_context.md",
+    "race_predictions_context": "latest/chat_context/race_predictions_context.md",
+    "race_reports_context": "latest/chat_context/race_reports_context.md",
+    "trigger_decision": "latest/consumer_trigger_governor/trigger_decision.json"
+  },
+  "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
+  "send_external_notification": false,
+  "stable_engine_modified": false
+}

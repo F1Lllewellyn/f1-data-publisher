@@ -1,0 +1,14 @@
+{
+  "canonical_workbook_overwrite": false,
+  "forecast_gate_activated": false,
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_v25_consumer_context_acceptance",
+  "stable_engine_modified": false,
+  "status": "pass",
+  "tests": {
+    "blocked_source_blocks_consumers": "pass",
+    "material_change_recommends_decision_only_notification": "pass",
+    "race_session_report_context_carries_full_readiness": "pass",
+    "ready_no_change_quiet_contexts": "pass"
+  }
+}
