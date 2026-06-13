@@ -1,0 +1,5 @@
+F1 1B v23 Control Room Output Contract Bridge hardening installer started: 2026-06-12T23:41:37.9805084-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+Safety: exact-file replace only; no delete; no scan; no .git access; no workbook/engine touch; no commit/push; forecast gate remains off.
+Copied: .github\workflows\f1-1b-output-contract-after-control-room-v22.yml
+Copied: docs\F1_1B_CONTROL_ROOM_OUTPUT_CONTRACT_BRIDGE_V23_2026-06-13.md
