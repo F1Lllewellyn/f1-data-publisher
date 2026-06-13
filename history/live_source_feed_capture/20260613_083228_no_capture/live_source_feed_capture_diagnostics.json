@@ -1,0 +1,29 @@
+{
+  "generated_utc": "2026-06-13T08:32:28.073765Z",
+  "verdict": "Pass with warnings",
+  "decision": {
+    "should_capture": false,
+    "reason": "no_active_capture_window"
+  },
+  "recording_result": {
+    "recording_attempted": false,
+    "recording_status": "no_active_capture_window",
+    "recording_started_utc": null,
+    "recording_finished_utc": "2026-06-13T08:32:28.072898Z",
+    "duration_minutes_requested": null,
+    "raw_path": "_live_source_feed_capture_work/20260613_083228_no_capture/live_timing_raw.txt",
+    "python_version": "3.9.25 (main, Nov  3 2025, 15:16:36) \n[GCC 13.3.0]",
+    "fastf1_installed_version": "3.6.1",
+    "fastf1_import_ok": null,
+    "error": null,
+    "diagnostic_hint": "No active capture window was detected."
+  },
+  "packet_summary": {
+    "raw_exists": false,
+    "raw_size_bytes": 0,
+    "line_count": 0,
+    "topic_counts": {},
+    "index_created": false
+  },
+  "operator_note": "If this is a manual test outside an active F1 live timing window, zero raw bytes may be expected. If recording_status is recording_error or fastf1_import_failed, inspect the error field and patch before race-weekend use."
+}
