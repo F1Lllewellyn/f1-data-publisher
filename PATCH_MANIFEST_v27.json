@@ -1,0 +1,19 @@
+{
+  "canonical_workbook_overwrite": false,
+  "delete_scan": false,
+  "files": [
+    ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml",
+    ".github/workflows/f1-session-autorepair-integrated-loop-v1.yml",
+    ".github/workflows/openf1-prerace-auto-ingest.yml",
+    "docs/F1_1B_SESSION_GATE_AND_LEGACY_COLLISION_HARDENING_V27_2026-06-13.md",
+    "scripts/ops/f1_1b_v27_legacy_collision_hardening_acceptance_tests.py",
+    "scripts/ops/f1_canonical_chain_guard_v27.py",
+    "scripts/ops/f1_openf1_live_restriction_guard_v27.py"
+  ],
+  "forecast_gate_activated": false,
+  "git_access": false,
+  "package": "F1_1B_v27_SESSION_GATE_LEGACY_COLLISION_HARDENING",
+  "promotion_allowed": false,
+  "stable_engine_modified": false,
+  "version": "v27"
+}

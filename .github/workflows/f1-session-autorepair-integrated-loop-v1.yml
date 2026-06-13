@@ -14,16 +14,17 @@ on:
         required: false
         default: 'auto'
   schedule:
-    # Runs shortly after the :00/:15/:30/:45 source-readiness watchers and session processor window.
-    # The workflow exits cleanly if no completed/usable session source exists.
     - cron: '8,23,38,53 * * * 5,6,0'
 
 permissions:
   contents: write
   actions: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 concurrency:
-  group: f1-session-autorepair-integrated-${{ github.ref }}
+  group: f1-main-write-serialization
   cancel-in-progress: false
 
 jobs:
@@ -43,25 +44,42 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Check v27 canonical-chain yield guard
+        id: canonical_guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_canonical_chain_guard_v27.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --mode legacy_yield \
+            --workflow-name "F1 Session Processor + Auto-Repair Integrated Loop v1" \
+            --recent-minutes 90
+          if grep -q '"should_yield": true' latest/legacy_workflow_hardening/f1-session-processor-plus-auto-repair-integrated-loop-v1_guard.json; then
+            echo "should_yield=true" >> "$GITHUB_OUTPUT"
+            echo "Legacy integrated loop yielded to recent canonical Control Room chain."
+          else
+            echo "should_yield=false" >> "$GITHUB_OUTPUT"
+            echo "Legacy integrated loop allowed; no recent canonical run detected."
+          fi
+
       - name: Install dependencies
+        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' }}
         shell: bash
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install pandas requests openpyxl
-          python - <<'PY'
-          import pandas, requests, openpyxl
-          print("Integrated dependency preflight passed: pandas, requests, openpyxl")
-          PY
+          python -c "import pandas, requests, openpyxl; print('Integrated dependency preflight passed: pandas, requests, openpyxl')"
 
       - name: Run integration health check
+        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' }}
         shell: bash
         run: |
           set -euo pipefail
           python scripts/autorepair/health_check_autorepair_scheduled_integration_v1.py
 
       - name: Run safe test checks only
-        if: ${{ env.MODE == 'safe_test' }}
+        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' && env.MODE == 'safe_test' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -69,7 +87,7 @@ jobs:
           python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode safe_test --repo-root "$GITHUB_WORKSPACE" --timeout 900
 
       - name: Run session ingest then Auto-Repair recovery
-        if: ${{ env.MODE != 'safe_test' }}
+        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' && env.MODE != 'safe_test' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -82,6 +100,11 @@ jobs:
         if: always()
         shell: bash
         run: |
+          if [ "${{ steps.canonical_guard.outputs.should_yield }}" = "true" ]; then
+            echo "Legacy Auto-Repair yielded to canonical Control Room chain."
+            cat latest/legacy_workflow_hardening/f1-session-processor-plus-auto-repair-integrated-loop-v1_guard.json || true
+            exit 0
+          fi
           if [ -f "_runtime/autorepair/session_workbook_recovery/autorepair_report.md" ]; then
             echo "----- AUTO-REPAIR REPORT START -----"
             cat _runtime/autorepair/session_workbook_recovery/autorepair_report.md
@@ -103,10 +126,11 @@ jobs:
             latest/session_data_processor/**
             latest/workbook_kpi_refresh_applier/**
             latest/autorepair/**
+            latest/legacy_workflow_hardening/**
           if-no-files-found: ignore
 
       - name: Commit source-backed integrated outputs only
-        if: ${{ env.MODE != 'safe_test' }}
+        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' && env.MODE != 'safe_test' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -133,6 +157,7 @@ jobs:
             "history/workbook_kpi_refresh_applier"
             "latest/autorepair"
             "history/autorepair"
+            "latest/legacy_workflow_hardening"
           )
           for p in "${candidates[@]}"; do
             if [ -e "$p" ]; then
@@ -148,5 +173,4 @@ jobs:
           else
             git commit -m "chore: integrated session processor auto-repair workbook KPI refresh"
             bash scripts/ops/safe_git_push_rebase_retry.sh
-
           fi

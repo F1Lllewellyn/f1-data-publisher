@@ -71,6 +71,16 @@ jobs:
           set -euo pipefail
           python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root "$GITHUB_WORKSPACE" --mode static --fail-on-issue
 
+      - name: Write v27 scheduled session-gate decision
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_canonical_chain_guard_v27.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --mode scheduled_gate \
+            --workflow-name "F1 Peak Elite Control Room - One Click v1" \
+            --recent-minutes 20
+
       - name: Run peak-elite orchestrator
         shell: bash
         run: |
@@ -79,7 +89,11 @@ jobs:
           COMMIT_OUTPUTS="${{ inputs.commit_outputs }}"
           RUN_FORECAST_GATE="${{ inputs.run_forecast_gate }}"
           if [ -z "${OPERATION:-}" ]; then
-            OPERATION="scheduled_monitor"
+            if [ "${GITHUB_EVENT_NAME:-}" = "schedule" ]; then
+              OPERATION="full_run_chain"
+            else
+              OPERATION="scheduled_monitor"
+            fi
           fi
           if [ -z "${COMMIT_OUTPUTS:-}" ]; then
             COMMIT_OUTPUTS="true"
@@ -103,6 +117,13 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root "$GITHUB_WORKSPACE" --mode runtime --fail-on-issue
+
+      - name: Run v27 static acceptance checks
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_1b_v27_legacy_collision_hardening_acceptance_tests.py --repo-root "$GITHUB_WORKSPACE"
 
       - name: Upload peak-elite diagnostics and refreshed workbook handoff artifacts
         if: always()
@@ -128,6 +149,10 @@ jobs:
             history/chat_context/**
             latest/forecast_bundle_ledger/session_data_processor/**
             history/forecast_bundle_ledger/session_data_processor/**
+            latest/session_gate_watch_v27/**
+            history/session_gate_watch_v27/**
+            latest/legacy_workflow_hardening/**
+            latest/1b_validation/**
           if-no-files-found: ignore
 
       - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts
@@ -186,6 +211,10 @@ jobs:
             "history/chat_context"
             "latest/forecast_bundle_ledger/session_data_processor"
             "history/forecast_bundle_ledger/session_data_processor"
+            "latest/session_gate_watch_v27"
+            "history/session_gate_watch_v27"
+            "latest/legacy_workflow_hardening"
+            "latest/1b_validation"
           )
 
           added=0
@@ -200,8 +229,6 @@ jobs:
             fi
           done
 
-          # Sandbox workbooks are intentionally versioned handoff artifacts.
-          # Force-add only sandbox workbook files in the dedicated refresh-applier paths in case the repo ignores *.xlsx globally.
           for root in latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier; do
             if [ -d "$root" ]; then
               while IFS= read -r -d '' f; do

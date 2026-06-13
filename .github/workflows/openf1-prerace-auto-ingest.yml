@@ -1,4 +1,4 @@
-﻿name: OpenF1 Pre-Race Auto Ingest
+name: OpenF1 Pre-Race Auto Ingest
 
 on:
   workflow_dispatch:
@@ -27,6 +27,8 @@ jobs:
     name: Extract OpenF1 data and upload checkpoint
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    outputs:
+      deferred: ${{ steps.extract.outputs.deferred }}
 
     steps:
       - name: Checkout repo
@@ -42,8 +44,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
 
-      - name: Extract and build checkpoint
+      - name: Extract and build checkpoint with live-session defer guard
+        id: extract
+        shell: bash
         run: |
+          set -o pipefail
+          mkdir -p latest/legacy_workflow_hardening
+          LOG="latest/legacy_workflow_hardening/openf1_prerace_extract.log"
           python scripts/openf1/openf1_high_frequency_extract_checkpoint.py \
             --year "$YEAR" \
             --mode "$MODE" \
@@ -51,22 +58,50 @@ jobs:
             --output-dir "$OUTPUT_DIR" \
             --request-sleep 0.35 \
             --warning-threshold 0.80 \
-            --strict-threshold 0.90 
+            --strict-threshold 0.90 2>&1 | tee "$LOG"
+          status=${PIPESTATUS[0]}
+          if [ "$status" -eq 0 ]; then
+            echo "deferred=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python scripts/ops/f1_openf1_live_restriction_guard_v27.py \
+            --repo-root . \
+            --log "$LOG" \
+            --workflow-name "OpenF1 Pre-Race Auto Ingest" \
+            --github-run-id "$GITHUB_RUN_ID"
+          guard_status=$?
+          if [ "$guard_status" -eq 0 ]; then
+            echo "deferred=true" >> "$GITHUB_OUTPUT"
+            echo "OpenF1 prereace ingest deferred because live-session unauthenticated API access is restricted."
+            exit 0
+          fi
+          echo "deferred=false" >> "$GITHUB_OUTPUT"
+          exit "$status"
 
       - name: Upload extraction checkpoint artifact
         uses: actions/upload-artifact@v6
-        if: success()
+        if: ${{ steps.extract.outputs.deferred != 'true' }}
         with:
           name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 60
           if-no-files-found: error
 
+      - name: Upload live-session defer diagnostics
+        uses: actions/upload-artifact@v6
+        if: ${{ steps.extract.outputs.deferred == 'true' }}
+        with:
+          name: openf1-prerace-live-session-deferred-${{ env.YEAR }}-${{ github.run_number }}
+          path: latest/legacy_workflow_hardening/**
+          retention-days: 14
+          if-no-files-found: ignore
+
   validate_report_and_upload:
     name: Validate checkpoint, write report, upload final artifact
     runs-on: ubuntu-latest
     timeout-minutes: 90
     needs: extract_and_checkpoint
+    if: ${{ needs.extract_and_checkpoint.outputs.deferred != 'true' }}
 
     steps:
       - name: Checkout repo
@@ -117,4 +152,3 @@ jobs:
           path: ${{ env.OUTPUT_DIR }}
           retention-days: 60
           if-no-files-found: error
-
