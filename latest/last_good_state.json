@@ -5,12 +5,12 @@
     "session_key": 11303,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T162810Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T165712Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260613T162810Z",
+  "run_id": "20260613T165712Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "1f08c1948be08fbb6822cbcbb34d4cd31afc48caede9285ebbdb02f5eaeb3096",
+  "signature": "376bed08e61a9f4d841461d87120a8969c819791212c7ed7a4241d808a4ebe90",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-06-13T16:28:10Z"
+  "updated_at_utc": "2026-06-13T16:57:13Z"
 }
