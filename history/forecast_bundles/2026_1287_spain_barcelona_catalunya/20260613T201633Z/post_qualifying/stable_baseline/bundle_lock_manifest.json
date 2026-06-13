@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1287_spain_barcelona_catalunya__post_qualifying__stable_baseline__20260613T201633Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "season": "2026",
+  "round": "",
+  "race_name": "Spain - Barcelona - Catalunya",
+  "gate": "post_qualifying",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-06-13T20:16:33Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
