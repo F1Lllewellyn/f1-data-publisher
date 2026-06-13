@@ -26,11 +26,11 @@ path,size_bytes,category,recommended_action,reason,path_length
 .github/workflows/f1-forecast-use-dry-review.yml,1871,active_architecture,keep,Inside active architecture root.,102
 .github/workflows/f1-live-source-feed-capture-experimental.yml,4634,active_architecture,keep,Inside active architecture root.,116
 .github/workflows/f1-openf1-lightweight-source-closure.yml,2242,active_architecture,keep,Inside active architecture root.,112
-.github/workflows/f1-peak-elite-control-room-one-click-v1.yml,8783,active_architecture,keep,Inside active architecture root.,115
+.github/workflows/f1-peak-elite-control-room-one-click-v1.yml,9680,active_architecture,keep,Inside active architecture root.,115
 .github/workflows/f1-post-race-scoring-loop.yml,1878,active_architecture,keep,Inside active architecture root.,101
 .github/workflows/f1-race-weekend-operating-rhythm.yml,1805,active_architecture,keep,Inside active architecture root.,108
 .github/workflows/f1-season-archive-publisher.yml,2287,active_architecture,keep,Inside active architecture root.,103
-.github/workflows/f1-session-autorepair-integrated-loop-v1.yml,5921,active_architecture,keep,Inside active architecture root.,116
+.github/workflows/f1-session-autorepair-integrated-loop-v1.yml,7333,active_architecture,keep,Inside active architecture root.,116
 .github/workflows/f1-session-autorepair-integrated-run-now-button-v1.yml,3728,active_architecture,keep,Inside active architecture root.,126
 .github/workflows/f1-session-autorepair-integrated-safe-test-button-v1.yml,1444,active_architecture,keep,Inside active architecture root.,128
 .github/workflows/f1-session-data-processor-loop-v1.yml,4028,active_architecture,keep,Inside active architecture root.,109
@@ -43,7 +43,7 @@ path,size_bytes,category,recommended_action,reason,path_length
 .github/workflows/f1-workflow-meta-health-safe-test-button.yml,728,active_architecture,keep,Inside active architecture root.,116
 .github/workflows/openf1-full-historical-auto-ingest.yml,3565,active_architecture,keep,Inside active architecture root.,110
 .github/workflows/openf1-post-race-auto-reliability.yml,3643,active_architecture,keep,Inside active architecture root.,109
-.github/workflows/openf1-prerace-auto-ingest.yml,3522,active_architecture,keep,Inside active architecture root.,102
+.github/workflows/openf1-prerace-auto-ingest.yml,5051,active_architecture,keep,Inside active architecture root.,102
 .gitignore,821,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,64
 .gitignore.openf1_high_frequency,202,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,86
 1_DOUBLE_CLICK_ME_INSTALL_F1_PEAK_ELITE_SYSTEM_v3.cmd,73907,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,107
@@ -109,6 +109,7 @@ MANIFEST.csv,259,active_or_unknown,keep,Not classified as generated junk or obvi
 OPENF1_LIGHTWEIGHT_SOURCE_CLOSURE_PATCH_MANIFEST.csv,684,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,106
 OPERATIONAL_USE_ALL5_PATCH_MANIFEST.csv,1466,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,93
 PATCH_MANIFEST_v26.json,1121,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,77
+PATCH_MANIFEST_v27.json,756,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,77
 README_GITHUB_OPENF1_AUTO_INGEST.md,2267,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,89
 README_START_HERE.txt,599,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,75
 README_START_HERE_v4.txt,622,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,78
@@ -813,9 +814,9 @@ _backups/F1_1A_Cumulative_Validation_Hotfix_2026-06-11_20260611_201219/.github/w
 _backups/F1_1A_Cumulative_Validation_Hotfix_2026-06-11_20260611_201219/.github/workflows/f1-forecast-gate-source-writer-v1.yml,2655,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,180
 _backups/F1_1A_Cumulative_Validation_Hotfix_2026-06-11_20260611_201219/scripts/forecast_bundles/create_forecast_bundles_v1.py,16186,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,179
 _runtime/peak_elite/workflow_repair/WORKFLOW_COMMIT_BLOCK_REPAIR_REPORT.md,360,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,128
-_runtime/peak_elite/workflow_repair/workflow_commit_block_repair_report.json,10125,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
-_runtime/peak_elite/workflow_static_validation/WORKFLOW_STATIC_VALIDATION.md,2005,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
-_runtime/peak_elite/workflow_static_validation/workflow_static_validation.json,9859,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,132
+_runtime/peak_elite/workflow_repair/workflow_commit_block_repair_report.json,10126,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
+_runtime/peak_elite/workflow_static_validation/WORKFLOW_STATIC_VALIDATION.md,1922,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
+_runtime/peak_elite/workflow_static_validation/workflow_static_validation.json,9741,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,132
 _runtime/workbook_persistence_handoff_guard/workbook_persistence_handoff_guard_report.json,633,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,144
 _runtime/workflow_meta_health/WORKFLOW_META_HEALTH_REPORT.md,165,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,114
 _runtime/workflow_meta_health/workflow_meta_health.json,267,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,109
@@ -860,6 +861,7 @@ docs/F1_1B_OUTPUT_CONTRACT_V16_2026-06-13.md,1403,active_architecture,keep,Insid
 docs/F1_1B_OUTPUT_CONTRACT_V19_WIRING_FIX_2026-06-13.md,867,active_architecture,keep,Inside active architecture root.,109
 docs/F1_1B_OUTPUT_CONTRACT_V20_NORMALIZATION_FIX_2026-06-13.md,989,active_architecture,keep,Inside active architecture root.,116
 docs/F1_1B_QUALI_READY_CONTEXT_AND_WORKBOOK_PERSISTENCE_V26_2026-06-13.md,1859,active_architecture,keep,Inside active architecture root.,127
+docs/F1_1B_SESSION_GATE_AND_LEGACY_COLLISION_HARDENING_V27_2026-06-13.md,1916,active_architecture,keep,Inside active architecture root.,126
 docs/F1_1B_SOURCE_READINESS_AGGREGATION_REFINEMENT_2026-06-13_v11.md,1265,active_architecture,keep,Inside active architecture root.,122
 docs/F1_ACTUAL_FORECAST_PRODUCER_SOURCE_DISCOVERY_HOTFIX_2026-06-12.md,1435,active_architecture,keep,Inside active architecture root.,124
 docs/F1_ACTUAL_FORECAST_PRODUCER_V1_PATCH_2026-06-12.md,1774,active_architecture,keep,Inside active architecture root.,109
@@ -963,6 +965,8 @@ history/chat_context/20260613T125451Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.m
 history/chat_context/20260613T125451Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,703,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/20260613T155518Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,714,active_architecture,keep,Inside active architecture root.,135
 history/chat_context/20260613T155518Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,712,active_architecture,keep,Inside active architecture root.,132
+history/chat_context/20260613T162756Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,714,active_architecture,keep,Inside active architecture root.,135
+history/chat_context/20260613T162756Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,712,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/combined_context_index.json,895,active_architecture,keep,Inside active architecture root.,155
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/fantasy_predictions_context.md,1694,active_architecture,keep,Inside active architecture root.,158
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/race_predictions_context.md,1687,active_architecture,keep,Inside active architecture root.,155
@@ -975,12 +979,18 @@ history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T160239Z/combin
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T160239Z/fantasy_predictions_context.md,1705,active_architecture,keep,Inside active architecture root.,158
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T160239Z/race_predictions_context.md,1698,active_architecture,keep,Inside active architecture root.,155
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T160239Z/race_reports_context.md,1705,active_architecture,keep,Inside active architecture root.,151
+history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T162810Z/combined_context_index.json,895,active_architecture,keep,Inside active architecture root.,155
+history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T162810Z/fantasy_predictions_context.md,1705,active_architecture,keep,Inside active architecture root.,158
+history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T162810Z/race_predictions_context.md,1698,active_architecture,keep,Inside active architecture root.,155
+history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T162810Z/race_reports_context.md,1705,active_architecture,keep,Inside active architecture root.,151
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T123639Z/consumer_trigger_report.json,2331,active_architecture,keep,Inside active architecture root.,169
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T123639Z/trigger_decision.json,2331,active_architecture,keep,Inside active architecture root.,162
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T125511Z/consumer_trigger_report.json,2361,active_architecture,keep,Inside active architecture root.,169
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T125511Z/trigger_decision.json,2361,active_architecture,keep,Inside active architecture root.,162
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T160239Z/consumer_trigger_report.json,2365,active_architecture,keep,Inside active architecture root.,169
 history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T160239Z/trigger_decision.json,2365,active_architecture,keep,Inside active architecture root.,162
+history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T162810Z/consumer_trigger_report.json,2365,active_architecture,keep,Inside active architecture root.,169
+history/consumer_trigger_governor/2026_1287_spain_barcelona_catalunya/20260613T162810Z/trigger_decision.json,2365,active_architecture,keep,Inside active architecture root.,162
 history/cross_car_microdelta_forensics/20260612_233747/NO_ACTION_REPORT.md,261,active_architecture,keep,Inside active architecture root.,128
 history/cross_car_microdelta_forensics/20260612_233747/manifests/governance_status.json,1324,active_architecture,keep,Inside active architecture root.,141
 history/cross_car_microdelta_forensics/20260612_233747/results/microdelta_driver_signal_matrix.csv,1,active_architecture,keep,Inside active architecture root.,152
@@ -1001,6 +1011,10 @@ history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T160239
 history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T160239Z/fantasy_predictions/consumer_bootstrap.json,1305,active_architecture,keep,Inside active architecture root.,179
 history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T160239Z/race_predictions/consumer_bootstrap.json,1254,active_architecture,keep,Inside active architecture root.,176
 history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T160239Z/race_reports/consumer_bootstrap.json,1242,active_architecture,keep,Inside active architecture root.,172
+history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T162810Z/combined_downstream_consumer_manifest.json,7886,active_architecture,keep,Inside active architecture root.,178
+history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T162810Z/fantasy_predictions/consumer_bootstrap.json,1305,active_architecture,keep,Inside active architecture root.,179
+history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T162810Z/race_predictions/consumer_bootstrap.json,1254,active_architecture,keep,Inside active architecture root.,176
+history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T162810Z/race_reports/consumer_bootstrap.json,1242,active_architecture,keep,Inside active architecture root.,172
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T031310Z/bundle_snapshot.json,5075,active_architecture,keep,Inside active architecture root.,158
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T031310Z/material_change_report.json,567,active_architecture,keep,Inside active architecture root.,165
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T032119Z/bundle_snapshot.json,5113,active_architecture,keep,Inside active architecture root.,158
@@ -1019,6 +1033,8 @@ history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T1255
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T125511Z/material_change_report.json,654,active_architecture,keep,Inside active architecture root.,165
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T160239Z/bundle_snapshot.json,5530,active_architecture,keep,Inside active architecture root.,158
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T160239Z/material_change_report.json,654,active_architecture,keep,Inside active architecture root.,165
+history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T162810Z/bundle_snapshot.json,5530,active_architecture,keep,Inside active architecture root.,158
+history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T162810Z/material_change_report.json,654,active_architecture,keep,Inside active architecture root.,165
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/README.md,122,active_architecture,keep,Inside active architecture root.,173
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/bundle_completeness_check.csv,2204,active_architecture,keep,Inside active architecture root.,193
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/bundle_lock_manifest.json,554,active_architecture,keep,Inside active architecture root.,189
@@ -1311,6 +1327,8 @@ history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T125511
 history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T125511Z/notification_summary.md,752,active_architecture,keep,Inside active architecture root.,159
 history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T160239Z/notification_decision.json,1014,active_architecture,keep,Inside active architecture root.,162
 history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T160239Z/notification_summary.md,752,active_architecture,keep,Inside active architecture root.,159
+history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T162810Z/notification_decision.json,1014,active_architecture,keep,Inside active architecture root.,162
+history/notification_routing/2026_1287_spain_barcelona_catalunya/20260613T162810Z/notification_summary.md,752,active_architecture,keep,Inside active architecture root.,159
 history/openf1_lightweight_source_closure/20260610_230044/F1_OpenF1_Lightweight_Source_Closure_Summary.xlsx,24661,active_architecture,keep,Inside active architecture root.,161
 history/openf1_lightweight_source_closure/20260610_230044/combined_source_manifest.csv,1220,active_architecture,keep,Inside active architecture root.,140
 history/openf1_lightweight_source_closure/20260610_230044/data/openf1_drivers.csv,121346,active_architecture,keep,Inside active architecture root.,135
@@ -1361,6 +1379,9 @@ history/readiness_dashboards/20260613T125451Z/race_predictions_readiness_state.j
 history/readiness_dashboards/20260613T155518Z/combined_readiness_dashboard.json,1384,active_architecture,keep,Inside active architecture root.,133
 history/readiness_dashboards/20260613T155518Z/fantasy_readiness_state.json,549,active_architecture,keep,Inside active architecture root.,128
 history/readiness_dashboards/20260613T155518Z/race_predictions_readiness_state.json,544,active_architecture,keep,Inside active architecture root.,137
+history/readiness_dashboards/20260613T162756Z/combined_readiness_dashboard.json,1384,active_architecture,keep,Inside active architecture root.,133
+history/readiness_dashboards/20260613T162756Z/fantasy_readiness_state.json,549,active_architecture,keep,Inside active architecture root.,128
+history/readiness_dashboards/20260613T162756Z/race_predictions_readiness_state.json,544,active_architecture,keep,Inside active architecture root.,137
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/forecast_bundle_ledger_snapshot.json,740,active_architecture,keep,Inside active architecture root.,191
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,177
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,178
@@ -1551,6 +1572,45 @@ history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T1553
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T155344Z/qualifying_11303/validation/openf1_weather_validation.json,906,active_architecture,keep,Inside active architecture root.,196
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T155344Z/qualifying_11303/workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,181
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T155344Z/qualifying_11303/workbook_kpi_readiness.json,2060,active_architecture,keep,Inside active architecture root.,182
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/forecast_bundle_ledger_snapshot.json,745,active_architecture,keep,Inside active architecture root.,191
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,177
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,178
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_intervals.csv,0,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_intervals.json,2,active_architecture,keep,Inside active architecture root.,180
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_laps.csv,58668,active_architecture,keep,Inside active architecture root.,174
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_laps.json,186778,active_architecture,keep,Inside active architecture root.,175
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_pit.csv,5510,active_architecture,keep,Inside active architecture root.,173
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_pit.json,20900,active_architecture,keep,Inside active architecture root.,174
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_position.csv,56114,active_architecture,keep,Inside active architecture root.,178
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_position.json,168779,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_race_control.csv,5522,active_architecture,keep,Inside active architecture root.,182
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_race_control.json,16653,active_architecture,keep,Inside active architecture root.,183
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_session_result.csv,1982,active_architecture,keep,Inside active architecture root.,184
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_session_result.json,6902,active_architecture,keep,Inside active architecture root.,185
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_sessions.csv,319,active_architecture,keep,Inside active architecture root.,178
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_sessions.json,465,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_starting_grid.csv,0,active_architecture,keep,Inside active architecture root.,183
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_starting_grid.json,2,active_architecture,keep,Inside active architecture root.,184
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_stints.csv,2620,active_architecture,keep,Inside active architecture root.,176
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_stints.json,17566,active_architecture,keep,Inside active architecture root.,177
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_weather.csv,6870,active_architecture,keep,Inside active architecture root.,177
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/raw/openf1_weather.json,24795,active_architecture,keep,Inside active architecture root.,178
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/sandbox_workbook_update_plan.json,423,active_architecture,keep,Inside active architecture root.,188
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/source_readiness_manifest.json,20432,active_architecture,keep,Inside active architecture root.,185
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_drivers_validation.json,948,active_architecture,keep,Inside active architecture root.,196
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_intervals_validation.json,745,active_architecture,keep,Inside active architecture root.,198
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_laps_validation.json,1050,active_architecture,keep,Inside active architecture root.,193
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_pit_validation.json,860,active_architecture,keep,Inside active architecture root.,192
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_position_validation.json,816,active_architecture,keep,Inside active architecture root.,197
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_race_control_validation.json,918,active_architecture,keep,Inside active architecture root.,201
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_session_result_validation.json,907,active_architecture,keep,Inside active architecture root.,203
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_sessions_validation.json,930,active_architecture,keep,Inside active architecture root.,197
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_starting_grid_validation.json,724,active_architecture,keep,Inside active architecture root.,202
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_stints_validation.json,869,active_architecture,keep,Inside active architecture root.,195
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/validation/openf1_weather_validation.json,906,active_architecture,keep,Inside active architecture root.,196
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,181
+history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260613T162744Z/qualifying_11303/workbook_kpi_readiness.json,2060,active_architecture,keep,Inside active architecture root.,182
+history/session_gate_watch_v27/20260613T165637Z/gate_decision.json,2997,active_architecture,keep,Inside active architecture root.,120
 history/workbook_kpi_refresh_applier/20260612T184142Z/F1_Workbook_KPI_SANDBOX_Refresh_unknown_event_session_20260612T184142Z.xlsx,9011,active_architecture,keep,Inside active architecture root.,183
 history/workbook_kpi_refresh_applier/20260612T184142Z/refreshed_workbook_kpi_readiness.csv,143,active_architecture,keep,Inside active architecture root.,144
 history/workbook_kpi_refresh_applier/20260612T184142Z/sandbox_workbook_update_plan_applied.json,315,active_architecture,keep,Inside active architecture root.,149
@@ -1631,6 +1691,14 @@ history/workbook_kpi_refresh_applier/20260613T155718Z/upstream_data_readiness_sn
 history/workbook_kpi_refresh_applier/20260613T155718Z/upstream_latest_manifest_snapshot.json,563,active_architecture,keep,Inside active architecture root.,146
 history/workbook_kpi_refresh_applier/20260613T155718Z/workbook_kpi_refresh_manifest.json,2468,active_architecture,keep,Inside active architecture root.,142
 history/workbook_kpi_refresh_applier/20260613T155718Z/workbook_kpi_refresh_report.md,1360,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20260613T162756Z/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260613T162756Z.xlsx,10306,active_architecture,keep,Inside active architecture root.,199
+history/workbook_kpi_refresh_applier/20260613T162756Z/refreshed_workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20260613T162756Z/sandbox_workbook_update_plan_applied.json,753,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20260613T162756Z/upstream_combined_source_manifest_snapshot.json,692,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20260613T162756Z/upstream_data_readiness_snapshot.json,1571,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20260613T162756Z/upstream_latest_manifest_snapshot.json,563,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20260613T162756Z/workbook_kpi_refresh_manifest.json,2468,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20260613T162756Z/workbook_kpi_refresh_report.md,1360,active_architecture,keep,Inside active architecture root.,138
 install_f1_github_automation_clean.py,8528,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,91
 install_reports/F1_1A_CUMULATIVE_GITHUB_PRODUCTION_V2_1_2026-06-11_install_report.md,2491,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,138
 installer/Install-F1-1A-GitHub-LongPath-Backup-Cleanup-Fix.ps1,5460,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,116
@@ -1653,7 +1721,7 @@ latest/autorepair/session_workbook_recovery/autorepair_manifest.json,992,active_
 latest/autorepair/session_workbook_recovery/autorepair_report.md,1025,active_architecture,keep,Inside active architecture root.,118
 latest/autorepair/session_workbook_recovery/autorepair_status.json,3279,active_architecture,keep,Inside active architecture root.,120
 latest/chat_context/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,714,active_architecture,keep,Inside active architecture root.,117
-latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md,935,active_architecture,keep,Inside active architecture root.,106
+latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md,1116,active_architecture,keep,Inside active architecture root.,106
 latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md,607,active_architecture,keep,Inside active architecture root.,101
 latest/chat_context/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,712,active_architecture,keep,Inside active architecture root.,114
 latest/chat_context/combined_context_index.json,895,active_architecture,keep,Inside active architecture root.,101
@@ -1812,9 +1880,9 @@ latest/openf1_lightweight_source_closure/request_log.csv,244053,active_architect
 latest/openf1_lightweight_source_closure/source_closure_report.md,374,active_architecture,keep,Inside active architecture root.,119
 latest/openf1_lightweight_source_closure/source_readiness_summary.csv,661,active_architecture,keep,Inside active architecture root.,123
 latest/openf1_lightweight_source_closure/zero_lane_diagnostics.csv,24169,active_architecture,keep,Inside active architecture root.,120
-latest/peak_elite/ORCHESTRATOR_STATUS.md,935,active_architecture,keep,Inside active architecture root.,94
+latest/peak_elite/ORCHESTRATOR_STATUS.md,1116,active_architecture,keep,Inside active architecture root.,94
 latest/peak_elite/SYSTEM_STATUS.md,607,active_architecture,keep,Inside active architecture root.,88
-latest/peak_elite/orchestrator_status.json,39904,active_architecture,keep,Inside active architecture root.,96
+latest/peak_elite/orchestrator_status.json,54290,active_architecture,keep,Inside active architecture root.,96
 latest/peak_elite/system_status.json,13041,active_architecture,keep,Inside active architecture root.,90
 latest/readiness_dashboards/combined_readiness_dashboard.json,1384,active_architecture,keep,Inside active architecture root.,115
 latest/readiness_dashboards/fantasy_readiness_state.json,549,active_architecture,keep,Inside active architecture root.,110
@@ -1824,9 +1892,9 @@ latest/readiness_handoff/combined_readiness_handoff.json,1704,active_architectur
 latest/readiness_handoff/fantasy_predictions_readiness.json,334,active_architecture,keep,Inside active architecture root.,113
 latest/readiness_handoff/race_predictions_readiness.json,337,active_architecture,keep,Inside active architecture root.,110
 latest/readiness_handoff/race_reports_readiness.json,388,active_architecture,keep,Inside active architecture root.,106
-latest/repo_canonicalization/REPO_CANONICALIZATION_REPORT.md,808,active_architecture,keep,Inside active architecture root.,114
-latest/repo_canonicalization/repo_canonicalization_inventory.csv,364771,active_architecture,keep,Inside active architecture root.,118
-latest/repo_canonicalization/repo_canonicalization_report.json,10350,active_architecture,keep,Inside active architecture root.,116
+latest/repo_canonicalization/REPO_CANONICALIZATION_REPORT.md,807,active_architecture,keep,Inside active architecture root.,114
+latest/repo_canonicalization/repo_canonicalization_inventory.csv,367275,active_architecture,keep,Inside active architecture root.,118
+latest/repo_canonicalization/repo_canonicalization_report.json,10349,active_architecture,keep,Inside active architecture root.,116
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/forecast_bundle_ledger_snapshot.json,741,active_architecture,keep,Inside active architecture root.,173
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,159
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,160
@@ -1903,7 +1971,7 @@ latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_113
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/validation/openf1_weather_validation.json,906,active_architecture,keep,Inside active architecture root.,178
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/workbook_kpi_readiness.csv,415,active_architecture,keep,Inside active architecture root.,163
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/workbook_kpi_readiness.json,2052,active_architecture,keep,Inside active architecture root.,164
-latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/forecast_bundle_ledger_snapshot.json,743,active_architecture,keep,Inside active architecture root.,173
+latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/forecast_bundle_ledger_snapshot.json,745,active_architecture,keep,Inside active architecture root.,173
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,159
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,160
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_intervals.csv,0,active_architecture,keep,Inside active architecture root.,161
@@ -1927,7 +1995,7 @@ latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_113
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_weather.csv,6870,active_architecture,keep,Inside active architecture root.,159
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_weather.json,24795,active_architecture,keep,Inside active architecture root.,160
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/sandbox_workbook_update_plan.json,423,active_architecture,keep,Inside active architecture root.,170
-latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json,20431,active_architecture,keep,Inside active architecture root.,167
+latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json,20432,active_architecture,keep,Inside active architecture root.,167
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/validation/openf1_drivers_validation.json,948,active_architecture,keep,Inside active architecture root.,178
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/validation/openf1_intervals_validation.json,745,active_architecture,keep,Inside active architecture root.,180
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/validation/openf1_laps_validation.json,1050,active_architecture,keep,Inside active architecture root.,175
@@ -1941,6 +2009,7 @@ latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_113
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/validation/openf1_weather_validation.json,906,active_architecture,keep,Inside active architecture root.,178
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,163
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/workbook_kpi_readiness.json,2060,active_architecture,keep,Inside active architecture root.,164
+latest/session_gate_watch_v27/gate_decision.json,2997,active_architecture,keep,Inside active architecture root.,102
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T184747Z.xlsx,10309,active_architecture,keep,Inside active architecture root.,181
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T223448Z.xlsx,10347,active_architecture,keep,Inside active architecture root.,181
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260612T225059Z.xlsx,10342,active_architecture,keep,Inside active architecture root.,181
@@ -1950,11 +2019,12 @@ latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barc
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260613T125451Z.xlsx,10304,active_architecture,keep,Inside active architecture root.,181
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260613T155320Z.xlsx,10303,active_architecture,keep,Inside active architecture root.,181
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260613T155718Z.xlsx,10306,active_architecture,keep,Inside active architecture root.,181
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Spain_-_Barcelona_-_Catalunya_session_20260613T162756Z.xlsx,10306,active_architecture,keep,Inside active architecture root.,181
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_unknown_event_session_20260612T184142Z.xlsx,9011,active_architecture,keep,Inside active architecture root.,165
 latest/workbook_kpi_refresh_applier/refreshed_workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,126
 latest/workbook_kpi_refresh_applier/sandbox_workbook_update_plan_applied.json,753,active_architecture,keep,Inside active architecture root.,131
 latest/workbook_kpi_refresh_applier/upstream_combined_source_manifest_snapshot.json,692,active_architecture,keep,Inside active architecture root.,137
-latest/workbook_kpi_refresh_applier/upstream_data_readiness_snapshot.json,1569,active_architecture,keep,Inside active architecture root.,127
+latest/workbook_kpi_refresh_applier/upstream_data_readiness_snapshot.json,1571,active_architecture,keep,Inside active architecture root.,127
 latest/workbook_kpi_refresh_applier/upstream_latest_manifest_snapshot.json,563,active_architecture,keep,Inside active architecture root.,128
 latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json,2468,active_architecture,keep,Inside active architecture root.,124
 latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_report.md,1360,active_architecture,keep,Inside active architecture root.,120
@@ -2010,6 +2080,9 @@ scripts/ops/f1_1b_source_readiness_patch_validation_v1.py,2685,active_architectu
 scripts/ops/f1_1b_v16_acceptance_tests_v1.py,8095,active_architecture,keep,Inside active architecture root.,98
 scripts/ops/f1_1b_v24_acceptance_tests_v1.py,8855,active_architecture,keep,Inside active architecture root.,98
 scripts/ops/f1_1b_v25_acceptance_tests_v1.py,10028,active_architecture,keep,Inside active architecture root.,98
+scripts/ops/f1_1b_v27_legacy_collision_hardening_acceptance_tests.py,4315,active_architecture,keep,Inside active architecture root.,122
+scripts/ops/f1_canonical_chain_guard_v27.py,7788,active_architecture,keep,Inside active architecture root.,97
+scripts/ops/f1_openf1_live_restriction_guard_v27.py,2670,active_architecture,keep,Inside active architecture root.,105
 scripts/ops/f1_peak_elite_cleanup_report_v1.py,4211,active_architecture,keep,Inside active architecture root.,100
 scripts/ops/f1_peak_elite_health_v1.py,9263,active_architecture,keep,Inside active architecture root.,92
 scripts/ops/f1_peak_elite_orchestrator_v1.py,12624,active_architecture,keep,Inside active architecture root.,98
