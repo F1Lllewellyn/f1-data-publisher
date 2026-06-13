@@ -1,0 +1,99 @@
+name: F1 Forecast Bundle Locker v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: "Forecast run label. Use the same label as the producer/source-writer."
+        required: false
+        default: "manual_forecast_producer_validation"
+      race_name:
+        description: "Readable race or validation name"
+        required: false
+        default: "Manual Forecast Producer Validation"
+      gate:
+        description: "Gate to lock"
+        required: false
+        default: "all"
+      allow_structural_placeholders:
+        description: "Only set true for schema tests. Default blocks placeholder bundle commits."
+        required: false
+        default: "false"
+      commit_outputs:
+        description: "Commit locked bundles when actual forecast rows exist"
+        required: false
+        default: "true"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
+jobs:
+  lock-forecast-bundles:
+    runs-on: ubuntu-latest
+    env:
+      EVENT_ID: ${{ github.event.inputs.event_id || 'manual_forecast_producer_validation' }}
+      RACE_NAME: ${{ github.event.inputs.race_name || 'Manual Forecast Producer Validation' }}
+      GATE: ${{ github.event.inputs.gate || 'all' }}
+      ALLOW_STRUCTURAL_PLACEHOLDERS: ${{ github.event.inputs.allow_structural_placeholders || 'false' }}
+      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Show event context
+        run: |
+          echo "Forecast event label: ${EVENT_ID}"
+          echo "Race name: ${RACE_NAME}"
+          echo "Gate: ${GATE}"
+          echo "Allow structural placeholders: ${ALLOW_STRUCTURAL_PLACEHOLDERS}"
+
+      - name: Run forecast bundle locker
+        run: |
+          args=(--event-id "${EVENT_ID}" --race-name "${RACE_NAME}" --gate "${GATE}")
+          if [ "${ALLOW_STRUCTURAL_PLACEHOLDERS}" = "true" ]; then
+            args+=(--allow-structural-placeholders)
+          fi
+          if [ "${COMMIT_OUTPUTS}" = "true" ]; then
+            args+=(--commit-outputs)
+          fi
+          python scripts/forecast_bundles/create_forecast_bundles_v1.py "${args[@]}"
+
+      - name: Upload bundle artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-forecast-bundle-locker-v1
+          path: |
+            latest/forecast_bundles/${{ env.EVENT_ID }}/**
+            history/forecast_bundles/${{ env.EVENT_ID }}/**
+            _runtime/**
+          if-no-files-found: ignore
+
+      - name: Commit locked bundles only when present
+        if: ${{ env.COMMIT_OUTPUTS == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          paths=()
+          [ -d "latest/forecast_bundles/${EVENT_ID}" ] && paths+=("latest/forecast_bundles/${EVENT_ID}")
+          [ -d "history/forecast_bundles/${EVENT_ID}" ] && paths+=("history/forecast_bundles/${EVENT_ID}")
+          [ ${#paths[@]} -gt 0 ] && git add "${paths[@]}" || true
+          if git diff --cached --quiet; then
+            echo "No forecast bundle changes to commit."
+          else
+            git commit -m "forecast: lock bundles for ${EVENT_ID}"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+          fi

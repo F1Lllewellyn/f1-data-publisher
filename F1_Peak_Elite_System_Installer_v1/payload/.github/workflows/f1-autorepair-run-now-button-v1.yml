@@ -1,0 +1,98 @@
+name: F1 Auto-Repair - Run Now Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
+jobs:
+  run-now:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Run Auto-Repair recovery loop
+        run: |
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode run_now --repo-root "$GITHUB_WORKSPACE" --timeout 1200
+      - name: Print Auto-Repair plain-English report
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "_runtime/autorepair/session_workbook_recovery/autorepair_report.md" ]; then
+            echo "----- AUTO-REPAIR REPORT START -----"
+            cat _runtime/autorepair/session_workbook_recovery/autorepair_report.md
+            echo "----- AUTO-REPAIR REPORT END -----"
+          else
+            echo "No Auto-Repair report was produced."
+          fi
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-autorepair-run-now-runtime
+          path: |
+            _runtime/autorepair/**
+            _runtime/session_data_processor/**
+            _runtime/workbook_kpi_refresh_status.json
+          if-no-files-found: ignore
+      - name: Commit source-backed recovered outputs only
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          COMMIT_ALLOWED="false"
+          if [ -f "_runtime/autorepair/session_workbook_recovery/commit_allowed.txt" ]; then
+            COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
+          fi
+          echo "commit_allowed=$COMMIT_ALLOWED"
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            echo "Auto-repair did not allow commit; no source-backed repair outputs to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          candidates=(
+            "latest/session_data_processor"
+            "history/session_data_processor"
+            "latest/latest_manifest.json"
+            "latest/data_readiness.json"
+            "latest/combined_source_manifest.json"
+            "latest/forecast_bundle_ledger"
+            "history/forecast_bundle_ledger"
+            "latest/workbook_kpi_refresh_applier"
+            "history/workbook_kpi_refresh_applier"
+            "latest/autorepair"
+            "history/autorepair"
+          )
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              if git check-ignore -q "$p"; then
+                echo "Skipping ignored path: $p"
+              else
+                git add "$p"
+              fi
+            fi
+          done
+          if git diff --cached --quiet; then
+            echo "No auto-repair changes to commit."
+          else
+            git commit -m "chore: auto-repair session to workbook KPI refresh chain"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+          fi

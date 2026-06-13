@@ -1,0 +1,152 @@
+name: F1 Session Processor + Auto-Repair Integrated Loop v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'safe_test checks install; run_now runs session ingest then workbook/KPI auto-recovery.'
+        required: false
+        default: 'run_now'
+        type: choice
+        options: [safe_test, run_now]
+      session_filter:
+        description: 'Optional. Leave auto, or use practice 1, practice 2, practice 3, qualifying, race.'
+        required: false
+        default: 'auto'
+  schedule:
+    # Runs shortly after the :00/:15/:30/:45 source-readiness watchers and session processor window.
+    # The workflow exits cleanly if no completed/usable session source exists.
+    - cron: '8,23,38,53 * * * 5,6,0'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-session-autorepair-integrated-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integrated-session-to-workbook-recovery:
+    runs-on: ubuntu-latest
+    env:
+      MODE: ${{ github.event_name == 'schedule' && 'run_now' || github.event.inputs.mode || 'run_now' }}
+      SESSION_FILTER: ${{ github.event.inputs.session_filter || 'auto' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+          python - <<'PY'
+          import pandas, requests, openpyxl
+          print("Integrated dependency preflight passed: pandas, requests, openpyxl")
+          PY
+
+      - name: Run integration health check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/autorepair/health_check_autorepair_scheduled_integration_v1.py
+
+      - name: Run safe test checks only
+        if: ${{ env.MODE == 'safe_test' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode safe_test --season 2026 --session-filter auto
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode safe_test --repo-root "$GITHUB_WORKSPACE" --timeout 900
+
+      - name: Run session ingest then Auto-Repair recovery
+        if: ${{ env.MODE != 'safe_test' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Step 1: run Session Data Processor"
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode run_now --season 2026 --session-filter "${SESSION_FILTER}"
+          echo "Step 2: run Auto-Repair session to workbook/KPI recovery"
+          python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode run_now --repo-root "$GITHUB_WORKSPACE" --timeout 1200
+
+      - name: Print Auto-Repair plain-English report
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "_runtime/autorepair/session_workbook_recovery/autorepair_report.md" ]; then
+            echo "----- AUTO-REPAIR REPORT START -----"
+            cat _runtime/autorepair/session_workbook_recovery/autorepair_report.md
+            echo "----- AUTO-REPAIR REPORT END -----"
+          else
+            echo "No Auto-Repair report was produced. Safe-test-only runs may only upload health diagnostics."
+          fi
+
+      - name: Upload integrated diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-session-autorepair-integrated-runtime
+          path: |
+            _runtime/autorepair_integrated_health/**
+            _runtime/autorepair/**
+            _runtime/session_data_processor/**
+            _runtime/workbook_kpi_refresh_status.json
+            latest/session_data_processor/**
+            latest/workbook_kpi_refresh_applier/**
+            latest/autorepair/**
+          if-no-files-found: ignore
+
+      - name: Commit source-backed integrated outputs only
+        if: ${{ env.MODE != 'safe_test' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          COMMIT_ALLOWED="false"
+          if [ -f "_runtime/autorepair/session_workbook_recovery/commit_allowed.txt" ]; then
+            COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
+          fi
+          echo "commit_allowed=$COMMIT_ALLOWED"
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            echo "Integrated Auto-Repair did not allow commit; no source-backed workbook/KPI recovery outputs to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          candidates=(
+            "latest/session_data_processor"
+            "history/session_data_processor"
+            "latest/latest_manifest.json"
+            "latest/data_readiness.json"
+            "latest/combined_source_manifest.json"
+            "latest/forecast_bundle_ledger"
+            "history/forecast_bundle_ledger"
+            "latest/workbook_kpi_refresh_applier"
+            "history/workbook_kpi_refresh_applier"
+            "latest/autorepair"
+            "history/autorepair"
+          )
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              if git check-ignore -q "$p"; then
+                echo "Skipping ignored path: $p"
+              else
+                git add "$p"
+              fi
+            fi
+          done
+          if git diff --cached --quiet; then
+            echo "No integrated Auto-Repair changes to commit."
+          else
+            git commit -m "chore: integrated session processor auto-repair workbook KPI refresh"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+          fi

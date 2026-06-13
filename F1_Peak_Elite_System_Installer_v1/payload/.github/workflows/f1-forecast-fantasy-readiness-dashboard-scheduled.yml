@@ -1,0 +1,56 @@
+name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
+jobs:
+  scheduled-dashboard-refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+      - name: Health check
+        run: |
+          python scripts/dashboard_connector/health_check_dashboard_connector_v1.py --mode scheduled --runtime-dir _runtime/dashboard_connector
+      - name: Publish readiness dashboards
+        run: |
+          python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode scheduled --runtime-dir _runtime/dashboard_connector
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: dashboard-connector-scheduled-runtime
+          path: _runtime/dashboard_connector
+          if-no-files-found: ignore
+      - name: Commit dashboard outputs if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/readiness_dashboards latest/chat_context history/readiness_dashboards history/chat_context || true
+          if git diff --cached --quiet; then
+            echo "No dashboard changes to commit."
+          else
+            git commit -m "Scheduled forecast/fantasy readiness dashboard refresh"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+          fi

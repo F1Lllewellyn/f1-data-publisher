@@ -1,0 +1,139 @@
+name: F1 Peak Elite Control Room - One Click v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Operation to run'
+        required: true
+        default: 'full_safe_chain'
+        type: choice
+        options:
+          - health_only
+          - syntax_repair_only
+          - full_safe_chain
+          - full_run_chain
+          - scheduled_monitor
+      commit_outputs:
+        description: 'Commit repaired workflows/status outputs when safe'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      run_forecast_gate:
+        description: 'Also run forecast gate chain during full_run_chain'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+  schedule:
+    - cron: '9,39 * * * *'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-main-write-serialization
+  cancel-in-progress: false
+
+jobs:
+  peak-elite-control-room:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install pandas requests openpyxl
+
+      - name: Run peak-elite orchestrator
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPERATION="${{ inputs.operation }}"
+          COMMIT_OUTPUTS="${{ inputs.commit_outputs }}"
+          RUN_FORECAST_GATE="${{ inputs.run_forecast_gate }}"
+          if [ -z "${OPERATION:-}" ]; then
+            OPERATION="scheduled_monitor"
+          fi
+          if [ -z "${COMMIT_OUTPUTS:-}" ]; then
+            COMMIT_OUTPUTS="true"
+          fi
+          if [ -z "${RUN_FORECAST_GATE:-}" ]; then
+            RUN_FORECAST_GATE="false"
+          fi
+          echo "operation=$OPERATION"
+          echo "commit_outputs=$COMMIT_OUTPUTS"
+          echo "run_forecast_gate=$RUN_FORECAST_GATE"
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --operation "$OPERATION" \
+            --season 2026 \
+            --session-filter auto \
+            --run-forecast-gate "$RUN_FORECAST_GATE"
+
+      - name: Upload peak-elite diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-peak-elite-control-room-runtime
+          path: |
+            _runtime/peak_elite/**
+            latest/peak_elite/**
+            latest/chat_context/PEAK_ELITE*.md
+          if-no-files-found: ignore
+
+      - name: Commit safe repaired workflows and status outputs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          COMMIT_OUTPUTS="${{ inputs.commit_outputs }}"
+          if [ -z "${COMMIT_OUTPUTS:-}" ]; then
+            COMMIT_OUTPUTS="true"
+          fi
+          if [ "$COMMIT_OUTPUTS" != "true" ]; then
+            echo "Commit disabled by workflow input."
+            exit 0
+          fi
+          if git status --porcelain | grep -E 'Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'; then
+            echo "Protected stable engine or canonical workbook touched. Blocking commit."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in \
+            .github/workflows \
+            scripts/ops \
+            configs/peak_elite \
+            docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md \
+            _runtime/peak_elite \
+            latest/peak_elite \
+            latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md \
+            latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md; do
+            if [ -e "$p" ] && ! git check-ignore -q "$p"; then
+              git add "$p"
+            fi
+          done
+          if git diff --cached --quiet; then
+            echo "No peak-elite changes to commit."
+          else
+            git commit -m "chore: peak elite control room workflow stabilization"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+          fi
