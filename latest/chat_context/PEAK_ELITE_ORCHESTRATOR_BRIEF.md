@@ -1,12 +1,12 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-06-13T12:54:53.022951Z`
-Operation: `full_run_chain`
+Created UTC: `2026-06-13T16:02:27.282997Z`
+Operation: `scheduled_monitor`
 Status: **pass**
 
 ## Latest source state
 - Race/event: `Spain - Barcelona - Catalunya`
-- Session: `Practice 3`
+- Session: `Qualifying`
 - Source status: `clean`
 - Workbook source status: `clean`
 - Workbook commit allowed: `True`
@@ -15,13 +15,9 @@ Status: **pass**
 - `workflow_commit_block_repair`: PASS (`0`)
 - `workflow_static_validation`: PASS (`0`)
 - `workflow_meta_health_v1`: PASS (`0`)
-- `repo_canonicalization_safe_apply`: PASS (`0`)
+- `repo_canonicalization_report_only`: PASS (`0`)
 - `source_readiness_classifier_v2_self_test`: PASS (`0`)
-- `session_data_processor_run_now`: PASS (`0`)
-- `workbook_kpi_refresh_apply`: PASS (`0`)
-- `dashboard_readiness_publish`: PASS (`0`)
-- `peak_elite_health_after_run`: PASS (`0`)
-- `cleanup_inventory_report_only`: PASS (`0`)
+- `peak_elite_health_safe`: PASS (`0`)
 
 ## Governance
 - Stable engine modified: `false`

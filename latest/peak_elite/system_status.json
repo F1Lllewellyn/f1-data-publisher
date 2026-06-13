@@ -19,7 +19,7 @@
     "latest_data_readiness": {
       "event_id": "2026_1287_spain_barcelona_catalunya",
       "race_name": "Spain - Barcelona - Catalunya",
-      "session_name": "Practice 3",
+      "session_name": "Qualifying",
       "source_status": "clean",
       "status": "pass"
     },
@@ -29,7 +29,7 @@
       "status": "pass"
     }
   },
-  "created_utc": "2026-06-13T12:54:52.821704Z",
+  "created_utc": "2026-06-13T16:02:27.254268Z",
   "engine_authority": "health/readiness/automation only; no stable prediction promotion",
   "failed_steps": [],
   "promotion_allowed": false,
@@ -121,7 +121,7 @@
       ],
       "label": "workflow_meta_health_v1",
       "ok": true,
-      "output_tail": "{\n  \"created_utc\": \"2026-06-13T12:54:52.490304+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 153,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
+      "output_tail": "{\n  \"created_utc\": \"2026-06-13T16:02:26.893724+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 153,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
       "returncode": 0
     },
     {
@@ -135,7 +135,7 @@
       ],
       "label": "session_processor_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.15\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-06-13T12:54:52.549232Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20260613T125452Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
+      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.15\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-06-13T16:02:26.956071Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20260613T160226Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
       "returncode": 0
     },
     {
@@ -148,7 +148,7 @@
       ],
       "label": "workbook_kpi_refresh_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20260613T125452Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
+      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20260613T160227Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
       "returncode": 0
     },
     {
