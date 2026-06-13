@@ -1,0 +1,7 @@
+F1 1B v25 Consumer Context Publisher + Trigger Governor installer started: 2026-06-13T08:34:25.4125826-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+Safety: exact-file add/replace only; no delete; no scan; no .git access; no workbook/engine touch; no commit/push; forecast gate remains off.
+Copied: .github\workflows\f1-1b-output-contract-after-control-room-v22.yml
+Copied: scripts\session_data_processor\f1_1b_consumer_context_publisher_v25.py
+Copied: scripts\ops\f1_1b_v25_acceptance_tests_v1.py
+Copied: docs\F1_1B_CONSUMER_CONTEXT_TRIGGER_GOVERNOR_V25_2026-06-13.md

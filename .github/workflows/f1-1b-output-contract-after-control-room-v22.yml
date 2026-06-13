@@ -52,7 +52,7 @@ jobs:
           mkdir -p latest/1b_output_contract
           {
             echo "{"
-            echo "  \"bridge_version\": \"v24\","
+            echo "  \"bridge_version\": \"v25\","
             echo "  \"event_name\": \"${GITHUB_EVENT_NAME}\","
             echo "  \"github_workflow\": \"${GITHUB_WORKFLOW}\","
             echo "  \"github_run_id\": \"${GITHUB_RUN_ID}\","
@@ -61,10 +61,10 @@ jobs:
             echo "  \"promotion_allowed\": false,"
             echo "  \"stable_engine_modified\": false,"
             echo "  \"canonical_workbook_overwrite\": false,"
-            echo "  \"purpose\": \"Run 1B output-contract ledger and handoff after Control Room success.\""
+            echo "  \"purpose\": \"Run 1B output-contract ledger, downstream handoff, context publisher, and trigger governor after Control Room success.\""
             echo "}"
-          } > latest/1b_output_contract/control_room_bridge_v24_trigger_report.json
-          cat latest/1b_output_contract/control_room_bridge_v24_trigger_report.json
+          } > latest/1b_output_contract/control_room_bridge_v25_trigger_report.json
+          cat latest/1b_output_contract/control_room_bridge_v25_trigger_report.json
 
       - name: Run output-contract acceptance tests
         shell: bash
@@ -90,6 +90,18 @@ jobs:
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py --repo-root . --mode run_now
 
+      - name: Run v25 consumer context acceptance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_1b_v25_acceptance_tests_v1.py --repo-root .
+
+      - name: Run v25 consumer context publisher and trigger governor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py --repo-root . --mode run_now
+
       - name: Write bridge completion marker
         shell: bash
         if: always()
@@ -98,7 +110,7 @@ jobs:
           mkdir -p latest/1b_output_contract
           {
             echo "{"
-            echo "  \"bridge_version\": \"v24\","
+            echo "  \"bridge_version\": \"v25\","
             echo "  \"completed_utc\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
             echo "  \"github_workflow\": \"${GITHUB_WORKFLOW}\","
             echo "  \"github_run_id\": \"${GITHUB_RUN_ID}\","
@@ -107,14 +119,14 @@ jobs:
             echo "  \"stable_engine_modified\": false,"
             echo "  \"canonical_workbook_overwrite\": false"
             echo "}"
-          } > latest/1b_output_contract/control_room_bridge_v24_completion_report.json
-          cat latest/1b_output_contract/control_room_bridge_v24_completion_report.json
+          } > latest/1b_output_contract/control_room_bridge_v25_completion_report.json
+          cat latest/1b_output_contract/control_room_bridge_v25_completion_report.json
 
-      - name: Upload v24 bridge and downstream diagnostics
+      - name: Upload v25 bridge/context diagnostics
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: f1-1b-control-room-output-contract-bridge-v24-diagnostics
+          name: f1-1b-control-room-output-contract-context-v25-diagnostics
           path: |
             latest/1b_output_contract/**
             latest/1b_validation/**
@@ -123,11 +135,17 @@ jobs:
             latest/readiness_handoff/**
             latest/last_good_state.json
             latest/downstream_consumers/**
+            latest/chat_context/**
+            latest/consumer_trigger_governor/**
+            latest/notification_routing/**
             history/forecast_bundle_ledger/**
             history/downstream_consumers/**
+            history/chat_context/**
+            history/consumer_trigger_governor/**
+            history/notification_routing/**
           if-no-files-found: ignore
 
-      - name: Commit v24 output-contract bridge and downstream artifacts
+      - name: Commit v25 output-contract bridge, downstream, context, and trigger artifacts
         if: ${{ github.event_name == 'workflow_run' || github.event.inputs.commit_outputs == 'true' }}
         shell: bash
         run: |
@@ -143,8 +161,14 @@ jobs:
             latest/1b_output_contract \
             latest/1b_validation \
             latest/downstream_consumers \
+            latest/chat_context \
+            latest/consumer_trigger_governor \
+            latest/notification_routing \
             history/forecast_bundle_ledger \
             history/downstream_consumers \
+            history/chat_context \
+            history/consumer_trigger_governor \
+            history/notification_routing \
             latest/last_good_state.json
           do
             if [ -e "$p" ]; then
@@ -154,8 +178,8 @@ jobs:
             fi
           done
           if git diff --cached --quiet; then
-            echo "No v24 output-contract/downstream bridge changes to commit."
+            echo "No v25 output-contract/downstream/context bridge changes to commit."
           else
-            git commit -m "chore: update 1B output contract bridge and downstream artifacts v24"
+            git commit -m "chore: update 1B consumer context and trigger artifacts v25"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi
