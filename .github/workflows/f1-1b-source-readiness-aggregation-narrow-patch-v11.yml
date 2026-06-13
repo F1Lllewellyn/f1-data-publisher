@@ -1,0 +1,679 @@
+name: F1 1B Source Readiness Aggregation Narrow Patch v11
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_patch:
+        description: 'Commit the narrow 1B source-readiness aggregation patch'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: f1-1b-source-readiness-aggregation-narrow-patch-v11-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  apply-narrow-source-readiness-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Apply exact 1B source-readiness aggregation patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _runtime/source_readiness_patch
+          cat > _runtime/source_readiness_patch/apply_patch_v11.py <<'PY'
+          #!/usr/bin/env python3
+          from __future__ import annotations
+          import json, re, sys, subprocess
+          from pathlib import Path
+          from typing import Any
+
+          ROOT = Path.cwd()
+          REPORT = {
+              "schema_version": "f1_1b_narrow_source_readiness_patch_v11_report",
+              "patch": "F1 1B Source-Readiness Aggregation Narrow Patch v11",
+              "modified_files": [],
+              "created_files": [],
+              "warnings": [],
+              "protected_guard": {
+                  "stable_engine_modified": False,
+                  "canonical_workbook_overwrite": False,
+                  "promotion_allowed": False,
+                  "touched_git_metadata": False,
+              },
+          }
+
+          TARGETS = {
+              "scripts/session_data_processor/source_readiness_aggregation_v2.py",
+              "scripts/ops/f1_1b_source_readiness_patch_validation_v1.py",
+              "configs/session_data_processor/source_readiness_aggregation_policy_v2.json",
+              "docs/F1_1B_SOURCE_READINESS_AGGREGATION_REFINEMENT_2026-06-13_v11.md",
+              "scripts/session_data_processor/session_data_processor_loop_v1.py",
+          }
+
+          PROTECTED_NAME_FRAGMENTS = [
+              "Engine_2026-06-07_STABLE",
+              "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+              "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+          ]
+
+
+          def write_text(rel: str, text: str) -> None:
+              if rel.startswith(".git/") or "/.git/" in rel or rel == ".git":
+                  raise RuntimeError(f"Refusing to write Git metadata path: {rel}")
+              path = ROOT / rel
+              existed = path.exists()
+              path.parent.mkdir(parents=True, exist_ok=True)
+              old = path.read_text(encoding="utf-8") if existed else None
+              if old != text:
+                  path.write_text(text, encoding="utf-8", newline="\n")
+                  REPORT["modified_files" if existed else "created_files"].append(rel)
+
+
+          AGGREGATION_MODULE = r'''#!/usr/bin/env python3
+          """F1 1B source-readiness aggregation v2.
+
+          Session-aware source-readiness aggregation for the autonomous Session Data
+          Processor Loop. It prevents expected-empty or optional-context Practice-session
+          sources, such as starting_grid and intervals, from downgrading the whole system
+          into manual-review or partial state when core Practice data is usable.
+
+          This module is sandbox/readiness-only. It does not promote forecasts, modify the
+          stable engine, or overwrite canonical workbooks.
+          """
+          from __future__ import annotations
+
+          from typing import Any, Dict, List, Mapping, Set
+
+          CLEANISH = {"clean"}
+          PARTIALISH = {"partial"}
+          LATEISH = {"late", "no_data"}
+          MANUALISH = {"needs_manual_review", "manual_review", "needs-review", "needs_manual"}
+          CONFLICTING = {"conflicting", "conflict"}
+
+          PRACTICE_REQUIRED = {"drivers", "laps", "position", "weather"}
+          PRACTICE_OPTIONAL_CONTEXT = {"intervals", "pit", "stints", "race_control", "session_result"}
+          PRACTICE_EXPECTED_EMPTY = {"starting_grid"}
+
+          QUALIFYING_REQUIRED = {"drivers", "laps", "position", "session_result", "weather"}
+          QUALIFYING_OPTIONAL_CONTEXT = {"intervals", "pit", "stints", "race_control", "starting_grid"}
+          QUALIFYING_EXPECTED_EMPTY: Set[str] = set()
+
+          RACE_REQUIRED = {"drivers", "laps", "position", "race_control", "session_result", "starting_grid", "weather"}
+          RACE_OPTIONAL_CONTEXT = {"intervals", "pit", "stints"}
+          RACE_EXPECTED_EMPTY: Set[str] = set()
+
+          DEFAULT_REQUIRED = {"drivers", "laps", "position", "weather"}
+          DEFAULT_OPTIONAL_CONTEXT = {"intervals", "pit", "stints", "race_control", "session_result", "starting_grid"}
+          DEFAULT_EXPECTED_EMPTY: Set[str] = set()
+
+
+          def canonical_endpoint(name: str) -> str:
+              n = str(name or "").strip().lower()
+              if n.startswith("openf1_"):
+                  n = n[len("openf1_"):]
+              return n
+
+
+          def normalize_status(value: Any) -> str:
+              return str(value or "").strip().lower().replace(" ", "_") or "missing"
+
+
+          def infer_session_family(session: Mapping[str, Any]) -> str:
+              raw = f"{session.get('session_name', '')} {session.get('session_type', '')}".lower()
+              if "practice" in raw or "fp1" in raw or "fp2" in raw or "fp3" in raw:
+                  return "practice"
+              if "sprint qualifying" in raw or "sprint_shootout" in raw:
+                  return "qualifying"
+              if "qualifying" in raw:
+                  return "qualifying"
+              if "sprint" in raw and "qual" not in raw:
+                  return "race"
+              if "race" in raw:
+                  return "race"
+              return "other"
+
+
+          def policy_for_family(family: str) -> Dict[str, Set[str]]:
+              if family == "practice":
+                  return {"required": PRACTICE_REQUIRED, "optional_context": PRACTICE_OPTIONAL_CONTEXT, "expected_empty": PRACTICE_EXPECTED_EMPTY}
+              if family == "qualifying":
+                  return {"required": QUALIFYING_REQUIRED, "optional_context": QUALIFYING_OPTIONAL_CONTEXT, "expected_empty": QUALIFYING_EXPECTED_EMPTY}
+              if family == "race":
+                  return {"required": RACE_REQUIRED, "optional_context": RACE_OPTIONAL_CONTEXT, "expected_empty": RACE_EXPECTED_EMPTY}
+              return {"required": DEFAULT_REQUIRED, "optional_context": DEFAULT_OPTIONAL_CONTEXT, "expected_empty": DEFAULT_EXPECTED_EMPTY}
+
+
+          def aggregate_source_readiness(source_reports: Mapping[str, Mapping[str, Any]], session: Mapping[str, Any] | None = None) -> Dict[str, Any]:
+              session = session or {}
+              family = infer_session_family(session)
+              policy = policy_for_family(family)
+              required = set(policy["required"])
+              optional_context = set(policy["optional_context"])
+              expected_empty = set(policy["expected_empty"])
+
+              per_source: Dict[str, Dict[str, Any]] = {}
+              blocking_issues: List[Dict[str, Any]] = []
+              optional_context_gaps: List[Dict[str, Any]] = []
+              expected_empty_sources: List[Dict[str, Any]] = []
+              critical_partial: List[Dict[str, Any]] = []
+              critical_late: List[Dict[str, Any]] = []
+
+              endpoints_seen = set()
+              for original_name, report in source_reports.items():
+                  endpoint = canonical_endpoint(original_name)
+                  endpoints_seen.add(endpoint)
+                  status = normalize_status(report.get("status"))
+                  rows = int(report.get("rows") or 0)
+                  missing_cols = list(report.get("missing_required_columns") or [])
+                  anomalies = list(report.get("anomalies") or [])
+                  role = "required" if endpoint in required else "optional_context" if endpoint in optional_context else "expected_empty" if endpoint in expected_empty else "observed_optional"
+                  effective_status = status
+                  classification = status
+                  blocking = False
+                  reason = ""
+
+                  if endpoint in expected_empty and rows == 0:
+                      effective_status = "clean"
+                      classification = "expected_empty"
+                      reason = "expected_empty_for_session_type"
+                      expected_empty_sources.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason})
+                  elif endpoint in optional_context and rows == 0 and status in (LATEISH | PARTIALISH | CLEANISH):
+                      effective_status = "clean"
+                      classification = "optional_empty"
+                      reason = "optional_context_empty_for_session_type"
+                      optional_context_gaps.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason})
+                  elif endpoint in required:
+                      if status in CONFLICTING:
+                          effective_status = "conflicting"
+                          blocking = True
+                          reason = "required_source_conflicting"
+                          blocking_issues.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason, "anomalies": anomalies})
+                      elif status in MANUALISH:
+                          effective_status = "needs_manual_review"
+                          blocking = True
+                          reason = "required_source_needs_manual_review"
+                          blocking_issues.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason, "anomalies": anomalies})
+                      elif rows == 0 or status in LATEISH:
+                          effective_status = "late"
+                          blocking = True
+                          reason = "required_source_late_or_empty"
+                          critical_late.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason})
+                      elif status in PARTIALISH or missing_cols:
+                          effective_status = "partial"
+                          classification = "critical_partial"
+                          reason = "required_source_partial_but_usable"
+                          critical_partial.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "missing_required_columns": missing_cols, "reason": reason})
+                      else:
+                          effective_status = "clean"
+                          classification = "critical_clean"
+                          reason = "required_source_clean"
+                  else:
+                      if status in CONFLICTING or status in MANUALISH:
+                          effective_status = "partial"
+                          classification = "optional_context_warning"
+                          reason = "optional_source_warning_non_blocking"
+                          optional_context_gaps.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason})
+                      elif rows == 0 and status in (LATEISH | PARTIALISH):
+                          effective_status = "clean"
+                          classification = "optional_empty"
+                          reason = "optional_source_empty_non_blocking"
+                          optional_context_gaps.append({"source": original_name, "endpoint": endpoint, "status": status, "rows": rows, "reason": reason})
+                      else:
+                          classification = "optional_observed"
+                          reason = "optional_source_observed"
+
+                  per_source[original_name] = {
+                      "endpoint": endpoint,
+                      "role": role,
+                      "raw_status": status,
+                      "effective_status": effective_status,
+                      "classification": classification,
+                      "rows": rows,
+                      "blocking": blocking,
+                      "reason": reason,
+                      "missing_required_columns": missing_cols,
+                      "anomalies": anomalies,
+                  }
+
+              missing_required = sorted(required - endpoints_seen)
+              for endpoint in missing_required:
+                  critical_late.append({"source": f"openf1_{endpoint}", "endpoint": endpoint, "status": "missing", "rows": 0, "reason": "required_source_not_fetched"})
+
+              if any(item.get("reason") == "required_source_conflicting" for item in blocking_issues):
+                  overall = "conflicting"
+              elif blocking_issues:
+                  overall = "needs_manual_review"
+              elif critical_late:
+                  overall = "late"
+              elif critical_partial:
+                  overall = "partial"
+              elif optional_context_gaps or expected_empty_sources:
+                  overall = "clean"
+              else:
+                  overall = "clean" if source_reports else "no_data"
+
+              needs_manual_review = overall in {"conflicting", "needs_manual_review"}
+              if overall == "clean" and (optional_context_gaps or expected_empty_sources):
+                  quality = "usable_with_optional_context_gaps"
+              elif overall == "clean":
+                  quality = "usable_clean"
+              elif overall == "partial":
+                  quality = "usable_with_required_source_partial"
+              elif overall == "late":
+                  quality = "not_ready_required_source_late"
+              elif overall == "conflicting":
+                  quality = "blocked_conflicting_required_source"
+              elif overall == "needs_manual_review":
+                  quality = "blocked_manual_review_required_source"
+              else:
+                  quality = "not_ready_no_data"
+
+              return {
+                  "schema_version": "source_readiness_aggregation_v2",
+                  "session_family": family,
+                  "overall_status": overall,
+                  "readiness_quality": quality,
+                  "needs_manual_review": needs_manual_review,
+                  "promotion_allowed": False,
+                  "critical_endpoints": sorted(required),
+                  "optional_context_endpoints": sorted(optional_context),
+                  "expected_empty_endpoints": sorted(expected_empty),
+                  "missing_required_endpoints": missing_required,
+                  "blocking_issues": blocking_issues,
+                  "critical_late": critical_late,
+                  "critical_partial": critical_partial,
+                  "optional_context_gaps": optional_context_gaps,
+                  "expected_empty_sources": expected_empty_sources,
+                  "source_effective_statuses": {k: v["effective_status"] for k, v in per_source.items()},
+                  "per_source": per_source,
+              }
+
+
+          def _self_test() -> int:
+              practice_session = {"session_name": "Practice 2", "session_type": "Practice"}
+              sources = {
+                  "openf1_drivers": {"status": "clean", "rows": 20},
+                  "openf1_laps": {"status": "clean", "rows": 300},
+                  "openf1_position": {"status": "clean", "rows": 4000},
+                  "openf1_weather": {"status": "clean", "rows": 90},
+                  "openf1_intervals": {"status": "late", "rows": 0},
+                  "openf1_starting_grid": {"status": "late", "rows": 0},
+              }
+              agg = aggregate_source_readiness(sources, practice_session)
+              assert agg["overall_status"] == "clean", agg
+              assert agg["readiness_quality"] == "usable_with_optional_context_gaps", agg
+              assert agg["needs_manual_review"] is False, agg
+              sources_bad = dict(sources)
+              sources_bad["openf1_laps"] = {"status": "late", "rows": 0}
+              agg_bad = aggregate_source_readiness(sources_bad, practice_session)
+              assert agg_bad["overall_status"] == "late", agg_bad
+              assert agg_bad["needs_manual_review"] is False, agg_bad
+              return 0
+
+
+          if __name__ == "__main__":
+              raise SystemExit(_self_test())
+          '''
+
+          VALIDATOR = r'''#!/usr/bin/env python3
+          """F1 1B source-readiness patch validation v1."""
+          from __future__ import annotations
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          ROOT = Path.cwd()
+
+
+          def read_json(path: Path, default):
+              try:
+                  if path.exists():
+                      return json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  return default
+              return default
+
+
+          def main() -> int:
+              out = {
+                  "schema_version": "f1_1b_source_readiness_patch_validation_v1",
+                  "status": "pass",
+                  "checks": {},
+                  "stable_engine_modified": False,
+                  "canonical_workbook_overwrite": False,
+                  "promotion_allowed": False,
+              }
+              py = sys.executable
+              targets = [
+                  "scripts/session_data_processor/source_readiness_aggregation_v2.py",
+                  "scripts/session_data_processor/session_data_processor_loop_v1.py",
+                  "scripts/ops/f1_1b_source_readiness_patch_validation_v1.py",
+              ]
+              for rel in targets:
+                  path = ROOT / rel
+                  out["checks"][f"exists:{rel}"] = path.exists()
+                  if not path.exists():
+                      out["status"] = "fail"
+              for rel in targets:
+                  if (ROOT / rel).exists():
+                      proc = subprocess.run([py, "-m", "py_compile", rel], cwd=str(ROOT), text=True, capture_output=True)
+                      out["checks"][f"py_compile:{rel}"] = proc.returncode == 0
+                      if proc.returncode != 0:
+                          out["status"] = "fail"
+                          out[f"py_compile_error:{rel}"] = proc.stderr[-2000:]
+              proc = subprocess.run([py, "scripts/session_data_processor/source_readiness_aggregation_v2.py"], cwd=str(ROOT), text=True, capture_output=True)
+              out["checks"]["aggregation_self_test"] = proc.returncode == 0
+              if proc.returncode != 0:
+                  out["status"] = "fail"
+                  out["aggregation_self_test_output"] = (proc.stdout + proc.stderr)[-4000:]
+              latest = read_json(ROOT / "latest" / "data_readiness.json", {})
+              if isinstance(latest, dict):
+                  out["latest_readiness_fields"] = {
+                      "overall_status": latest.get("overall_status"),
+                      "readiness_quality": latest.get("readiness_quality"),
+                      "needs_manual_review": latest.get("needs_manual_review"),
+                      "source_needs_manual_review": latest.get("source_needs_manual_review"),
+                  }
+              report_path = ROOT / "latest" / "source_readiness_patch" / "validation_v1.json"
+              report_path.parent.mkdir(parents=True, exist_ok=True)
+              report_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+              print(json.dumps(out, indent=2, sort_keys=True))
+              return 0 if out["status"] == "pass" else 1
+
+
+          if __name__ == "__main__":
+              raise SystemExit(main())
+          '''
+
+          POLICY_JSON = {
+              "schema_version": "source_readiness_aggregation_policy_v2",
+              "purpose": "Session-aware aggregation for autonomous Session Data Processor readiness.",
+              "practice": {
+                  "critical_endpoints": sorted(list({"drivers", "laps", "position", "weather"})),
+                  "expected_empty_endpoints": ["starting_grid"],
+                  "optional_context_endpoints": sorted(list({"intervals", "pit", "stints", "race_control", "session_result"})),
+                  "rule": "Practice sessions are usable when core lap/position/driver/weather data is clean. Empty starting_grid and intervals are non-blocking context gaps."
+              },
+              "qualifying": {
+                  "critical_endpoints": sorted(list({"drivers", "laps", "position", "session_result", "weather"})),
+                  "optional_context_endpoints": sorted(list({"intervals", "pit", "stints", "race_control", "starting_grid"})),
+                  "rule": "Qualifying remains stricter than practice, but race-grid promotion remains blocked outside forecast gate approval."
+              },
+              "race": {
+                  "critical_endpoints": sorted(list({"drivers", "laps", "position", "race_control", "session_result", "starting_grid", "weather"})),
+                  "optional_context_endpoints": sorted(list({"intervals", "pit", "stints"})),
+                  "rule": "Race/sprint sessions require result/grid/control/weather core sources before clean readiness."
+              },
+              "guards": {
+                  "promotion_allowed": False,
+                  "stable_engine_modified": False,
+                  "canonical_workbook_overwrite": False,
+                  "forecast_gate_activation": "unchanged/off unless explicitly enabled by user"
+              }
+          }
+
+          DOC = '''# F1 1B Source-Readiness Aggregation Refinement v11
+
+          Created UTC: 2026-06-13
+
+          ## Purpose
+
+          This is a narrow 1B processor-lane patch. It improves the autonomous Session Data Processor Loop by making source-readiness aggregation session-aware, especially for Practice sessions.
+
+          ## What changed
+
+          - Adds `scripts/session_data_processor/source_readiness_aggregation_v2.py`.
+          - Adds `configs/session_data_processor/source_readiness_aggregation_policy_v2.json`.
+          - Adds `scripts/ops/f1_1b_source_readiness_patch_validation_v1.py`.
+          - Patches `scripts/session_data_processor/session_data_processor_loop_v1.py` only enough to consume the aggregation result and publish `readiness_quality` / `source_needs_manual_review` fields.
+
+          ## Key behavior
+
+          For Practice sessions:
+
+          - `starting_grid = 0` is expected-empty and non-blocking.
+          - `intervals = 0` is optional context and non-blocking.
+          - Core `laps`, `drivers`, `position`, and `weather` remain critical.
+          - If `laps = 0`, the session remains late/not ready.
+
+          ## Governance
+
+          This patch does not alter `Engine_2026-06-07_STABLE`, canonical workbooks, stable prediction logic, experimental/sandbox model logic, or forecast promotion gates.
+
+          Forecast gate remains off until explicitly activated after clean source-backed validation.
+          '''
+
+
+          def patch_session_processor() -> None:
+              rel = "scripts/session_data_processor/session_data_processor_loop_v1.py"
+              path = ROOT / rel
+              if not path.exists():
+                  raise RuntimeError(f"Required processor file not found: {rel}")
+              text = path.read_text(encoding="utf-8-sig")
+              original = text
+
+              if "source_readiness_aggregation_v2" not in text:
+                  old = "overall = combined_status(sources)"
+                  new = '''# 1B v11: session-aware readiness aggregation keeps expected-empty Practice sources non-blocking.
+              readiness_aggregation = {}
+              try:
+                  helper_dir = ROOT / "scripts" / "session_data_processor"
+                  if str(helper_dir) not in sys.path:
+                      sys.path.insert(0, str(helper_dir))
+                  from source_readiness_aggregation_v2 import aggregate_source_readiness
+                  readiness_aggregation = aggregate_source_readiness(sources, session)
+                  overall = readiness_aggregation.get("overall_status") or combined_status(sources)
+              except Exception as exc:
+                  readiness_aggregation = {
+                      "schema_version": "source_readiness_aggregation_v2_fallback",
+                      "error": repr(exc),
+                      "overall_status": combined_status(sources),
+                      "readiness_quality": "fallback_legacy_combined_status",
+                      "needs_manual_review": combined_status(sources) in {"conflicting", "needs_manual_review"},
+                      "promotion_allowed": False,
+                  }
+                  overall = readiness_aggregation["overall_status"]'''
+                  if old not in text:
+                      raise RuntimeError("Could not find expected overall = combined_status(sources) anchor")
+                  text = text.replace(old, new, 1)
+
+              if '"readiness_quality": readiness_aggregation.get("readiness_quality")' not in text:
+                  old = '"overall_status": overall,\n        "material_readiness_improved": materially_improved,'
+                  new = '"overall_status": overall,\n        "readiness_quality": readiness_aggregation.get("readiness_quality"),\n        "source_needs_manual_review": bool(readiness_aggregation.get("needs_manual_review", overall in {"conflicting", "needs_manual_review"})),\n        "readiness_aggregation": readiness_aggregation,\n        "material_readiness_improved": materially_improved,'
+                  if old not in text:
+                      raise RuntimeError("Could not find manifest overall_status anchor")
+                  text = text.replace(old, new, 1)
+
+              if '"readiness_quality": manifest.get("readiness_quality")' not in text:
+                  old = '"material_readiness_improved": manifest.get("material_readiness_improved", False),\n        "forecast_state_changed": manifest.get("forecast_state_changed", False),\n        "needs_manual_review": manifest.get("overall_status") in {"conflicting", "needs_manual_review"},'
+                  new = '"material_readiness_improved": manifest.get("material_readiness_improved", False),\n        "forecast_state_changed": manifest.get("forecast_state_changed", False),\n        "readiness_quality": manifest.get("readiness_quality"),\n        "source_needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),\n        "needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),'
+                  if old not in text:
+                      raise RuntimeError("Could not find data_readiness needs_manual_review anchor")
+                  text = text.replace(old, new, 1)
+
+              if '"readiness_quality": manifest.get("readiness_quality"),' not in text[text.find('write_json(ROOT / "latest" / "combined_source_manifest.json"') if 'write_json(ROOT / "latest" / "combined_source_manifest.json"' in text else 0:]:
+                  old = '"overall_status": manifest.get("overall_status"),\n        "promotion_allowed": False,'
+                  new = '"overall_status": manifest.get("overall_status"),\n        "readiness_quality": manifest.get("readiness_quality"),\n        "source_needs_manual_review": bool(manifest.get("source_needs_manual_review", manifest.get("overall_status") in {"conflicting", "needs_manual_review"})),\n        "promotion_allowed": False,'
+                  if old in text:
+                      text = text.replace(old, new, 1)
+                  else:
+                      REPORT["warnings"].append("combined_source_manifest anchor not found; data_readiness still patched")
+
+              # Add aggregation fields to the final runtime result too.
+              result_anchor = '"overall_status": overall,\n        "material_readiness_improved": materially_improved,'
+              if 'result.update({' in text:
+                  result_region_start = text.rfind('result.update({')
+                  result_region = text[result_region_start:]
+                  if '"readiness_quality": readiness_aggregation.get("readiness_quality"),' not in result_region:
+                      result_new = '"overall_status": overall,\n        "readiness_quality": readiness_aggregation.get("readiness_quality"),\n        "source_needs_manual_review": bool(readiness_aggregation.get("needs_manual_review", overall in {"conflicting", "needs_manual_review"})),\n        "material_readiness_improved": materially_improved,'
+                      idx = text.find(result_anchor, result_region_start)
+                      if idx != -1:
+                          text = text[:idx] + result_new + text[idx+len(result_anchor):]
+                      else:
+                          REPORT["warnings"].append("result.update readiness_quality anchor not found")
+
+              if text != original:
+                  path.write_text(text, encoding="utf-8", newline="\n")
+                  REPORT["modified_files"].append(rel)
+
+
+          def validate_git_status_scope() -> None:
+              git = subprocess.run(["git", "status", "--porcelain"], cwd=str(ROOT), text=True, capture_output=True)
+              REPORT["git_status_available"] = git.returncode == 0
+              if git.returncode != 0:
+                  REPORT["warnings"].append("git status unavailable in patch validator")
+                  return
+              touched = []
+              protected = []
+              unexpected = []
+              for line in git.stdout.splitlines():
+                  rel = line[3:].strip() if len(line) > 3 else line.strip()
+                  touched.append(rel)
+                  if rel.startswith(".git") or "/.git/" in rel:
+                      REPORT["protected_guard"]["touched_git_metadata"] = True
+                      protected.append(rel)
+                  if any(p.lower() in rel.lower() for p in PROTECTED_NAME_FRAGMENTS):
+                      protected.append(rel)
+                  # Allow workflow file if user installed this via GitHub and it is untracked/modified.
+                  if rel not in TARGETS and not rel.startswith("latest/source_readiness_patch") and not rel.startswith("_runtime/") and "f1-1b-source-readiness-aggregation-narrow-patch-v11.yml" not in rel:
+                      # outputs from validation/meta may exist; only warn, do not fail.
+                      unexpected.append(rel)
+              REPORT["git_touched_files"] = touched
+              REPORT["protected_touched_files"] = protected
+              REPORT["unexpected_touched_files"] = unexpected[:50]
+              if protected:
+                  raise RuntimeError(f"Protected paths touched: {protected}")
+
+
+          def main() -> int:
+              if (ROOT / ".git").exists():
+                  REPORT["repo_has_git_dir"] = True
+              # Explicit writes only. No broad deletes. No archive cleanup. No .git access except status read.
+              write_text("scripts/session_data_processor/source_readiness_aggregation_v2.py", AGGREGATION_MODULE)
+              write_text("scripts/ops/f1_1b_source_readiness_patch_validation_v1.py", VALIDATOR)
+              write_text("configs/session_data_processor/source_readiness_aggregation_policy_v2.json", json.dumps(POLICY_JSON, indent=2, sort_keys=True) + "\n")
+              write_text("docs/F1_1B_SOURCE_READINESS_AGGREGATION_REFINEMENT_2026-06-13_v11.md", DOC)
+              patch_session_processor()
+
+              # Compile exact files only.
+              for rel in [
+                  "scripts/session_data_processor/source_readiness_aggregation_v2.py",
+                  "scripts/session_data_processor/session_data_processor_loop_v1.py",
+                  "scripts/ops/f1_1b_source_readiness_patch_validation_v1.py",
+              ]:
+                  proc = subprocess.run([sys.executable, "-m", "py_compile", rel], cwd=str(ROOT), text=True, capture_output=True)
+                  REPORT.setdefault("compile_checks", {})[rel] = {"ok": proc.returncode == 0, "stderr": proc.stderr[-2000:]}
+                  if proc.returncode != 0:
+                      raise RuntimeError(f"Compile failed for {rel}: {proc.stderr[-1000:]}")
+
+              proc = subprocess.run([sys.executable, "scripts/session_data_processor/source_readiness_aggregation_v2.py"], cwd=str(ROOT), text=True, capture_output=True)
+              REPORT["aggregation_self_test"] = {"ok": proc.returncode == 0, "output": (proc.stdout + proc.stderr)[-2000:]}
+              if proc.returncode != 0:
+                  raise RuntimeError("Aggregation self-test failed")
+
+              proc = subprocess.run([sys.executable, "scripts/ops/f1_1b_source_readiness_patch_validation_v1.py"], cwd=str(ROOT), text=True, capture_output=True)
+              REPORT["patch_validation"] = {"ok": proc.returncode == 0, "output": (proc.stdout + proc.stderr)[-4000:]}
+              if proc.returncode != 0:
+                  raise RuntimeError("Patch validation failed")
+
+              validate_git_status_scope()
+              REPORT["status"] = "pass"
+              out = ROOT / "latest" / "source_readiness_patch" / "patch_v11_install_report.json"
+              out.parent.mkdir(parents=True, exist_ok=True)
+              out.write_text(json.dumps(REPORT, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+              print(json.dumps(REPORT, indent=2, sort_keys=True))
+              return 0
+
+
+          if __name__ == "__main__":
+              try:
+                  raise SystemExit(main())
+              except Exception as exc:
+                  REPORT["status"] = "fail"
+                  REPORT["error"] = repr(exc)
+                  out = ROOT / "latest" / "source_readiness_patch" / "patch_v11_install_report.json"
+                  out.parent.mkdir(parents=True, exist_ok=True)
+                  out.write_text(json.dumps(REPORT, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                  print(json.dumps(REPORT, indent=2, sort_keys=True), file=sys.stderr)
+                  raise
+
+          PY
+          python _runtime/source_readiness_patch/apply_patch_v11.py
+
+      - name: Run exact validation gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_1b_source_readiness_patch_validation_v1.py
+          python scripts/session_data_processor/source_readiness_aggregation_v2.py
+          python scripts/session_data_processor/session_data_processor_loop_v1.py --mode safe_test --season 2026 --session-filter auto
+          if [ -f scripts/ops/f1_workflow_static_validator_v2.py ]; then
+            python scripts/ops/f1_workflow_static_validator_v2.py --repo-root "$GITHUB_WORKSPACE"
+          fi
+          if [ -f scripts/ops/f1_workflow_meta_health_check_v1.py ]; then
+            python scripts/ops/f1_workflow_meta_health_check_v1.py
+          fi
+
+      - name: Upload patch diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-1b-source-readiness-aggregation-narrow-patch-v11
+          path: |
+            latest/source_readiness_patch/**
+            _runtime/source_readiness_patch/**
+            _runtime/session_data_processor/session_processor_result.json
+          if-no-files-found: ignore
+
+      - name: Commit exact narrow patch files
+        if: ${{ success() && github.event.inputs.commit_patch == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          targets=(
+            "scripts/session_data_processor/source_readiness_aggregation_v2.py"
+            "scripts/session_data_processor/session_data_processor_loop_v1.py"
+            "scripts/ops/f1_1b_source_readiness_patch_validation_v1.py"
+            "configs/session_data_processor/source_readiness_aggregation_policy_v2.json"
+            "docs/F1_1B_SOURCE_READINESS_AGGREGATION_REFINEMENT_2026-06-13_v11.md"
+            "latest/source_readiness_patch/patch_v11_install_report.json"
+            "latest/source_readiness_patch/validation_v1.json"
+          )
+          git add -- "${targets[@]}"
+          echo "Staged files:"
+          git diff --cached --name-only
+          if git diff --cached --name-only | grep -E '(^|/)\.git(/|$)|Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook.*\.xlsx'; then
+            echo "Protected path staged. Refusing to commit." >&2
+            exit 23
+          fi
+          if git diff --cached --quiet; then
+            echo "No patch changes to commit."
+            exit 0
+          fi
+          git commit -m "feat: install 1B source-readiness aggregation patch v11"
+          if [ -f scripts/ops/safe_git_push_rebase_retry.sh ]; then
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+          else
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push origin HEAD:"${{ github.ref_name }}"
+          fi
