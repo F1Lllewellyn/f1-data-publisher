@@ -1,0 +1,23 @@
+{
+  "patch_name": "F1 1B v26 Qualifying-Ready Consumer Context + Workbook Persistence Bridge",
+  "version": "v26_2026-06-13",
+  "supersedes": "v25 consumer context trigger governor installer for this run",
+  "purpose": "Combine v25 consumer context/trigger governor with safe workbook KPI sandbox persistence needed before qualifying.",
+  "files": [
+    ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml",
+    ".github/workflows/f1-1b-output-contract-after-control-room-v22.yml",
+    "scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py",
+    "scripts/ops/f1_1b_v25_acceptance_tests_v1.py",
+    "scripts/ops/f1_workbook_persistence_handoff_guard_v1.py",
+    "docs/F1_1B_QUALI_READY_CONTEXT_AND_WORKBOOK_PERSISTENCE_V26_2026-06-13.md"
+  ],
+  "protected_assets": [
+    "Engine_2026-06-07_STABLE",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
+  ],
+  "forecast_gate_activated": false,
+  "promotion_allowed": false,
+  "canonical_workbook_overwrite": false,
+  "stable_engine_modified": false
+}

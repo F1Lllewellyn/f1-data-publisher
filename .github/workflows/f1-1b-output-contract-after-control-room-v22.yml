@@ -66,6 +66,12 @@ jobs:
           } > latest/1b_output_contract/control_room_bridge_v25_trigger_report.json
           cat latest/1b_output_contract/control_room_bridge_v25_trigger_report.json
 
+      - name: Run workbook persistence handoff static guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root . --mode static --fail-on-issue
+
       - name: Run output-contract acceptance tests
         shell: bash
         run: |
@@ -126,10 +132,16 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: f1-1b-control-room-output-contract-context-v25-diagnostics
+          name: f1-1b-control-room-output-contract-context-v26-diagnostics
           path: |
             latest/1b_output_contract/**
             latest/1b_validation/**
+            latest/session_data_processor/**
+            history/session_data_processor/**
+            latest/workbook_kpi_refresh_applier/**
+            history/workbook_kpi_refresh_applier/**
+            latest/readiness_dashboards/**
+            history/readiness_dashboards/**
             latest/forecast_bundle_ledger/**
             latest/material_change/**
             latest/readiness_handoff/**
@@ -152,9 +164,20 @@ jobs:
           set -euo pipefail
           rm -rf scripts/**/__pycache__ || true
           find . -path ./.git -prune -o -type f \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print | xargs -r rm -f
+          PROTECTED_PATTERN='Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'
+          if git status --porcelain | grep -E "$PROTECTED_PATTERN"; then
+            echo "Protected stable engine or canonical workbook touched. Blocking commit."
+            exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for p in \
+            latest/session_data_processor \
+            history/session_data_processor \
+            latest/workbook_kpi_refresh_applier \
+            history/workbook_kpi_refresh_applier \
+            latest/readiness_dashboards \
+            history/readiness_dashboards \
             latest/forecast_bundle_ledger \
             latest/readiness_handoff \
             latest/material_change \
@@ -177,9 +200,28 @@ jobs:
               echo "Optional output not present, skipping: $p"
             fi
           done
+          for root in latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier; do
+            if [ -d "$root" ]; then
+              while IFS= read -r -d '' f; do
+                case "$f" in
+                  *F1_2026_Prediction_Model_Data_Workbook.xlsx|*F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx|*Engine_2026-06-07_STABLE*)
+                    echo "Skipping protected artifact candidate: $f"
+                    ;;
+                  *)
+                    git add -f "$f"
+                    ;;
+                esac
+              done < <(find "$root" -type f \( -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -o -name '*.json' -o -name '*.csv' -o -name '*.md' \) -print0)
+            fi
+          done
+          if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then
+            echo "Protected stable engine or canonical workbook entered the staged set. Blocking commit."
+            git reset
+            exit 1
+          fi
           if git diff --cached --quiet; then
             echo "No v25 output-contract/downstream/context bridge changes to commit."
           else
-            git commit -m "chore: update 1B consumer context and trigger artifacts v25"
+            git commit -m "chore: update 1B consumer context, trigger, and workbook persistence artifacts v26"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi

@@ -1,0 +1,21 @@
+{
+  "canonical_workbook_overwrite": false,
+  "contains_python_heredoc_f1-1b-output-contract-after-control-room-v22.yml": false,
+  "contains_python_heredoc_f1-peak-elite-control-room-one-click-v1.yml": false,
+  "contains_raw_git_push_f1-1b-output-contract-after-control-room-v22.yml": false,
+  "contains_raw_git_push_f1-peak-elite-control-room-one-click-v1.yml": false,
+  "created_utc": "2026-06-13T12:51:08Z",
+  "external_notification_sent": false,
+  "forecast_gate_activated": false,
+  "no_delete_scan": true,
+  "no_git_access_local_installer": true,
+  "promotion_allowed": false,
+  "python_compile": "pass",
+  "safe_push_helper_f1-1b-output-contract-after-control-room-v22.yml": true,
+  "safe_push_helper_f1-peak-elite-control-room-one-click-v1.yml": true,
+  "stable_engine_modified": false,
+  "workbook_persistence_paths_f1-1b-output-contract-after-control-room-v22.yml": true,
+  "workbook_persistence_paths_f1-peak-elite-control-room-one-click-v1.yml": true,
+  "yaml_parse_f1-1b-output-contract-after-control-room-v22.yml": "pass",
+  "yaml_parse_f1-peak-elite-control-room-one-click-v1.yml": "pass"
+}

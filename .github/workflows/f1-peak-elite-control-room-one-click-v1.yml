@@ -37,6 +37,9 @@ permissions:
   contents: write
   actions: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 concurrency:
   group: f1-main-write-serialization
   cancel-in-progress: false
@@ -61,6 +64,12 @@ jobs:
           set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install pandas requests openpyxl
+
+      - name: Verify workbook persistence workflow wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root "$GITHUB_WORKSPACE" --mode static --fail-on-issue
 
       - name: Run peak-elite orchestrator
         shell: bash
@@ -88,7 +97,14 @@ jobs:
             --session-filter auto \
             --run-forecast-gate "$RUN_FORECAST_GATE"
 
-      - name: Upload peak-elite diagnostics
+      - name: Verify workbook/session persistence handoff
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root "$GITHUB_WORKSPACE" --mode runtime --fail-on-issue
+
+      - name: Upload peak-elite diagnostics and refreshed workbook handoff artifacts
         if: always()
         uses: actions/upload-artifact@v6
         with:
@@ -96,12 +112,25 @@ jobs:
           path: |
             _runtime/peak_elite/**
             _runtime/repo_canonicalization/**
+            _runtime/session_data_processor/**
+            _runtime/workbook_kpi_refresh_applier/**
+            _runtime/dashboard_connector/**
+            _runtime/autorepair/session_workbook_recovery/**
             latest/peak_elite/**
             latest/repo_canonicalization/**
-            latest/chat_context/PEAK_ELITE*.md
+            latest/session_data_processor/**
+            history/session_data_processor/**
+            latest/workbook_kpi_refresh_applier/**
+            history/workbook_kpi_refresh_applier/**
+            latest/readiness_dashboards/**
+            history/readiness_dashboards/**
+            latest/chat_context/**
+            history/chat_context/**
+            latest/forecast_bundle_ledger/session_data_processor/**
+            history/forecast_bundle_ledger/session_data_processor/**
           if-no-files-found: ignore
 
-      - name: Commit safe repaired workflows and status outputs
+      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts
         if: always()
         shell: bash
         run: |
@@ -114,10 +143,13 @@ jobs:
             echo "Commit disabled by workflow input."
             exit 0
           fi
-          if git status --porcelain | grep -E 'Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'; then
+
+          PROTECTED_PATTERN='Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'
+          if git status --porcelain | grep -E "$PROTECTED_PATTERN"; then
             echo "Protected stable engine or canonical workbook touched. Blocking commit."
             exit 1
           fi
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -131,28 +163,74 @@ jobs:
             done
           fi
 
-          for p in \
-            .gitignore \
-            .github/workflows \
-            scripts/ops \
-            scripts/session_data_processor \
-            configs/peak_elite \
-            configs/session_data_processor \
-            docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md \
-            docs/F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md \
-            _runtime/peak_elite \
-            _runtime/repo_canonicalization \
-            latest/peak_elite \
-            latest/repo_canonicalization \
-            latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md \
-            latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md; do
-            if [ -e "$p" ] && ! git check-ignore -q "$p"; then
+          candidates=(
+            ".gitignore"
+            ".github/workflows"
+            "scripts/ops"
+            "scripts/session_data_processor"
+            "scripts/workbook_kpi_refresh"
+            "scripts/dashboard_connector"
+            "configs/peak_elite"
+            "configs/session_data_processor"
+            "docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md"
+            "docs/F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md"
+            "latest/peak_elite"
+            "latest/repo_canonicalization"
+            "latest/session_data_processor"
+            "history/session_data_processor"
+            "latest/workbook_kpi_refresh_applier"
+            "history/workbook_kpi_refresh_applier"
+            "latest/readiness_dashboards"
+            "history/readiness_dashboards"
+            "latest/chat_context"
+            "history/chat_context"
+            "latest/forecast_bundle_ledger/session_data_processor"
+            "history/forecast_bundle_ledger/session_data_processor"
+          )
+
+          added=0
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              if git check-ignore -q "$p"; then
+                echo "Skipping ignored path: $p"
+                continue
+              fi
               git add "$p"
+              added=1
             fi
           done
+
+          # Sandbox workbooks are intentionally versioned handoff artifacts.
+          # Force-add only sandbox workbook files in the dedicated refresh-applier paths in case the repo ignores *.xlsx globally.
+          for root in latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier; do
+            if [ -d "$root" ]; then
+              while IFS= read -r -d '' f; do
+                case "$f" in
+                  *F1_2026_Prediction_Model_Data_Workbook.xlsx|*F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx|*Engine_2026-06-07_STABLE*)
+                    echo "Skipping protected artifact candidate: $f"
+                    ;;
+                  *)
+                    git add -f "$f"
+                    added=1
+                    ;;
+                esac
+              done < <(find "$root" -type f \( -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -o -name '*.json' -o -name '*.csv' -o -name '*.md' \) -print0)
+            fi
+          done
+
+          if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then
+            echo "Protected stable engine or canonical workbook entered the staged set. Blocking commit."
+            git reset
+            exit 1
+          fi
+
+          if [ "$added" = "0" ]; then
+            echo "No peak-elite/workbook handoff output paths exist to commit."
+            exit 0
+          fi
           if git diff --cached --quiet; then
-            echo "No peak-elite changes to commit."
+            echo "No peak-elite/workbook handoff changes to commit."
           else
-            git commit -m "chore: canonicalize repo and upgrade source readiness classifier"
+            git commit -m "chore: persist source-backed workbook KPI handoff artifacts"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi
