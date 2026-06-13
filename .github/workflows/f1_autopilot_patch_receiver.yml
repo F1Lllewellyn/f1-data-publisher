@@ -1,0 +1,117 @@
+name: F1 1C Gmail Autopilot Patch Receiver
+
+on:
+  repository_dispatch:
+    types: [f1_autopilot_patch]
+  workflow_dispatch:
+    inputs:
+      payload_json:
+        description: 'Raw f1_autopilot_patch_command payload JSON for manual dispatch testing'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: f1-1c-autopilot-${{ github.event.client_payload.target_branch || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  validate_apply_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Materialize payload
+        shell: bash
+        run: |
+          mkdir -p .autopilot_runtime
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            cat > .autopilot_runtime/payload.json <<'JSON'
+          ${{ toJson(github.event.client_payload) }}
+          JSON
+          else
+            cat > .autopilot_runtime/payload.json <<'JSON'
+          ${{ inputs.payload_json }}
+          JSON
+          fi
+          node -e "JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log('payload_json_parse=PASS')"
+
+      - name: Validate command and scope
+        shell: bash
+        run: |
+          node scripts/autopilot/validate_command.mjs \
+            --payload .autopilot_runtime/payload.json \
+            --policy config/protected_paths.json \
+            --out .autopilot_runtime/validation.json
+
+      - name: Create target branch
+        shell: bash
+        run: |
+          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
+          case "$BRANCH" in
+            autopilot/*|install/*|outputs/*) ;;
+            *) echo "Blocked branch prefix: $BRANCH"; exit 1 ;;
+          esac
+          git checkout -B "$BRANCH"
+
+      - name: Apply patch
+        shell: bash
+        run: |
+          node scripts/autopilot/apply_assistant_patch.mjs \
+            --payload .autopilot_runtime/payload.json \
+            --validation .autopilot_runtime/validation.json \
+            --out .autopilot_runtime/applied_files.json
+
+      - name: Run whitelisted named tests
+        shell: bash
+        run: |
+          node scripts/autopilot/run_requested_tests.mjs \
+            --payload .autopilot_runtime/payload.json \
+            --allowed config/autopilot_allowed_tests.json \
+            --out .autopilot_runtime/test_results.json
+
+      - name: Write status ledger
+        shell: bash
+        run: |
+          node scripts/autopilot/write_status_ledger.mjs \
+            --payload .autopilot_runtime/payload.json \
+            --validation .autopilot_runtime/validation.json \
+            --applied .autopilot_runtime/applied_files.json \
+            --tests .autopilot_runtime/test_results.json \
+            --status PASS
+
+      - name: Commit and push branch
+        shell: bash
+        run: |
+          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
+          git config user.name "f1-autopilot-bridge"
+          git config user.email "actions@users.noreply.github.com"
+          git add .github/workflows config docs processor schemas scripts health logs latest history outputs alerts forecast_bundles 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Apply F1 autopilot patch: ${BRANCH}"
+          fi
+          git push -u origin "$BRANCH"
+
+      - name: Open or update PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
+          BASE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.base_branch || 'main')")
+          TITLE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.title || 'F1 Autopilot Patch')")
+          SUMMARY=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.summary || 'No summary supplied.')")
+          if gh pr view "$BRANCH" >/dev/null 2>&1; then
+            gh pr view "$BRANCH" --json url
+          else
+            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$SUMMARY"
+          fi

@@ -1,0 +1,40 @@
+# Human-readable companion to protected_paths.json
+protected_markers:
+  - Engine_2026-06-07_STABLE
+  - canonical
+  - backups/
+  - source archives/
+  - source_archives/
+  - stable model
+  - stable_engine
+  - secrets/
+  - tokens/
+  - .env
+  - password
+  - private_key
+
+allowed_roots:
+  outputs_only:
+    - latest/
+    - history/
+    - outputs/
+    - alerts/
+    - forecast_bundles/
+    - logs/
+    - health/
+  pr_only:
+    - .github/workflows/
+    - config/
+    - docs/
+    - processor/
+    - schemas/
+    - scripts/
+    - health/
+    - logs/
+
+blocked_actions:
+  - delete
+  - remove
+  - chmod
+  - move
+  - rename

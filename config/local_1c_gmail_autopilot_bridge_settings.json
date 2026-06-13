@@ -1,0 +1,13 @@
+{
+  "installer": "F1_1C_Gmail_Autopilot_Bridge_Completion_Installer_2026-06-13_v6_CMD_NATIVE_GIT_DISCOVERY",
+  "repo_path": "C:\\Users\\Matt Llewellyn\\OneDrive\\Documents\\GitHub\\f1-data-publisher",
+  "dedicated_command_inbox": "F1lllewellyn@gmail.com",
+  "install_branch": "install/1c-gmail-autopilot-bridge-2026-06-13-v6-cmd-native",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion": false,
+  "local_python_required": false,
+  "local_powershell_required": false,
+  "secrets_written": false,
+  "activation_status": "NOT_ACTIVATED"
+}
