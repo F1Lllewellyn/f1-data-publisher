@@ -1,4 +1,4 @@
 consumer,source_status,workbook_source_status,readiness_quality,session_type,source_needs_manual_review,ready_for_use,blocked,allowed_effect,ready_for_readiness_context,ready_for_full_report
-race_predictions,needs_manual_review,needs_manual_review,usable_with_optional_context_gaps,Practice,False,False,True,readiness/confidence/risk context only; stable P1-P20 not overwritten,,
-fantasy_predictions,needs_manual_review,needs_manual_review,usable_with_optional_context_gaps,Practice,False,False,True,value/risk/readiness context only; no automatic transfer execution,,
-race_reports,needs_manual_review,needs_manual_review,usable_with_optional_context_gaps,Practice,False,,True,report readiness/context only; no Full Report PDF generated automatically,False,False
+race_predictions,clean,clean,usable_with_optional_context_gaps,Practice,False,True,False,readiness/confidence/risk context only; stable P1-P20 not overwritten,,
+fantasy_predictions,clean,clean,usable_with_optional_context_gaps,Practice,False,True,False,value/risk/readiness context only; no automatic transfer execution,,
+race_reports,clean,clean,usable_with_optional_context_gaps,Practice,False,,False,report readiness/context only; no Full Report PDF generated automatically,True,False
