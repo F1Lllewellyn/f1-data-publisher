@@ -1,14 +1,14 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-06-13T02:51:29.462373Z`
-Status: **pass**
+Created UTC: `2026-06-13T03:35:38.701747Z`
+Status: **fail**
 
 ## Confirmed Data
 - Latest event: `Spain - Barcelona - Catalunya`
 - Latest session: `Practice 2`
-- Source status: `needs_manual_review`
+- Source status: `clean`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 
 ## System checks
 - `core_files`: **pass**
@@ -18,7 +18,8 @@ Status: **pass**
 - `governance_guard`: **pass**
 
 ## Failed steps
-- None
+- `workflow_static_validator`
+- `workflow_meta_health_v1`
 
 ## Governance
 - Stable engine modified: `false`
