@@ -1,26 +1,22 @@
-name: F1 Forecast Chain Readiness Validator v1
+﻿name: F1 Forecast Gate Source Writer v1
 
 on:
   workflow_dispatch:
     inputs:
       event_id:
-        description: "Forecast run label. Use the same label as the producer/source-writer."
+        description: "Forecast run label. Default matches the producer validation output."
         required: false
         default: "manual_forecast_producer_validation"
       gate:
-        description: "Gate to validate"
+        description: "Gate to write: all, pre_weekend, post_fp3, post_qualifying, race_result, post_event"
         required: false
         default: "all"
       lane:
-        description: "Engine lane to validate"
+        description: "Engine lane: all, stable_baseline, control_room_overlay, experimental_challenger"
         required: false
         default: "all"
-      strict:
-        description: "Fail when any actual forecast row source is missing"
-        required: false
-        default: "false"
       commit_outputs:
-        description: "Commit validator reports"
+        description: "Commit outputs to the repo"
         required: false
         default: "true"
 
@@ -33,13 +29,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  validate-forecast-chain-readiness:
+  write-gate-forecast-rows:
     runs-on: ubuntu-latest
     env:
       EVENT_ID: ${{ github.event.inputs.event_id || 'manual_forecast_producer_validation' }}
       GATE: ${{ github.event.inputs.gate || 'all' }}
       LANE: ${{ github.event.inputs.lane || 'all' }}
-      STRICT: ${{ github.event.inputs.strict || 'false' }}
       COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
     steps:
       - name: Checkout repository
@@ -57,43 +52,38 @@ jobs:
           echo "Forecast event label: ${EVENT_ID}"
           echo "Gate: ${GATE}"
           echo "Lane: ${LANE}"
-          echo "Strict: ${STRICT}"
 
-      - name: Run forecast chain readiness validator
+      - name: Run forecast gate source writer
         run: |
           args=(--event-id "${EVENT_ID}" --gate "${GATE}" --lane "${LANE}")
-          if [ "${STRICT}" = "true" ]; then
-            args+=(--strict)
-          fi
           if [ "${COMMIT_OUTPUTS}" = "true" ]; then
             args+=(--commit-outputs)
           fi
-          python scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py "${args[@]}"
+          python scripts/forecast_bundles/write_gate_forecast_rows_v1.py "${args[@]}"
 
-      - name: Upload validator artifacts
+      - name: Upload source-writer artifacts
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: f1-forecast-chain-readiness-validator-v1
+          name: f1-forecast-gate-source-writer-v1
           path: |
-            latest/forecast_chain_readiness/${{ env.EVENT_ID }}/**
-            history/forecast_chain_readiness/${{ env.EVENT_ID }}/**
+            latest/forecast_outputs/${{ env.EVENT_ID }}/**
+            history/forecast_outputs/${{ env.EVENT_ID }}/**
             _runtime/**
           if-no-files-found: ignore
 
-      - name: Commit validator outputs
+      - name: Commit outputs
         if: ${{ env.COMMIT_OUTPUTS == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           paths=()
-          [ -d "latest/forecast_chain_readiness/${EVENT_ID}" ] && paths+=("latest/forecast_chain_readiness/${EVENT_ID}")
-          [ -d "history/forecast_chain_readiness/${EVENT_ID}" ] && paths+=("history/forecast_chain_readiness/${EVENT_ID}")
+          [ -d "latest/forecast_outputs/${EVENT_ID}" ] && paths+=("latest/forecast_outputs/${EVENT_ID}")
+          [ -d "history/forecast_outputs/${EVENT_ID}" ] && paths+=("history/forecast_outputs/${EVENT_ID}")
           [ ${#paths[@]} -gt 0 ] && git add "${paths[@]}" || true
           if git diff --cached --quiet; then
-            echo "No readiness validator changes to commit."
+            echo "No forecast source-writer changes to commit."
           else
-            git commit -m "forecast: validate chain readiness for ${EVENT_ID}"
+            git commit -m "forecast: write gate source rows for ${EVENT_ID}"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
-          fi

@@ -1,4 +1,4 @@
-name: F1 Auto-Repair - Run Now Button
+﻿name: F1 Auto-Repair - Run Now Button
 
 on:
   workflow_dispatch:
@@ -95,4 +95,3 @@ jobs:
             git commit -m "chore: auto-repair session to workbook KPI refresh chain"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
-          fi

@@ -1,0 +1,21 @@
+{
+  "schema_version": "peak_elite_policy_v1",
+  "created_utc": "2026-06-13T00:00:00Z",
+  "authority": {
+    "stable_engine_protected": "Engine_2026-06-07_STABLE",
+    "canonical_workbook_overwrite_allowed": false,
+    "model_promotion_allowed": false,
+    "force_push_allowed": false,
+    "delete_allowed_by_default": false
+  },
+  "automation_goal": "watcher/readiness gate -> session source ingest -> validation -> workbook/KPI sandbox refresh -> forecast bundle/readiness ledger -> Race/Fantasy readiness briefs -> notify/commit only on material readiness change",
+  "2026_f1_rule": "No DRS assumptions. Use energy deployment, battery state, harvest/regen efficiency, cooling pressure, dirty-air cost, traffic cost, and attack/defend energy availability.",
+  "status_classes": {
+    "clean": "usable source-backed signal",
+    "partial": "usable only as confidence/risk/readiness context",
+    "late": "source endpoint expected to arrive later; do not overreact",
+    "conflicting": "manual review before consumption",
+    "needs_manual_review": "source-backed but not clean; no automatic stable prediction changes",
+    "missing": "do not consume"
+  }
+}

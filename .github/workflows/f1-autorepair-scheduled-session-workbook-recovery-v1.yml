@@ -1,4 +1,4 @@
-﻿name: F1 Auto-Repair - Scheduled Session Workbook Recovery
+name: F1 Auto-Repair - Scheduled Session Workbook Recovery
 
 on:
   schedule:
@@ -58,7 +58,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for p in latest/session_data_processor history/session_data_processor latest/latest_manifest.json latest/data_readiness.json latest/combined_source_manifest.json latest/forecast_bundle_ledger history/forecast_bundle_ledger latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier latest/autorepair history/autorepair; do
-            if [ -e "$p" ] && ! git check-ignore -q "$p"; then git add "$p"; fi
+            if [ -e "$p" ] && ! git check-ignore -q "$p"; then
+              git add "$p"
+            fi
           done
           if git diff --cached --quiet; then
             echo "No auto-repair changes to commit."
@@ -66,3 +68,4 @@ jobs:
             git commit -m "chore: scheduled auto-repair session workbook chain"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
+          fi

@@ -1,0 +1,32 @@
+﻿F1 Peak-Elite System Installer v4 CMD-safe
+Started: 2026-06-12T20:50:40.7691719-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+PayloadRoot: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1_PeakElite_Installer_v4_68366931\expanded\F1_Peak_Elite_System_Installer_v4_INTERNAL\payload
+Purpose: install workflow/control-room stabilizer without touching stable engine logic, canonical workbooks, prediction model logic, or promotion state.
+BackupRoot: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\_archive\F1_PEAK_ELITE_PREINSTALL_BACKUP_20260612_205040
+Installed: .github\workflows\f1-autorepair-run-now-button-v1.yml
+Installed: .github\workflows\f1-autorepair-scheduled-session-workbook-recovery-v1.yml
+Installed: .github\workflows\f1-black-box-temporal-validation-harness-v1.yml
+Installed: .github\workflows\f1-experimental-challenger-v2-1-calibrated-stack.yml
+Installed: .github\workflows\f1-forecast-bundle-locker-v1.yml
+Installed: .github\workflows\f1-forecast-chain-readiness-validator-v1.yml
+Installed: .github\workflows\f1-forecast-fantasy-readiness-dashboard-run-now.yml
+Installed: .github\workflows\f1-forecast-fantasy-readiness-dashboard-scheduled.yml
+Installed: .github\workflows\f1-forecast-gate-source-writer-v1.yml
+Installed: .github\workflows\f1-openf1-lightweight-source-closure.yml
+Installed: .github\workflows\f1-peak-elite-control-room-one-click-v1.yml
+Installed: .github\workflows\f1-session-autorepair-integrated-loop-v1.yml
+Installed: .github\workflows\f1-session-autorepair-integrated-run-now-button-v1.yml
+Installed: .github\workflows\f1-workbook-kpi-refresh-run-now-button.yml
+Installed: configs\peak_elite\peak_elite_policy_v1.json
+Installed: docs\F1_PEAK_ELITE_SYSTEM_2026-06-13.md
+Installed: scripts\ops\f1_peak_elite_cleanup_report_v1.py
+Installed: scripts\ops\f1_peak_elite_health_v1.py
+Installed: scripts\ops\f1_peak_elite_orchestrator_v1.py
+Installed: scripts\ops\f1_workflow_commit_block_repair_v1.py
+Installed: scripts\ops\f1_workflow_static_validator_v2.py
+Git not found on PATH. Files were installed locally, but not committed/pushed. Use GitHub Desktop to commit/push the staged changes if needed.
+GitHub CLI not found. Opening the workflow page so you can click Run workflow.
+Finished: 2026-06-12T20:50:41.1553306-04:00
+Install report saved: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\latest\installer_reports\F1_PEAK_ELITE_SYSTEM_INSTALL_REPORT_20260612_205040.txt
+Local temp installer root: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1_PeakElite_Installer_v4_68366931\expanded\F1_Peak_Elite_System_Installer_v4_INTERNAL

@@ -1,4 +1,4 @@
-name: F1 Experimental Challenger v2.1 Calibrated Gate-Aware Stack
+﻿name: F1 Experimental Challenger v2.1 Calibrated Gate-Aware Stack
 
 on:
   workflow_dispatch:
@@ -54,4 +54,3 @@ jobs:
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
 
-          fi

@@ -1,4 +1,4 @@
-name: F1 OpenF1 Lightweight Source Closure
+﻿name: F1 OpenF1 Lightweight Source Closure
 
 on:
   workflow_dispatch:
@@ -72,4 +72,3 @@ jobs:
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
 
-          fi

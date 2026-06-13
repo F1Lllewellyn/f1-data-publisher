@@ -1,8 +1,6 @@
-name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
+﻿name: F1 Forecast/Fantasy Readiness Dashboard - Run Now Button
 
 on:
-  schedule:
-    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -14,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  scheduled-dashboard-refresh:
+  run-now:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,15 +29,15 @@ jobs:
           python -m pip install pandas requests openpyxl
       - name: Health check
         run: |
-          python scripts/dashboard_connector/health_check_dashboard_connector_v1.py --mode scheduled --runtime-dir _runtime/dashboard_connector
+          python scripts/dashboard_connector/health_check_dashboard_connector_v1.py --mode run_now --runtime-dir _runtime/dashboard_connector
       - name: Publish readiness dashboards
         run: |
-          python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode scheduled --runtime-dir _runtime/dashboard_connector
+          python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode run_now --runtime-dir _runtime/dashboard_connector
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: dashboard-connector-scheduled-runtime
+          name: dashboard-connector-run-now-runtime
           path: _runtime/dashboard_connector
           if-no-files-found: ignore
       - name: Commit dashboard outputs if changed
@@ -50,7 +48,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dashboard changes to commit."
           else
-            git commit -m "Scheduled forecast/fantasy readiness dashboard refresh"
+            git commit -m "Update forecast/fantasy readiness dashboards"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
-          fi

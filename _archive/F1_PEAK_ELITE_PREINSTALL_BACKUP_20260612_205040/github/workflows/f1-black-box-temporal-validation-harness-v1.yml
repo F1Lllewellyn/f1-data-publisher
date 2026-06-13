@@ -1,4 +1,4 @@
-name: F1 Black-Box Temporal Validation Harness v1
+﻿name: F1 Black-Box Temporal Validation Harness v1
 
 on:
   workflow_dispatch:
@@ -58,4 +58,3 @@ jobs:
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
 
-          fi

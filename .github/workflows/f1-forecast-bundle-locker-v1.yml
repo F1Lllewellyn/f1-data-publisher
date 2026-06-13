@@ -1,4 +1,4 @@
-﻿name: F1 Forecast Bundle Locker v1
+name: F1 Forecast Bundle Locker v1
 
 on:
   workflow_dispatch:
@@ -96,3 +96,4 @@ jobs:
             git commit -m "forecast: lock bundles for ${EVENT_ID}"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
+          fi

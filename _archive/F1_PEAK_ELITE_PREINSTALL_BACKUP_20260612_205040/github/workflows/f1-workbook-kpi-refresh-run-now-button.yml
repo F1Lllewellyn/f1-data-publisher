@@ -1,4 +1,4 @@
-name: F1 Workbook KPI Refresh - Run Now Button
+﻿name: F1 Workbook KPI Refresh - Run Now Button
 
 on:
   workflow_dispatch:
@@ -57,4 +57,3 @@ jobs:
             git commit -m "Add source-backed sandbox workbook KPI refresh artifacts"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
-          fi

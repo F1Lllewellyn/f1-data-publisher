@@ -1,4 +1,4 @@
-name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
+﻿name: F1 Forecast/Fantasy Readiness Dashboard Integrated Loop v1
 
 on:
   schedule:
@@ -53,4 +53,3 @@ jobs:
             git commit -m "Scheduled forecast/fantasy readiness dashboard refresh"
             bash scripts/ops/safe_git_push_rebase_retry.sh
 
-          fi
