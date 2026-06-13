@@ -5,7 +5,7 @@
     "archive": 690,
     "legacy_installer_or_patch_artifact": 54
   },
-  "created_utc": "2026-06-13T01:31:06.451093Z",
+  "created_utc": "2026-06-13T02:01:40.702896Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
   "file_count": 1674,
   "generated_cleanup": {
@@ -45,7 +45,7 @@
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 25835256,
+  "total_bytes": 25841256,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
