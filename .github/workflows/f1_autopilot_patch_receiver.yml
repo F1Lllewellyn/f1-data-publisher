@@ -69,7 +69,7 @@ jobs:
             --validation .autopilot_runtime/validation.json \
             --out .autopilot_runtime/applied_files.json
           echo "git_status_after_apply=BEGIN"
-          git status --short
+          git status --short --untracked-files=all
           echo "git_status_after_apply=END"
 
       - name: Run whitelisted named tests
@@ -90,7 +90,7 @@ jobs:
             --tests .autopilot_runtime/test_results.json \
             --status PASS
           echo "git_status_after_ledger=BEGIN"
-          git status --short
+          git status --short --untracked-files=all
           echo "git_status_after_ledger=END"
 
       - name: Commit and push branch
@@ -101,26 +101,62 @@ jobs:
           git config user.name "f1-autopilot-bridge"
           git config user.email "actions@users.noreply.github.com"
 
-          # Force-add only approved bridge/output roots. This is intentional because this repo
-          # may ignore generated docs/health/log paths, and the receiver must still stage
-          # approved autopilot outputs after validation.
-          git add -A -f -- \
-            .github/workflows \
-            config \
-            docs \
-            processor \
-            schemas \
-            scripts \
-            health \
-            logs \
-            latest \
-            history \
-            outputs \
-            alerts \
-            forecast_bundles 2>/dev/null || true
+          # v2 fix: stage approved roots one-by-one, only when they exist.
+          # The previous single git-add command could become a no-op when optional
+          # roots were absent. This loop prevents missing optional roots from
+          # blocking approved docs/health/log/output files from being committed.
+          cat > .autopilot_runtime/approved_stage_roots.txt <<'ROOTS'
+          .github/workflows
+          config
+          docs
+          processor
+          schemas
+          scripts
+          health
+          logs
+          latest
+          history
+          outputs
+          alerts
+          forecast_bundles
+          ROOTS
+
+          while IFS= read -r root; do
+            root="${root#"${root%%[![:space:]]*}"}"
+            root="${root%"${root##*[![:space:]]}"}"
+            if [ -n "$root" ] && [ -e "$root" ]; then
+              echo "force_stage_root=$root"
+              git add -A -f -- "$root"
+            else
+              echo "skip_missing_root=$root"
+            fi
+          done < .autopilot_runtime/approved_stage_roots.txt
+
+          # Also stage exactly the files reported by the apply step, after validation.
+          node - <<'NODE' > .autopilot_runtime/applied_paths.txt
+          const fs = require('fs');
+          const applied = JSON.parse(fs.readFileSync('.autopilot_runtime/applied_files.json','utf8'));
+          for (const item of applied.applied || []) {
+            if (item && typeof item.path === 'string' && item.path.trim()) {
+              console.log(item.path.trim());
+            }
+          }
+          NODE
+
+          while IFS= read -r file_path; do
+            file_path="${file_path#"${file_path%%[![:space:]]*}"}"
+            file_path="${file_path%"${file_path##*[![:space:]]}"}"
+            if [ -n "$file_path" ] && [ -e "$file_path" ]; then
+              echo "force_stage_applied_file=$file_path"
+              git add -A -f -- "$file_path"
+            fi
+          done < .autopilot_runtime/applied_paths.txt
 
           echo "git_status_after_force_stage=BEGIN"
-          git status --short
+          git status --short --untracked-files=all
+          echo "git_cached_diff_after_force_stage=BEGIN"
+          git diff --cached --name-status
+          echo "git_cached_diff_after_force_stage=END"
           echo "git_status_after_force_stage=END"
 
           if git diff --cached --quiet; then
@@ -128,7 +164,7 @@ jobs:
             echo "No changes to commit after force staging approved roots. Skipping PR creation."
           else
             git commit -m "Apply F1 autopilot patch: ${BRANCH}"
-            git push -u origin "$BRANCH"
+            git push -u origin "$BRANCH" --force-with-lease
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -142,10 +178,18 @@ jobs:
           BASE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.base_branch || 'main')")
           TITLE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.title || 'F1 Autopilot Patch')")
           SUMMARY=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.summary || 'No summary supplied.')")
+          BODY="${SUMMARY}
+
+Safety:
+- Created by 1C Gmail Autopilot Bridge.
+- PR-only path.
+- Production automation remains OFF.
+- Promotion remains false.
+- Protected path validation passed before patch application."
           if gh pr view "$BRANCH" >/dev/null 2>&1; then
             gh pr view "$BRANCH" --json url
           else
-            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$SUMMARY"
+            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$BODY"
           fi
 
       - name: Report no-op branch
