@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 899,
+    "active_architecture": 905,
     "active_or_unknown": 37,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 54
   },
-  "created_utc": "2026-06-13T02:34:56.990605Z",
+  "created_utc": "2026-06-13T02:51:28.469426Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 1680,
+  "file_count": 1686,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -39,13 +39,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 1626,
+    "keep": 1632,
     "recommend_archive_only": 54
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 25855863,
+  "total_bytes": 25891314,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
@@ -112,6 +112,7 @@
     "docs/F1_SEASON_ARCHIVE_PUBLISHER_INSTALL_REPORT.md",
     "install_reports/F1_1A_CUMULATIVE_GITHUB_PRODUCTION_V2_1_2026-06-11_install_report.md",
     "latest/installer_reports/F1_1B_v15_NARROW_LOCAL_INSTALL_REPORT_20260612_222800.txt",
+    "latest/installer_reports/F1_1B_v17_OUTPUT_CONTRACT_INSTALL_REPORT_20260612_225019.txt",
     "latest/installer_reports/F1_PEAK_ELITE_CANONICALIZATION_SOURCE_CLASSIFIER_INSTALL_REPORT_20260612_212641.txt",
     "latest/installer_reports/F1_PEAK_ELITE_CANONICALIZATION_SOURCE_CLASSIFIER_INSTALL_SUMMARY_20260612_212641.json",
     "latest/installer_reports/F1_PEAK_ELITE_HYGIENE_INSTALL_REPORT_20260612_210100.txt",
@@ -123,5 +124,5 @@
     "requirements-f1-engine-automation.txt",
     "requirements-openf1-ingest.txt"
   ],
-  "workflow_count": 43
+  "workflow_count": 44
 }
