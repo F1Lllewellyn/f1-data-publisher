@@ -1,0 +1,27 @@
+To: F1lllewellyn@gmail.com
+Subject: F1_AUTOPILOT_PATCH | repo=f1-data-publisher | mode=pr_only | test-v6
+
+BEGIN_F1_AUTOPILOT_COMMAND
+{
+  "schema_name": "f1_autopilot_patch_command",
+  "schema_version": "2026-06-13_v6",
+  "command_type": "assistant_patch",
+  "project": "F1_Prediction_Engine",
+  "safety_mode": "pr_only",
+  "change_class": "docs",
+  "target_branch": "autopilot/test-gmail-bridge-v6-docs",
+  "base_branch": "main",
+  "title": "Test F1 Gmail Autopilot Bridge v6",
+  "summary": "Docs-only test command from v6 native CMD installer. No production activation.",
+  "files": [
+    {
+      "path": "docs/autopilot_bridge_test_v6.txt",
+      "action": "upsert",
+      "content_base64": "RjEgQXV0b3BpbG90IHY2IHRlc3QgcGF0Y2ggY3JlYXRlZCBzdWNjZXNzZnVsbHkuCg=="
+    }
+  ],
+  "tests": [],
+  "promotion_status": "NOT_PROMOTED",
+  "activation_status": "NOT_ACTIVATED"
+}
+END_F1_AUTOPILOT_COMMAND

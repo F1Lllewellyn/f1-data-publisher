@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "F1 Autopilot Patch Command",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "command_type",
+    "project",
+    "safety_mode",
+    "target_branch",
+    "base_branch",
+    "title",
+    "summary",
+    "files"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "f1_autopilot_patch_command"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "command_type": {
+      "const": "assistant_patch"
+    },
+    "project": {
+      "const": "F1_Prediction_Engine"
+    },
+    "safety_mode": {
+      "enum": [
+        "pr_only",
+        "outputs_only"
+      ]
+    },
+    "change_class": {
+      "type": "string"
+    },
+    "target_branch": {
+      "type": "string"
+    },
+    "base_branch": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "files": {
+      "type": "array"
+    },
+    "tests": {
+      "type": "array"
+    },
+    "promotion_status": {
+      "enum": [
+        "NOT_PROMOTED"
+      ]
+    },
+    "activation_status": {
+      "enum": [
+        "NOT_ACTIVATED"
+      ]
+    }
+  }
+}

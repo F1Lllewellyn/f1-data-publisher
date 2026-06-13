@@ -1,0 +1,20 @@
+{
+  "allowed_named_tests": [
+    {
+      "name": "node_syntax_autopilot_scripts",
+      "command": [
+        "node",
+        "--check",
+        "scripts/autopilot/validate_command.mjs"
+      ]
+    },
+    {
+      "name": "no_production_activation_flag",
+      "command": [
+        "node",
+        "-e",
+        "const p=require('fs').readFileSync('health/autopilot_last_status.json','utf8'); if(!p.includes('NOT_ACTIVATED')) process.exit(1);"
+      ]
+    }
+  ]
+}

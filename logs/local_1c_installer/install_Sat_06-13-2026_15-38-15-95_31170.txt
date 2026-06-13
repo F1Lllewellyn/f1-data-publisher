@@ -1,0 +1,17 @@
+installer=F1_1C_Gmail_Autopilot_Bridge_Completion_Installer_2026-06-13_v6_CMD_NATIVE_GIT_DISCOVERY
+status=PASS_READY_TO_COMMIT
+stamp=Sat_06-13-2026_15-38-15-95_31170
+repo=C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+dedicated_gmail=F1lllewellyn@gmail.com
+branch=install/1c-gmail-autopilot-bridge-2026-06-13-v6-cmd-native
+git_exe=C:\Users\Matt Llewellyn\AppData\Local\GitHubDesktop\app-3.5.12\resources\app\git\cmd\git.exe
+copied=13
+updated=0
+identical=0
+production_automation=OFF
+forecast_gate=OFF
+promotion=false
+secrets_written=false
+local_python_required=false
+local_powershell_required=false
+backup_dir=C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\F1_1C_Gmail_Autopilot_Bridge_Completion_Installer_2026-06-13_v6_CMD_NATIVE_GIT_DISCOVERY\LOCAL_PREINSTALL_BACKUPS\Sat_06-13-2026_15-38-15-95_31170
