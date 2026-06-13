@@ -1,0 +1,9 @@
+﻿F1 1B v20 Output Contract Normalization Fix Installer
+Started: 2026-06-12T23:20:35.6741876-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+PayloadRoot: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1_1B_v20_344223246\x\payload
+Purpose: exact-file output-contract normalization fix; no scan, no delete, no .git access, no workbook/engine touch, no commit/push, no forecast gate.
+Installed: .github\workflows\f1-1b-output-contract-v16.yml
+Installed: scripts\session_data_processor\f1_1b_output_contract_v16.py
+Installed: scripts\ops\f1_1b_v16_acceptance_tests_v1.py
+Installed: docs\F1_1B_OUTPUT_CONTRACT_V20_NORMALIZATION_FIX_2026-06-13.md

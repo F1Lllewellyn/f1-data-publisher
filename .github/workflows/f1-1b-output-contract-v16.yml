@@ -34,23 +34,23 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run v19 acceptance tests
+      - name: Run v20 acceptance tests
         shell: bash
         run: |
           set -euo pipefail
           python scripts/ops/f1_1b_v16_acceptance_tests_v1.py --repo-root .
 
-      - name: Run v19 output contract
+      - name: Run v20 output contract
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_output_contract_v16.py --repo-root . --mode run_now
 
-      - name: Upload v19 diagnostics
+      - name: Upload v20 diagnostics
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: f1-1b-output-contract-v19-diagnostics
+          name: f1-1b-output-contract-v20-diagnostics
           path: |
             latest/1b_output_contract/**
             latest/1b_validation/**
@@ -61,7 +61,7 @@ jobs:
             history/forecast_bundle_ledger/**
           if-no-files-found: ignore
 
-      - name: Commit v19 output-contract artifacts
+      - name: Commit v20 output-contract artifacts
         if: ${{ github.event.inputs.commit_outputs == 'true' }}
         shell: bash
         run: |
@@ -86,8 +86,8 @@ jobs:
             fi
           done
           if git diff --cached --quiet; then
-            echo "No v19 output-contract changes to commit."
+            echo "No v20 output-contract changes to commit."
           else
-            git commit -m "chore: update 1B output contract artifacts v19"
+            git commit -m "chore: update 1B output contract artifacts v20"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi

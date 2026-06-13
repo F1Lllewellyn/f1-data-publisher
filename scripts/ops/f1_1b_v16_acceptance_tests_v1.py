@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Acceptance tests for F1 1B Output Contract v19 wiring fix."""
+"""Acceptance tests for F1 1B Output Contract v20 wiring fix."""
 from __future__ import annotations
 import argparse, json, subprocess, sys, tempfile
 from pathlib import Path
@@ -27,6 +27,17 @@ def build_dashboard_override_case(root: Path):
     dash = root/"latest/readiness_dashboards/combined_readiness_dashboard.json"
     write_json(dash, {"generated_at_utc":"2026-06-13T02:35:10Z","status":"dashboard_refreshed","source_status":"clean","source_backed":True,"event_name":"Spain - Barcelona - Catalunya","session_name":{"gate":"post_fp2","meeting_key":1287,"session_key":11301,"session_name":"Practice 2","session_type":"Practice"},"workbook_artifact":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx","workbook_manifest":"latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json","session_manifest":"latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json","stable_engine_modified":False,"canonical_workbook_overwrite":False,"promotion_allowed":False})
 
+
+
+def build_stale_status_usable_quality_case(root: Path):
+    sp = root/"latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json"
+    wp = root/"latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json"
+    counts = {"openf1_drivers":22,"openf1_intervals":0,"openf1_laps":586,"openf1_pit":118,"openf1_position":424,"openf1_race_control":52,"openf1_session_result":22,"openf1_sessions":1,"openf1_starting_grid":0,"openf1_stints":118,"openf1_weather":85}
+    statuses = {k:"clean" for k in counts}
+    statuses["openf1_starting_grid"] = "expected_empty"
+    statuses["openf1_intervals"] = "optional_empty"
+    write_json(sp, {"schema_version":"session_processor_result_v1","event_id":"2026_1287_spain_barcelona_catalunya","race_name":"Spain - Barcelona - Catalunya","session_name":"Practice 2","session_type":"Practice","session_key":11301,"run_id":"20260613T023457Z","overall_status":"needs_manual_review","source_status":"needs_manual_review","source_needs_manual_review":True,"readiness_quality":"usable_with_optional_context_gaps","source_backed":True,"source_counts":counts,"source_statuses":statuses,"promotion_allowed":False,"stable_engine_modified":False,"canonical_workbook_modified":False})
+    write_json(wp, {"status":"needs_manual_review","source_status":"needs_manual_review","workbook_source_status":"needs_manual_review","sandbox_workbook":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx","canonical_workbook_overwrite":False,"stable_engine_modified":False,"promotion_allowed":False})
 
 def run_script(script: Path, repo: Path):
     cp = subprocess.run([sys.executable, str(script), "--repo-root", str(repo), "--mode", "run_now"], text=True, capture_output=True)
@@ -70,9 +81,16 @@ def main():
         assert r4["workbook_source_status"] == "clean", r4
         assert r4["last_good_state_updated"] is True, r4
         results.append({"case":"dashboard_clean_state_overrides_stale_blocked_manifest", "status":"pass"})
-    out={"schema_version":"f1_1b_v19_acceptance_tests", "status":"pass", "results":results}
+        case5=base/"case5"; build_stale_status_usable_quality_case(case5)
+        r5=run_script(script, case5)
+        assert r5["status"] == "pass", r5
+        assert r5["source_status"] == "clean", r5
+        assert r5["workbook_source_status"] == "clean", r5
+        assert r5["last_good_state_updated"] is True, r5
+        results.append({"case":"usable_quality_normalizes_stale_manual_review_status", "status":"pass"})
+    out={"schema_version":"f1_1b_v20_acceptance_tests", "status":"pass", "results":results}
     latest=repo_root/"latest/1b_validation"; latest.mkdir(parents=True, exist_ok=True)
-    (latest/"v19_acceptance_tests.json").write_text(json.dumps(out, indent=2, sort_keys=True)+"\n", encoding="utf-8")
+    (latest/"v20_acceptance_tests.json").write_text(json.dumps(out, indent=2, sort_keys=True)+"\n", encoding="utf-8")
     print(json.dumps(out, indent=2, sort_keys=True))
     return 0
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""F1 1B Processor Output Contract v19 wiring fix.
+"""F1 1B Processor Output Contract v20 status normalization fix.
 
 Purpose:
 - Prefer the newest clean/usable processor readiness state instead of stale blocked manifests.
-- Allow dashboard readiness handoff to provide authoritative source/workbook state when it is newer/cleaner.
+- Normalize stale source/workbook statuses when readiness quality proves the run is source-backed and usable.
 - Create Forecast Bundle Ledger snapshots, last-good state, material-change reports, and downstream handoffs.
 
 Safety:
@@ -23,7 +23,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-SCHEMA_VERSION = "f1_1b_output_contract_v19"
+SCHEMA_VERSION = "f1_1b_output_contract_v20"
 CLEANISH_SOURCE_STATES = {"clean", "usable", "source_backed", "partial"}
 CLEANISH_WORKBOOK_STATES = {"clean", "usable", "source_backed", "refresh_applied", "partial"}
 PROTECTED_MARKERS = ("Engine_2026-06-07_STABLE", "F1_2026_Prediction_Model_Data_Workbook")
@@ -140,6 +140,89 @@ def is_cleanish_workbook(manifest: Dict[str, Any]) -> bool:
     return status in CLEANISH_WORKBOOK_STATES or status == "clean"
 
 
+def has_critical_source_gap(manifest: Dict[str, Any]) -> bool:
+    """Return True only when a critical source appears missing/conflicting.
+
+    Optional practice-context gaps such as starting grid and intervals must not
+    downgrade an otherwise usable practice session.  This intentionally avoids
+    treating absent source_counts as a critical gap, because dashboard-backed
+    handoff states may not include endpoint counts.
+    """
+    counts = manifest.get("source_counts") if isinstance(manifest.get("source_counts"), dict) else {}
+    statuses = manifest.get("source_statuses") if isinstance(manifest.get("source_statuses"), dict) else {}
+    optional = {"openf1_starting_grid", "openf1_intervals"}
+    critical = {"openf1_drivers", "openf1_laps", "openf1_position", "openf1_weather", "openf1_race_control", "openf1_session_result", "openf1_sessions"}
+    bad_status = {"late", "missing", "missing_critical", "conflicting", "needs_manual_review", "blocked"}
+    for key, value in counts.items():
+        if key in optional:
+            continue
+        if key in critical:
+            try:
+                if int(value or 0) <= 0:
+                    return True
+            except Exception:
+                return True
+    for key, value in statuses.items():
+        if key in optional:
+            continue
+        if key in critical and normalize_status(value) in bad_status:
+            return True
+    return False
+
+
+def normalize_effective_source_state(manifest: Dict[str, Any], dashboard: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Normalize final source state when evidence proves usable readiness.
+
+    v20 could carry a stale `overall_status=needs_manual_review` into the final
+    output even while `readiness_quality=usable_with_optional_context_gaps` and
+    dashboard/source-backed evidence showed the run was usable.  v20 normalizes
+    that final outward state to clean unless a critical source gap is still present.
+    """
+    out = dict(manifest or {})
+    dash = dashboard or {}
+    quality = normalize_status(out.get("readiness_quality") or dash.get("readiness_quality"))
+    dashboard_clean = normalize_status(dash.get("source_status")) == "clean" or bool(dash.get("source_backed", False))
+    source_backed_hint = bool(out.get("source_backed", False)) or dashboard_clean
+    out["_v20_source_backed_evidence"] = bool(source_backed_hint)
+    usable_quality = quality == "usable_with_optional_context_gaps"
+    critical_gap = has_critical_source_gap(out)
+    if (usable_quality or dashboard_clean or source_backed_hint) and not critical_gap:
+        out["overall_status"] = "clean"
+        out["source_status"] = "clean"
+        out["source_needs_manual_review"] = False
+        out["readiness_quality"] = "usable_with_optional_context_gaps" if usable_quality or dashboard_clean else quality or "usable"
+        out["source_backed"] = True
+        out["normalization_applied"] = "v20_source_status_normalized_from_usable_readiness"
+    else:
+        out["critical_source_gap_detected"] = critical_gap
+    return out
+
+
+def normalize_effective_workbook_state(workbook: Dict[str, Any], source_manifest: Dict[str, Any], dashboard: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Normalize workbook state when the processor/dashboard proves usable output.
+
+    This does not overwrite canonical workbooks. It only corrects the machine-
+    readable handoff status when a sandbox workbook/artifact is present or the
+    dashboard confirms a clean source-backed workbook handoff.
+    """
+    out = dict(workbook or {})
+    dash = dashboard or {}
+    source_clean = normalize_status(source_manifest.get("source_status") or source_manifest.get("overall_status")) == "clean"
+    usable_quality = normalize_status(source_manifest.get("readiness_quality")) == "usable_with_optional_context_gaps"
+    dashboard_artifact = dash.get("workbook_artifact") or dash.get("sandbox_workbook")
+    workbook_artifact = out.get("sandbox_workbook") or out.get("workbook_artifact") or dashboard_artifact
+    dashboard_clean = normalize_status(dash.get("source_status")) == "clean" or bool(dash.get("source_backed", False))
+    if source_clean and (bool(source_manifest.get("_v20_source_backed_evidence", False)) or dashboard_clean) and (usable_quality or dashboard_clean) and workbook_artifact:
+        out["status"] = "refresh_applied"
+        out["source_status"] = "clean"
+        out["workbook_source_status"] = "clean"
+        out["sandbox_workbook"] = workbook_artifact
+        out["canonical_workbook_overwrite"] = False
+        out["promotion_allowed"] = False
+        out["normalization_applied"] = "v20_workbook_status_normalized_from_usable_readiness"
+    return out
+
+
 def status_score_source(data: Dict[str, Any]) -> int:
     if not data:
         return -100
@@ -232,7 +315,7 @@ def apply_dashboard_source_overlay(source: Dict[str, Any], dashboard: Dict[str, 
     out = dict(source or {})
     dash_status = normalize_status(dashboard.get("source_status"))
     if dash_status == "clean" or bool(dashboard.get("source_backed", False)):
-        out.setdefault("schema_version", "dashboard_backed_source_state_v19")
+        out.setdefault("schema_version", "dashboard_backed_source_state_v20")
         out["overall_status"] = dashboard.get("source_status", "clean")
         out["source_status"] = dashboard.get("source_status", "clean")
         out["source_needs_manual_review"] = False
@@ -332,6 +415,9 @@ def build_snapshot(root: Path, run_id: str) -> Dict[str, Any]:
     workbook_path, workbook, workbook_selection = find_latest_workbook_manifest(root)
     dashboard_path, dashboard, dash_rows = find_latest_dashboard_manifest(root)
 
+    session = normalize_effective_source_state(session, dashboard)
+    workbook = normalize_effective_workbook_state(workbook, session, dashboard)
+
     source_counts = session.get("source_counts") if isinstance(session.get("source_counts"), dict) else {}
     source_statuses = session.get("source_statuses") if isinstance(session.get("source_statuses"), dict) else {}
     optional_gaps = [k for k, v in source_counts.items() if int(v or 0) == 0 and k in {"openf1_starting_grid", "openf1_intervals"}]
@@ -389,7 +475,7 @@ def detect_material_change(root: Path, snapshot: Dict[str, Any]) -> Dict[str, An
     current_sig = snapshot.get("signature")
     changed = previous_sig != current_sig
     report = {
-        "schema_version": "f1_1b_material_change_v19",
+        "schema_version": "f1_1b_material_change_v20",
         "generated_at_utc": utc_now().replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "material_change_detected": changed,
         "previous_signature": previous_sig,
@@ -423,7 +509,7 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
         rows.append({"consumer": name, **item})
         write_json(handoff_root / f"{name}_readiness.json", item)
     write_json(handoff_root / "combined_readiness_handoff.json", {
-        "schema_version": "f1_1b_combined_readiness_handoff_v19",
+        "schema_version": "f1_1b_combined_readiness_handoff_v20",
         "generated_at_utc": snapshot.get("generated_at_utc"),
         "event": snapshot.get("event"),
         "source_status": snapshot.get("source", {}).get("status"),
@@ -437,7 +523,7 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
     last_good_updated = bool(snapshot.get("source_backed") and snapshot.get("workbook_ready"))
     if last_good_updated:
         write_json(root / "latest" / "last_good_state.json", {
-            "schema_version": "f1_1b_last_good_state_v19",
+            "schema_version": "f1_1b_last_good_state_v20",
             "updated_at_utc": snapshot.get("generated_at_utc"),
             "run_id": snapshot.get("run_id"),
             "event": snapshot.get("event"),
@@ -449,7 +535,7 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
         })
 
     contract_report = {
-        "schema_version": "f1_1b_output_contract_report_v19",
+        "schema_version": "f1_1b_output_contract_report_v20",
         "status": "pass" if snapshot.get("source_backed") else "blocked",
         "generated_at_utc": snapshot.get("generated_at_utc"),
         "run_id": snapshot.get("run_id"),
