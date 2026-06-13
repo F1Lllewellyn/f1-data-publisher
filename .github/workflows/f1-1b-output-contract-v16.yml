@@ -15,8 +15,6 @@ on:
 permissions:
   contents: write
 
-timeout-minutes: 20
-
 concurrency:
   group: f1-1b-output-contract-v16-${{ github.ref }}
   cancel-in-progress: false
@@ -24,6 +22,7 @@ concurrency:
 jobs:
   output-contract:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -76,5 +75,5 @@ jobs:
             echo "No v16 output-contract changes to commit."
           else
             git commit -m "chore: update 1B output contract artifacts v16"
-            git push
+            bash scripts/ops/safe_git_push_rebase_retry.sh
           fi
