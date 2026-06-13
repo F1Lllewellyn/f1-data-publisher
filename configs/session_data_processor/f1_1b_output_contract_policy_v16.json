@@ -1,0 +1,31 @@
+{
+  "allowed_write_files": [
+    "latest/last_good_state.json"
+  ],
+  "allowed_write_prefixes": [
+    "latest/forecast_bundle_ledger/",
+    "history/forecast_bundle_ledger/",
+    "latest/readiness_handoff/",
+    "latest/material_change/",
+    "latest/1b_output_contract/",
+    "latest/1b_validation/"
+  ],
+  "created_utc": "2026-06-13T00:00:00Z",
+  "material_change_dimensions": [
+    "event",
+    "source",
+    "workbook",
+    "handoffs",
+    "status"
+  ],
+  "protected": {
+    "canonical_workbooks": [
+      "F1_2026_Prediction_Model_Data_Workbook"
+    ],
+    "forecast_gate_activation": false,
+    "model_promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE"
+  },
+  "purpose": "Forecast Bundle Ledger + last-good + material-change + readiness handoff output contract for 1B autonomous processor lane.",
+  "schema_version": "f1_1b_output_contract_policy_v16"
+}

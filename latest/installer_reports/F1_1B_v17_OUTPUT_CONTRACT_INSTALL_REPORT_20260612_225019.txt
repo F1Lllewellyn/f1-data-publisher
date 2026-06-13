@@ -1,0 +1,16 @@
+﻿F1 1B v17 Output Contract Narrow Installer
+Started: 2026-06-12T22:50:19.8143934-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+PayloadRoot: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1_1B_v17_3028311849\x\payload
+Purpose: install exact Forecast Bundle Ledger / last-good / material-change / handoff / validation files.
+No scan, no delete, no .git access, no workbook touch, no engine touch, no commit, no push, no forecast gate.
+v17 fixes the v16 installer regex bug by using path-component guards instead of regex matching.
+Installed: .github\workflows\f1-1b-output-contract-v16.yml
+Installed: scripts\session_data_processor\f1_1b_output_contract_v16.py
+Installed: scripts\ops\f1_1b_v16_acceptance_tests_v1.py
+Installed: configs\session_data_processor\f1_1b_output_contract_policy_v16.json
+Installed: docs\F1_1B_OUTPUT_CONTRACT_V16_2026-06-13.md
+SHA256 verification: pass
+Local Python compile skipped intentionally to avoid generating __pycache__. GitHub Actions will validate.
+Finished: 2026-06-12T22:50:19.9975628-04:00
+Install report saved: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\latest\installer_reports\F1_1B_v17_OUTPUT_CONTRACT_INSTALL_REPORT_20260612_225019.txt

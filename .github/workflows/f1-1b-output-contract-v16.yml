@@ -1,0 +1,80 @@
+name: F1 1B Output Contract v16
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_outputs:
+        description: "Commit generated 1B output-contract artifacts"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+
+timeout-minutes: 20
+
+concurrency:
+  group: f1-1b-output-contract-v16-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  output-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run v16 acceptance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_1b_v16_acceptance_tests_v1.py --repo-root .
+
+      - name: Run v16 output contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/f1_1b_output_contract_v16.py --repo-root . --mode run_now
+
+      - name: Upload v16 diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f1-1b-output-contract-v16-diagnostics
+          path: |
+            latest/1b_output_contract/**
+            latest/1b_validation/**
+            latest/forecast_bundle_ledger/**
+            latest/material_change/**
+            latest/readiness_handoff/**
+            latest/last_good_state.json
+            history/forecast_bundle_ledger/**
+          if-no-files-found: ignore
+
+      - name: Commit v16 output-contract artifacts
+        if: ${{ github.event.inputs.commit_outputs == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf scripts/**/__pycache__ || true
+          find . -path ./.git -prune -o \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print -delete || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/forecast_bundle_ledger latest/readiness_handoff latest/material_change latest/1b_output_contract latest/1b_validation history/forecast_bundle_ledger latest/last_good_state.json || true
+          if git diff --cached --quiet; then
+            echo "No v16 output-contract changes to commit."
+          else
+            git commit -m "chore: update 1B output contract artifacts v16"
+            git push
+          fi
