@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "9e93d0a2686cee8fb140c6441433aa13a3a5b2c8a74c9109e46606427e084830",
+  "bundle_signature": "6911ca5ef48308d469154ddda38f2f682b8f8e0ab50749bb5abeadc07ae308f9",
   "canonical_workbook_overwrite": false,
   "consumer": "fantasy_predictions",
   "consumer_contract_from_output_layer": {
@@ -27,17 +27,17 @@
   "event": {
     "event_id": "2026_1287_spain_barcelona_catalunya",
     "race_name": "Spain - Barcelona - Catalunya",
-    "session_key": 11301,
-    "session_name": "Practice 2"
+    "session_key": 11302,
+    "session_name": "Practice 3"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-06-13T12:36:39Z",
-  "material_change_detected": false,
-  "notification_recommended": false,
+  "generated_at_utc": "2026-06-13T12:55:11Z",
+  "material_change_detected": true,
+  "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260613T123639Z",
+  "run_id": "20260613T125511Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",

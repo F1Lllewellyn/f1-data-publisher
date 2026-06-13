@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1287_spain_barcelona_catalunya",
     "race_name": "Spain - Barcelona - Catalunya",
-    "session_key": 11301,
-    "session_name": "Practice 2"
+    "session_key": 11302,
+    "session_name": "Practice 3"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T123639Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T125511Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260613T123639Z",
+  "run_id": "20260613T125511Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "9e93d0a2686cee8fb140c6441433aa13a3a5b2c8a74c9109e46606427e084830",
+  "signature": "6911ca5ef48308d469154ddda38f2f682b8f8e0ab50749bb5abeadc07ae308f9",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-06-13T12:36:39Z"
+  "updated_at_utc": "2026-06-13T12:55:11Z"
 }
