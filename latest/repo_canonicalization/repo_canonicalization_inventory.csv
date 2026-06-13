@@ -1,7 +1,7 @@
 path,size_bytes,category,recommended_action,reason,path_length
 .github/workflows/elite-weekend-engine-run.yml,2118,active_architecture,keep,Inside active architecture root.,100
-.github/workflows/f1-1b-output-contract-after-control-room-v22.yml,5220,active_architecture,keep,Inside active architecture root.,120
-.github/workflows/f1-1b-output-contract-v16.yml,2913,active_architecture,keep,Inside active architecture root.,101
+.github/workflows/f1-1b-output-contract-after-control-room-v22.yml,5886,active_architecture,keep,Inside active architecture root.,120
+.github/workflows/f1-1b-output-contract-v16.yml,3611,active_architecture,keep,Inside active architecture root.,101
 .github/workflows/f1-1b-source-readiness-aggregation-narrow-patch-v11.yml,652,active_architecture,keep,Inside active architecture root.,127
 .github/workflows/f1-actual-forecast-producer-v1.yml,3461,active_architecture,keep,Inside active architecture root.,106
 .github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml,5625,active_architecture,keep,Inside active architecture root.,118
@@ -851,6 +851,7 @@ docs/F1_1A_GITHUB_LONGPATH_BACKUP_CLEANUP_FIX_2026-06-12.md,1470,active_architec
 docs/F1_1A_NODE24_WORKFLOW_ACTIONS_MAINTENANCE_ASCII_FIX_REPORT_2026-06-12.md,1579,active_architecture,keep,Inside active architecture root.,131
 docs/F1_1B_CONTROL_ROOM_OUTPUT_CONTRACT_BRIDGE_V22_2026-06-13.md,1926,active_architecture,keep,Inside active architecture root.,118
 docs/F1_1B_CONTROL_ROOM_OUTPUT_CONTRACT_BRIDGE_V23_2026-06-13.md,918,active_architecture,keep,Inside active architecture root.,118
+docs/F1_1B_DOWNSTREAM_CONSUMER_WIRING_V24_2026-06-13.md,1842,active_architecture,keep,Inside active architecture root.,109
 docs/F1_1B_OUTPUT_CONTRACT_V16_2026-06-13.md,1403,active_architecture,keep,Inside active architecture root.,98
 docs/F1_1B_OUTPUT_CONTRACT_V19_WIRING_FIX_2026-06-13.md,867,active_architecture,keep,Inside active architecture root.,109
 docs/F1_1B_OUTPUT_CONTRACT_V20_NORMALIZATION_FIX_2026-06-13.md,989,active_architecture,keep,Inside active architecture root.,116
@@ -954,6 +955,8 @@ history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T0321
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T032119Z/material_change_report.json,654,active_architecture,keep,Inside active architecture root.,165
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T032633Z/bundle_snapshot.json,5113,active_architecture,keep,Inside active architecture root.,158
 history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T032633Z/material_change_report.json,657,active_architecture,keep,Inside active architecture root.,165
+history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T034318Z/bundle_snapshot.json,5113,active_architecture,keep,Inside active architecture root.,158
+history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260613T034318Z/material_change_report.json,657,active_architecture,keep,Inside active architecture root.,165
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/README.md,122,active_architecture,keep,Inside active architecture root.,173
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/bundle_completeness_check.csv,2204,active_architecture,keep,Inside active architecture root.,193
 history/forecast_bundles/manual_forecast_producer_validation/20260612T014702Z/post_event/control_room_overlay/bundle_lock_manifest.json,554,active_architecture,keep,Inside active architecture root.,189
@@ -1423,6 +1426,8 @@ installer/Install-F1-1A-GitHub-LongPath-Backup-Cleanup-Fix.ps1,5460,legacy_insta
 installer/Install-F1-Forecast-Chain-OneClick-Hardened-Fix.ps1,2266,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,115
 installer/RUN_F1_1A_GITHUB_LONGPATH_BACKUP_CLEANUP_FIX_WINDOWS.bat,196,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,120
 installer/RUN_F1_FORECAST_CHAIN_ONECLICK_HARDENED_FIX_WINDOWS.bat,136,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,119
+latest/1b_output_contract/control_room_bridge_v23_completion_report.json,312,active_architecture,keep,Inside active architecture root.,126
+latest/1b_output_contract/control_room_bridge_v23_trigger_report.json,413,active_architecture,keep,Inside active architecture root.,123
 latest/1b_output_contract/input_selection_report.json,2199,active_architecture,keep,Inside active architecture root.,107
 latest/1b_output_contract/output_contract_report.json,3431,active_architecture,keep,Inside active architecture root.,107
 latest/1b_validation/v19_acceptance_tests.json,530,active_architecture,keep,Inside active architecture root.,100
@@ -1431,8 +1436,8 @@ latest/autorepair/session_workbook_recovery/autorepair_manifest.json,992,active_
 latest/autorepair/session_workbook_recovery/autorepair_report.md,1039,active_architecture,keep,Inside active architecture root.,118
 latest/autorepair/session_workbook_recovery/autorepair_status.json,3486,active_architecture,keep,Inside active architecture root.,120
 latest/chat_context/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,719,active_architecture,keep,Inside active architecture root.,117
-latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md,1135,active_architecture,keep,Inside active architecture root.,106
-latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md,658,active_architecture,keep,Inside active architecture root.,101
+latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md,1116,active_architecture,keep,Inside active architecture root.,106
+latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md,607,active_architecture,keep,Inside active architecture root.,101
 latest/chat_context/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,717,active_architecture,keep,Inside active architecture root.,114
 latest/combined_source_manifest.json,606,active_architecture,keep,Inside active architecture root.,90
 latest/cross_car_microdelta_forensics/NO_ACTION_REPORT.md,261,active_architecture,keep,Inside active architecture root.,111
@@ -1531,6 +1536,7 @@ latest/installer_reports/F1_1B_OUTPUT_CONTRACT_V19_INSTALL_REPORT.txt,654,active
 latest/installer_reports/F1_1B_OUTPUT_CONTRACT_V20_INSTALL_REPORT.txt,675,active_architecture,keep,Inside active architecture root.,123
 latest/installer_reports/F1_1B_V22_CONTROL_ROOM_OUTPUT_CONTRACT_BRIDGE_INSTALL_REPORT.txt,459,active_architecture,keep,Inside active architecture root.,143
 latest/installer_reports/F1_1B_V23_CONTROL_ROOM_OUTPUT_CONTRACT_BRIDGE_HARDENING_INSTALL_REPORT.txt,473,active_architecture,keep,Inside active architecture root.,153
+latest/installer_reports/F1_1B_V24_DOWNSTREAM_CONSUMER_WIRING_INSTALL_REPORT.txt,638,active_architecture,keep,Inside active architecture root.,134
 latest/installer_reports/F1_1B_v15_NARROW_LOCAL_INSTALL_REPORT_20260612_222800.txt,1268,active_architecture,keep,Inside active architecture root.,136
 latest/installer_reports/F1_1B_v17_OUTPUT_CONTRACT_INSTALL_REPORT_20260612_225019.txt,1240,active_architecture,keep,Inside active architecture root.,139
 latest/installer_reports/F1_PEAK_ELITE_CANONICALIZATION_SOURCE_CLASSIFIER_INSTALL_REPORT_20260612_212641.txt,1990,active_architecture,keep,Inside active architecture root.,162
@@ -1570,10 +1576,10 @@ latest/openf1_lightweight_source_closure/request_log.csv,244053,active_architect
 latest/openf1_lightweight_source_closure/source_closure_report.md,374,active_architecture,keep,Inside active architecture root.,119
 latest/openf1_lightweight_source_closure/source_readiness_summary.csv,661,active_architecture,keep,Inside active architecture root.,123
 latest/openf1_lightweight_source_closure/zero_lane_diagnostics.csv,24169,active_architecture,keep,Inside active architecture root.,120
-latest/peak_elite/ORCHESTRATOR_STATUS.md,1135,active_architecture,keep,Inside active architecture root.,94
-latest/peak_elite/SYSTEM_STATUS.md,658,active_architecture,keep,Inside active architecture root.,88
-latest/peak_elite/orchestrator_status.json,54636,active_architecture,keep,Inside active architecture root.,96
-latest/peak_elite/system_status.json,13049,active_architecture,keep,Inside active architecture root.,90
+latest/peak_elite/ORCHESTRATOR_STATUS.md,1116,active_architecture,keep,Inside active architecture root.,94
+latest/peak_elite/SYSTEM_STATUS.md,607,active_architecture,keep,Inside active architecture root.,88
+latest/peak_elite/orchestrator_status.json,54267,active_architecture,keep,Inside active architecture root.,96
+latest/peak_elite/system_status.json,12697,active_architecture,keep,Inside active architecture root.,90
 latest/readiness_dashboards/combined_readiness_dashboard.json,1417,active_architecture,keep,Inside active architecture root.,115
 latest/readiness_dashboards/fantasy_readiness_state.json,568,active_architecture,keep,Inside active architecture root.,110
 latest/readiness_dashboards/race_predictions_readiness_state.json,563,active_architecture,keep,Inside active architecture root.,119
@@ -1583,7 +1589,7 @@ latest/readiness_handoff/fantasy_predictions_readiness.json,332,active_architect
 latest/readiness_handoff/race_predictions_readiness.json,335,active_architecture,keep,Inside active architecture root.,110
 latest/readiness_handoff/race_reports_readiness.json,387,active_architecture,keep,Inside active architecture root.,106
 latest/repo_canonicalization/REPO_CANONICALIZATION_REPORT.md,807,active_architecture,keep,Inside active architecture root.,114
-latest/repo_canonicalization/repo_canonicalization_inventory.csv,309367,active_architecture,keep,Inside active architecture root.,118
+latest/repo_canonicalization/repo_canonicalization_inventory.csv,309666,active_architecture,keep,Inside active architecture root.,118
 latest/repo_canonicalization/repo_canonicalization_report.json,10348,active_architecture,keep,Inside active architecture root.,116
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/forecast_bundle_ledger_snapshot.json,741,active_architecture,keep,Inside active architecture root.,173
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,159
@@ -1684,6 +1690,7 @@ scripts/openf1/openf1_high_frequency_report_only.py,5839,active_architecture,kee
 scripts/openf1/publish_openf1_lightweight_source_closure.py,17578,active_architecture,keep,Inside active architecture root.,113
 scripts/ops/f1_1b_source_readiness_patch_validation_v1.py,2685,active_architecture,keep,Inside active architecture root.,111
 scripts/ops/f1_1b_v16_acceptance_tests_v1.py,8095,active_architecture,keep,Inside active architecture root.,98
+scripts/ops/f1_1b_v24_acceptance_tests_v1.py,8855,active_architecture,keep,Inside active architecture root.,98
 scripts/ops/f1_peak_elite_cleanup_report_v1.py,4211,active_architecture,keep,Inside active architecture root.,100
 scripts/ops/f1_peak_elite_health_v1.py,9263,active_architecture,keep,Inside active architecture root.,92
 scripts/ops/f1_peak_elite_orchestrator_v1.py,12624,active_architecture,keep,Inside active architecture root.,98
@@ -1693,6 +1700,7 @@ scripts/ops/f1_workflow_meta_health_check_v1.py,3875,active_architecture,keep,In
 scripts/ops/f1_workflow_static_validator_v2.py,8019,active_architecture,keep,Inside active architecture root.,100
 scripts/ops/safe_git_push_rebase_retry.sh,853,active_architecture,keep,Inside active architecture root.,95
 scripts/scoring/build_post_race_scoring_loop.py,6397,active_architecture,keep,Inside active architecture root.,101
+scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py,15184,active_architecture,keep,Inside active architecture root.,125
 scripts/session_data_processor/f1_1b_output_contract_v16.py,28772,active_architecture,keep,Inside active architecture root.,113
 scripts/session_data_processor/health_check_session_processor_package_v1.py,1701,active_architecture,keep,Inside active architecture root.,129
 scripts/session_data_processor/session_data_processor_loop_v1.py,30619,active_architecture,keep,Inside active architecture root.,118
