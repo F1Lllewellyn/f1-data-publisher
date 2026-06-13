@@ -12,19 +12,19 @@
     "session_name": "Practice 2"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-06-13T03:55:08Z",
+  "generated_at_utc": "2026-06-13T10:38:00Z",
   "material_change_detected": false,
   "notification_recommended": false,
   "outputs": {
     "combined_csv": "latest/downstream_consumers/combined_downstream_consumer_manifest.csv",
     "combined_manifest": "latest/downstream_consumers/combined_downstream_consumer_manifest.json",
     "fantasy_predictions_input": "latest/downstream_consumers/fantasy_predictions/consumer_input.json",
-    "history_manifest": "history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T035507Z/combined_downstream_consumer_manifest.json",
+    "history_manifest": "history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260613T103759Z/combined_downstream_consumer_manifest.json",
     "race_predictions_input": "latest/downstream_consumers/race_predictions/consumer_input.json",
     "race_reports_input": "latest/downstream_consumers/race_reports/consumer_input.json"
   },
   "promotion_allowed": false,
-  "run_id": "20260613T035507Z",
+  "run_id": "20260613T103759Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "stable_engine_modified": false,
   "status": "pass"
