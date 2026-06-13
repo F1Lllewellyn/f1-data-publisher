@@ -1,0 +1,23 @@
+{
+  "applied": true,
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "source_plan": {
+    "blocked_actions": [
+      "overwrite canonical workbook",
+      "alter Engine_2026-06-07_STABLE",
+      "promote model layer"
+    ],
+    "canonical_workbook_modified": false,
+    "created_utc": "2026-06-13T12:54:51.639680Z",
+    "recommended_action": "consume workbook_kpi_readiness.json/csv into the workbook-control-room or create an explicitly named sandbox workbook copy",
+    "schema_version": "sandbox_workbook_update_plan_v1"
+  },
+  "source_status": "clean"
+}
