@@ -1,0 +1,17 @@
+﻿{
+    "installed_files":  [
+                            ".github\\workflows\\f1-peak-elite-control-room-one-click-v1.yml",
+                            "scripts\\ops\\f1_peak_elite_orchestrator_v1.py",
+                            "scripts\\ops\\f1_repo_canonicalization_v1.py",
+                            "scripts\\session_data_processor\\session_data_processor_loop_v1.py",
+                            "scripts\\session_data_processor\\source_readiness_classifier_v2.py",
+                            "configs\\session_data_processor\\source_readiness_classifier_policy_v2.json",
+                            "docs\\F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md"
+                        ],
+    "canonical_workbook_overwrite":  false,
+    "stable_engine_modified":  false,
+    "schema_version":  "f1_peak_elite_v8_install_summary",
+    "protected_assets_touched":  false,
+    "promotion_allowed":  false,
+    "created_local":  "2026-06-12T21:26:42.8593805-04:00"
+}

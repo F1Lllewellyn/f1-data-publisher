@@ -1,0 +1,32 @@
+{
+  "canonical_workbook_overwrite": false,
+  "created_utc": "2026-06-13T01:22:42.280050+00:00",
+  "no_drs_2026_assumption": true,
+  "practice_expected_empty": [
+    "starting_grid"
+  ],
+  "practice_optional_empty": [
+    "intervals",
+    "pit",
+    "stints",
+    "race_control"
+  ],
+  "promotion_allowed": false,
+  "purpose": "Session-aware endpoint criticality rules for source readiness classification.",
+  "qualifying_expected_empty": [
+    "starting_grid"
+  ],
+  "race_core_endpoints": [
+    "sessions",
+    "drivers",
+    "laps",
+    "position",
+    "weather",
+    "session_result",
+    "starting_grid",
+    "intervals"
+  ],
+  "schema_version": "source_readiness_classifier_policy_v2",
+  "stable_engine_modified": false,
+  "status_compatibility": "Classifier emits v1-compatible statuses only: clean, partial, late, conflicting, needs_manual_review."
+}

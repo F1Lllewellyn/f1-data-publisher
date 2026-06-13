@@ -95,9 +95,7 @@ jobs:
           name: f1-peak-elite-control-room-runtime
           path: |
             _runtime/peak_elite/**
-            _runtime/repo_canonicalization/**
             latest/peak_elite/**
-            latest/repo_canonicalization/**
             latest/chat_context/PEAK_ELITE*.md
           if-no-files-found: ignore
 
@@ -122,8 +120,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           echo "Removing generated Python cache files before staging."
-          find . -type d -name .git -prune -o -type d -name "__pycache__" -print -exec rm -rf {} + || true
-          find . -type d -name .git -prune -o -type f \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print -exec rm -f {} + || true
+          find . -path ./.git -prune -o -type d -name "__pycache__" -print -exec rm -rf {} + || true
+          find . -path ./.git -prune -o -type f \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print -delete || true
           CACHE_TRACKED="$(git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$|\.pyd$' || true)"
           if [ -n "$CACHE_TRACKED" ]; then
             echo "$CACHE_TRACKED" | while IFS= read -r f; do
@@ -135,15 +133,10 @@ jobs:
             .gitignore \
             .github/workflows \
             scripts/ops \
-            scripts/session_data_processor \
             configs/peak_elite \
-            configs/session_data_processor \
             docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md \
-            docs/F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md \
             _runtime/peak_elite \
-            _runtime/repo_canonicalization \
             latest/peak_elite \
-            latest/repo_canonicalization \
             latest/chat_context/PEAK_ELITE_ORCHESTRATOR_BRIEF.md \
             latest/chat_context/PEAK_ELITE_SYSTEM_STATUS.md; do
             if [ -e "$p" ] && ! git check-ignore -q "$p"; then
@@ -153,6 +146,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No peak-elite changes to commit."
           else
-            git commit -m "chore: canonicalize repo and upgrade source readiness classifier"
+            git commit -m "chore: peak elite control room workflow stabilization"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi

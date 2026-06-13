@@ -1,0 +1,22 @@
+﻿F1 Peak-Elite Canonicalization + Source Classifier Installer v8 CMD-safe
+Started: 2026-06-12T21:26:41.6731819-04:00
+RepoPath: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher
+PayloadRoot: C:\Users\Matt Llewellyn\AppData\Local\Temp\F1v9_138931725\x\p\payload
+Purpose: controlled repo canonicalization plus session-aware source-readiness classifier upgrade.
+TextBackupRoot: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\_archive\F1_PEAK_ELITE_CANON_SOURCE_V8_TEXT_BACKUP_20260612_212641
+Backed up text file: .github\workflows\f1-peak-elite-control-room-one-click-v1.yml
+Installed: .github\workflows\f1-peak-elite-control-room-one-click-v1.yml
+Backed up text file: scripts\ops\f1_peak_elite_orchestrator_v1.py
+Installed: scripts\ops\f1_peak_elite_orchestrator_v1.py
+Installed: scripts\ops\f1_repo_canonicalization_v1.py
+Backed up text file: scripts\session_data_processor\session_data_processor_loop_v1.py
+Installed: scripts\session_data_processor\session_data_processor_loop_v1.py
+Installed: scripts\session_data_processor\source_readiness_classifier_v2.py
+Installed: configs\session_data_processor\source_readiness_classifier_policy_v2.json
+Installed: docs\F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md
+Removed generated cache directory: scripts\ops\__pycache__
+Generated cache cleanup summary: dirs=0 files=0
+Install summary JSON saved: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\latest\installer_reports\F1_PEAK_ELITE_CANONICALIZATION_SOURCE_CLASSIFIER_INSTALL_SUMMARY_20260612_212641.json
+Finished: 2026-06-12T21:26:42.9101741-04:00
+Install report saved: C:\Users\Matt Llewellyn\OneDrive\Documents\GitHub\f1-data-publisher\latest\installer_reports\F1_PEAK_ELITE_CANONICALIZATION_SOURCE_CLASSIFIER_INSTALL_REPORT_20260612_212641.txt
+Next: commit and push these local changes, then run F1 Peak Elite Control Room - One Click v1 with operation=full_safe_chain, commit_outputs=true, run_forecast_gate=false.

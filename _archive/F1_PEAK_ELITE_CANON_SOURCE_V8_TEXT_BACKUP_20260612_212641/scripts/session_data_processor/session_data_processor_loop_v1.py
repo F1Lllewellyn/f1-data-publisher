@@ -24,11 +24,6 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-try:
-    from source_readiness_classifier_v2 import classify_openf1_endpoint_v2
-except Exception:  # pragma: no cover - safe fallback for older deployments
-    classify_openf1_endpoint_v2 = None
-
 ROOT = Path.cwd()
 POLICY_PATH = ROOT / "configs" / "session_data_processor" / "session_data_processor_policy_v1.json"
 RUNTIME = ROOT / "_runtime" / "session_data_processor"
@@ -268,44 +263,9 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
     else:
         status = "clean"
 
-    classifier: Dict[str, Any] = {
-        "schema_version": "source_readiness_classifier_v1_fallback",
-        "status": status,
-        "baseline_status": status,
-        "criticality": "unknown",
-        "blocking_for_forecast": status in {"conflicting", "needs_manual_review"},
-        "reason": "v2 classifier unavailable; using legacy status logic",
-    }
-    if classify_openf1_endpoint_v2 is not None:
-        try:
-            classifier = classify_openf1_endpoint_v2(
-                endpoint=endpoint,
-                rows=rows,
-                session=session,
-                fetch_meta=fetch_meta,
-                required_missing=missing,
-                anomalies=anomalies,
-                baseline_status=status,
-                expected_late=expected_late,
-            )
-            status = str(classifier.get("status") or status)
-        except Exception as exc:
-            classifier = {
-                "schema_version": "source_readiness_classifier_v2_error",
-                "status": status,
-                "baseline_status": status,
-                "criticality": "unknown",
-                "blocking_for_forecast": status in {"conflicting", "needs_manual_review"},
-                "reason": f"v2 classifier failed; using legacy status logic: {exc!r}",
-            }
-
     return {
         "endpoint": endpoint,
         "status": status,
-        "classifier": classifier,
-        "criticality": classifier.get("criticality"),
-        "empty_classification": classifier.get("empty_classification"),
-        "blocking_for_forecast": classifier.get("blocking_for_forecast"),
         "rows": row_count,
         "columns": sorted(cols),
         "missing_required_columns": missing,
@@ -440,7 +400,7 @@ def maybe_write_workbook_kpi_artifacts(out_root: Path, manifest: Dict[str, Any])
         "overall_status": manifest.get("overall_status"),
         "canonical_workbook_modified": False,
         "sandbox_workbook_created": False,
-        "sources": {k: {"status": v.get("status"), "rows": v.get("rows"), "driver_count": v.get("driver_count"), "max_lap_number": v.get("max_lap_number"), "criticality": v.get("criticality"), "empty_classification": v.get("empty_classification"), "blocking_for_forecast": v.get("blocking_for_forecast")} for k, v in manifest.get("sources", {}).items()},
+        "sources": {k: {"status": v.get("status"), "rows": v.get("rows"), "driver_count": v.get("driver_count"), "max_lap_number": v.get("max_lap_number")} for k, v in manifest.get("sources", {}).items()},
     }
     write_json(out_root / "workbook_kpi_readiness.json", readiness)
     csv_path = out_root / "workbook_kpi_readiness.csv"
@@ -620,9 +580,6 @@ def main() -> int:
             "late_sources": sum(1 for s in sources.values() if s.get("status") == "late"),
             "conflicting_sources": sum(1 for s in sources.values() if s.get("status") == "conflicting"),
             "manual_review_sources": sum(1 for s in sources.values() if s.get("status") == "needs_manual_review"),
-            "blocking_for_forecast_sources": sum(1 for s in sources.values() if s.get("blocking_for_forecast") is True),
-            "expected_empty_sources": sum(1 for s in sources.values() if s.get("empty_classification") == "expected_empty"),
-            "optional_empty_sources": sum(1 for s in sources.values() if s.get("empty_classification") == "optional_empty"),
         },
         "manifest_staleness_before_update": staleness_scan(),
         "stable_engine_modified": False,

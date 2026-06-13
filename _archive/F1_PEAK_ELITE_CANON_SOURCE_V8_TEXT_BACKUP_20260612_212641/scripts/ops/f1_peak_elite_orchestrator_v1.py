@@ -159,13 +159,6 @@ def main() -> int:
         if (repo / "scripts/ops/f1_workflow_meta_health_check_v1.py").exists():
             steps.append(run(repo, "workflow_meta_health_v1", [py, "scripts/ops/f1_workflow_meta_health_check_v1.py"], timeout=300))
 
-    if operation in {"health_only", "full_safe_chain", "full_run_chain", "scheduled_monitor"}:
-        if (repo / "scripts/ops/f1_repo_canonicalization_v1.py").exists():
-            canon_mode = "safe_apply" if operation in {"full_safe_chain", "full_run_chain"} else "report_only"
-            steps.append(run(repo, "repo_canonicalization_" + canon_mode, [py, "scripts/ops/f1_repo_canonicalization_v1.py", "--repo-root", str(repo), "--mode", canon_mode], timeout=600, allow_fail=(operation == "scheduled_monitor")))
-        if (repo / "scripts/session_data_processor/source_readiness_classifier_v2.py").exists():
-            steps.append(run(repo, "source_readiness_classifier_v2_self_test", [py, "scripts/session_data_processor/source_readiness_classifier_v2.py", "--self-test"], timeout=300, allow_fail=(operation == "scheduled_monitor")))
-
     if operation in {"full_safe_chain", "scheduled_monitor"}:
         steps.append(run(repo, "peak_elite_health_safe", [py, "scripts/ops/f1_peak_elite_health_v1.py", "--repo-root", str(repo), "--run-safe-tests", "true"], timeout=600, allow_fail=(operation == "scheduled_monitor")))
 
