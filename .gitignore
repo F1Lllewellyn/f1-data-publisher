@@ -35,3 +35,4 @@ scripts/**/__pycache__/
 _archive/*/REMOVED_GENERATED_PYTHON_CACHES/
 _archive/F1_PEAK_ELITE_HYGIENE_PREINSTALL_BACKUP_*/
 *.pyc
+_runtime/**/__pycache__/
