@@ -1,0 +1,11 @@
+{
+  "forecast_gate_activated": false,
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_v24_downstream_consumer_acceptance",
+  "status": "pass",
+  "tests": {
+    "blocked_source_blocks_consumers": "pass",
+    "clean_practice_consumers_ready": "pass",
+    "race_session_full_report_ready_and_no_spam": "pass"
+  }
+}

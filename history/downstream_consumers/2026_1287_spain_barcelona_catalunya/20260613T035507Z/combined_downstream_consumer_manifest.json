@@ -1,0 +1,168 @@
+{
+  "canonical_workbook_overwrite": false,
+  "consumers": {
+    "fantasy_predictions": {
+      "allowed_effect": "constructor/driver value, risk, chip, and transfer recommendation context",
+      "allowed_input_paths": {
+        "combined_readiness_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+        "last_good_state": "latest/last_good_state.json",
+        "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+        "material_change_report": "latest/material_change/material_change_report.json",
+        "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
+      },
+      "blocked": false,
+      "bundle_signature": "9e93d0a2686cee8fb140c6441433aa13a3a5b2c8a74c9109e46606427e084830",
+      "canonical_workbook_overwrite": false,
+      "consumer": "fantasy_predictions",
+      "consumer_contract_from_output_layer": {
+        "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
+        "blocked": false,
+        "readiness_quality": "usable_with_optional_context_gaps",
+        "ready_for_use": true,
+        "session_type": "Practice",
+        "source_needs_manual_review": false,
+        "source_status": "clean",
+        "workbook_source_status": "clean"
+      },
+      "consumer_readiness": "ready",
+      "default_output_rule": "fantasy picks may use this as source-backed value/risk/readiness context only",
+      "disallowed_effect": "automatic transfer execution, chip activation, or budget assumption without current fantasy data",
+      "event": {
+        "event_id": "2026_1287_spain_barcelona_catalunya",
+        "race_name": "Spain - Barcelona - Catalunya",
+        "session_key": 11301,
+        "session_name": "Practice 2"
+      },
+      "forecast_gate_activated": false,
+      "generated_at_utc": "2026-06-13T03:55:08Z",
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": true,
+      "run_id": "20260613T035507Z",
+      "schema_version": "f1_1b_downstream_consumer_wiring_v24",
+      "source_backed": true,
+      "source_status": "clean",
+      "stable_engine_modified": false,
+      "workbook_ready": true,
+      "workbook_source_status": "clean"
+    },
+    "race_predictions": {
+      "allowed_effect": "readiness, confidence, risk flags, and source-backed context",
+      "allowed_input_paths": {
+        "combined_readiness_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+        "last_good_state": "latest/last_good_state.json",
+        "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+        "material_change_report": "latest/material_change/material_change_report.json",
+        "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
+      },
+      "blocked": false,
+      "bundle_signature": "9e93d0a2686cee8fb140c6441433aa13a3a5b2c8a74c9109e46606427e084830",
+      "canonical_workbook_overwrite": false,
+      "consumer": "race_predictions",
+      "consumer_contract_from_output_layer": {
+        "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
+        "blocked": false,
+        "readiness_quality": "usable_with_optional_context_gaps",
+        "ready_for_use": true,
+        "session_type": "Practice",
+        "source_needs_manual_review": false,
+        "source_status": "clean",
+        "workbook_source_status": "clean"
+      },
+      "consumer_readiness": "ready",
+      "default_output_rule": "exact P1-P20 prediction output may use this as readiness/confidence/risk context only; stable engine logic is not overwritten",
+      "disallowed_effect": "automatic promotion, stable logic change, or hidden model overwrite",
+      "event": {
+        "event_id": "2026_1287_spain_barcelona_catalunya",
+        "race_name": "Spain - Barcelona - Catalunya",
+        "session_key": 11301,
+        "session_name": "Practice 2"
+      },
+      "forecast_gate_activated": false,
+      "generated_at_utc": "2026-06-13T03:55:08Z",
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": true,
+      "run_id": "20260613T035507Z",
+      "schema_version": "f1_1b_downstream_consumer_wiring_v24",
+      "source_backed": true,
+      "source_status": "clean",
+      "stable_engine_modified": false,
+      "workbook_ready": true,
+      "workbook_source_status": "clean"
+    },
+    "race_reports": {
+      "allowed_effect": "Race Reports source context and placemat/full-report readiness checks",
+      "allowed_input_paths": {
+        "combined_readiness_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+        "last_good_state": "latest/last_good_state.json",
+        "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+        "material_change_report": "latest/material_change/material_change_report.json",
+        "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
+      },
+      "blocked": false,
+      "bundle_signature": "9e93d0a2686cee8fb140c6441433aa13a3a5b2c8a74c9109e46606427e084830",
+      "canonical_workbook_overwrite": false,
+      "consumer": "race_reports",
+      "consumer_contract_from_output_layer": {
+        "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
+        "blocked": false,
+        "readiness_quality": "usable_with_optional_context_gaps",
+        "ready_for_full_report": false,
+        "ready_for_readiness_context": true,
+        "session_type": "Practice",
+        "source_needs_manual_review": false,
+        "source_status": "clean",
+        "workbook_source_status": "clean"
+      },
+      "consumer_readiness": "context_ready",
+      "default_output_rule": "report layer may use this for source/readiness context; Full Report PDF only when session type supports it and user requests report output",
+      "disallowed_effect": "automatic PDF generation or report publication",
+      "event": {
+        "event_id": "2026_1287_spain_barcelona_catalunya",
+        "race_name": "Spain - Barcelona - Catalunya",
+        "session_key": 11301,
+        "session_name": "Practice 2"
+      },
+      "forecast_gate_activated": false,
+      "generated_at_utc": "2026-06-13T03:55:08Z",
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_full_report": false,
+      "ready_for_readiness_context": true,
+      "run_id": "20260613T035507Z",
+      "schema_version": "f1_1b_downstream_consumer_wiring_v24",
+      "source_backed": true,
+      "source_status": "clean",
+      "stable_engine_modified": false,
+      "workbook_ready": true,
+      "workbook_source_status": "clean"
+    }
+  },
+  "event": {
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "race_name": "Spain - Barcelona - Catalunya",
+    "session_key": 11301,
+    "session_name": "Practice 2"
+  },
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-06-13T03:55:08Z",
+  "promotion_allowed": false,
+  "run_id": "20260613T035507Z",
+  "schema_version": "f1_1b_downstream_consumer_wiring_v24",
+  "source_paths": {
+    "bundle": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
+    "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
+    "last_good": "latest/last_good_state.json",
+    "material_change": "latest/material_change/material_change_report.json",
+    "output_contract": "latest/1b_output_contract/output_contract_report.json"
+  },
+  "stable_engine_modified": false,
+  "status": "pass"
+}

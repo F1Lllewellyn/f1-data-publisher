@@ -1,0 +1,4 @@
+consumer,consumer_readiness,source_status,workbook_source_status,readiness_quality,material_change_detected,notification_recommended,promotion_allowed,forecast_gate_activated
+race_predictions,ready,clean,clean,usable_with_optional_context_gaps,False,False,False,False
+fantasy_predictions,ready,clean,clean,usable_with_optional_context_gaps,False,False,False,False
+race_reports,context_ready,clean,clean,usable_with_optional_context_gaps,False,False,False,False
