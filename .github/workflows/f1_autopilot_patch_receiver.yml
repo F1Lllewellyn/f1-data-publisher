@@ -68,6 +68,9 @@ jobs:
             --payload .autopilot_runtime/payload.json \
             --validation .autopilot_runtime/validation.json \
             --out .autopilot_runtime/applied_files.json
+          echo "git_status_after_apply=BEGIN"
+          git status --short
+          echo "git_status_after_apply=END"
 
       - name: Run whitelisted named tests
         shell: bash
@@ -86,22 +89,51 @@ jobs:
             --applied .autopilot_runtime/applied_files.json \
             --tests .autopilot_runtime/test_results.json \
             --status PASS
+          echo "git_status_after_ledger=BEGIN"
+          git status --short
+          echo "git_status_after_ledger=END"
 
       - name: Commit and push branch
+        id: commit_push
         shell: bash
         run: |
           BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
           git config user.name "f1-autopilot-bridge"
           git config user.email "actions@users.noreply.github.com"
-          git add .github/workflows config docs processor schemas scripts health logs latest history outputs alerts forecast_bundles 2>/dev/null || true
+
+          # Force-add only approved bridge/output roots. This is intentional because this repo
+          # may ignore generated docs/health/log paths, and the receiver must still stage
+          # approved autopilot outputs after validation.
+          git add -A -f -- \
+            .github/workflows \
+            config \
+            docs \
+            processor \
+            schemas \
+            scripts \
+            health \
+            logs \
+            latest \
+            history \
+            outputs \
+            alerts \
+            forecast_bundles 2>/dev/null || true
+
+          echo "git_status_after_force_stage=BEGIN"
+          git status --short
+          echo "git_status_after_force_stage=END"
+
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes to commit after force staging approved roots. Skipping PR creation."
           else
             git commit -m "Apply F1 autopilot patch: ${BRANCH}"
+            git push -u origin "$BRANCH"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-          git push -u origin "$BRANCH"
 
       - name: Open or update PR
+        if: steps.commit_push.outputs.changed == 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -115,3 +147,10 @@ jobs:
           else
             gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$SUMMARY"
           fi
+
+      - name: Report no-op branch
+        if: steps.commit_push.outputs.changed != 'true'
+        shell: bash
+        run: |
+          echo "No PR was created because the validated command produced no repository diff."
+          echo "This is a safe no-op, not a production activation."
