@@ -41,7 +41,18 @@ jobs:
           ${{ inputs.payload_json }}
           JSON
           fi
-          node -e "JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log('payload_json_parse=PASS')"
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = '.autopilot_runtime/payload.json';
+          const payload = JSON.parse(fs.readFileSync(path, 'utf8'));
+          if (!payload.change_class) payload.change_class = 'docs';
+          if (!Array.isArray(payload.tests)) payload.tests = [];
+          if (!payload.promotion_status) payload.promotion_status = 'NOT_PROMOTED';
+          if (!payload.activation_status) payload.activation_status = 'NOT_ACTIVATED';
+          fs.writeFileSync(path, JSON.stringify(payload, null, 2) + '\n');
+          console.log('payload_json_parse=PASS');
+          console.log('payload_safety_defaults=PASS');
+          NODE
 
       - name: Validate command and scope
         shell: bash
@@ -164,7 +175,7 @@ jobs:
           fi
 
       - name: Open or update PR
-        if: steps.commit_push.outputs.changed == 'true'
+        if: ${{ steps.commit_push.outputs.changed == 'true' }}
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -175,12 +186,12 @@ jobs:
           SUMMARY=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.summary || 'No summary supplied.')")
           BODY="${SUMMARY}
 
-Safety:
-- Created by 1C Gmail Autopilot Bridge catchall receiver.
-- PR-only path.
-- Production automation remains OFF.
-- Promotion remains false.
-- Protected path validation passed before patch application."
+          Safety:
+          - Created by 1C Gmail Autopilot Bridge catchall receiver.
+          - PR-only path.
+          - Production automation remains OFF.
+          - Promotion remains false.
+          - Protected path validation passed before patch application."
           if gh pr view "$BRANCH" >/dev/null 2>&1; then
             gh pr view "$BRANCH" --json url
           else
@@ -188,7 +199,7 @@ Safety:
           fi
 
       - name: Report no-op branch
-        if: steps.commit_push.outputs.changed != 'true'
+        if: ${{ steps.commit_push.outputs.changed != 'true' }}
         shell: bash
         run: |
           echo "No PR was created because the validated command produced no repository diff."
