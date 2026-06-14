@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "stable_baseline",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "gate": "race_result",
+  "generated_utc": "2026-06-14T15:39:52Z",
+  "promotion_allowed": false,
+  "race_name": "Spain - Barcelona - Catalunya",
+  "row_count": 22,
+  "run_id": "20260614T153950Z",
+  "source_counts": {
+    "drivers": 548,
+    "intervals": 27497,
+    "pit": 182,
+    "position": 12054,
+    "race_control": 1499,
+    "source_readiness": 9,
+    "starting_grid": 66,
+    "stints": 1785,
+    "weather": 3680
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
