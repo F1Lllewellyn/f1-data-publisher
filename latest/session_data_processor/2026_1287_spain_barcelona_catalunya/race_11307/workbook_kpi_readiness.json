@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-06-14T16:11:52.160042Z",
+  "created_utc": "2026-06-14T20:24:22.639635Z",
   "event_id": "2026_1287_spain_barcelona_catalunya",
   "overall_status": "needs_manual_review",
   "race_name": "Spain - Barcelona - Catalunya",
@@ -25,7 +25,7 @@
     "openf1_intervals": {
       "driver_count": 22,
       "max_lap_number": null,
-      "rows": 24884,
+      "rows": 25022,
       "status": "clean"
     },
     "openf1_laps": {
@@ -43,7 +43,7 @@
     "openf1_position": {
       "driver_count": 22,
       "max_lap_number": null,
-      "rows": 611,
+      "rows": 613,
       "status": "clean"
     },
     "openf1_race_control": {
@@ -73,13 +73,13 @@
     "openf1_stints": {
       "driver_count": 22,
       "max_lap_number": null,
-      "rows": 70,
+      "rows": 27,
       "status": "clean"
     },
     "openf1_weather": {
       "driver_count": 0,
       "max_lap_number": null,
-      "rows": 149,
+      "rows": 150,
       "status": "clean"
     }
   }
