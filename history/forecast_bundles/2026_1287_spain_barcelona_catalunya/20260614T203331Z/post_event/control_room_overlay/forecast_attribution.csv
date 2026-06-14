@@ -1,0 +1,2 @@
+attribution_id,gate,engine_lane,feature_family,input_source,directional_effect,weight_class,confidence,proof_loop_status,notes
+2026_1287_spain_barcelona_catalunya__post_event__control_room_overlay__20260614T203331Z__ATTR,post_event,control_room_overlay,bundle_lock,/home/runner/work/f1-data-publisher/f1-data-publisher/latest/forecasts/2026_1287_spain_barcelona_catalunya/post_event/control_room_overlay/forecast_rows.csv,locked,source,high,ready_for_scoring,

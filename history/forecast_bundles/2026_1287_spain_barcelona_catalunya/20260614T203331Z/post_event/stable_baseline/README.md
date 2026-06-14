@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1287_spain_barcelona_catalunya__post_event__stable_baseline__20260614T203331Z
+
+Status: locked
