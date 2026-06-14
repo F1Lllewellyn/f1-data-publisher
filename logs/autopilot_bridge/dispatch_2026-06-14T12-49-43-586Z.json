@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "written_at": "2026-06-14T12:49:43.586Z",
+  "command_title": "Test F1 Gmail Autopilot Bridge Round 8 Catchall v6",
+  "safety_mode": "pr_only",
+  "target_branch": "autopilot/test-gmail-bridge-8-catchall-v6",
+  "base_branch": "main",
+  "validation": {
+    "ok": true,
+    "validated_at": "2026-06-14T12:49:43.146Z",
+    "safety_mode": "pr_only",
+    "target_branch": "autopilot/test-gmail-bridge-8-catchall-v6",
+    "base_branch": "main",
+    "files": [
+      {
+        "path": "docs/autopilot_bridge/test_gmail_bridge_round_8_catchall_v6_result.txt",
+        "action": "upsert"
+      }
+    ],
+    "production_automation": "OFF",
+    "forecast_gate": "OFF",
+    "promotion": false,
+    "secrets_written": false
+  },
+  "applied": {
+    "ok": true,
+    "applied": [
+      {
+        "path": "docs/autopilot_bridge/test_gmail_bridge_round_8_catchall_v6_result.txt",
+        "action": "upsert",
+        "bytes": 62
+      }
+    ]
+  },
+  "tests": {
+    "ok": true,
+    "results": []
+  },
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_status": "NOT_PROMOTED",
+  "activation_status": "NOT_ACTIVATED",
+  "secrets_written": false
+}
