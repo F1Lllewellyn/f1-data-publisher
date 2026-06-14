@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 12759,
+    "ok": true,
+    "sha256": "767550fa68c5fb3191bd36f27d959cd883ce70bad73785755b0ce1b0920d5b87",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/raw/openf1_stints.json",
+  "json_sha256": "edf152b923e353f0617bfff2cf789ee485341bdac816ad31320cdd2bca3834b6",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 89,
+  "status": "clean",
+  "timestamp_rows": 0
+}

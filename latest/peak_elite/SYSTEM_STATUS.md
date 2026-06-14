@@ -1,7 +1,7 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-06-13T16:56:52.262181Z`
-Status: **pass**
+Created UTC: `2026-06-14T10:31:01.472122Z`
+Status: **fail**
 
 ## Confirmed Data
 - Latest event: `Spain - Barcelona - Catalunya`
@@ -18,7 +18,8 @@ Status: **pass**
 - `governance_guard`: **pass**
 
 ## Failed steps
-- None
+- `workflow_static_validator`
+- `workflow_meta_health_v1`
 
 ## Governance
 - Stable engine modified: `false`
