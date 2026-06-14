@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 70554,
+    "ok": true,
+    "sha256": "efed0a9635ce8092c731f43175218042580756386e8a7d9388f7151ed8c70e46",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_position.json",
+  "json_sha256": "4ace9439dcda24871acfc951d8e23944a7b4c74841dc3e29f65a4b2d47b96fa5",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 611,
+  "status": "clean",
+  "timestamp_rows": 611
+}

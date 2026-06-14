@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 10126,
+    "ok": true,
+    "sha256": "4efac57bd5fc9f9954f4fccc3b4684b723738fa65a4e7e8bee685e4f7eed5af0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_stints.json",
+  "json_sha256": "fac06d4a4359409b57c50ebd7d7270bea022f2e4c3e27afe85f3bb6109618b63",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 70,
+  "status": "clean",
+  "timestamp_rows": 0
+}

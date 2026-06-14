@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_pit.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 8632,
+    "ok": true,
+    "sha256": "f5bcaac13d34e4eea6a9e946a0cdd09ea0df2d84146f14cee751a87f46bc8303",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_pit.json",
+  "json_sha256": "a918b175388730a3b47d8fd9e5ed9a0227c01cbb449be81ebc775b8f1676e307",
+  "max_lap_number": 58.0,
+  "missing_required_columns": [],
+  "rows": 48,
+  "status": "clean",
+  "timestamp_rows": 48
+}

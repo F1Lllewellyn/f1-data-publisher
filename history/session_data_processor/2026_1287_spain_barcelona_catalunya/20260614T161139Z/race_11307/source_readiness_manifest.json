@@ -1,0 +1,624 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-06-14T16:11:52.159719Z",
+  "event_id": "2026_1287_spain_barcelona_catalunya",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-06-14T16:11:52.160869Z",
+    "event_id": "2026_1287_spain_barcelona_catalunya",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Spain - Barcelona - Catalunya",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-06-14T15:00:00+00:00",
+      "date_start": "2026-06-14T13:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1287,
+      "session_key": 11307,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 434.31,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "407153c3abbe15a44d8d4b8e2144906dee190203afd14719ed770b16c6aae539",
+      "size_bytes": 691,
+      "timestamp_utc": "2026-06-14T08:57:33.670316Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 434.31,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "5e3e62a61512eade199c62d4d981f73bd3fc2a776b09ceb0f9b2ec2ba1202e5a",
+      "size_bytes": 1557,
+      "timestamp_utc": "2026-06-14T08:57:33.670125Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 434.31,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "01b0a8964506d1fc0d7d3f5e7bf4079f8ce2b77469760c2d1b004ba81bd90064",
+      "size_bytes": 562,
+      "timestamp_utc": "2026-06-14T08:57:33.669959Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Spain - Barcelona - Catalunya",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 24884
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1241
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 48
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 611
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 179
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 70
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 149
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20260614T161139Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-06-14T15:00:00+00:00",
+    "date_start": "2026-06-14T13:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "51a56b7874ae4672a3baab521d2a7806f0c6416424017810b3998275af9494c4",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_drivers.json",
+      "json_sha256": "c46a78cf47ae2993bf133fc1dfce6143aa6d10b6fefb900beb20f902973ccac3",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 3543103,
+        "ok": true,
+        "sha256": "9f285abecf765313182b37ef923bdd9884f1d2238c799e7a35e2a521482aa023",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_intervals.json",
+      "json_sha256": "ad0ba7b47ed30c03fe82fa167d8ea658b305590dea67eec41466fe29df554ada",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 24884,
+      "status": "clean",
+      "timestamp_rows": 24884
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 580442,
+        "ok": true,
+        "sha256": "270dce4c2221ce5dbe3aa0b5ff4cc5d93df87b2b09c24cd88ad4f8387e7d490c",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_laps.json",
+      "json_sha256": "33b7bb5409f35eb9f1a4ab841ce3f68818c0d8083fa462d2b5342516180da0f5",
+      "max_lap_number": 66.0,
+      "missing_required_columns": [],
+      "rows": 1241,
+      "status": "clean",
+      "timestamp_rows": 1221
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_pit.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 8632,
+        "ok": true,
+        "sha256": "f5bcaac13d34e4eea6a9e946a0cdd09ea0df2d84146f14cee751a87f46bc8303",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_pit.json",
+      "json_sha256": "a918b175388730a3b47d8fd9e5ed9a0227c01cbb449be81ebc775b8f1676e307",
+      "max_lap_number": 58.0,
+      "missing_required_columns": [],
+      "rows": 48,
+      "status": "clean",
+      "timestamp_rows": 48
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 70554,
+        "ok": true,
+        "sha256": "efed0a9635ce8092c731f43175218042580756386e8a7d9388f7151ed8c70e46",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_position.json",
+      "json_sha256": "4ace9439dcda24871acfc951d8e23944a7b4c74841dc3e29f65a4b2d47b96fa5",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 611,
+      "status": "clean",
+      "timestamp_rows": 611
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_race_control.csv",
+      "driver_count": 14,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 47234,
+        "ok": true,
+        "sha256": "ae15a82e240ec378ec0fb8ec8eb173cbd3a50bb8d9e45ce03920a86f6eec1502",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_race_control.json",
+      "json_sha256": "d5f95265dc1a3653a191b6aaa43bbd1fc36de10b63c61346f58ee47c2c52bf1d",
+      "max_lap_number": 66.0,
+      "missing_required_columns": [],
+      "rows": 179,
+      "status": "clean",
+      "timestamp_rows": 179
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4026,
+        "ok": true,
+        "sha256": "c2c17e7e89846c999468d9b9a2ece1362b305e83ea4447385901a1c60afd2e1d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_session_result.json",
+      "json_sha256": "548f9b85e5aa691464a9754fd72f586caf4d032c1fe847f109de61c2b7ba2e2c",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 385,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_sessions.json",
+      "json_sha256": "64edd78a254d0d19b0743ee340b93636ecd874b654aeed12d17647316ce2db00",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 10126,
+        "ok": true,
+        "sha256": "4efac57bd5fc9f9954f4fccc3b4684b723738fa65a4e7e8bee685e4f7eed5af0",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_stints.json",
+      "json_sha256": "fac06d4a4359409b57c50ebd7d7270bea022f2e4c3e27afe85f3bb6109618b63",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 70,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 32122,
+        "ok": true,
+        "sha256": "a28999d63babe4954d5b6fc764a46e6ac711db13e07ceb792380eb7eb74f6f2d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_weather.json",
+      "json_sha256": "8724e5da653e0d0b42dd717b9e9bb1de9f78051354345346020feb524ddcaf4a",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 149,
+      "status": "clean",
+      "timestamp_rows": 149
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/workbook_kpi_readiness.json"
+  }
+}

@@ -1,0 +1,702 @@
+[
+  {
+    "compound": "HARD",
+    "driver_number": 18,
+    "lap_end": 5,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 77,
+    "lap_end": 14,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 16,
+    "lap_end": 16,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 77,
+    "lap_end": 15,
+    "lap_start": 15,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 6,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 10,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 30,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 27,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 43,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 55,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 31,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 5,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 87,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 23,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 11,
+    "lap_end": 19,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 63,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 44,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 1,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 12,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 3,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": null,
+    "driver_number": 81,
+    "lap_end": 20,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": null
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 14,
+    "lap_end": 21,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 41,
+    "lap_end": 22,
+    "lap_start": 1,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 1,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 44,
+    "lap_end": 27,
+    "lap_start": 12,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 3,
+    "lap_end": 29,
+    "lap_start": 21,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 9
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 27,
+    "lap_end": 29,
+    "lap_start": 14,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 23,
+    "lap_end": 29,
+    "lap_start": 14,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 55,
+    "lap_end": 30,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 6
+  },
+  {
+    "compound": null,
+    "driver_number": 11,
+    "lap_end": 31,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 8
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 6,
+    "lap_end": 32,
+    "lap_start": 16,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 87,
+    "lap_end": 28,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 14
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 5,
+    "lap_end": 33,
+    "lap_start": 16,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 43,
+    "lap_end": 34,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 8
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 1,
+    "lap_end": 35,
+    "lap_start": 14,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 31,
+    "lap_end": 34,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 7
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 23,
+    "lap_end": 34,
+    "lap_start": 30,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 30,
+    "lap_end": 35,
+    "lap_start": 12,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 63,
+    "lap_end": 36,
+    "lap_start": 21,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 9
+  },
+  {
+    "compound": null,
+    "driver_number": 81,
+    "lap_end": 36,
+    "lap_start": 21,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 7
+  },
+  {
+    "compound": null,
+    "driver_number": 12,
+    "lap_end": 37,
+    "lap_start": 21,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 7
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 41,
+    "lap_end": 37,
+    "lap_start": 23,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 14,
+    "lap_end": 37,
+    "lap_start": 22,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 16,
+    "lap_end": 39,
+    "lap_start": 2,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 5
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 3,
+    "lap_end": 40,
+    "lap_start": 30,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 11,
+    "lap_end": 39,
+    "lap_start": 32,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 44,
+    "lap_end": 41,
+    "lap_start": 28,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": null,
+    "driver_number": 10,
+    "lap_end": 40,
+    "lap_start": 20,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 2,
+    "tyre_age_at_start": 6
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 5,
+    "lap_end": 53,
+    "lap_start": 34,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 55,
+    "lap_end": 55,
+    "lap_start": 31,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 6,
+    "lap_end": 58,
+    "lap_start": 33,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 31,
+    "lap_end": 58,
+    "lap_start": 35,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 12,
+    "lap_end": 61,
+    "lap_start": 38,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 23,
+    "lap_end": 50,
+    "lap_start": 35,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 87,
+    "lap_end": 60,
+    "lap_start": 29,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 16,
+    "lap_end": 62,
+    "lap_start": 40,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 44,
+    "lap_end": 66,
+    "lap_start": 42,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 11,
+    "lap_end": 63,
+    "lap_start": 40,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 63,
+    "lap_end": 66,
+    "lap_start": 37,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 1,
+    "lap_end": 66,
+    "lap_start": 36,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 6,
+    "lap_end": 65,
+    "lap_start": 59,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 3
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 5,
+    "lap_end": 64,
+    "lap_start": 54,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 55,
+    "lap_end": 64,
+    "lap_start": 56,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "MEDIUM",
+    "driver_number": 3,
+    "lap_end": 66,
+    "lap_start": 41,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 23,
+    "lap_end": 55,
+    "lap_start": 51,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 5,
+    "tyre_age_at_start": 3
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 10,
+    "lap_end": 65,
+    "lap_start": 41,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 81,
+    "lap_end": 66,
+    "lap_start": 37,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "SOFT",
+    "driver_number": 31,
+    "lap_end": 64,
+    "lap_start": 59,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 4,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 43,
+    "lap_end": 65,
+    "lap_start": 35,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 30,
+    "lap_end": 65,
+    "lap_start": 36,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  },
+  {
+    "compound": "HARD",
+    "driver_number": 41,
+    "lap_end": 65,
+    "lap_start": 38,
+    "meeting_key": 1287,
+    "session_key": 11307,
+    "stint_number": 3,
+    "tyre_age_at_start": 0
+  }
+]

@@ -1,14 +1,14 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-06-14T10:31:01.716576Z`
+Created UTC: `2026-06-14T16:11:53.614690Z`
 Operation: `full_run_chain`
 Status: **fail**
 
 ## Latest source state
 - Race/event: `Spain - Barcelona - Catalunya`
-- Session: `Qualifying`
-- Source status: `clean`
-- Workbook source status: `clean`
+- Session: `Race`
+- Source status: `needs_manual_review`
+- Workbook source status: `needs_manual_review`
 - Workbook commit allowed: `True`
 
 ## Steps
