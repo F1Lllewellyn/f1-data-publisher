@@ -1,0 +1,36 @@
+{
+  "schema_version": "f1_session_source_readiness_manifest_v30b",
+  "generated_for": "Session Data Processor Loop source adapter dry-run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "default_mode": "dry_run",
+  "adapter_groups": [
+    {
+      "id": "openf1",
+      "label": "OpenF1 public API",
+      "adapter_script": "scripts/autopilot/openf1_source_adapter_v30b.mjs",
+      "mode": "dry_run",
+      "planned_endpoints": ["meetings", "sessions", "drivers", "laps", "stints", "pit", "position", "weather", "race_control"],
+      "default_base_url": "https://api.openf1.org/v1",
+      "historical_without_auth": true,
+      "failure_policy": "block_forecast_refresh"
+    },
+    {
+      "id": "fastf1",
+      "label": "FastF1 Python package cache/session loader",
+      "adapter_script": "scripts/autopilot/fastf1_source_adapter_v30b.mjs",
+      "mode": "dry_run",
+      "planned_capabilities": ["session_metadata", "laps", "telemetry", "weather", "race_results"],
+      "requires_python_package": "fastf1",
+      "failure_policy": "block_model_update"
+    }
+  ],
+  "readiness_outputs": {
+    "status_file": "health/session_source_readiness_v30b_last_status.json",
+    "log_dir": "logs/session_source_readiness",
+    "forecast_bundle_ledger_mode": "planned_v30d"
+  }
+}
