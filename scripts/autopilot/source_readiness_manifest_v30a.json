@@ -1,0 +1,25 @@
+{
+  "schema_version": "f1_session_source_readiness_manifest_v30a",
+  "generated_for": "Session Data Processor Loop foundation",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "default_mode": "dry_run",
+  "source_groups": [
+    { "id": "openf1", "label": "OpenF1 public API", "required_for": ["practice", "qualifying", "race", "fantasy_readiness"], "adapter_status": "planned_v30b", "freshness_minutes": 20, "minimum_records": 1, "failure_policy": "block_forecast_refresh" },
+    { "id": "fastf1_cache", "label": "FastF1 timing/session cache", "required_for": ["practice", "qualifying", "race"], "adapter_status": "planned_v30b", "freshness_minutes": 60, "minimum_records": 1, "failure_policy": "block_model_update" },
+    { "id": "fia_documents", "label": "FIA documents and official classifications", "required_for": ["qualifying", "race", "reports"], "adapter_status": "planned_v30c", "freshness_minutes": 120, "minimum_records": 1, "failure_policy": "require_manual_review" },
+    { "id": "public_context", "label": "Public context sources for incident/weather/team notes", "required_for": ["risk_flags", "reports"], "adapter_status": "planned_v30c", "freshness_minutes": 180, "minimum_records": 1, "failure_policy": "warn_only" }
+  ],
+  "readiness_outputs": {
+    "status_file": "health/session_source_readiness_last_status.json",
+    "log_dir": "logs/session_source_readiness",
+    "forecast_bundle_ledger_mode": "planned_v30d"
+  },
+  "material_change_rules": {
+    "notify_only_when": ["source_group_changes_from_not_ready_to_ready", "source_group_changes_from_ready_to_not_ready", "new_official_classification_detected", "forecast_inputs_materially_changed"],
+    "suppress_when": ["dry_run_no_source_fetch", "no_material_readiness_change"]
+  }
+}
