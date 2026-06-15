@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://f1-prediction-engine.local/schemas/session_source_readiness_v30a.json",
+  "title": "F1 Session Source Readiness Manifest v30A",
+  "type": "object",
+  "required": ["schema_version", "production_automation", "forecast_gate", "promotion_allowed", "stable_engine_protected", "canonical_workbook_protected", "default_mode", "source_groups", "readiness_outputs", "material_change_rules"],
+  "properties": {
+    "schema_version": { "const": "f1_session_source_readiness_manifest_v30a" },
+    "production_automation": { "const": "OFF" },
+    "forecast_gate": { "const": "OFF" },
+    "promotion_allowed": { "const": false },
+    "stable_engine_protected": { "const": true },
+    "canonical_workbook_protected": { "const": true },
+    "default_mode": { "enum": ["dry_run"] },
+    "source_groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "required_for", "adapter_status", "freshness_minutes", "minimum_records", "failure_policy"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "label": { "type": "string", "minLength": 1 },
+          "required_for": { "type": "array", "items": { "type": "string" } },
+          "adapter_status": { "type": "string" },
+          "freshness_minutes": { "type": "integer", "minimum": 1 },
+          "minimum_records": { "type": "integer", "minimum": 0 },
+          "failure_policy": { "enum": ["block_forecast_refresh", "block_model_update", "require_manual_review", "warn_only"] }
+        }
+      }
+    },
+    "readiness_outputs": { "type": "object", "required": ["status_file", "log_dir", "forecast_bundle_ledger_mode"] },
+    "material_change_rules": { "type": "object", "required": ["notify_only_when", "suppress_when"] }
+  }
+}
