@@ -1,0 +1,21 @@
+{
+  "schema_version": "f1_source_validation_policy_v30c_2026-06-15",
+  "mode": "dry_run_contract",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "source_roles": {
+    "openf1": "primary_timing_telemetry_manifest",
+    "fastf1": "secondary_timing_cache_manifest",
+    "fia_documents_index": "official_result_penalty_classification_crosscheck",
+    "formula1_official_event_pages": "public_context_quote_schedule_crosscheck"
+  },
+  "dry_run_rules": {
+    "network_fetch_enabled": false,
+    "missing_public_source_documents_blocking": false,
+    "write_health_manifest": true,
+    "write_log_manifest": true
+  }
+}
