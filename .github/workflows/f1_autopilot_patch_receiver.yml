@@ -49,16 +49,16 @@ jobs:
         run: node -e "const fs=require('fs'); fs.mkdirSync('_runtime/autopilot_bridge',{recursive:true}); const manual=(process.env.MANUAL_PAYLOAD_JSON||'').trim(); const raw=manual||process.env.CLIENT_PAYLOAD_JSON||'{}'; const obj=JSON.parse(raw); const cmd=obj.command||obj; fs.writeFileSync('_runtime/autopilot_bridge/command.json', JSON.stringify(cmd,null,2));"
 
       - name: Validate command
-        run: node scripts/autopilot/validate_command.mjs _runtime/autopilot_bridge/command.json
+        run: node scripts/autopilot/validate_command.mjs --payload _runtime/autopilot_bridge/command.json --policy config/protected_paths.json --out _runtime/autopilot_bridge/validation.json
 
       - name: Apply command files
-        run: node scripts/autopilot/apply_assistant_patch.mjs _runtime/autopilot_bridge/command.json
+        run: node scripts/autopilot/apply_assistant_patch.mjs --payload _runtime/autopilot_bridge/command.json --validation _runtime/autopilot_bridge/validation.json --out _runtime/autopilot_bridge/applied_files.json
 
       - name: Run requested tests
-        run: node scripts/autopilot/run_requested_tests.mjs _runtime/autopilot_bridge/command.json
+        run: node scripts/autopilot/run_requested_tests.mjs --payload _runtime/autopilot_bridge/command.json --out _runtime/autopilot_bridge/test_results.json
 
       - name: Write bridge status ledger
-        run: node scripts/autopilot/write_status_ledger.mjs _runtime/autopilot_bridge/command.json
+        run: node scripts/autopilot/write_status_ledger.mjs --payload _runtime/autopilot_bridge/command.json --validation _runtime/autopilot_bridge/validation.json --applied _runtime/autopilot_bridge/applied_files.json --tests _runtime/autopilot_bridge/test_results.json --status PASS
 
       - name: Read PR metadata
         id: prmeta
