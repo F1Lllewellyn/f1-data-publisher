@@ -1,14 +1,17 @@
-name: F1 1C Gmail Autopilot Patch Receiver
+name: F1 Autopilot Patch Receiver
 
 on:
   repository_dispatch:
-    types: [f1_autopilot_patch]
+    types:
+      - f1_autopilot_patch
+      - f1_autopilot_patch_command
   workflow_dispatch:
     inputs:
       payload_json:
-        description: 'Raw f1_autopilot_patch_command payload JSON for manual dispatch testing'
-        required: true
+        description: Optional raw command JSON for manual receiver testing
+        required: false
         type: string
+        default: ""
 
 permissions:
   contents: write
@@ -16,185 +19,64 @@ permissions:
   actions: read
 
 concurrency:
-  group: f1-1c-autopilot-${{ github.event.client_payload.target_branch || github.run_id }}
+  group: f1-1c-autopilot-bridge-pr-only
   cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   validate_apply_pr:
+    name: validate_apply_pr
     runs-on: ubuntu-latest
+    timeout-minutes: 12
+    if: github.event_name == 'workflow_dispatch' || github.event.action == 'f1_autopilot_patch' || github.event.action == 'f1_autopilot_patch_command'
     steps:
-      - name: Checkout default branch
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Materialize payload
-        shell: bash
-        run: |
-          mkdir -p .autopilot_runtime
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            cat > .autopilot_runtime/payload.json <<'JSON'
-          ${{ toJson(github.event.client_payload) }}
-          JSON
-          else
-            cat > .autopilot_runtime/payload.json <<'JSON'
-          ${{ inputs.payload_json }}
-          JSON
-          fi
-          node -e "JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log('payload_json_parse=PASS')"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Validate command and scope
-        shell: bash
-        run: |
-          node scripts/autopilot/validate_command.mjs \
-            --payload .autopilot_runtime/payload.json \
-            --policy config/protected_paths.json \
-            --out .autopilot_runtime/validation.json
-
-      - name: Create target branch
-        shell: bash
-        run: |
-          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
-          case "$BRANCH" in
-            autopilot/*|install/*|outputs/*) ;;
-            *) echo "Blocked branch prefix: $BRANCH"; exit 1 ;;
-          esac
-          git checkout -B "$BRANCH"
-
-      - name: Apply patch
-        shell: bash
-        run: |
-          node scripts/autopilot/apply_assistant_patch.mjs \
-            --payload .autopilot_runtime/payload.json \
-            --validation .autopilot_runtime/validation.json \
-            --out .autopilot_runtime/applied_files.json
-          echo "git_status_after_apply=BEGIN"
-          git status --short --untracked-files=all
-          echo "git_status_after_apply=END"
-
-      - name: Run whitelisted named tests
-        shell: bash
-        run: |
-          node scripts/autopilot/run_requested_tests.mjs \
-            --payload .autopilot_runtime/payload.json \
-            --allowed config/autopilot_allowed_tests.json \
-            --out .autopilot_runtime/test_results.json
-
-      - name: Write status ledger
-        shell: bash
-        run: |
-          node scripts/autopilot/write_status_ledger.mjs \
-            --payload .autopilot_runtime/payload.json \
-            --validation .autopilot_runtime/validation.json \
-            --applied .autopilot_runtime/applied_files.json \
-            --tests .autopilot_runtime/test_results.json \
-            --status PASS
-          echo "git_status_after_ledger=BEGIN"
-          git status --short --untracked-files=all
-          echo "git_status_after_ledger=END"
-
-      - name: Commit and push branch
-        id: commit_push
-        shell: bash
-        run: |
-          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
-          git config user.name "f1-autopilot-bridge"
-          git config user.email "actions@users.noreply.github.com"
-
-          # v2 fix: stage approved roots one-by-one, only when they exist.
-          # The previous single git-add command could become a no-op when optional
-          # roots were absent. This loop prevents missing optional roots from
-          # blocking approved docs/health/log/output files from being committed.
-          cat > .autopilot_runtime/approved_stage_roots.txt <<'ROOTS'
-          .github/workflows
-          config
-          docs
-          processor
-          schemas
-          scripts
-          health
-          logs
-          latest
-          history
-          outputs
-          alerts
-          forecast_bundles
-          ROOTS
-
-          while IFS= read -r root; do
-            root="${root#"${root%%[![:space:]]*}"}"
-            root="${root%"${root##*[![:space:]]}"}"
-            if [ -n "$root" ] && [ -e "$root" ]; then
-              echo "force_stage_root=$root"
-              git add -A -f -- "$root"
-            else
-              echo "skip_missing_root=$root"
-            fi
-          done < .autopilot_runtime/approved_stage_roots.txt
-
-          # Also stage exactly the files reported by the apply step, after validation.
-          node - <<'NODE' > .autopilot_runtime/applied_paths.txt
-          const fs = require('fs');
-          const applied = JSON.parse(fs.readFileSync('.autopilot_runtime/applied_files.json','utf8'));
-          for (const item of applied.applied || []) {
-            if (item && typeof item.path === 'string' && item.path.trim()) {
-              console.log(item.path.trim());
-            }
-          }
-          NODE
-
-          while IFS= read -r file_path; do
-            file_path="${file_path#"${file_path%%[![:space:]]*}"}"
-            file_path="${file_path%"${file_path##*[![:space:]]}"}"
-            if [ -n "$file_path" ] && [ -e "$file_path" ]; then
-              echo "force_stage_applied_file=$file_path"
-              git add -A -f -- "$file_path"
-            fi
-          done < .autopilot_runtime/applied_paths.txt
-
-          echo "git_status_after_force_stage=BEGIN"
-          git status --short --untracked-files=all
-          echo "git_cached_diff_after_force_stage=BEGIN"
-          git diff --cached --name-status
-          echo "git_cached_diff_after_force_stage=END"
-          echo "git_status_after_force_stage=END"
-
-          if git diff --cached --quiet; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No changes to commit after force staging approved roots. Skipping PR creation."
-          else
-            git commit -m "Apply F1 autopilot patch: ${BRANCH}"
-            git push -u origin "$BRANCH" --force-with-lease
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Open or update PR
-        if: steps.commit_push.outputs.changed == 'true'
-        shell: bash
+      - name: Materialize command payload
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          BRANCH=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.target_branch)")
-          BASE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.base_branch || 'main')")
-          TITLE=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.title || 'F1 Autopilot Patch')")
-          SUMMARY=$(node -e "const p=JSON.parse(require('fs').readFileSync('.autopilot_runtime/payload.json','utf8')); console.log(p.summary || 'No summary supplied.')")
-          BODY="${SUMMARY}
+          CLIENT_PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          MANUAL_PAYLOAD_JSON: ${{ inputs.payload_json }}
+        run: node -e "const fs=require('fs'); fs.mkdirSync('_runtime/autopilot_bridge',{recursive:true}); const manual=(process.env.MANUAL_PAYLOAD_JSON||'').trim(); const raw=manual||process.env.CLIENT_PAYLOAD_JSON||'{}'; const obj=JSON.parse(raw); const cmd=obj.command||obj; fs.writeFileSync('_runtime/autopilot_bridge/command.json', JSON.stringify(cmd,null,2));"
 
-Safety:
-- Created by 1C Gmail Autopilot Bridge.
-- PR-only path.
-- Production automation remains OFF.
-- Promotion remains false.
-- Protected path validation passed before patch application."
-          if gh pr view "$BRANCH" >/dev/null 2>&1; then
-            gh pr view "$BRANCH" --json url
-          else
-            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$BODY"
-          fi
+      - name: Validate command
+        run: node scripts/autopilot/validate_command.mjs _runtime/autopilot_bridge/command.json
 
-      - name: Report no-op branch
-        if: steps.commit_push.outputs.changed != 'true'
-        shell: bash
-        run: |
-          echo "No PR was created because the validated command produced no repository diff."
-          echo "This is a safe no-op, not a production activation."
+      - name: Apply command files
+        run: node scripts/autopilot/apply_assistant_patch.mjs _runtime/autopilot_bridge/command.json
+
+      - name: Run requested tests
+        run: node scripts/autopilot/run_requested_tests.mjs _runtime/autopilot_bridge/command.json
+
+      - name: Write bridge status ledger
+        run: node scripts/autopilot/write_status_ledger.mjs _runtime/autopilot_bridge/command.json
+
+      - name: Read PR metadata
+        id: prmeta
+        run: node -e "const fs=require('fs'); const c=JSON.parse(fs.readFileSync('_runtime/autopilot_bridge/command.json','utf8')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'branch='+c.target_branch+'\n'); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'title='+c.title+'\n'); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'body='+((c.summary||'F1 1C Gmail Autopilot Bridge PR-only patch.').replace(/%/g,'%25').replace(/\r/g,'%0D').replace(/\n/g,'%0A'))+'\n');"
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.prmeta.outputs.branch }}
+          base: main
+          title: ${{ steps.prmeta.outputs.title }}
+          body: ${{ steps.prmeta.outputs.body }}
+          commit-message: ${{ steps.prmeta.outputs.title }}
+          add-paths: |
+            .github/workflows/f1_1c_repository_dispatch_catchall.yml
+            .github/workflows/f1_autopilot_patch_receiver.yml
+            scripts/autopilot/**
+            docs/autopilot_bridge/**
+            health/autopilot_last_status.json
+            logs/autopilot_bridge/**
