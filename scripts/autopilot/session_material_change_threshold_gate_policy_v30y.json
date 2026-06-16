@@ -1,0 +1,35 @@
+{
+  "schema_version": "f1_session_material_change_threshold_gate_policy_v30y_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "notification_sending_enabled": false,
+  "write_preview_artifact": true,
+  "thresholds": {
+    "min_readiness_rank_delta": 1,
+    "min_failed_case_delta": 1,
+    "min_data_ready_case_delta": 1,
+    "material_row_delta": 10
+  },
+  "material_change_types": [
+    "status_transition",
+    "blocking_source_count_change",
+    "failed_case_count_change",
+    "source_row_count_change",
+    "data_ready_case_change",
+    "live_fetch_observed",
+    "governance_issue"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
