@@ -1,0 +1,32 @@
+{
+  "schema_version": "f1_forecast_bundle_ledger_snapshot_policy_v30r_2026-06-16",
+  "mode": "dry_run",
+  "ledger_write_mode": "sandbox_snapshot",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "canonical_workbook_write_enabled": false,
+  "forecast_bundle_publish_enabled": false,
+  "race_predictions_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "allowed_upstream_artifacts": [
+    "control_room",
+    "source_summary",
+    "workbook_reflection",
+    "material_change",
+    "taxonomy"
+  ],
+  "blocking_conditions": [
+    "production_automation_not_off",
+    "forecast_gate_not_off",
+    "promotion_allowed_not_false",
+    "stable_engine_not_protected",
+    "canonical_workbook_not_protected",
+    "blocking_live_source_taxonomy"
+  ],
+  "next_step": "v30S_control_room_forecast_bundle_ledger_wiring_after_review"
+}
