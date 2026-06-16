@@ -1,0 +1,47 @@
+{
+  "schema_version": "f1_session_live_source_hardening_policy_v30q_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed_by_default": false,
+  "retry_policy": {
+    "max_attempts": 3,
+    "base_delay_seconds": 8,
+    "jitter_seconds": 4,
+    "retryable_failures": [
+      "source_timeout",
+      "network_dns_resolution_failure",
+      "provider_http_5xx",
+      "rate_limited_http_429"
+    ],
+    "non_retryable_failures": [
+      "schema_validation_failure",
+      "provider_http_4xx",
+      "empty_source_result",
+      "stale_source_artifact"
+    ]
+  },
+  "failure_taxonomy": {
+    "source_timeout": "Provider did not return within configured timeout.",
+    "network_dns_resolution_failure": "Host lookup failed or network path was unavailable.",
+    "rate_limited_http_429": "Provider rate-limited the request.",
+    "provider_http_5xx": "Provider/server-side failure.",
+    "provider_http_4xx": "Client/request or unavailable-resource failure.",
+    "schema_validation_failure": "Returned data did not match required structure.",
+    "stale_source_artifact": "Artifact is older than allowed freshness window.",
+    "empty_source_result": "Source returned no usable rows for a required artifact.",
+    "partial_source_artifact": "Some required source fragments are present but incomplete."
+  },
+  "downstream_consumer_policy": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
