@@ -1,0 +1,55 @@
+{
+  "schema_version": "f1_session_source_pull_evidence_policy_v31a_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "workbook_write_allowed": false,
+  "prediction_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "notification_sending_enabled": false,
+  "sources": [
+    {
+      "source_id": "openf1_session_results_probe",
+      "provider": "openf1",
+      "source_type": "timing_or_result_probe",
+      "enabled": true,
+      "url": "https://api.openf1.org/v1/sessions",
+      "query": {
+        "session_name": "{session}"
+      },
+      "required_fields": [
+        "session_key",
+        "session_name"
+      ],
+      "expected_min_rows": 1
+    },
+    {
+      "source_id": "openf1_meetings_probe",
+      "provider": "openf1",
+      "source_type": "event_context_probe",
+      "enabled": true,
+      "url": "https://api.openf1.org/v1/meetings",
+      "query": {
+        "meeting_name": "{event}"
+      },
+      "required_fields": [
+        "meeting_key",
+        "meeting_name"
+      ],
+      "expected_min_rows": 1
+    }
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
