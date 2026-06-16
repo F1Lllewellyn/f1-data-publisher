@@ -1,0 +1,21 @@
+{
+  "schema_version": "f1_session_sandbox_workbook_readiness_reflection_policy_v30n_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "canonical_workbook_write_allowed": false,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "artifact_target": "sandbox_json_artifact_only",
+  "consumer_rules": {
+    "workbook_refresh_allowed": false,
+    "forecast_bundle_refresh_allowed": false,
+    "race_predictions_refresh_allowed": false,
+    "fantasy_readiness_refresh_allowed": false,
+    "notification_sending_allowed": false
+  },
+  "next_step": "v30O_material_change_notifier_dry_run_after_review"
+}
