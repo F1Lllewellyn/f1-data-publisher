@@ -1,0 +1,25 @@
+{
+  "schema_version": "f1_session_material_change_policy_v30e_2026-06-16",
+  "mode": "dry_run_contract",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "material_fields": [
+    "ok",
+    "overall_readiness",
+    "present_inputs",
+    "expected_inputs",
+    "inputs[].present",
+    "inputs[].status",
+    "inputs[].ok",
+    "inputs[].governance_issues"
+  ],
+  "notification_policy": {
+    "emit_candidate_only": true,
+    "send_email": false,
+    "send_chat": false,
+    "notify_only_on_material_change": true
+  }
+}
