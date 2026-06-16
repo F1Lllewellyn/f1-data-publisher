@@ -1,0 +1,34 @@
+{
+  "schema_version": "f1_session_source_fetch_policy_v30g_2026-06-16",
+  "mode": "dry_run_contract",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_enabled": false,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "default_timeout_seconds": 30,
+  "required_source_families": [
+    "openf1",
+    "fastf1",
+    "fia_public_documents",
+    "formula1_public_site"
+  ],
+  "source_roles": {
+    "openf1_session_data": "primary_public_api",
+    "fastf1_session_cache": "secondary_timing_cache",
+    "fia_documents_index": "official_classification_penalty_crosscheck",
+    "formula1_official_event_context": "public_context_and_schedule_crosscheck"
+  },
+  "dry_run_rules": {
+    "perform_network_fetch": false,
+    "write_fetch_plan": true,
+    "write_log_manifest": true,
+    "block_if_no_session_end_gate": true,
+    "block_if_openf1_contract_missing": true,
+    "allow_fia_lag_with_reason": true,
+    "allow_fastf1_lag_with_reason": true
+  }
+}
