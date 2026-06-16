@@ -1,0 +1,38 @@
+{
+  "schema_version": "f1_control_room_operator_dashboard_packet_policy_v30z_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "notification_sending_enabled": false,
+  "require_consumer_gates_closed": true,
+  "expected_upstream_snapshots": [
+    "v30v_session_end_watcher_processor_loop",
+    "v30w_sandbox_live_source_pull_harness",
+    "v30x_session_processor_loop_replay_validation",
+    "v30y_material_change_threshold_gate"
+  ],
+  "operator_packet_sections": [
+    "governance",
+    "watcher",
+    "source",
+    "replay",
+    "threshold",
+    "forecast",
+    "blocking_issues",
+    "consumer_gates",
+    "recommended_action"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
