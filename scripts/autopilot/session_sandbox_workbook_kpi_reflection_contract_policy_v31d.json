@@ -1,0 +1,33 @@
+{
+  "schema_version": "f1_session_sandbox_workbook_kpi_reflection_contract_policy_v31d_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "sandbox_reflection_activation_allowed": false,
+  "reflection_fields": [
+    "event",
+    "session",
+    "source_review_status",
+    "downstream_contract_status",
+    "source_pull_status",
+    "source_count",
+    "ready_source_count",
+    "degraded_source_count",
+    "failed_source_count",
+    "row_count"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
