@@ -1,0 +1,45 @@
+{
+  "schema_version": "f1_session_end_watcher_processor_loop_policy_v30v_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "execute_processor_loop": true,
+  "execute_predictions_refresh": false,
+  "execute_fantasy_refresh": false,
+  "forecast_bundle_publish_enabled": false,
+  "canonical_workbook_write_enabled": false,
+  "race_predictions_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "terminal_event_types": [
+    "session_end",
+    "session_complete",
+    "session_completed",
+    "race_session_complete",
+    "chequered_flag",
+    "post_session",
+    "classification_posted"
+  ],
+  "terminal_session_statuses": [
+    "ended",
+    "complete",
+    "completed",
+    "final",
+    "official",
+    "classified",
+    "session_complete"
+  ],
+  "allowed_watcher_states": [
+    "no_gate_detected",
+    "processor_ready_dry_run_no_execution",
+    "processor_contract_ready_no_refresh",
+    "processor_not_ready",
+    "processor_status_missing_or_unknown",
+    "blocked"
+  ],
+  "next_step": "v30W_sandbox_live_source_pull_harness_after_review"
+}
