@@ -1,0 +1,25 @@
+{
+  "schema_version": "f1_session_control_room_source_cache_summary_policy_v30l_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "required_artifacts": [
+    "v30i_source_validation",
+    "v30j_openf1_probe",
+    "v30k_cache_status"
+  ],
+  "consumer_rules": {
+    "control_room_summary_only": true,
+    "workbook_refresh_allowed": false,
+    "forecast_bundle_refresh_allowed": false,
+    "race_predictions_refresh_allowed": false,
+    "fantasy_readiness_refresh_allowed": false,
+    "notification_sending_allowed": false
+  },
+  "next_step": "v30M_control_room_previous_snapshot_diff_or_sandbox_workbook_readiness_after_review"
+}
