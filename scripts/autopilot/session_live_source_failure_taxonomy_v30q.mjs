@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /*
-* F1 v30Q Live Source Hardening + Failure Taxonomy Dry-Run
+ * F1 v30Q R2 Live Source Hardening + Failure Taxonomy Dry-Run.
  *
- * Classifies source-readiness/fetch/probe artifacts into a deterministic failure taxonomy
- * before any live source activation or downstream consumer wiring is allowed.
- *
- * This script does not fetch network data, mutate workbooks, refresh forecasts,
- * send notifications, or modify stable engine artifacts.
+ * Classifies source-readiness/fetch/probe/cache artifacts into a deterministic
+ * taxonomy before downstream consumers can be considered. This script does not
+ * fetch live data, mutate workbooks, refresh forecasts, send notifications, or
+ * modify stable engine artifacts.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,6 +30,7 @@ function parseArgs(argv) {
     mode: 'dry_run',
     allowLive: false
   };
+
   for (let i = 2; i < argv.length; i += 1) {
     const key = argv[i];
     const value = argv[i + 1];
@@ -44,6 +44,7 @@ function parseArgs(argv) {
     else if (key === '--mode' && value) { args.mode = value; i += 1; }
     else if (key === '--allow-live' && value) { args.allowLive = value === 'true'; i += 1; }
   }
+
   return args;
 }
 
@@ -54,11 +55,12 @@ function readJsonMaybe(filePath) {
 
 function writeJson(filePath, payload) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + '\\n', 'utf8');
+  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
 }
 
 function collectSources(...payloads) {
   const byId = new Map();
+
   function add(sourceId, entry) {
     if (!sourceId) return;
     const existing = byId.get(sourceId) || { source_id: sourceId, evidence: [] };
@@ -69,17 +71,24 @@ function collectSources(...payloads) {
   for (const payload of payloads) {
     if (!payload) continue;
     if (Array.isArray(payload.sources)) {
-      for (const source of payload.sources) add(source.source_id || source.id || source.name, { kind: 'source', source });
+      for (const source of payload.sources) {
+        add(source.source_id || source.id || source.name, { kind: 'source', source });
+      }
     }
     if (Array.isArray(payload.requests)) {
-      for (const request of payload.requests) add(request.source_id || request.source || request.adapter, { kind: 'request', request });
+      for (const request of payload.requests) {
+        add(request.source_id || request.source || request.adapter, { kind: 'request', request });
+      }
     }
     if (Array.isArray(payload.results)) {
-      for (const result of payload.results) add(result.source_id || result.source || result.adapter, { kind: 'result', result });
+      for (const result of payload.results) {
+        add(result.source_id || result.source || result.adapter, { kind: 'result', result });
+      }
     }
     if (payload.source_id) add(payload.source_id, { kind: 'payload', payload });
     if (payload.adapter) add(payload.adapter, { kind: 'payload', payload });
   }
+
   return Array.from(byId.values());
 }
 
@@ -96,12 +105,30 @@ function classifyEvidence(source, policy) {
 
   for (const item of source.evidence) {
     const obj = item.result || item.request || item.source || item.payload || {};
-    const status = normalizeStatus(obj.status || obj.fetch_status || obj.validation_status || obj.readiness_status || obj.cache_status || obj.decision);
-    const error = normalizeStatus(obj.error || obj.error_code || obj.failure || obj.failure_type || obj.reason);
+    const status = normalizeStatus(
+      obj.status ||
+      obj.fetch_status ||
+      obj.validation_status ||
+      obj.readiness_status ||
+      obj.cache_status ||
+      obj.decision
+    );
+    const error = normalizeStatus(
+      obj.error ||
+      obj.error_code ||
+      obj.failure ||
+      obj.failure_type ||
+      obj.reason
+    );
     const rows = Number(obj.row_count ?? obj.rows ?? obj.record_count ?? obj.result_count ?? 0);
+
     if (Number.isFinite(rows) && rows > 0) rowEvidence += rows;
-    if (obj.cache_available === true || obj.fallback_available === true || status.includes('cache_artifact_ready')) fallbackAvailable = true;
-    if (status.includes('blocked_live') || status.includes('live_disabled') || obj.live_fetch_enabled === false) liveBlocked = true;
+    if (obj.cache_available === true || obj.fallback_available === true || status.includes('cache_artifact_ready')) {
+      fallbackAvailable = true;
+    }
+    if (status.includes('blocked_live') || status.includes('live_disabled') || obj.live_fetch_enabled === false) {
+      liveBlocked = true;
+    }
 
     if (status.includes('timeout') || error.includes('timeout')) failures.push('source_timeout');
     if (error.includes('dns') || error.includes('enotfound') || error.includes('eai_again')) failures.push('network_dns_resolution_failure');
@@ -112,14 +139,18 @@ function classifyEvidence(source, policy) {
     if (status.includes('stale') || error.includes('stale')) failures.push('stale_source_artifact');
     if (status.includes('empty') || error.includes('empty') || obj.empty === true) failures.push('empty_source_result');
     if (status.includes('partial')) warnings.push('partial_source_artifact');
-    if (liveBlocked) warnings.push('hlive_fetch_disabled_by_policy'.replace('hlive', 'live'));
+    if (liveBlocked) warnings.push('live_fetch_disabled_by_policy');
   }
 
-  if (rowEvidence === 0 && source.evidence.some((item) => item.kind === 'result')) failures.push('empty_source_result');
+  if (rowEvidence === 0 && source.evidence.some((item) => item.kind === 'result')) {
+    failures.push('empty_source_result');
+  }
 
   const uniqueFailures = Array.from(new Set(failures));
   const uniqueWarnings = Array.from(new Set(warnings));
-  const severity = uniqueFailures.length === 0 ? 'none' : (fallbackAvailable ? 'degraded_with_fallback' : 'blocking');
+  const severity = uniqueFailures.length === 0
+    ? 'none'
+    : (fallbackAvailable ? 'degraded_with_fallback' : 'blocking');
   const action = uniqueFailures.length === 0
     ? 'continue_dry_run_contract'
     : (fallbackAvailable ? 'use_cache_fallback_and_recheck' : 'hold_downstream_consumers');
@@ -140,6 +171,7 @@ function classifyEvidence(source, policy) {
 function deriveOverall(classifications, governanceIssues) {
   const blocking = classifications.filter((c) => c.severity === 'blocking');
   const degraded = classifications.filter((c) => c.severity === 'degraded_with_fallback');
+
   if (governanceIssues.length > 0) return { status: 'blocked', quality: 'governance_issue' };
   if (blocking.length > 0) return { status: 'blocked', quality: 'blocking_source_failures' };
   if (degraded.length > 0) return { status: 'degraded', quality: 'fallback_available_recheck_required' };
@@ -172,7 +204,7 @@ function main() {
   const overall = deriveOverall(classifications, issues);
 
   const status = {
-    schema_version: 'f1_session_live_source_failure_taxonomy_v30q_2026-06-16',
+    schema_version: 'f1_session_live_source_failure_taxonomy_v30q_r2_2026-06-16',
     generated_utc: nowIso(),
     mode: args.mode,
     allow_live: args.allowLive,
@@ -198,11 +230,18 @@ function main() {
       notification_send_enabled: false,
       production_automation_enabled: false
     },
-    next_step: 'v30R_forecast_bundle_ledger_snapshot_writer_after_hardening_review',
+    next_step: 'v30R_forecast_bundle_ledger_snapshot_writer_after_hardening_review'
   };
 
   writeJson(args.out, status);
-  if (args.log))writeJson(args.log, { ok: true, generated_utc: status.generated_utc, out: args.out, taxonomy_status: status.taxonomy_status });
+  if (args.log) {
+    writeJson(args.log, {
+      ok: true,
+      generated_utc: status.generated_utc,
+      out: args.out,
+      taxonomy_status: status.taxonomy_status
+    });
+  }
 
   console.log(JSON.stringify({
     ok: true,
