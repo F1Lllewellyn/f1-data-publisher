@@ -1,5 +1,5 @@
 {
-  "schema_version": "f1_session_live_source_hardening_policy_v30q_2026-06-16",
+  "schema_version": "f1_session_live_source_hardening_policy_v30q_r2_2026-06-16",
   "mode": "dry_run",
   "production_automation": "OFF",
   "forecast_gate": "OFF",
