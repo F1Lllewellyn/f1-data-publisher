@@ -1,0 +1,26 @@
+{
+  "schema_version": "f1_session_control_room_forecast_bundle_ledger_wiring_policy_v30s_2026-06-16",
+  "mode": "dry_run",
+  "ledger_wiring_mode": "dry_run_control_room_handoff",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "execute_forecast_bundle_ledger_writer": true,
+  "canonical_workbook_write_enabled": false,
+  "forecast_bundle_publish_enabled": false,
+  "race_predictions_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "allowed_upstream_artifacts": [
+    "control_room",
+    "source_summary",
+    "workbook_reflection",
+    "material_change",
+    "taxonomy",
+    "forecast_bundle_ledger_status"
+  ],
+  "next_step": "v30T_race_predictions_fantasy_readiness_refresh_gate_dry_run_after_review"
+}
