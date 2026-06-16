@@ -1,0 +1,27 @@
+{
+  "schema_version": "f1_session_source_evidence_review_gate_policy_v31b_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_performed_by_review_gate": false,
+  "source_evidence_live_mode_allowed_for_review": "sandbox_live",
+  "requires_live_evidence_policy_allowance": true,
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "review_statuses": {
+    "ready": "source_evidence_review_ready",
+    "degraded": "source_evidence_review_degraded",
+    "blocked": "source_evidence_review_blocked",
+    "contract": "source_evidence_review_contract_ready"
+  }
+}
