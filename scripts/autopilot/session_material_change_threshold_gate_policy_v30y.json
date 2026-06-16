@@ -1,5 +1,5 @@
 {
-  "schema_version": "f1_session_material_change_threshold_gate_policy_v30y_2026-06-16",
+  "schema_version": "f1_session_material_change_threshold_gate_policy_v30y_r2_2026-06-16",
   "mode": "dry_run",
   "production_automation": "OFF",
   "forecast_gate": "OFF",
