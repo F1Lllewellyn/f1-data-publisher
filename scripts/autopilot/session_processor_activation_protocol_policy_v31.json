@@ -1,0 +1,36 @@
+{
+  "schema_version": "f1_session_processor_activation_protocol_policy_v31_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "workbook_write_allowed": false,
+  "prediction_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "notification_sending_enabled": false,
+  "required_evidence": [
+    "dashboard",
+    "replay",
+    "source",
+    "threshold"
+  ],
+  "required_manual_approvals": [
+    "sandbox_live_source_pull",
+    "sandbox_workbook_reflection",
+    "forecast_bundle_snapshot_write",
+    "race_predictions_readiness_refresh",
+    "fantasy_readiness_refresh",
+    "material_notification_preview"
+  ],
+  "forbidden_activation_targets": [
+    "production_automation",
+    "canonical_workbook_write",
+    "forecast_gate",
+    "model_promotion",
+    "notification_send",
+    "stable_engine_modification"
+  ]
+}
