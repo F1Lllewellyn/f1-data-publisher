@@ -1,0 +1,25 @@
+{
+  "schema_version": "f1_session_source_cache_artifact_policy_v30k_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "source_family": "openf1",
+  "required_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints"
+  ],
+  "cache_artifact_rules": {
+    "write_artifact_only_when_data_ready": true,
+    "allow_manifest_only_status": true,
+    "downstream_refresh_allowed": false,
+    "consumer_gates_remain_closed_until_control_room_wiring_review": true
+  },
+  "next_step": "v30L_control_room_source_cache_summary_dry_run_after_review"
+}
