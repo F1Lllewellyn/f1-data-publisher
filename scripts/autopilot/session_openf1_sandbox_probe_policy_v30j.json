@@ -1,0 +1,29 @@
+{
+  "schema_version": "f1_session_openf1_sandbox_probe_policy_v30j_2026-06-16",
+  "mode": "sandbox_probe",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_live_probe_allowed": true,
+  "workboook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "default_timeout_seconds": 20,
+  "minimum_openf1_request_count": 4,
+  "require_nonempty_required_results": true,
+  "required_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints"
+  ],
+  "network_rules": {
+    "default_perform_network_fetch": false,
+    "perform_network_fetch_only_when_mode_sandbox_live_and_allow_live_true": true,
+    "openf1_only": true,
+    "no_fastf1_execution": true,
+    "no_fia_fetch": true,
+    "no_formula1_public_fetch": true
+  }
+}

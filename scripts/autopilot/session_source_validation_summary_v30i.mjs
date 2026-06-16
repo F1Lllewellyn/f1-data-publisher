@@ -82,7 +82,7 @@ function validateFetchResults(adapter, requests, policy) {
   const requiredLiveFailures = [];
 
   if (adapter.live_fetch_enabled === true) {
-    for (const request of requirdLive) {
+    for (const request of requiredLive) {
       const result = resultById.get(request.request_id);
       if (!result) {
         requiredLiveFailures.push({ request_id: request.request_id, issue: 'missing_fetch_result' });
