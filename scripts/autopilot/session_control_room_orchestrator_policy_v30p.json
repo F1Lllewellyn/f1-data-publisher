@@ -1,0 +1,37 @@
+{
+  "schema_version": "f1_session_control_room_orchestrator_policy_v30p_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_enabled": false,
+  "forecast_bundle_write_enabled": false,
+  "prediction_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "live_fetch_enabled_by_default": false,
+  "allowed_stage_prefixes": ["v30f", "v30g", "v30h", "v30i", "v30j", "v30k", "v30l", "v30m", "v30n", "v30o"],
+  "required_scripts": [
+    "scripts/autopilot/session_source_fetch_contract_v30g.mjs",
+    "scripts/autopilot/session_source_fetch_adapter_v30h.mjs",
+    "scripts/autopilot/session_source_validation_summary_v30i.mjs",
+    "scripts/autopilot/session_source_cache_artifact_writer_v30k.mjs",
+    "scripts/autopilot/session_control_room_source_cache_summary_v30l.mjs",
+    "scripts/autopilot/session_control_room_snapshot_diff_v30m.mjs",
+    "scripts/autopilot/session_sandbox_workbook_readiness_reflection_v30n.mjs",
+    "scripts/autopilot/session_material_change_notifier_dry_run_v30o.mjs"
+  ],
+  "status_artifact_contracts": {
+    "source_fetch_contract": "health/session_source_fetch_contract_v30g_status.json",
+    "source_fetch_adapter": "health/session_source_fetch_adapter_v30h_status.json",
+    "source_validation_summary": "health/session_source_validation_summary_v30i_status.json",
+    "openf1_probe": "health/session_openf1_sandbox_probe_v30j_status.json",
+    "source_cache_writer": "health/session_source_cache_artifact_writer_v30k_status.json",
+    "control_room_cache_summary": "health/session_control_room_source_cache_summary_v30l_status.json",
+    "snapshot_diff": "health/session_control_room_snapshot_diff_v30m_status.json",
+    "sandbox_workbook_reflection": "health/session_sandbox_workbook_readiness_reflection_v30n_status.json",
+    "material_change_notifier": "health/session_material_change_notifier_dry_run_v30o_status.json"
+  }
+}
