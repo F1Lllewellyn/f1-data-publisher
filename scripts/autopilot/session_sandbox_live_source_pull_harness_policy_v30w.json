@@ -1,0 +1,29 @@
+{
+  "schema_version": "f1_session_sandbox_live_source_pull_harness_policy_v30w_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_enabled": false,
+  "prediction_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "sandbox_live_fetch_allowed": true,
+  "sandbox_live_requires_explicit_allow_live": true,
+  "default_timeout_seconds": 15,
+  "required_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints"
+  ],
+  "require_nonempty_required_results": true,
+  "allowed_modes": [
+    "dry_run",
+    "fixture",
+    "sandbox_live"
+  ],
+  "next_step": "v30X_end_to_end_replay_fixture_validation_runner_after_review"
+}
