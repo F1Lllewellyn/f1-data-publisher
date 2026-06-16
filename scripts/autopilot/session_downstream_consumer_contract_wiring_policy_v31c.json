@@ -1,0 +1,52 @@
+{
+  "schema_version": "f1_session_downstream_consumer_contract_wiring_policy_v31c_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "execute_allowed": false,
+  "consumer_contracts": [
+    {
+      "consumer_id": "sandbox_workbook_kpi_reflection",
+      "consumer_type": "sandbox_workbook_readiness_reflection",
+      "intended_role": "write sandbox-only KPI/readiness reflection after explicit activation",
+      "blocked_until": "v31d_contract_review"
+    },
+    {
+      "consumer_id": "forecast_bundle_ledger_snapshot",
+      "consumer_type": "forecast_bundle_ledger_writer",
+      "intended_role": "save Forecast Bundle Ledger snapshot after source readiness is accepted",
+      "blocked_until": "forecast_bundle_writer_activation_review"
+    },
+    {
+      "consumer_id": "race_predictions_readiness_refresh",
+      "consumer_type": "race_predictions_readiness_artifact",
+      "intended_role": "refresh readiness metadata only, not prediction output",
+      "blocked_until": "race_predictions_readiness_review"
+    },
+    {
+      "consumer_id": "fantasy_readiness_refresh",
+      "consumer_type": "fantasy_readiness_artifact",
+      "intended_role": "refresh fantasy readiness metadata only, not picks",
+      "blocked_until": "fantasy_readiness_review"
+    },
+    {
+      "consumer_id": "material_notification_preview",
+      "consumer_type": "notification_preview_artifact",
+      "intended_role": "prepare notification preview for material readiness change",
+      "blocked_until": "notification_send_activation_review"
+    }
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
