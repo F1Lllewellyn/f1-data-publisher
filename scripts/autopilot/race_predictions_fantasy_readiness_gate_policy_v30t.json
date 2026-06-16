@@ -1,0 +1,32 @@
+{
+  "schema_version": "f1_race_predictions_fantasy_readiness_gate_policy_v30t_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "forecast_bundle_publish_enabled": false,
+  "race_predictions_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "canonical_workbook_write_enabled": false,
+  "notification_send_enabled": false,
+  "allowed_readiness_states": [
+    "refresh_ready_dry_run",
+    "contract_ready_no_refresh",
+    "not_ready",
+    "blocked"
+  ],
+  "blocking_conditions": [
+    "production_automation_not_off",
+    "forecast_gate_not_off",
+    "promotion_allowed_not_false",
+    "stable_engine_not_protected",
+    "canonical_workbook_not_protected",
+    "race_predictions_refresh_not_disabled",
+    "fantasy_refresh_not_disabled",
+    "forecast_bundle_ledger_blocked"
+  ],
+  "next_step": "v30U_session_processor_loop_readiness_orchestrator_after_review"
+}
