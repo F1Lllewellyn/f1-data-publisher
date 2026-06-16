@@ -1,0 +1,49 @@
+{
+  "schema_version": "f1_session_processor_loop_replay_validation_policy_v30x_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "allow_live_fixture_evidence": false,
+  "embedded_fixture_cases": [
+    {
+      "case_id": "no_gate_noop",
+      "event": {"gate_type": "heartbeat", "session_end": false},
+      "expected": {"status": "no_gate_noop"}
+    },
+    {
+      "case_id": "contract_ready_session_end",
+      "event": {"gate_type": "session_end", "session_end": true},
+      "watcher_status": {"watcher_status": "processor_ready_dry_run_no_execution"},
+      "source_pull_status": {"pull_status": "pull_manifest_ready_no_live_fetch"},
+      "forecast_readiness": {"readiness_status": "contract_ready"},
+      "expected": {"status": "contract_ready_fixture"}
+    },
+    {
+      "case_id": "data_ready_session_end",
+      "event": {"gate_type": "session_end", "session_end": true},
+      "watcher_status": {"watcher_status": "processor_ready_dry_run_no_execution"},
+      "source_pull_status": {"pull_status": "source_data_ready_sandbox", "row_count": 25},
+      "forecast_readiness": {"readiness_status": "refresh_ready_dry_run"},
+      "expected": {"status": "ready_dry_run_fixture"}
+    },
+    {
+      "case_id": "blocking_failure_session_end",
+      "event": {"gate_type": "session_end", "session_end": true},
+      "watcher_status": {"watcher_status": "processor_ready_dry_run_no_execution"},
+      "source_pull_status": {"pull_status": "blocked", "failures": ["source_timeout"]},
+      "expected": {"status": "blocked_failure_fixture"}
+    }
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  }
+}
