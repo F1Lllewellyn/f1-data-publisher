@@ -1,0 +1,22 @@
+{
+  "schema_version": "f1_bridge_status_policy_v31_2026-06-16",
+  "default_status_write_mode": "runtime_only",
+  "tracked_status_files_default": false,
+  "tracked_status_files_enabled_by": [
+    "--write-tracked-status true",
+    "F1_BRIDGE_WRITE_TRACKED_STATUS=true"
+  ],
+  "reason": "Generated bridge status files changed on every dispatch and caused avoidable PR conflicts between feature branches.",
+  "runtime_status_path": "_runtime/autopilot_bridge/status_ledger.json",
+  "tracked_status_paths_when_explicitly_enabled": [
+    "health/autopilot_last_status.json",
+    "logs/autopilot_bridge/dispatch_*.json"
+  ],
+  "governance": {
+    "production_automation": "OFF",
+    "forecast_gate": "OFF",
+    "promotion_allowed": false,
+    "stable_engine_protected": true,
+    "canonical_workbook_protected": true
+  }
+}
