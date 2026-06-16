@@ -1,0 +1,27 @@
+{
+  "schema_version": "f1_session_control_room_snapshot_diff_policy_v30m_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "diff_rules": {
+    "initial_snapshot_is_not_material_change": true,
+    "compare_summary_status": true,
+    "compare_cache_readiness": true,
+    "compare_missing_artifacts": true,
+    "compare_governance_issue_count": true,
+    "compare_artifact_readiness": true
+  },
+  "consumer_rules": {
+    "notification_allowed": false,
+    "workbook_refresh_allowed": false,
+    "forecast_bundle_refresh_allowed": false,
+    "race_predictions_refresh_allowed": false,
+    "fantasy_readiness_refresh_allowed": false
+  },
+  "next_step": "v30N_sandbox_workbook_readiness_reflection_or_material_change_notifier_after_review"
+}
