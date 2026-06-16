@@ -1,0 +1,29 @@
+{
+  "schema_version": "f1_session_source_validation_policy_v30i_2026-06-16",
+  "mode": "dry_run_validation_summary",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "minimum_request_count": 9,
+  "require_nonempty_required_results": true,
+  "required_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints",
+    "fastf1_cache_manifest",
+    "fia_documents_manual_public_index",
+    "formula1_public_event_context"
+  ],
+  "consumer_rules": {
+    "contract_ready_allows_control_room_wiring": true,
+    "data_ready_required_for_forecast_refresh": true,
+    "data_ready_required_for_workbook_refresh": true,
+    "dry_run_must_not_write_workbook": true,
+    "dry_run_must_not_send_notifications": true
+  }
+}
