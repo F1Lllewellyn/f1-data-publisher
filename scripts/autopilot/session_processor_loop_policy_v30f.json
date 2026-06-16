@@ -1,0 +1,24 @@
+{
+  "schema_version": "f1_session_processor_loop_policy_v30f_2026-06-16",
+  "mode": "dry_run_contract",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "default_gate_behavior": "require_session_end_signal",
+  "initial_baseline_behavior": "suppress_notification_until_previous_snapshot_exists",
+  "steps": [
+    "read_session_gate_event",
+    "run_or_read_v30d_session_readiness",
+    "run_or_read_v30e_material_change",
+    "emit_loop_summary"
+  ],
+  "notification_policy": {
+    "emit_candidate_only": true,
+    "send_email": false,
+    "send_chat": false,
+    "notify_only_on_material_change": true,
+    "suppress_initial_baseline_notification": true
+  }
+}
