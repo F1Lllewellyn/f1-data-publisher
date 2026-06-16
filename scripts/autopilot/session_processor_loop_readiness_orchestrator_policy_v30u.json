@@ -1,0 +1,26 @@
+{
+  "schema_version": "f1_session_processor_loop_readiness_orchestrator_policy_v30u_2026-06-16",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "live_fetch_allowed": false,
+  "execute_v30s_ledger_wiring": true,
+  "execute_v30t_readiness_gate": true,
+  "execute_predictions_refresh": false,
+  "execute_fantasy_refresh": false,
+  "forecast_bundle_publish_enabled": false,
+  "canonical_workbook_write_enabled": false,
+  "race_predictions_refresh_enabled": false,
+  "fantasy_refresh_enabled": false,
+  "notification_send_enabled": false,
+  "allowed_loop_readiness_states": [
+    "ready_dry_run_no_execution",
+    "contract_ready_no_refresh",
+    "not_ready",
+    "blocked"
+  ],
+  "next_step": "v30V_session_end_watcher_to_processor_loop_dry_run_after_review"
+}
