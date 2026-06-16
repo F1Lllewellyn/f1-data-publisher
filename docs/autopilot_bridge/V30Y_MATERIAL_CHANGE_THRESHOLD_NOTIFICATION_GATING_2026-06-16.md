@@ -1,30 +1,30 @@
-# V30Y Material-Change Threshold and Notification Gating
+# V30Y R2 Material-Change Threshold and Notification Gating
 
-This patch adds a dry-run material-change threshold gate for the Session Data Processor Loop.
+This patch replaces the v30Y command payload with a clean ASCII-only dry-run material-change gate.
 
 ## Purpose
 
-V30Y compares current session-loop readiness evidence with a previous snapshot and determines whether the difference is material enough to create a notification preview.
+V30Y compares current Session Data Processor Loop readiness evidence with a previous snapshot and decides whether a material-change notification preview should be created.
 
-## What It Does
+## Scope
 
-- Classifies readiness status transitions.
+- Detects readiness status transitions.
 - Detects blocking-source count changes.
 - Detects failed-case count changes.
-- Detects source row-count deltas above configured thresholds.
+- Detects source row-count changes above policy threshold.
 - Detects data-ready case changes.
-- Treats any live-fetch evidence as manual-review material.
-- Writes a machine-readable threshold-gate status.
+- Treats live-fetch evidence as material manual-review signal.
+- Keeps notification sending disabled.
 
-## What It Does Not Do
+## Governance
 
-- Does not send notifications.
-- Does not activate production automation.
-- Does not activate the forecast gate.
-- Does not promote model logic.
-- Does not write to the canonical workbook.
-- Does not refresh Race Predictions or Fantasy outputs.
+- Production automation remains OFF.
+- Forecast gate remains OFF.
+- Model promotion remains false.
+- Stable engine remains untouched.
+- Canonical workbook remains untouched.
+- Race Predictions and Fantasy refresh remain disabled.
 
 ## Next Step
 
-After V30Y is merged, the next safe layer is V30Z: Control Room operator dashboard packet.
+After V30Y R2 is merged and reviewed, proceed to V30Z: Control Room operator dashboard packet.
