@@ -1,0 +1,40 @@
+{
+  "schema_version": "f1_session_readiness_control_room_policy_v30d_2026-06-16",
+  "mode": "dry_run_contract",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "required_inputs": [
+    {
+      "id": "v30a_source_readiness",
+      "default_path": "health/session_source_readiness_last_status.json",
+      "required_for_ready": false,
+      "role": "source_group_manifest"
+    },
+    {
+      "id": "v30b_adapter_readiness",
+      "default_path": "health/session_source_readiness_v30b_last_status.json",
+      "required_for_ready": false,
+      "role": "openf1_fastf1_adapter_contract"
+    },
+    {
+      "id": "v30c_public_crosscheck",
+      "default_path": "health/source_crosscheck_v30c_status.json",
+      "required_for_ready": false,
+      "role": "public_fia_crosscheck_contract"
+    }
+  ],
+  "readiness_states": {
+    "ready": "all expected dry-run manifests are present and pass governance checks",
+    "partial": "one or more expected dry-run manifests are missing, but no governance breach is found",
+    "blocked": "governance breach or invalid manifest detected"
+  },
+  "material_change_policy": {
+    "notify_only_on_state_change": true,
+    "write_status_manifest": true,
+    "write_log_manifest": true,
+    "no_chat_notification_from_script": true
+  }
+}
