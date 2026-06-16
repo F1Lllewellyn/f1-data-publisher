@@ -1,0 +1,27 @@
+{
+  "schema_version": "f1_session_source_fetch_adapter_policy_v30h_2026-06-16",
+  "mode": "dry_run_manifest",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_live_fetch_allowed": false,
+  "workbook_write_allowed": false,
+  "notification_sending_enabled": false,
+  "default_timeout_seconds": 20,
+  "network_rules": {
+    "default_perform_network_fetch": false,
+    "allow_openf1_only_when_sandbox_live_and_explicit_allow_live": true,
+    "allow_fastf1_python_execution": false,
+    "allow_fia_public_fetch": false,
+    "allow_formula1_public_fetch": false
+  },
+  "output_rules": {
+    "write_request_manifest": true,
+    "write_fetch_results_only_when_live_enabled": true,
+    "write_cache_metadata": true,
+    "write_workbook": false,
+    "send_notifications": false
+  }
+}
