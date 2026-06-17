@@ -1,0 +1,34 @@
+{
+  "schema_version": "f1_session_processor_material_change_notification_preflight_policy_v32m_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "required_fantasy_preflight_status": "fantasy_predictions_readiness_refresh_preflight_ready",
+  "required_fantasy_preflight_quality": "race_predictions_preflight_verified_no_fantasy_refresh_performed",
+  "material_change_policy": {
+    "treat_ready_preflight_chain_as_material": true,
+    "min_ready_gate_count": 1,
+    "notification_preview_allowed": true,
+    "notification_send_allowed": false
+  },
+  "race_predictions_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "forecast_bundle_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "notification_send_allowed": false,
+  "live_fetch_allowed": false,
+  "activation_allowed": false,
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_layer": "v32n_operator_handoff_readiness_packet_finalizer"
+}
