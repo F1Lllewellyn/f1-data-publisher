@@ -1,0 +1,29 @@
+{
+  "schema_version": "f1_session_processor_forecast_bundle_ledger_evidence_review_policy_v32j_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "required_status": "controlled_sandbox_forecast_ledger_written_sandbox_only",
+  "required_artifact_type": "sandbox_forecast_bundle_ledger_snapshot_v32i",
+  "required_target": "sandbox_only",
+  "required_write_scope": "sandbox_artifact_only",
+  "allow_live_fetch": false,
+  "allow_activation": false,
+  "allow_production_ledger_write": false,
+  "allow_canonical_workbook_write": false,
+  "allow_notification_send": false,
+  "max_artifact_age_minutes": 1440,
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_layer": "v32k_race_predictions_readiness_refresh_preflight_after_review"
+}
