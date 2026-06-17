@@ -1,0 +1,108 @@
+{
+  "version": "v33B-R3",
+  "created_utc": "2026-06-17T22:55:00Z",
+  "purpose": "One-command end-to-end dry-run rehearsal for the Session Data Processor Loop activation path after v33A operator-review verification, with R3 bridge-contract repair: tests array remains empty and policy file lives under scripts/autopilot to match the repeated successful v32 merge-gate path pattern.",
+  "mode": "pr_only_dry_run",
+  "allowed_side_effects": {
+    "write_rehearsal_artifact": true,
+    "read_repo_files": true,
+    "read_fixture_files": true,
+    "network_fetch": false,
+    "production_automation": false,
+    "workbook_write": false,
+    "ledger_write": false,
+    "race_predictions_refresh": false,
+    "fantasy_predictions_refresh": false,
+    "notification_send": false,
+    "model_promotion": false,
+    "delete_or_overwrite_protected_files": false
+  },
+  "required_explicit_false_flags": [
+    "allow_live",
+    "production_automation",
+    "workbook_write",
+    "ledger_write",
+    "race_predictions_refresh",
+    "fantasy_predictions_refresh",
+    "notification_send",
+    "model_promotion"
+  ],
+  "protected_paths": [
+    "Engine_2026-06-07_STABLE",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "backups/",
+    "source_archives/",
+    ".env",
+    "secrets/",
+    "tokens/"
+  ],
+  "required_evidence_chain": {
+    "v32N_dry_run_operator_packet": {
+      "candidate_paths": [
+        "artifacts/autopilot/v32n/dry_run_operator_packet_v32n.json",
+        "artifacts/autopilot/v32N/dry_run_operator_packet_v32n.json",
+        "artifacts/autopilot/dry_run_operator_packet_v32n.json"
+      ],
+      "required_fields": {
+        "version": "v32N",
+        "live_fetch": false,
+        "production_automation": false,
+        "workbook_write": false,
+        "ledger_write": false,
+        "notification_send": false,
+        "model_promotion": false
+      },
+      "allowed_statuses": [
+        "READY",
+        "PASS",
+        "DRY_RUN_READY"
+      ]
+    },
+    "v33A_operator_review_verifier": {
+      "candidate_paths": [
+        "artifacts/autopilot/v33a/operator_review_verifier_output_v33a.json",
+        "artifacts/autopilot/v33A/operator_review_verifier_output_v33a.json",
+        "artifacts/autopilot/operator_review_verifier_output_v33a.json"
+      ],
+      "required_fields": {
+        "version": "v33A",
+        "live_fetch": false,
+        "production_automation": false,
+        "workbook_write": false,
+        "ledger_write": false,
+        "notification_send": false,
+        "model_promotion": false
+      },
+      "allowed_statuses": [
+        "READE",
+        "PASS",
+        "DRY_RUN_READY"
+      ]
+    }
+  },
+  "dry_run_stage_contract": [
+    "policy_guard",
+    "evidence_chain",
+    "bridge_intake",
+    "source_gate_detector",
+    "source_fetch_plan",
+    "data_validator",
+    "manifest_writer_plan",
+    "forecast_bundle_ledger_plan",
+    "sandbox_workbook_kpi_plan",
+    "race_fantasy_readiness_plan",
+    "notification_plan"
+  ],
+  "readiness_rule": "READY only when all required evidence files are present, required false flags are false, and every stage is pass/no-op dry run. Otherwise BLOCKED with explicit blockers.",
+  "allowed_output_roots": [
+    "artifacts/autopilot/v33b/",
+    "verification/"
+  ],
+  "write_guard": {
+    "output_must_remain_inside_repo_root": true,
+    "output_must_be_under_allowed_output_roots": true,
+    "do_not_write_when_output_policy_blocked": true,
+    "protected_path_touch_blocks_artifact_write": true
+  }
+}
