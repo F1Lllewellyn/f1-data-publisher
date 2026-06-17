@@ -1,0 +1,40 @@
+{
+  "schema_version": "f1_session_processor_controlled_sandbox_forecast_ledger_policy_v32i_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_forecast_ledger_write_allowed": true,
+  "production_forecast_ledger_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "activation_allowed": false,
+  "live_fetch_allowed": false,
+  "operator_approval_required": true,
+  "required_inputs": [
+    "forecast_bundle_ledger_write_preflight",
+    "forecast_bundle_ledger_contract"
+  ],
+  "required_preflight_status": "ready",
+  "required_contract_status": "forecast_bundle_ledger_contract_ready",
+  "sandbox_artifact_default": "sandbox/session_processor/forecast_bundle_ledger_snapshot_v32i.json",
+  "blocked_write_targets": [
+    "Engine_2026-06-07_STABLE",
+    "canonical_workbook",
+    "production_forecast_bundle_ledger",
+    "race_predictions",
+    "fantasy_outputs",
+    "production_automation"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "v32j_forecast_bundle_ledger_evidence_review"
+}
