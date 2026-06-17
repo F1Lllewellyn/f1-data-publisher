@@ -1,0 +1,41 @@
+{
+  "schema_version": "f1_session_processor_sandbox_workbook_reflection_preflight_policy_v32e_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "activation_allowed": false,
+  "execution_allowed": false,
+  "sandbox_workbook_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "required_inputs": [
+    "sandbox_execution_evidence_review",
+    "sandbox_reflection_contract"
+  ],
+  "required_review_status": "sandbox_execution_evidence_review_ready",
+  "required_reflection_status": "sandbox_kpi_reflection_contract_ready",
+  "candidate_sandbox_targets": [
+    "sandbox_workbook_reflection_status",
+    "sandbox_kpi_readiness_artifact"
+  ],
+  "blocked_write_targets": [
+    "Engine_2026-06-07_STABLE",
+    "canonical_workbook",
+    "forecast_bundle_ledger",
+    "race_predictions",
+    "fantasy_outputs",
+    "production_automation"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "v32f_controlled_sandbox_workbook_reflection_execution"
+}
