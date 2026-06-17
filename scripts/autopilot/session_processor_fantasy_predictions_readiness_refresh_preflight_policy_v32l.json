@@ -1,0 +1,28 @@
+{
+  "schema_version": "f1_session_processor_fantasy_predictions_readiness_refresh_preflight_policy_v32l_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "required_race_preflight_status": "race_predictions_readiness_refresh_preflight_ready",
+  "required_race_preflight_quality": "ledger_evidence_review_verified_no_refresh_performed",
+  "race_predictions_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "forecast_bundle_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "notification_send_allowed": false,
+  "live_fetch_allowed": false,
+  "activation_allowed": false,
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_layer": "v32m_material_change_notification_preflight_after_fantasy_preflight"
+}
