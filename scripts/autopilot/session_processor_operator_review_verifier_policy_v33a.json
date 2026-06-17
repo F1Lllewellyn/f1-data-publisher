@@ -1,0 +1,28 @@
+{
+  "schema_version": "f1_session_processor_operator_review_verifier_policy_v33a_2026-06-17",
+  "mode": "dry_run",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "allow_sandbox_live_in_v33a": false,
+  "required_handoff_status": "operator_handoff_readiness_packet_ready",
+  "required_handoff_quality": "dry_run_readiness_chain_finalized_for_operator_review",
+  "required_evidence_chain": [
+    "v32j_forecast_bundle_ledger_evidence_review",
+    "v32k_race_predictions_readiness_refresh_preflight",
+    "v32l_fantasy_predictions_readiness_refresh_preflight",
+    "v32m_material_change_notification_preflight"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false,
+    "sandbox_live_source_pull_enabled": false
+  }
+}
