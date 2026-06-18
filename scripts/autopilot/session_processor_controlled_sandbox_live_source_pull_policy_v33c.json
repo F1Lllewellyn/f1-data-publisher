@@ -1,0 +1,68 @@
+{
+  "schema_version": "f1_session_processor_controlled_sandbox_live_source_pull_policy_v33c_2026-06-17",
+  "purpose": "Roadmap Step 3 of 10: controlled sandbox-live source pull. This may fetch OpenF1 source evidence only in explicit sandbox_live mode with allow-live true and exact operator approval. It writes sandbox/health artifacts only and does not activate production automation or downstream consumers.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_live_fetch_allowed": true,
+  "sandbox_live_requires_explicit_allow_live": true,
+  "sandbox_live_requires_operator_approval": true,
+  "default_timeout_seconds": 15,
+  "allowed_modes": [
+    "dry_run",
+    "fixture",
+    "sandbox_live"
+  ],
+  "allowed_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints",
+    "openf1_position",
+    "openf1_intervals",
+    "openf1_race_control",
+    "openf1_weather"
+  ],
+  "required_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints"
+  ],
+  "require_nonempty_required_results": true,
+  "required_false_flags": [
+    "production_automation",
+    "workbook_write",
+    "ledger_write",
+    "race_predictions_refresh",
+    "fantasy_predictions_refresh",
+    "notification_send",
+    "model_promotion",
+    "activate"
+  ],
+  "network_rules": {
+    "default_perform_network_fetch": false,
+    "perform_network_fetch_only_when_mode_sandbox_live_and_allow_live_true_and_operator_approved": true,
+    "openf1_only": true,
+    "no_fastf1_execution": true,
+    "no_fia_fetch": true,
+    "no_formula1_public_fetch": true
+  },
+  "writes_allowed": [
+    "health/session_processor_controlled_sandbox_live_source_pull_v33c_status.json",
+    "sandbox/session_sources/v33c/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "next_step": "v33D_sandbox_live_source_quality_review"
+}
