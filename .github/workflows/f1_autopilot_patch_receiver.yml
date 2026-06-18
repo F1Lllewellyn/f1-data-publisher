@@ -67,7 +67,7 @@ jobs:
       - name: Create or update pull request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.F1_WORKFLOW_PAT }}
           branch: ${{ steps.prmeta.outputs.branch }}
           base: main
           title: ${{ steps.prmeta.outputs.title }}
@@ -76,6 +76,7 @@ jobs:
           add-paths: |
             .github/workflows/f1_1c_repository_dispatch_catchall.yml
             .github/workflows/f1_autopilot_patch_receiver.yml
+            .github/workflows/f1_ai_pr_log_advisory_reviewer.yml
             scripts/autopilot/**
             docs/autopilot_bridge/**
             health/autopilot_last_status.json
