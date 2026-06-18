@@ -1,0 +1,57 @@
+{
+  "schema_version": "f1_session_processor_race_fantasy_readiness_metadata_refresh_policy_v33h_2026-06-18",
+  "purpose": "Roadmap Step 8 of 10: Race/Fantasy readiness metadata refresh. Consumes v33G sandbox Forecast Bundle Ledger snapshot and writes sandbox readiness metadata only. Does not generate Race Predictions, Fantasy picks, notifications, production activation, canonical workbook writes, production ledger writes, live fetch, or model promotion.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_readiness_metadata_refresh_allowed": true,
+  "race_predictions_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "notification_send_allowed": false,
+  "production_activation_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "production_forecast_bundle_ledger_write_allowed": false,
+  "operator_approval_required": true,
+  "live_fetch_allowed": false,
+  "required_ledger_status": "SANDBOX_FORECAST_BUNDLE_LEDGER_WRITTEN_SANDBOX_ONLY",
+  "required_ledger_snapshot_artifact_type": "sandbox_forecast_bundle_ledger_snapshot_v33g",
+  "required_false_runtime_flags": [
+    "production_automation",
+    "allow_race_predictions_refresh",
+    "allow_fantasy_refresh",
+    "allow_notification_send",
+    "allow_production_activation",
+    "allow_canonical_workbook_write",
+    "allow_production_ledger_write",
+    "model_promotion",
+    "activate",
+    "live_fetch"
+  ],
+  "writes_allowed": [
+    "health/session_processor_race_fantasy_readiness_metadata_refresh_v33h_status.json",
+    "sandbox/readiness_metadata/v33h/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "canonical workbook",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "v33I_material_change_notification_rehearsal"
+}
