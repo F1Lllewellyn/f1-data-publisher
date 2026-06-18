@@ -1,0 +1,22 @@
+{
+  "v32N_dry_run_operator_packet": {
+    "version": "v32N",
+    "status": "READY",
+    "live_fetch": false,
+    "production_automation": false,
+    "workbook_write": false,
+    "ledger_write": false,
+    "notification_send": false,
+    "model_promotion": false
+  },
+  "v33A_operator_review_verifier": {
+    "version": "v33A",
+    "status": "READY",
+    "live_fetch": false,
+    "production_automation": false,
+    "workbook_write": false,
+    "ledger_write": false,
+    "notification_send": false,
+    "model_promotion": false
+  }
+}

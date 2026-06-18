@@ -1,282 +1,121 @@
-
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
-
-const VERSION = 'v33B-R3';
+const VERSION = 'v33B-R4-R2';
 const DEFAULT_POLICY = 'scripts/autopilot/session_processor_end_to_end_dry_run_policy_v33b.json';
-
+const DEFAULT_FIXTURE = 'scripts/autopilot/session_processor_end_to_end_dry_run_fixture_v33b.json';
+const aliases = new Map([
+  ['repo-root', 'repoRoot'], ['repoRoot', 'repoRoot'], ['repo_root', 'repoRoot'],
+  ['allow-live', 'allow_live'], ['production-automation', 'production_automation'],
+  ['workbook-write', 'workbook_write'], ['ledger-write', 'ledger_write'],
+  ['race-predictions-refresh', 'race_predictions_refresh'],
+  ['fantasy-predictions-refresh', 'fantasy_predictions_refresh'],
+  ['notification-send', 'notification_send'], ['model-promotion', 'model_promotion']
+]);
+const boolKeys = new Set(['allow_live','production_automation','workbook_write','ledger_write','race_predictions_refresh','fantasy_predictions_refresh','notification_send','model_promotion']);
 function parseArgs(argv) {
-  const args = {
-    repoRoot: process.cwd(),
-    policy: DEFAULT_POLICY,
-    mode: 'repo',
-    fixture: null,
-    output: null,
-    allow_live: false,
-    production_automation: false,
-    workbook_write: false,
-    ledger_write: false,
-    race_predictions_refresh: false,
-    fantasy_predictions_refresh: false,
-    notification_send: false,
-    model_promotion: false
-  };
-  for (let i = 2; i < argv.length; i += 1) {
-    const key = argv[i];
+  const args = { repoRoot: process.cwd(), policy: DEFAULT_POLICY, mode: 'repo', fixture: null, output: null, allow_live: false, production_automation: false, workbook_write: false, ledger_write: false, race_predictions_refresh: false, fantasy_predictions_refresh: false, notification_send: false, model_promotion: false };
+  for (let i = 2; i < argv.length; i++) {
+    const item = argv[i];
+    if (!item.startsWith('--')) continue;
+    const raw = item.slice(2);
+    const key = aliases.get(raw) || raw.replaceAll('-', '_');
+    if (key === 'help') { printHelp(); process.exit(0); }
+    if (!(key in args)) throw new Error(`Unknown argument: --${raw}`);
     const next = argv[i + 1];
-    if (!key.startsWith('--')) continue;
-    const name = key.slice(2).replaceAll('-', '_');
-    if (name in args) {
-      if (typeof args[name] === 'boolean') {
-        if (next === 'true' || next === 'false') {
-          args[name] = next === 'true';
-          i += 1;
-        } else {
-          args[name] = true;
-        }
-      } else {
-        args[name] = next;
-        i += 1;
-      }
-    } else if (name === 'help') {
-      printHelpAndExit();
+    if (boolKeys.has(key)) {
+      if (next === 'true' || next === 'false') { args[key] = next === 'true'; i += 1; }
+      else args[key] = true;
     } else {
-      throw new Error(`Unknown argument: ${key}`);
+      if (!next || next.startsWith('--')) throw new Error(`Missing value for --${raw}`);
+      args[key] = next;
+      i += 1;
     }
   }
   return args;
 }
-
-function printHelpAndExit() {
-  console.log(`Usage:
-  node scripts/autopilot/session_processor_end_to_end_dry_run_rehearsal_v33b.mjs \\
-    --repo-root . \\
-    --policy scripts/autopilot/session_processor_end_to_end_dry_run_policy_v33b.json \\
-    --mode repo \\
-    --output artifacts/autopilot/v33b/rehearsal_output_v33b.json
-
-Fixture self-test:
-  node scripts/autopilot/session_processor_end_to_end_dry_run_rehearsal_v33b.mjs \\
-    --mode fixture \\
-    --fixture fixtures/autopilot/v33b/happy_path_operator_packet.json
-
-Safety flags default false and must remain false for v33B:
-  --allow-live false
-  --production-automation false
-  --workbook-write false
-  --ledger-write false
-  --race-predictions-refresh false
-  --fantasy-predictions-refresh false
-  --notification-send false
-  --model-promotion false`);
-  process.exit(0);
+function printHelp() {
+  console.log(`Usage: node scripts/autopilot/session_processor_end_to_end_dry_run_rehearsal_v33b.mjs --repo-root . --mode repo --output artifacts/autopilot/v33b/rehearsal_output_v33b.json\nFixture: node scripts/autopilot/session_processor_end_to_end_dry_run_rehearsal_v33b.mjs --mode fixture --fixture ${DEFAULT_FIXTURE}`);
 }
-
-function readJson(absPath) {
-  const raw = fs.readFileSync(absPath, 'utf8');
-  return JSON.parse(raw);
-}
-
-function maybeReadJson(absPath) {
-  try {
-    if (fs.existsSync(absPath)) return readJson(absPath);
-  } catch (error) {
-    return { __parse_error: String(error?.message || error) };
-  }
-  return null;
-}
-
-function ensureDirForFile(filePath) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-}
-
-function canonicalStatus(value) {
-  return String(value || '').trim().toUpperCase();
-}
-
-function sha256Object(obj) {
-  return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
-}
-
-function pathExistsAny(repoRoot, candidates) {
-  const checked = [];
-  for (const rel of candidates || []) {
-    const abs = path.resolve(repoRoot, rel);
-    checked.push(rel);
-    const obj = maybeReadJson(abs);
-    if (obj) return { found: true, relPath: rel, absPath: abs, object: obj, checked };
-  }
-  return { found: false, relPath: null, absPath: null, object: null, checked };
-}
-
-function validateRequiredFields(name, packet, spec) {
+function readJson(file) { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+function maybeJson(file) { try { return fs.existsSync(file) ? readJson(file) : null; } catch (error) { return { __error: String(error.message || error) }; } }
+function norm(rel) { return String(rel || '').replaceAll('\\', '/').replace(/^\.\//, ''); }
+function inside(parent, child) { const rel = path.relative(parent, child); return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel)); }
+function status(value) { return String(value || '').toUpperCase(); }
+function outputPlan(args, policy) {
+  if (!args.output) return { permitted: false, rel: null, abs: null, blockers: [], touches: [] };
+  const root = path.resolve(args.repoRoot);
+  const abs = path.resolve(root, args.output);
+  const rel = norm(path.relative(root, abs));
   const blockers = [];
-  const warnings = [];
-  if (!packet) {
-    blockers.push(`${name}: missing packet`);
-    return { blockers, warnings };
-  }
-  if (packet.__parse_error) {
-    blockers.push(`${name}: JSON parse/read failure: ${packet.__parse_error}`);
-    return { blockers, warnings };
-  }
-  for (const [field, expected] of Object.entries(spec.required_fields || {})) {
-    if (!(field in packet)) {
-      blockers.push(`${name}: missing required field '${field}'`);
-    } else if (packet[field] !== expected) {
-      blockers.push(`${name}: field '${field}' expected ${JSON.stringify(expected)} but found ${JSON.stringify(packet[field])}`);
-    }
-  }
-  const status = canonicalStatus(packet.status);
-  const allowed = (spec.allowed_statuses || []).map(canonicalStatus);
-  if (!allowed.includes(status)) {
-    blockers.push(`${name}: status '${packet.status ?? 'missing'}' is not in allowed statuses ${JSON.stringify(spec.allowed_statuses || [])}`);
-  }
-  if (packet.notes && String(packet.notes).toLowerCase().includes('fixture')) {
-    warnings.push(`${name}: fixture note detected; not production evidence`);
-  }
-  return { blockers, warnings };
+  if (!inside(root, abs)) blockers.push(`output outside repo: ${rel}`);
+  const roots = policy.allowed_output_roots || ['artifacts/autopilot/v33b/', 'verification/'];
+  const allowed = roots.some((allowedRoot) => rel === norm(allowedRoot).replace(/\/$/, '') || rel.startsWith(norm(allowedRoot)));
+  if (!allowed) blockers.push(`output not under allowed roots: ${roots.join(',')}`);
+  const touches = (policy.protected_paths || []).filter((protectedPath) => {
+    const p = norm(protectedPath);
+    return rel === p || rel.startsWith(p.endsWith('/') ? p : `${p}/`);
+  }).map((protectedPath) => ({ writePath: rel, protectedPath }));
+  if (touches.length) blockers.push('output touches protected path');
+  return { permitted: blockers.length === 0, rel, abs, blockers, touches };
 }
-
-function validateFalseFlags(args, policy) {
+function evidenceFromFixture(args) {
+  const file = path.resolve(args.repoRoot, args.fixture || DEFAULT_FIXTURE);
+  const obj = readJson(file);
+  return {
+    v32N_dry_run_operator_packet: { found: Boolean(obj.v32N_dry_run_operator_packet), path: args.fixture || DEFAULT_FIXTURE, obj: obj.v32N_dry_run_operator_packet || null },
+    v33A_operator_review_verifier: { found: Boolean(obj.v33A_operator_review_verifier), path: args.fixture || DEFAULT_FIXTURE, obj: obj.v33A_operator_review_verifier || null }
+  };
+}
+function findFirst(root, paths) {
+  for (const rel of paths || []) {
+    const obj = maybeJson(path.resolve(root, rel));
+    if (obj) return { found: !obj.__error, path: rel, obj };
+  }
+  return { found: false, path: null, obj: null };
+}
+function evidenceFromRepo(args, policy) {
+  const root = path.resolve(args.repoRoot);
+  const chain = policy.required_evidence_chain || {};
+  return Object.fromEntries(Object.entries(chain).map(([name, spec]) => [name, findFirst(root, spec.candidate_paths || [])]));
+}
+function validateEvidence(evidence, policy) {
   const blockers = [];
-  for (const flag of policy.required_explicit_false_flags || []) {
-    const argName = flag;
-    if (args[argName] !== false) {
-      blockers.push(`safety flag '${argName}' must be explicitly false for ${VERSION}`);
+  for (const [name, spec] of Object.entries(policy.required_evidence_chain || {})) {
+    const item = evidence[name];
+    if (!item?.found) { blockers.push(`${name}: missing evidence`); continue; }
+    for (const [field, expected] of Object.entries(spec.required_fields || {})) {
+      if (!(field in item.obj)) blockers.push(`${name}: missing ${field}`);
+      else if (item.obj[field] !== expected) blockers.push(`${name}: ${field} expected ${JSON.stringify(expected)} got ${JSON.stringify(item.obj[field])}`);
     }
+    const allowed = (spec.allowed_statuses || []).map(status);
+    if (!allowed.includes(status(item.obj.status))) blockers.push(`${name}: status not allowed`);
   }
   return blockers;
 }
-
-function isPathInside(parentAbs, childAbs) {
-  const rel = path.relative(parentAbs, childAbs);
-  return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel));
-}
-
-function normalizeRelPath(relPath) {
-  return relPath.replaceAll('\\\\', '/');
-}
-
-function pathMatchesProtected(writePath, protectedPath) {
-  const normalizedWrite = normalizeRelPath(writePath);
-  const normalizedProtected = normalizeRelPath(protectedPath);
-  if (normalizedWrite === normalizedProtected) return true;
-  if (normalizedProtected.endsWith('/')) return normalizedWrite.startsWith(normalizedProtected);
-  return normalizedWrite.startsWith(`${normalizedProtected}/`);
-}
-
-function protectedPathAudit(policy, plannedWrites) {
-  const touches = [];
-  const protectedPaths = policy.protected_paths || [];
-  for (const writePath of plannedWrites) {
-    for (const protectedPath of protectedPaths) {
-      if (pathMatchesProtected(writePath, protectedPath)) {
-        touches.push({ writePath, protectedPath });
-      }
-    }
-  }
-  return touches;
-}
-
-function validateOutputTarget(args, policy) {
-  if (!args.output) {
-    return {
-      requested: false,
-      writePermitted: false,
-      relPath: null,
-      absPath: null,
-      blockers: [],
-      protectedTouches: []
-    };
-  }
-
-  const repoRootAbs = path.resolve(args.repoRoot);
-  const absPath = path.resolve(repoRootAbs, args.output);
-  const insideRepo = isPathInside(repoRootAbs, absPath);
-  const relPath = insideRepo ? normalizeRelPath(path.relative(repoRootAbs, absPath)) : normalizeRelPath(path.relative(repoRootAbs, absPath));
-  const blockers = [];
-
-  if (!insideRepo) {
-    blockers.push(`output path must remain inside repo root for ${VERSION}: ${relPath}`);
-  }
-
-  const allowedRoots = policy.allowed_output_roots || ['artifacts/autopilot/v33b/', 'verification/'];
-  const insideAllowedRoot = allowedRoots.some((root) => {
-    const normalizedRoot = normalizeRelPath(root);
-    return relPath === normalizedRoot.replace(/\/$/, '') || relPath.startsWith(normalizedRoot);
-  });
-  if (!insideAllowedRoot) {
-    blockers.push(`output path must be under an allowed dry-run artifact root: ${JSON.stringify(allowedRoots)}`);
-  }
-
-  const protectedTouches = protectedPathAudit(policy, [relPath]);
-  if (protectedTouches.length > 0) {
-    blockers.push(`planned write touches protected path: ${JSON.stringify(protectedTouches)}`);
-  }
-
-  return {
-    requested: true,
-    writePermitted: blockers.length === 0,
-    relPath,
-    absPath,
-    allowedRoots,
-    blockers,
-    protectedTouches
+function run() {
+  const args = parseArgs(process.argv);
+  const root = path.resolve(args.repoRoot);
+  const policy = readJson(path.resolve(root, args.policy));
+  const out = outputPlan(args, policy);
+  const blockers = [...out.blockers];
+  for (const flag of policy.required_explicit_false_flags || []) if (args[flag] !== false) blockers.push(`safety flag ${flag} must remain false`);
+  const evidence = args.mode === 'fixture' ? evidenceFromFixture(args) : evidenceFromRepo(args, policy);
+  blockers.push(...validateEvidence(evidence, policy));
+  const ready = blockers.length === 0;
+  const result = {
+    version: VERSION,
+    status: ready ? 'READY' : 'BLOCKED',
+    mode: args.mode,
+    blockers: [...new Set(blockers)],
+    planned_writes: out.rel ? [out.rel] : [],
+    output_write_permitted: out.permitted,
+    side_effects: { network_fetch: false, production_automation: false, workbook_write: false, ledger_write: false, race_predictions_refresh: false, fantasy_predictions_refresh: false, notification_send: false, model_promotion: false, protected_path_touch: out.touches.length > 0, rehearsal_artifact_written: Boolean(args.output && out.permitted) },
+    stages: (policy.dry_run_stage_contract || []).map((name) => ({ name, status: ready ? 'pass' : 'blocked', details: { mutation: false, network_fetch: false } })),
+    governance: { stable_engine_protected: true, no_accuracy_claim: true, no_automation_change: true, pr_only: true }
   };
+  const rendered = JSON.stringify(result, null, 2);
+  if (args.output && out.permitted) { fs.mkdirSync(path.dirname(out.abs), { recursive: true }); fs.writeFileSync(out.abs, `${rendered}\n`, 'utf8'); }
+  console.log(rendered);
+  process.exit(ready ? 0 : 2);
 }
-
-function buildEvidenceFromFixture(fixtureObject) {
-  return {
-    v32N_dry_run_operator_packet: {
-      found: Boolean(fixtureObject?.v32N_dry_run_operator_packet),
-      relPath: 'fixture:v32N_dry_run_operator_packet',
-      object: fixtureObject?.v32N_dry_run_operator_packet || null,
-      checked: ['fixture:v32N_dry_run_operator_packet']
-    },
-    v33A_operator_review_verifier: {
-      found: Boolean(š^\™SØš™XİËŒÌĞWÛÜ\˜]Ü—Ü™]šY]×İ™\šYšY\ŠKˆ™[]ˆ	Ùš^\™NŒÌĞWÛÜ\˜]Ü—Ü™]šY]×İ™\šYšY\‰ËˆØš™Xİˆš^\™SØš™XİËŒÌĞWÛÜ\˜]Ü—Ü™]šY]×İ™\šYšY\ˆ[ˆÚXÚÙYˆÉÙš^\™NŒÌĞWÛÜ\˜]Ü—Ü™]šY]×İ™\šYšY\‰×BˆBˆNÂŸB‚™[˜İ[ÛˆZ[]šY[˜ÙQœ›ÛT™\Ê™\Ô›ÛİÛXŞJHÂˆÛÛœİİ]HßNÂˆ›Üˆ
-ÛÛœİÛ˜[YKÜX×HÙˆØš™Xİ™[šY\ÊÛXŞKœ™\]Z\™YÙ]šY[˜ÙWØÚZ[ˆßJJHÂˆİ]Û˜[YWHH]^\İĞ[J™\Ô›ÛİÜXË˜Ø[™Y]WÜ]È×JNÂˆBˆ™]\›ˆİ]ÂŸB‚™[˜İ[ÛˆİYÙJ˜[YKİ]\Ë]Z[ÈHßK›ØÚÙ\œÈH×KØ\›š[™ÜÈH×JHÂˆ™]\›ˆÈ˜[YKİ]\Ë]Z[Ë›ØÚÙ\œËØ\›š[™ÜÈNÂŸB‚™[˜İ[Ûˆ[”™ZX\œØ[
-\™ÜËÛXŞJHÂˆÛÛœİİ\Y]ÈH™]È]J
-KÒTÓÔİš[™Ê
-NÂˆÛÛœİİ]][ˆH˜[Y]Sİ]]\™Ù]
-\™ÜËÛXŞJNÂˆÛÛœİ[›™YÜš]\ÈHİ]][‹œ™[]ÈÛİ]][‹œ™[]Hˆ×NÂ‚ˆÛÛœİØY™]P›ØÚÙ\œÈH˜[Y]Q˜[ÙQ›YÜÊ\™ÜËÛXŞJNÂˆÛÛœİ›İXİYİXÚ\ÈHİ]][‹œ›İXİYİXÚ\È›İXİY]]Y]
-ÛXŞK[›™YÜš]\ÊNÂˆÛÛœİİYÙ\ÈH×NÂˆÛÛœİ[›ØÚÙ\œÈH×NÂˆÛÛœİ[Ø\›š[™ÜÈH×NÂ‚ˆ[›ØÚÙ\œËœ\Ú
-‹‹›İ]][‹˜›ØÚÙ\œÊNÂˆ[›ØÚÙ\œËœ\Ú
-‹‹œØY™]P›ØÚÙ\œÊNÂ‚ˆİYÙ\Ëœ\Ú
-İYÙJ	ÜÛXŞWÙİX\™	Ë[›ØÚÙ\œË›[™İOOHÈ	Ü\ÜÉÈˆ	Ø›ØÚÙY	ËÂˆ[ÙNˆ\™ÜË›[ÙKˆ™\]Z\™YÙ˜[ÙWÙ›YÜÎˆÛXŞKœ™\]Z\™YÙ^XÚ]Ù˜[ÙWÙ›YÜËˆ›İXİYÜ]İİXÚ\Îˆ›İXİYİXÚ\Ëˆ[›™YİÜš]\Îˆ[›™YÜš]\Ëˆİ]]İÜš]WÜ\›Z]Yˆİ]][‹Üš]T\›Z]Yˆ[İÙYÛİ]]Ü›ÛİÎˆİ]][‹˜[İÙY›ÛİÈ×BˆKË‹‹˜[›ØÚÙ\œ×JJNÂ‚ˆ]]šY[˜ÙNÂˆYˆ
-\™ÜË›[ÙHOOH	Ùš^\™IÊHÂˆYˆ
-X\™ÜË™š^\™JH›İÈ™]È\œ›ÜŠ	ËKYš^\™H\È™\]Z\™YÚ[ˆK[[ÙHš^\™IÊNÂˆÛÛœİš^\™SØš™XİH™XYœÛÛŠ]œ™\ÛÛ™J\™ÜËœ™\Ô›Ûİ\™ÜË™š^\™JJNÂˆ]šY[˜ÙHHZ[]šY[˜ÙQœ›ÛQš^\™Jš^\™SØš™Xİ
-NÂˆH[ÙHYˆ
-\™ÜË›[ÙHOOH	Ü™\ÉÊHÂˆ]šY[˜ÙHHZ[]šY[˜ÙQœ›ÛT™\Ê]œ™\ÛÛ™J\™ÜËœ™\Ô›Ûİ
-KÛXŞJNÂˆH[ÙHÂˆ›İÈ™]È\œ›ÜŠ[œİ\ÜY[ÙH	ÉØ\™ÜË›[Ù_IËˆ\ÙH™\ÈÜˆš^\™K˜
-NÂˆB‚ˆÛÛœİ]šY[˜ÙQ]Z[ÈHßNÂˆÛÛœİ]šY[˜ÙP›ØÚÙ\œÈH×NÂˆÛÛœİ]šY[˜ÙUØ\›š[™ÜÈH×NÂˆ›Üˆ
-ÛÛœİÛ˜[YKÜX×HÙˆØš™Xİ™[šY\ÊÛXŞKœ™\]Z\™YÙ]šY[˜ÙWØÚZ[ˆßJJHÂˆÛÛœİ][HH]šY[˜ÙVÛ˜[YWNÂˆ]šY[˜ÙQ]Z[ÖÛ˜[YWHHÂˆ›İ[™ˆ][OË™›İ[™˜[ÙKˆ™[]ˆ][OËœ™[][ˆÚXÚÙYˆ][OË˜ÚXÚÙY×KˆÛÛ[ÜÚLMˆ][OË›Øš™XİÈÚLM“Øš™Xİ
-][K›Øš™Xİ
-Hˆ[ˆNÂˆÛÛœİ˜[Y][ÛˆH˜[Y]T™\]Z\™YšY[Ê˜[YK][OË›Øš™XİÜXÊNÂˆ]šY[˜ÙP›ØÚÙ\œËœ\Ú
-‹‹˜[Y][Û‹˜›ØÚÙ\œÊNÂˆ]šY[˜ÙUØ\›š[™ÜËœ\Ú
-‹‹˜[Y][Û‹Ø\›š[™ÜÊNÂˆBˆ[›ØÚÙ\œËœ\Ú
-‹‹™]šY[˜ÙP›ØÚÙ\œÊNÂˆ[Ø\›š[™ÜËœ\Ú
-‹‹™]šY[˜ÙUØ\›š[™ÜÊNÂˆİYÙ\Ëœ\Ú
-İYÙJ	Ù]šY[˜ÙWØÚZ[‰Ë]šY[˜ÙP›ØÚÙ\œË›[™İOOHÈ	Ü\ÜÉÈˆ	Ø›ØÚÙY	Ë]šY[˜ÙQ]Z[Ë]šY[˜ÙP›ØÚÙ\œË]šY[˜ÙUØ\›š[™ÜÊJNÂ‚ˆÛÛœİT[”[ˆHÂˆÂˆ˜[YNˆ	ØœšYÙWÚ[ZÙIËˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü™XYİ˜[Y]HœšYÙH™\]Y\İ[™[ÜHÛ›IËˆ]]][Ûˆ˜[ÙKˆ›ÙXİ[Û—Ø]]ÛX][Ûˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	ÜÛİ\˜ÙWÙØ]WÙ]XİÜ‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	ÜÚ[][]HÙ\ÜÚ[Û‹Y[™Y™XY[™\ÜÈØ]H]Xİ[Ûˆœ›ÛHİ\YYXÚÙ]Ùš^\™IËˆ]]][Ûˆ˜[ÙKˆ™]ÛÜš×Ù™]Úˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	ÜÛİ\˜ÙWÙ™]ÚÜ[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	ØÛÛœİXİÜ[‘ŒKÑ˜\İŒKÑ’PKÜX›XÈ[[ˆÚ]İ]^Xİ][™È™]ÛÜšÈØ[ÉËˆ]]][Ûˆ˜[ÙKˆ™]ÛÜš×Ù™]Úˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	Ù]Wİ˜[Y]Ü‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	İ˜[Y]H^XİYØÚ[XH[™[›ÛX[HÚXÚÜÈYØZ[œİK\[ˆXÚÙ]Y]Y]HÛ›IËˆÚXÚÜÎˆÉÚYÉË	İ[Y\İ[\ÉË	Û\ØÛİ[ÉË	Ù\XØ]\ÉË	Û]WÙ]IË	ØÛÛ™›Xİ[™×Ù]IË	ÛX[X[Ü™]šY]×Ü™\]Z\™Y	×Kˆ]]][Ûˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	ÛX[šY™\İİÜš]\—Ü[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü[ˆ]\İÛX[šY™\İšœÛÛ‹]WÜ™XY[™\ÜËšœÛÛ‹ÛÛXš[™YÜÛİ\˜ÙWÛX[šY™\İšœÛÛˆÜš]\ÈÛ›IËˆ]]][Ûˆ˜[ÙKˆ[›™YØ\Y˜XİÎˆÉÛ]\İÛX[šY™\İšœÛÛ‰Ë	Ù]WÜ™XY[™\ÜËšœÛÛ‰Ë	ØÛÛXš[™YÜÛİ\˜ÙWÛX[šY™\İšœÛÛ‰×BˆBˆKˆÂˆ˜[YNˆ	Ù›Ü™XØ\İØ[™WÛYÙ\—Ü[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü[ˆ›Ü™XØ\İ[™HYÙ\ˆÛ˜\ÚİÛ›IËˆ]]][Ûˆ˜[ÙKˆİX›WÛÙÚX×ØÚ[™ÙNˆ˜[ÙKˆ[Ù[Ü›Û[İ[Ûˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	ÜØ[™›ŞİÛÜšØ›ÛÚ×ÚÜWÜ[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü[ˆØ[™›ŞÛÜšØ›ÛÚËÒÔK\™XYH™Yœ™\ÚÛ›IËˆ]]][Ûˆ˜[ÙKˆØ[›ÛšXØ[İÛÜšØ›ÛÚ×İÜš]Nˆ˜[ÙKˆİX›WÙ[™Ú[™WİİXÚˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	Ü˜XÙWÙ˜[\ŞWÜ™XY[™\Ü×Ü[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü[ˆ™XY[™\ÜÈ^[ØY[™Ù™ˆQÈÛ›IËˆ]]][Ûˆ˜[ÙKˆ›Ü™XØ\İÜ™Yœ™\Úˆ˜[ÙKˆ˜[\ŞWÜ™Yœ™\Úˆ˜[ÙBˆBˆKˆÂˆ˜[YNˆ	Û›İYšXØ][Û—Ü[‰Ëˆ]Z[ÎˆÂˆÜ\˜][Ûˆ	Ü[ˆX]\šX[XÚ[™ÙH›İYšXØ][Ûˆ[YÚXš[]HÛ›IËˆ]]][Ûˆ˜[ÙKˆ›İYšXØ][Û—ÜÙ[™ˆ˜[ÙBˆBˆBˆNÂ‚ˆ›Üˆ
-ÛÛœİÈÙˆT[”[ŠHÂˆÛÛœİ›ØÚÙYTÛXŞHH[›ØÚÙ\œË›[™İˆÂˆİYÙ\Ëœ\Ú
-İYÙJË›˜[YK›ØÚÙYTÛXŞHÈ	Ø›ØÚÙY	Èˆ	Ü\ÜÉËË™]Z[Ë›ØÚÙYTÛXŞHÈÉİ\İ™X[HÛXŞKÙ]šY[˜ÙHÚZ[ˆ›İ™XYI×Hˆ×JJNÂˆB‚ˆÛÛœİİ]\ÈH[›ØÚÙ\œË›[™İOOHÈ	Ô‘PQIÈˆ	Ğ“ĞÒÑQ	ÎÂˆ™]\›ˆÂˆ™\œÚ[Ûˆ‘T”ÒSÓ‹ˆ[—ÚYˆ	Õ‘T”ÒSÓŸKIÜİ\Y]Ëœ™\XÙJÖÎ‹—KÙË	ËIÊ_Xˆİ\Yİ]Îˆİ\Y]Ëˆš[š\ÚYİ]Îˆ™]È]J
-KÒTÓÔİš[™Ê
-Kˆ[ÙNˆ\™ÜË›[ÙKˆİ]\Ëˆ\œÜÙNˆÛXŞKœ\œÜÙKˆÚYWÙY™™XİÎˆÂˆ™]ÛÜš×Ù™]Úˆ˜[ÙKˆ›ÙXİ[Û—Ø]]ÛX][Ûˆ˜[ÙKˆÛÜšØ›ÛÚ×İÜš]Nˆ˜[ÙKˆYÙ\—İÜš]Nˆ˜[ÙKˆ˜XÙWÜ™YXİ[Ûœ×Ü™Yœ™\Úˆ˜[ÙKˆ˜[\ŞWÜ™YXİ[Ûœ×Ü™Yœ™\Úˆ˜[ÙKˆ›İYšXØ][Û—ÜÙ[™ˆ˜[ÙKˆ[Ù[Ü›Û[İ[Ûˆ˜[ÙKˆ›İXİYÜ]İİXÚˆ›İXİYİXÚ\Ë›[™İˆˆ™ZX\œØ[Ø\Y˜XİİÜš][ˆ›ÛÛX[Š\™ÜË›İ]]	‰ˆİ]][‹Üš]T\›Z]Y
-BˆKˆ›İXİYÜ]İİXÚ\Îˆ›İXİYİXÚ\Ëˆ[›™YİÜš]\Îˆ[›™YÜš]\Ëˆİ]]İÜš]WÜ\›Z]Yˆİ]][‹Üš]T\›Z]Yˆİ]]ÜÛXŞWØ›ØÚÙ\œÎˆİ]][‹˜›ØÚÙ\œÈ×Kˆ›ØÚÙ\œÎˆË‹‹›™]ÈÙ]
-[›ØÚÙ\œÊWKˆØ\›š[™ÜÎˆË‹‹›™]ÈÙ]
-[Ø\›š[™ÜÊWKˆİYÙ\Ëˆ™^Ü™XÛÛ[Y[™YÜİ\ˆİ]\ÈOOH	Ô‘PQIÂˆÈ	Ô›ØÙYYÈŒÌĞÈ‹[Û›HØ[™›Ş[™Ù™ˆš[™\Èİ[›È]™H™]ÚİÛÜšØ›ÛÚÈÜš]KÛYÙ\ˆÜš]KÛ›İYšXØ][Û‹Û[Ù[›Û[İ[Û‹‰Âˆˆ	Ô™\ÛÛ™HZ\ÜÚ[™ÈÜˆ›Û‹\™XYHŒÌ“‹İŒÌĞH]šY[˜ÙKXÚZ[ˆXÚÙ]Ë™\[ˆŒÌĞˆ[ˆ™\È[ÙK[™ÙY\[ØY™]H›YÜÈ˜[ÙK‰ËˆÛİ™\›˜[˜ÙNˆÂˆİX›WÙ[™Ú[™WÜ›İXİYˆYKˆİX›Wİœ×Ù^\š[Y[[ÜÙ\\˜]YˆYKˆ›×ØXØİ\˜XŞWØÛZ[NˆYKˆ›×ÌŒ—Ùœ×Ø\Üİ[\[ÛˆYKˆ›×Ø]]ÛX][Û—ØÚ[™ÙNˆYKˆ—ÛÛ›NˆYBˆBˆNÂŸB‚™[˜İ[ÛˆXZ[Š
-HÂˆÛÛœİ\™ÜÈH\œÙP\™ÜÊ›ØÙ\ÜË˜\™İŠNÂˆÛÛœİ™\Ô›ÛİH]œ™\ÛÛ™J\™ÜËœ™\Ô›Ûİ
-NÂˆÛÛœİÛXŞT]H]œ™\ÛÛ™J™\Ô›Ûİ\™ÜËœÛXŞJNÂˆÛÛœİÛXŞHH™XYœÛÛŠÛXŞT]
-NÂˆÛÛœİİ]]H[”™ZX\œØ[
-\™ÜËÛXŞJNÂˆÛÛœİ™[™\™YH”ÓÓ‹œİš[™ÚYJİ]][ŠNÂˆYˆ
-\™ÜË›İ]]	‰ˆİ]]›İ]]İÜš]WÜ\›Z]Y
-HÂˆÛÛœİXœÓİ]]H]œ™\ÛÛ™J™\Ô›Ûİ\™ÜË›İ]]
-NÂˆ[œİ\™Q\‘›Ü‘š[JXœÓİ]]
-NÂˆœËÜš]Qš[TŞ[˜ÊXœÓİ]]	Ü™[™\™YWˆ	İ]	ÊNÂˆBˆÛÛœÛÛK›ÙÊ™[™\™Y
-NÂˆ›ØÙ\ÜË™^]
-İ]]œİ]\ÈOOH	Ô‘PQIÈÈˆŠNÂŸB‚HÂˆXZ[Š
-NÂŸHØ]Ú
-\œ›ÜŠHÂˆÛÛœİ˜Z[\™HHÂˆ™\œÚ[Ûˆ‘T”ÒSÓ‹ˆİ]\Îˆ	ÑT”“Ô‰Ëˆ\œ›Üˆİš[™Ê\œ›ÜËœİXÚÈ\œ›ÜË›Y\ÜØYÙH\œ›ÜŠKˆÚYWÙY™™XİÎˆÂˆ™]ÛÜš×Ù™]Úˆ˜[ÙKˆ›ÙXİ[Û—Ø]]ÛX][Ûˆ˜[ÙKˆÛÜšØ›ÛÚ×İÜš]Nˆ˜[ÙKˆYÙ\—İÜš]Nˆ˜[ÙKˆ˜XÙWÜ™YXİ[Ûœ×Ü™Yœ™\Úˆ˜[ÙKˆ˜[\ŞWÜ™YXİ[Ûœ×Ü™Yœ™\Úˆ˜[ÙKˆ›İYšXØ][Û—ÜÙ[™ˆ˜[ÙKˆ[Ù[Ü›Û[İ[Ûˆ˜[ÙBˆBˆNÂˆÛÛœÛÛK™\œ›ÜŠ”ÓÓ‹œİš[™ÚYJ˜Z[\™K[ŠJNÂˆ›ØÙ\ÜË™^]
-JNÂŸB
+try { run(); } catch (error) { console.error(JSON.stringify({ version: VERSION, status: 'ERROR', error: String(error.stack || error.message || error), side_effects: { network_fetch: false, production_automation: false, workbook_write: false, ledger_write: false, race_predictions_refresh: false, fantasy_predictions_refresh: false, notification_send: false, model_promotion: false } }, null, 2)); process.exit(1); }
