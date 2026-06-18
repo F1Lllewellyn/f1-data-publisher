@@ -1,0 +1,80 @@
+{
+  "schema_version": "f1_session_processor_sandbox_live_source_quality_review_policy_v33d_2026-06-18",
+  "purpose": "Roadmap Step 4 of 10: sandbox-live source quality review. This reviews v33C sandbox source evidence for completeness, timestamps, session alignment, source health, missing-source classification, and degraded/blocked state. It writes sandbox/health quality-review artifacts only and does not fetch live sources, run processors, write workbooks, write production ledgers, refresh predictions, send notifications, activate automation, or promote models.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "allowed_modes": [
+    "dry_run",
+    "fixture",
+    "review"
+  ],
+  "network_rules": {
+    "default_perform_network_fetch": false,
+    "no_network_fetch": true,
+    "review_existing_v33c_evidence_only": true
+  },
+  "allowed_v33c_source_readiness": [
+    "SANDBOX_SOURCE_EVIDENCE_READY",
+    "SANDBOX_SOURCE_EVIDENCE_DEGRADED"
+  ],
+  "required_openf1_request_ids": [
+    "openf1_resolve_session",
+    "openf1_drivers",
+    "openf1_laps",
+    "openf1_stints"
+  ],
+  "optional_openf1_request_ids": [
+    "openf1_position",
+    "openf1_intervals",
+    "openf1_race_control",
+    "openf1_weather"
+  ],
+  "minimum_required_row_counts": {
+    "openf1_resolve_session": 1,
+    "openf1_drivers": 10,
+    "openf1_laps": 1,
+    "openf1_stints": 1
+  },
+  "maximum_source_age_hours": 168,
+  "required_false_flags": [
+    "production_automation",
+    "workbook_write",
+    "ledger_write",
+    "race_predictions_refresh",
+    "fantasy_predictions_refresh",
+    "notification_send",
+    "model_promotion",
+    "activate"
+  ],
+  "required_evidence_flags": {
+    "production_automation": "OFF",
+    "forecast_gate": "OFF",
+    "promotion_allowed": false,
+    "stable_engine_modified": false,
+    "canonical_workbook_overwrite": false,
+    "workbook_write_allowed": false,
+    "ledger_write_allowed": false,
+    "prediction_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false
+  },
+  "writes_allowed": [
+    "health/session_processor_sandbox_live_source_quality_review_v33d_status.json",
+    "sandbox/session_quality/v33d/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "next_step_when_ready_or_degraded": "v33E_sandbox_live_processor_execution",
+  "next_step_when_blocked": "resolve_v33d_source_quality_blockers"
+}
