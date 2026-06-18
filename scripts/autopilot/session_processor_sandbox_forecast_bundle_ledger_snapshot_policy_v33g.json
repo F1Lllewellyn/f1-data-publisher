@@ -1,0 +1,53 @@
+{
+  "schema_version": "f1_session_processor_sandbox_forecast_bundle_ledger_snapshot_policy_v33g_2026-06-18",
+  "purpose": "Roadmap Step 7 of 10: sandbox Forecast Bundle Ledger snapshot. Consumes v33F sandbox workbook-reflection evidence and writes a sandbox Forecast Bundle Ledger snapshot only. No production Forecast Bundle Ledger write, canonical workbook write, Race/Fantasy refresh, notification send, activation, live fetch, or model promotion.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "sandbox_forecast_bundle_ledger_snapshot_allowed": true,
+  "production_forecast_bundle_ledger_write_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "operator_approval_required": true,
+  "live_fetch_allowed": false,
+  "activation_allowed": false,
+  "required_workbook_reflection_status": "SANDBOX_WORKBOOK_REFLECTION_WRITTEN_SANDBOX_ONLY",
+  "required_workbook_reflection_artifact_type": "sandbox_workbook_reflection_write_v33f",
+  "required_false_runtime_flags": [
+    "production_automation",
+    "race_predictions_refresh",
+    "fantasy_predictions_refresh",
+    "notification_send",
+    "model_promotion",
+    "activate",
+    "live_fetch",
+    "allow_production_ledger_write",
+    "allow_canonical_workbook_write"
+  ],
+  "writes_allowed": [
+    "health/session_processor_sandbox_forecast_bundle_ledger_snapshot_v33g_status.json",
+    "sandbox/forecast_bundle_ledger/v33g/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "canonical workbook",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "v33H_race_fantasy_readiness_metadata_refresh"
+}
