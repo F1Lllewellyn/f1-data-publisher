@@ -1,0 +1,57 @@
+{
+  "schema_version": "f1_session_processor_material_change_notification_rehearsal_policy_v33i_2026-06-18",
+  "purpose": "Roadmap Step 9 of 10: Material-change notification rehearsal. Consumes v33H sandbox Race/Fantasy readiness metadata and writes a sandbox notification preview artifact only. It never sends notifications and never generates Race Predictions, Fantasy picks, production activation, canonical workbook writes, production ledger writes, live fetch, stable engine changes, or model promotion.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "notification_preview_rehearsal_allowed": true,
+  "notification_send_allowed": false,
+  "race_predictions_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "production_activation_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "production_forecast_bundle_ledger_write_allowed": false,
+  "operator_approval_required": true,
+  "live_fetch_allowed": false,
+  "required_readiness_metadata_status": "RACE_FANTASY_READINESS_METADATA_REFRESHED_SANDBOX_ONLY",
+  "required_readiness_metadata_artifact_type": "race_fantasy_readiness_metadata_refresh_v33h",
+  "required_false_runtime_flags": [
+    "production_automation",
+    "allow_notification_send",
+    "allow_race_predictions_refresh",
+    "allow_fantasy_refresh",
+    "allow_production_activation",
+    "allow_canonical_workbook_write",
+    "allow_production_ledger_write",
+    "model_promotion",
+    "activate",
+    "live_fetch"
+  ],
+  "writes_allowed": [
+    "health/session_processor_material_change_notification_rehearsal_v33i_status.json",
+    "sandbox/notification_previews/v33i/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "canonical workbook",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "v33J_final_activation_decision_packet"
+}
