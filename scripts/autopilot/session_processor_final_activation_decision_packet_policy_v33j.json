@@ -1,0 +1,64 @@
+{
+  "schema_version": "f1_session_processor_final_activation_decision_packet_policy_v33j_2026-06-18",
+  "purpose": "Roadmap Step 10 of 10: Final activation decision packet. Consumes v33C-v33I sandbox evidence and writes a sandbox operator decision packet only. It never activates production and never sends notifications, generates Race Predictions, generates Fantasy picks, writes the canonical workbook, writes the production ledger, performs live fetch, changes the stable engine, or promotes model logic.",
+  "production_automation": "OFF",
+  "forecast_gate": "OFF",
+  "promotion_allowed": false,
+  "stable_engine_protected": true,
+  "canonical_workbook_protected": true,
+  "final_decision_packet_allowed": true,
+  "activation_allowed": false,
+  "notification_send_allowed": false,
+  "race_predictions_refresh_allowed": false,
+  "fantasy_refresh_allowed": false,
+  "canonical_workbook_write_allowed": false,
+  "production_forecast_bundle_ledger_write_allowed": false,
+  "operator_approval_required": true,
+  "live_fetch_allowed": false,
+  "required_statuses": {
+    "v33C_source_pull": "SANDBOX_SOURCE_EVIDENCE_READY",
+    "v33D_source_quality": "SANDBOX_SOURCE_QUALITY_READY",
+    "v33E_processor_execution": "SANDBOX_PROCESSOR_EXECUTION_READY_ARTIFACT_WRITTEN",
+    "v33F_workbook_reflection": "SANDBOX_WORKBOOK_REFLECTION_WRITTEN_SANDBOX_ONLY",
+    "v33G_ledger_snapshot": "SANDBOX_FORECAST_BUNDLE_LEDGER_WRITTEN_SANDBOX_ONLY",
+    "v33H_readiness_metadata": "RACE_FANTASY_READINESS_METADATA_REFRESHED_SANDBOX_ONLY",
+    "v33I_notification_rehearsal": "MATERIAL_CHANGE_NOTIFICATION_PREVIEW_READY_SANDBOX_ONLY"
+  },
+  "required_false_runtime_flags": [
+    "production_automation",
+    "allow_activation",
+    "allow_notification_send",
+    "allow_race_predictions_refresh",
+    "allow_fantasy_refresh",
+    "allow_canonical_workbook_write",
+    "allow_production_ledger_write",
+    "model_promotion",
+    "activate",
+    "live_fetch"
+  ],
+  "writes_allowed": [
+    "health/session_processor_final_activation_decision_packet_v33j_status.json",
+    "sandbox/activation_decision_packets/v33j/**",
+    "logs/autopilot_bridge/**"
+  ],
+  "writes_forbidden": [
+    "Engine_2026-06-07_STABLE/**",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "canonical workbook",
+    "forecast_bundle_ledger/**",
+    "race_predictions/**",
+    "fantasy_predictions/**",
+    "notifications/**"
+  ],
+  "consumer_gates": {
+    "workbook_write_enabled": false,
+    "canonical_workbook_write_enabled": false,
+    "forecast_bundle_write_enabled": false,
+    "race_predictions_refresh_enabled": false,
+    "fantasy_refresh_enabled": false,
+    "notification_send_enabled": false,
+    "production_automation_enabled": false
+  },
+  "next_allowed_layer": "post_v33_bridge_hardening_then_operator_activation_decision"
+}
