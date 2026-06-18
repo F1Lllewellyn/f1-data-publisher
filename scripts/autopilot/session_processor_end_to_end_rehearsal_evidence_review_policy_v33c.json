@@ -1,0 +1,32 @@
+{
+  "schema_version": "f1_session_processor_end_to_end_rehearsal_evidence_review_policy_v33c_2026-06-17",
+  "purpose": "Review the v33B-R4-R2 end-to-end dry-run rehearsal output before any downstream operator packet or session-processor-loop preflight. This is review-only and must not activate automation, promote model logic, fetch live data, write workbook/ledger outputs, refresh Race/Fantasy, or send notifications.",
+  "required_v33b_version": "v33B-R4-R2",
+  "required_status": "READY",
+  "allowed_modes": [
+    "fixture",
+    "repo"
+  ],
+  "required_false_flags": [
+    "execute",
+    "activate",
+    "allow_live",
+    "production_automation",
+    "workbook_write",
+    "ledger_write",
+    "race_predictions_refresh",
+    "fantasy_predictions_refresh",
+    "notification_send",
+    "model_promotion"
+  ],
+  "protected_paths": [
+    "Engine_2026-06-07_STABLE",
+    "F1_2026_Prediction_Model_Data_Workbook.xlsx",
+    "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx",
+    "backups/",
+    "source_archives/",
+    ".env",
+    "secrets/",
+    "tokens/"
+  ]
+}
