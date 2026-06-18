@@ -1,0 +1,54 @@
+name: F1 Advisory AI PR and Log Reviewer
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_run:
+    workflows:
+      - F1 Autopilot Patch Receiver
+      - F1 1C Repository Dispatch Catchall Receiver
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      event_json:
+        description: Optional raw GitHub event JSON for dry-run diagnostics.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: f1-ai-advisory-review-${{ github.event.pull_request.number || github.event.workflow_run.id || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  advisory_review:
+    name: advisory_review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'failure'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
+      AI_REVIEW_ENFORCEMENT: advisory
+      EVENT_CONTEXT: ${{ toJson(github.event) }}
+      MANUAL_EVENT_JSON: ${{ inputs.event_json }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_EVENT_NAME: ${{ github.event_name }}
+      GITHUB_STEP_SUMMARY: ${{ github.step_summary }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run advisory AI PR/log review
+        run: python3 scripts/autopilot/f1_ai_pr_log_advisory_reviewer_v33d.py
