@@ -5,12 +5,12 @@
     "session_key": 11307,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260621T170817Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1287_spain_barcelona_catalunya/20260622T225628Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260621T170817Z",
+  "run_id": "20260622T225628Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "547582d1ab4d37484888183ab0f88600236acd74b668d441742859a4378ed75a",
+  "signature": "d2110d798baaf4b072dd9bacd5fa8ce7f194d5be031e743653a818d10a80fee9",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-06-21T17:08:17Z"
+  "updated_at_utc": "2026-06-22T22:56:28Z"
 }
