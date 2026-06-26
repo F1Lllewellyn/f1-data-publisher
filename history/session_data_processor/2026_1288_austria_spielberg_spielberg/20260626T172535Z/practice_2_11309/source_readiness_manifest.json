@@ -1,0 +1,633 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-06-26T17:25:50.540061Z",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-06-26T17:25:50.540904Z",
+    "event_id": "2026_1288_austria_spielberg_spielberg",
+    "forecast_state_changed": true,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "Austria - Spielberg - Spielberg",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-06-26T16:00:00+00:00",
+      "date_start": "2026-06-26T15:00:00+00:00",
+      "gate": "post_fp2",
+      "meeting_key": 1288,
+      "session_key": 11309,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": true,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 15898.04,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "177d7e9c6c3fc3f19e9c9a63996dea4636e9085bd8b0862115f6cb9ddb7d905b",
+      "size_bytes": 702,
+      "timestamp_utc": "2026-06-15T16:27:47.865703Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 15898.04,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "2423b37eefe0e99c95b83c81ccb629a6baa668448fb1a00671515b06a2209607",
+      "size_bytes": 1562,
+      "timestamp_utc": "2026-06-15T16:27:47.865498Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 15898.04,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "46e64b029675e366095b4a0ef15a53f0be43a55d85052fd8fc817cf934547ea9",
+      "size_bytes": 564,
+      "timestamp_utc": "2026-06-15T16:27:47.865327Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Austria - Spielberg - Spielberg",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "expected_empty_sources": [
+      {
+        "endpoint": "starting_grid",
+        "reason": "expected_empty_for_session_type",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 631
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 109
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 509
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 53
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "expected_empty",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "expected_empty_for_session_type",
+        "role": "expected_empty",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 109
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 81
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "practice",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 1.0,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20260626T172535Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-06-26T16:00:00+00:00",
+    "date_start": "2026-06-26T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1288,
+    "session_key": 11309,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "30f7335888ca09112ae7b8c053f39feda4102ee0a4389c7e54f06e04ec6bee15",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_drivers.json",
+      "json_sha256": "3201ba8e98b6f4eef04f78e05b2c66e1b98fd48f1b279dea8157ee6bf24461d8",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 293070,
+        "ok": true,
+        "sha256": "baafa2da7c60fec7d1b9ccce5798105c5f7051a05133c3025be8093c39b29baf",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_laps.json",
+      "json_sha256": "2013587aacf0002a1fb9b197461544e2852cc5b8bc09b1d03e6fc2fb58e4325f",
+      "max_lap_number": 35.0,
+      "missing_required_columns": [],
+      "rows": 631,
+      "status": "clean",
+      "timestamp_rows": 630
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 19659,
+        "ok": true,
+        "sha256": "1bd76b0fa017c8c5049a7ea72d34fc9e353fa582a02cc7d0e658c9ae63fe0eec",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_pit.json",
+      "json_sha256": "d258e9758ec2bb9b45a8e967c55e59df9b665f5e0119d1cef59d0d26bc470014",
+      "max_lap_number": 29.0,
+      "missing_required_columns": [],
+      "rows": 109,
+      "status": "clean",
+      "timestamp_rows": 109
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 58723,
+        "ok": true,
+        "sha256": "5a16ec72b7c0b7fd14ec32d7e1f3f29bacbb78fd14de01b673b9141fd19b6556",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_position.json",
+      "json_sha256": "7d757f98ff532e9fcf345cfa40d88e7af054e59cf5660ea86e991d826e4fb757",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 509,
+      "status": "clean",
+      "timestamp_rows": 509
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 13450,
+        "ok": true,
+        "sha256": "50f8d95851b523663bd8cad0cd6ecf1fa31539685e19ac32677f8ef9b8e53cd5",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_race_control.json",
+      "json_sha256": "d3617659350dc23a2bbb623ea64eb86a04fd33464484c0160685bde6b0324000",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 53,
+      "status": "clean",
+      "timestamp_rows": 53
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 3714,
+        "ok": true,
+        "sha256": "700eb9d90cd85d7c8757c8b860f278e3cc34243b94b42e34f2d1fc2a70f577de",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_session_result.json",
+      "json_sha256": "071afb7725df4d1f818de3d8c4aafc70945082d0f9d663c422b34f3b693af297",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 398,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_sessions.json",
+      "json_sha256": "4891ee0868618462bc8cbfd8c28971a97c27ff1df6f5c24fd815ac35679c8ecd",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 15832,
+        "ok": true,
+        "sha256": "4f3710cc9a5717a0f167516cb469df0f8ce0e635847b33e819e9135d7317a2a5",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_stints.json",
+      "json_sha256": "ec4328186da0227ae403ac96c90c204db4371bd49a0bff0786178cb86ce137d0",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 109,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 17367,
+        "ok": true,
+        "sha256": "14a6424595d1d6d47ebf93b3cb862c2647ed5c69bc397462a20f223397ab5597",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_weather.json",
+      "json_sha256": "6c03764b3922e83f5ae5453e1d87b1d6beeb501331fe33ad09482cf35e06a285",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 81,
+      "status": "clean",
+      "timestamp_rows": 81
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 9,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 2,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/workbook_kpi_readiness.json"
+  }
+}

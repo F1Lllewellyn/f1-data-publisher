@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1287_spain_barcelona_catalunya",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11307,
-  "session_name": "Race",
+  "session_key": 11309,
+  "session_name": "Practice 2",
   "stable_engine_modified": false,
-  "updated_utc": "2026-06-15T16:27:47.865327Z"
+  "updated_utc": "2026-06-26T17:25:50.541921Z"
 }

@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 13450,
+    "ok": true,
+    "sha256": "50f8d95851b523663bd8cad0cd6ecf1fa31539685e19ac32677f8ef9b8e53cd5",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/raw/openf1_race_control.json",
+  "json_sha256": "d3617659350dc23a2bbb623ea64eb86a04fd33464484c0160685bde6b0324000",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 53,
+  "status": "clean",
+  "timestamp_rows": 53
+}
