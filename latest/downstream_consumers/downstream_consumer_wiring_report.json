@@ -3,28 +3,28 @@
   "consumers_ready": {
     "fantasy_predictions": "ready",
     "race_predictions": "ready",
-    "race_reports": "full_report_ready"
+    "race_reports": "context_ready"
   },
   "event": {
-    "event_id": "2026_1287_spain_barcelona_catalunya",
-    "race_name": "Spain - Barcelona - Catalunya",
-    "session_key": 11307,
-    "session_name": "Race"
+    "event_id": "2026_1288_austria_spielberg_spielberg",
+    "race_name": "Austria - Spielberg - Spielberg",
+    "session_key": 11309,
+    "session_name": "Practice 2"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-06-25T17:51:04Z",
+  "generated_at_utc": "2026-06-27T08:13:09Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "outputs": {
     "combined_csv": "latest/downstream_consumers/combined_downstream_consumer_manifest.csv",
     "combined_manifest": "latest/downstream_consumers/combined_downstream_consumer_manifest.json",
     "fantasy_predictions_input": "latest/downstream_consumers/fantasy_predictions/consumer_input.json",
-    "history_manifest": "history/downstream_consumers/2026_1287_spain_barcelona_catalunya/20260625T175104Z/combined_downstream_consumer_manifest.json",
+    "history_manifest": "history/downstream_consumers/2026_1288_austria_spielberg_spielberg/20260627T081309Z/combined_downstream_consumer_manifest.json",
     "race_predictions_input": "latest/downstream_consumers/race_predictions/consumer_input.json",
     "race_reports_input": "latest/downstream_consumers/race_reports/consumer_input.json"
   },
   "promotion_allowed": false,
-  "run_id": "20260625T175104Z",
+  "run_id": "20260627T081309Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "stable_engine_modified": false,
   "status": "pass"
