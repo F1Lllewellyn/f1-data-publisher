@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 3722,
+    "ok": true,
+    "sha256": "5959192c52512d777dbc1cb0112fc9162451cc68025c381f22059c7c4f65b107",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/raw/openf1_session_result.json",
+  "json_sha256": "a4c5f32f028946a974521d36f37a340df56a84bf10f7224e0b27c4a8b525bd31",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}

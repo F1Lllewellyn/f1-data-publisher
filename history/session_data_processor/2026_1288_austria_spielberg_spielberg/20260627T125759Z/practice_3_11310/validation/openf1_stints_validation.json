@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 16716,
+    "ok": true,
+    "sha256": "d4e828f846c374f91256c5dae1cf977e8427f437b16ed69622a66ff2981eb970",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/raw/openf1_stints.json",
+  "json_sha256": "46f6bdb83ee3a27d7af1c6afe44020bcf9f56873a4c3c061c828f809280d0d30",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 116,
+  "status": "clean",
+  "timestamp_rows": 0
+}

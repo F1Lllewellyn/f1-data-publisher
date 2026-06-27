@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-06-27T12:58:14.544916Z",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "forecast_state_changed": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Austria - Spielberg - Spielberg",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-06-27T11:30:00+00:00",
+    "date_start": "2026-06-27T10:30:00+00:00",
+    "gate": "post_fp3",
+    "meeting_key": 1288,
+    "session_key": 11310,
+    "session_name": "Practice 3",
+    "session_type": "Practice"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}
