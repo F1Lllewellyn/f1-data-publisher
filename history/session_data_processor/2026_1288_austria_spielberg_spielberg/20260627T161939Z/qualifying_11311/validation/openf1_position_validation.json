@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 113219,
+    "ok": true,
+    "sha256": "5add5c4eff9a23aede022a0b25f60e3d53ba8d30ecc2577c5ee6798a362e58de",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/raw/openf1_position.json",
+  "json_sha256": "14d5d3b2049de8e7b929cf3a3535b27e344051e01e7cb3a34d445b7405fa9ad8",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 982,
+  "status": "clean",
+  "timestamp_rows": 982
+}
