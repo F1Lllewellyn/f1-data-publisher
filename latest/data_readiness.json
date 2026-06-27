@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1288_austria_spielberg_spielberg",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Austria - Spielberg - Spielberg",
@@ -51,8 +51,8 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "rows": 99,
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-06-27T16:19:51.183102Z"
+  "updated_utc": "2026-06-27T20:20:37.503471Z"
 }
