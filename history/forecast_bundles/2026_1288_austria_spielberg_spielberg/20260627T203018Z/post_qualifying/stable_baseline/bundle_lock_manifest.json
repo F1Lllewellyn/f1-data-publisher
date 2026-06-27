@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1288_austria_spielberg_spielberg__post_qualifying__stable_baseline__20260627T203018Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "season": "2026",
+  "round": "",
+  "race_name": "Austria - Spielberg - Spielberg",
+  "gate": "post_qualifying",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-06-27T20:30:18Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
