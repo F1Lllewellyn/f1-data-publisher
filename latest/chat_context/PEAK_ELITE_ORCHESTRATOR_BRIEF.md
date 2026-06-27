@@ -1,14 +1,14 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-06-25T17:35:56.867373Z`
+Created UTC: `2026-06-27T08:12:48.830786Z`
 Operation: `full_run_chain`
-Status: **pass_with_warnings**
+Status: **pass**
 
 ## Latest source state
-- Race/event: `Spain - Barcelona - Catalunya`
-- Session: `Race`
-- Source status: `needs_manual_review`
-- Workbook source status: `needs_manual_review`
+- Race/event: `Austria - Spielberg - Spielberg`
+- Session: `Practice 2`
+- Source status: `clean`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps
@@ -30,4 +30,4 @@ Status: **pass_with_warnings**
 - 2026 no-DRS rule: active by project governance; this layer does not create DRS assumptions
 
 ## Interpretation
-The processor produced source-backed artifacts, but readiness is not clean. Use as confidence/risk context, not automatic stable-prediction promotion.
+Workflow health, source readiness, and workbook/KPI handoff are aligned. Stable engine remains protected.
