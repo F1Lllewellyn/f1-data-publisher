@@ -1,0 +1,10 @@
+source_name,found,row_count,path
+drivers,True,456,latest/openf1_lightweight_source_closure/data/openf1_drivers.csv
+intervals,True,105632,latest/openf1_lightweight_source_closure/data/openf1_intervals.csv
+pit,True,199,latest/openf1_lightweight_source_closure/data/openf1_pit.csv
+position,True,11006,latest/openf1_lightweight_source_closure/data/openf1_position.csv
+race_control,True,1566,latest/openf1_lightweight_source_closure/data/openf1_race_control.csv
+source_readiness,True,9,latest/openf1_lightweight_source_closure/source_readiness_summary.csv
+starting_grid,True,110,latest/openf1_lightweight_source_closure/data/openf1_starting_grid.csv
+stints,True,1864,latest/openf1_lightweight_source_closure/data/openf1_stints.csv
+weather,True,4144,latest/openf1_lightweight_source_closure/data/openf1_weather.csv

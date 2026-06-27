@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-06-27T12:28:56Z",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "race_name": "Austria - Spielberg - Spielberg",
+  "gate": "post_fp3",
+  "scheduled_run": false,
+  "detected_sources": [],
+  "skipped_missing_sources": [],
+  "bundles": [
+    {
+      "bundle_id": "2026_1288_austria_spielberg_spielberg__post_fp3__stable_baseline__20260627T122856Z",
+      "gate": "post_fp3",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1288_austria_spielberg_spielberg/20260627T122856Z/post_fp3/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "2026_1288_austria_spielberg_spielberg__post_fp3__control_room_overlay__20260627T122856Z",
+      "gate": "post_fp3",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1288_austria_spielberg_spielberg/20260627T122856Z/post_fp3/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "2026_1288_austria_spielberg_spielberg__post_fp3__experimental_challenger__20260627T122856Z",
+      "gate": "post_fp3",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1288_austria_spielberg_spielberg/20260627T122856Z/post_fp3/experimental_challenger",
+      "latest_dir": ""
+    }
+  ]
+}

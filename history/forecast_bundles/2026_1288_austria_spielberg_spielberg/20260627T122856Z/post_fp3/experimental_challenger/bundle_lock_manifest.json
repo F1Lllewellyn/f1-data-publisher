@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1288_austria_spielberg_spielberg__post_fp3__experimental_challenger__20260627T122856Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "season": "2026",
+  "round": "",
+  "race_name": "Austria - Spielberg - Spielberg",
+  "gate": "post_fp3",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-06-27T12:28:56Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
