@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-06-27T16:19:51.181529Z",
+  "created_utc": "2026-06-27T16:48:44.545132Z",
   "event_id": "2026_1288_austria_spielberg_spielberg",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Austria - Spielberg - Spielberg",
@@ -16,6 +16,6 @@
     "session_name": "Qualifying",
     "session_type": "Qualifying"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }

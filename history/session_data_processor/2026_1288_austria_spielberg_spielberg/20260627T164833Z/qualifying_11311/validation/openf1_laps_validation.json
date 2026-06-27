@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 133759,
+    "ok": true,
+    "sha256": "f22e27b0ac300c236d77cb59ac8776ddaa0a554adc76b5f11bce7de4d83d704e",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/raw/openf1_laps.json",
+  "json_sha256": "df7e70fec8d8a954e8ee703f6c5d41d49180938254611abd38a05c7edeaa5fe5",
+  "max_lap_number": 20.0,
+  "missing_required_columns": [],
+  "rows": 290,
+  "status": "clean",
+  "timestamp_rows": 289
+}
