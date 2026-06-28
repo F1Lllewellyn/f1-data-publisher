@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
   "event_id": "2026_1288_austria_spielberg_spielberg",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/source_readiness_manifest.json",
-  "overall_status": "clean",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/source_readiness_manifest.json",
+  "overall_status": "needs_manual_review",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11311,
-  "session_name": "Qualifying",
+  "session_key": 11315,
+  "session_name": "Race",
   "stable_engine_modified": false,
-  "updated_utc": "2026-06-28T10:12:14.646927Z"
+  "updated_utc": "2026-06-28T16:51:12.035265Z"
 }

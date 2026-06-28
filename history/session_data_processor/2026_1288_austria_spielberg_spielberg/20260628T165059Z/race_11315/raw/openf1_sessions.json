@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 19,
+    "circuit_short_name": "Spielberg",
+    "country_code": "AUT",
+    "country_key": 17,
+    "country_name": "Austria",
+    "date_end": "2026-06-28T15:00:00+00:00",
+    "date_start": "2026-06-28T13:00:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Spielberg",
+    "meeting_key": 1288,
+    "session_key": 11315,
+    "session_name": "Race",
+    "session_type": "Race",
+    "year": 2026
+  }
+]

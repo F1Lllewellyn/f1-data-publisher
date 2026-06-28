@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 57584,
+    "ok": true,
+    "sha256": "d12f50435c675f42814c3cc40aecd17373c61e999a54dc748f8daa1c0c1900a1",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_position.json",
+  "json_sha256": "c713acd88ecfde4bd8dc74a464e0395ca70a4ee0950b2a25cc8a059eca0e22cd",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 499,
+  "status": "clean",
+  "timestamp_rows": 499
+}
