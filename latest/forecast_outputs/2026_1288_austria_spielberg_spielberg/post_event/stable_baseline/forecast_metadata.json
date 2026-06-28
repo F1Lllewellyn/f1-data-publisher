@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "stable_baseline",
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "gate": "post_event",
+  "generated_utc": "2026-06-28T20:07:23Z",
+  "promotion_allowed": false,
+  "race_name": "Austria - Spielberg - Spielberg",
+  "row_count": 32,
+  "run_id": "20260628T200716Z",
+  "source_counts": {
+    "drivers": 627,
+    "intervals": 147838,
+    "pit": 348,
+    "position": 13632,
+    "race_control": 2096,
+    "source_readiness": 9,
+    "starting_grid": 110,
+    "stints": 1970,
+    "weather": 4430
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}

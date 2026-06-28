@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-06-28T10:22:18Z",
+  "run_timestamp_utc": "2026-06-28T20:07:23Z",
   "event_id": "2026_1288_austria_spielberg_spielberg",
-  "gate_request": "post_qualifying",
+  "gate_request": "post_event",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
