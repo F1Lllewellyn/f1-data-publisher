@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1288_austria_spielberg_spielberg",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Austria - Spielberg - Spielberg",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-06-27T15:00:00+00:00",
+    "date_start": "2026-06-27T14:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1288,
+    "session_key": 11311,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 290,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 99,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 982,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 55,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "rows": 99,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 80,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-06-28T10:12:14.647073Z"
+}
