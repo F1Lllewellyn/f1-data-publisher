@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1288_austria_spielberg_spielberg",
     "race_name": "Austria - Spielberg - Spielberg",
-    "session_key": 11311,
-    "session_name": "Qualifying"
+    "session_key": 11315,
+    "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1288_austria_spielberg_spielberg/20260627T204339Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1288_austria_spielberg_spielberg/20260628T204620Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260627T204339Z",
+  "run_id": "20260628T204620Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "23ad45f65417c5f9ca3d767d2e603f7f1a2bde24f47c3804a111844386233a93",
+  "signature": "dd45fe320a86ea59538c78f2e32485d829ce6c1077a87e7b0d322c501d33a054",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-06-27T20:43:39Z"
+  "updated_at_utc": "2026-06-28T20:46:20Z"
 }
