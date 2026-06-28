@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 9162,
+    "ok": true,
+    "sha256": "3fe51aa0744ddd8a844236417cf4ef011102df1820a4b8ecc10bb314bc1ef617",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_stints.json",
+  "json_sha256": "8c4230098c44e82ed679949a1d078cef06749bc2252935f857568ea5ce91907c",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 63,
+  "status": "clean",
+  "timestamp_rows": 0
+}
