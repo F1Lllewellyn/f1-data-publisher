@@ -5,12 +5,12 @@
     "session_key": 11315,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1288_austria_spielberg_spielberg/20260628T204620Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1288_austria_spielberg_spielberg/20260629T125350Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260628T204620Z",
+  "run_id": "20260629T125350Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "dd45fe320a86ea59538c78f2e32485d829ce6c1077a87e7b0d322c501d33a054",
+  "signature": "694d7b3f068b95d5a3154f09b5e34fd6fac09db5b2cc2f1acb7e68f258a49c20",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-06-28T20:46:20Z"
+  "updated_at_utc": "2026-06-29T12:53:50Z"
 }
