@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 31973,
+    "ok": true,
+    "sha256": "d4f8c3a4f7e01f0f9851378240fecfca899de4e5abe432a1603840e9e825200e",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_weather.json",
+  "json_sha256": "be2b99bfb4d4372e67faeeeac8860d286019f6d058426efcd081a0b4ec467177",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 149,
+  "status": "clean",
+  "timestamp_rows": 149
+}
