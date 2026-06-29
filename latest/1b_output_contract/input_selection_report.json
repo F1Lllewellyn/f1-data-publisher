@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-06-29T12:53:18Z",
+      "run_id": "2026-06-29T19:26:58Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-06-29T12:53:18Z",
+        "run_id": "2026-06-29T19:26:58Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -30,7 +30,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/source_readiness_manifest.json",
-        "run_id": "20260629T125304Z",
+        "run_id": "20260629T192645Z",
         "score": -130,
         "status": "needs_manual_review"
       },
@@ -76,7 +76,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-06-29T12:53:18Z",
+        "run_id": "2026-06-29T19:26:58Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -88,13 +88,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260629T125318Z",
+        "run_id": "20260629T192658Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260629T125318Z",
+        "run_id": "20260629T192658Z",
         "score": -50,
         "status": "needs_manual_review"
       }
