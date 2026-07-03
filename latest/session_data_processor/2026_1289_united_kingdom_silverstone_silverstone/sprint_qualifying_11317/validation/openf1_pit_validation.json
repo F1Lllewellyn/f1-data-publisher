@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/sprint_qualifying_11317/raw/openf1_pit.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 11347,
+    "ok": true,
+    "sha256": "249af7a0d5c703756e5f59ce7c8c00e84e0acaa903add97fbefc00fcd5546d22",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/sprint_qualifying_11317/raw/openf1_pit.json",
+  "json_sha256": "4dd20d91a91c95e3a943a27f4847ae6dc9fb1f463ffe2699b77d41b5217313d5",
+  "max_lap_number": 13.0,
+  "missing_required_columns": [],
+  "rows": 63,
+  "status": "clean",
+  "timestamp_rows": 63
+}

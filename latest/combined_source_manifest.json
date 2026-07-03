@@ -1,15 +1,15 @@
 {
-  "event_id": "2026_1288_austria_spielberg_spielberg",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+  "overall_status": "clean",
   "promotion_allowed": false,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "combined_source_manifest_v2_session_processor",
-  "session_key": 11315,
+  "session_key": 11317,
   "source_layers": {
     "forecast_bundles": "latest/forecast_bundles",
     "openf1_lightweight_source_closure": "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
-    "session_data_processor": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/source_readiness_manifest.json"
+    "session_data_processor": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/sprint_qualifying_11317/source_readiness_manifest.json"
   },
-  "source_needs_manual_review": true,
-  "updated_utc": "2026-06-29T14:39:49.853479Z"
+  "source_needs_manual_review": false,
+  "updated_utc": "2026-07-03T20:35:37.244587Z"
 }
