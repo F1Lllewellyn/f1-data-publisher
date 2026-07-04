@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/qualifying_11322/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 4311,
+    "ok": true,
+    "sha256": "c845a41f2add5b0158ce1b1115fd6cc71c75b69b05d7fac23985da510bafff23",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/qualifying_11322/raw/openf1_session_result.json",
+  "json_sha256": "e745bc9dd133096a10b3786986a76eea6cd85634b5b649a5aeaa0ae1f9591011",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}

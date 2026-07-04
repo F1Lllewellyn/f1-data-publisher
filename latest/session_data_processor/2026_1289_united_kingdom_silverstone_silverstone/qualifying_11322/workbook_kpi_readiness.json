@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-07-04T18:39:06.876547Z",
+  "created_utc": "2026-07-04T20:01:36.537549Z",
   "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
   "overall_status": "clean",
   "race_name": "United Kingdom - Silverstone - Silverstone",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,
