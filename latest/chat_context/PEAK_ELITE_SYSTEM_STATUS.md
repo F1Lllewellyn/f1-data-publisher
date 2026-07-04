@@ -1,14 +1,14 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-07-03T15:54:54.407448Z`
+Created UTC: `2026-07-04T09:30:37.136696Z`
 Status: **pass**
 
 ## Confirmed Data
-- Latest event: `Austria - Spielberg - Spielberg`
-- Latest session: `Race`
-- Source status: `needs_manual_review`
+- Latest event: `United Kingdom - Silverstone - Silverstone`
+- Latest session: `Sprint Qualifying`
+- Source status: `clean`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 
 ## System checks
 - `core_files`: **pass**
