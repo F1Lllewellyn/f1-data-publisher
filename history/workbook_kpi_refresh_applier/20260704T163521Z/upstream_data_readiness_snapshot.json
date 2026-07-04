@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "United Kingdom - Silverstone - Silverstone",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-07-03T16:14:00+00:00",
+    "date_start": "2026-07-03T15:30:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1289,
+    "session_key": 11317,
+    "session_name": "Sprint Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 236,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 63,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 839,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 64,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "rows": 63,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 60,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-07-04T07:29:32.871600Z"
+}
