@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
     "race_name": "United Kingdom - Silverstone - Silverstone",
-    "session_key": 11317,
-    "session_name": "Sprint Qualifying"
+    "session_key": 11322,
+    "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260704T144843Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260704T183938Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260704T144843Z",
+  "run_id": "20260704T183938Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "46a393292ed4162557ad934af71b5a37b75e626854a29c0fb10bb7d55f07763e",
+  "signature": "89414bd201b0f98464a3621e286699d823adc7f2da928e1c5f6faa29696fec95",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-04T14:48:43Z"
+  "updated_at_utc": "2026-07-04T18:39:38Z"
 }

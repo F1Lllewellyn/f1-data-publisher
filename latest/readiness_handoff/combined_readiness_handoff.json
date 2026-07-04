@@ -2,10 +2,10 @@
   "event": {
     "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
     "race_name": "United Kingdom - Silverstone - Silverstone",
-    "session_key": 11317,
-    "session_name": "Sprint Qualifying"
+    "session_key": 11322,
+    "session_name": "Qualifying"
   },
-  "generated_at_utc": "2026-07-04T14:48:43Z",
+  "generated_at_utc": "2026-07-04T18:39:38Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
