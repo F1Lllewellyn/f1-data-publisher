@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "control_room_overlay",
+  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+  "gate": "post_qualifying",
+  "generated_utc": "2026-07-04T16:46:49Z",
+  "promotion_allowed": false,
+  "race_name": "United Kingdom - Silverstone - Silverstone",
+  "row_count": 29,
+  "run_id": "20260704T164639Z",
+  "source_counts": {
+    "drivers": 767,
+    "intervals": 124638,
+    "pit": 231,
+    "position": 16743,
+    "race_control": 2380,
+    "source_readiness": 9,
+    "starting_grid": 132,
+    "stints": 2731,
+    "weather": 5030
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}

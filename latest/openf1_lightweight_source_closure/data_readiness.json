@@ -1,75 +1,75 @@
 {
-  "generated_utc": "2026-07-04T15:49:50.949512Z",
+  "generated_utc": "2026-07-04T16:46:38.458112Z",
   "lanes": [
     {
       "lane": "weather",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 5030,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "race_control",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 2380,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "intervals",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 124638,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "position",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 16743,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "stints",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 2731,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "pit",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 231,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "starting_grid",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 132,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "drivers",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 767,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "team_radio",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "opportunistic_source_limited_zero_rows",
+      "rows": 142,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "opportunistic",
       "heavy_endpoint": false
     }
