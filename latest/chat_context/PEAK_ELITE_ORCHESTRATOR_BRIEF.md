@@ -1,12 +1,12 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-07-04T14:48:15.857839Z`
+Created UTC: `2026-07-04T18:39:08.755320Z`
 Operation: `full_run_chain`
 Status: **pass**
 
 ## Latest source state
 - Race/event: `United Kingdom - Silverstone - Silverstone`
-- Session: `Sprint Qualifying`
+- Session: `Qualifying`
 - Source status: `clean`
 - Workbook source status: `clean`
 - Workbook commit allowed: `True`

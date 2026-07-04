@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/qualifying_11322/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 14932,
+    "ok": true,
+    "sha256": "40bf64b7432c83a8562e7f92cac71249dfb1d0a6f4f7ab7d2a77f16eeec6ee55",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/qualifying_11322/raw/openf1_stints.json",
+  "json_sha256": "49c71b5ece2667df9cdd237fcd9d92d936f1cf8c86bf9f49e7c6ae43c219412f",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 104,
+  "status": "clean",
+  "timestamp_rows": 0
+}

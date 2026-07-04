@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-07-04T18:39:06.877411Z",
+  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+  "forecast_state_changed": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "United Kingdom - Silverstone - Silverstone",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-07-04T16:00:00+00:00",
+    "date_start": "2026-07-04T15:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1289,
+    "session_key": 11322,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_readiness_materially_improved": true,
+  "stable_order_overwrite_allowed": false
+}

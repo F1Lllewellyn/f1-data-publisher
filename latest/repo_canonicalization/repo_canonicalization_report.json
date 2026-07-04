@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 6984,
+    "active_architecture": 7151,
     "active_or_unknown": 51,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-07-04T14:48:10.791228Z",
+  "created_utc": "2026-07-04T18:38:56.203317Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 7782,
+  "file_count": 7949,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -29,6 +29,7 @@
     "_archive/Engine_2026-06-11_SANDBOX_WorkbookKPIRefreshApplier_StrictSourceStatus_Fix_2026-06-12/VALIDATION_REPORT_WORKBOOK_KPI_REFRESH_APPLIER_STRICT_SOURCE_STATUS_FIX_2026-06-12.md",
     "_archive/F1_1A_Actual_Forecast_Producer_Source_Discovery_Installer_Fix_2026-06-12/installer/RUN_F1_ACTUAL_FORECAST_PRODUCER_SOURCE_DISCOVERY_INSTALLER_FIX_WINDOWS.bat",
     "_archive/f1_control_room_forecast_scoring_all_patch_2026-06-10/payload/workbooks/F1_2026_Prediction_Model_Data_Workbook_OPERATIONAL_CONTROL_ROOM_READY_2026-06-10.xlsx",
+    "history/forecast_bundles/2026_1289_united_kingdom_silverstone_silverstone/20260704T164649Z/post_qualifying/experimental_challenger/method_e_proof_loop_gate_record.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_race_control_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_starting_grid_validation.json",
@@ -51,13 +52,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 7725,
+    "keep": 7892,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 526067035,
+  "total_bytes": 539464310,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
