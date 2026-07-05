@@ -5,12 +5,12 @@
     "session_key": 11326,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260705T164654Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260705T204057Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260705T164654Z",
+  "run_id": "20260705T204057Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "918d96c910e7d570cbf539149e67fb2677b6fa96bc9a3937512819acead3cb4c",
+  "signature": "ff44adc4b47e5da82974d16f2ba629289748576d8bd7effc658ce7810e3596dc",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-05T16:46:54Z"
+  "updated_at_utc": "2026-07-05T20:40:57Z"
 }

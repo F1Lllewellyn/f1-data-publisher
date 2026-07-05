@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-07-05T16:46:21Z",
+      "run_id": "2026-07-05T20:40:25Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-05T16:46:21Z",
+        "run_id": "2026-07-05T20:40:25Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -84,7 +84,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/source_readiness_manifest.json",
-        "run_id": "20260705T164606Z",
+        "run_id": "20260705T204013Z",
         "score": -130,
         "status": "needs_manual_review"
       }
@@ -94,7 +94,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-05T16:46:21Z",
+        "run_id": "2026-07-05T20:40:25Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -106,13 +106,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260705T164621Z",
+        "run_id": "20260705T204024Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260705T164621Z",
+        "run_id": "20260705T204024Z",
         "score": -50,
         "status": "needs_manual_review"
       }
