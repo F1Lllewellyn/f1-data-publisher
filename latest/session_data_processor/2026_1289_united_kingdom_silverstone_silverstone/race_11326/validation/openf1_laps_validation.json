@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 551513,
+    "ok": true,
+    "sha256": "34fdc0e568604e4cbff5b69949719e37e4fc261266c9dbc25911ca3ce83bb627",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_laps.json",
+  "json_sha256": "fd59452c2b5a3ad9c5d1f32a366da9ddfb2e461f8247eb9960ea71f16ffa1531",
+  "max_lap_number": 52.0,
+  "missing_required_columns": [],
+  "rows": 1114,
+  "status": "clean",
+  "timestamp_rows": 1114
+}

@@ -1,0 +1,624 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-07-05T16:46:21.159701Z",
+  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-07-05T16:46:21.160899Z",
+    "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "United Kingdom - Silverstone - Silverstone",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-07-05T16:00:00+00:00",
+      "date_start": "2026-07-05T14:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1289,
+      "session_key": 11326,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 420.15,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "833f8e373c4902c49716e8bb82e630f5dfd3093781889a38b4bef9276509226e",
+      "size_bytes": 717,
+      "timestamp_utc": "2026-07-05T09:46:12.206002Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 420.15,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "b73a3345390fdc28dca243b25e7ec35630d3532a91f86b0cb343643f9151d124",
+      "size_bytes": 1584,
+      "timestamp_utc": "2026-07-05T09:46:12.205872Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 420.15,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "2f8286ca5ca3eea2d38d8d85bd12a5995da3c97a344e5d8b123562bcf5844478",
+      "size_bytes": 588,
+      "timestamp_utc": "2026-07-05T09:46:12.205768Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "United Kingdom - Silverstone - Silverstone",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 28253
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1114
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 51
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 467
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 250
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 73
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 156
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20260705T164606Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-07-05T16:00:00+00:00",
+    "date_start": "2026-07-05T14:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1289,
+    "session_key": 11326,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "be04dda275ea984e636eac249345039be731fb22bd88b07a37c668ed7f0c8b85",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_drivers.json",
+      "json_sha256": "40eecd10f401f09e08eac75bd745af2d8790cc22d33141437d634fafb0ca736c",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 4025884,
+        "ok": true,
+        "sha256": "ce2782ff69ec622bf68bcdfb1a8c8047f097674e7278284ded9a023d90e64f58",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_intervals.json",
+      "json_sha256": "b7e1fb004c28bca8bbb9e81faa6150fdab8d767d75330065bfecbae6139dba75",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 28253,
+      "status": "clean",
+      "timestamp_rows": 28253
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 551513,
+        "ok": true,
+        "sha256": "34fdc0e568604e4cbff5b69949719e37e4fc261266c9dbc25911ca3ce83bb627",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_laps.json",
+      "json_sha256": "fd59452c2b5a3ad9c5d1f32a366da9ddfb2e461f8247eb9960ea71f16ffa1531",
+      "max_lap_number": 52.0,
+      "missing_required_columns": [],
+      "rows": 1114,
+      "status": "clean",
+      "timestamp_rows": 1114
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 9169,
+        "ok": true,
+        "sha256": "4e0047f6414fb71c3a590f9827fbb45ca53d5c76d1fe006554d2a52e4ab49f19",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_pit.json",
+      "json_sha256": "425f81aa961c8db5f8247efbbbe7949d063ef725af9778ae96fe1593fbcf4b2d",
+      "max_lap_number": 48.0,
+      "missing_required_columns": [],
+      "rows": 51,
+      "status": "clean",
+      "timestamp_rows": 51
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 53930,
+        "ok": true,
+        "sha256": "6ae3808f76ba303575b43f78857d450421c06b532908c7182a0a5e0c1f63e1e7",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_position.json",
+      "json_sha256": "db0939ec4b34b254ea1f95c2f9e1b13663f1e96cec7bbcc0b88f2e8f93d7239b",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 467,
+      "status": "clean",
+      "timestamp_rows": 467
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_race_control.csv",
+      "driver_count": 11,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 64643,
+        "ok": true,
+        "sha256": "9cd9f5c4dba4e919e4e8a49cf4f2bf44388005c8d96af160ab6463af1b938977",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_race_control.json",
+      "json_sha256": "8e6d8015dd145f873d6f4d90ac86e81128c46a234291226c89eea8fb1d289656",
+      "max_lap_number": 52.0,
+      "missing_required_columns": [],
+      "rows": 250,
+      "status": "clean",
+      "timestamp_rows": 250
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4040,
+        "ok": true,
+        "sha256": "1fafc865912ea1f45d5c558d88ac8da7699fdb316684b6d37f576a5276e893f1",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_session_result.json",
+      "json_sha256": "cc2c8f295388a50e0b6fc08c5adbe10cfc2c4b5b5d7f0afcbc3cd3e8af3ca7e1",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 397,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_sessions.json",
+      "json_sha256": "5d084d049a9f6224341287a63bc5a8eee302afed352b3a399f1d46b3902e65f2",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 10606,
+        "ok": true,
+        "sha256": "dc533d6174e0d52c9c1f71791a91f9ea4546403d0c23ef8fd8b70b40436ca8ef",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_stints.json",
+      "json_sha256": "6c0cdfc4a6e3b2c73cc5d7fc2efb16e1a88946f4b34b6f2d9d22648e6007a58d",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 73,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 33683,
+        "ok": true,
+        "sha256": "85b22a981661fc863419fc452b7856b043a48d7476791ab530dd9bbb00c8c7c2",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_weather.json",
+      "json_sha256": "732f361fa4a9dbfd38b1761b5484566665ff2d13cf084bc220e7f9be6d914069",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 156,
+      "status": "clean",
+      "timestamp_rows": 156
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/workbook_kpi_readiness.json"
+  }
+}
