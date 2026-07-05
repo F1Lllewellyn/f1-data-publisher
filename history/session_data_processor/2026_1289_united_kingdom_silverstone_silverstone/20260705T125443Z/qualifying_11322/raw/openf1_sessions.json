@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 2,
+    "circuit_short_name": "Silverstone",
+    "country_code": "GBR",
+    "country_key": 2,
+    "country_name": "United Kingdom",
+    "date_end": "2026-07-04T16:00:00+00:00",
+    "date_start": "2026-07-04T15:00:00+00:00",
+    "gmt_offset": "01:00:00",
+    "is_cancelled": false,
+    "location": "Silverstone",
+    "meeting_key": 1289,
+    "session_key": 11322,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying",
+    "year": 2026
+  }
+]
