@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-07-05T09:59:21Z",
+  "run_timestamp_utc": "2026-07-05T18:58:56Z",
   "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
-  "gate_request": "post_qualifying",
+  "gate_request": "race_result",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
