@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 33683,
+    "ok": true,
+    "sha256": "85b22a981661fc863419fc452b7856b043a48d7476791ab530dd9bbb00c8c7c2",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_weather.json",
+  "json_sha256": "732f361fa4a9dbfd38b1761b5484566665ff2d13cf084bc220e7f9be6d914069",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 156,
+  "status": "clean",
+  "timestamp_rows": 156
+}
