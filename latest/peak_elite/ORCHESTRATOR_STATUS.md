@@ -1,6 +1,6 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-07-06T19:20:37.017669Z`
+Created UTC: `2026-07-07T11:25:25.650199Z`
 Operation: `full_run_chain`
 Status: **pass_with_warnings**
 
@@ -8,7 +8,7 @@ Status: **pass_with_warnings**
 - Race/event: `United Kingdom - Silverstone - Silverstone`
 - Session: `Race`
 - Source status: `needs_manual_review`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps
