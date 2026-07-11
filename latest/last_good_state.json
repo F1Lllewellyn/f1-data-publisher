@@ -5,12 +5,12 @@
     "session_key": 11317,
     "session_name": "Sprint Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260711T194917Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1289_united_kingdom_silverstone_silverstone/20260711T210234Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260711T194917Z",
+  "run_id": "20260711T210234Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "2f84032bd6a4e068401eddbd3292f2f2185c23c90a46afe1457bd0295c55225e",
+  "signature": "340c457cf80903d90326bb2764ca8d3cc7c1a782c552f73d0d5fb98643d47d14",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-11T19:49:17Z"
+  "updated_at_utc": "2026-07-11T21:02:34Z"
 }
