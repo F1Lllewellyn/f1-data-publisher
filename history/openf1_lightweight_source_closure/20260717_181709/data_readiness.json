@@ -1,9 +1,5 @@
 {
-  "artifact_profile": "openf1-lightweight-source-closure",
-  "generated_utc": "2026-07-17T18:29:13.012901Z",
-  "season": 2026,
-  "completed_only": true,
-  "target_session_count": 63,
+  "generated_utc": "2026-07-17T18:29:13.013644Z",
   "lanes": [
     {
       "lane": "weather",
@@ -77,17 +73,5 @@
       "required_status": "opportunistic",
       "heavy_endpoint": false
     }
-  ],
-  "pass_count": 9,
-  "pass_with_warnings_count": 0,
-  "fail_count": 0,
-  "heavy_endpoints_excluded_by_default": [
-    "car_data",
-    "location"
-  ],
-  "timestamp_policy": "dt.datetime.now(dt.UTC)",
-  "no_drs_2026_assumption": true,
-  "previous_manifest_generated_utc": "2026-07-17T14:17:42.734192Z",
-  "latest_zip": "openf1_lightweight_source_closure.zip",
-  "history_path": "history/openf1_lightweight_source_closure/20260717_181709"
+  ]
 }
