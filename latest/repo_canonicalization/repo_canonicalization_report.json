@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 15142,
+    "active_architecture": 15248,
     "active_or_unknown": 51,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-07-17T07:00:51.396766Z",
+  "created_utc": "2026-07-17T09:18:44.808002Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 15940,
+  "file_count": 16046,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -35,6 +35,7 @@
     "history/forecast_bundles/2026_1289_united_kingdom_silverstone_silverstone/20260705T095921Z/post_qualifying/experimental_challenger/method_e_proof_loop_gate_record.json",
     "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T034126Z/pre_weekend/experimental_challenger/method_e_proof_loop_gate_record.json",
     "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T061428Z/pre_weekend/experimental_challenger/method_e_proof_loop_gate_record.json",
+    "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T083823Z/pre_weekend/experimental_challenger/method_e_proof_loop_gate_record.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_race_control_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_starting_grid_validation.json",
@@ -57,13 +58,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 15883,
+    "keep": 15989,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 861429332,
+  "total_bytes": 885744529,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
