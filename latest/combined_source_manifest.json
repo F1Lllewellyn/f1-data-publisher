@@ -1,15 +1,15 @@
 {
-  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "overall_status": "clean",
   "promotion_allowed": false,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "combined_source_manifest_v2_session_processor",
-  "session_key": 11326,
+  "session_key": 11327,
   "source_layers": {
     "forecast_bundles": "latest/forecast_bundles",
     "openf1_lightweight_source_closure": "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
-    "session_data_processor": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/source_readiness_manifest.json"
+    "session_data_processor": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_1_11327/source_readiness_manifest.json"
   },
-  "source_needs_manual_review": true,
-  "updated_utc": "2026-07-06T12:31:48.740205Z"
+  "source_needs_manual_review": false,
+  "updated_utc": "2026-07-17T13:14:39.996208Z"
 }

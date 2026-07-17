@@ -1,45 +1,45 @@
 {
-  "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
-  "forecast_state_changed": false,
-  "material_readiness_improved": false,
-  "needs_manual_review": true,
-  "overall_status": "needs_manual_review",
-  "race_name": "United Kingdom - Silverstone - Silverstone",
-  "readiness_quality": "blocked_manual_review_required_source",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-07-05T16:00:00+00:00",
-    "date_start": "2026-07-05T14:00:00+00:00",
-    "gate": "race_result",
-    "meeting_key": 1289,
-    "session_key": 11326,
-    "session_name": "Race",
-    "session_type": "Race"
+    "date_end": "2026-07-17T12:30:00+00:00",
+    "date_start": "2026-07-17T11:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1290,
+    "session_key": 11327,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
   },
-  "source_needs_manual_review": true,
+  "source_needs_manual_review": false,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
       "status": "clean"
     },
     "openf1_intervals": {
-      "rows": 28253,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_laps": {
-      "rows": 1114,
+      "rows": 486,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 51,
+      "rows": 84,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 467,
+      "rows": 600,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 250,
+      "rows": 87,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -55,13 +55,13 @@
       "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 73,
+      "rows": 30,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 156,
+      "rows": 58,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-07-06T12:31:48.740014Z"
+  "updated_utc": "2026-07-17T13:14:39.996029Z"
 }
