@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "a63a81fe0a574fe1752854cca4a42da0b5234baacb38488b64221817ef6df888",
+  "bundle_signature": "552fd669d277b8e88253729492323d32a36a5c4e6cf07433687e86314387e388",
   "canonical_workbook_overwrite": false,
   "consumer": "fantasy_predictions",
   "consumer_contract_from_output_layer": {
@@ -16,7 +16,7 @@
     "blocked": false,
     "readiness_quality": "usable_with_optional_context_gaps",
     "ready_for_use": true,
-    "session_type": "Qualifying",
+    "session_type": "Practice",
     "source_needs_manual_review": false,
     "source_status": "clean",
     "workbook_source_status": "clean"
@@ -25,19 +25,19 @@
   "default_output_rule": "fantasy picks may use this as source-backed value/risk/readiness context only",
   "disallowed_effect": "automatic transfer execution, chip activation, or budget assumption without current fantasy data",
   "event": {
-    "event_id": "2026_1289_united_kingdom_silverstone_silverstone",
-    "race_name": "United Kingdom - Silverstone - Silverstone",
-    "session_key": 11317,
-    "session_name": "Sprint Qualifying"
+    "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+    "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+    "session_key": 11327,
+    "session_name": "Practice 1"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-07-17T11:09:53Z",
+  "generated_at_utc": "2026-07-17T16:02:27Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260717T110953Z",
+  "run_id": "20260717T160227Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",
