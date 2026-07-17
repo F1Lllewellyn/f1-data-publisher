@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-07-17T03:41:26Z",
+  "created_utc": "2026-07-17T06:14:28Z",
   "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
   "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
   "gate": "pre_weekend",
@@ -8,27 +8,27 @@
   "skipped_missing_sources": [],
   "bundles": [
     {
-      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__stable_baseline__20260717T034126Z",
+      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__stable_baseline__20260717T061428Z",
       "gate": "pre_weekend",
       "engine_lane": "stable_baseline",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T034126Z/pre_weekend/stable_baseline",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T061428Z/pre_weekend/stable_baseline",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__control_room_overlay__20260717T034126Z",
+      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__control_room_overlay__20260717T061428Z",
       "gate": "pre_weekend",
       "engine_lane": "control_room_overlay",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T034126Z/pre_weekend/control_room_overlay",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T061428Z/pre_weekend/control_room_overlay",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__experimental_challenger__20260717T034126Z",
+      "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__pre_weekend__experimental_challenger__20260717T061428Z",
       "gate": "pre_weekend",
       "engine_lane": "experimental_challenger",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T034126Z/pre_weekend/experimental_challenger",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T061428Z/pre_weekend/experimental_challenger",
       "latest_dir": ""
     }
   ]
