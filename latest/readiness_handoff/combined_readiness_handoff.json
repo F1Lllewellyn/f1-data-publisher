@@ -2,10 +2,10 @@
   "event": {
     "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
     "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
-    "session_key": 11327,
-    "session_name": "Practice 1"
+    "session_key": 11328,
+    "session_name": "Practice 2"
   },
-  "generated_at_utc": "2026-07-17T16:02:27Z",
+  "generated_at_utc": "2026-07-17T17:22:31Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
