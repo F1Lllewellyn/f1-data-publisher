@@ -5,12 +5,12 @@
     "session_key": 11328,
     "session_name": "Practice 2"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T183949Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260717T194720Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260717T183949Z",
+  "run_id": "20260717T194720Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "d2b2a548dcc816478c50fa746f6510e41561beef6df5942925fe0ef22e9bee1d",
+  "signature": "d1d3d6691af4e287934b71af655211e6749d08b9cec46d49d732468350e079a1",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-17T18:39:49Z"
+  "updated_at_utc": "2026-07-17T19:47:20Z"
 }
