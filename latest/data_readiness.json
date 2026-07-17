@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
@@ -55,13 +55,13 @@
       "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 30,
+      "rows": 84,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 58,
+      "rows": 81,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-07-17T13:14:39.996029Z"
+  "updated_utc": "2026-07-17T14:17:12.153299Z"
 }
