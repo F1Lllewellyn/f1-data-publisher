@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "99edba607ce622d8900d6c5767f244ea0c8348453520ff8e9728735e729a2ed7",
+  "bundle_signature": "60aa4805cb97f8280e2d203aebbfe5f2c84b508541dfd730ea64e2d31e43b944",
   "canonical_workbook_overwrite": false,
   "consumer": "race_predictions",
   "consumer_contract_from_output_layer": {
@@ -31,13 +31,13 @@
     "session_name": "Practice 2"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-07-17T21:06:59Z",
+  "generated_at_utc": "2026-07-17T22:05:21Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260717T210659Z",
+  "run_id": "20260717T220520Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",
