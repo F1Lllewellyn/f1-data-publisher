@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-07-18T17:38:04Z",
+      "run_id": "2026-07-18T18:35:10Z",
       "score": 200,
       "source_backed": true,
       "source_status": "clean"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-18T17:38:04Z",
+        "run_id": "2026-07-18T18:35:10Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -66,7 +66,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/qualifying_11330/source_readiness_manifest.json",
-        "run_id": "20260718T173749Z",
+        "run_id": "20260718T183455Z",
         "score": 130,
         "status": "clean"
       },
@@ -118,7 +118,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-18T17:38:04Z",
+        "run_id": "2026-07-18T18:35:10Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -130,13 +130,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260718T173804Z",
+        "run_id": "20260718T183509Z",
         "score": 100,
         "status": "clean"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260718T173804Z",
+        "run_id": "20260718T183509Z",
         "score": 100,
         "status": "clean"
       }
