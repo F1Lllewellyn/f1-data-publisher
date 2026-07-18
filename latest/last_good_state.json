@@ -5,12 +5,12 @@
     "session_key": 11330,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T220400Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T230702Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260718T220400Z",
+  "run_id": "20260718T230702Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "3344e387f53ba44a021c51d49a98123e45161844fa59a7d2018dc23a6fba83c9",
+  "signature": "dffa30dba0fd060590e82377e04b65c333b1ac3a428f20286e70450f25f6bffe",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-18T22:04:00Z"
+  "updated_at_utc": "2026-07-18T23:07:02Z"
 }
