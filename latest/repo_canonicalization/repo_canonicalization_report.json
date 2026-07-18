@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 17180,
+    "active_architecture": 17335,
     "active_or_unknown": 51,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-07-18T09:43:12.542147Z",
+  "created_utc": "2026-07-18T11:16:37.148667Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 17978,
+  "file_count": 18133,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -98,7 +98,11 @@
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T080603Z/practice_2_11328/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T080603Z/practice_2_11328/validation/openf1_starting_grid_validation.json",
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T080935Z/practice_2_11328/validation/openf1_session_result_validation.json",
-    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T080935Z/practice_2_11328/validation/openf1_starting_grid_validation.json"
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T080935Z/practice_2_11328/validation/openf1_starting_grid_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T094312Z/practice_2_11328/validation/openf1_session_result_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T094312Z/practice_2_11328/validation/openf1_starting_grid_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T094539Z/practice_2_11328/validation/openf1_session_result_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T094539Z/practice_2_11328/validation/openf1_starting_grid_validation.json"
   ],
   "mode": "safe_apply",
   "phase2_recommendation": "After source classifier stabilizes, move legacy installer/patch/report artifacts into _archive/repository_canonicalization/ using a reviewed manifest, not blind deletion.",
@@ -109,13 +113,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 17921,
+    "keep": 18076,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 974360477,
+  "total_bytes": 975945056,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
