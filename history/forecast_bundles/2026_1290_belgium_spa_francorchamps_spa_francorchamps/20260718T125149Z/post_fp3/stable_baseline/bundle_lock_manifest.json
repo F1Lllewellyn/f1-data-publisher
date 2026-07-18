@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__post_fp3__stable_baseline__20260718T125149Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "season": "2026",
+  "round": "",
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "gate": "post_fp3",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-07-18T12:51:49Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

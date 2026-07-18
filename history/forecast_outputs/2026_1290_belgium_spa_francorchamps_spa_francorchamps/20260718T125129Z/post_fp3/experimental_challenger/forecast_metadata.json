@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "experimental_challenger",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "gate": "post_fp3",
+  "generated_utc": "2026-07-18T12:51:49Z",
+  "promotion_allowed": false,
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "row_count": 28,
+  "run_id": "20260718T125129Z",
+  "source_counts": {
+    "drivers": 653,
+    "intervals": 108696,
+    "pit": 194,
+    "position": 16595,
+    "race_control": 2458,
+    "source_readiness": 9,
+    "starting_grid": 110,
+    "stints": 2671,
+    "weather": 4986
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
