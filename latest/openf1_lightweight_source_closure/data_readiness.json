@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-07-18T22:39:32.031406Z",
+  "generated_utc": "2026-07-18T23:42:15.470657Z",
   "lanes": [
     {
       "lane": "weather",
-      "rows": 4592,
+      "rows": 6627,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -11,7 +11,7 @@
     },
     {
       "lane": "race_control",
-      "rows": 2469,
+      "rows": 3535,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -19,7 +19,7 @@
     },
     {
       "lane": "intervals",
-      "rows": 135937,
+      "rows": 265692,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -27,7 +27,7 @@
     },
     {
       "lane": "position",
-      "rows": 18525,
+      "rows": 24517,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -35,7 +35,7 @@
     },
     {
       "lane": "stints",
-      "rows": 2408,
+      "rows": 3508,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -43,7 +43,7 @@
     },
     {
       "lane": "pit",
-      "rows": 202,
+      "rows": 460,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -51,7 +51,7 @@
     },
     {
       "lane": "starting_grid",
-      "rows": 110,
+      "rows": 264,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -59,7 +59,7 @@
     },
     {
       "lane": "drivers",
-      "rows": 660,
+      "rows": 903,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -67,7 +67,7 @@
     },
     {
       "lane": "team_radio",
-      "rows": 211,
+      "rows": 246,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "opportunistic",
