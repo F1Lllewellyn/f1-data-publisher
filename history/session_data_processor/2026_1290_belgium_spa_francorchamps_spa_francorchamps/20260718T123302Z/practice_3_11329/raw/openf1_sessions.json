@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 7,
+    "circuit_short_name": "Spa-Francorchamps",
+    "country_code": "BEL",
+    "country_key": 16,
+    "country_name": "Belgium",
+    "date_end": "2026-07-18T11:30:00+00:00",
+    "date_start": "2026-07-18T10:30:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Spa-Francorchamps",
+    "meeting_key": 1290,
+    "session_key": 11329,
+    "session_name": "Practice 3",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]
