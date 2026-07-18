@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-07-18T18:35:09.735201Z",
+  "created_utc": "2026-07-18T19:32:46.247401Z",
   "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
   "overall_status": "clean",
   "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,
