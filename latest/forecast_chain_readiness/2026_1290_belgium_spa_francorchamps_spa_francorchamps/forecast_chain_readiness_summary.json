@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-07-19T11:57:34Z",
+  "run_timestamp_utc": "2026-07-19T16:24:38Z",
   "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
-  "gate_request": "post_qualifying",
+  "gate_request": "race_result",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
