@@ -1,0 +1,13 @@
+{
+  "canonical_workbook_modified": false,
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/qualifying_11330/source_readiness_manifest.json",
+  "overall_status": "clean",
+  "producer": "session_data_processor_loop_v1",
+  "promotion_allowed": false,
+  "schema_version": "latest_manifest_v2_session_processor",
+  "session_key": 11330,
+  "session_name": "Qualifying",
+  "stable_engine_modified": false,
+  "updated_utc": "2026-07-19T11:52:40.414014Z"
+}
