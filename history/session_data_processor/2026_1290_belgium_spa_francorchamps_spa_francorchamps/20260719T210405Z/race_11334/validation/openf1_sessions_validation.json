@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 403,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_sessions.json",
+  "json_sha256": "ceeefdfc7663520189db91b14671f21fbef51e9ea5ae1c036897e4b392dbca4d",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}
