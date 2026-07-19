@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 19115,
+    "active_architecture": 19318,
     "active_or_unknown": 51,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-07-18T23:05:26.403053Z",
+  "created_utc": "2026-07-19T00:05:04.769572Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 19913,
+  "file_count": 20116,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -55,6 +55,9 @@
     "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T223952Z/post_qualifying/control_room_overlay/method_e_proof_loop_gate_record.json",
     "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T223952Z/post_qualifying/experimental_challenger/method_e_proof_loop_gate_record.json",
     "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T223952Z/post_qualifying/experimental_challenger/stable_vs_challenger_delta.csv",
+    "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T234239Z/post_qualifying/control_room_overlay/method_e_proof_loop_gate_record.json",
+    "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T234239Z/post_qualifying/experimental_challenger/method_e_proof_loop_gate_record.json",
+    "history/forecast_bundles/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T234239Z/post_qualifying/experimental_challenger/stable_vs_challenger_delta.csv",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_race_control_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/20260703T203526Z/sprint_qualifying_11317/validation/openf1_starting_grid_validation.json",
@@ -150,7 +153,11 @@
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T220222Z/qualifying_11330/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T220222Z/qualifying_11330/validation/openf1_starting_grid_validation.json",
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T222424Z/qualifying_11330/validation/openf1_session_result_validation.json",
-    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T222424Z/qualifying_11330/validation/openf1_starting_grid_validation.json"
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T222424Z/qualifying_11330/validation/openf1_starting_grid_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T230526Z/qualifying_11330/validation/openf1_session_result_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T230526Z/qualifying_11330/validation/openf1_starting_grid_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T232812Z/qualifying_11330/validation/openf1_session_result_validation.json",
+    "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260718T232812Z/qualifying_11330/validation/openf1_starting_grid_validation.json"
   ],
   "mode": "safe_apply",
   "phase2_recommendation": "After source classifier stabilizes, move legacy installer/patch/report artifacts into _archive/repository_canonicalization/ using a reviewed manifest, not blind deletion.",
@@ -161,13 +168,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 19856,
+    "keep": 20059,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 1099290332,
+  "total_bytes": 1140390169,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
