@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-07-19T16:11:41.585736Z",
+  "created_utc": "2026-07-19T16:32:05.464852Z",
   "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
   "forecast_state_changed": false,
   "overall_status": "needs_manual_review",
@@ -16,6 +16,6 @@
     "session_name": "Race",
     "session_type": "Race"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
