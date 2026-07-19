@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/qualifying_11330/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 12910,
+    "ok": true,
+    "sha256": "2292b08a62bc04424d536230374b855f856fd33c658c998893a08312e8839ac0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/qualifying_11330/raw/openf1_stints.json",
+  "json_sha256": "ef0337b3a4d4363bef1ca8e7a30c130c4eebaaf1740cce8f668287d2cfb52bff",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 90,
+  "status": "clean",
+  "timestamp_rows": 0
+}
