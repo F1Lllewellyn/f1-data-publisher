@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 31377,
+    "ok": true,
+    "sha256": "7a83c61119a438af925c94fb13d9f5d74fa46c9d102229fffa0ed0ecae9e3d37",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_weather.json",
+  "json_sha256": "3c4069d57fd3b607455cacac2f3e011037d2f495acc9f4132329020eee0ee63e",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 146,
+  "status": "clean",
+  "timestamp_rows": 146
+}
