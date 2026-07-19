@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps__post_qualifying__control_room_overlay__20260719T093230Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "season": "2026",
+  "round": "",
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "gate": "post_qualifying",
+  "engine_lane": "control_room_overlay",
+  "engine_lane_config": "MethodE_ControlRoom_Overlay",
+  "forecast_lock_utc": "2026-07-19T09:32:30Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
