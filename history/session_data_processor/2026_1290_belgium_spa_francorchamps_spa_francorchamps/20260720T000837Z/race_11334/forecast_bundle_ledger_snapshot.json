@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-07-20T00:08:52.588912Z",
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "forecast_state_changed": false,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "recommended_forecast_action": "hold forecast state / manual review",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-07-19T15:00:00+00:00",
+    "date_start": "2026-07-19T13:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1290,
+    "session_key": 11334,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}
