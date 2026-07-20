@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_pit.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 5109,
+    "ok": true,
+    "sha256": "5884b556c530f1ff65f9fb961f6730cb9a8e10e0d70257b3b74aa26b7fae8a68",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_pit.json",
+  "json_sha256": "334e247bf3a8e547a1713f9a6a73c0c67cd134dedc8856ba9bf7e1584a306729",
+  "max_lap_number": 32.0,
+  "missing_required_columns": [],
+  "rows": 28,
+  "status": "clean",
+  "timestamp_rows": 28
+}
