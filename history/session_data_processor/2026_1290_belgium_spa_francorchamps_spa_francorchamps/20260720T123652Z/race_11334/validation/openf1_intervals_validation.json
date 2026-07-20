@@ -1,0 +1,28 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "gap_to_leader",
+    "interval",
+    "meeting_key",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_intervals.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "intervals",
+  "fetch": {
+    "bytes": 3277198,
+    "ok": true,
+    "sha256": "af4591135d48756d43e78fc55335fe7e078326acb62ad7abf398d3000ae55e6e",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_intervals.json",
+  "json_sha256": "363e2619c0995adbd7631765d90e0948ca586554eb38c800547626f3b4ecec2a",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 23116,
+  "status": "clean",
+  "timestamp_rows": 23116
+}
