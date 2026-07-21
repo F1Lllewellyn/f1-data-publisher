@@ -5,12 +5,12 @@
     "session_key": 11334,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260721T141925Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260721T160701Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260721T141925Z",
+  "run_id": "20260721T160701Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "9170852c429c1ee3812e0ea049c89faf7dd7e7d7a98426365081897b0821b23b",
+  "signature": "e9115f80a1faac82d116c9e453a5c90825ef5d6bcff61fd27fcb7b3c6d934bb6",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-21T14:19:25Z"
+  "updated_at_utc": "2026-07-21T16:07:01Z"
 }
