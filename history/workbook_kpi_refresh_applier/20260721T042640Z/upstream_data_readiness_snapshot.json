@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
+  "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
+  "readiness_quality": "blocked_manual_review_required_source",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-07-19T15:00:00+00:00",
+    "date_start": "2026-07-19T13:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1290,
+    "session_key": 11334,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 23116,
+      "status": "clean"
+    },
+    "openf1_laps": {
+      "rows": 875,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 28,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 443,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 151,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 51,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 146,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-07-20T01:05:41.664389Z"
+}
