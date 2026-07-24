@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-07-24T17:12:39.679132Z",
+  "created_utc": "2026-07-24T17:47:49.481078Z",
   "event_id": "2026_1291_hungary_budapest_hungaroring",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Hungary - Budapest - Hungaroring",
@@ -16,6 +16,6 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
