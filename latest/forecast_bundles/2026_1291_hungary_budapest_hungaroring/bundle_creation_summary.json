@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-07-24T03:49:40Z",
+  "created_utc": "2026-07-24T06:25:03Z",
   "event_id": "2026_1291_hungary_budapest_hungaroring",
   "race_name": "Hungary - Budapest - Hungaroring",
   "gate": "pre_weekend",
@@ -8,27 +8,27 @@
   "skipped_missing_sources": [],
   "bundles": [
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__stable_baseline__20260724T034940Z",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__stable_baseline__20260724T062503Z",
       "gate": "pre_weekend",
       "engine_lane": "stable_baseline",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T034940Z/pre_weekend/stable_baseline",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T062503Z/pre_weekend/stable_baseline",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__control_room_overlay__20260724T034940Z",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__control_room_overlay__20260724T062503Z",
       "gate": "pre_weekend",
       "engine_lane": "control_room_overlay",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T034940Z/pre_weekend/control_room_overlay",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T062503Z/pre_weekend/control_room_overlay",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__experimental_challenger__20260724T034940Z",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__experimental_challenger__20260724T062503Z",
       "gate": "pre_weekend",
       "engine_lane": "experimental_challenger",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T034940Z/pre_weekend/experimental_challenger",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260724T062503Z/pre_weekend/experimental_challenger",
       "latest_dir": ""
     }
   ]
