@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-07-24T12:30:00+00:00",
+    "date_start": "2026-07-24T11:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1291,
+    "session_key": 11335,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 545,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 105,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 734,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 57,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 106,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 79,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-07-24T14:04:56.494160Z"
+}
