@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 4,
+    "circuit_short_name": "Hungaroring",
+    "country_code": "HUN",
+    "country_key": 14,
+    "country_name": "Hungary",
+    "date_end": "2026-07-24T16:00:00+00:00",
+    "date_start": "2026-07-24T15:00:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Budapest",
+    "meeting_key": 1291,
+    "session_key": 11336,
+    "session_name": "Practice 2",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]
