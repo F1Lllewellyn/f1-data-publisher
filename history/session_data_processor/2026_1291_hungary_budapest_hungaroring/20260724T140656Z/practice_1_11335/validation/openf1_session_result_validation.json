@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 3720,
+    "ok": true,
+    "sha256": "15c17d00ce270797f5ebfba522b35b0b9b11d3d7c022d3d4b2e01a36ed5e4ef9",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_session_result.json",
+  "json_sha256": "cfb2e05f9e999a03ad1c55ae8d06bb5cdbd9ae3bdf18364ef47c5a1d56999ee5",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
