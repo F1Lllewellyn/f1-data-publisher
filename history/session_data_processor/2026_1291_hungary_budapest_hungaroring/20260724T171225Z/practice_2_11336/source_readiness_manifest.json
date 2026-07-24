@@ -1,0 +1,633 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-07-24T17:12:39.677897Z",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-07-24T17:12:39.679132Z",
+    "event_id": "2026_1291_hungary_budapest_hungaroring",
+    "forecast_state_changed": true,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "Hungary - Budapest - Hungaroring",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-07-24T16:00:00+00:00",
+      "date_start": "2026-07-24T15:00:00+00:00",
+      "gate": "post_fp2",
+      "meeting_key": 1291,
+      "session_key": 11336,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": true,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 187.72,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "1df8c301d90b4d01cb0f6e2f7218109a4f5382eed51eb0b694104ce6e2156421",
+      "size_bytes": 697,
+      "timestamp_utc": "2026-07-24T14:04:56.494361Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 187.72,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "1566b0b93032d9999ad991f8f804dfafe5bf8929322aa17018b4bac9a09d01c6",
+      "size_bytes": 1566,
+      "timestamp_utc": "2026-07-24T14:04:56.494160Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 187.72,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "1417db4a29f5ae040dadd5c17a1a2b5fd6603a15f4a68722c349cbcfacbc2da2",
+      "size_bytes": 568,
+      "timestamp_utc": "2026-07-24T14:04:56.493994Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "expected_empty_sources": [
+      {
+        "endpoint": "starting_grid",
+        "reason": "expected_empty_for_session_type",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 572
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 93
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 608
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 72
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 21
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "expected_empty",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "expected_empty_for_session_type",
+        "role": "expected_empty",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 93
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 82
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "practice",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 1.0,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20260724T171225Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-07-24T16:00:00+00:00",
+    "date_start": "2026-07-24T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1291,
+    "session_key": 11336,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "b50b35af94d18ebdea26c5025b46904aecc76f0a485d684793c121f2da6e8bc4",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_drivers.json",
+      "json_sha256": "a3ec0c0a5fbfbb3483115371cce08ac6f84d79020e611a89218322ea86dcd6cb",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_laps.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 268224,
+        "ok": true,
+        "sha256": "61af64d971cb0a1570f443c1eca5caf548e3a4e55298639b9808c4a25fee2140",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_laps.json",
+      "json_sha256": "d15a47bba5acc3d14deb6fff5e6d5d543249cde4ed1e79d62bc19c9342e1ca06",
+      "max_lap_number": 33.0,
+      "missing_required_columns": [],
+      "rows": 572,
+      "status": "clean",
+      "timestamp_rows": 571
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_pit.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 16814,
+        "ok": true,
+        "sha256": "96c31515046d9cc125c493430a35aaf556cedec06e09ff3cdf7ae2862dfac794",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_pit.json",
+      "json_sha256": "43eec57a7352152fa8123c848ba4e0730e697888a958e600a69be96f46a5222b",
+      "max_lap_number": 30.0,
+      "missing_required_columns": [],
+      "rows": 93,
+      "status": "clean",
+      "timestamp_rows": 93
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 70199,
+        "ok": true,
+        "sha256": "e0392103dd6896bb16522aaa3ae470f26dc4750b40e054fc767b81998f193ce5",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_position.json",
+      "json_sha256": "e177da40add1985dfeb8e904f03a6f601b8b0114244c0316d77d627ce8b6e9b0",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 608,
+      "status": "clean",
+      "timestamp_rows": 608
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 19079,
+        "ok": true,
+        "sha256": "08d0156c1cac5793045c1be335f06eb63d0c04ca4305c6afeaabd6e99f2936d8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_race_control.json",
+      "json_sha256": "b83f1118d84467c930c74f4016209d94e4a1713873c6f66fde4162f72ecbe3b1",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 72,
+      "status": "clean",
+      "timestamp_rows": 72
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_session_result.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 3550,
+        "ok": true,
+        "sha256": "7778febcf1dabc14338c936267dab09b030e29c920c5a13eff0baaae54b5c68e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_session_result.json",
+      "json_sha256": "0237769fd91ce93f455dac9a669d88666507d464e6848bb419da0517f5ab7312",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 21,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 398,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_sessions.json",
+      "json_sha256": "38804c94930c3494b5d339a20182e5ad17240caefea343742be0779cf69c9d8e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_stints.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 13480,
+        "ok": true,
+        "sha256": "8a78b1df155bf4d424a02ad7a1a2a9e3059feb2870d4c9ee0a8c562962c6c291",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_stints.json",
+      "json_sha256": "8e3e3aa120ef59563b9c2f692e4bd290e62de86fbd13c2afc5ce0224ba114d71",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 93,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 17608,
+        "ok": true,
+        "sha256": "9bba159acd2e9141c1abe9afc9c191cb7408c497dd7c9f7561cd1736f0f9a85d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_weather.json",
+      "json_sha256": "d49d6773f68ea45f6493ce73e09c8c6d5ac413694752153cb770c5fd2f3461f9",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 82,
+      "status": "clean",
+      "timestamp_rows": 82
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 9,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 2,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/workbook_kpi_readiness.json"
+  }
+}
