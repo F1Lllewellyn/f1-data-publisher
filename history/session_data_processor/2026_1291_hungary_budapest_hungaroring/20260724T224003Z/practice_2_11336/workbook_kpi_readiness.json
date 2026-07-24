@@ -1,0 +1,86 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-07-24T22:40:15.895791Z",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "overall_status": "clean",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "sandbox_workbook_created": false,
+  "schema_version": "workbook_kpi_readiness_v1_session_processor",
+  "session": {
+    "date_end": "2026-07-24T16:00:00+00:00",
+    "date_start": "2026-07-24T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1291,
+    "session_key": 11336,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "driver_count": 21,
+      "max_lap_number": 33.0,
+      "rows": 572,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "driver_count": 21,
+      "max_lap_number": 30.0,
+      "rows": 93,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 608,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 72,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "driver_count": 21,
+      "max_lap_number": null,
+      "rows": 21,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "driver_count": 21,
+      "max_lap_number": null,
+      "rows": 93,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 82,
+      "status": "clean"
+    }
+  }
+}
