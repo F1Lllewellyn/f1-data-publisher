@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "e114796cd67d52ae2681eebb48f0e645ff01167e39118a746ccae5ea92030258",
+  "bundle_signature": "65343a6172dcbe9a533b0e148361fd6d5752f0efd2d70802e69f5c8b4374da4b",
   "canonical_workbook_overwrite": false,
   "consumer": "race_predictions",
   "consumer_contract_from_output_layer": {
@@ -16,7 +16,7 @@
     "blocked": false,
     "readiness_quality": "usable_with_optional_context_gaps",
     "ready_for_use": true,
-    "session_type": "Race",
+    "session_type": "Practice",
     "source_needs_manual_review": false,
     "source_status": "clean",
     "workbook_source_status": "clean"
@@ -25,19 +25,19 @@
   "default_output_rule": "exact P1-P20 prediction output may use this as readiness/confidence/risk context only; stable engine logic is not overwritten",
   "disallowed_effect": "automatic promotion, stable logic change, or hidden model overwrite",
   "event": {
-    "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
-    "race_name": "Belgium - Spa-Francorchamps - Spa-Francorchamps",
-    "session_key": 11334,
-    "session_name": "Race"
+    "event_id": "2026_1291_hungary_budapest_hungaroring",
+    "race_name": "Hungary - Budapest - Hungaroring",
+    "session_key": 11335,
+    "session_name": "Practice 1"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-07-24T11:55:25Z",
+  "generated_at_utc": "2026-07-24T14:09:24Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260724T115525Z",
+  "run_id": "20260724T140924Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",
