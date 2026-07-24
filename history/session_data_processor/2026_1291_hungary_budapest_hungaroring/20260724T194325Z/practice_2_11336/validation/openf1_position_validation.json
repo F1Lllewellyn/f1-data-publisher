@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 70199,
+    "ok": true,
+    "sha256": "e0392103dd6896bb16522aaa3ae470f26dc4750b40e054fc767b81998f193ce5",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_position.json",
+  "json_sha256": "e177da40add1985dfeb8e904f03a6f601b8b0114244c0316d77d627ce8b6e9b0",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 608,
+  "status": "clean",
+  "timestamp_rows": 608
+}
