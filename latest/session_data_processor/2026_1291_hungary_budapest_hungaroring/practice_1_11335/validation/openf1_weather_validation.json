@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 16982,
+    "ok": true,
+    "sha256": "46828c9462f4e02ea822bdeb09df72cb22340f72296ac03982afad1e23bdde42",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_weather.json",
+  "json_sha256": "835d1999d26ffb833a6509da21ca8db44c12e20abc150b0ba23a5cc8670d05d7",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 79,
+  "status": "clean",
+  "timestamp_rows": 79
+}

@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1290_belgium_spa_francorchamps_spa_francorchamps",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11334,
-  "session_name": "Race",
+  "session_key": 11335,
+  "session_name": "Practice 1",
   "stable_engine_modified": false,
-  "updated_utc": "2026-07-20T01:05:41.664252Z"
+  "updated_utc": "2026-07-24T14:04:56.493994Z"
 }

@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 15402,
+    "ok": true,
+    "sha256": "73b21b9cc6444b5643c8c8b24512e1bb451d3e5c76781329aef197be22365a95",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/raw/openf1_stints.json",
+  "json_sha256": "e5e4ab38df96a44486b53415682f0c5a007675c1abdd12fa5eb17a71203569ee",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 106,
+  "status": "clean",
+  "timestamp_rows": 0
+}
