@@ -5,12 +5,12 @@
     "session_key": 11336,
     "session_name": "Practice 2"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260724T211955Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260724T224219Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260724T211955Z",
+  "run_id": "20260724T224219Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "76a8cd785c7cf5eec8825658f9fc5c883534e00d4d2ea2f2f508c28aabcaa11b",
+  "signature": "d237285310dccb864ff08eaaa0815208946fc3510334b78664afec9abbe63513",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-24T21:19:55Z"
+  "updated_at_utc": "2026-07-24T22:42:19Z"
 }
