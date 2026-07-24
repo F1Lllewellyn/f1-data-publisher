@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1291_hungary_budapest_hungaroring__pre_weekend__control_room_overlay__20260724T085746Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "season": "2026",
+  "round": "",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "gate": "pre_weekend",
+  "engine_lane": "control_room_overlay",
+  "engine_lane_config": "MethodE_ControlRoom_Overlay",
+  "forecast_lock_utc": "2026-07-24T08:57:46Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
