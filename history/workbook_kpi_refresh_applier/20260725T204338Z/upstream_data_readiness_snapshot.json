@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-07-25T15:00:00+00:00",
+    "date_start": "2026-07-25T14:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1291,
+    "session_key": 11338,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 299,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 98,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1016,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 48,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "rows": 98,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 76,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-07-25T20:33:08.563209Z"
+}
