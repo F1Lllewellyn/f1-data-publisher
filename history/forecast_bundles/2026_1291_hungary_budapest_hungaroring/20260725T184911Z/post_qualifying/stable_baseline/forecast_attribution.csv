@@ -1,0 +1,2 @@
+attribution_id,gate,engine_lane,feature_family,input_source,directional_effect,weight_class,confidence,proof_loop_status,notes
+2026_1291_hungary_budapest_hungaroring__post_qualifying__stable_baseline__20260725T184911Z__ATTR,post_qualifying,stable_baseline,bundle_lock,/home/runner/work/f1-data-publisher/f1-data-publisher/latest/forecasts/2026_1291_hungary_budapest_hungaroring/post_qualifying/stable_baseline/forecast_rows.csv,locked,source,high,ready_for_scoring,
