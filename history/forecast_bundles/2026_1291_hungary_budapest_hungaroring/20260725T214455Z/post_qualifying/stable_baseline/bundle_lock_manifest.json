@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_qualifying__stable_baseline__20260725T214455Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "season": "2026",
+  "round": "",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "gate": "post_qualifying",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-07-25T21:44:55Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
