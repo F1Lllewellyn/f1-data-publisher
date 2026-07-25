@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_laps.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 268224,
+    "ok": true,
+    "sha256": "61af64d971cb0a1570f443c1eca5caf548e3a4e55298639b9808c4a25fee2140",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/raw/openf1_laps.json",
+  "json_sha256": "d15a47bba5acc3d14deb6fff5e6d5d543249cde4ed1e79d62bc19c9342e1ca06",
+  "max_lap_number": 33.0,
+  "missing_required_columns": [],
+  "rows": 572,
+  "status": "clean",
+  "timestamp_rows": 571
+}
