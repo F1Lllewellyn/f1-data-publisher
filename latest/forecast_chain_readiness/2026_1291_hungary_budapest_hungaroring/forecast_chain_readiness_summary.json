@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-07-25T13:02:15Z",
+  "run_timestamp_utc": "2026-07-25T15:46:41Z",
   "event_id": "2026_1291_hungary_budapest_hungaroring",
-  "gate_request": "post_fp3",
+  "gate_request": "post_qualifying",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,

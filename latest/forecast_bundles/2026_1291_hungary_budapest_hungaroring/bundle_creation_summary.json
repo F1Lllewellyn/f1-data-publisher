@@ -1,34 +1,34 @@
 {
-  "created_utc": "2026-07-25T13:02:15Z",
+  "created_utc": "2026-07-25T15:46:41Z",
   "event_id": "2026_1291_hungary_budapest_hungaroring",
   "race_name": "Hungary - Budapest - Hungaroring",
-  "gate": "post_fp3",
+  "gate": "post_qualifying",
   "scheduled_run": false,
   "detected_sources": [],
   "skipped_missing_sources": [],
   "bundles": [
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_fp3__stable_baseline__20260725T130215Z",
-      "gate": "post_fp3",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_qualifying__stable_baseline__20260725T154641Z",
+      "gate": "post_qualifying",
       "engine_lane": "stable_baseline",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T130215Z/post_fp3/stable_baseline",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T154641Z/post_qualifying/stable_baseline",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_fp3__control_room_overlay__20260725T130215Z",
-      "gate": "post_fp3",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_qualifying__control_room_overlay__20260725T154641Z",
+      "gate": "post_qualifying",
       "engine_lane": "control_room_overlay",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T130215Z/post_fp3/control_room_overlay",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T154641Z/post_qualifying/control_room_overlay",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_fp3__experimental_challenger__20260725T130215Z",
-      "gate": "post_fp3",
+      "bundle_id": "2026_1291_hungary_budapest_hungaroring__post_qualifying__experimental_challenger__20260725T154641Z",
+      "gate": "post_qualifying",
       "engine_lane": "experimental_challenger",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T130215Z/post_fp3/experimental_challenger",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1291_hungary_budapest_hungaroring/20260725T154641Z/post_qualifying/experimental_challenger",
       "latest_dir": ""
     }
   ]
