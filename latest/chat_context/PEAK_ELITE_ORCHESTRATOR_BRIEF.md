@@ -1,12 +1,12 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-07-25T15:16:51.397370Z`
+Created UTC: `2026-07-25T16:29:47.452299Z`
 Operation: `full_run_chain`
 Status: **pass**
 
 ## Latest source state
 - Race/event: `Hungary - Budapest - Hungaroring`
-- Session: `Practice 2`
+- Session: `Qualifying`
 - Source status: `clean`
 - Workbook source status: `clean`
 - Workbook commit allowed: `True`
