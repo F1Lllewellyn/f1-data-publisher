@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 400,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/raw/openf1_sessions.json",
+  "json_sha256": "15e8d9870d55b0604c5dfe050c6f3f2982a07cb77f684814474e587447043127",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}
