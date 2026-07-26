@@ -1,0 +1,28 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "gap_to_leader",
+    "interval",
+    "meeting_key",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/raw/openf1_intervals.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "intervals",
+  "fetch": {
+    "bytes": 4211968,
+    "ok": true,
+    "sha256": "477219cb31586aaa5a19a9d9a542b95ed0f40bba6677290fd7e0d126b42bb697",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/raw/openf1_intervals.json",
+  "json_sha256": "927961c5b0ca2d48df5db5549ebee1674e4d56e43f9b7c0e2c80e5cabbdc8216",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 29593,
+  "status": "clean",
+  "timestamp_rows": 29593
+}

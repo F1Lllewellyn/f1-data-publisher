@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-07-26T15:44:07.700783Z",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "forecast_state_changed": false,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "recommended_forecast_action": "hold forecast state / manual review",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-07-26T15:00:00+00:00",
+    "date_start": "2026-07-26T13:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1291,
+    "session_key": 11342,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_readiness_materially_improved": true,
+  "stable_order_overwrite_allowed": false
+}
