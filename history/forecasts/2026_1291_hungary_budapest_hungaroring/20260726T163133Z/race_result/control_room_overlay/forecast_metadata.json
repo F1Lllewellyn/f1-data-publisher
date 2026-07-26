@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "control_room_overlay",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "gate": "race_result",
+  "generated_utc": "2026-07-26T16:32:12Z",
+  "promotion_allowed": false,
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "row_count": 32,
+  "run_id": "20260726T163133Z",
+  "source_counts": {
+    "drivers": 577,
+    "intervals": 111361,
+    "pit": 136,
+    "position": 9762,
+    "race_control": 1825,
+    "source_readiness": 9,
+    "starting_grid": 44,
+    "stints": 2293,
+    "weather": 4704
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
