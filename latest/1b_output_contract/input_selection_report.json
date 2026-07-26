@@ -2,20 +2,20 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-07-26T14:12:34Z",
-      "score": 200,
+      "run_id": "2026-07-26T15:44:08Z",
+      "score": 100,
       "source_backed": true,
-      "source_status": "clean"
+      "source_status": "needs_manual_review"
     }
   ],
   "source": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-26T14:12:34Z",
-        "score": 200,
+        "run_id": "2026-07-26T15:44:08Z",
+        "score": 100,
         "source_backed": true,
-        "source_status": "clean"
+        "source_status": "needs_manual_review"
       }
     ],
     "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
@@ -95,6 +95,12 @@
         "status": "clean"
       },
       {
+        "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
+        "run_id": "20260726T154355Z",
+        "score": -130,
+        "status": "needs_manual_review"
+      },
+      {
         "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/source_readiness_manifest.json",
         "run_id": "20260724T140656Z",
         "score": 130,
@@ -142,10 +148,10 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-26T14:12:34Z",
-        "score": 200,
+        "run_id": "2026-07-26T15:44:08Z",
+        "score": 100,
         "source_backed": true,
-        "source_status": "clean"
+        "source_status": "needs_manual_review"
       }
     ],
     "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
@@ -154,15 +160,15 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260726T141234Z",
-        "score": 100,
-        "status": "clean"
+        "run_id": "20260726T154407Z",
+        "score": -50,
+        "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260726T141234Z",
-        "score": 100,
-        "status": "clean"
+        "run_id": "20260726T154407Z",
+        "score": -50,
+        "status": "needs_manual_review"
       }
     ]
   }
