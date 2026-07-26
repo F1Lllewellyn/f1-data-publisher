@@ -5,12 +5,12 @@
     "session_key": 11338,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260726T001450Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260726T041157Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260726T001450Z",
+  "run_id": "20260726T041157Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "78820f2f1a5d64493e19901eb7bb63d909bdbec7f64e847ad3419a1dcd310dde",
+  "signature": "49dd132fe423dcf9271024951461f16ab77093887189fad6c19d9c9e87bf644a",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-07-26T00:14:51Z"
+  "updated_at_utc": "2026-07-26T04:11:57Z"
 }
