@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1291_hungary_budapest_hungaroring__race_result__control_room_overlay__20260726T173151Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1291_hungary_budapest_hungaroring",
+  "season": "2026",
+  "round": "",
+  "race_name": "Hungary - Budapest - Hungaroring",
+  "gate": "race_result",
+  "engine_lane": "control_room_overlay",
+  "engine_lane_config": "MethodE_ControlRoom_Overlay",
+  "forecast_lock_utc": "2026-07-26T17:31:51Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
