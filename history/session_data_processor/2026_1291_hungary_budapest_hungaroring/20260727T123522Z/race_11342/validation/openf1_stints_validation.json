@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 9716,
+    "ok": true,
+    "sha256": "0013001d81ee8735baad830a9322c8ab6a681b179bf419821b5d7d9fd4525276",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/raw/openf1_stints.json",
+  "json_sha256": "2930773a80a372707d67915a7e9c8c786c88475823d0e0bb00bf2ddd740cbc64",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 67,
+  "status": "clean",
+  "timestamp_rows": 0
+}
