@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-07-27T01:15:51Z",
+      "run_id": "2026-07-27T05:30:00Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-27T01:15:51Z",
+        "run_id": "2026-07-27T05:30:00Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -96,7 +96,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
-        "run_id": "20260727T011516Z",
+        "run_id": "20260727T052927Z",
         "score": -130,
         "status": "needs_manual_review"
       },
@@ -148,7 +148,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-07-27T01:15:51Z",
+        "run_id": "2026-07-27T05:30:00Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -160,13 +160,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260727T011551Z",
+        "run_id": "20260727T053000Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260727T011551Z",
+        "run_id": "20260727T053000Z",
         "score": -50,
         "status": "needs_manual_review"
       }
