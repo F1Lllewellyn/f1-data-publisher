@@ -1,11 +1,11 @@
 {
   "canonical_workbook_overwrite": false,
-  "generated_at_utc": "2026-08-06T10:19:43Z",
+  "generated_at_utc": "2026-08-06T12:32:48Z",
   "input_selection": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-06T10:16:05Z",
+        "run_id": "2026-08-06T12:29:00Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -15,7 +15,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-06T10:16:05Z",
+          "run_id": "2026-08-06T12:29:00Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -26,38 +26,38 @@
       "selection_rule": "prefer_clean_dashboard_backed_state_then_best_source_manifest",
       "source_candidates": [
         {
-          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/source_readiness_manifest.json",
-          "run_id": "20260725T083503Z",
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/source_readiness_manifest.json",
+          "run_id": "20260613T125438Z",
           "score": 130,
           "status": "clean"
         },
         {
-          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/source_readiness_manifest.json",
-          "run_id": "20260724T140656Z",
-          "score": 130,
-          "status": "clean"
-        },
-        {
-          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/source_readiness_manifest.json",
-          "run_id": "20260726T121732Z",
-          "score": 130,
-          "status": "clean"
-        },
-        {
-          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
-          "run_id": "20260727T234117Z",
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/source_readiness_manifest.json",
+          "run_id": "20260615T162911Z",
           "score": -130,
           "status": "needs_manual_review"
         },
         {
-          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/source_readiness_manifest.json",
-          "run_id": "20260627T125759Z",
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json",
+          "run_id": "20260614T103048Z",
           "score": 130,
           "status": "clean"
         },
         {
-          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/source_readiness_manifest.json",
-          "run_id": "20260628T101203Z",
+          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+          "run_id": "20260612T230452Z",
+          "score": -50,
+          "status": "needs_manual_review"
+        },
+        {
+          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/source_readiness_manifest.json",
+          "run_id": "20260627T081235Z",
+          "score": 130,
+          "status": "clean"
+        },
+        {
+          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/source_readiness_manifest.json",
+          "run_id": "20260627T125759Z",
           "score": 130,
           "status": "clean"
         },
@@ -68,8 +68,8 @@
           "status": "needs_manual_review"
         },
         {
-          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/source_readiness_manifest.json",
-          "run_id": "20260627T081235Z",
+          "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/source_readiness_manifest.json",
+          "run_id": "20260628T101203Z",
           "score": 130,
           "status": "clean"
         },
@@ -92,8 +92,26 @@
           "status": "clean"
         },
         {
-          "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_3_11329/source_readiness_manifest.json",
-          "run_id": "20260718T123906Z",
+          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/source_readiness_manifest.json",
+          "run_id": "20260725T083503Z",
+          "score": 130,
+          "status": "clean"
+        },
+        {
+          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
+          "run_id": "20260727T234117Z",
+          "score": -130,
+          "status": "needs_manual_review"
+        },
+        {
+          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/source_readiness_manifest.json",
+          "run_id": "20260724T140656Z",
+          "score": 130,
+          "status": "clean"
+        },
+        {
+          "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/source_readiness_manifest.json",
+          "run_id": "20260726T121732Z",
           "score": 130,
           "status": "clean"
         },
@@ -110,8 +128,8 @@
           "status": "needs_manual_review"
         },
         {
-          "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_2_11328/source_readiness_manifest.json",
-          "run_id": "20260718T094539Z",
+          "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_3_11329/source_readiness_manifest.json",
+          "run_id": "20260718T123906Z",
           "score": 130,
           "status": "clean"
         },
@@ -122,26 +140,8 @@
           "status": "clean"
         },
         {
-          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
-          "run_id": "20260612T230452Z",
-          "score": -50,
-          "status": "needs_manual_review"
-        },
-        {
-          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/source_readiness_manifest.json",
-          "run_id": "20260615T162911Z",
-          "score": -130,
-          "status": "needs_manual_review"
-        },
-        {
-          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json",
-          "run_id": "20260614T103048Z",
-          "score": 130,
-          "status": "clean"
-        },
-        {
-          "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/source_readiness_manifest.json",
-          "run_id": "20260613T125438Z",
+          "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_2_11328/source_readiness_manifest.json",
+          "run_id": "20260718T094539Z",
           "score": 130,
           "status": "clean"
         }
@@ -151,7 +151,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-06T10:16:05Z",
+          "run_id": "2026-08-06T12:29:00Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -163,13 +163,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260806T101605Z",
+          "run_id": "20260806T122859Z",
           "score": -50,
           "status": "needs_manual_review"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260806T101605Z",
+          "run_id": "20260806T122859Z",
           "score": -50,
           "status": "needs_manual_review"
         }
@@ -182,7 +182,7 @@
   "notification_recommended": true,
   "outputs": {
     "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
-    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260806T101943Z/bundle_snapshot.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260806T123248Z/bundle_snapshot.json",
     "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
     "last_good_state": "latest/last_good_state.json",
     "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
@@ -190,7 +190,7 @@
   },
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20260806T101943Z",
+  "run_id": "20260806T123248Z",
   "schema_version": "f1_1b_output_contract_report_v20",
   "source_status": "clean",
   "stable_engine_modified": false,
