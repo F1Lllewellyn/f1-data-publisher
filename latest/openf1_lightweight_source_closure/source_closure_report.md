@@ -1,6 +1,6 @@
 # F1 OpenF1 Lightweight Source Closure Report
 
-Generated UTC: 2026-08-08T13:29:53.907216Z
+Generated UTC: 2026-08-08T18:06:21.862160Z
 Season: 2026
 Target sessions: 71
 
