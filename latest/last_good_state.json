@@ -5,12 +5,12 @@
     "session_key": 11342,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260808T234321Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260809T040738Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260808T234321Z",
+  "run_id": "20260809T040738Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "5f98aa0c88ed6c15368925cea3f631e9795dd55a0dc1130c3a4e80bf7cf744b6",
+  "signature": "cb92f26cf2a7489a85f6645ac4d5c47e06833a0ce9aa6511a783652f2d6bc904",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-08T23:43:21Z"
+  "updated_at_utc": "2026-08-09T04:07:38Z"
 }
