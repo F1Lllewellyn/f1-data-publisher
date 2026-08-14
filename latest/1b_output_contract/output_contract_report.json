@@ -1,11 +1,11 @@
 {
   "canonical_workbook_overwrite": false,
-  "generated_at_utc": "2026-08-14T15:09:49Z",
+  "generated_at_utc": "2026-08-14T16:07:20Z",
   "input_selection": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-14T15:04:24Z",
+        "run_id": "2026-08-14T16:02:03Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -15,7 +15,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-14T15:04:24Z",
+          "run_id": "2026-08-14T16:02:03Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -151,7 +151,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-14T15:04:24Z",
+          "run_id": "2026-08-14T16:02:03Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -163,13 +163,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260814T150423Z",
+          "run_id": "20260814T160203Z",
           "score": -50,
           "status": "needs_manual_review"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260814T150423Z",
+          "run_id": "20260814T160203Z",
           "score": -50,
           "status": "needs_manual_review"
         }
@@ -182,7 +182,7 @@
   "notification_recommended": true,
   "outputs": {
     "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
-    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260814T150949Z/bundle_snapshot.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260814T160720Z/bundle_snapshot.json",
     "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
     "last_good_state": "latest/last_good_state.json",
     "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
@@ -190,7 +190,7 @@
   },
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20260814T150949Z",
+  "run_id": "20260814T160720Z",
   "schema_version": "f1_1b_output_contract_report_v20",
   "source_status": "clean",
   "stable_engine_modified": false,
