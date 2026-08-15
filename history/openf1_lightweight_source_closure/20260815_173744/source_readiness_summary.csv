@@ -1,0 +1,10 @@
+lane,rows,result,reason,required_status,heavy_endpoint
+weather,6345,pass,evidence_bearing,required_lightweight,False
+race_control,3370,pass,evidence_bearing,required_lightweight,False
+intervals,251897,pass,evidence_bearing,required_lightweight,False
+position,20829,pass,evidence_bearing,required_lightweight,False
+stints,3482,pass,evidence_bearing,required_lightweight,False
+pit,274,pass,evidence_bearing,required_lightweight,False
+starting_grid,132,pass,evidence_bearing,required_lightweight,False
+drivers,848,pass,evidence_bearing,required_lightweight,False
+team_radio,214,pass,evidence_bearing,opportunistic,False
