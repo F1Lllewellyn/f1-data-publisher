@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "f7400986d0690cfb1cf0044f50a540fc846948acccf714a1919b10c850e8acd5",
+  "bundle_signature": "5071c29b0e7367497019bb483f48eb3bb9076ef6a28fe8b1d7d8333e5a926935",
   "canonical_workbook_overwrite": false,
   "consumer": "fantasy_predictions",
   "consumer_contract_from_output_layer": {
@@ -31,13 +31,13 @@
     "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-08-15T19:36:37Z",
+  "generated_at_utc": "2026-08-15T19:57:36Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260815T193636Z",
+  "run_id": "20260815T195736Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",
