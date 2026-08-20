@@ -29,7 +29,7 @@
       "status": "pass"
     }
   },
-  "created_utc": "2026-08-20T13:57:40.049681Z",
+  "created_utc": "2026-08-20T14:51:07.003387Z",
   "engine_authority": "health/readiness/automation only; no stable prediction promotion",
   "failed_steps": [],
   "promotion_allowed": false,
@@ -38,7 +38,7 @@
   "steps": [
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "-m",
         "py_compile",
         "scripts/fantasy_value_backtester.py",
@@ -119,7 +119,7 @@
     },
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "scripts/ops/f1_workflow_static_validator_v2.py",
         "--repo-root",
         "/home/runner/work/f1-data-publisher/f1-data-publisher"
@@ -131,17 +131,17 @@
     },
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "scripts/ops/f1_workflow_meta_health_check_v1.py"
       ],
       "label": "workflow_meta_health_v1",
       "ok": true,
-      "output_tail": "{\n  \"created_utc\": \"2026-08-20T13:57:39.412291+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 156,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
+      "output_tail": "{\n  \"created_utc\": \"2026-08-20T14:51:06.400558+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 156,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
       "returncode": 0
     },
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "scripts/session_data_processor/session_data_processor_loop_v1.py",
         "--mode",
         "safe_test",
@@ -150,12 +150,12 @@
       ],
       "label": "session_processor_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.16\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-08-20T13:57:39.477633Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20260820T135739Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
+      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.15\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-08-20T14:51:06.462310Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20260820T145106Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
       "returncode": 0
     },
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py",
         "--safe-test",
         "--repo-root",
@@ -163,12 +163,12 @@
       ],
       "label": "workbook_kpi_refresh_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20260820T135739Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
+      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20260820T145106Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
       "returncode": 0
     },
     {
       "cmd": [
-        "/opt/hostedtoolcache/Python/3.11.16/x64/bin/python",
+        "/opt/hostedtoolcache/Python/3.11.15/x64/bin/python",
         "scripts/autorepair/f1_autorepair_orchestrator_v1.py",
         "--mode",
         "safe_test",
