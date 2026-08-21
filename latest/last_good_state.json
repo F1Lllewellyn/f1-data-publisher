@@ -5,12 +5,12 @@
     "session_key": 11343,
     "session_name": "Practice 1"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260821T131502Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260821T140243Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260821T131502Z",
+  "run_id": "20260821T140243Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "5434e4332270ae1fbf3b8c107eaa044527d159389e3506a114855dde7eb00a39",
+  "signature": "729390caa5e446fb7ca58ef81f41fa3c23e758918c84ae6d981c4631f44884ef",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-21T13:15:02Z"
+  "updated_at_utc": "2026-08-21T14:02:43Z"
 }
