@@ -1,0 +1,13 @@
+{
+  "canonical_workbook_modified": false,
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/source_readiness_manifest.json",
+  "overall_status": "clean",
+  "producer": "session_data_processor_loop_v1",
+  "promotion_allowed": false,
+  "schema_version": "latest_manifest_v2_session_processor",
+  "session_key": 11344,
+  "session_name": "Sprint Qualifying",
+  "stable_engine_modified": false,
+  "updated_utc": "2026-08-21T22:33:24.912690Z"
+}
