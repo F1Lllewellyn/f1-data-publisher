@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 13329,
+    "ok": true,
+    "sha256": "16e17b5e21f7a7540f25adaf0ee4b3a87eb277ac2979a0e47edd71c5f3666d7d",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/raw/openf1_weather.json",
+  "json_sha256": "85c01a35d6ea7502bd7e7ee5ec8d45d711d0b63bec163f6bd9857f43d4d09370",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 62,
+  "status": "clean",
+  "timestamp_rows": 62
+}
