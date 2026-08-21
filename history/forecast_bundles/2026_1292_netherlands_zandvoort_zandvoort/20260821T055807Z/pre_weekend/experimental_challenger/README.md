@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1292_netherlands_zandvoort_zandvoort__pre_weekend__experimental_challenger__20260821T055807Z
+
+Status: locked
