@@ -1,13 +1,13 @@
 {
   "category_counts": {
-    "active_architecture": 60323,
+    "active_architecture": 60450,
     "active_or_unknown": 51,
     "archive": 690,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-08-21T20:57:47.992821Z",
+  "created_utc": "2026-08-21T21:35:42.737630Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 61121,
+  "file_count": 61248,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -219,13 +219,13 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 61064,
+    "keep": 61191,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 3061670687,
+  "total_bytes": 3062921917,
   "utf8_bom_files_sample": [
     ".github/workflows/elite-weekend-engine-run.yml",
     ".github/workflows/f1-actual-forecast-producer-v1.yml",
