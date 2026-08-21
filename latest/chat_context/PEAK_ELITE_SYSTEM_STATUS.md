@@ -1,14 +1,14 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-08-21T11:59:29.143525Z`
+Created UTC: `2026-08-21T13:07:10.158835Z`
 Status: **pass**
 
 ## Confirmed Data
-- Latest event: `Hungary - Budapest - Hungaroring`
-- Latest session: `Race`
-- Source status: `needs_manual_review`
+- Latest event: `Netherlands - Zandvoort - Zandvoort`
+- Latest session: `Practice 1`
+- Source status: `clean`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 
 ## System checks
 - `core_files`: **pass**

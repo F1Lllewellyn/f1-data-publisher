@@ -1,0 +1,86 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-08-21T13:07:08.284044Z",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "overall_status": "clean",
+  "race_name": "Netherlands - Zandvoort - Zandvoort",
+  "sandbox_workbook_created": false,
+  "schema_version": "workbook_kpi_readiness_v1_session_processor",
+  "session": {
+    "date_end": "2026-08-21T11:30:00+00:00",
+    "date_start": "2026-08-21T10:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1292,
+    "session_key": 11343,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "driver_count": 22,
+      "max_lap_number": 39.0,
+      "rows": 693,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "driver_count": 22,
+      "max_lap_number": 32.0,
+      "rows": 97,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 803,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 68,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 97,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 82,
+      "status": "clean"
+    }
+  }
+}
