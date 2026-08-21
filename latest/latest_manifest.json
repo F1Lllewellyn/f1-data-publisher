@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1291_hungary_budapest_hungaroring",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11342,
-  "session_name": "Race",
+  "session_key": 11343,
+  "session_name": "Practice 1",
   "stable_engine_modified": false,
-  "updated_utc": "2026-07-27T01:09:53.120440Z"
+  "updated_utc": "2026-08-21T12:53:13.756719Z"
 }

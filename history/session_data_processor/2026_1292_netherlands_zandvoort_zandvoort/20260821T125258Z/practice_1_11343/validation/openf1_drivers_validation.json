@@ -1,0 +1,34 @@
+{
+  "anomalies": [],
+  "columns": [
+    "broadcast_name",
+    "country_code",
+    "driver_number",
+    "first_name",
+    "full_name",
+    "headshot_url",
+    "last_name",
+    "meeting_key",
+    "name_acronym",
+    "session_key",
+    "team_colour",
+    "team_name"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_drivers.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "drivers",
+  "fetch": {
+    "bytes": 9022,
+    "ok": true,
+    "sha256": "b094879206b58a7f24aec772ceee4de6eaa4bd1aaa5b5ab26afc2d61cd4e5b23",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_drivers.json",
+  "json_sha256": "e1f229e091f68740f0ba05c743aee6c584da27c5153a016e82b1d772776d6057",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}

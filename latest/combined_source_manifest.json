@@ -1,15 +1,15 @@
 {
-  "event_id": "2026_1291_hungary_budapest_hungaroring",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "overall_status": "clean",
   "promotion_allowed": false,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "combined_source_manifest_v2_session_processor",
-  "session_key": 11342,
+  "session_key": 11343,
   "source_layers": {
     "forecast_bundles": "latest/forecast_bundles",
     "openf1_lightweight_source_closure": "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
-    "session_data_processor": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json"
+    "session_data_processor": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/source_readiness_manifest.json"
   },
-  "source_needs_manual_review": true,
-  "updated_utc": "2026-07-27T01:09:53.120773Z"
+  "source_needs_manual_review": false,
+  "updated_utc": "2026-08-21T12:53:13.757114Z"
 }

@@ -1,0 +1,633 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-08-21T12:53:13.754126Z",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-08-21T12:53:13.755335Z",
+    "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+    "forecast_state_changed": true,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "Netherlands - Zandvoort - Zandvoort",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-08-21T11:30:00+00:00",
+      "date_start": "2026-08-21T10:30:00+00:00",
+      "gate": "post_fp1",
+      "meeting_key": 1292,
+      "session_key": 11343,
+      "session_name": "Practice 1",
+      "session_type": "Practice"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": true,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 36703.34,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "ab3f77fb86a4c09fed34ab5c1c84405c847292254c7c7e6c2cf5d6ace412a8b4",
+      "size_bytes": 708,
+      "timestamp_utc": "2026-07-27T01:09:53.120773Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 36703.34,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "e46d95bf7034a22f1d207ea960abfd5c557b761262901cdadbf8c8737e1ff6dc",
+      "size_bytes": 1567,
+      "timestamp_utc": "2026-07-27T01:09:53.120585Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 36703.34,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "4e2514b1becb242efd6426f9ef26fa0997b80c46549293c8fe8803d1a9cfc952",
+      "size_bytes": 570,
+      "timestamp_utc": "2026-07-27T01:09:53.120440Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Netherlands - Zandvoort - Zandvoort",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "expected_empty_sources": [
+      {
+        "endpoint": "starting_grid",
+        "reason": "expected_empty_for_session_type",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 693
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 97
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 803
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 68
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "expected_empty",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "expected_empty_for_session_type",
+        "role": "expected_empty",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 97
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 82
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "practice",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 1.0,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20260821T125258Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-08-21T11:30:00+00:00",
+    "date_start": "2026-08-21T10:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1292,
+    "session_key": 11343,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9022,
+        "ok": true,
+        "sha256": "b094879206b58a7f24aec772ceee4de6eaa4bd1aaa5b5ab26afc2d61cd4e5b23",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_drivers.json",
+      "json_sha256": "e1f229e091f68740f0ba05c743aee6c584da27c5153a016e82b1d772776d6057",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 332293,
+        "ok": true,
+        "sha256": "935315efec8705621ad0a521b39b1c57444537ec4cbbd6662155b472c3eb1e3a",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_laps.json",
+      "json_sha256": "206240575d67f1189ed41f466ff9d2bcbea61c10fa1bb31e5a44318f3612b3a7",
+      "max_lap_number": 39.0,
+      "missing_required_columns": [],
+      "rows": 693,
+      "status": "clean",
+      "timestamp_rows": 692
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 17520,
+        "ok": true,
+        "sha256": "9401b27e83c8d6476474e2b7fdbc5a447a4cf9ee20b1bccc437e327651afdcb5",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_pit.json",
+      "json_sha256": "0b8b29e645bcba27f573bb2e02ba4512a6fadde7e2427e2e97c487859d82a4f2",
+      "max_lap_number": 32.0,
+      "missing_required_columns": [],
+      "rows": 97,
+      "status": "clean",
+      "timestamp_rows": 97
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 92691,
+        "ok": true,
+        "sha256": "f0cd2d5a64e4e70c6f0db4fbd41675c55a1d0b0ea8e7698d9f78047acece0e1b",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_position.json",
+      "json_sha256": "181128750fc963fbb93c3257b93751cc39a554cd535d07358eda10df96e9a4d6",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 803,
+      "status": "clean",
+      "timestamp_rows": 803
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 17051,
+        "ok": true,
+        "sha256": "578d9a709dd5b8da12cd86459da68091f58c54e7c5b14348bcdcc07b29547f4c",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_race_control.json",
+      "json_sha256": "3db58f7388607ef0ccaabf8671604da386637f4876e94bca5ff0ad5d764262d8",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 68,
+      "status": "clean",
+      "timestamp_rows": 68
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 3718,
+        "ok": true,
+        "sha256": "30e7fa986ca453983f759ab31272faec5a12a36fdf2e089402b80b4adbae06ec",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_session_result.json",
+      "json_sha256": "8ccbe6a53c7679436d3e8b06ef102fefe75bb60c589e3ee3b9dda2786918e095",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 403,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_sessions.json",
+      "json_sha256": "67bba93ccd492291f890d49f03e6b16f68384622dc444af26de75736bd8d2dd5",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 14235,
+        "ok": true,
+        "sha256": "6f414af7bfbb4a654aee0eec0438d9010067dc291c3b4e039160fb7678d1a7e8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_stints.json",
+      "json_sha256": "2537b4702e40fee0dc499e708c20c5473e7d980ec0167f29099fd74497cc684e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 97,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 17631,
+        "ok": true,
+        "sha256": "fc678013ab01f82714cc4afb2e9153798cab61105dbc00b607b099b7593f167e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/raw/openf1_weather.json",
+      "json_sha256": "00fb34e2c5e1c6de45c845ffee9660c434ae1ebb7313af512001fcb4e007d267",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 82,
+      "status": "clean",
+      "timestamp_rows": 82
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 9,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 2,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/workbook_kpi_readiness.json"
+  }
+}
