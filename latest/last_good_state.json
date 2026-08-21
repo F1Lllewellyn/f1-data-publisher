@@ -1,16 +1,16 @@
 {
   "event": {
-    "event_id": "2026_1291_hungary_budapest_hungaroring",
-    "race_name": "Hungary - Budapest - Hungaroring",
-    "session_key": 11342,
-    "session_name": "Race"
+    "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+    "race_name": "Netherlands - Zandvoort - Zandvoort",
+    "session_key": 11343,
+    "session_name": "Practice 1"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260821T120732Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260821T131502Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260821T120732Z",
+  "run_id": "20260821T131502Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "d6b7985f5c90e55213c46ea990c5fa1406bfa9cdc1959405d92e5adfd86d8df1",
+  "signature": "5434e4332270ae1fbf3b8c107eaa044527d159389e3506a114855dde7eb00a39",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-21T12:07:32Z"
+  "updated_at_utc": "2026-08-21T13:15:02Z"
 }

@@ -1,30 +1,36 @@
 {
   "canonical_workbook_overwrite": false,
-  "generated_at_utc": "2026-08-21T12:07:32Z",
+  "generated_at_utc": "2026-08-21T13:15:02Z",
   "input_selection": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-21T11:59:27Z",
-        "score": 100,
+        "run_id": "2026-08-21T13:07:08Z",
+        "score": 200,
         "source_backed": true,
-        "source_status": "needs_manual_review"
+        "source_status": "clean"
       }
     ],
     "source": {
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-21T11:59:27Z",
-          "score": 100,
+          "run_id": "2026-08-21T13:07:08Z",
+          "score": 200,
           "source_backed": true,
-          "source_status": "needs_manual_review"
+          "source_status": "clean"
         }
       ],
       "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "selected_source_manifest": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/source_readiness_manifest.json",
+      "selected_source_manifest": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/source_readiness_manifest.json",
       "selection_rule": "prefer_clean_dashboard_backed_state_then_best_source_manifest",
       "source_candidates": [
+        {
+          "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/source_readiness_manifest.json",
+          "run_id": "20260821T130653Z",
+          "score": 130,
+          "status": "clean"
+        },
         {
           "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json",
           "run_id": "20260614T103048Z",
@@ -151,10 +157,10 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-21T11:59:27Z",
-          "score": 100,
+          "run_id": "2026-08-21T13:07:08Z",
+          "score": 200,
           "source_backed": true,
-          "source_status": "needs_manual_review"
+          "source_status": "clean"
         }
       ],
       "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
@@ -163,15 +169,15 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260821T115927Z",
-          "score": -50,
-          "status": "needs_manual_review"
+          "run_id": "20260821T130708Z",
+          "score": 100,
+          "status": "clean"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260821T115927Z",
-          "score": -50,
-          "status": "needs_manual_review"
+          "run_id": "20260821T130708Z",
+          "score": 100,
+          "status": "clean"
         }
       ]
     }
@@ -182,7 +188,7 @@
   "notification_recommended": true,
   "outputs": {
     "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
-    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1291_hungary_budapest_hungaroring/20260821T120732Z/bundle_snapshot.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260821T131502Z/bundle_snapshot.json",
     "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
     "last_good_state": "latest/last_good_state.json",
     "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
@@ -190,7 +196,7 @@
   },
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20260821T120732Z",
+  "run_id": "20260821T131502Z",
   "schema_version": "f1_1b_output_contract_report_v20",
   "source_status": "clean",
   "stable_engine_modified": false,
