@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 55,
+    "circuit_short_name": "Zandvoort",
+    "country_code": "NED",
+    "country_key": 133,
+    "country_name": "Netherlands",
+    "date_end": "2026-08-21T11:30:00+00:00",
+    "date_start": "2026-08-21T10:30:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Zandvoort",
+    "meeting_key": 1292,
+    "session_key": 11343,
+    "session_name": "Practice 1",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]
