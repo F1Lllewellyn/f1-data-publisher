@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-08-21T18:04:31.790290Z",
+  "created_utc": "2026-08-21T18:50:01.561586Z",
   "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
   "overall_status": "clean",
   "race_name": "Netherlands - Zandvoort - Zandvoort",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,
