@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1292_netherlands_zandvoort_zandvoort__pre_weekend__stable_baseline__20260821T081530Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "season": "2026",
+  "round": "",
+  "race_name": "Netherlands - Zandvoort - Zandvoort",
+  "gate": "pre_weekend",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-08-21T08:15:30Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
