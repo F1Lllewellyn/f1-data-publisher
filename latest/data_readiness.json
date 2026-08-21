@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Netherlands - Zandvoort - Zandvoort",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-08-21T12:53:13.756885Z"
+  "updated_utc": "2026-08-21T13:48:39.931383Z"
 }
