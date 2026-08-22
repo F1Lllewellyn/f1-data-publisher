@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-08-22T18:46:10Z",
+      "run_id": "2026-08-22T19:31:52Z",
       "score": 200,
       "source_backed": true,
       "source_status": "clean"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-22T18:46:10Z",
+        "run_id": "2026-08-22T19:31:52Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -36,7 +36,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/source_readiness_manifest.json",
-        "run_id": "20260822T184601Z",
+        "run_id": "20260822T193140Z",
         "score": 130,
         "status": "clean"
       },
@@ -172,7 +172,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-22T18:46:10Z",
+        "run_id": "2026-08-22T19:31:52Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -184,13 +184,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260822T184610Z",
+        "run_id": "20260822T193152Z",
         "score": 100,
         "status": "clean"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260822T184610Z",
+        "run_id": "20260822T193152Z",
         "score": 100,
         "status": "clean"
       }
