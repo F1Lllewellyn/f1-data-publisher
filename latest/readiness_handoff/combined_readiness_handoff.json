@@ -2,10 +2,10 @@
   "event": {
     "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
     "race_name": "Netherlands - Zandvoort - Zandvoort",
-    "session_key": 11344,
-    "session_name": "Sprint Qualifying"
+    "session_key": 11349,
+    "session_name": "Qualifying"
   },
-  "generated_at_utc": "2026-08-22T15:02:19Z",
+  "generated_at_utc": "2026-08-22T15:42:38Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
