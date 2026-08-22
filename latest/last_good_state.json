@@ -5,12 +5,12 @@
     "session_key": 11349,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260822T174149Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260822T185508Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260822T174149Z",
+  "run_id": "20260822T185508Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "d4fe58770d95b765fb78f49e12be59995d98cb08028184a58ee1961de574140d",
+  "signature": "0dc82256447c9d085f8cee578b023af71bf0891ffaaf97f6c8585f684701c740",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-22T17:41:49Z"
+  "updated_at_utc": "2026-08-22T18:55:08Z"
 }
