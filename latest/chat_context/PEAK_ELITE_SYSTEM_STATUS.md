@@ -1,12 +1,12 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-08-22T14:55:16.929919Z`
+Created UTC: `2026-08-22T15:32:44.762174Z`
 Status: **pass**
 
 ## Confirmed Data
 - Latest event: `Netherlands - Zandvoort - Zandvoort`
-- Latest session: `Sprint`
-- Source status: `needs_manual_review`
+- Latest session: `Qualifying`
+- Source status: `clean`
 - Workbook/KPI commit allowed: `True`
 - Workbook source status: `clean`
 
