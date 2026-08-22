@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_11348/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 242896,
+    "ok": true,
+    "sha256": "fdc3745a9ef4cfa62fa8dca659e148ff00d283868481f39a49a41f9f464c768a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_11348/raw/openf1_laps.json",
+  "json_sha256": "fdcaf737e7c61739b4a7749df728bed6176676fcbb08e85b7f67880bb57660cd",
+  "max_lap_number": 24.0,
+  "missing_required_columns": [],
+  "rows": 506,
+  "status": "clean",
+  "timestamp_rows": 506
+}
