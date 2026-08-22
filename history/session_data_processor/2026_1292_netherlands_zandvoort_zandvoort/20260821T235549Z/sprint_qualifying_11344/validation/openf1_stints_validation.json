@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 8276,
+    "ok": true,
+    "sha256": "42ef583ca149719ee9b431c316be72e5b0ffdeffa8797b286717dad31eb51da5",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/raw/openf1_stints.json",
+  "json_sha256": "bdd3548b5458bd729dbccc40acf956a7126455b272bda0a8d079c547f93ace79",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 57,
+  "status": "clean",
+  "timestamp_rows": 0
+}
