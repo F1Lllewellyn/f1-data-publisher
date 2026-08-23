@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Netherlands - Zandvoort - Zandvoort",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-08-22T15:00:00+00:00",
+    "date_start": "2026-08-22T14:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1292,
+    "session_key": 11349,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 377,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 109,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1184,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 118,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "rows": 109,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 77,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-08-23T07:59:09.503285Z"
+}
