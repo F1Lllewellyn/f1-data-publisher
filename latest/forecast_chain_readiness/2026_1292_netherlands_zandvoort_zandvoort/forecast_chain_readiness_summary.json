@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-08-23T17:47:59Z",
+  "run_timestamp_utc": "2026-08-23T18:22:21Z",
   "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
-  "gate_request": "race_result",
+  "gate_request": "post_event",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
