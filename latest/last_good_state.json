@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
     "race_name": "Netherlands - Zandvoort - Zandvoort",
-    "session_key": 11344,
-    "session_name": "Sprint Qualifying"
+    "session_key": 11353,
+    "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260823T150808Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260823T154217Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260823T150808Z",
+  "run_id": "20260823T154217Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "aa9004bef82f030fb9e372904861c8805c45cef46ea27fc0d719f2521e628eac",
+  "signature": "828a80424194a9e7d0292ff74d9d3a371b782be06845000095f563b79ca8bfaf",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-23T15:08:09Z"
+  "updated_at_utc": "2026-08-23T15:42:17Z"
 }
