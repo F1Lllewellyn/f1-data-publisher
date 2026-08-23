@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1292_netherlands_zandvoort_zandvoort__race_result__experimental_challenger__20260823T154723Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1292_netherlands_zandvoort_zandvoort",
+  "season": "2026",
+  "round": "",
+  "race_name": "Netherlands - Zandvoort - Zandvoort",
+  "gate": "race_result",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-08-23T15:47:23Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
