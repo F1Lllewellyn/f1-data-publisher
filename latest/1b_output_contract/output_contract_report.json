@@ -1,11 +1,11 @@
 {
   "canonical_workbook_overwrite": false,
-  "generated_at_utc": "2026-08-23T10:46:19Z",
+  "generated_at_utc": "2026-08-23T11:07:25Z",
   "input_selection": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-08-23T10:36:38Z",
+        "run_id": "2026-08-23T10:57:15Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -15,7 +15,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-23T10:36:38Z",
+          "run_id": "2026-08-23T10:57:15Z",
           "score": 200,
           "source_backed": true,
           "source_status": "clean"
@@ -39,7 +39,7 @@
         },
         {
           "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/source_readiness_manifest.json",
-          "run_id": "20260823T103627Z",
+          "run_id": "20260823T105705Z",
           "score": 130,
           "status": "clean"
         },
@@ -175,7 +175,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-08-23T10:36:38Z",
+          "run_id": "2026-08-23T10:57:15Z",
           "score": 200,
           "source_backed": true,
           "source_status": "clean"
@@ -187,13 +187,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260823T103637Z",
+          "run_id": "20260823T105715Z",
           "score": 100,
           "status": "clean"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20260823T103637Z",
+          "run_id": "20260823T105715Z",
           "score": 100,
           "status": "clean"
         }
@@ -206,7 +206,7 @@
   "notification_recommended": true,
   "outputs": {
     "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
-    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260823T104619Z/bundle_snapshot.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260823T110725Z/bundle_snapshot.json",
     "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
     "last_good_state": "latest/last_good_state.json",
     "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
@@ -214,7 +214,7 @@
   },
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20260823T104619Z",
+  "run_id": "20260823T110725Z",
   "schema_version": "f1_1b_output_contract_report_v20",
   "source_status": "clean",
   "stable_engine_modified": false,
