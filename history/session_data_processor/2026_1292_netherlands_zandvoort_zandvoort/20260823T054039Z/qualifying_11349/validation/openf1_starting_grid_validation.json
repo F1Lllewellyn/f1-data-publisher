@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2096,
+    "ok": true,
+    "sha256": "98a61ae811ccdf590a5b51486e08ab39fbd1a29b64095f63b866b5271404dbc7",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/raw/openf1_starting_grid.json",
+  "json_sha256": "dddf476c0a86c76f3ef6b6d827ba5a0e758bde7bf0473f3c317f236a7dd48b50",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
