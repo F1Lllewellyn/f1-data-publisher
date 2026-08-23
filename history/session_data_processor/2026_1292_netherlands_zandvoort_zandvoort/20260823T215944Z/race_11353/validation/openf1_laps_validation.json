@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/race_11353/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 656631,
+    "ok": true,
+    "sha256": "3a092abe66c37309a5096e1277ac75fcc137c0d04e990cb27775607c9b0166b0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/race_11353/raw/openf1_laps.json",
+  "json_sha256": "66712ce52d11eb170424a2a0d40c858f559ef6d1f8106537743d7e68db613dc1",
+  "max_lap_number": 72.0,
+  "missing_required_columns": [],
+  "rows": 1369,
+  "status": "clean",
+  "timestamp_rows": 1369
+}
