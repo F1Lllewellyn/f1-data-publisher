@@ -5,12 +5,12 @@
     "session_key": 11353,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260823T234111Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260824T020600Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260823T234111Z",
+  "run_id": "20260824T020600Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "ab8bcf312a6100ae1fd16e7b1efc37710bea8e686e8c7f46aa7bfefc667fb98e",
+  "signature": "f4c5e5b5e99bb7b273fee883f2aa6ce2aca6171af6adf30be97bcc224f2373fb",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-23T23:41:11Z"
+  "updated_at_utc": "2026-08-24T02:06:00Z"
 }
