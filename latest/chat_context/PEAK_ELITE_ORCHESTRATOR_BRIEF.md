@@ -1,6 +1,6 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-08-25T01:49:12.533330Z`
+Created UTC: `2026-08-25T03:09:24.568662Z`
 Operation: `full_run_chain`
 Status: **pass_with_warnings**
 
@@ -8,7 +8,7 @@ Status: **pass_with_warnings**
 - Race/event: `Netherlands - Zandvoort - Zandvoort`
 - Session: `Race`
 - Source status: `needs_manual_review`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps
