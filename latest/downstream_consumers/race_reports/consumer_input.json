@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "910553ee49d955ba6ef7b1db12735b990f5d606ae042f12d3218191f7734c0e4",
+  "bundle_signature": "6278bb1552736fe41ff503b210b5747f20370e9b3341a68ab96b3eb7c1c44758",
   "canonical_workbook_overwrite": false,
   "consumer": "race_reports",
   "consumer_contract_from_output_layer": {
@@ -32,14 +32,14 @@
     "session_name": "Sprint Qualifying"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-08-26T04:32:31Z",
+  "generated_at_utc": "2026-08-26T05:20:11Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_full_report": true,
   "ready_for_readiness_context": true,
-  "run_id": "20260826T043231Z",
+  "run_id": "20260826T052011Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",
