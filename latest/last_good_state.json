@@ -5,12 +5,12 @@
     "session_key": 11344,
     "session_name": "Sprint Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260830T193842Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1292_netherlands_zandvoort_zandvoort/20260830T221506Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260830T193842Z",
+  "run_id": "20260830T221506Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "69b7a6a18b376aac4658e7b49d908d685f8ae89849d1b5da28a513292507f2e7",
+  "signature": "2c37acd3cae3553444dca3d876504c9c867a76adb2c4df2763f0a46468539263",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-08-30T19:38:42Z"
+  "updated_at_utc": "2026-08-30T22:15:06Z"
 }
