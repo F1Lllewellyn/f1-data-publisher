@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-09-04T16:37:20.522340Z",
+  "created_utc": "2026-09-04T17:04:26.674027Z",
   "event_id": "2026_1293_italy_monza_monza",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Italy - Monza - Monza",
@@ -16,6 +16,6 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
