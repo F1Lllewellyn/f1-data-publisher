@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1293_italy_monza_monza__pre_weekend__stable_baseline__20260904T091132Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1293_italy_monza_monza",
+  "season": "2026",
+  "round": "",
+  "race_name": "Italy - Monza - Monza",
+  "gate": "pre_weekend",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-09-04T09:11:32Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

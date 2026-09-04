@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1293_italy_monza_monza__pre_weekend__stable_baseline__20260904T091132Z
+
+Status: locked
