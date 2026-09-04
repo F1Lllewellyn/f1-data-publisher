@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_1_11354/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 255419,
+    "ok": true,
+    "sha256": "953aba6bb5838a1b89b93c84c6c6f5f6b93f212731c966eff953f30a53bfc9bc",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_1_11354/raw/openf1_laps.json",
+  "json_sha256": "d21285638400d18d758dfd6716866b3cf540995198af95a57d67f12bd702a866",
+  "max_lap_number": 29.0,
+  "missing_required_columns": [],
+  "rows": 545,
+  "status": "clean",
+  "timestamp_rows": 544
+}
