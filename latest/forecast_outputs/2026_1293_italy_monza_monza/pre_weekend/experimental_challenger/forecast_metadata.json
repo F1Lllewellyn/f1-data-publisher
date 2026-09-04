@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "experimental_challenger",
+  "event_id": "2026_1293_italy_monza_monza",
+  "gate": "pre_weekend",
+  "generated_utc": "2026-09-04T04:36:48Z",
+  "promotion_allowed": false,
+  "race_name": "Italy - Monza - Monza",
+  "row_count": 32,
+  "run_id": "20260904T043522Z",
+  "source_counts": {
+    "drivers": 991,
+    "intervals": 273741,
+    "pit": 614,
+    "position": 24691,
+    "race_control": 3947,
+    "source_readiness": 9,
+    "starting_grid": 176,
+    "stints": 3874,
+    "weather": 7118
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
