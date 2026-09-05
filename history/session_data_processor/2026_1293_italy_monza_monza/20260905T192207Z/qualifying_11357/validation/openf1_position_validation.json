@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/qualifying_11357/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 102653,
+    "ok": true,
+    "sha256": "91b880c4d0c6672a47a0e33af8180d03f2cfe7148a7480e3a9d4b2235b727295",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/qualifying_11357/raw/openf1_position.json",
+  "json_sha256": "838ea951810078f6b29b9ed4d0162990841c43650aaf16b797f1cf7c81efafde",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 890,
+  "status": "clean",
+  "timestamp_rows": 890
+}
