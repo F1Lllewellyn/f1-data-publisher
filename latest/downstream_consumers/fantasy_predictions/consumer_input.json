@@ -8,7 +8,7 @@
     "output_contract_report": "latest/1b_output_contract/output_contract_report.json"
   },
   "blocked": false,
-  "bundle_signature": "5984f434eb625fea1cd006a5e26c277e0476010a6a3db1946bf57a4f23374d16",
+  "bundle_signature": "f2c62437ed9f61c5922c783d6e8f3febcba6654213ab3da947e9818b5107b444",
   "canonical_workbook_overwrite": false,
   "consumer": "fantasy_predictions",
   "consumer_contract_from_output_layer": {
@@ -27,17 +27,17 @@
   "event": {
     "event_id": "2026_1293_italy_monza_monza",
     "race_name": "Italy - Monza - Monza",
-    "session_key": 11355,
-    "session_name": "Practice 2"
+    "session_key": 11356,
+    "session_name": "Practice 3"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-09-05T08:45:26Z",
+  "generated_at_utc": "2026-09-05T12:14:49Z",
   "material_change_detected": true,
   "notification_recommended": true,
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
   "ready_for_use": true,
-  "run_id": "20260905T084525Z",
+  "run_id": "20260905T121448Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "source_backed": true,
   "source_status": "clean",

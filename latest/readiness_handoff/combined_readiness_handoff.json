@@ -2,10 +2,10 @@
   "event": {
     "event_id": "2026_1293_italy_monza_monza",
     "race_name": "Italy - Monza - Monza",
-    "session_key": 11355,
-    "session_name": "Practice 2"
+    "session_key": 11356,
+    "session_name": "Practice 3"
   },
-  "generated_at_utc": "2026-09-05T08:45:26Z",
+  "generated_at_utc": "2026-09-05T12:14:48Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
