@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-09-04T09:11:32Z",
+  "run_timestamp_utc": "2026-09-05T13:19:43Z",
   "event_id": "2026_1293_italy_monza_monza",
-  "gate_request": "pre_weekend",
+  "gate_request": "post_fp3",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,

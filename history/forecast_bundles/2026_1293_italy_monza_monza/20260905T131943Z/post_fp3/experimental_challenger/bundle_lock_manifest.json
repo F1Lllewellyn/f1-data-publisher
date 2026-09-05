@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1293_italy_monza_monza__post_fp3__experimental_challenger__20260905T131943Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1293_italy_monza_monza",
+  "season": "2026",
+  "round": "",
+  "race_name": "Italy - Monza - Monza",
+  "gate": "post_fp3",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-09-05T13:19:43Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
