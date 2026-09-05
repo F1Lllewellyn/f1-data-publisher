@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1293_italy_monza_monza__post_qualifying__stable_baseline__20260905T182902Z
+
+Status: locked
