@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_2_11355/raw/openf1_pit.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 17486,
+    "ok": true,
+    "sha256": "456870a0c66d6c2ca27fbf2792d8a71289ffba739ae6b1f798715a3f8493387a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_2_11355/raw/openf1_pit.json",
+  "json_sha256": "4a9633a7b9a2227a3a690978afded9e7593ab4b8579008bfde98898b8d33be0c",
+  "max_lap_number": 29.0,
+  "missing_required_columns": [],
+  "rows": 97,
+  "status": "clean",
+  "timestamp_rows": 97
+}
