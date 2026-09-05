@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_3_11356/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 15908,
+    "ok": true,
+    "sha256": "6dcac117bc5c42886be5fbbf43eda5847af57d7dd30c07d9f428e70edbec893d",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_3_11356/raw/openf1_stints.json",
+  "json_sha256": "6493ca1f13eacf984bd534fb9717742357c5b6aee80fddf391e20ac88b999cf3",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 110,
+  "status": "clean",
+  "timestamp_rows": 0
+}

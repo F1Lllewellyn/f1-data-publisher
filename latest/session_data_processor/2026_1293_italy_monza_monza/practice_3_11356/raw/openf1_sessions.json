@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 39,
+    "circuit_short_name": "Monza",
+    "country_code": "ITA",
+    "country_key": 13,
+    "country_name": "Italy",
+    "date_end": "2026-09-05T11:30:00+00:00",
+    "date_start": "2026-09-05T10:30:00+00:00",
+    "gmt_offset": "02:00:00",
+    "is_cancelled": false,
+    "location": "Monza",
+    "meeting_key": 1293,
+    "session_key": 11356,
+    "session_name": "Practice 3",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]
