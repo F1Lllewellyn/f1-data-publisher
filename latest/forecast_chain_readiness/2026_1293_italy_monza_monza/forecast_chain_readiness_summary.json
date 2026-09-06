@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-09-06T11:06:43Z",
+  "run_timestamp_utc": "2026-09-06T16:50:39Z",
   "event_id": "2026_1293_italy_monza_monza",
-  "gate_request": "post_qualifying",
+  "gate_request": "race_result",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
