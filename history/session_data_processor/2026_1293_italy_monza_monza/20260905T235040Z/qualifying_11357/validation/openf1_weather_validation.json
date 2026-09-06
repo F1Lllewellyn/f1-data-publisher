@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/qualifying_11357/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 16531,
+    "ok": true,
+    "sha256": "189bcf658d3fc784e13a6e7e3493c1634f9cf8e054fe6f1e968c6ac9e9324696",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/qualifying_11357/raw/openf1_weather.json",
+  "json_sha256": "499ce75aed25015803096434773a41a42df5c3a9c99dc3a89c228bd30bb9f1c3",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 77,
+  "status": "clean",
+  "timestamp_rows": 77
+}
