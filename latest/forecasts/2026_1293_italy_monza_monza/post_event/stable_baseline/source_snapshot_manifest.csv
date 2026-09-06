@@ -1,10 +1,10 @@
 source_name,found,row_count,path
-drivers,True,886,latest/openf1_lightweight_source_closure/data/openf1_drivers.csv
-intervals,True,225665,latest/openf1_lightweight_source_closure/data/openf1_intervals.csv
-pit,True,534,latest/openf1_lightweight_source_closure/data/openf1_pit.csv
-position,True,24727,latest/openf1_lightweight_source_closure/data/openf1_position.csv
-race_control,True,3572,latest/openf1_lightweight_source_closure/data/openf1_race_control.csv
+drivers,True,934,latest/openf1_lightweight_source_closure/data/openf1_drivers.csv
+intervals,True,118063,latest/openf1_lightweight_source_closure/data/openf1_intervals.csv
+pit,True,194,latest/openf1_lightweight_source_closure/data/openf1_pit.csv
+position,True,25743,latest/openf1_lightweight_source_closure/data/openf1_position.csv
+race_control,True,2998,latest/openf1_lightweight_source_closure/data/openf1_race_control.csv
 source_readiness,True,9,latest/openf1_lightweight_source_closure/source_readiness_summary.csv
 starting_grid,True,176,latest/openf1_lightweight_source_closure/data/openf1_starting_grid.csv
-stints,True,3432,latest/openf1_lightweight_source_closure/data/openf1_stints.csv
-weather,True,6090,latest/openf1_lightweight_source_closure/data/openf1_weather.csv
+stints,True,3746,latest/openf1_lightweight_source_closure/data/openf1_stints.csv
+weather,True,5539,latest/openf1_lightweight_source_closure/data/openf1_weather.csv
