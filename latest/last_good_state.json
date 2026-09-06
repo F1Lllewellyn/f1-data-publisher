@@ -5,12 +5,12 @@
     "session_key": 11357,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1293_italy_monza_monza/20260906T000325Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1293_italy_monza_monza/20260906T044347Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260906T000325Z",
+  "run_id": "20260906T044347Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "86e93b4e4c7de7d18c4e2d5ae155c39bb5b0d4e8f0b985216bf15ecd67a62500",
+  "signature": "051573450d4f2c5af6de0bd1097db9e11f3db0e7f43fb044ed3f5cdfdf9edfdf",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-06T00:03:25Z"
+  "updated_at_utc": "2026-09-06T04:43:48Z"
 }
