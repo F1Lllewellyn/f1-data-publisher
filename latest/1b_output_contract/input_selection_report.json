@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-09-06T18:37:56Z",
+      "run_id": "2026-09-06T20:50:04Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-06T18:37:56Z",
+        "run_id": "2026-09-06T20:50:04Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -42,7 +42,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/source_readiness_manifest.json",
-        "run_id": "20260906T183742Z",
+        "run_id": "20260906T204948Z",
         "score": -130,
         "status": "needs_manual_review"
       },
@@ -208,7 +208,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-06T18:37:56Z",
+        "run_id": "2026-09-06T20:50:04Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -220,13 +220,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260906T183756Z",
+        "run_id": "20260906T205004Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260906T183756Z",
+        "run_id": "20260906T205004Z",
         "score": -50,
         "status": "needs_manual_review"
       }
