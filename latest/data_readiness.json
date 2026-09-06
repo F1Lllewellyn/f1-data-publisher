@@ -1,45 +1,45 @@
 {
   "event_id": "2026_1293_italy_monza_monza",
   "forecast_state_changed": false,
-  "material_readiness_improved": false,
-  "needs_manual_review": false,
-  "overall_status": "clean",
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
   "race_name": "Italy - Monza - Monza",
-  "readiness_quality": "usable_with_optional_context_gaps",
+  "readiness_quality": "blocked_manual_review_required_source",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-09-05T15:00:00+00:00",
-    "date_start": "2026-09-05T14:00:00+00:00",
-    "gate": "post_qualifying",
+    "date_end": "2026-09-06T15:00:00+00:00",
+    "date_start": "2026-09-06T13:00:00+00:00",
+    "gate": "race_result",
     "meeting_key": 1293,
-    "session_key": 11357,
-    "session_name": "Qualifying",
-    "session_type": "Qualifying"
+    "session_key": 11361,
+    "session_name": "Race",
+    "session_type": "Race"
   },
-  "source_needs_manual_review": false,
+  "source_needs_manual_review": true,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
       "status": "clean"
     },
     "openf1_intervals": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 21955,
+      "status": "clean"
     },
     "openf1_laps": {
-      "rows": 307,
+      "rows": 1055,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 101,
+      "rows": 30,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 890,
+      "rows": 678,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 53,
+      "rows": 158,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -51,17 +51,17 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "rows": 22,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 101,
+      "rows": 52,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 77,
+      "rows": 176,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-09-06T09:42:05.397545Z"
+  "updated_utc": "2026-09-06T15:45:01.990884Z"
 }
