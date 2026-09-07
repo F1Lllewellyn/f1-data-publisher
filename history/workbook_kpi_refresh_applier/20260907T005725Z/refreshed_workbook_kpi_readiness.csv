@@ -1,0 +1,12 @@
+endpoint,status,rows,driver_count,max_lap_number
+openf1_sessions,clean,1,0,
+openf1_drivers,clean,22,22,
+openf1_laps,clean,1055,22,53.0
+openf1_intervals,clean,21955,22,
+openf1_position,clean,678,22,
+openf1_pit,clean,30,21,46.0
+openf1_stints,clean,52,22,
+openf1_race_control,clean,158,4,53.0
+openf1_weather,clean,176,0,
+openf1_session_result,clean,22,22,
+openf1_starting_grid,needs_manual_review,0,0,
