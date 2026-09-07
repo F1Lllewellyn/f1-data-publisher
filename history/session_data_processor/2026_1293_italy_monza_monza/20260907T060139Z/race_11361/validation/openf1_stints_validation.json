@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 7511,
+    "ok": true,
+    "sha256": "06dbf341c9cbef47845bcdfbb5bcaee1b885e739a02fe6d4a3865f471e36a703",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_stints.json",
+  "json_sha256": "bbef422a689ce8b85d36b8b6bd8dbacae7c39361c426a957fa0b84677b1ad2f7",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 52,
+  "status": "clean",
+  "timestamp_rows": 0
+}

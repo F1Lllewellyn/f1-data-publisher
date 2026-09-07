@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_race_control.csv",
+  "driver_count": 4,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 40291,
+    "ok": true,
+    "sha256": "d8e35de449972bdbb69d844b24565427a9241fd2e50f1cf69de94228422135b0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_race_control.json",
+  "json_sha256": "51ac075a754f808a64b197430edaa2a92c3dd05ac416036e86db0d188bf8546e",
+  "max_lap_number": 53.0,
+  "missing_required_columns": [],
+  "rows": 158,
+  "status": "clean",
+  "timestamp_rows": 158
+}
