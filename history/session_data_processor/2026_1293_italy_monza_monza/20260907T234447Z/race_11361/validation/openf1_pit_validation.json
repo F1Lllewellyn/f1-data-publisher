@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_pit.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 5460,
+    "ok": true,
+    "sha256": "b9d9dd7d0423223012266a1d8103458b3d1b095dd03958aa95f2233598b1e259",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_pit.json",
+  "json_sha256": "9baea4c92c3adcade0a2132700852c437ca34154bb24b9b971a855de6e84b793",
+  "max_lap_number": 46.0,
+  "missing_required_columns": [],
+  "rows": 30,
+  "status": "clean",
+  "timestamp_rows": 30
+}
