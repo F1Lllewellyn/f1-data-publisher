@@ -5,12 +5,12 @@
     "session_key": 11361,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1293_italy_monza_monza/20260908T174220Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1293_italy_monza_monza/20260908T230802Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260908T174220Z",
+  "run_id": "20260908T230802Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "38311534ae26d2384d1bbd7568bd9d25d46ad113b485b816c4baec38ac14da3f",
+  "signature": "28e865b2ac1ac3c68a0e119f3c29c540c7d51bd9c3f1f9167a0c14f21cf08ba1",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-08T17:42:21Z"
+  "updated_at_utc": "2026-09-08T23:08:02Z"
 }
