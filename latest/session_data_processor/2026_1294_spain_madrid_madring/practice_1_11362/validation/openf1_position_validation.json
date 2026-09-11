@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 98230,
+    "ok": true,
+    "sha256": "ff833e2f3a4b602fb90e44fb7e2c0f485ed67a760707b788f10e7c06de1f058b",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/raw/openf1_position.json",
+  "json_sha256": "814558a2fac61245498d21e7456ed7836078e07722be671f7df7cd956d3c2ff6",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 851,
+  "status": "clean",
+  "timestamp_rows": 851
+}

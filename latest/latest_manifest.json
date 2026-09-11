@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1293_italy_monza_monza",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1294_spain_madrid_madring",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11361,
-  "session_name": "Race",
+  "session_key": 11362,
+  "session_name": "Practice 1",
   "stable_engine_modified": false,
-  "updated_utc": "2026-09-07T00:13:44.438729Z"
+  "updated_utc": "2026-09-11T13:34:05.979566Z"
 }

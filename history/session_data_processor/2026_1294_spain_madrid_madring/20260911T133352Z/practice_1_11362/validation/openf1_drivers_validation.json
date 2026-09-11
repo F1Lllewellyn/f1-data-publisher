@@ -1,0 +1,34 @@
+{
+  "anomalies": [],
+  "columns": [
+    "broadcast_name",
+    "country_code",
+    "driver_number",
+    "first_name",
+    "full_name",
+    "headshot_url",
+    "last_name",
+    "meeting_key",
+    "name_acronym",
+    "session_key",
+    "team_colour",
+    "team_name"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/raw/openf1_drivers.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "drivers",
+  "fetch": {
+    "bytes": 9022,
+    "ok": true,
+    "sha256": "ebe3f7db2f781979f9e17e9d77c2d248a63eac905130da318d1a5592806b3893",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/raw/openf1_drivers.json",
+  "json_sha256": "0a7b062973016699f15672f9ffde8261509d0ddf80f500b876e9aebe420993ab",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
