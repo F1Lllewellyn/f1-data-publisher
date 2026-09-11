@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1294_spain_madrid_madring__pre_weekend__experimental_challenger__20260911T044425Z
+
+Status: locked
