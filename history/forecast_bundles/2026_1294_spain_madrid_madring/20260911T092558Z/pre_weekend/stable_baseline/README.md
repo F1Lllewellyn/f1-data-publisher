@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1294_spain_madrid_madring__pre_weekend__stable_baseline__20260911T092558Z
+
+Status: locked
