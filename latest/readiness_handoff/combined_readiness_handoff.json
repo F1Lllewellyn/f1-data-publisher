@@ -2,10 +2,10 @@
   "event": {
     "event_id": "2026_1294_spain_madrid_madring",
     "race_name": "Spain - Madrid - Madring",
-    "session_key": 11362,
-    "session_name": "Practice 1"
+    "session_key": 11363,
+    "session_name": "Practice 2"
   },
-  "generated_at_utc": "2026-09-11T15:23:19Z",
+  "generated_at_utc": "2026-09-11T18:55:55Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
