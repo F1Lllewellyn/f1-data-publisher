@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1294_spain_madrid_madring",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Spain - Madrid - Madring",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-09-11T12:30:00+00:00",
+    "date_start": "2026-09-11T11:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1294,
+    "session_key": 11362,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 561,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 90,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 851,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 98,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 90,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 86,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-09-11T13:34:05.979660Z"
+}
