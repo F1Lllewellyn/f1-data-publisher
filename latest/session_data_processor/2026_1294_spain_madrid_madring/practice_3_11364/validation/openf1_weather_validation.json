@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_3_11364/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 20362,
+    "ok": true,
+    "sha256": "8bc543bca124c7dbf66761bcf37aa1984553613e7956af4f1962e942e253dfe6",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_3_11364/raw/openf1_weather.json",
+  "json_sha256": "4f82f892f8bd8aee5161d54d268f9220e4c03737a419ac1f23090c0d96ec85c9",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 95,
+  "status": "clean",
+  "timestamp_rows": 95
+}
