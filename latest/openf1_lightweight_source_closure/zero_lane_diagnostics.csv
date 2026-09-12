@@ -51,8 +51,8 @@ position,1305,11468,Day 3,Practice,True,341,pass
 stints,1305,11468,Day 3,Practice,True,290,pass
 pit,1305,11468,Day 3,Practice,False,0,skipped_not_applicable
 starting_grid,1305,11468,Day 3,Practice,True,0,zero_rows
-drivers,1305,11468,Day 3,Practice,True,22,pass
-team_radio,1305,11468,Day 3,Practice,True,1,pass
+drivers,1305,11468,Day 3,Practice,True,0,zero_rows
+team_radio,1305,11468,Day 3,Practice,True,0,zero_rows
 weather,1279,11227,Practice 1,Practice,True,0,zero_rows
 race_control,1279,11227,Practice 1,Practice,True,0,zero_rows
 intervals,1279,11227,Practice 1,Practice,True,0,zero_rows
@@ -69,7 +69,7 @@ position,1279,11228,Practice 2,Practice,True,0,zero_rows
 stints,1279,11228,Practice 2,Practice,True,0,zero_rows
 pit,1279,11228,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1279,11228,Practice 2,Practice,True,0,zero_rows
-drivers,1279,11228,Practice 2,Practice,True,2,pass
+drivers,1279,11228,Practice 2,Practice,True,18,pass
 team_radio,1279,11228,Practice 2,Practice,True,1,pass
 weather,1279,11229,Practice 3,Practice,True,90,pass
 race_control,1279,11229,Practice 3,Practice,True,66,pass
@@ -80,23 +80,23 @@ pit,1279,11229,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1279,11229,Practice 3,Practice,True,0,zero_rows
 drivers,1279,11229,Practice 3,Practice,True,22,pass
 team_radio,1279,11229,Practice 3,Practice,True,1,pass
-weather,1279,11230,Qualifying,Qualifying,True,95,pass
-race_control,1279,11230,Qualifying,Qualifying,True,109,pass
+weather,1279,11230,Qualifying,Qualifying,True,0,zero_rows
+race_control,1279,11230,Qualifying,Qualifying,True,0,zero_rows
 intervals,1279,11230,Qualifying,Qualifying,True,0,zero_rows
-position,1279,11230,Qualifying,Qualifying,True,1070,pass
-stints,1279,11230,Qualifying,Qualifying,True,99,pass
+position,1279,11230,Qualifying,Qualifying,True,0,zero_rows
+stints,1279,11230,Qualifying,Qualifying,True,0,zero_rows
 pit,1279,11230,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1279,11230,Qualifying,Qualifying,True,22,pass
-drivers,1279,11230,Qualifying,Qualifying,True,22,pass
+starting_grid,1279,11230,Qualifying,Qualifying,True,0,zero_rows
+drivers,1279,11230,Qualifying,Qualifying,True,0,zero_rows
 team_radio,1279,11230,Qualifying,Qualifying,True,0,zero_rows
-weather,1279,11234,Race,Race,True,148,pass
-race_control,1279,11234,Race,Race,True,169,pass
-intervals,1279,11234,Race,Race,True,22276,pass
-position,1279,11234,Race,Race,True,531,pass
-stints,1279,11234,Race,Race,True,53,pass
-pit,1279,11234,Race,Race,True,36,pass
+weather,1279,11234,Race,Race,True,0,zero_rows
+race_control,1279,11234,Race,Race,True,0,zero_rows
+intervals,1279,11234,Race,Race,True,0,zero_rows
+position,1279,11234,Race,Race,True,0,zero_rows
+stints,1279,11234,Race,Race,True,0,zero_rows
+pit,1279,11234,Race,Race,True,0,zero_rows
 starting_grid,1279,11234,Race,Race,True,0,zero_rows
-drivers,1279,11234,Race,Race,True,22,pass
+drivers,1279,11234,Race,Race,True,0,zero_rows
 team_radio,1279,11234,Race,Race,True,0,zero_rows
 weather,1280,11235,Practice 1,Practice,True,0,zero_rows
 race_control,1280,11235,Practice 1,Practice,True,0,zero_rows
@@ -105,34 +105,34 @@ position,1280,11235,Practice 1,Practice,True,0,zero_rows
 stints,1280,11235,Practice 1,Practice,True,0,zero_rows
 pit,1280,11235,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1280,11235,Practice 1,Practice,True,0,zero_rows
-drivers,1280,11235,Practice 1,Practice,True,0,zero_rows
+drivers,1280,11235,Practice 1,Practice,True,22,pass
 team_radio,1280,11235,Practice 1,Practice,True,0,zero_rows
-weather,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
-race_control,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
+weather,1280,11236,Sprint Qualifying,Qualifying,True,60,pass
+race_control,1280,11236,Sprint Qualifying,Qualifying,True,43,pass
 intervals,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
-position,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
+position,1280,11236,Sprint Qualifying,Qualifying,True,1041,pass
 stints,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
 pit,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
 starting_grid,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
 drivers,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
 team_radio,1280,11236,Sprint Qualifying,Qualifying,True,0,zero_rows
-weather,1280,11240,Sprint,Race,True,83,pass
-race_control,1280,11240,Sprint,Race,True,51,pass
-intervals,1280,11240,Sprint,Race,True,9019,pass
-position,1280,11240,Sprint,Race,True,351,pass
-stints,1280,11240,Sprint,Race,True,22,pass
-pit,1280,11240,Sprint,Race,True,12,pass
+weather,1280,11240,Sprint,Race,True,0,zero_rows
+race_control,1280,11240,Sprint,Race,True,0,zero_rows
+intervals,1280,11240,Sprint,Race,True,0,zero_rows
+position,1280,11240,Sprint,Race,True,0,zero_rows
+stints,1280,11240,Sprint,Race,True,0,zero_rows
+pit,1280,11240,Sprint,Race,True,0,zero_rows
 starting_grid,1280,11240,Sprint,Race,True,0,zero_rows
-drivers,1280,11240,Sprint,Race,True,22,pass
+drivers,1280,11240,Sprint,Race,True,0,zero_rows
 team_radio,1280,11240,Sprint,Race,True,0,zero_rows
-weather,1280,11241,Qualifying,Qualifying,True,79,pass
-race_control,1280,11241,Qualifying,Qualifying,True,47,pass
+weather,1280,11241,Qualifying,Qualifying,True,0,zero_rows
+race_control,1280,11241,Qualifying,Qualifying,True,0,zero_rows
 intervals,1280,11241,Qualifying,Qualifying,True,0,zero_rows
-position,1280,11241,Qualifying,Qualifying,True,922,pass
-stints,1280,11241,Qualifying,Qualifying,True,42,pass
+position,1280,11241,Qualifying,Qualifying,True,0,zero_rows
+stints,1280,11241,Qualifying,Qualifying,True,0,zero_rows
 pit,1280,11241,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1280,11241,Qualifying,Qualifying,True,22,pass
-drivers,1280,11241,Qualifying,Qualifying,True,22,pass
+starting_grid,1280,11241,Qualifying,Qualifying,True,0,zero_rows
+drivers,1280,11241,Qualifying,Qualifying,True,18,pass
 team_radio,1280,11241,Qualifying,Qualifying,True,0,zero_rows
 weather,1280,11245,Race,Race,True,152,pass
 race_control,1280,11245,Race,Race,True,88,pass
@@ -143,7 +143,7 @@ pit,1280,11245,Race,Race,True,19,pass
 starting_grid,1280,11245,Race,Race,True,0,zero_rows
 drivers,1280,11245,Race,Race,True,22,pass
 team_radio,1280,11245,Race,Race,True,0,zero_rows
-weather,1281,11246,Practice 1,Practice,True,83,pass
+weather,1281,11246,Practice 1,Practice,True,0,zero_rows
 race_control,1281,11246,Practice 1,Practice,True,0,zero_rows
 intervals,1281,11246,Practice 1,Practice,True,0,zero_rows
 position,1281,11246,Practice 1,Practice,True,0,zero_rows
@@ -161,11 +161,11 @@ pit,1281,11247,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1281,11247,Practice 2,Practice,True,0,zero_rows
 drivers,1281,11247,Practice 2,Practice,True,0,zero_rows
 team_radio,1281,11247,Practice 2,Practice,True,0,zero_rows
-weather,1281,11248,Practice 3,Practice,True,80,pass
-race_control,1281,11248,Practice 3,Practice,True,48,pass
+weather,1281,11248,Practice 3,Practice,True,0,zero_rows
+race_control,1281,11248,Practice 3,Practice,True,0,zero_rows
 intervals,1281,11248,Practice 3,Practice,True,0,zero_rows
-position,1281,11248,Practice 3,Practice,True,516,pass
-stints,1281,11248,Practice 3,Practice,True,92,pass
+position,1281,11248,Practice 3,Practice,True,0,zero_rows
+stints,1281,11248,Practice 3,Practice,True,0,zero_rows
 pit,1281,11248,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1281,11248,Practice 3,Practice,True,0,zero_rows
 drivers,1281,11248,Practice 3,Practice,True,22,pass
@@ -195,7 +195,7 @@ position,1282,11254,Practice 1,Practice,True,0,zero_rows
 stints,1282,11254,Practice 1,Practice,True,0,zero_rows
 pit,1282,11254,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1282,11254,Practice 1,Practice,True,0,zero_rows
-drivers,1282,11254,Practice 1,Practice,True,0,zero_rows
+drivers,1282,11254,Practice 1,Practice,True,22,pass
 team_radio,1282,11254,Practice 1,Practice,True,0,zero_rows
 weather,1282,11255,Practice 2,Practice,True,0,zero_rows
 race_control,1282,11255,Practice 2,Practice,True,0,zero_rows
@@ -213,7 +213,7 @@ position,1282,11256,Practice 3,Practice,True,0,zero_rows
 stints,1282,11256,Practice 3,Practice,True,0,zero_rows
 pit,1282,11256,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1282,11256,Practice 3,Practice,True,0,zero_rows
-drivers,1282,11256,Practice 3,Practice,True,22,pass
+drivers,1282,11256,Practice 3,Practice,True,0,zero_rows
 team_radio,1282,11256,Practice 3,Practice,True,0,zero_rows
 weather,1282,11257,Qualifying,Qualifying,True,0,zero_rows
 race_control,1282,11257,Qualifying,Qualifying,True,0,zero_rows
@@ -240,7 +240,7 @@ position,1283,11262,Practice 1,Practice,True,0,zero_rows
 stints,1283,11262,Practice 1,Practice,True,0,zero_rows
 pit,1283,11262,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1283,11262,Practice 1,Practice,True,0,zero_rows
-drivers,1283,11262,Practice 1,Practice,True,0,zero_rows
+drivers,1283,11262,Practice 1,Practice,True,22,pass
 team_radio,1283,11262,Practice 1,Practice,True,0,zero_rows
 weather,1283,11263,Practice 2,Practice,True,0,zero_rows
 race_control,1283,11263,Practice 2,Practice,True,0,zero_rows
@@ -249,7 +249,7 @@ position,1283,11263,Practice 2,Practice,True,0,zero_rows
 stints,1283,11263,Practice 2,Practice,True,0,zero_rows
 pit,1283,11263,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1283,11263,Practice 2,Practice,True,0,zero_rows
-drivers,1283,11263,Practice 2,Practice,True,0,zero_rows
+drivers,1283,11263,Practice 2,Practice,True,22,pass
 team_radio,1283,11263,Practice 2,Practice,True,0,zero_rows
 weather,1283,11264,Practice 3,Practice,True,0,zero_rows
 race_control,1283,11264,Practice 3,Practice,True,0,zero_rows
@@ -258,7 +258,7 @@ position,1283,11264,Practice 3,Practice,True,0,zero_rows
 stints,1283,11264,Practice 3,Practice,True,0,zero_rows
 pit,1283,11264,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1283,11264,Practice 3,Practice,True,0,zero_rows
-drivers,1283,11264,Practice 3,Practice,True,22,pass
+drivers,1283,11264,Practice 3,Practice,True,0,zero_rows
 team_radio,1283,11264,Practice 3,Practice,True,0,zero_rows
 weather,1283,11265,Qualifying,Qualifying,True,0,zero_rows
 race_control,1283,11265,Qualifying,Qualifying,True,0,zero_rows
@@ -267,7 +267,7 @@ position,1283,11265,Qualifying,Qualifying,True,0,zero_rows
 stints,1283,11265,Qualifying,Qualifying,True,0,zero_rows
 pit,1283,11265,Qualifying,Qualifying,False,0,skipped_not_applicable
 starting_grid,1283,11265,Qualifying,Qualifying,True,0,zero_rows
-drivers,1283,11265,Qualifying,Qualifying,True,22,pass
+drivers,1283,11265,Qualifying,Qualifying,True,0,zero_rows
 team_radio,1283,11265,Qualifying,Qualifying,True,0,zero_rows
 weather,1283,11269,Race,Race,True,0,zero_rows
 race_control,1283,11269,Race,Race,True,0,zero_rows
@@ -281,24 +281,24 @@ team_radio,1283,11269,Race,Race,True,0,zero_rows
 weather,1284,11270,Practice 1,Practice,True,101,pass
 race_control,1284,11270,Practice 1,Practice,True,56,pass
 intervals,1284,11270,Practice 1,Practice,True,0,zero_rows
-position,1284,11270,Practice 1,Practice,True,0,zero_rows
-stints,1284,11270,Practice 1,Practice,True,0,zero_rows
+position,1284,11270,Practice 1,Practice,True,670,pass
+stints,1284,11270,Practice 1,Practice,True,110,pass
 pit,1284,11270,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1284,11270,Practice 1,Practice,True,0,zero_rows
-drivers,1284,11270,Practice 1,Practice,True,0,zero_rows
+drivers,1284,11270,Practice 1,Practice,True,22,pass
 team_radio,1284,11270,Practice 1,Practice,True,0,zero_rows
-weather,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-race_control,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
+weather,1284,11271,Sprint Qualifying,Qualifying,True,59,pass
+race_control,1284,11271,Sprint Qualifying,Qualifying,True,49,pass
 intervals,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-position,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-stints,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-pit,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-starting_grid,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-drivers,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
+position,1284,11271,Sprint Qualifying,Qualifying,True,941,pass
+stints,1284,11271,Sprint Qualifying,Qualifying,True,59,pass
+pit,1284,11271,Sprint Qualifying,Qualifying,True,59,pass
+starting_grid,1284,11271,Sprint Qualifying,Qualifying,True,22,pass
+drivers,1284,11271,Sprint Qualifying,Qualifying,True,22,pass
 team_radio,1284,11271,Sprint Qualifying,Qualifying,True,0,zero_rows
-weather,1284,11275,Sprint,Race,True,0,zero_rows
-race_control,1284,11275,Sprint,Race,True,0,zero_rows
-intervals,1284,11275,Sprint,Race,True,0,zero_rows
+weather,1284,11275,Sprint,Race,True,80,pass
+race_control,1284,11275,Sprint,Race,True,84,pass
+intervals,1284,11275,Sprint,Race,True,9347,pass
 position,1284,11275,Sprint,Race,True,164,pass
 stints,1284,11275,Sprint,Race,True,23,pass
 pit,1284,11275,Sprint,Race,True,1,pass
@@ -308,36 +308,36 @@ team_radio,1284,11275,Sprint,Race,True,0,zero_rows
 weather,1284,11276,Qualifying,Qualifying,True,81,pass
 race_control,1284,11276,Qualifying,Qualifying,True,66,pass
 intervals,1284,11276,Qualifying,Qualifying,True,0,zero_rows
-position,1284,11276,Qualifying,Qualifying,True,981,pass
-stints,1284,11276,Qualifying,Qualifying,True,104,pass
+position,1284,11276,Qualifying,Qualifying,True,0,zero_rows
+stints,1284,11276,Qualifying,Qualifying,True,0,zero_rows
 pit,1284,11276,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1284,11276,Qualifying,Qualifying,True,22,pass
-drivers,1284,11276,Qualifying,Qualifying,True,22,pass
+starting_grid,1284,11276,Qualifying,Qualifying,True,0,zero_rows
+drivers,1284,11276,Qualifying,Qualifying,True,0,zero_rows
 team_radio,1284,11276,Qualifying,Qualifying,True,0,zero_rows
-weather,1284,11280,Race,Race,True,168,pass
-race_control,1284,11280,Race,Race,True,178,pass
-intervals,1284,11280,Race,Race,True,25483,pass
-position,1284,11280,Race,Race,True,550,pass
-stints,1284,11280,Race,Race,True,44,pass
-pit,1284,11280,Race,Race,True,22,pass
+weather,1284,11280,Race,Race,True,0,zero_rows
+race_control,1284,11280,Race,Race,True,0,zero_rows
+intervals,1284,11280,Race,Race,True,0,zero_rows
+position,1284,11280,Race,Race,True,0,zero_rows
+stints,1284,11280,Race,Race,True,0,zero_rows
+pit,1284,11280,Race,Race,True,0,zero_rows
 starting_grid,1284,11280,Race,Race,True,0,zero_rows
-drivers,1284,11280,Race,Race,True,22,pass
+drivers,1284,11280,Race,Race,True,0,zero_rows
 team_radio,1284,11280,Race,Race,True,0,zero_rows
-weather,1285,11281,Practice 1,Practice,True,102,pass
-race_control,1285,11281,Practice 1,Practice,True,106,pass
+weather,1285,11281,Practice 1,Practice,True,0,zero_rows
+race_control,1285,11281,Practice 1,Practice,True,0,zero_rows
 intervals,1285,11281,Practice 1,Practice,True,0,zero_rows
-position,1285,11281,Practice 1,Practice,True,843,pass
-stints,1285,11281,Practice 1,Practice,True,109,pass
+position,1285,11281,Practice 1,Practice,True,0,zero_rows
+stints,1285,11281,Practice 1,Practice,True,0,zero_rows
 pit,1285,11281,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1285,11281,Practice 1,Practice,True,0,zero_rows
-drivers,1285,11281,Practice 1,Practice,True,22,pass
+drivers,1285,11281,Practice 1,Practice,True,20,pass
 team_radio,1285,11281,Practice 1,Practice,True,0,zero_rows
-weather,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
-race_control,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
+weather,1285,11282,Sprint Qualifying,Qualifying,True,77,pass
+race_control,1285,11282,Sprint Qualifying,Qualifying,True,65,pass
 intervals,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
-position,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
-stints,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
-pit,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
+position,1285,11282,Sprint Qualifying,Qualifying,True,1035,pass
+stints,1285,11282,Sprint Qualifying,Qualifying,True,56,pass
+pit,1285,11282,Sprint Qualifying,Qualifying,True,56,pass
 starting_grid,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
 drivers,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
 team_radio,1285,11282,Sprint Qualifying,Qualifying,True,0,zero_rows
@@ -348,16 +348,16 @@ position,1285,11286,Sprint,Race,True,0,zero_rows
 stints,1285,11286,Sprint,Race,True,0,zero_rows
 pit,1285,11286,Sprint,Race,True,0,zero_rows
 starting_grid,1285,11286,Sprint,Race,True,0,zero_rows
-drivers,1285,11286,Sprint,Race,True,2,pass
-team_radio,1285,11286,Sprint,Race,True,13,pass
-weather,1285,11287,Qualifying,Qualifying,True,76,pass
-race_control,1285,11287,Qualifying,Qualifying,True,60,pass
+drivers,1285,11286,Sprint,Race,True,0,zero_rows
+team_radio,1285,11286,Sprint,Race,True,0,zero_rows
+weather,1285,11287,Qualifying,Qualifying,True,0,zero_rows
+race_control,1285,11287,Qualifying,Qualifying,True,0,zero_rows
 intervals,1285,11287,Qualifying,Qualifying,True,0,zero_rows
-position,1285,11287,Qualifying,Qualifying,True,1449,pass
-stints,1285,11287,Qualifying,Qualifying,True,91,pass
+position,1285,11287,Qualifying,Qualifying,True,0,zero_rows
+stints,1285,11287,Qualifying,Qualifying,True,0,zero_rows
 pit,1285,11287,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1285,11287,Qualifying,Qualifying,True,22,pass
-drivers,1285,11287,Qualifying,Qualifying,True,22,pass
+starting_grid,1285,11287,Qualifying,Qualifying,True,0,zero_rows
+drivers,1285,11287,Qualifying,Qualifying,True,14,pass
 team_radio,1285,11287,Qualifying,Qualifying,True,19,pass
 weather,1285,11291,Race,Race,True,160,pass
 race_control,1285,11291,Race,Race,True,287,pass
@@ -371,11 +371,11 @@ team_radio,1285,11291,Race,Race,True,33,pass
 weather,1286,11292,Practice 1,Practice,True,80,pass
 race_control,1286,11292,Practice 1,Practice,True,130,pass
 intervals,1286,11292,Practice 1,Practice,True,0,zero_rows
-position,1286,11292,Practice 1,Practice,True,1015,pass
-stints,1286,11292,Practice 1,Practice,True,81,pass
+position,1286,11292,Practice 1,Practice,True,0,zero_rows
+stints,1286,11292,Practice 1,Practice,True,0,zero_rows
 pit,1286,11292,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1286,11292,Practice 1,Practice,True,0,zero_rows
-drivers,1286,11292,Practice 1,Practice,True,22,pass
+drivers,1286,11292,Practice 1,Practice,True,0,zero_rows
 team_radio,1286,11292,Practice 1,Practice,True,0,zero_rows
 weather,1286,11293,Practice 2,Practice,True,0,zero_rows
 race_control,1286,11293,Practice 2,Practice,True,0,zero_rows
@@ -393,7 +393,7 @@ position,1286,11294,Practice 3,Practice,True,0,zero_rows
 stints,1286,11294,Practice 3,Practice,True,0,zero_rows
 pit,1286,11294,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1286,11294,Practice 3,Practice,True,0,zero_rows
-drivers,1286,11294,Practice 3,Practice,True,0,zero_rows
+drivers,1286,11294,Practice 3,Practice,True,20,pass
 team_radio,1286,11294,Practice 3,Practice,True,22,pass
 weather,1286,11295,Qualifying,Qualifying,True,84,pass
 race_control,1286,11295,Qualifying,Qualifying,True,73,pass
@@ -402,81 +402,81 @@ position,1286,11295,Qualifying,Qualifying,True,1616,pass
 stints,1286,11295,Qualifying,Qualifying,True,100,pass
 pit,1286,11295,Qualifying,Qualifying,False,0,skipped_not_applicable
 starting_grid,1286,11295,Qualifying,Qualifying,True,22,pass
-drivers,1286,11295,Qualifying,Qualifying,True,22,pass
-team_radio,1286,11295,Qualifying,Qualifying,True,18,pass
-weather,1286,11299,Race,Race,True,208,pass
-race_control,1286,11299,Race,Race,True,269,pass
-intervals,1286,11299,Race,Race,True,29916,pass
-position,1286,11299,Race,Race,True,291,pass
-stints,1286,11299,Race,Race,True,108,pass
-pit,1286,11299,Race,Race,True,86,pass
+drivers,1286,11295,Qualifying,Qualifying,True,0,zero_rows
+team_radio,1286,11295,Qualifying,Qualifying,True,0,zero_rows
+weather,1286,11299,Race,Race,True,0,zero_rows
+race_control,1286,11299,Race,Race,True,0,zero_rows
+intervals,1286,11299,Race,Race,True,0,zero_rows
+position,1286,11299,Race,Race,True,0,zero_rows
+stints,1286,11299,Race,Race,True,0,zero_rows
+pit,1286,11299,Race,Race,True,0,zero_rows
 starting_grid,1286,11299,Race,Race,True,0,zero_rows
-drivers,1286,11299,Race,Race,True,22,pass
-team_radio,1286,11299,Race,Race,True,36,pass
-weather,1287,11300,Practice 1,Practice,True,84,pass
-race_control,1287,11300,Practice 1,Practice,True,25,pass
+drivers,1286,11299,Race,Race,True,0,zero_rows
+team_radio,1286,11299,Race,Race,True,0,zero_rows
+weather,1287,11300,Practice 1,Practice,True,0,zero_rows
+race_control,1287,11300,Practice 1,Practice,True,0,zero_rows
 intervals,1287,11300,Practice 1,Practice,True,0,zero_rows
-position,1287,11300,Practice 1,Practice,True,612,pass
-stints,1287,11300,Practice 1,Practice,True,115,pass
+position,1287,11300,Practice 1,Practice,True,0,zero_rows
+stints,1287,11300,Practice 1,Practice,True,0,zero_rows
 pit,1287,11300,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1287,11300,Practice 1,Practice,True,0,zero_rows
-drivers,1287,11300,Practice 1,Practice,True,21,pass
+drivers,1287,11300,Practice 1,Practice,True,11,pass
 team_radio,1287,11300,Practice 1,Practice,True,6,pass
 weather,1287,11301,Practice 2,Practice,True,85,pass
 race_control,1287,11301,Practice 2,Practice,True,52,pass
 intervals,1287,11301,Practice 2,Practice,True,0,zero_rows
-position,1287,11301,Practice 2,Practice,True,0,zero_rows
-stints,1287,11301,Practice 2,Practice,True,0,zero_rows
+position,1287,11301,Practice 2,Practice,True,424,pass
+stints,1287,11301,Practice 2,Practice,True,118,pass
 pit,1287,11301,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1287,11301,Practice 2,Practice,True,0,zero_rows
-drivers,1287,11301,Practice 2,Practice,True,0,zero_rows
-team_radio,1287,11301,Practice 2,Practice,True,0,zero_rows
-weather,1287,11302,Practice 3,Practice,True,0,zero_rows
-race_control,1287,11302,Practice 3,Practice,True,0,zero_rows
+drivers,1287,11301,Practice 2,Practice,True,22,pass
+team_radio,1287,11301,Practice 2,Practice,True,6,pass
+weather,1287,11302,Practice 3,Practice,True,81,pass
+race_control,1287,11302,Practice 3,Practice,True,44,pass
 intervals,1287,11302,Practice 3,Practice,True,0,zero_rows
-position,1287,11302,Practice 3,Practice,True,0,zero_rows
+position,1287,11302,Practice 3,Practice,True,465,pass
 stints,1287,11302,Practice 3,Practice,True,0,zero_rows
 pit,1287,11302,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1287,11302,Practice 3,Practice,True,0,zero_rows
-drivers,1287,11302,Practice 3,Practice,True,8,pass
-team_radio,1287,11302,Practice 3,Practice,True,8,pass
-weather,1287,11303,Qualifying,Qualifying,True,88,pass
-race_control,1287,11303,Qualifying,Qualifying,True,50,pass
+drivers,1287,11302,Practice 3,Practice,True,0,zero_rows
+team_radio,1287,11302,Practice 3,Practice,True,0,zero_rows
+weather,1287,11303,Qualifying,Qualifying,True,0,zero_rows
+race_control,1287,11303,Qualifying,Qualifying,True,0,zero_rows
 intervals,1287,11303,Qualifying,Qualifying,True,0,zero_rows
-position,1287,11303,Qualifying,Qualifying,True,1116,pass
-stints,1287,11303,Qualifying,Qualifying,True,89,pass
+position,1287,11303,Qualifying,Qualifying,True,0,zero_rows
+stints,1287,11303,Qualifying,Qualifying,True,0,zero_rows
 pit,1287,11303,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1287,11303,Qualifying,Qualifying,True,22,pass
-drivers,1287,11303,Qualifying,Qualifying,True,22,pass
-team_radio,1287,11303,Qualifying,Qualifying,True,8,pass
-weather,1287,11307,Race,Race,True,150,pass
-race_control,1287,11307,Race,Race,True,179,pass
-intervals,1287,11307,Race,Race,True,25022,pass
-position,1287,11307,Race,Race,True,613,pass
+starting_grid,1287,11303,Qualifying,Qualifying,True,0,zero_rows
+drivers,1287,11303,Qualifying,Qualifying,True,0,zero_rows
+team_radio,1287,11303,Qualifying,Qualifying,True,0,zero_rows
+weather,1287,11307,Race,Race,True,0,zero_rows
+race_control,1287,11307,Race,Race,True,0,zero_rows
+intervals,1287,11307,Race,Race,True,0,zero_rows
+position,1287,11307,Race,Race,True,0,zero_rows
 stints,1287,11307,Race,Race,True,0,zero_rows
 pit,1287,11307,Race,Race,True,0,zero_rows
 starting_grid,1287,11307,Race,Race,True,0,zero_rows
-drivers,1287,11307,Race,Race,True,0,zero_rows
-team_radio,1287,11307,Race,Race,True,0,zero_rows
-weather,1288,11308,Practice 1,Practice,True,0,zero_rows
-race_control,1288,11308,Practice 1,Practice,True,0,zero_rows
+drivers,1287,11307,Race,Race,True,20,pass
+team_radio,1287,11307,Race,Race,True,40,pass
+weather,1288,11308,Practice 1,Practice,True,77,pass
+race_control,1288,11308,Practice 1,Practice,True,55,pass
 intervals,1288,11308,Practice 1,Practice,True,0,zero_rows
-position,1288,11308,Practice 1,Practice,True,0,zero_rows
+position,1288,11308,Practice 1,Practice,True,640,pass
 stints,1288,11308,Practice 1,Practice,True,0,zero_rows
 pit,1288,11308,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1288,11308,Practice 1,Practice,True,0,zero_rows
-drivers,1288,11308,Practice 1,Practice,True,6,pass
-team_radio,1288,11308,Practice 1,Practice,True,13,pass
-weather,1288,11309,Practice 2,Practice,True,81,pass
-race_control,1288,11309,Practice 2,Practice,True,53,pass
+drivers,1288,11308,Practice 1,Practice,True,0,zero_rows
+team_radio,1288,11308,Practice 1,Practice,True,0,zero_rows
+weather,1288,11309,Practice 2,Practice,True,0,zero_rows
+race_control,1288,11309,Practice 2,Practice,True,0,zero_rows
 intervals,1288,11309,Practice 2,Practice,True,0,zero_rows
-position,1288,11309,Practice 2,Practice,True,509,pass
-stints,1288,11309,Practice 2,Practice,True,109,pass
+position,1288,11309,Practice 2,Practice,True,0,zero_rows
+stints,1288,11309,Practice 2,Practice,True,0,zero_rows
 pit,1288,11309,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1288,11309,Practice 2,Practice,True,0,zero_rows
-drivers,1288,11309,Practice 2,Practice,True,22,pass
+drivers,1288,11309,Practice 2,Practice,True,0,zero_rows
 team_radio,1288,11309,Practice 2,Practice,True,0,zero_rows
-weather,1288,11310,Practice 3,Practice,True,81,pass
+weather,1288,11310,Practice 3,Practice,True,0,zero_rows
 race_control,1288,11310,Practice 3,Practice,True,21,pass
 intervals,1288,11310,Practice 3,Practice,True,0,zero_rows
 position,1288,11310,Practice 3,Practice,True,475,pass
@@ -488,20 +488,20 @@ team_radio,1288,11310,Practice 3,Practice,True,12,pass
 weather,1288,11311,Qualifying,Qualifying,True,80,pass
 race_control,1288,11311,Qualifying,Qualifying,True,55,pass
 intervals,1288,11311,Qualifying,Qualifying,True,0,zero_rows
-position,1288,11311,Qualifying,Qualifying,True,0,zero_rows
-stints,1288,11311,Qualifying,Qualifying,True,0,zero_rows
+position,1288,11311,Qualifying,Qualifying,True,982,pass
+stints,1288,11311,Qualifying,Qualifying,True,99,pass
 pit,1288,11311,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1288,11311,Qualifying,Qualifying,True,0,zero_rows
-drivers,1288,11311,Qualifying,Qualifying,True,0,zero_rows
-team_radio,1288,11311,Qualifying,Qualifying,True,0,zero_rows
-weather,1288,11315,Race,Race,True,0,zero_rows
-race_control,1288,11315,Race,Race,True,0,zero_rows
-intervals,1288,11315,Race,Race,True,0,zero_rows
-position,1288,11315,Race,Race,True,0,zero_rows
-stints,1288,11315,Race,Race,True,0,zero_rows
-pit,1288,11315,Race,Race,True,0,zero_rows
+starting_grid,1288,11311,Qualifying,Qualifying,True,22,pass
+drivers,1288,11311,Qualifying,Qualifying,True,22,pass
+team_radio,1288,11311,Qualifying,Qualifying,True,12,pass
+weather,1288,11315,Race,Race,True,149,pass
+race_control,1288,11315,Race,Race,True,213,pass
+intervals,1288,11315,Race,Race,True,26312,pass
+position,1288,11315,Race,Race,True,499,pass
+stints,1288,11315,Race,Race,True,63,pass
+pit,1288,11315,Race,Race,True,41,pass
 starting_grid,1288,11315,Race,Race,True,0,zero_rows
-drivers,1288,11315,Race,Race,True,4,pass
+drivers,1288,11315,Race,Race,True,22,pass
 team_radio,1288,11315,Race,Race,True,23,pass
 weather,1289,11316,Practice 1,Practice,True,84,pass
 race_control,1289,11316,Practice 1,Practice,True,36,pass
@@ -510,34 +510,34 @@ position,1289,11316,Practice 1,Practice,True,788,pass
 stints,1289,11316,Practice 1,Practice,True,92,pass
 pit,1289,11316,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1289,11316,Practice 1,Practice,True,0,zero_rows
-drivers,1289,11316,Practice 1,Practice,True,22,pass
-team_radio,1289,11316,Practice 1,Practice,True,9,pass
-weather,1289,11317,Sprint Qualifying,Qualifying,True,60,pass
-race_control,1289,11317,Sprint Qualifying,Qualifying,True,64,pass
+drivers,1289,11316,Practice 1,Practice,True,0,zero_rows
+team_radio,1289,11316,Practice 1,Practice,True,0,zero_rows
+weather,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+race_control,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
 intervals,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
-position,1289,11317,Sprint Qualifying,Qualifying,True,839,pass
-stints,1289,11317,Sprint Qualifying,Qualifying,True,63,pass
-pit,1289,11317,Sprint Qualifying,Qualifying,True,63,pass
-starting_grid,1289,11317,Sprint Qualifying,Qualifying,True,22,pass
-drivers,1289,11317,Sprint Qualifying,Qualifying,True,22,pass
-team_radio,1289,11317,Sprint Qualifying,Qualifying,True,7,pass
+position,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+stints,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+pit,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+starting_grid,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+drivers,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
+team_radio,1289,11317,Sprint Qualifying,Qualifying,True,0,zero_rows
 weather,1289,11321,Sprint,Race,True,79,pass
 race_control,1289,11321,Sprint,Race,True,95,pass
-intervals,1289,11321,Sprint,Race,True,0,zero_rows
-position,1289,11321,Sprint,Race,True,0,zero_rows
-stints,1289,11321,Sprint,Race,True,0,zero_rows
-pit,1289,11321,Sprint,Race,True,0,zero_rows
+intervals,1289,11321,Sprint,Race,True,9414,pass
+position,1289,11321,Sprint,Race,True,196,pass
+stints,1289,11321,Sprint,Race,True,22,pass
+pit,1289,11321,Sprint,Race,True,2,pass
 starting_grid,1289,11321,Sprint,Race,True,0,zero_rows
-drivers,1289,11321,Sprint,Race,True,0,zero_rows
-team_radio,1289,11321,Sprint,Race,True,0,zero_rows
-weather,1289,11322,Qualifying,Qualifying,True,0,zero_rows
-race_control,1289,11322,Qualifying,Qualifying,True,0,zero_rows
+drivers,1289,11321,Sprint,Race,True,22,pass
+team_radio,1289,11321,Sprint,Race,True,4,pass
+weather,1289,11322,Qualifying,Qualifying,True,84,pass
+race_control,1289,11322,Qualifying,Qualifying,True,70,pass
 intervals,1289,11322,Qualifying,Qualifying,True,0,zero_rows
-position,1289,11322,Qualifying,Qualifying,True,0,zero_rows
-stints,1289,11322,Qualifying,Qualifying,True,0,zero_rows
+position,1289,11322,Qualifying,Qualifying,True,968,pass
+stints,1289,11322,Qualifying,Qualifying,True,104,pass
 pit,1289,11322,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1289,11322,Qualifying,Qualifying,True,0,zero_rows
-drivers,1289,11322,Qualifying,Qualifying,True,4,pass
+starting_grid,1289,11322,Qualifying,Qualifying,True,22,pass
+drivers,1289,11322,Qualifying,Qualifying,True,22,pass
 team_radio,1289,11322,Qualifying,Qualifying,True,12,pass
 weather,1289,11326,Race,Race,True,156,pass
 race_control,1289,11326,Race,Race,True,250,pass
@@ -552,28 +552,28 @@ weather,1290,11327,Practice 1,Practice,True,81,pass
 race_control,1290,11327,Practice 1,Practice,True,87,pass
 intervals,1290,11327,Practice 1,Practice,True,0,zero_rows
 position,1290,11327,Practice 1,Practice,True,600,pass
-stints,1290,11327,Practice 1,Practice,True,84,pass
+stints,1290,11327,Practice 1,Practice,True,0,zero_rows
 pit,1290,11327,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1290,11327,Practice 1,Practice,True,0,zero_rows
-drivers,1290,11327,Practice 1,Practice,True,22,pass
-team_radio,1290,11327,Practice 1,Practice,True,4,pass
-weather,1290,11328,Practice 2,Practice,True,83,pass
-race_control,1290,11328,Practice 2,Practice,True,89,pass
+drivers,1290,11327,Practice 1,Practice,True,0,zero_rows
+team_radio,1290,11327,Practice 1,Practice,True,0,zero_rows
+weather,1290,11328,Practice 2,Practice,True,0,zero_rows
+race_control,1290,11328,Practice 2,Practice,True,0,zero_rows
 intervals,1290,11328,Practice 2,Practice,True,0,zero_rows
 position,1290,11328,Practice 2,Practice,True,0,zero_rows
 stints,1290,11328,Practice 2,Practice,True,0,zero_rows
 pit,1290,11328,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1290,11328,Practice 2,Practice,True,0,zero_rows
 drivers,1290,11328,Practice 2,Practice,True,0,zero_rows
-team_radio,1290,11328,Practice 2,Practice,True,0,zero_rows
-weather,1290,11329,Practice 3,Practice,True,0,zero_rows
-race_control,1290,11329,Practice 3,Practice,True,0,zero_rows
+team_radio,1290,11328,Practice 2,Practice,True,4,pass
+weather,1290,11329,Practice 3,Practice,True,85,pass
+race_control,1290,11329,Practice 3,Practice,True,82,pass
 intervals,1290,11329,Practice 3,Practice,True,0,zero_rows
-position,1290,11329,Practice 3,Practice,True,0,zero_rows
-stints,1290,11329,Practice 3,Practice,True,0,zero_rows
+position,1290,11329,Practice 3,Practice,True,485,pass
+stints,1290,11329,Practice 3,Practice,True,82,pass
 pit,1290,11329,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1290,11329,Practice 3,Practice,True,0,zero_rows
-drivers,1290,11329,Practice 3,Practice,True,11,pass
+drivers,1290,11329,Practice 3,Practice,True,22,pass
 team_radio,1290,11329,Practice 3,Practice,True,10,pass
 weather,1290,11330,Qualifying,Qualifying,True,88,pass
 race_control,1290,11330,Qualifying,Qualifying,True,65,pass
@@ -584,32 +584,32 @@ pit,1290,11330,Qualifying,Qualifying,False,0,skipped_not_applicable
 starting_grid,1290,11330,Qualifying,Qualifying,True,22,pass
 drivers,1290,11330,Qualifying,Qualifying,True,22,pass
 team_radio,1290,11330,Qualifying,Qualifying,True,5,pass
-weather,1290,11334,Race,Race,True,0,zero_rows
-race_control,1290,11334,Race,Race,True,0,zero_rows
-intervals,1290,11334,Race,Race,True,0,zero_rows
-position,1290,11334,Race,Race,True,0,zero_rows
-stints,1290,11334,Race,Race,True,0,zero_rows
-pit,1290,11334,Race,Race,True,0,zero_rows
+weather,1290,11334,Race,Race,True,146,pass
+race_control,1290,11334,Race,Race,True,151,pass
+intervals,1290,11334,Race,Race,True,23116,pass
+position,1290,11334,Race,Race,True,443,pass
+stints,1290,11334,Race,Race,True,51,pass
+pit,1290,11334,Race,Race,True,28,pass
 starting_grid,1290,11334,Race,Race,True,0,zero_rows
-drivers,1290,11334,Race,Race,True,0,zero_rows
-team_radio,1290,11334,Race,Race,True,0,zero_rows
-weather,1291,11335,Practice 1,Practice,True,0,zero_rows
-race_control,1291,11335,Practice 1,Practice,True,0,zero_rows
+drivers,1290,11334,Race,Race,True,22,pass
+team_radio,1290,11334,Race,Race,True,29,pass
+weather,1291,11335,Practice 1,Practice,True,79,pass
+race_control,1291,11335,Practice 1,Practice,True,57,pass
 intervals,1291,11335,Practice 1,Practice,True,0,zero_rows
 position,1291,11335,Practice 1,Practice,True,0,zero_rows
 stints,1291,11335,Practice 1,Practice,True,0,zero_rows
 pit,1291,11335,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1291,11335,Practice 1,Practice,True,0,zero_rows
-drivers,1291,11335,Practice 1,Practice,True,10,pass
-team_radio,1291,11335,Practice 1,Practice,True,15,pass
-weather,1291,11336,Practice 2,Practice,True,82,pass
-race_control,1291,11336,Practice 2,Practice,True,72,pass
+drivers,1291,11335,Practice 1,Practice,True,0,zero_rows
+team_radio,1291,11335,Practice 1,Practice,True,0,zero_rows
+weather,1291,11336,Practice 2,Practice,True,0,zero_rows
+race_control,1291,11336,Practice 2,Practice,True,0,zero_rows
 intervals,1291,11336,Practice 2,Practice,True,0,zero_rows
-position,1291,11336,Practice 2,Practice,True,608,pass
-stints,1291,11336,Practice 2,Practice,True,93,pass
+position,1291,11336,Practice 2,Practice,True,0,zero_rows
+stints,1291,11336,Practice 2,Practice,True,0,zero_rows
 pit,1291,11336,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1291,11336,Practice 2,Practice,True,0,zero_rows
-drivers,1291,11336,Practice 2,Practice,True,22,pass
+drivers,1291,11336,Practice 2,Practice,True,0,zero_rows
 team_radio,1291,11336,Practice 2,Practice,True,7,pass
 weather,1291,11337,Practice 3,Practice,True,80,pass
 race_control,1291,11337,Practice 3,Practice,True,67,pass
@@ -618,16 +618,16 @@ position,1291,11337,Practice 3,Practice,True,513,pass
 stints,1291,11337,Practice 3,Practice,True,89,pass
 pit,1291,11337,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1291,11337,Practice 3,Practice,True,0,zero_rows
-drivers,1291,11337,Practice 3,Practice,True,0,zero_rows
-team_radio,1291,11337,Practice 3,Practice,True,0,zero_rows
-weather,1291,11338,Qualifying,Qualifying,True,0,zero_rows
-race_control,1291,11338,Qualifying,Qualifying,True,0,zero_rows
+drivers,1291,11337,Practice 3,Practice,True,22,pass
+team_radio,1291,11337,Practice 3,Practice,True,7,pass
+weather,1291,11338,Qualifying,Qualifying,True,76,pass
+race_control,1291,11338,Qualifying,Qualifying,True,48,pass
 intervals,1291,11338,Qualifying,Qualifying,True,0,zero_rows
-position,1291,11338,Qualifying,Qualifying,True,0,zero_rows
-stints,1291,11338,Qualifying,Qualifying,True,0,zero_rows
+position,1291,11338,Qualifying,Qualifying,True,1016,pass
+stints,1291,11338,Qualifying,Qualifying,True,98,pass
 pit,1291,11338,Qualifying,Qualifying,False,0,skipped_not_applicable
-starting_grid,1291,11338,Qualifying,Qualifying,True,0,zero_rows
-drivers,1291,11338,Qualifying,Qualifying,True,4,pass
+starting_grid,1291,11338,Qualifying,Qualifying,True,22,pass
+drivers,1291,11338,Qualifying,Qualifying,True,22,pass
 team_radio,1291,11338,Qualifying,Qualifying,True,17,pass
 weather,1291,11342,Race,Race,True,156,pass
 race_control,1291,11342,Race,Race,True,80,pass
@@ -639,31 +639,31 @@ starting_grid,1291,11342,Race,Race,True,0,zero_rows
 drivers,1291,11342,Race,Race,True,22,pass
 team_radio,1291,11342,Race,Race,True,36,pass
 weather,1292,11343,Practice 1,Practice,True,82,pass
-race_control,1292,11343,Practice 1,Practice,True,68,pass
+race_control,1292,11343,Practice 1,Practice,True,0,zero_rows
 intervals,1292,11343,Practice 1,Practice,True,0,zero_rows
-position,1292,11343,Practice 1,Practice,True,803,pass
-stints,1292,11343,Practice 1,Practice,True,97,pass
+position,1292,11343,Practice 1,Practice,True,0,zero_rows
+stints,1292,11343,Practice 1,Practice,True,0,zero_rows
 pit,1292,11343,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1292,11343,Practice 1,Practice,True,0,zero_rows
-drivers,1292,11343,Practice 1,Practice,True,22,pass
-team_radio,1292,11343,Practice 1,Practice,True,8,pass
-weather,1292,11344,Sprint Qualifying,Qualifying,True,62,pass
-race_control,1292,11344,Sprint Qualifying,Qualifying,True,62,pass
+drivers,1292,11343,Practice 1,Practice,True,0,zero_rows
+team_radio,1292,11343,Practice 1,Practice,True,0,zero_rows
+weather,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
+race_control,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 intervals,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 position,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 stints,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 pit,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 starting_grid,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
 drivers,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
-team_radio,1292,11344,Sprint Qualifying,Qualifying,True,0,zero_rows
-weather,1292,11348,Sprint,Race,True,0,zero_rows
-race_control,1292,11348,Sprint,Race,True,0,zero_rows
-intervals,1292,11348,Sprint,Race,True,0,zero_rows
-position,1292,11348,Sprint,Race,True,0,zero_rows
-stints,1292,11348,Sprint,Race,True,0,zero_rows
-pit,1292,11348,Sprint,Race,True,0,zero_rows
+team_radio,1292,11344,Sprint Qualifying,Qualifying,True,14,pass
+weather,1292,11348,Sprint,Race,True,80,pass
+race_control,1292,11348,Sprint,Race,True,65,pass
+intervals,1292,11348,Sprint,Race,True,11063,pass
+position,1292,11348,Sprint,Race,True,65,pass
+stints,1292,11348,Sprint,Race,True,24,pass
+pit,1292,11348,Sprint,Race,True,2,pass
 starting_grid,1292,11348,Sprint,Race,True,0,zero_rows
-drivers,1292,11348,Sprint,Race,True,11,pass
+drivers,1292,11348,Sprint,Race,True,22,pass
 team_radio,1292,11348,Sprint,Race,True,6,pass
 weather,1292,11349,Qualifying,Qualifying,True,77,pass
 race_control,1292,11349,Qualifying,Qualifying,True,118,pass
@@ -673,13 +673,13 @@ stints,1292,11349,Qualifying,Qualifying,True,109,pass
 pit,1292,11349,Qualifying,Qualifying,False,0,skipped_not_applicable
 starting_grid,1292,11349,Qualifying,Qualifying,True,22,pass
 drivers,1292,11349,Qualifying,Qualifying,True,22,pass
-team_radio,1292,11349,Qualifying,Qualifying,True,0,zero_rows
-weather,1292,11353,Race,Race,True,0,zero_rows
-race_control,1292,11353,Race,Race,True,0,zero_rows
-intervals,1292,11353,Race,Race,True,0,zero_rows
-position,1292,11353,Race,Race,True,0,zero_rows
-stints,1292,11353,Race,Race,True,0,zero_rows
-pit,1292,11353,Race,Race,True,0,zero_rows
+team_radio,1292,11349,Qualifying,Qualifying,True,7,pass
+weather,1292,11353,Race,Race,True,191,pass
+race_control,1292,11353,Race,Race,True,333,pass
+intervals,1292,11353,Race,Race,True,30616,pass
+position,1292,11353,Race,Race,True,608,pass
+stints,1292,11353,Race,Race,True,87,pass
+pit,1292,11353,Race,Race,True,65,pass
 starting_grid,1292,11353,Race,Race,True,0,zero_rows
 drivers,1292,11353,Race,Race,True,0,zero_rows
 team_radio,1292,11353,Race,Race,True,0,zero_rows
@@ -690,7 +690,7 @@ position,1293,11354,Practice 1,Practice,True,0,zero_rows
 stints,1293,11354,Practice 1,Practice,True,0,zero_rows
 pit,1293,11354,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1293,11354,Practice 1,Practice,True,0,zero_rows
-drivers,1293,11354,Practice 1,Practice,True,14,pass
+drivers,1293,11354,Practice 1,Practice,True,0,zero_rows
 team_radio,1293,11354,Practice 1,Practice,True,7,pass
 weather,1293,11355,Practice 2,Practice,True,83,pass
 race_control,1293,11355,Practice 2,Practice,True,34,pass
@@ -699,16 +699,16 @@ position,1293,11355,Practice 2,Practice,True,561,pass
 stints,1293,11355,Practice 2,Practice,True,97,pass
 pit,1293,11355,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1293,11355,Practice 2,Practice,True,0,zero_rows
-drivers,1293,11355,Practice 2,Practice,True,0,zero_rows
-team_radio,1293,11355,Practice 2,Practice,True,0,zero_rows
-weather,1293,11356,Practice 3,Practice,True,0,zero_rows
-race_control,1293,11356,Practice 3,Practice,True,0,zero_rows
+drivers,1293,11355,Practice 2,Practice,True,22,pass
+team_radio,1293,11355,Practice 2,Practice,True,9,pass
+weather,1293,11356,Practice 3,Practice,True,80,pass
+race_control,1293,11356,Practice 3,Practice,True,68,pass
 intervals,1293,11356,Practice 3,Practice,True,0,zero_rows
-position,1293,11356,Practice 3,Practice,True,0,zero_rows
-stints,1293,11356,Practice 3,Practice,True,0,zero_rows
+position,1293,11356,Practice 3,Practice,True,617,pass
+stints,1293,11356,Practice 3,Practice,True,110,pass
 pit,1293,11356,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1293,11356,Practice 3,Practice,True,0,zero_rows
-drivers,1293,11356,Practice 3,Practice,True,5,pass
+drivers,1293,11356,Practice 3,Practice,True,22,pass
 team_radio,1293,11356,Practice 3,Practice,True,14,pass
 weather,1293,11357,Qualifying,Qualifying,True,77,pass
 race_control,1293,11357,Qualifying,Qualifying,True,53,pass
@@ -721,30 +721,30 @@ drivers,1293,11357,Qualifying,Qualifying,True,22,pass
 team_radio,1293,11357,Qualifying,Qualifying,True,13,pass
 weather,1293,11361,Race,Race,True,176,pass
 race_control,1293,11361,Race,Race,True,158,pass
-intervals,1293,11361,Race,Race,True,21955,pass
-position,1293,11361,Race,Race,True,678,pass
-stints,1293,11361,Race,Race,True,52,pass
-pit,1293,11361,Race,Race,True,30,pass
+intervals,1293,11361,Race,Race,True,0,zero_rows
+position,1293,11361,Race,Race,True,0,zero_rows
+stints,1293,11361,Race,Race,True,0,zero_rows
+pit,1293,11361,Race,Race,True,0,zero_rows
 starting_grid,1293,11361,Race,Race,True,0,zero_rows
-drivers,1293,11361,Race,Race,True,22,pass
-team_radio,1293,11361,Race,Race,True,24,pass
-weather,1294,11362,Practice 1,Practice,True,86,pass
+drivers,1293,11361,Race,Race,True,0,zero_rows
+team_radio,1293,11361,Race,Race,True,0,zero_rows
+weather,1294,11362,Practice 1,Practice,True,0,zero_rows
 race_control,1294,11362,Practice 1,Practice,True,0,zero_rows
 intervals,1294,11362,Practice 1,Practice,True,0,zero_rows
 position,1294,11362,Practice 1,Practice,True,0,zero_rows
 stints,1294,11362,Practice 1,Practice,True,0,zero_rows
 pit,1294,11362,Practice 1,Practice,False,0,skipped_not_applicable
 starting_grid,1294,11362,Practice 1,Practice,True,0,zero_rows
-drivers,1294,11362,Practice 1,Practice,True,0,zero_rows
-team_radio,1294,11362,Practice 1,Practice,True,0,zero_rows
-weather,1294,11363,Practice 2,Practice,True,0,zero_rows
-race_control,1294,11363,Practice 2,Practice,True,0,zero_rows
+drivers,1294,11362,Practice 1,Practice,True,3,pass
+team_radio,1294,11362,Practice 1,Practice,True,11,pass
+weather,1294,11363,Practice 2,Practice,True,85,pass
+race_control,1294,11363,Practice 2,Practice,True,108,pass
 intervals,1294,11363,Practice 2,Practice,True,0,zero_rows
-position,1294,11363,Practice 2,Practice,True,0,zero_rows
-stints,1294,11363,Practice 2,Practice,True,0,zero_rows
+position,1294,11363,Practice 2,Practice,True,593,pass
+stints,1294,11363,Practice 2,Practice,True,90,pass
 pit,1294,11363,Practice 2,Practice,False,0,skipped_not_applicable
 starting_grid,1294,11363,Practice 2,Practice,True,0,zero_rows
-drivers,1294,11363,Practice 2,Practice,True,8,pass
+drivers,1294,11363,Practice 2,Practice,True,22,pass
 team_radio,1294,11363,Practice 2,Practice,True,17,pass
 weather,1294,11364,Practice 3,Practice,True,95,pass
 race_control,1294,11364,Practice 3,Practice,True,179,pass
@@ -755,3 +755,12 @@ pit,1294,11364,Practice 3,Practice,False,0,skipped_not_applicable
 starting_grid,1294,11364,Practice 3,Practice,True,0,zero_rows
 drivers,1294,11364,Practice 3,Practice,True,22,pass
 team_radio,1294,11364,Practice 3,Practice,True,6,pass
+weather,1294,11365,Qualifying,Qualifying,True,78,pass
+race_control,1294,11365,Qualifying,Qualifying,True,141,pass
+intervals,1294,11365,Qualifying,Qualifying,True,0,zero_rows
+position,1294,11365,Qualifying,Qualifying,True,953,pass
+stints,1294,11365,Qualifying,Qualifying,True,0,zero_rows
+pit,1294,11365,Qualifying,Qualifying,False,0,skipped_not_applicable
+starting_grid,1294,11365,Qualifying,Qualifying,True,0,zero_rows
+drivers,1294,11365,Qualifying,Qualifying,True,0,zero_rows
+team_radio,1294,11365,Qualifying,Qualifying,True,0,zero_rows
