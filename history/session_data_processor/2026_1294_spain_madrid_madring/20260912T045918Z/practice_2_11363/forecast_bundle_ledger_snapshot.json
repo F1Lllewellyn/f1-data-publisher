@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-09-12T04:59:32.077279Z",
+  "event_id": "2026_1294_spain_madrid_madring",
+  "forecast_state_changed": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Spain - Madrid - Madring",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-09-11T16:00:00+00:00",
+    "date_start": "2026-09-11T15:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1294,
+    "session_key": 11363,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}
