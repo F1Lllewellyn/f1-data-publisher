@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1294_spain_madrid_madring__post_qualifying__experimental_challenger__20260912T181216Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1294_spain_madrid_madring",
+  "season": "2026",
+  "round": "",
+  "race_name": "Spain - Madrid - Madring",
+  "gate": "post_qualifying",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-09-12T18:12:16Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

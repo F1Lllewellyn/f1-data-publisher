@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1294_spain_madrid_madring__post_qualifying__stable_baseline__20260912T181216Z
+
+Status: locked
