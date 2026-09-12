@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_2_11363/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 13065,
+    "ok": true,
+    "sha256": "a39074740837ceea5b18299d1be85f674ad4acd284291194d9a16ebc90ddae85",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_2_11363/raw/openf1_stints.json",
+  "json_sha256": "3f50258f5285a79adf0932f5b9ee2a10c097995cc1875e86ab2e5a14f8c4e8fa",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 90,
+  "status": "clean",
+  "timestamp_rows": 0
+}
