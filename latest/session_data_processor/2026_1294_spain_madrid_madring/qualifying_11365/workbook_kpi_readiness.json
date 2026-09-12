@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-09-12T19:39:56.218112Z",
+  "created_utc": "2026-09-12T21:25:42.302613Z",
   "event_id": "2026_1294_spain_madrid_madring",
   "overall_status": "clean",
   "race_name": "Spain - Madrid - Madring",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 21,
