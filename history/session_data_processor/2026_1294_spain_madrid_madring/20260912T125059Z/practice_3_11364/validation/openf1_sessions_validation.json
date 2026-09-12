@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_3_11364/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 391,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_3_11364/raw/openf1_sessions.json",
+  "json_sha256": "8ac12774581821001f69c824ee2895b5af9893c9d1de23323f0a8e856cc75e81",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}
