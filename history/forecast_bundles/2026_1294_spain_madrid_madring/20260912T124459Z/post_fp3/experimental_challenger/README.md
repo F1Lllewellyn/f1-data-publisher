@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1294_spain_madrid_madring__post_fp3__experimental_challenger__20260912T124459Z
+
+Status: locked
