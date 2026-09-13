@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 6813,
+    "ok": true,
+    "sha256": "8021155c4679cfc84dd85ef8c407681c0e0adedf89bb92a41a128dd08dd10b5d",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_stints.json",
+  "json_sha256": "49aecdbf497cb7b5a11a08f0b35a4b0659527fc17fe86bb44e9f7d1f8513c3f9",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 47,
+  "status": "clean",
+  "timestamp_rows": 0
+}
