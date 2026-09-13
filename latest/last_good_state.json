@@ -5,12 +5,12 @@
     "session_key": 11365,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1294_spain_madrid_madring/20260912T214000Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1294_spain_madrid_madring/20260913T013612Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260912T214000Z",
+  "run_id": "20260913T013612Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "102e29bf1e981461ae97da02c83bde648c1292a76a5512abf750e78f0133f695",
+  "signature": "1fd7dc84485dcefa426635ba4badcb3aaa0e2b760970dbde78d54c9e35b5c1ec",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-12T21:40:00Z"
+  "updated_at_utc": "2026-09-13T01:36:13Z"
 }
