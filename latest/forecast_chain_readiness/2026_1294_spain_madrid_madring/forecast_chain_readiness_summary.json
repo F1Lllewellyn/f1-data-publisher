@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-09-13T16:29:03Z",
+  "run_timestamp_utc": "2026-09-13T19:10:16Z",
   "event_id": "2026_1294_spain_madrid_madring",
-  "gate_request": "race_result",
+  "gate_request": "post_event",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
