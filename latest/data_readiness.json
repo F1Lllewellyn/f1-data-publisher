@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1294_spain_madrid_madring",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "Spain - Madrid - Madring",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-09-13T15:50:12.878382Z"
+  "updated_utc": "2026-09-13T18:22:22.832043Z"
 }
