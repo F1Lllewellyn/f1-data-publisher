@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/qualifying_11365/raw/openf1_race_control.csv",
+  "driver_count": 1,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 36463,
+    "ok": true,
+    "sha256": "47f8c218152fcbd277e2d9595e3db22070d013cf96791130a3611ddd95d32a00",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/qualifying_11365/raw/openf1_race_control.json",
+  "json_sha256": "341885d6a98b3071f9ef1c67708f730267b372c9bd404b5c3048fb5c22a9f163",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 141,
+  "status": "clean",
+  "timestamp_rows": 141
+}
