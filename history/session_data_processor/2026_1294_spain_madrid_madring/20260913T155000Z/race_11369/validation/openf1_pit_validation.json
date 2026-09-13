@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_pit.csv",
+  "driver_count": 20,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 4498,
+    "ok": true,
+    "sha256": "a1e30407e69b29971fb84f979f678445c7e40b71b6d3a0f53b6934a9d7953568",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_pit.json",
+  "json_sha256": "ce7d7d73dfa5272c543d70f8ca8c1fea24f6a16baa85fa8b2d1504206b7aaead",
+  "max_lap_number": 55.0,
+  "missing_required_columns": [],
+  "rows": 25,
+  "status": "clean",
+  "timestamp_rows": 25
+}

@@ -1,0 +1,624 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-09-13T15:50:12.875828Z",
+  "event_id": "2026_1294_spain_madrid_madring",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-09-13T15:50:12.876914Z",
+    "event_id": "2026_1294_spain_madrid_madring",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Spain - Madrid - Madring",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-09-13T15:00:00+00:00",
+      "date_start": "2026-09-13T13:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1294,
+      "session_key": 11369,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 230.92,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "38eb321b7358c94d2a27b5ecabcf2a0752c3455659b71c9cc065b5e5fb767e19",
+      "size_bytes": 681,
+      "timestamp_utc": "2026-09-13T11:59:17.407103Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 230.92,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "31089b057e83ca52a2ab810d9c44f1bb89035ac6ff66c56f8f032b394df8f16f",
+      "size_bytes": 1547,
+      "timestamp_utc": "2026-09-13T11:59:17.406959Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 230.92,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "90afaa2735e21e8e433fbedbd66ee2a7dc373007812c4c9a46c968601063252f",
+      "size_bytes": 552,
+      "timestamp_utc": "2026-09-13T11:59:17.406854Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Spain - Madrid - Madring",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 26935
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1109
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 25
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 254
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 185
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 47
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 161
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20260913T155000Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-09-13T15:00:00+00:00",
+    "date_start": "2026-09-13T13:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1294,
+    "session_key": 11369,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9022,
+        "ok": true,
+        "sha256": "e8e07427ec76009157855783ae079946fcf6dcbcf0829bf1b91cfbe1b17f4a7f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_drivers.json",
+      "json_sha256": "879310350973e9ae71e36ed737e13cf01755c6db6409335af7fa2284bf0aaf0c",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 3834194,
+        "ok": true,
+        "sha256": "b9720e64679c9144bc1ae723576a79900790b0dfa4af29e57421b4b933583ac9",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_intervals.json",
+      "json_sha256": "48ec7986533dbf5e38df318ee66da64ec57db0aecd8d5b01679fdc74a62013cd",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 26935,
+      "status": "clean",
+      "timestamp_rows": 26935
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 543773,
+        "ok": true,
+        "sha256": "87c7db6a829ebb879cc10d1c64b45088c3fcf4ad2891ffa4165171cece3776bc",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_laps.json",
+      "json_sha256": "7669b06b0295c5ff1d0b75f5fe5410a909945239dc66908a80a60d4e32893c4a",
+      "max_lap_number": 57.0,
+      "missing_required_columns": [],
+      "rows": 1109,
+      "status": "clean",
+      "timestamp_rows": 1109
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_pit.csv",
+      "driver_count": 20,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 4498,
+        "ok": true,
+        "sha256": "a1e30407e69b29971fb84f979f678445c7e40b71b6d3a0f53b6934a9d7953568",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_pit.json",
+      "json_sha256": "ce7d7d73dfa5272c543d70f8ca8c1fea24f6a16baa85fa8b2d1504206b7aaead",
+      "max_lap_number": 55.0,
+      "missing_required_columns": [],
+      "rows": 25,
+      "status": "clean",
+      "timestamp_rows": 25
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 29334,
+        "ok": true,
+        "sha256": "3f2b29c2c231a00524eba65a05e47be90102b72f17f5fc9d4b057ffc98d0c306",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_position.json",
+      "json_sha256": "3d7e086689969cf10d57fa120a9b9ea2b6f1f63860b140425f2f25642dda65f4",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 254,
+      "status": "clean",
+      "timestamp_rows": 254
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_race_control.csv",
+      "driver_count": 13,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 49221,
+        "ok": true,
+        "sha256": "9146e6d9827a3fa20bf3a25c53e6f8c791e50da6177db8cc5b35ef5e2554cd5e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_race_control.json",
+      "json_sha256": "7ffcfd33a441bf4b5bf1e7296fe2e95364e84f322f43cf75ada5e0ace915927c",
+      "max_lap_number": 57.0,
+      "missing_required_columns": [],
+      "rows": 185,
+      "status": "clean",
+      "timestamp_rows": 185
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4037,
+        "ok": true,
+        "sha256": "4889f60d12005b651cd0988d68c03f4b5753005c08aa61afd6a3d90abb443f1d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_session_result.json",
+      "json_sha256": "49e9158fc6ae73e9b34c484d68090ad9279d702c44a7f39f1a37f54a05bfa937",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 381,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_sessions.json",
+      "json_sha256": "a92af856c6181d1b27862c09f47951e01c032f9b59f5720328d77fe922f7ad68",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 6813,
+        "ok": true,
+        "sha256": "8021155c4679cfc84dd85ef8c407681c0e0adedf89bb92a41a128dd08dd10b5d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_stints.json",
+      "json_sha256": "49aecdbf497cb7b5a11a08f0b35a4b0659527fc17fe86bb44e9f7d1f8513c3f9",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 47,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 34527,
+        "ok": true,
+        "sha256": "d5403cb5a3bc0fd474f03396b203544530140b49b58bd12f38ce345d3e499783",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_weather.json",
+      "json_sha256": "0d95b81f66b7a718c67ac339b1e9a363e653038f89e0f60588fa84366c23056d",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 161,
+      "status": "clean",
+      "timestamp_rows": 161
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/workbook_kpi_readiness.json"
+  }
+}
