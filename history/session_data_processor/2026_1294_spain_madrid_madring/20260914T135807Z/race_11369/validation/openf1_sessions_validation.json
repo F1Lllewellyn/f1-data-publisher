@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 381,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_sessions.json",
+  "json_sha256": "a92af856c6181d1b27862c09f47951e01c032f9b59f5720328d77fe922f7ad68",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}
