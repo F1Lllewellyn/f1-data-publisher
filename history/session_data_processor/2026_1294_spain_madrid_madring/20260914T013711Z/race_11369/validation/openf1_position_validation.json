@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 29334,
+    "ok": true,
+    "sha256": "3f2b29c2c231a00524eba65a05e47be90102b72f17f5fc9d4b057ffc98d0c306",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_position.json",
+  "json_sha256": "3d7e086689969cf10d57fa120a9b9ea2b6f1f63860b140425f2f25642dda65f4",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 254,
+  "status": "clean",
+  "timestamp_rows": 254
+}
