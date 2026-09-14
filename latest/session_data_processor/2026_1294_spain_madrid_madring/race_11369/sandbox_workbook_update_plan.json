@@ -5,7 +5,7 @@
     "promote model layer"
   ],
   "canonical_workbook_modified": false,
-  "created_utc": "2026-09-14T01:37:27.584800Z",
+  "created_utc": "2026-09-14T07:04:31.017143Z",
   "recommended_action": "consume workbook_kpi_readiness.json/csv into the workbook-control-room or create an explicitly named sandbox workbook copy",
   "schema_version": "sandbox_workbook_update_plan_v1"
 }
