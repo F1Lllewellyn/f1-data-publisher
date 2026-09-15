@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-09-14T19:18:49Z",
+      "run_id": "2026-09-15T01:24:27Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-14T19:18:49Z",
+        "run_id": "2026-09-15T01:24:27Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -204,7 +204,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/source_readiness_manifest.json",
-        "run_id": "20260914T191833Z",
+        "run_id": "20260915T012415Z",
         "score": -130,
         "status": "needs_manual_review"
       },
@@ -238,7 +238,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-14T19:18:49Z",
+        "run_id": "2026-09-15T01:24:27Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -250,13 +250,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260914T191848Z",
+        "run_id": "20260915T012427Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260914T191848Z",
+        "run_id": "20260915T012427Z",
         "score": -50,
         "status": "needs_manual_review"
       }
