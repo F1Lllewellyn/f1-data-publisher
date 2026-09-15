@@ -5,12 +5,12 @@
     "session_key": 11369,
     "session_name": "Race"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1294_spain_madrid_madring/20260915T202723Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1294_spain_madrid_madring/20260915T232635Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260915T202723Z",
+  "run_id": "20260915T232635Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "38afb7fb430ee2b05871ee8f20cccdc8e01d3a3ae894a8b4f4621e10f7eba988",
+  "signature": "6c69d48f36ea861ca30796dbf195d81566a7fb61dd8b5f740beca45fa695cc45",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-15T20:27:23Z"
+  "updated_at_utc": "2026-09-15T23:26:35Z"
 }
