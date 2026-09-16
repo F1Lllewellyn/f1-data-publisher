@@ -22,10 +22,22 @@ def build_case(root: Path, source_status="clean", manual=False, laps=586, starti
     write_json(wp, {"status":"refresh_applied" if workbook_status == "clean" else workbook_status,"source_status":workbook_status,"workbook_source_status":workbook_status,"sandbox_workbook":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx","canonical_workbook_overwrite":False,"stable_engine_modified":False,"promotion_allowed":False})
 
 
-def build_dashboard_override_case(root: Path):
-    build_case(root, source_status="needs_manual_review", manual=True, laps=0, workbook_status="needs_manual_review")
+def build_dashboard_override_case(root: Path, laps=586):
+    build_case(root, source_status="needs_manual_review", manual=True, laps=laps, workbook_status="needs_manual_review")
     dash = root/"latest/readiness_dashboards/combined_readiness_dashboard.json"
     write_json(dash, {"generated_at_utc":"2026-06-13T02:35:10Z","status":"dashboard_refreshed","source_status":"clean","source_backed":True,"event_name":"Spain - Barcelona - Catalunya","session_name":{"gate":"post_fp2","meeting_key":1287,"session_key":11301,"session_name":"Practice 2","session_type":"Practice"},"workbook_artifact":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx","workbook_manifest":"latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json","session_manifest":"latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json","stable_engine_modified":False,"canonical_workbook_overwrite":False,"promotion_allowed":False})
+
+
+def build_race_grid_case(root: Path):
+    event = "2026_1294_spain_madrid_madring"
+    race = root/f"latest/session_data_processor/{event}/race_11369/source_readiness_manifest.json"
+    quali = root/f"latest/session_data_processor/{event}/qualifying_11365/source_readiness_manifest.json"
+    write_json(race, {"event_id":event,"race_name":"Spain - Madrid - Madring","session":{"session_key":11369,"session_name":"Race","session_type":"Race","gate":"race_result"},"run_id":"20260915T012415Z","overall_status":"needs_manual_review","source_needs_manual_review":True,"readiness_quality":"blocked_manual_review_required_source","readiness_aggregation":{"overall_status":"needs_manual_review","needs_manual_review":True,"blocking_issues":[{"endpoint":"starting_grid","reason":"required_source_needs_manual_review","rows":0}],"critical_endpoints":["drivers","laps","position","race_control","session_result","starting_grid","weather"]},"sources":{"openf1_starting_grid":{"rows":0,"status":"needs_manual_review"}}})
+    write_json(quali, {"event_id":event,"race_name":"Spain - Madrid - Madring","session":{"session_key":11365,"session_name":"Qualifying","session_type":"Qualifying","gate":"post_qualifying"},"run_id":"20260913T115906Z","overall_status":"clean","source_needs_manual_review":False,"readiness_quality":"usable_clean"})
+    write_json(root/"latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json", {"source_status":"needs_manual_review","source_processor_root":str(race.parent.relative_to(root)),"sandbox_workbook":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx"})
+    dashboard = {"source_status":"needs_manual_review","source_backed":True,"event_name":"Spain - Madrid - Madring","session_name":{"session_key":11369,"session_name":"Race","session_type":"Race","gate":"race_result"},"session_manifest":str(race.relative_to(root)),"workbook_artifact":"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_SAMPLE.xlsx"}
+    write_json(root/"latest/readiness_dashboards/combined_readiness_dashboard.json", dashboard)
+    return race, quali, dashboard
 
 
 
@@ -88,6 +100,30 @@ def main():
         assert r5["workbook_source_status"] == "clean", r5
         assert r5["last_good_state_updated"] is True, r5
         results.append({"case":"usable_quality_normalizes_stale_manual_review_status", "status":"pass"})
+        case6=base/"case6"; build_dashboard_override_case(case6, laps=0)
+        r6=run_script(script, case6)
+        assert r6["status"] == "blocked" and r6["last_good_state_updated"] is False, r6
+        results.append({"case":"clean_dashboard_cannot_override_missing_laps", "status":"pass"})
+        case7=base/"case7"; race, _, dashboard=build_race_grid_case(case7)
+        r7=run_script(script, case7)
+        assert r7["status"] == "blocked" and r7["notification_recommended"] is False, r7
+        snap7=json.loads((case7/"latest/forecast_bundle_ledger/latest_bundle_snapshot.json").read_text())
+        assert snap7["source"]["manifest_path"] == str(race.relative_to(case7)), snap7
+        assert snap7["event"]["session_key"] == 11369 and not snap7["handoffs"]["race_reports"]["ready_for_full_report"], snap7
+        assert not (case7/"latest/last_good_state.json").exists()
+        results.append({"case":"blocked_race_grid_cannot_borrow_clean_qualifying", "status":"pass"})
+        case8=base/"case8"; _, quali, dashboard=build_race_grid_case(case8)
+        dashboard["source_status"]="clean"; dashboard["session_manifest"]=str(quali.relative_to(case8))
+        write_json(case8/"latest/readiness_dashboards/combined_readiness_dashboard.json", dashboard)
+        r8=run_script(script, case8)
+        assert r8["status"] == "blocked" and r8["last_good_state_updated"] is False, r8
+        results.append({"case":"explicit_session_reference_mismatch_blocks", "status":"pass"})
+        case9=base/"case9"; _, _, dashboard=build_race_grid_case(case9)
+        dashboard["source_status"]="clean"
+        write_json(case9/"latest/readiness_dashboards/combined_readiness_dashboard.json", dashboard)
+        r9=run_script(script, case9)
+        assert r9["status"] == "blocked" and r9["last_good_state_updated"] is False, r9
+        results.append({"case":"clean_dashboard_cannot_override_blocked_race_aggregation", "status":"pass"})
     out={"schema_version":"f1_1b_v20_acceptance_tests", "status":"pass", "results":results}
     latest=repo_root/"latest/1b_validation"; latest.mkdir(parents=True, exist_ok=True)
     (latest/"v20_acceptance_tests.json").write_text(json.dumps(out, indent=2, sort_keys=True)+"\n", encoding="utf-8")
