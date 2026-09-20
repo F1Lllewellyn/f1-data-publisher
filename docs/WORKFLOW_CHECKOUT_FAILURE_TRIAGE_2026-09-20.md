@@ -26,3 +26,9 @@ The pilot does not guarantee that all conflicts vanish. A different writer can p
 4. If failures persist, identify exact writer/paths and checkout age first. Keep the existing safe-push guard; use a separate reviewed change for writer ownership, transaction isolation, or concurrency coverage.
 
 The competing Madrid/FIA final-grid readiness gate is staged separately on `audit/f1-readiness-fia-integrated-20260920`. Neither pilot promotes a forecast, modifies the stable engine or canonical workbook, nor permits writing an unverified final grid.
+
+## Follow-up scope: dashboard and peak-control writers
+
+[Dashboard run 34886952094](https://github.com/F1Lllewellyn/f1-data-publisher/actions/runs/34886952094) completed processing, but its safe-push rebase conflicted on readiness and latest chat-context outputs after the branch moved. It uses the same serialized main-writer group and event-SHA checkout as the three pilot writers. A separate reviewed PR proposes the identical current-branch checkout line for this dashboard and the peak-control scheduled writer, whose work can also outlast changes to main. Preserve their triggers, output allowlists, and safe-push guard.
+
+This checkout update addresses only *staleness before job start*. [Peak run 35341318551](https://github.com/F1Lllewellyn/f1-data-publisher/actions/runs/35341318551) also reported `cannot rebase: You have unstaged changes` after a push rejection. That is a separate worktree/commit-scope defect. Capture the exact dirty path list and fix it in a reviewed follow-up; do not stash or discard those artifacts without verifying their purpose. Additional main writers and independent concurrency groups remain to be audited. Live results and merged state must be verified from GitHub.
