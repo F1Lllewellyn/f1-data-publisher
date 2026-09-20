@@ -124,7 +124,7 @@ def is_cleanish_source(manifest: Dict[str, Any]) -> bool:
     status = source_status(manifest)
     manual = bool(manifest.get("source_needs_manual_review", False))
     quality = normalize_status(manifest.get("readiness_quality"))
-    if manual:
+    if manual or has_critical_source_gap(manifest) or status in {"needs_manual_review", "blocked", "conflicting", "late", "unknown"}:
         return False
     if status == "clean":
         return True
@@ -148,10 +148,29 @@ def has_critical_source_gap(manifest: Dict[str, Any]) -> bool:
     treating absent source_counts as a critical gap, because dashboard-backed
     handoff states may not include endpoint counts.
     """
+    if manifest.get("source_identity_error"):
+        return True
+    # The session processor's own aggregation is more authoritative than a
+    # dashboard summary. Current processor manifests put endpoint findings
+    # here, not in the older flat source_counts/source_statuses fields.
+    aggregation = manifest.get("readiness_aggregation")
+    if isinstance(aggregation, dict):
+        if aggregation.get("needs_manual_review") or any(aggregation.get(k) for k in
+            ("blocking_issues", "critical_late", "missing_required_endpoints")):
+            return True
+        if normalize_status(aggregation.get("overall_status")) in {"conflicting", "needs_manual_review", "late", "no_data"}:
+            return True
     counts = manifest.get("source_counts") if isinstance(manifest.get("source_counts"), dict) else {}
     statuses = manifest.get("source_statuses") if isinstance(manifest.get("source_statuses"), dict) else {}
-    optional = {"openf1_starting_grid", "openf1_intervals"}
+    session = manifest.get("session") if isinstance(manifest.get("session"), dict) else manifest
+    session_type = str(session.get("session_type") or session.get("session_name") or "").lower()
+    race_session = "race" in session_type or ("sprint" in session_type and "qualifying" not in session_type)
+    optional = {"openf1_intervals"}
+    if not race_session:
+        optional.add("openf1_starting_grid")
     critical = {"openf1_drivers", "openf1_laps", "openf1_position", "openf1_weather", "openf1_race_control", "openf1_session_result", "openf1_sessions"}
+    if race_session:
+        critical.add("openf1_starting_grid")
     bad_status = {"late", "missing", "missing_critical", "conflicting", "needs_manual_review", "blocked"}
     for key, value in counts.items():
         if key in optional:
@@ -181,12 +200,14 @@ def normalize_effective_source_state(manifest: Dict[str, Any], dashboard: Option
     out = dict(manifest or {})
     dash = dashboard or {}
     quality = normalize_status(out.get("readiness_quality") or dash.get("readiness_quality"))
-    dashboard_clean = normalize_status(dash.get("source_status")) == "clean" or bool(dash.get("source_backed", False))
+    # source_backed means evidence exists, including evidence requiring review.
+    # It is not an assertion that the evidence is clean.
+    dashboard_clean = normalize_status(dash.get("source_status")) == "clean"
     source_backed_hint = bool(out.get("source_backed", False)) or dashboard_clean
     out["_v20_source_backed_evidence"] = bool(source_backed_hint)
     usable_quality = quality == "usable_with_optional_context_gaps"
     critical_gap = has_critical_source_gap(out)
-    if (usable_quality or dashboard_clean or source_backed_hint) and not critical_gap:
+    if (usable_quality or dashboard_clean) and not critical_gap:
         out["overall_status"] = "clean"
         out["source_status"] = "clean"
         out["source_needs_manual_review"] = False
@@ -211,7 +232,7 @@ def normalize_effective_workbook_state(workbook: Dict[str, Any], source_manifest
     usable_quality = normalize_status(source_manifest.get("readiness_quality")) == "usable_with_optional_context_gaps"
     dashboard_artifact = dash.get("workbook_artifact") or dash.get("sandbox_workbook")
     workbook_artifact = out.get("sandbox_workbook") or out.get("workbook_artifact") or dashboard_artifact
-    dashboard_clean = normalize_status(dash.get("source_status")) == "clean" or bool(dash.get("source_backed", False))
+    dashboard_clean = normalize_status(dash.get("source_status")) == "clean"
     if source_clean and (bool(source_manifest.get("_v20_source_backed_evidence", False)) or dashboard_clean) and (usable_quality or dashboard_clean) and workbook_artifact:
         out["status"] = "refresh_applied"
         out["source_status"] = "clean"
@@ -314,7 +335,7 @@ def path_from_manifest_ref(root: Path, ref: Any) -> Optional[Path]:
 def apply_dashboard_source_overlay(source: Dict[str, Any], dashboard: Dict[str, Any]) -> Dict[str, Any]:
     out = dict(source or {})
     dash_status = normalize_status(dashboard.get("source_status"))
-    if dash_status == "clean" or bool(dashboard.get("source_backed", False)):
+    if dash_status == "clean" and not has_critical_source_gap(out):
         out.setdefault("schema_version", "dashboard_backed_source_state_v20")
         out["overall_status"] = dashboard.get("source_status", "clean")
         out["source_status"] = dashboard.get("source_status", "clean")
@@ -345,20 +366,48 @@ def apply_dashboard_workbook_overlay(workbook: Dict[str, Any], dashboard: Dict[s
 def find_latest_session_manifest(root: Path) -> Tuple[Optional[Path], Dict[str, Any], Dict[str, Any]]:
     dashboard_path, dashboard, dash_rows = find_latest_dashboard_manifest(root)
     candidates: List[Path] = list((root / "latest" / "session_data_processor").glob("**/source_readiness_manifest.json"))
-    dp = path_from_manifest_ref(root, dashboard.get("session_manifest"))
-    if dp and dp not in candidates:
-        candidates.append(dp)
-    source_path, source, rows = newest_by_score(candidates, root, "source")
-    # If dashboard says the same processor chain is clean/source-backed, use it as readiness authority.
-    # This prevents older stale source_readiness_manifest.json files from downgrading the output contract.
-    if dashboard and (normalize_status(dashboard.get("source_status")) == "clean" or bool(dashboard.get("source_backed", False))):
+    _, _, rows = newest_by_score(candidates, root, "source")
+    referenced = dashboard.get("session_manifest")
+    if referenced:
+        # An explicit reference identifies the session being handed off. Do
+        # not replace a blocked race with a higher-scoring qualifying session.
+        source_path = path_from_manifest_ref(root, referenced)
+        allowed_root = (root / "latest" / "session_data_processor").resolve()
+        if source_path and source_path.name == "source_readiness_manifest.json" and source_path.resolve().is_relative_to(allowed_root):
+            source = load_json(source_path) or {}
+            expected = dashboard.get("session_name") if isinstance(dashboard.get("session_name"), dict) else {}
+            actual = source.get("session") if isinstance(source.get("session"), dict) else source
+            expected_key, actual_key = expected.get("session_key"), actual.get("session_key")
+            expected_event, actual_event = dashboard.get("event_name"), source.get("race_name")
+            if (expected_key is not None and str(expected_key) != str(actual_key)) or (
+                expected_event and actual_event and str(expected_event).strip().lower() != str(actual_event).strip().lower()
+            ):
+                source = {"overall_status": "blocked", "source_needs_manual_review": True,
+                          "readiness_quality": "blocked_session_identity_mismatch",
+                          "session": expected, "race_name": expected_event,
+                          "source_identity_error": {"expected_session_key": expected_key, "actual_session_key": actual_key,
+                                                    "expected_event": expected_event, "actual_event": actual_event}}
+        else:
+            source_path = None
+            source = {"overall_status": "blocked", "source_needs_manual_review": True,
+                      "readiness_quality": "blocked_missing_session_manifest", "session": dashboard.get("session_name"),
+                      "source_identity_error": {"session_manifest": referenced, "reason": "missing_or_invalid_reference"}}
+        selection_rule = "follow_dashboard_session_manifest_or_block"
+    else:
+        # Legacy cases without an explicit session reference retain the v20
+        # clean-first selection rule until their producers supply identity.
+        source_path, source, _ = newest_by_score(candidates, root, "source")
+        selection_rule = "legacy_best_source_manifest_no_session_reference"
+    # A clean dashboard can resolve stale outward status only when the selected
+    # processor manifest has no critical gap for that same session.
+    if dashboard and normalize_status(dashboard.get("source_status")) == "clean" and not source.get("source_identity_error"):
         source = apply_dashboard_source_overlay(source, dashboard)
     selection = {
         "dashboard_path": relpath(dashboard_path, root),
         "dashboard_candidates": dash_rows,
         "selected_source_manifest": relpath(source_path, root),
         "source_candidates": rows,
-        "selection_rule": "prefer_clean_dashboard_backed_state_then_best_source_manifest",
+        "selection_rule": selection_rule,
     }
     return source_path, source, selection
 
@@ -392,7 +441,9 @@ def classify_handoffs(source_manifest: Dict[str, Any], workbook_manifest: Dict[s
     source_state = first(source_manifest, ["overall_status", "source_status", "status"], "unknown")
     quality = source_manifest.get("readiness_quality", "unknown")
     workbook_state = first(workbook_manifest, ["workbook_source_status", "source_status", "status"], "unknown")
-    session_type = str(source_manifest.get("session_type") or source_manifest.get("session_name") or "unknown")
+    session_info = source_manifest.get("session") if isinstance(source_manifest.get("session"), dict) else {}
+    session_type = str(session_info.get("session_type") or source_manifest.get("session_type") or
+                       session_info.get("session_name") or source_manifest.get("session_name") or "unknown")
     base = {
         "source_status": source_state,
         "workbook_source_status": workbook_state,
@@ -431,8 +482,9 @@ def build_snapshot(root: Path, run_id: str) -> Dict[str, Any]:
 
     event_id = first(session, ["event_id"], "unknown_event")
     race_name = first(session, ["race_name", "event_name"], dashboard.get("event_name", "unknown_event") if dashboard else "unknown_event")
-    session_name = first(session, ["session_name"], "unknown_session")
-    session_key = first(session, ["session_key"], None)
+    session_info = session.get("session") if isinstance(session.get("session"), dict) else {}
+    session_name = first(session_info, ["session_name"], first(session, ["session_name"], "unknown_session"))
+    session_key = first(session_info, ["session_key"], first(session, ["session_key"], None))
 
     snapshot = {
         "schema_version": SCHEMA_VERSION,

@@ -135,6 +135,52 @@ def fetch_sessions(season: int) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     return http_json(openf1_url("sessions", {"year": season}), timeout=35)
 
 
+def grid_source_for_target(sessions: List[Dict[str, Any]], target: Dict[str, Any]) -> Tuple[Optional[Dict[str, Any]], str]:
+    """Associate a race with its qualifying grid without rewriting source IDs.
+
+    Sprint Qualifying feeds Sprint; ordinary Qualifying feeds Race. Ambiguous,
+    incomplete, or cross-meeting schedules require review rather than a guess.
+    """
+    name = str(target.get("session_name") or "").strip().lower()
+    expected = {"race": "qualifying", "sprint": "sprint qualifying"}.get(name)
+    if not expected:
+        return None, "target_is_not_race_or_sprint"
+    start = parse_time(target.get("date_start"))
+    meeting = target.get("meeting_key")
+    if start is None or meeting is None or target.get("session_key") is None:
+        return None, "target_identity_or_start_missing"
+    matches = []
+    for candidate in sessions:
+        if str(candidate.get("meeting_key")) != str(meeting):
+            continue
+        if str(candidate.get("session_name") or "").strip().lower() != expected:
+            continue
+        matches.append(candidate)
+    if len(matches) != 1:
+        return None, "qualifying_source_missing" if not matches else "qualifying_source_ambiguous"
+    end = parse_time(matches[0].get("date_end"))
+    if end is None or end > start or matches[0].get("session_key") is None:
+        return None, "qualifying_identity_or_schedule_invalid"
+    return matches[0], "unique_same_meeting_qualifying_before_target"
+
+
+def grid_integrity_anomalies(rows: List[Dict[str, Any]], drivers: List[Dict[str, Any]]) -> List[str]:
+    """Flag inconsistent source rows; do not infer absent/pit-lane drivers."""
+    if not rows:
+        return []
+    numbers = [str(r.get("driver_number")) for r in rows if r.get("driver_number") not in (None, "")]
+    positions = [r.get("position") for r in rows]
+    issues = []
+    if len(numbers) != len(rows) or len(set(numbers)) != len(numbers):
+        issues.append("missing_or_duplicate_grid_driver")
+    if any(type(p) is not int or p < 1 for p in positions) or len(set(positions)) != len(positions):
+        issues.append("invalid_or_duplicate_grid_position")
+    roster = {str(r.get("driver_number")) for r in drivers if r.get("driver_number") not in (None, "")}
+    if roster and set(numbers) != roster:
+        issues.append("grid_driver_set_differs_from_target_roster")
+    return issues
+
+
 def select_recent_completed_session(sessions: List[Dict[str, Any]], now: dt.datetime, lookback_hours: int, forced_session: str = "auto") -> Optional[Dict[str, Any]]:
     forced = (forced_session or "auto").lower().strip()
     candidates: List[Tuple[dt.datetime, Dict[str, Any]]] = []
@@ -527,13 +573,33 @@ def main() -> int:
         endpoint_list += list(policy.get("heavy_openf1_endpoints") or [])
 
     sources: Dict[str, Dict[str, Any]] = {}
+    target_drivers: List[Dict[str, Any]] = []
     for endpoint in endpoint_list:
+        source_session = session
+        grid_resolution = None
+        direct_grid_fetch = None
         # sessions endpoint is already fetched globally; filter selected session.
         if endpoint == "sessions":
             rows = [session]
             meta = {"ok": True, "bytes": len(json.dumps(rows)), "source": "sessions_prefetch"}
         else:
             rows, meta = http_json(openf1_url(endpoint, {"session_key": session.get("session_key")}), timeout=args.timeout)
+            # Keep a successful direct-session grid if OpenF1 ever publishes one.
+            # On a missing race/sprint grid, use only an unambiguous qualifying
+            # session in the same meeting and preserve its original row keys.
+            if endpoint == "starting_grid" and str(session.get("session_name") or "").strip().lower() in {"race", "sprint"}:
+                grid_resolution = "direct_target_session"
+                direct_missing = (meta.get("ok") and not rows) or meta.get("status_code") == 404 or "HTTPError 404" in str(meta.get("error", ""))
+                if direct_missing:
+                    direct_grid_fetch = dict(meta)
+                    candidate, reason = grid_source_for_target(sessions, session)
+                    grid_resolution = reason
+                    if candidate is not None:
+                        source_session = candidate
+                        rows, meta = http_json(openf1_url(endpoint, {"session_key": candidate["session_key"]}), timeout=args.timeout)
+        observed_at_utc = iso_now()
+        if endpoint == "drivers":
+            target_drivers = rows
         raw_json = latest_root / "raw" / f"openf1_{endpoint}.json"
         raw_csv = latest_root / "raw" / f"openf1_{endpoint}.csv"
         write_json(raw_json, rows)
@@ -541,10 +607,58 @@ def main() -> int:
         # mirror to history
         write_json(history_root / "raw" / f"openf1_{endpoint}.json", rows)
         rows_to_csv(history_root / "raw" / f"openf1_{endpoint}.csv", rows)
-        report = analyze_rows(endpoint, rows, session, meta)
+        report = analyze_rows(endpoint, rows, source_session, meta)
         report["json_path"] = str(raw_json.relative_to(ROOT))
         report["csv_path"] = str(raw_csv.relative_to(ROOT))
         report["json_sha256"] = sha256_file(raw_json)
+        if endpoint == "starting_grid" and grid_resolution is not None:
+            start = parse_time(session.get("date_start"))
+            observed = parse_time(observed_at_utc)
+            previous = read_json(latest_root / "validation" / "openf1_starting_grid_validation.json", {})
+            prior_sha = previous.get("json_sha256") if (previous.get("provenance") or {}).get("source_session_key") == source_session.get("session_key") else None
+            qualifying_baseline_sha = None
+            if source_session is not session:
+                baseline_path = latest_root.parent / slugify(f"{source_session.get('session_name')}_{source_session.get('session_key')}") / "validation" / "openf1_starting_grid_validation.json"
+                qualifying_baseline_sha = read_json(baseline_path, {}).get("json_sha256")
+            report["provenance"] = {
+                "resolution": grid_resolution,
+                "source_session_key": source_session.get("session_key"),
+                "source_session_name": source_session.get("session_name"),
+                "target_session_key": session.get("session_key"),
+                "meeting_key": session.get("meeting_key"),
+                "observed_at_utc": observed_at_utc,
+                "observed_before_target_start": bool(start and observed and observed <= start),
+                "official_final_grid_verified": False,
+                "forecast_as_of_eligible": False,
+                "openf1_row_status": report["status"],
+                "prior_target_snapshot_sha256": prior_sha,
+                "changed_since_prior_target_snapshot": report["json_sha256"] != prior_sha if prior_sha else None,
+                "prior_qualifying_snapshot_sha256": qualifying_baseline_sha,
+                "changed_since_qualifying_snapshot": report["json_sha256"] != qualifying_baseline_sha if qualifying_baseline_sha else None,
+            }
+            if direct_grid_fetch is not None:
+                report["provenance"]["direct_target_fetch"] = direct_grid_fetch
+            # A valid OpenF1 response is useful source evidence, but it is not
+            # the FIA final grid. In Madrid the FIA moved car 87 to a pit-lane
+            # start after the earlier OpenF1 capture. Keep race/sprint readiness
+            # blocked until an independent official document is verified.
+            if report["status"] == "clean":
+                report["anomalies"].append("fia_final_grid_unverified")
+                report["status"] = "needs_manual_review"
+            issues = grid_integrity_anomalies(rows, target_drivers)
+            if issues:
+                report["anomalies"].extend(issues)
+                if report["status"] != "conflicting":
+                    report["status"] = "needs_manual_review"
+            # A revision first observed after the target began cannot establish
+            # when the grid changed, so keep the source under manual review.
+            if (not report["provenance"]["observed_before_target_start"]
+                    and report["provenance"]["changed_since_qualifying_snapshot"]):
+                report["anomalies"].append("grid_revision_time_unestablished_after_start")
+                if report["status"] != "conflicting":
+                    report["status"] = "needs_manual_review"
+            if source_session is not session and not rows and not meta.get("ok"):
+                report["anomalies"].append("qualifying_grid_unavailable")
         sources[f"openf1_{endpoint}"] = report
         write_json(latest_root / "validation" / f"openf1_{endpoint}_validation.json", report)
         write_json(history_root / "validation" / f"openf1_{endpoint}_validation.json", report)
