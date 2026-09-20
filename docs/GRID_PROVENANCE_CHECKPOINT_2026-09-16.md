@@ -22,6 +22,17 @@ session-readiness policy rather than removing its race/sprint grid requirement.
   race*, available after official results, but does not certify in each row
   when a later grid revision took effect. The OpenF1 source is unofficial:
   <https://openf1.org/docs/#starting-grid>.
+- **Correction on 20 September:** FIA [provisional grid, Doc 57](https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_provisional_starting_grid.pdf)
+  assigned car 87 a numbered slot. [Stewards' Doc 63](https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_87_-_pu_elements_changed_during_parc_ferme.pdf)
+  subsequently required it to start from the pit lane. FIA [final grid, Doc 65](https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_starting_grid.pdf)
+  lists car 87 under pit-lane starters and car 18 at grid position 21. The
+  stored OpenF1 capture still has car 87 at 21 and car 18 at 22. Doc 65 was
+  published at 14:00 on race day, one hour before the scheduled race start;
+  the stored OpenF1 capture time was 11:59:17 UTC. The source key lookup was
+  correct, but its grid was **not** the final official grid. FIA [2026 sporting
+  regulations, B2.3.4 and B2.4.4](https://api.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_b_sporting_-_iss_07_-_2026-06-25.pdf)
+  specify final-grid publication one hour before the formation lap and allow
+  positions to remain vacant after late withdrawals.
 
 ## Sandbox contract
 
@@ -43,10 +54,12 @@ session-readiness policy rather than removing its race/sprint grid requirement.
    **not** date that change. No snapshot is certified as the official final
    grid or as a forecast-time input merely because the OpenF1 fetch succeeded.
 5. `official_final_grid_verified=false`, `forecast_as_of_eligible=false`, and
-   `promotion_allowed=false` remain explicit. Existing sandbox reports may
-   describe an observed OpenF1 race grid as clean when its rows pass integrity
-   checks; that says nothing about final official certification or permission
-   to generate or publish a prediction.
+   `promotion_allowed=false` remain explicit. A race/sprint grid's valid OpenF1
+   rows are recorded separately as `provenance.openf1_row_status=clean`, but its
+   required **source status remains `needs_manual_review`** with anomaly
+   `fia_final_grid_unverified`. This prevents downstream readiness from
+   treating an unverified OpenF1 grid as the final FIA grid. No prediction is
+   generated or published.
 
 ## Remaining closure work
 
