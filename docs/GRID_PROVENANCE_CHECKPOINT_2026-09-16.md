@@ -1,6 +1,6 @@
 # Grid provenance checkpoint — 2026-09-16
 
-Status: **guarded sandbox branch; no production promotion or forecast authorization**.
+Status: **guarded source-readiness checkpoint; no model promotion or forecast authorization**.
 This note records why the race/sprint grid was held for review, the bounded
 source mapping, and the next evidence needed. It supplements the existing
 session-readiness policy rather than removing its race/sprint grid requirement.
@@ -72,8 +72,8 @@ session-readiness policy rather than removing its race/sprint grid requirement.
   review late changes. Historical API responses cannot prove their earlier
   availability merely because they are fetchable now.
 - Validate representative sprint and race weekends in a read-only replay,
-  then review downstream consumers and notification behavior. The branch does
-  not change the stable engine, canonical workbook, scheduled production
-  workflows, or the main branch.
+  then review downstream consumers and notification behavior. This checkpoint does
+  not change the stable engine, canonical workbook, or scheduled production
+  workflows. Verify the associated PR's merged SHA before calling it deployed.
 
 Offline acceptance: `python scripts/ops/grid_provenance_acceptance_v1.py`.
