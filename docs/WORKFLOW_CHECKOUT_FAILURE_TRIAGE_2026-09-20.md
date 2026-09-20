@@ -2,7 +2,7 @@
 
 ## Scope and evidence
 
-This is a review checkpoint. The proposed change is staged on `audit/fresh-checkout-serialized-writers-20260920`; it has not been merged or activated on `main`.
+This checkpoint was prepared on `audit/fresh-checkout-serialized-writers-20260920`. Its three-workflow pilot is reviewed through PR #117; deployment and live-run outcomes must be verified from GitHub, not inferred from this note.
 
 Three recent failing runs completed their source processing and diagnostics upload, then failed when `scripts/ops/safe_git_push_rebase_retry.sh` refused a rebase conflict (exit 20) on `latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json` and `workbook_kpi_refresh_report.md`:
 
@@ -21,7 +21,7 @@ The pilot does not guarantee that all conflicts vanish. A different writer can p
 ## Review and verification before promotion
 
 1. Confirm the branch diff is exactly one `ref` line in each of the three workflow files. Validate workflow YAML expression syntax, preserving `on`, permissions, and concurrency.
-2. Seek explicit production-workflow approval under project governance; do not treat a staged audit branch as live. A PR can invoke the advisory AI reviewer and consume credits, so create one only when ready for the approval gate.
+2. Confirm production-workflow approval and the merged main SHA from PR #117. The PR advisory AI reviewer may consume API credits; avoid redundant PR updates.
 3. After approved deployment, compare queued-run event SHA with checkout `HEAD` and branch tip in a representative scheduled run. Watch several later writer runs for exit 20, conflicts, and pending-run replacement; retain failure diagnostics. Do not claim notification relief until live runs substantiate it.
 4. If failures persist, identify exact writer/paths and checkout age first. Keep the existing safe-push guard; use a separate reviewed change for writer ownership, transaction isolation, or concurrency coverage.
 
