@@ -630,6 +630,7 @@ def main() -> int:
                 "observed_before_target_start": bool(start and observed and observed <= start),
                 "official_final_grid_verified": False,
                 "forecast_as_of_eligible": False,
+                "openf1_row_status": report["status"],
                 "prior_target_snapshot_sha256": prior_sha,
                 "changed_since_prior_target_snapshot": report["json_sha256"] != prior_sha if prior_sha else None,
                 "prior_qualifying_snapshot_sha256": qualifying_baseline_sha,
@@ -637,6 +638,13 @@ def main() -> int:
             }
             if direct_grid_fetch is not None:
                 report["provenance"]["direct_target_fetch"] = direct_grid_fetch
+            # A valid OpenF1 response is useful source evidence, but it is not
+            # the FIA final grid. In Madrid the FIA moved car 87 to a pit-lane
+            # start after the earlier OpenF1 capture. Keep race/sprint readiness
+            # blocked until an independent official document is verified.
+            if report["status"] == "clean":
+                report["anomalies"].append("fia_final_grid_unverified")
+                report["status"] = "needs_manual_review"
             issues = grid_integrity_anomalies(rows, target_drivers)
             if issues:
                 report["anomalies"].extend(issues)
