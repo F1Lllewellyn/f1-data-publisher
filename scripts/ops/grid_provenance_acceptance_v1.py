@@ -77,7 +77,9 @@ def test_processor_fetch_and_revision() -> None:
             assert processor.main() == 0
             out = root / "latest/session_data_processor/test/race_11369"
             report = json.loads((out / "validation/openf1_starting_grid_validation.json").read_text())
-            assert report["status"] == "clean", report
+            assert report["status"] == "needs_manual_review", report
+            assert report["provenance"]["openf1_row_status"] == "clean"
+            assert "fia_final_grid_unverified" in report["anomalies"]
             assert report["provenance"]["source_session_key"] == 11365
             assert report["provenance"]["target_session_key"] == 11369
             assert report["provenance"]["direct_target_fetch"]["status_code"] == 404
@@ -98,7 +100,8 @@ def test_processor_fetch_and_revision() -> None:
             before = len([url for url in calls if "starting_grid?session_key=11365" in url])
             assert processor.main() == 0
             published = json.loads((out / "validation/openf1_starting_grid_validation.json").read_text())
-            assert published["status"] == "clean"
+            assert published["status"] == "needs_manual_review"
+            assert "fia_final_grid_unverified" in published["anomalies"]
             assert published["provenance"]["resolution"] == "direct_target_session"
             assert published["provenance"]["source_session_key"] == 11369
             assert len([url for url in calls if "starting_grid?session_key=11365" in url]) == before
