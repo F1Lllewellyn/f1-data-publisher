@@ -23,6 +23,22 @@
     {
       "case": "usable_quality_normalizes_stale_manual_review_status",
       "status": "pass"
+    },
+    {
+      "case": "clean_dashboard_cannot_override_missing_laps",
+      "status": "pass"
+    },
+    {
+      "case": "blocked_race_grid_cannot_borrow_clean_qualifying",
+      "status": "pass"
+    },
+    {
+      "case": "explicit_session_reference_mismatch_blocks",
+      "status": "pass"
+    },
+    {
+      "case": "clean_dashboard_cannot_override_blocked_race_aggregation",
+      "status": "pass"
     }
   ],
   "schema_version": "f1_1b_v20_acceptance_tests",

@@ -1,10 +1,10 @@
 {
   "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
-  "blocked": false,
-  "readiness_quality": "usable_with_optional_context_gaps",
-  "ready_for_use": true,
+  "blocked": true,
+  "readiness_quality": "blocked_manual_review_required_source",
+  "ready_for_use": false,
   "session_type": "Race",
-  "source_needs_manual_review": false,
-  "source_status": "clean",
-  "workbook_source_status": "clean"
+  "source_needs_manual_review": true,
+  "source_status": "needs_manual_review",
+  "workbook_source_status": "needs_manual_review"
 }

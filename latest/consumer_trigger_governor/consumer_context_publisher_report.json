@@ -1,9 +1,9 @@
 {
   "canonical_workbook_overwrite": false,
   "consumer_actions": {
-    "fantasy_predictions": "notify_and_update_context",
-    "race_predictions": "notify_and_update_context",
-    "race_reports": "notify_and_update_context"
+    "fantasy_predictions": "blocked",
+    "race_predictions": "blocked",
+    "race_reports": "blocked"
   },
   "event": {
     "event_id": "2026_1294_spain_madrid_madring",
@@ -12,8 +12,8 @@
     "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-09-20T17:55:50Z",
-  "notification_recommended": true,
+  "generated_at_utc": "2026-09-20T22:41:12Z",
+  "notification_recommended": false,
   "outputs": {
     "chat_context_index": "latest/chat_context/combined_context_index.json",
     "notification_decision": "latest/notification_routing/notification_decision.json",
@@ -21,9 +21,9 @@
     "trigger_decision": "latest/consumer_trigger_governor/trigger_decision.json"
   },
   "promotion_allowed": false,
-  "run_id": "20260920T175549Z",
+  "run_id": "20260920T224112Z",
   "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
-  "should_notify": true,
+  "should_notify": false,
   "stable_engine_modified": false,
-  "status": "pass"
+  "status": "blocked"
 }

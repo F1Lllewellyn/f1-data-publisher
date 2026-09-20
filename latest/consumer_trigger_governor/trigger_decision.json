@@ -1,39 +1,43 @@
 {
-  "blocked_consumers": [],
+  "blocked_consumers": [
+    "race_predictions",
+    "fantasy_predictions",
+    "race_reports"
+  ],
   "canonical_workbook_overwrite": false,
   "consumer_decisions": {
     "fantasy_predictions": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "fantasy_predictions",
-      "consumer_readiness": "ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     },
     "race_predictions": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "race_predictions",
-      "consumer_readiness": "ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     },
     "race_reports": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "race_reports",
-      "consumer_readiness": "full_report_ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     }
   },
   "context_paths": {
@@ -49,17 +53,17 @@
     "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-09-20T17:55:50Z",
+  "generated_at_utc": "2026-09-20T22:41:12Z",
   "material_change_detected": true,
-  "notification_recommended": true,
+  "notification_recommended": false,
   "promotion_allowed": false,
-  "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20260920T175549Z",
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20260920T224112Z",
   "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
-  "should_notify": true,
-  "signature": "09515cbb44607a2feb8179e506293c1494aabfda1fa1561010e504349429c040",
-  "source_status": "clean",
+  "should_notify": false,
+  "signature": "d7c94e997fedcac8af6fb3bebf5d5689ce11676f7ecb760c45641b5fad7cca3a",
+  "source_status": "needs_manual_review",
   "stable_engine_modified": false,
-  "status": "pass",
-  "workbook_source_status": "clean"
+  "status": "blocked",
+  "workbook_source_status": "needs_manual_review"
 }
