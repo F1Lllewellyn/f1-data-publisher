@@ -18,8 +18,19 @@ for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
 
   echo "[f1-safe-push] push rejected or failed; fetching/rebasing then retrying"
   git fetch origin "${BRANCH}" --depth=20 || git fetch origin "${BRANCH}"
+  if ! dirty_tracked="$(git status --porcelain=v1 --untracked-files=no)"; then
+    echo "[f1-safe-push] cannot inspect tracked worktree changes; refusing rebase"
+    exit 20
+  fi
+  if [ -n "$dirty_tracked" ]; then
+    echo "[f1-safe-push] tracked worktree changes before rebase (status and exact paths):"
+    printf '%s\n' "$dirty_tracked"
+    echo "[f1-safe-push] refusing rebase; generated data retained for review"
+    exit 20
+  fi
   if ! git rebase "origin/${BRANCH}"; then
     echo "[f1-safe-push] rebase conflict; aborting safely"
+    git status --short --untracked-files=no || true
     git rebase --abort || true
     exit 20
   fi
