@@ -105,7 +105,7 @@ def main() -> int:
         safe_commands = [
             ("session_processor_safe_test", [sys.executable, "scripts/session_data_processor/session_data_processor_loop_v1.py", "--mode", "safe_test", "--season", "2026"]),
             ("workbook_kpi_refresh_safe_test", [sys.executable, "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py", "--safe-test", "--repo-root", str(repo)]),
-            ("autorepair_safe_test", [sys.executable, "scripts/autorepair/f1_autorepair_orchestrator_v1.py", "--mode", "safe_test", "--repo-root", str(repo)]),
+            ("autorepair_safe_test", [sys.executable, "scripts/autorepair/f1_autorepair_orchestrator_v1.py", "--mode", "safe_test", "--runtime-only", "--repo-root", str(repo)]),
         ]
         for label, cmd in safe_commands:
             if (repo / cmd[1]).exists():

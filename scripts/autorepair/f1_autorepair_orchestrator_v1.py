@@ -247,7 +247,7 @@ This layer automatically recovers the current session-to-workbook gap by running
 """
 
 
-def safe_test(repo: Path, out: Path, catalog: Dict[str, Any]) -> Dict[str, Any]:
+def safe_test(repo: Path, out: Path, catalog: Dict[str, Any], runtime_only: bool = False) -> Dict[str, Any]:
     session_script = discover_script(repo, catalog["script_discovery"]["session_processor_preferred"], ["session", "processor"])
     workbook_script = discover_script(repo, catalog["script_discovery"]["workbook_applier_preferred"], ["workbook", "refresh"])
     warnings = []
@@ -277,7 +277,12 @@ def safe_test(repo: Path, out: Path, catalog: Dict[str, Any]) -> Dict[str, Any]:
         },
         "actions": [{"name": "safe_preflight", "status": "passed" if not warnings else "passed_with_warnings"}],
     }
-    write_outputs(repo, out, report)
+    if runtime_only:
+        # Peak health checks upload _runtime but must not rewrite the tracked
+        # Auto-Repair latest snapshot owned by the recovery workflow.
+        write_runtime_outputs(out, report)
+    else:
+        write_outputs(repo, out, report)
     return report
 
 
@@ -375,18 +380,22 @@ def run_now(repo: Path, out: Path, catalog: Dict[str, Any], timeout: int) -> Dic
     return report
 
 
+def write_runtime_outputs(runtime: Path, report: Dict[str, Any]) -> None:
+    runtime.mkdir(parents=True, exist_ok=True)
+    report_md = make_report(report)
+    write_json(runtime / "autorepair_status.json", report)
+    (runtime / "autorepair_report.md").write_text(report_md, encoding="utf-8")
+    (runtime / "commit_allowed.txt").write_text("true" if report.get("commit_allowed") else "false", encoding="utf-8")
+
+
 def write_outputs(repo: Path, out: Path, report: Dict[str, Any]) -> None:
     run_id = report.get("run_id") or utc_now()
     latest = repo / "latest" / "autorepair" / "session_workbook_recovery"
     history = repo / "history" / "autorepair" / "session_workbook_recovery" / run_id
-    runtime = out
-    for d in [latest, history, runtime]:
+    write_runtime_outputs(out, report)
+    for d in [latest, history]:
         d.mkdir(parents=True, exist_ok=True)
     report_md = make_report(report)
-    # runtime
-    write_json(runtime / "autorepair_status.json", report)
-    (runtime / "autorepair_report.md").write_text(report_md, encoding="utf-8")
-    (runtime / "commit_allowed.txt").write_text("true" if report.get("commit_allowed") else "false", encoding="utf-8")
     # latest/history
     write_json(history / "autorepair_status.json", report)
     (history / "autorepair_report.md").write_text(report_md, encoding="utf-8")
@@ -413,7 +422,10 @@ def main() -> int:
     ap.add_argument("--repo-root", default=".")
     ap.add_argument("--catalog", default="configs/autorepair/repair_catalog_v1.json")
     ap.add_argument("--timeout", type=int, default=900)
+    ap.add_argument("--runtime-only", action="store_true", help="Safe-test preflight: write diagnostics only to _runtime; leave latest/history untouched.")
     args = ap.parse_args()
+    if args.runtime_only and args.mode != "safe_test":
+        ap.error("--runtime-only is supported only with --mode safe_test")
 
     repo = Path(args.repo_root).resolve()
     out = repo / "_runtime" / "autorepair" / "session_workbook_recovery"
@@ -429,7 +441,7 @@ def main() -> int:
             }
         }
     if args.mode == "safe_test":
-        report = safe_test(repo, out, catalog)
+        report = safe_test(repo, out, catalog, runtime_only=args.runtime_only)
     else:
         report = run_now(repo, out, catalog, args.timeout)
     # Print enough detail into the GitHub log so the user does not have to
