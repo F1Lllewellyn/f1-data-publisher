@@ -1,16 +1,16 @@
 {
   "event": {
-    "event_id": "2026_1294_spain_madrid_madring",
-    "race_name": "Spain - Madrid - Madring",
-    "session_key": 11369,
-    "session_name": "Race"
+    "event_id": "2026_1295_azerbaijan_baku_baku",
+    "race_name": "Azerbaijan - Baku - Baku",
+    "session_key": 11371,
+    "session_name": "Practice 2"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1294_spain_madrid_madring/20260920T175549Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1295_azerbaijan_baku_baku/20260924T172030Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260920T175549Z",
+  "run_id": "20260924T172030Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "98716c81c8a72c90cf2ef04120ddcc93025151ea08700d9be1a987a574d72d88",
+  "signature": "0c66364f287e808358b42f3290f9a0b306c732d54d8b6c40c276e93f4716c8ed",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-20T17:55:49Z"
+  "updated_at_utc": "2026-09-24T17:20:30Z"
 }
