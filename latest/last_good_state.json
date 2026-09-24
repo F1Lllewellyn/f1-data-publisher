@@ -5,12 +5,12 @@
     "session_key": 11371,
     "session_name": "Practice 2"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1295_azerbaijan_baku_baku/20260924T172030Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1295_azerbaijan_baku_baku/20260924T204339Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260924T172030Z",
+  "run_id": "20260924T204339Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "0c66364f287e808358b42f3290f9a0b306c732d54d8b6c40c276e93f4716c8ed",
+  "signature": "ea2ec4fa937a6023e4bff9d00a104cc072ea24a768d33ea09125c346be12a0a7",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-24T17:20:30Z"
+  "updated_at_utc": "2026-09-24T20:43:40Z"
 }
