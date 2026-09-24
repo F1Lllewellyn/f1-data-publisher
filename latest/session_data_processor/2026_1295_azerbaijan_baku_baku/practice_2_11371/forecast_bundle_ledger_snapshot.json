@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-09-24T17:05:57.141358Z",
+  "created_utc": "2026-09-24T20:27:08.972714Z",
   "event_id": "2026_1295_azerbaijan_baku_baku",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Azerbaijan - Baku - Baku",
@@ -16,6 +16,6 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
