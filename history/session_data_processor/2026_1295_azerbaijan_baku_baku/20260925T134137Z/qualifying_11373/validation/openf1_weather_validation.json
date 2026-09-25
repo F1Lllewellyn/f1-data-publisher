@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 17458,
+    "ok": true,
+    "sha256": "b4bac7fd3cfc1c03cc950fa4e16e841ea4d633e145bbfe565828fe7d8bb94261",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_weather.json",
+  "json_sha256": "3686250f626cd79fd735e65d7e083a941eff46b0299b636cbf98fbd6f99dce22",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 81,
+  "status": "clean",
+  "timestamp_rows": 81
+}
