@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 144,
+    "circuit_short_name": "Baku",
+    "country_code": "AZE",
+    "country_key": 30,
+    "country_name": "Azerbaijan",
+    "date_end": "2026-09-24T13:00:00+00:00",
+    "date_start": "2026-09-24T12:00:00+00:00",
+    "gmt_offset": "04:00:00",
+    "is_cancelled": false,
+    "location": "Baku",
+    "meeting_key": 1295,
+    "session_key": 11371,
+    "session_name": "Practice 2",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]
