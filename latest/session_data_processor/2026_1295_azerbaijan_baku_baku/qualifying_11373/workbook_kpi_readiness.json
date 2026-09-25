@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-09-25T14:43:51.307204Z",
+  "created_utc": "2026-09-25T18:32:48.155972Z",
   "event_id": "2026_1295_azerbaijan_baku_baku",
   "overall_status": "clean",
   "race_name": "Azerbaijan - Baku - Baku",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,
