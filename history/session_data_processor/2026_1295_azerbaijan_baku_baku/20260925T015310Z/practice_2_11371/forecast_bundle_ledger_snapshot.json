@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-09-25T01:53:21.801345Z",
+  "event_id": "2026_1295_azerbaijan_baku_baku",
+  "forecast_state_changed": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Azerbaijan - Baku - Baku",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-09-24T13:00:00+00:00",
+    "date_start": "2026-09-24T12:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1295,
+    "session_key": 11371,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}
