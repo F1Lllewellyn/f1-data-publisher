@@ -1,0 +1,34 @@
+{
+  "anomalies": [],
+  "columns": [
+    "broadcast_name",
+    "country_code",
+    "driver_number",
+    "first_name",
+    "full_name",
+    "headshot_url",
+    "last_name",
+    "meeting_key",
+    "name_acronym",
+    "session_key",
+    "team_colour",
+    "team_name"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_drivers.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "drivers",
+  "fetch": {
+    "bytes": 9166,
+    "ok": true,
+    "sha256": "f6d74feac93df246f99b7ea2fc1c3e03a5caa5f54afa1ce9bd60be07272b3ef3",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_drivers.json",
+  "json_sha256": "a4e65ea4cf205f0bb5392c75fddae8b52c15a027c51f09f6e14ecfedfc90dc99",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
