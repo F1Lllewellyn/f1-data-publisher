@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-09-25T07:42:57Z",
+      "run_id": "2026-09-25T13:41:51Z",
       "score": 200,
       "source_backed": true,
       "source_status": "clean"
@@ -12,14 +12,14 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-25T07:42:57Z",
+        "run_id": "2026-09-25T13:41:51Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
       }
     ],
     "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-    "selected_source_manifest": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/practice_2_11371/source_readiness_manifest.json",
+    "selected_source_manifest": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/source_readiness_manifest.json",
     "selection_rule": "follow_dashboard_session_manifest_or_block",
     "source_candidates": [
       {
@@ -143,6 +143,12 @@
         "status": "clean"
       },
       {
+        "path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/source_readiness_manifest.json",
+        "run_id": "20260925T134137Z",
+        "score": 130,
+        "status": "clean"
+      },
+      {
         "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/source_readiness_manifest.json",
         "run_id": "20260628T101203Z",
         "score": 130,
@@ -244,7 +250,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-09-25T07:42:57Z",
+        "run_id": "2026-09-25T13:41:51Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -256,13 +262,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260925T074257Z",
+        "run_id": "20260925T134150Z",
         "score": 100,
         "status": "clean"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20260925T074257Z",
+        "run_id": "20260925T134150Z",
         "score": 100,
         "status": "clean"
       }

@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1295_azerbaijan_baku_baku",
     "race_name": "Azerbaijan - Baku - Baku",
-    "session_key": 11371,
-    "session_name": "Practice 2"
+    "session_key": 11373,
+    "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1295_azerbaijan_baku_baku/20260925T075949Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1295_azerbaijan_baku_baku/20260925T135511Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20260925T075949Z",
+  "run_id": "20260925T135511Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "9042d49299a95dcb719933d24c296963cc65ea4f27ca6ec16df9410ce2a08aa8",
+  "signature": "e9e109712b9166651f61ffe6aef31c815b5790809603a5c7837f942afc113533",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-09-25T07:59:49Z"
+  "updated_at_utc": "2026-09-25T13:55:11Z"
 }
