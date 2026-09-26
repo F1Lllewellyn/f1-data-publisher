@@ -1,0 +1,86 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-09-26T00:35:58.832500Z",
+  "event_id": "2026_1295_azerbaijan_baku_baku",
+  "overall_status": "clean",
+  "race_name": "Azerbaijan - Baku - Baku",
+  "sandbox_workbook_created": false,
+  "schema_version": "workbook_kpi_readiness_v1_session_processor",
+  "session": {
+    "date_end": "2026-09-25T13:00:00+00:00",
+    "date_start": "2026-09-25T12:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1295,
+    "session_key": 11373,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "driver_count": 22,
+      "max_lap_number": 26.0,
+      "rows": 373,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "driver_count": 22,
+      "max_lap_number": 22.0,
+      "rows": 66,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 1301,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 134,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 66,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 81,
+      "status": "clean"
+    }
+  }
+}
