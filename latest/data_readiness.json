@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1295_azerbaijan_baku_baku",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "Azerbaijan - Baku - Baku",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-09-26T14:31:52.186968Z"
+  "updated_utc": "2026-09-26T14:37:21.658903Z"
 }
