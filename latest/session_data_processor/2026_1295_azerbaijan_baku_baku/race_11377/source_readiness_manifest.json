@@ -1,0 +1,652 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-09-26T14:31:52.184726Z",
+  "event_id": "2026_1295_azerbaijan_baku_baku",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-09-26T14:31:52.185500Z",
+    "event_id": "2026_1295_azerbaijan_baku_baku",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Azerbaijan - Baku - Baku",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-09-26T13:00:00+00:00",
+      "date_start": "2026-09-26T11:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1295,
+      "session_key": 11377,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 265.35,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "08bfd8a37c241c97f5f883e00acbeeb31795177e42c67ddaf7bc5711340acd68",
+      "size_bytes": 681,
+      "timestamp_utc": "2026-09-26T10:06:31.292763Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 265.35,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "cf0736c397a6c193e3fdc5aeb98d7df2ccd96a01f56a479a61ef93413f98c7f4",
+      "size_bytes": 1548,
+      "timestamp_utc": "2026-09-26T10:06:31.292436Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 265.35,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "1387df7a4ed1847144df88ee046c7433418c2b4c4f4d66d7c307bb6ab49881e4",
+      "size_bytes": 552,
+      "timestamp_utc": "2026-09-26T10:06:31.292215Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Azerbaijan - Baku - Baku",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [
+          "fia_final_grid_unverified"
+        ],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 22,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 24933
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 983
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 36
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 311
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 141
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [
+          "fia_final_grid_unverified"
+        ],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 58
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 168
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20260926T143138Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-09-26T13:00:00+00:00",
+    "date_start": "2026-09-26T11:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1295,
+    "session_key": 11377,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "1f37439508a627208dd0838157df26baed4858d6ced90a1e4c24e111cd8dfdd8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_drivers.json",
+      "json_sha256": "532201dfb3c65194548413d47184037a8d134656111091d09a6311a96f0b2de5",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 3528412,
+        "ok": true,
+        "sha256": "47fb50fcd83847cd778621264d4628cd01c9f1b10f298090ffe636b6905f3958",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_intervals.json",
+      "json_sha256": "b1ec6ff11307385641f113a8007c7a2dc6c06486d162a7b3e1049433f144b786",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 24933,
+      "status": "clean",
+      "timestamp_rows": 24933
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 486854,
+        "ok": true,
+        "sha256": "d76f261796857bc5b96582dfc53c56ce252d6720512c926c024f733aeaaf2699",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_laps.json",
+      "json_sha256": "c7ead73112ef223811e802197eeb56b0ac529bac0376c6d31a5c9c148a11b89f",
+      "max_lap_number": 51.0,
+      "missing_required_columns": [],
+      "rows": 983,
+      "status": "clean",
+      "timestamp_rows": 983
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_pit.csv",
+      "driver_count": 19,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 6474,
+        "ok": true,
+        "sha256": "13caeb37bdbb0578b932df54716d69a1824a4591acd1617f75d2b44c31a2da78",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_pit.json",
+      "json_sha256": "6ad8f95ca1fdef30ea85b02daf44c0ecfa827710d2208c41f512bb306a4bf835",
+      "max_lap_number": 36.0,
+      "missing_required_columns": [],
+      "rows": 36,
+      "status": "clean",
+      "timestamp_rows": 36
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 35934,
+        "ok": true,
+        "sha256": "68ea1bf89b6e3914ca2d1b1a386e85ba7efbd849d617b65da714896e2d2613cd",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_position.json",
+      "json_sha256": "33e9b6c6d08456899cd42d8dad9891fa136824d53a82e4c02f334fb2ec7aa751",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 311,
+      "status": "clean",
+      "timestamp_rows": 311
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_race_control.csv",
+      "driver_count": 1,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 35654,
+        "ok": true,
+        "sha256": "f8d879d71794fd3b039206536e88e62a30443375a53a00eea3515bdd44ea6109",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_race_control.json",
+      "json_sha256": "90cab9032075dc4a9b4b6fbfcc901cc4e2ccf73c7462df67283847576091aa77",
+      "max_lap_number": 51.0,
+      "missing_required_columns": [],
+      "rows": 141,
+      "status": "clean",
+      "timestamp_rows": 141
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4038,
+        "ok": true,
+        "sha256": "93464040c6e588f0325614435ac00fd94134d535d0658f9af2c3f44fa970dd7e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_session_result.json",
+      "json_sha256": "6a61d8ce2d27069c03fb1aded7b2f3d0692d3e412b71a2b98080faaca024816e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 382,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_sessions.json",
+      "json_sha256": "034d5d9daa7fec3c6685fc53f4ef69034c343586de51d794c2c910e69d2ac0ad",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [
+        "fia_final_grid_unverified"
+      ],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2114,
+        "ok": true,
+        "sha256": "23d798ed27e99138c6bcc61e6efbc557a4022f18ea874dee489f98b6f571cda9",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_starting_grid.json",
+      "json_sha256": "ea3401aab1d67d99d9dda13f1f230451dd86ebd845a0fe643c1b1836178ce6a6",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "provenance": {
+        "changed_since_prior_target_snapshot": null,
+        "changed_since_qualifying_snapshot": false,
+        "direct_target_fetch": {
+          "bytes": 0,
+          "error": "<HTTPError 404: 'Not Found'>",
+          "ok": false
+        },
+        "forecast_as_of_eligible": false,
+        "meeting_key": 1295,
+        "observed_at_utc": "2026-09-26T14:31:52.180411Z",
+        "observed_before_target_start": false,
+        "official_final_grid_verified": false,
+        "openf1_row_status": "clean",
+        "prior_qualifying_snapshot_sha256": "ea3401aab1d67d99d9dda13f1f230451dd86ebd845a0fe643c1b1836178ce6a6",
+        "prior_target_snapshot_sha256": null,
+        "resolution": "unique_same_meeting_qualifying_before_target",
+        "source_session_key": 11373,
+        "source_session_name": "Qualifying",
+        "target_session_key": 11377
+      },
+      "rows": 22,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 8428,
+        "ok": true,
+        "sha256": "eb128cabef1413468996a1603f2daea47553b6d40684747a51c51b3abd17f27f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_stints.json",
+      "json_sha256": "58ff048d1af7f11080b9909bed7fe6d993a007fa1152f6d33ccbf06b7995ccb5",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 58,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 36197,
+        "ok": true,
+        "sha256": "927cc5c167a33bca287ee3f68e063a20a0528a4fe21e89c2583d61872f80cbb8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_weather.json",
+      "json_sha256": "941ba81fac15018fe50c67c63bb362d1729691a8edc8787395c79318d4cf0b9e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 168,
+      "status": "clean",
+      "timestamp_rows": 168
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/workbook_kpi_readiness.json"
+  }
+}

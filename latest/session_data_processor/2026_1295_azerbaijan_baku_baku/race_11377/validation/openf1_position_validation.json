@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 35934,
+    "ok": true,
+    "sha256": "68ea1bf89b6e3914ca2d1b1a386e85ba7efbd849d617b65da714896e2d2613cd",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_position.json",
+  "json_sha256": "33e9b6c6d08456899cd42d8dad9891fa136824d53a82e4c02f334fb2ec7aa751",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 311,
+  "status": "clean",
+  "timestamp_rows": 311
+}
