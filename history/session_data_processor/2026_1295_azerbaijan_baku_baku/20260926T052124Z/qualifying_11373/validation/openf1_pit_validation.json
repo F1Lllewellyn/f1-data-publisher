@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_pit.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 11890,
+    "ok": true,
+    "sha256": "618d95ff89bbe6679e17da468e9396b6c28517c7600586fb13f9f9825363b2ff",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_pit.json",
+  "json_sha256": "34bf1499c842d59eee8df286a782b7b8de8ea71ebaffcc41691a0b0a3f8cd118",
+  "max_lap_number": 22.0,
+  "missing_required_columns": [],
+  "rows": 66,
+  "status": "clean",
+  "timestamp_rows": 66
+}

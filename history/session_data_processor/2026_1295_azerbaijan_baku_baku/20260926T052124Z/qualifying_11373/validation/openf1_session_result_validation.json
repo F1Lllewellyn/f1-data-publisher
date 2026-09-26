@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 4356,
+    "ok": true,
+    "sha256": "7955d7c9237a0627a8b5df705ef7bb987105b7b2f8a3e7abc418f902b3258c75",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/raw/openf1_session_result.json",
+  "json_sha256": "9ae0ddcb16e1a210fdc145a944ecdf6abb6598d712089846bf8146a88c1156cb",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
