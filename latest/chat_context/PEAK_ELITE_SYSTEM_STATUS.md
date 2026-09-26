@@ -1,14 +1,14 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-09-26T10:13:58.676387Z`
+Created UTC: `2026-09-26T18:33:51.660780Z`
 Status: **pass**
 
 ## Confirmed Data
 - Latest event: `Azerbaijan - Baku - Baku`
-- Latest session: `Qualifying`
-- Source status: `clean`
+- Latest session: `Race`
+- Source status: `needs_manual_review`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `clean`
+- Workbook source status: `needs_manual_review`
 
 ## System checks
 - `core_files`: **pass**
