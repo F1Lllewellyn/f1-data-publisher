@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "control_room_overlay",
+  "event_id": "2026_1295_azerbaijan_baku_baku",
+  "gate": "race_result",
+  "generated_utc": "2026-09-26T14:53:00Z",
+  "promotion_allowed": false,
+  "race_name": "Azerbaijan - Baku - Baku",
+  "row_count": 28,
+  "run_id": "20260926T145109Z",
+  "source_counts": {
+    "drivers": 790,
+    "intervals": 143155,
+    "pit": 280,
+    "position": 18517,
+    "race_control": 2861,
+    "source_readiness": 9,
+    "starting_grid": 110,
+    "stints": 2952,
+    "weather": 5574
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
