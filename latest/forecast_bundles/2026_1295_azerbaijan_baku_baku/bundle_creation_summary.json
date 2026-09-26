@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-09-26T05:55:59Z",
+  "created_utc": "2026-09-26T10:31:03Z",
   "event_id": "2026_1295_azerbaijan_baku_baku",
   "race_name": "Azerbaijan - Baku - Baku",
   "gate": "post_qualifying",
@@ -8,27 +8,27 @@
   "skipped_missing_sources": [],
   "bundles": [
     {
-      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__stable_baseline__20260926T055559Z",
+      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__stable_baseline__20260926T103103Z",
       "gate": "post_qualifying",
       "engine_lane": "stable_baseline",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T055559Z/post_qualifying/stable_baseline",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T103103Z/post_qualifying/stable_baseline",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__control_room_overlay__20260926T055559Z",
+      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__control_room_overlay__20260926T103103Z",
       "gate": "post_qualifying",
       "engine_lane": "control_room_overlay",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T055559Z/post_qualifying/control_room_overlay",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T103103Z/post_qualifying/control_room_overlay",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__experimental_challenger__20260926T055559Z",
+      "bundle_id": "2026_1295_azerbaijan_baku_baku__post_qualifying__experimental_challenger__20260926T103103Z",
       "gate": "post_qualifying",
       "engine_lane": "experimental_challenger",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T055559Z/post_qualifying/experimental_challenger",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1295_azerbaijan_baku_baku/20260926T103103Z/post_qualifying/experimental_challenger",
       "latest_dir": ""
     }
   ]
