@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_pit.csv",
+  "driver_count": 19,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 6474,
+    "ok": true,
+    "sha256": "13caeb37bdbb0578b932df54716d69a1824a4591acd1617f75d2b44c31a2da78",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_pit.json",
+  "json_sha256": "6ad8f95ca1fdef30ea85b02daf44c0ecfa827710d2208c41f512bb306a4bf835",
+  "max_lap_number": 36.0,
+  "missing_required_columns": [],
+  "rows": 36,
+  "status": "clean",
+  "timestamp_rows": 36
+}

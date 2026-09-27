@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 144,
+    "circuit_short_name": "Baku",
+    "country_code": "AZE",
+    "country_key": 30,
+    "country_name": "Azerbaijan",
+    "date_end": "2026-09-26T13:00:00+00:00",
+    "date_start": "2026-09-26T11:00:00+00:00",
+    "gmt_offset": "04:00:00",
+    "is_cancelled": false,
+    "location": "Baku",
+    "meeting_key": 1295,
+    "session_key": 11377,
+    "session_name": "Race",
+    "session_type": "Race",
+    "year": 2026
+  }
+]
