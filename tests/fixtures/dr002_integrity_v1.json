@@ -1,0 +1,68 @@
+{
+  "forecast": {
+    "schema_version": "dr002-integrity-v1",
+    "legacy": false,
+    "contract_approved": true,
+    "product_contract_id": "synthetic-contract-only",
+    "forecast_id": "fixture-forecast",
+    "product_id": "fixture-race-finish",
+    "lane_name": "stable_baseline",
+    "gate": "post_qualifying",
+    "execution_mode": "prospective",
+    "event_id": "fixture-event",
+    "meeting_id": "fixture-meeting",
+    "session_id": "fixture-race",
+    "allowed_session_ids": [
+      "fixture-qualifying"
+    ],
+    "mandatory_source_ids": [
+      "grid"
+    ],
+    "evidence_cutoff_utc": "2026-09-26T10:00:00Z",
+    "forecast_generation_utc": "2026-09-26T10:05:00Z",
+    "forecast_deadline_utc": "2026-09-26T10:30:00Z",
+    "forecast_lock_utc": "2026-09-26T10:10:00Z",
+    "outcome_availability_boundary_utc": "2026-09-26T11:00:00Z",
+    "outcome_boundary_evidence_ref": "fixture://conservative-outcome-boundary",
+    "lock_receipt_ref": "fixture://lock-receipt",
+    "revision_policy": "supersede_before_deadline",
+    "revisions": [],
+    "evidence": [
+      {
+        "source_id": "grid",
+        "source_uri": "fixture://grid",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-qualifying",
+        "event_time_utc": "2026-09-25T12:00:00Z",
+        "publisher_time_utc": null,
+        "first_observed_utc": "2026-09-26T09:55:00Z",
+        "ingested_utc": "2026-09-26T09:56:00Z",
+        "ingestion_required_at_cutoff": true,
+        "capture_evidence_ref": "fixture://capture"
+      }
+    ],
+    "producer": {
+      "implementation": "scripts/forecasts/produce_actual_forecast_rows_v1.py",
+      "git_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "code_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "execution_id": "fixture-execution",
+      "input_manifest_sha256": "a58f08417f517e95ed78a8b91f0be496a69442b944aa3e57373c0f852a03d23e",
+      "forecast_payload_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "engine_implementation": null
+    }
+  },
+  "verified_execution_records": {
+    "fixture-execution": {
+      "implementation": "scripts/forecasts/produce_actual_forecast_rows_v1.py",
+      "git_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "code_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "execution_id": "fixture-execution",
+      "input_manifest_sha256": "a58f08417f517e95ed78a8b91f0be496a69442b944aa3e57373c0f852a03d23e",
+      "forecast_payload_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "engine_implementation": null,
+      "verification_ref": "fixture://verified-execution"
+    }
+  }
+}
