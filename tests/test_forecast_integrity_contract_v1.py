@@ -111,7 +111,7 @@ class IntegrityAcceptance(unittest.TestCase):
     def test_late_revision_preserves_original(self):
         self.r['revisions']=[self.revision('2026-09-26T10:30:01Z')]
         result=self.assess('VALID_LOCKED')
-        self.assertEqual(result['revision_events'],[dict(revision_id='revision-1',state='POST_CUTOFF_REVISION')])
+        self.assertEqual(result['revision_events'],[dict(revision_id='revision-1',event_state='POST_CUTOFF_REVISION')])
 
     def test_revision_at_deadline_unresolved(self):
         self.r['revisions']=[self.revision('2026-09-26T10:30:00Z')]
@@ -133,12 +133,68 @@ class IntegrityAcceptance(unittest.TestCase):
         self.r['producer']['engine_implementation']='Engine_2026-06-07_STABLE'
         self.assess('HOLD','execution_lineage_unproven')
         self.receipts['fixture-execution']['engine_implementation']='Engine_2026-06-07_STABLE'
-        self.assess('VALID_LOCKED')
+        self.assess('HOLD','engine_execution_provenance_missing')
 
     def test_no_receipt_no_lineage(self):
         result=M.classify_forecast(self.r)
         self.assertEqual(result['state'],'HOLD')
         self.assertIn('execution_lineage_unproven',result['reason_codes'])
+
+    def engine_claim(self):
+        claim=dict(engine_implementation='Engine_2026-06-07_STABLE',
+                   engine_execution_id='synthetic-engine-execution',
+                   engine_code_sha256='e'*64,
+                   engine_execution_proof_ref='fixture://verified-engine-execution')
+        self.r['producer'].update(claim)
+        self.receipts['fixture-execution'].update(claim)
+
+    def test_matching_synthetic_engine_execution(self):
+        self.engine_claim()
+        self.assess('VALID_LOCKED')
+
+    def test_engine_hash_proof_and_identity_mismatches(self):
+        for key, value in [('engine_code_sha256','f'*64),
+                           ('engine_execution_proof_ref','fixture://other'),
+                           ('engine_execution_id','other-execution')]:
+            with self.subTest(key=key):
+                self.setUp();self.engine_claim()
+                self.receipts['fixture-execution'][key]=value
+                self.assess('HOLD','engine_execution_provenance_mismatch')
+
+    def test_missing_engine_proof_fields(self):
+        for key in ('engine_execution_id','engine_code_sha256','engine_execution_proof_ref'):
+            with self.subTest(key=key):
+                self.setUp();self.engine_claim()
+                del self.r['producer'][key]
+                self.assess('HOLD','engine_execution_provenance_missing')
+
+    def test_missing_engine_receipt_fields(self):
+        for key in ('engine_execution_id','engine_code_sha256','engine_execution_proof_ref'):
+            with self.subTest(key=key):
+                self.setUp();self.engine_claim()
+                del self.receipts['fixture-execution'][key]
+                self.assess('HOLD','engine_execution_provenance_mismatch')
+
+    def test_wrapper_hash_cannot_stand_in_for_engine(self):
+        self.engine_claim()
+        for p in (self.r['producer'],self.receipts['fixture-execution']):
+            p['engine_code_sha256']=p['code_sha256']
+        self.assess('HOLD','wrapper_hash_is_not_engine_hash')
+
+    def test_same_executable_identity_can_share_hash(self):
+        self.engine_claim()
+        for p in (self.r['producer'],self.receipts['fixture-execution']):
+            p['implementation']=p['engine_implementation']
+            p['engine_code_sha256']=p['code_sha256']
+        self.assess('VALID_LOCKED')
+
+    def test_null_engine_claim_valid(self):
+        self.assertIsNone(self.r['producer']['engine_implementation'])
+        self.assess('VALID_LOCKED')
+
+    def test_orphan_engine_provenance_rejected(self):
+        self.r['producer']['engine_execution_id']='orphan'
+        self.assess('HOLD','engine_provenance_without_engine_claim')
 
     def test_hash_binding(self):
         self.r['evidence'][0]['source_sha256']='f'*64
@@ -193,7 +249,14 @@ class IntegrityAcceptance(unittest.TestCase):
     def test_fixture_schema_and_state_catalog(self):
         s=json.loads((ROOT/'schemas/forecast_integrity_contract_v1.schema.json').read_text())
         self.assertEqual(set(s['required']),set(self.r))
-        self.assertEqual(set(s['$defs']['classification_state']['enum']),{x.value for x in M.State})
+        self.assertEqual(set(s['$defs']['forecast_classification_state']['enum']),{x.value for x in M.ForecastState})
+        self.assertEqual(set(s['$defs']['revision_event_state']['enum']),{x.value for x in M.RevisionEventState})
+        self.assertNotIn('POST_CUTOFF_REVISION',{x.value for x in M.ForecastState})
+        self.assertEqual(s['$defs']['classification']['properties']['state'],
+                         {'$ref':'#/$defs/forecast_classification_state'})
+        events=s['$defs']['classification']['properties']['revision_events']['items']
+        self.assertNotIn('state',events['properties'])
+        self.assertEqual(events['properties']['event_state'],{'$ref':'#/$defs/revision_event_state'})
 
 
 if __name__=='__main__':

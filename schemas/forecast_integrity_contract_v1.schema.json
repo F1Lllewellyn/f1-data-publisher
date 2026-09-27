@@ -284,7 +284,10 @@
         "execution_id",
         "input_manifest_sha256",
         "forecast_payload_sha256",
-        "engine_implementation"
+        "engine_implementation",
+        "engine_execution_id",
+        "engine_code_sha256",
+        "engine_execution_proof_ref"
       ],
       "properties": {
         "implementation": {
@@ -320,9 +323,71 @@
             "string",
             "null"
           ]
+        },
+        "engine_execution_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "engine_code_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_execution_proof_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "engine_implementation": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_code_sha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_execution_proof_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "null"
+              },
+              "engine_code_sha256": {
+                "type": "null"
+              },
+              "engine_execution_proof_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -330,18 +395,6 @@
   "$id": "urn:f1:dr002:integrity:v1",
   "title": "DR-002 isolated forecast integrity input",
   "$defs": {
-    "classification_state": {
-      "type": "string",
-      "enum": [
-        "VALID_LOCKED",
-        "HOLD",
-        "MISSED_DEADLINE",
-        "SUPERSEDED",
-        "POST_CUTOFF_REVISION",
-        "OUTCOME_AWARE_EVALUATION_ONLY",
-        "TEMPORAL_ELIGIBILITY_UNPROVEN"
-      ]
-    },
     "execution_receipt": {
       "type": "object",
       "description": "Supplied by a separate trusted verifier, never read from a forecast self-assertion. Authentication is outside this offline layer.",
@@ -353,7 +406,10 @@
         "input_manifest_sha256",
         "forecast_payload_sha256",
         "engine_implementation",
-        "verification_ref"
+        "verification_ref",
+        "engine_execution_id",
+        "engine_code_sha256",
+        "engine_execution_proof_ref"
       ],
       "properties": {
         "implementation": {
@@ -393,9 +449,71 @@
         "verification_ref": {
           "type": "string",
           "minLength": 1
+        },
+        "engine_execution_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "engine_code_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_execution_proof_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "engine_implementation": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_code_sha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_execution_proof_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "null"
+              },
+              "engine_code_sha256": {
+                "type": "null"
+              },
+              "engine_execution_proof_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "classification": {
       "type": "object",
@@ -411,7 +529,7 @@
           "const": "dr002-integrity-v1"
         },
         "state": {
-          "$ref": "#/$defs/classification_state"
+          "$ref": "#/$defs/forecast_classification_state"
         },
         "blind_validation_eligible": {
           "type": "boolean"
@@ -428,14 +546,14 @@
             "type": "object",
             "required": [
               "revision_id",
-              "state"
+              "event_state"
             ],
             "properties": {
               "revision_id": {
                 "type": "string"
               },
-              "state": {
-                "const": "POST_CUTOFF_REVISION"
+              "event_state": {
+                "$ref": "#/$defs/revision_event_state"
               }
             },
             "additionalProperties": false
@@ -443,6 +561,23 @@
         }
       },
       "additionalProperties": false
+    },
+    "forecast_classification_state": {
+      "type": "string",
+      "enum": [
+        "VALID_LOCKED",
+        "HOLD",
+        "MISSED_DEADLINE",
+        "SUPERSEDED",
+        "OUTCOME_AWARE_EVALUATION_ONLY",
+        "TEMPORAL_ELIGIBILITY_UNPROVEN"
+      ]
+    },
+    "revision_event_state": {
+      "type": "string",
+      "enum": [
+        "POST_CUTOFF_REVISION"
+      ]
     }
   }
 }

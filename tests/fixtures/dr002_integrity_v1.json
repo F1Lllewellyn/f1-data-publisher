@@ -50,7 +50,10 @@
       "execution_id": "fixture-execution",
       "input_manifest_sha256": "a58f08417f517e95ed78a8b91f0be496a69442b944aa3e57373c0f852a03d23e",
       "forecast_payload_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-      "engine_implementation": null
+      "engine_implementation": null,
+      "engine_execution_id": null,
+      "engine_code_sha256": null,
+      "engine_execution_proof_ref": null
     }
   },
   "verified_execution_records": {
@@ -62,7 +65,10 @@
       "input_manifest_sha256": "a58f08417f517e95ed78a8b91f0be496a69442b944aa3e57373c0f852a03d23e",
       "forecast_payload_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
       "engine_implementation": null,
-      "verification_ref": "fixture://verified-execution"
+      "verification_ref": "fixture://verified-execution",
+      "engine_execution_id": null,
+      "engine_code_sha256": null,
+      "engine_execution_proof_ref": null
     }
   }
 }

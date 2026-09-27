@@ -34,7 +34,9 @@ eligibility (in particular `source_found` and historical blind flags).
 
 Lane name and implementation are independent. An execution receipt must match
 implementation, Git commit, code hash, invocation ID, canonical input-manifest
-hash, forecast-payload hash and engine implementation. It must come from a
+hash, forecast-payload hash and engine implementation. A non-null engine claim
+also requires matching engine_execution_id, engine_code_sha256 and
+engine_execution_proof_ref in the trusted receipt. It must come from a
 separate trusted verifier. Stable-engine attribution cannot be inferred from the
 lane or self-asserted engine label. The input-manifest hash binds scope, contract,
 cutoff, deadline and consumed evidence; the classifier recalculates that hash.
@@ -76,6 +78,9 @@ filled from lock time or the current clock.
 6. Otherwise an eligible input set locked late returns MISSED_DEADLINE.
 7. Otherwise return VALID_LOCKED. Only this state sets blind eligibility true.
 
+ForecastState and RevisionEventState are separate machine-readable vocabularies.
+The top-level `state` uses only the six forecast classifications; entries in
+`revision_events` use `event_state`, whose sole value is POST_CUTOFF_REVISION.
 POST_CUTOFF_REVISION is a separate event classification nested in the result,
 not a destructive replacement for VALID_LOCKED. A relevant revision observed
 after deadline leaves the original classification intact. This resolves the
@@ -93,7 +98,7 @@ There is no fallback-selection or scoring code in this layer.
 
 Run: `PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p 'test_forecast_integrity_contract_v1.py' -v`
 
-33 offline unittest methods pass, including subcases for scope dimensions and
+41 offline unittest methods pass, including subcases for scope dimensions and
 evaluation gates. Fixtures are explicitly synthetic, not fabricated historical
 observations. Tests cover every requested acceptance case, input-hash tampering,
 missing execution proof, malformed UTC, exact lock boundaries, legacy handling,
@@ -118,3 +123,28 @@ Next action is review of this Gate 2A PR. Gate 2B is not authorized. Before live
 integration, approve concrete product contracts and implement authenticated
 receipt adapters. Existing unproven history must remain unproven, with any later
 assessment stored separately. Never use later API responses to backdate evidence.
+
+
+## PR #122 bounded amendment
+
+Amendment parent: `1e60373d3b0dfadff51aa4fe9bf5717e7b47ce42`.
+Only five existing PR files changed: classifier, schema, synthetic fixture,
+acceptance tests and this checkpoint. The PR-only/read-only CI file is unchanged.
+
+The engine proof is separate from producer-wrapper lineage. Matching an engine
+name string alone fails closed. A generic wrapper's code hash cannot be reused
+as the hash of a differently identified engine. Hash sharing is supported only
+when the declared producer and engine implementation identities are the same
+and the trusted receipt matches. No engine code is executed by these tests.
+Null engine implementation with null engine-provenance fields remains valid;
+orphan engine provenance without an engine claim is rejected.
+
+The schema defines forecast_classification_state and revision_event_state
+separately and binds them to top-level state and nested event_state respectively.
+Exactly-at-deadline revision observation still fails closed. No new boundary
+policy or production gate was introduced. All prior acceptance cases remain in
+the full 41-method suite, supplemented by engine identity/hash/proof mismatch,
+missing fields, wrapper-hash misuse, and null-engine tests. External receipt
+authentication remains outside this isolated consistency checker.
+
+This amendment does not merge PR #122, activate DR-002 or authorize Gate 2B.
