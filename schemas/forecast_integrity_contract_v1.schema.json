@@ -1,0 +1,583 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "legacy",
+    "contract_approved",
+    "product_contract_id",
+    "forecast_id",
+    "product_id",
+    "lane_name",
+    "gate",
+    "execution_mode",
+    "event_id",
+    "meeting_id",
+    "session_id",
+    "allowed_session_ids",
+    "mandatory_source_ids",
+    "evidence_cutoff_utc",
+    "forecast_generation_utc",
+    "forecast_deadline_utc",
+    "forecast_lock_utc",
+    "outcome_availability_boundary_utc",
+    "outcome_boundary_evidence_ref",
+    "lock_receipt_ref",
+    "revision_policy",
+    "revisions",
+    "evidence",
+    "producer"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "dr002-integrity-v1"
+    },
+    "legacy": {
+      "type": "boolean"
+    },
+    "contract_approved": {
+      "type": "boolean"
+    },
+    "product_contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "forecast_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lane_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gate": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meeting_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowed_session_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "mandatory_source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "evidence_cutoff_utc": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "forecast_generation_utc": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "forecast_deadline_utc": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "forecast_lock_utc": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "outcome_availability_boundary_utc": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "outcome_boundary_evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lock_receipt_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "revision_id",
+          "forecast_id",
+          "product_id",
+          "event_id",
+          "meeting_id",
+          "session_id",
+          "source_id",
+          "source_sha256",
+          "first_observed_utc",
+          "capture_evidence_ref"
+        ],
+        "properties": {
+          "revision_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "forecast_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "product_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "meeting_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "first_observed_utc": {
+            "type": "string",
+            "minLength": 1,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "capture_evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "source_uri",
+          "source_sha256",
+          "event_id",
+          "meeting_id",
+          "session_id",
+          "event_time_utc",
+          "publisher_time_utc",
+          "first_observed_utc",
+          "ingested_utc",
+          "ingestion_required_at_cutoff",
+          "capture_evidence_ref"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_uri": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "meeting_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "event_time_utc": {
+            "type": "string",
+            "minLength": 1,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "publisher_time_utc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "first_observed_utc": {
+            "type": "string",
+            "minLength": 1,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "ingested_utc": {
+            "type": "string",
+            "minLength": 1,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "ingestion_required_at_cutoff": {
+            "type": "boolean"
+          },
+          "capture_evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "producer": {
+      "type": "object",
+      "required": [
+        "implementation",
+        "git_commit",
+        "code_sha256",
+        "execution_id",
+        "input_manifest_sha256",
+        "forecast_payload_sha256",
+        "engine_implementation",
+        "engine_execution_id",
+        "engine_code_sha256",
+        "engine_execution_proof_ref"
+      ],
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "code_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "execution_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_manifest_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "forecast_payload_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_implementation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "engine_execution_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "engine_code_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_execution_proof_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "engine_implementation": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_code_sha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_execution_proof_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "null"
+              },
+              "engine_code_sha256": {
+                "type": "null"
+              },
+              "engine_execution_proof_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:f1:dr002:integrity:v1",
+  "title": "DR-002 isolated forecast integrity input",
+  "$defs": {
+    "execution_receipt": {
+      "type": "object",
+      "description": "Supplied by a separate trusted verifier, never read from a forecast self-assertion. Authentication is outside this offline layer.",
+      "required": [
+        "implementation",
+        "git_commit",
+        "code_sha256",
+        "execution_id",
+        "input_manifest_sha256",
+        "forecast_payload_sha256",
+        "engine_implementation",
+        "verification_ref",
+        "engine_execution_id",
+        "engine_code_sha256",
+        "engine_execution_proof_ref"
+      ],
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "code_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "execution_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_manifest_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "forecast_payload_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_implementation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "engine_execution_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "engine_code_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "engine_execution_proof_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "engine_implementation": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_code_sha256": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_execution_proof_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "engine_execution_id": {
+                "type": "null"
+              },
+              "engine_code_sha256": {
+                "type": "null"
+              },
+              "engine_execution_proof_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "contract_version",
+        "state",
+        "blind_validation_eligible",
+        "reason_codes",
+        "revision_events"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "dr002-integrity-v1"
+        },
+        "state": {
+          "$ref": "#/$defs/forecast_classification_state"
+        },
+        "blind_validation_eligible": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "revision_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "revision_id",
+              "event_state"
+            ],
+            "properties": {
+              "revision_id": {
+                "type": "string"
+              },
+              "event_state": {
+                "$ref": "#/$defs/revision_event_state"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "forecast_classification_state": {
+      "type": "string",
+      "enum": [
+        "VALID_LOCKED",
+        "HOLD",
+        "MISSED_DEADLINE",
+        "SUPERSEDED",
+        "OUTCOME_AWARE_EVALUATION_ONLY",
+        "TEMPORAL_ELIGIBILITY_UNPROVEN"
+      ]
+    },
+    "revision_event_state": {
+      "type": "string",
+      "enum": [
+        "POST_CUTOFF_REVISION"
+      ]
+    }
+  }
+}
