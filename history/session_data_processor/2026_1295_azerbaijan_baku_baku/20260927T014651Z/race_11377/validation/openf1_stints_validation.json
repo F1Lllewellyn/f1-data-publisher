@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 8428,
+    "ok": true,
+    "sha256": "eb128cabef1413468996a1603f2daea47553b6d40684747a51c51b3abd17f27f",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_stints.json",
+  "json_sha256": "58ff048d1af7f11080b9909bed7fe6d993a007fa1152f6d33ccbf06b7995ccb5",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 58,
+  "status": "clean",
+  "timestamp_rows": 0
+}
