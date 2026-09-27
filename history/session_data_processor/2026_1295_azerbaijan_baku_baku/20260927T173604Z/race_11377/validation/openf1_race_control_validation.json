@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_race_control.csv",
+  "driver_count": 1,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 35654,
+    "ok": true,
+    "sha256": "f8d879d71794fd3b039206536e88e62a30443375a53a00eea3515bdd44ea6109",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_race_control.json",
+  "json_sha256": "90cab9032075dc4a9b4b6fbfcc901cc4e2ccf73c7462df67283847576091aa77",
+  "max_lap_number": 51.0,
+  "missing_required_columns": [],
+  "rows": 141,
+  "status": "clean",
+  "timestamp_rows": 141
+}

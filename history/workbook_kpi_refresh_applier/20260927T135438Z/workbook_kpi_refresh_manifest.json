@@ -1,0 +1,56 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-09-27T13:54:38.909694+00:00",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "outputs": [
+    {
+      "bytes": 767,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "fade9c83c299ccfacd1f64132fb320f8f1e2ad30bc5b9d23b27ef1498af12c91"
+    },
+    {
+      "bytes": 412,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "705b24a63a2fb438a3f92de4156cb837e29e64c5c2988bc565b7fefbe5d6db98"
+    },
+    {
+      "bytes": 10322,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/F1_Workbook_KPI_SANDBOX_Refresh_Azerbaijan_-_Baku_-_Baku_session_20260927T135438Z.xlsx",
+      "sha256": "a0ee066d750e9a7589b41390c55a2abe4f7fc3b7cff25774b8da065690a0651d"
+    },
+    {
+      "bytes": 555,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "52bdf4502368ef88aaa1c0be68d68cb4952277ef98646ce905891219d859b07c"
+    },
+    {
+      "bytes": 1553,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/upstream_data_readiness_snapshot.json",
+      "sha256": "7c2d26c6d93dc7cc4f65e688d225c4af951c26edb897d0cb4897649571ff401c"
+    },
+    {
+      "bytes": 693,
+      "path": "history/workbook_kpi_refresh_applier/20260927T135438Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "f39205177f0febbaac2196e4b541545509aa90fb5dccb0f60f5c9c2c7025d1d3"
+    }
+  ],
+  "run_id": "20260927T135438Z",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_processor_root": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ]
+}

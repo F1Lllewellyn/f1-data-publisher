@@ -148,3 +148,17 @@ missing fields, wrapper-hash misuse, and null-engine tests. External receipt
 authentication remains outside this isolated consistency checker.
 
 This amendment does not merge PR #122, activate DR-002 or authorize Gate 2B.
+
+## Controlled pre-merge freshness sync
+
+Refreshed main baseline: `981b6beb06a76907f89f1f96351593df88afcf7d`.
+Reviewed pre-sync PR head: `e55d7f5ebfd3ce4eacf59d8f407b9c14e3e7590d`.
+The existing PR #122 branch incorporates this main baseline through a merge
+commit; no history rewrite or replacement PR. All six Gate 2A files remain
+additions relative to this baseline. The five implementation/schema/fixture/
+test/CI blobs are preserved exactly; only this checkpoint records the sync.
+The final pre-merge head is the containing sync commit (reported by PR #122),
+so this document does not attempt to embed its own self-referential commit hash.
+Re-run the complete 41-method offline suite and PR-only/read-only CI on that
+head before review. No approved contract semantics or isolation constraints
+change. Merge and Gate 2B remain unauthorized pending refreshed-result review.
