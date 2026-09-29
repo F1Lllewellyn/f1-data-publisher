@@ -182,3 +182,21 @@ Rollback: revert this isolated PR. No production/data migration is required.
 
 Return this PR to the Science / Architecture Adviser. Merge and Gate 2B-2 require
 separate authorization. DR-002 remains PROPOSED — NOT ACTIVATED.
+
+## Published review evidence
+
+PR: https://github.com/F1Lllewellyn/f1-data-publisher/pull/123 (open, not merged).
+Validated implementation head: `37b29a0b2a4f9087852f56255e6f8f146939d762`.
+GitHub Actions: https://github.com/F1Lllewellyn/f1-data-publisher/actions/runs/36547992510
+completed **SUCCESS**, pull_request event on that exact head. Job `offline-contract`
+logs confirm **41 Gate 2A + 75 receipt tests**, zero failures/errors, Python 3.11.
+The same complete commands passed locally (Python 3.12). This documentation-only
+follow-up preserves all implementation/schema/fixture/test/workflow blobs and
+records the evidence; its containing commit is the final review head. Its PR CI
+must also succeed before the result is returned for review.
+
+Initial diff: exactly six authorized files, 1,814 additions and zero deletions.
+This final checkpoint adds only this publication evidence; final PR statistics
+and the containing head are reported on PR #123. GitHub publishing used the
+connected repository API because the local git transport had no push credentials.
+No force push, rebase, history rewrite or protected-state mutation was performed.
