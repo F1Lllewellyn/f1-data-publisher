@@ -1,0 +1,558 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "dr002-receipt-v1"
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/text"
+    },
+    "receipt_type": {
+      "enum": [
+        "source_capture",
+        "engine_execution",
+        "producer_execution",
+        "normalization",
+        "forecast_lock",
+        "outcome_boundary",
+        "revision"
+      ]
+    },
+    "receipt_created_utc": {
+      "$ref": "#/$defs/time"
+    },
+    "scope": {},
+    "parent_receipt_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      },
+      "uniqueItems": true
+    },
+    "payload": {}
+  },
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "receipt_type",
+    "receipt_created_utc",
+    "scope",
+    "parent_receipt_ids",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:f1:dr002:receipt:v1",
+  "title": "DR-002 offline shared receipt envelope",
+  "description": "receipt_created_utc is receipt assembly time, never source availability or lock time. External bindings are required separately; this schema establishes no trust.",
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "boolean": {
+      "type": "boolean"
+    },
+    "nullable_text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_time": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_commit": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/commit"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_hash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "capture_scope": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/text"
+        },
+        "meeting_id": {
+          "$ref": "#/$defs/text"
+        },
+        "session_id": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "event_id",
+        "meeting_id",
+        "session_id"
+      ],
+      "additionalProperties": false
+    },
+    "forecast_scope": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/text"
+        },
+        "meeting_id": {
+          "$ref": "#/$defs/text"
+        },
+        "session_id": {
+          "$ref": "#/$defs/text"
+        },
+        "product_id": {
+          "$ref": "#/$defs/text"
+        },
+        "forecast_id": {
+          "$ref": "#/$defs/text"
+        },
+        "gate": {
+          "$ref": "#/$defs/text"
+        },
+        "lane_name": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "event_id",
+        "meeting_id",
+        "session_id",
+        "product_id",
+        "forecast_id",
+        "gate",
+        "lane_name"
+      ],
+      "additionalProperties": false
+    },
+    "source_capture": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/text"
+        },
+        "source_uri": {
+          "$ref": "#/$defs/text"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "event_time_utc": {
+          "$ref": "#/$defs/nullable_time"
+        },
+        "publisher_time_utc": {
+          "$ref": "#/$defs/nullable_time"
+        },
+        "first_observed_utc": {
+          "$ref": "#/$defs/time"
+        },
+        "ingested_utc": {
+          "$ref": "#/$defs/time"
+        },
+        "capture_ref": {
+          "$ref": "#/$defs/text"
+        },
+        "implementation": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_uri",
+        "source_sha256",
+        "event_time_utc",
+        "publisher_time_utc",
+        "first_observed_utc",
+        "ingested_utc",
+        "capture_ref",
+        "implementation"
+      ],
+      "additionalProperties": false
+    },
+    "engine_execution": {
+      "type": "object",
+      "properties": {
+        "engine_implementation": {
+          "$ref": "#/$defs/text"
+        },
+        "engine_execution_id": {
+          "$ref": "#/$defs/text"
+        },
+        "engine_code_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "repository_backed": {
+          "$ref": "#/$defs/boolean"
+        },
+        "git_commit": {
+          "$ref": "#/$defs/nullable_commit"
+        },
+        "producer_execution_id": {
+          "$ref": "#/$defs/text"
+        },
+        "input_manifest_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "input_receipt_manifest_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "result_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "completed_utc": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "engine_implementation",
+        "engine_execution_id",
+        "engine_code_sha256",
+        "repository_backed",
+        "git_commit",
+        "producer_execution_id",
+        "input_manifest_sha256",
+        "input_receipt_manifest_sha256",
+        "result_sha256",
+        "completed_utc"
+      ],
+      "additionalProperties": false
+    },
+    "producer_execution": {
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "$ref": "#/$defs/text"
+        },
+        "git_commit": {
+          "$ref": "#/$defs/commit"
+        },
+        "code_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "execution_id": {
+          "$ref": "#/$defs/text"
+        },
+        "forecast_generation_utc": {
+          "$ref": "#/$defs/time"
+        },
+        "input_manifest_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "input_receipt_manifest_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "forecast_payload_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "engine_implementation": {
+          "$ref": "#/$defs/nullable_text"
+        },
+        "engine_receipt_id": {
+          "$ref": "#/$defs/nullable_text"
+        },
+        "engine_result_sha256": {
+          "$ref": "#/$defs/nullable_hash"
+        }
+      },
+      "required": [
+        "implementation",
+        "git_commit",
+        "code_sha256",
+        "execution_id",
+        "forecast_generation_utc",
+        "input_manifest_sha256",
+        "input_receipt_manifest_sha256",
+        "forecast_payload_sha256",
+        "engine_implementation",
+        "engine_receipt_id",
+        "engine_result_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "normalization": {
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "$ref": "#/$defs/text"
+        },
+        "git_commit": {
+          "$ref": "#/$defs/commit"
+        },
+        "code_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "execution_id": {
+          "$ref": "#/$defs/text"
+        },
+        "input_payload_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "output_payload_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "completed_utc": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "implementation",
+        "git_commit",
+        "code_sha256",
+        "execution_id",
+        "input_payload_sha256",
+        "output_payload_sha256",
+        "completed_utc"
+      ],
+      "additionalProperties": false
+    },
+    "forecast_lock": {
+      "type": "object",
+      "properties": {
+        "forecast_payload_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "stored_payload_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "lock_utc": {
+          "$ref": "#/$defs/time"
+        },
+        "storage_ref": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "forecast_payload_sha256",
+        "stored_payload_sha256",
+        "lock_utc",
+        "storage_ref"
+      ],
+      "additionalProperties": false
+    },
+    "outcome_boundary": {
+      "type": "object",
+      "properties": {
+        "product_contract_id": {
+          "$ref": "#/$defs/text"
+        },
+        "boundary_policy_ref": {
+          "$ref": "#/$defs/text"
+        },
+        "outcome_availability_boundary_utc": {
+          "$ref": "#/$defs/time"
+        },
+        "source_id": {
+          "$ref": "#/$defs/text"
+        },
+        "evidence_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "product_contract_id",
+        "boundary_policy_ref",
+        "outcome_availability_boundary_utc",
+        "source_id",
+        "evidence_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "revision": {
+      "type": "object",
+      "properties": {
+        "revision_id": {
+          "$ref": "#/$defs/text"
+        },
+        "source_id": {
+          "$ref": "#/$defs/text"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "first_observed_utc": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "revision_id",
+        "source_id",
+        "source_sha256",
+        "first_observed_utc"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "source_capture"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/source_capture"
+          },
+          "scope": {
+            "$ref": "#/$defs/capture_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "engine_execution"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/engine_execution"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "producer_execution"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/producer_execution"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "normalization"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/normalization"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "forecast_lock"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/forecast_lock"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "outcome_boundary"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/outcome_boundary"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_type": {
+            "const": "revision"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/revision"
+          },
+          "scope": {
+            "$ref": "#/$defs/forecast_scope"
+          }
+        }
+      }
+    }
+  ]
+}

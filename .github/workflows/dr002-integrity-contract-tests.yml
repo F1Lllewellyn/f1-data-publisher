@@ -7,6 +7,11 @@ on:
       - 'tests/test_forecast_integrity_contract_v1.py'
       - 'tests/fixtures/dr002_integrity_v1.json'
       - '.github/workflows/dr002-integrity-contract-tests.yml'
+      - 'scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py'
+      - 'schemas/forecast_integrity_receipt_v1.schema.json'
+      - 'tests/test_forecast_integrity_receipts_v1.py'
+      - 'tests/fixtures/dr002_receipts_v1.json'
+      - 'docs/DR002_GATE2B1_CHECKPOINT_2026-09-29.md'
 permissions:
   contents: read
 jobs:
@@ -22,6 +27,11 @@ jobs:
             /schemas/forecast_integrity_contract_v1.schema.json
             /tests/test_forecast_integrity_contract_v1.py
             /tests/fixtures/dr002_integrity_v1.json
+            /scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py
+            /schemas/forecast_integrity_receipt_v1.schema.json
+            /tests/test_forecast_integrity_receipts_v1.py
+            /tests/fixtures/dr002_receipts_v1.json
+            /docs/DR002_GATE2B1_CHECKPOINT_2026-09-29.md
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
@@ -29,3 +39,7 @@ jobs:
         env:
           PYTHONDONTWRITEBYTECODE: '1'
         run: python -m unittest discover -s tests -p 'test_forecast_integrity_contract_v1.py' -v
+      - name: Run deterministic offline receipt tests
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -p 'test_forecast_integrity_receipts_v1.py' -v
