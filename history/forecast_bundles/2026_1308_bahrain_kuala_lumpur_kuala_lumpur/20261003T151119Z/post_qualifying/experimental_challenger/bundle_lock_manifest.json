@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur__post_qualifying__experimental_challenger__20261003T151119Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "season": "2026",
+  "round": "",
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "gate": "post_qualifying",
+  "engine_lane": "experimental_challenger",
+  "engine_lane_config": "Integrated_Recalibrated_Specialist_Challenger",
+  "forecast_lock_utc": "2026-10-03T15:11:19Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}
