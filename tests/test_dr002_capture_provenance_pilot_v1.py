@@ -99,7 +99,9 @@ class CaptureTests(unittest.TestCase):
         self.assertNotIn('verified_receipt_bindings',m); self.assertNotIn('trusted',self.receipt())
     def test_deterministic_receipt_identity_and_hash(self):
         m=self.capture(); r=self.receipt()
-        self.assertEqual(r['receipt_id'],'source_capture:openf1:weather:1295:11371:'+hashlib.sha256(BODY).hexdigest())
+        self.assertEqual(r['receipt_id'],'source_capture:'+p.sha256(p.canonical_json_bytes({
+            'source_id':'openf1:weather:1295:11371', **p.SCOPE,
+            'source_sha256':hashlib.sha256(BODY).hexdigest(),'first_observed_utc':TIMES[1]})))
         self.assertEqual(m['receipt_sha256'],p.receipt_sha256(r))
     def test_existing_run_not_overwritten(self):
         self.capture(); original=(self.package/'source_capture_receipt.json').read_bytes(); request=Mock()
@@ -115,5 +117,50 @@ class CaptureTests(unittest.TestCase):
         with patch.object(p,'urlopen',return_value=manager) as opener:
             self.assertEqual(p.transport(),(200,BODY)); opener.assert_called_once(); response.read.assert_called_once_with()
             self.assertEqual(opener.call_args.args[0].full_url,p.URI)
+
+    def test_manifest_persistence_failure_no_published_receipt(self):
+        def writer(path,data):
+            if path.name=='capture_manifest.json': raise OSError('manifest failure')
+            p.write_bytes(path,data)
+        with self.assertRaises(OSError): self.capture(writer=writer)
+        self.assertFalse((self.package/'source_capture_receipt.json').exists())
+        self.assertTrue((self.package/'receipt_candidate.diagnostic.json').exists())
+    def test_report_persistence_failure_no_published_receipt(self):
+        def writer(path,data):
+            if path.name=='pilot_report.md': raise OSError('report failure')
+            p.write_bytes(path,data)
+        with self.assertRaises(OSError): self.capture(writer=writer)
+        self.assertFalse((self.package/'source_capture_receipt.json').exists())
+        self.assertTrue((self.package/'receipt_candidate.diagnostic.json').exists())
+    def test_final_rename_failure_no_published_receipt(self):
+        with patch.object(Path,'rename',side_effect=OSError('rename failure')):
+            with self.assertRaises(OSError): self.capture()
+        self.assertFalse((self.package/'source_capture_receipt.json').exists())
+        self.assertTrue((self.package/'capture_manifest.json').exists())
+        self.assertTrue((self.package/'pilot_report.md').exists())
+    def test_final_receipt_published_last(self):
+        def writer(path,data):
+            self.assertFalse((self.package/'source_capture_receipt.json').exists())
+            p.write_bytes(path,data)
+        self.capture(writer=writer)
+        self.assertTrue((self.package/'source_capture_receipt.json').exists())
+    def test_same_observation_same_id(self):
+        self.capture(); first=self.receipt()['receipt_id']
+        with tempfile.TemporaryDirectory() as root:
+            p.capture('other',request=lambda:(200,BODY),clock=Mock(side_effect=TIMES),runtime_root=root)
+            second=json.loads((Path(root)/'other/source_capture_receipt.json').read_bytes())['receipt_id']
+        self.assertEqual(first,second)
+    def test_different_observation_different_id(self):
+        self.capture(); first=self.receipt()['receipt_id']
+        later=[t.replace('14:00','15:00') for t in TIMES]
+        with tempfile.TemporaryDirectory() as root:
+            p.capture('other',request=lambda:(200,BODY),clock=Mock(side_effect=later),runtime_root=root)
+            second=json.loads((Path(root)/'other/source_capture_receipt.json').read_bytes())['receipt_id']
+        self.assertNotEqual(first,second)
+    def test_identity_has_no_random_uuid_dependency(self):
+        import ast
+        tree=ast.parse(Path(p.__file__).read_text())
+        imports=[alias.name for node in ast.walk(tree) if isinstance(node,(ast.Import,ast.ImportFrom)) for alias in node.names]
+        self.assertFalse(any(name in ('uuid','random','uuid4') for name in imports))
 
 if __name__=='__main__': unittest.main()

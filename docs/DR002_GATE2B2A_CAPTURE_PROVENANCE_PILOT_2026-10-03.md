@@ -41,15 +41,19 @@ where possible. A separate canonical diagnostic representation has its own hash;
 that hash never replaces source_sha256 and is not a normalization receipt.
 
 The Gate 2B-1 source_capture envelope has no parents. event_time_utc and
-publisher_time_utc remain null. Receipt identity is derived from fixed scope and
-raw content hash. Identical source bytes can have the same content identity across
-attempts; receipt contents, observation timestamps, receipt hash and run package
-remain distinct. This ID is not proof of earliest-ever observation.
+publisher_time_utc remain null. Receipt identity deterministically hashes source identity, event/meeting/session
+scope, raw content SHA-256 and first_observed_utc. Identical bytes observed at
+different times have distinct receipt IDs; the same tuple has the same ID without
+randomness or UUIDs. source_sha256 remains the separate content identity.
+This ID is not proof of earliest-ever observation.
 
 All successful receipt publication requires:
 request_started_utc <= response_completed_utc = first_observed_utc <= ingested_utc
 <= receipt_created_utc. A diagnostic receipt candidate is read back before the
-receipt filename is published. HTTP/schema/scope/JSON/persistence/hash/time errors
+receipt filename is published LAST, only after capture_manifest.json and
+pilot_report.md persistence succeeds. Diagnostic persistence or final rename
+failure propagates and leaves no published source_capture_receipt.json; the
+candidate may remain diagnostic evidence. HTTP/schema/scope/JSON/persistence/hash/time errors
 produce HOLD diagnostics and no successful source_capture receipt. Existing run
 packages cannot be overwritten. If diagnostic storage itself is unavailable,
 the process fails rather than claiming success.
@@ -89,7 +93,7 @@ PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p 'test_dr002_ca
 PYTHONDONTWRITEBYTECODE=1 python -c "import ast,pathlib; [ast.parse(p.read_text()) for p in [pathlib.Path('scripts/session_data_processor/dr002_capture_provenance_pilot_v1.py'), pathlib.Path('tests/test_dr002_capture_provenance_pilot_v1.py')]]"
 ```
 
-Results: **36 test methods passed**, zero failures/errors. Receipt compatibility
+Results: **43 test methods passed**, zero failures/errors. Receipt compatibility
 is exercised against the unchanged committed Gate 2B-1 validators in the new
 suite. No unrelated suites or live OpenF1 pilot were run.
 

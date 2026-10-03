@@ -127,7 +127,9 @@ Only the CLI's fixed runtime root is exposed to real executions.
         if times != sorted(times):
             raise ValueError('invalid_time_order')
         receipt = dict(schema_version=VERSION,
-            receipt_id='source_capture:openf1:weather:1295:11371:' + manifest['source_sha256'],
+            receipt_id='source_capture:' + sha256(canonical_json_bytes({
+                'source_id': 'openf1:weather:1295:11371', **SCOPE,
+                'source_sha256': manifest['source_sha256'], 'first_observed_utc': completed})),
             receipt_type='source_capture', receipt_created_utc=created, scope=dict(SCOPE),
             parent_receipt_ids=[], payload=dict(source_id='openf1:weather:1295:11371',
                 source_uri=URI, source_sha256=manifest['source_sha256'], event_time_utc=None,
@@ -142,7 +144,6 @@ Only the CLI's fixed runtime root is exposed to real executions.
         writer(candidate, encoded)
         if reader(candidate) != encoded:
             raise ValueError('receipt_readback_mismatch')
-        candidate.rename(receipt_path)
         manifest.update(validation_status='CAPTURED_UNBOUND', receipt_path=str(receipt_path),
                         receipt_sha256=receipt_sha256(receipt))
     except Exception as exc:
@@ -154,6 +155,9 @@ Only the CLI's fixed runtime root is exposed to real executions.
         '\n\nUNBOUND: no production authentication or historical availability proof.\n'
         'DR-002 remains PROPOSED — NOT ACTIVATED. No forecast consumes this capture.\n'
         '\nReason: ' + str(manifest['reason']) + '\n').encode())
+    # Publish LAST. Diagnostic persistence and rename errors propagate.
+    if manifest['validation_status'] == 'CAPTURED_UNBOUND':
+        candidate.rename(receipt_path)
     return manifest
 
 
