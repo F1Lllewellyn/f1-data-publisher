@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-10-03T09:00:00+00:00",
+    "date_start": "2026-10-03T08:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1308,
+    "session_key": 11730,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 239,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 81,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 786,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 26,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 81,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 77,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-10-03T10:41:54.034740Z"
+}
