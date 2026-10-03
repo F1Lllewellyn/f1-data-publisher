@@ -1,0 +1,32 @@
+name: DR-002 synthetic frozen producer shadow pilot
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shadow:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: One synthetic frozen-mode producer CLI shadow
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          IMPLEMENTATION_SHA: ${{ github.sha }}
+          SHADOW_RUN_ID: gha-${{ github.run_id }}-${{ github.run_attempt }}
+        run: >-
+          python scripts/forecast_bundles/dr002_frozen_producer_shadow_pilot_v1.py
+          --implementation-git-sha "$IMPLEMENTATION_SHA"
+          --run-id "$SHADOW_RUN_ID"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dr002-frozen-producer-shadow-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/dr002_pre2b7c_frozen_producer_shadow/**
+          if-no-files-found: warn
