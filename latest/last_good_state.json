@@ -2,15 +2,15 @@
   "event": {
     "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
     "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11729,
-    "session_name": "Practice 3"
+    "session_key": 11730,
+    "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261003T064135Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261003T121759Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20261003T064135Z",
+  "run_id": "20261003T121759Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "c0ac318059160c2d509a21bb39bc97a166bea6cc1cd4d326c059bcec28cb8938",
+  "signature": "b474e707b94e21bef64b0473ff8f747b7bf3d78b042f080b932a4a94cc57726a",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-10-03T06:41:35Z"
+  "updated_at_utc": "2026-10-03T12:18:00Z"
 }
