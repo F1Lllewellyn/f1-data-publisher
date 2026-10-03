@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_3_11729/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 13084,
+    "ok": true,
+    "sha256": "c49c6e49c181cc4048968f71b20e833ff3ca592ba58a214e99640628ac9390a9",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_3_11729/raw/openf1_stints.json",
+  "json_sha256": "3eb273d4f2cb9834bcca89dc120d5c96dfa21e35f6b09d25738212f0f51e9fa2",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 91,
+  "status": "clean",
+  "timestamp_rows": 0
+}
