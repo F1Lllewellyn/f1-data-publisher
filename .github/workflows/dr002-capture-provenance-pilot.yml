@@ -1,0 +1,29 @@
+name: DR-002 isolated capture provenance pilot
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-weather-capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fixed Baku Practice 2 weather capture (one request)
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: >-
+          python scripts/session_data_processor/dr002_capture_provenance_pilot_v1.py
+          --run-id gha-${{ github.run_id }}-${{ github.run_attempt }}
+          --implementation-git-sha ${{ github.sha }}
+      - name: Upload runtime-only evidence and HOLD diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dr002-weather-capture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/dr002_gate2b2_capture_pilot/**
+          if-no-files-found: warn
