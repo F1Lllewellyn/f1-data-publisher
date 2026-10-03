@@ -1,0 +1,250 @@
+{
+  "notice": "SYNTHETIC ONLY. External bindings are fixture expectations, not production authentication, first observation, engine execution or policy approval.",
+  "forecast": {
+    "schema_version": "dr002-integrity-v1",
+    "legacy": false,
+    "contract_approved": true,
+    "product_contract_id": "synthetic-contract-only",
+    "forecast_id": "fixture-forecast",
+    "product_id": "fixture-race-finish",
+    "lane_name": "stable_baseline",
+    "gate": "post_qualifying",
+    "execution_mode": "prospective",
+    "event_id": "fixture-event",
+    "meeting_id": "fixture-meeting",
+    "session_id": "fixture-race",
+    "allowed_session_ids": [
+      "fixture-qualifying"
+    ],
+    "mandatory_source_ids": [
+      "grid"
+    ],
+    "evidence_cutoff_utc": "2026-09-26T10:00:00Z",
+    "forecast_generation_utc": "2026-09-26T10:05:00Z",
+    "forecast_deadline_utc": "2026-09-26T10:30:00Z",
+    "forecast_lock_utc": "2026-09-26T10:10:00Z",
+    "outcome_availability_boundary_utc": "2026-09-26T11:00:00Z",
+    "outcome_boundary_evidence_ref": "boundary-1",
+    "lock_receipt_ref": "lock-1",
+    "revision_policy": "supersede_before_deadline",
+    "revisions": [],
+    "evidence": [
+      {
+        "source_id": "grid",
+        "source_uri": "fixture://grid",
+        "source_sha256": "572293c645b0169c8478b3f4497f6baca62b18055f35b21bcd6084598959b6fa",
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-qualifying",
+        "event_time_utc": "2026-09-25T12:00:00Z",
+        "publisher_time_utc": null,
+        "first_observed_utc": "2026-09-26T09:55:00Z",
+        "ingested_utc": "2026-09-26T09:56:00Z",
+        "ingestion_required_at_cutoff": true,
+        "capture_evidence_ref": "capture-1"
+      }
+    ],
+    "producer": {
+      "implementation": "fixture/generic_producer.py",
+      "git_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "code_sha256": "391e7958e45cb7dc8867eaa5333b3b6c75b66f956642e1ef9cbc85378c52020f",
+      "execution_id": "fixture-execution",
+      "input_manifest_sha256": "39fcca21bd5702f23c460c26b427d0754fa4bccfeca90d7db1d0d0aba91f801f",
+      "forecast_payload_sha256": "406b1d43c53d0bcf7e93c6111493796240db85dbcf6a574de8269b31041ccb95",
+      "engine_implementation": null,
+      "engine_execution_id": null,
+      "engine_code_sha256": null,
+      "engine_execution_proof_ref": null
+    }
+  },
+  "objects_utf8": {
+    "572293c645b0169c8478b3f4497f6baca62b18055f35b21bcd6084598959b6fa": "SYNTHETIC grid bytes\n",
+    "391e7958e45cb7dc8867eaa5333b3b6c75b66f956642e1ef9cbc85378c52020f": "SYNTHETIC generic producer code\n",
+    "406b1d43c53d0bcf7e93c6111493796240db85dbcf6a574de8269b31041ccb95": "SYNTHETIC raw forecast rows\n",
+    "39fcca21bd5702f23c460c26b427d0754fa4bccfeca90d7db1d0d0aba91f801f": "{\"allowed_session_ids\":[\"fixture-qualifying\"],\"event_id\":\"fixture-event\",\"evidence\":[{\"capture_evidence_ref\":\"capture-1\",\"event_id\":\"fixture-event\",\"event_time_utc\":\"2026-09-25T12:00:00Z\",\"first_observed_utc\":\"2026-09-26T09:55:00Z\",\"ingested_utc\":\"2026-09-26T09:56:00Z\",\"ingestion_required_at_cutoff\":true,\"meeting_id\":\"fixture-meeting\",\"publisher_time_utc\":null,\"session_id\":\"fixture-qualifying\",\"source_id\":\"grid\",\"source_sha256\":\"572293c645b0169c8478b3f4497f6baca62b18055f35b21bcd6084598959b6fa\",\"source_uri\":\"fixture://grid\"}],\"evidence_cutoff_utc\":\"2026-09-26T10:00:00Z\",\"forecast_deadline_utc\":\"2026-09-26T10:30:00Z\",\"forecast_id\":\"fixture-forecast\",\"gate\":\"post_qualifying\",\"lane_name\":\"stable_baseline\",\"mandatory_source_ids\":[\"grid\"],\"meeting_id\":\"fixture-meeting\",\"product_contract_id\":\"synthetic-contract-only\",\"product_id\":\"fixture-race-finish\",\"revision_policy\":\"supersede_before_deadline\",\"session_id\":\"fixture-race\"}",
+    "cbb2ee3e9dea81c2708b9230551852eab63c1914691394dca6269a1e0e632442": "SYNTHETIC normalized forecast rows\n",
+    "be097145b20430c992e9d17cad3fdd353777466e84e440bc7592fd2c493885a5": "SYNTHETIC normalizer code\n",
+    "e7001af03c67415e1b94ead5c7293a473fb3d17fdf3fe60ad15342643686da48": "SYNTHETIC policy evidence, NOT A REAL RACE BOUNDARY\n"
+  },
+  "receipts": [
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "capture-1",
+      "receipt_type": "source_capture",
+      "receipt_created_utc": "2026-09-26T09:57:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-qualifying"
+      },
+      "parent_receipt_ids": [],
+      "payload": {
+        "source_id": "grid",
+        "source_uri": "fixture://grid",
+        "first_observed_utc": "2026-09-26T09:55:00Z",
+        "ingested_utc": "2026-09-26T09:56:00Z",
+        "event_time_utc": "2026-09-25T12:00:00Z",
+        "publisher_time_utc": null,
+        "source_sha256": "572293c645b0169c8478b3f4497f6baca62b18055f35b21bcd6084598959b6fa",
+        "capture_ref": "synthetic://objects/grid",
+        "implementation": "fixture/capture.py"
+      }
+    },
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "producer-1",
+      "receipt_type": "producer_execution",
+      "receipt_created_utc": "2026-09-26T10:05:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-race",
+        "product_id": "fixture-race-finish",
+        "forecast_id": "fixture-forecast",
+        "gate": "post_qualifying",
+        "lane_name": "stable_baseline"
+      },
+      "parent_receipt_ids": [
+        "capture-1"
+      ],
+      "payload": {
+        "implementation": "fixture/generic_producer.py",
+        "git_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "code_sha256": "391e7958e45cb7dc8867eaa5333b3b6c75b66f956642e1ef9cbc85378c52020f",
+        "execution_id": "fixture-execution",
+        "input_manifest_sha256": "39fcca21bd5702f23c460c26b427d0754fa4bccfeca90d7db1d0d0aba91f801f",
+        "forecast_payload_sha256": "406b1d43c53d0bcf7e93c6111493796240db85dbcf6a574de8269b31041ccb95",
+        "engine_implementation": null,
+        "forecast_generation_utc": "2026-09-26T10:05:00Z",
+        "engine_receipt_id": null,
+        "input_receipt_manifest_sha256": "a6d820203c6ce2dff355be09dfff6c63140cddf55b42d2f382b98dec639bdc78",
+        "engine_result_sha256": null
+      }
+    },
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "normalization-1",
+      "receipt_type": "normalization",
+      "receipt_created_utc": "2026-09-26T10:07:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-race",
+        "product_id": "fixture-race-finish",
+        "forecast_id": "fixture-forecast",
+        "gate": "post_qualifying",
+        "lane_name": "stable_baseline"
+      },
+      "parent_receipt_ids": [
+        "producer-1"
+      ],
+      "payload": {
+        "implementation": "fixture/normalize.py",
+        "git_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "code_sha256": "be097145b20430c992e9d17cad3fdd353777466e84e440bc7592fd2c493885a5",
+        "execution_id": "normalize-invocation-1",
+        "input_payload_sha256": "406b1d43c53d0bcf7e93c6111493796240db85dbcf6a574de8269b31041ccb95",
+        "output_payload_sha256": "cbb2ee3e9dea81c2708b9230551852eab63c1914691394dca6269a1e0e632442",
+        "completed_utc": "2026-09-26T10:07:00Z"
+      }
+    },
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "lock-1",
+      "receipt_type": "forecast_lock",
+      "receipt_created_utc": "2026-09-26T10:10:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-race",
+        "product_id": "fixture-race-finish",
+        "forecast_id": "fixture-forecast",
+        "gate": "post_qualifying",
+        "lane_name": "stable_baseline"
+      },
+      "parent_receipt_ids": [
+        "normalization-1"
+      ],
+      "payload": {
+        "forecast_payload_sha256": "cbb2ee3e9dea81c2708b9230551852eab63c1914691394dca6269a1e0e632442",
+        "lock_utc": "2026-09-26T10:10:00Z",
+        "storage_ref": "synthetic://create-only/forecast-1",
+        "stored_payload_sha256": "cbb2ee3e9dea81c2708b9230551852eab63c1914691394dca6269a1e0e632442"
+      }
+    },
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "boundary-capture",
+      "receipt_type": "source_capture",
+      "receipt_created_utc": "2026-09-26T09:57:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-race"
+      },
+      "parent_receipt_ids": [],
+      "payload": {
+        "source_id": "boundary-evidence",
+        "source_uri": "synthetic://boundary-evidence",
+        "first_observed_utc": "2026-09-26T09:55:00Z",
+        "ingested_utc": "2026-09-26T09:56:00Z",
+        "event_time_utc": null,
+        "publisher_time_utc": null,
+        "source_sha256": "e7001af03c67415e1b94ead5c7293a473fb3d17fdf3fe60ad15342643686da48",
+        "capture_ref": "synthetic://objects/boundary",
+        "implementation": "fixture/capture.py"
+      }
+    },
+    {
+      "schema_version": "dr002-receipt-v1",
+      "receipt_id": "boundary-1",
+      "receipt_type": "outcome_boundary",
+      "receipt_created_utc": "2026-09-26T09:58:00Z",
+      "scope": {
+        "event_id": "fixture-event",
+        "meeting_id": "fixture-meeting",
+        "session_id": "fixture-race",
+        "product_id": "fixture-race-finish",
+        "forecast_id": "fixture-forecast",
+        "gate": "post_qualifying",
+        "lane_name": "stable_baseline"
+      },
+      "parent_receipt_ids": [
+        "boundary-capture"
+      ],
+      "payload": {
+        "product_contract_id": "synthetic-contract-only",
+        "boundary_policy_ref": "synthetic-contract-only",
+        "outcome_availability_boundary_utc": "2026-09-26T11:00:00Z",
+        "evidence_sha256": "e7001af03c67415e1b94ead5c7293a473fb3d17fdf3fe60ad15342643686da48",
+        "source_id": "boundary-evidence"
+      }
+    }
+  ],
+  "verified_receipt_bindings": {
+    "capture-1": {
+      "receipt_sha256": "504439b388a42bc6526b5456cf0245a45fcd4a612b6a4d8995b5eab99a756ad9",
+      "verification_ref": "synthetic://capture-1"
+    },
+    "producer-1": {
+      "receipt_sha256": "074b7078c064691218982f8686be982f4c50f0e4a7a5aef813813fdbec294427",
+      "verification_ref": "synthetic://producer-1"
+    },
+    "normalization-1": {
+      "receipt_sha256": "7cd4a7b6e79cde37c2b9bf6ea098da5306599ad98c353bd77e9264df7003544c",
+      "verification_ref": "synthetic://normalization-1"
+    },
+    "lock-1": {
+      "receipt_sha256": "f5fc8d6639629e3a54a63fc7c038321aeb4adaf025b88d187462c137a830f307",
+      "verification_ref": "synthetic://lock-1"
+    },
+    "boundary-capture": {
+      "receipt_sha256": "21dd340cad7df4cd41fb513d01b4f89f6e5ffa3bb6dd4c10f9b79ba9255c7673",
+      "verification_ref": "synthetic://boundary-capture"
+    },
+    "boundary-1": {
+      "receipt_sha256": "c28664fd7a4de29b1453742568576961b1bd3a69c65b462b21ccdb6afc9ae318",
+      "verification_ref": "synthetic://boundary-1"
+    }
+  }
+}
