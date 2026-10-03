@@ -1,0 +1,17 @@
+{
+  "ready_for_use": true,
+  "latest_session_state": "clean",
+  "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
+  "generated_at_utc": "2026-10-03T19:24:24Z",
+  "source_status": "clean",
+  "event_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "session_name": {
+    "date_end": "2026-10-03T09:00:00+00:00",
+    "date_start": "2026-10-03T08:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1308,
+    "session_key": 11730,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "generated_at_utc": "2026-10-03T19:24:24Z",
+  "status": "dashboard_refreshed",
+  "source_status": "clean",
+  "source_backed": true,
+  "commit_allowed": true,
+  "event_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "session_name": {
+    "date_end": "2026-10-03T09:00:00+00:00",
+    "date_start": "2026-10-03T08:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1308,
+    "session_key": 11730,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "workbook_artifact": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261003T192424Z.xlsx",
+  "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+  "session_manifest": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
+  "autorepair_report": null,
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "race_predictions": {
+    "ready_for_use": true,
+    "latest_session_state": "clean",
+    "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
+  },
+  "fantasy_predictions": {
+    "ready_for_use": true,
+    "latest_session_state": "clean",
+    "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
+  }
+}
