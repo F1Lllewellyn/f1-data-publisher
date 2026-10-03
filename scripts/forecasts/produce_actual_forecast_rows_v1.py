@@ -3,6 +3,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import io
+import re
+import tempfile
+from contextlib import contextmanager
 import json
 import math
 import os
@@ -136,6 +141,113 @@ def find_sources(repo: Path) -> Tuple[Dict[str, Path], Dict[str, int]]:
         else:
             counts[source_name] = 0
     return found, counts
+
+
+
+FROZEN_SCHEMA = "dr002-frozen-producer-input-v1"
+
+
+def _unique_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate JSON key: " + key)
+        result[key] = value
+    return result
+
+
+@contextmanager
+def frozen_sources(manifest_path, event_id, meeting_id, session_id):
+    """Validate explicit files and snapshot exact bytes for existing CSV readers.
+
+    No discovery or authentication. Root is the manifest parent; symlinks and
+    non-canonical paths are rejected. Snapshots prevent later input alteration
+    from bypassing the checked content identity during repeated producer reads.
+    """
+    if not all(isinstance(v, str) and v.strip() for v in (event_id, meeting_id, session_id)):
+        raise ValueError("Frozen mode requires explicit event/meeting/session")
+    manifest_path = Path(manifest_path)
+    if manifest_path.is_symlink():
+        raise ValueError("Symlink manifest is ambiguous")
+    manifest_path = manifest_path.resolve(strict=True)
+    raw_manifest = manifest_path.read_bytes()
+    manifest = json.loads(raw_manifest, object_pairs_hook=_unique_json_object)
+    if not isinstance(manifest, dict) or set(manifest) != {"schema_version", "event_id", "meeting_id", "session_id", "sources"}:
+        raise ValueError("Malformed frozen manifest")
+    if manifest["schema_version"] != FROZEN_SCHEMA:
+        raise ValueError("Unsupported frozen manifest version")
+    for field, expected in (("event_id", event_id), ("meeting_id", meeting_id), ("session_id", session_id)):
+        if manifest[field] != expected:
+            raise ValueError("Frozen scope mismatch: " + field)
+    entries = manifest["sources"]
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("Empty frozen evidence")
+    root = manifest_path.parent
+    names, ids, paths = set(), set(), set()
+    validated = []
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) != {"source_name", "source_id", "relative_path", "source_sha256"}:
+            raise ValueError("Malformed frozen source")
+        name, sid, rel, digest = (entry[k] for k in ("source_name", "source_id", "relative_path", "source_sha256"))
+        if not all(isinstance(v, str) and v.strip() for v in (name, sid, rel, digest)):
+            raise ValueError("Missing frozen source identity")
+        if name not in SOURCE_FILES or name in names or sid in ids or rel in paths:
+            raise ValueError("Unknown or duplicate frozen source")
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise ValueError("Malformed source hash")
+        relative = Path(rel)
+        if relative.is_absolute() or "\\" in rel or ":" in rel or any(v in ("", ".", "..") for v in rel.split("/")):
+            raise ValueError("Non-canonical or escaping source path")
+        current = root
+        for part in relative.parts:
+            current = current / part
+            if current.is_symlink():
+                raise ValueError("Symlink source path is ambiguous")
+        resolved = current.resolve(strict=True)
+        if resolved != current or not resolved.is_relative_to(root) or not resolved.is_file():
+            raise ValueError("Invalid frozen source location")
+        data = resolved.read_bytes()
+        if not data or hashlib.sha256(data).hexdigest() != digest:
+            raise ValueError("Empty or hash-mismatched frozen source")
+        try:
+            text = data.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            text = data.decode("latin-1")
+        if "\x00" in text:
+            raise ValueError("Malformed CSV bytes")
+        reader = csv.DictReader(io.StringIO(text, newline=""), strict=True)
+        rows = list(reader)
+        fields = reader.fieldnames
+        if not fields or any(not f or not f.strip() for f in fields) or len(set(f.lower() for f in fields)) != len(fields) or not rows:
+            raise ValueError("Empty or malformed CSV")
+        for row in rows:
+            if None in row or any(v is None for v in row.values()):
+                raise ValueError("Malformed CSV row width")
+            for key, value in row.items():
+                expected = {"event_id": event_id, "meeting_id": meeting_id, "meeting_key": meeting_id,
+                            "session_id": session_id, "session_key": session_id}.get(key.lower())
+                if expected is not None and value.strip() != expected:
+                    raise ValueError("Frozen CSV scope mismatch")
+        names.add(name); ids.add(sid); paths.add(rel)
+        validated.append((entry, data, len(rows)))
+    with tempfile.TemporaryDirectory(prefix="dr002-frozen-producer-") as directory:
+        sources, counts = {}, {name: 0 for name in SOURCE_FILES}
+        source_records = []
+        for entry, data, row_count in sorted(validated, key=lambda x: x[0]["source_name"]):
+            path = Path(directory) / (entry["source_name"] + ".csv")
+            path.write_bytes(data)
+            if path.read_bytes() != data or len(read_csv(path)) != row_count:
+                raise ValueError("Frozen snapshot readback/parser mismatch")
+            sources[entry["source_name"]] = path
+            counts[entry["source_name"]] = row_count
+            source_records.append(dict(entry, row_count=row_count))
+        audit = dict(input_mode="frozen_manifest", schema_version=FROZEN_SCHEMA,
+                     frozen_manifest_sha256=hashlib.sha256(raw_manifest).hexdigest(),
+                     event_id=event_id, meeting_id=meeting_id, session_id=session_id,
+                     sources=source_records, broad_discovery_used=False,
+                     production_authenticated=False, historical_availability_proven=False,
+                     stable_engine_execution_proven=False, dr002_activated=False)
+        yield sources, counts, audit
 
 
 def clean_str(x) -> str:
@@ -397,6 +509,9 @@ def main() -> int:
     ap.add_argument("--lane", default="all")
     ap.add_argument("--repo-root", default=".")
     ap.add_argument("--strict-source", action="store_true")
+    ap.add_argument("--frozen-input-manifest")
+    ap.add_argument("--meeting-id")
+    ap.add_argument("--session-id")
     args = ap.parse_args()
 
     repo = Path(args.repo_root).resolve()
@@ -407,11 +522,18 @@ def main() -> int:
     if invalid_gates or invalid_lanes:
         raise SystemExit(f"Invalid gates={invalid_gates} lanes={invalid_lanes}")
 
+    if args.frozen_input_manifest:
+        with frozen_sources(args.frozen_input_manifest, args.event_id, args.meeting_id, args.session_id) as (sources, counts, frozen_audit):
+            return _run_producer(args, repo, gates, lanes, sources, counts, frozen_audit)
+    sources, counts = find_sources(repo)
+    return _run_producer(args, repo, gates, lanes, sources, counts)
+
+
+def _run_producer(args, repo, gates, lanes, sources, counts, frozen_audit=None):
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     runtime_dir = repo / "_runtime" / "actual_forecast_producer_v1" / run_id
     runtime_dir.mkdir(parents=True, exist_ok=True)
 
-    sources, counts = find_sources(repo)
     drivers = build_driver_universe(sources)
     grid = starting_grid_map(sources)
     source_manifest = []
@@ -421,8 +543,15 @@ def main() -> int:
             "source_name": source_name,
             "found": bool(p),
             "row_count": counts.get(source_name, 0),
-            "path": str(p.relative_to(repo)) if p else "",
+            "path": (next(e["relative_path"] for e in frozen_audit["sources"] if e["source_name"] == source_name) if frozen_audit and p else str(p.relative_to(repo)) if p else ""),
         })
+
+    if frozen_audit:
+        by_name = {e["source_name"]: e for e in frozen_audit["sources"]}
+        for record in source_manifest:
+            record.update(source_id=by_name.get(record["source_name"], {}).get("source_id", ""),
+                          source_sha256=by_name.get(record["source_name"], {}).get("source_sha256", ""),
+                          relative_path=record["path"])
 
     audit = {
         "run_id": run_id,
@@ -433,7 +562,7 @@ def main() -> int:
         "gates": gates,
         "lanes": lanes,
         "driver_universe_count": len(drivers),
-        "sources_found": {k: str(v.relative_to(repo)) for k, v in sources.items()},
+        "sources_found": {e["source_name"]: e["relative_path"] for e in frozen_audit["sources"]} if frozen_audit else {k: str(v.relative_to(repo)) for k, v in sources.items()},
         "source_counts": counts,
         "forecast_rows_created": 0,
         "gate_lane_files_created": 0,
@@ -442,6 +571,10 @@ def main() -> int:
         "stable_output_overwrite_allowed": False,
         "source_discovery_version": "v1.1_data_subfolder_recursive_hotfix",
     }
+
+    if frozen_audit:
+        audit.update(frozen_audit)
+        audit["source_discovery_version"] = "explicit_frozen_manifest_v1"
 
     if not drivers:
         audit["status"] = "pending_required_driver_source_rows"
@@ -472,6 +605,8 @@ def main() -> int:
                 "stable_output_overwrite_allowed": False,
                 "source_counts": counts,
             }
+            if frozen_audit:
+                meta.update(frozen_audit)
             copy_to_latest_and_history(repo, args.event_id, run_id, gate, lane, rows, source_manifest, meta)
             total_rows += len(rows)
             files_created += 1
