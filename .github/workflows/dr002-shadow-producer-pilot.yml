@@ -1,0 +1,42 @@
+name: DR-002 isolated shadow producer pilot
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  shadow:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37133694090
+          name: dr002-weather-capture-37133694090-1
+          github-token: ${{ github.token }}
+          path: _runtime/dr002_gate2b3b_input/
+      - name: One retrospective execution shadow
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          IMPLEMENTATION_SHA: ${{ github.sha }}
+          SHADOW_RUN_ID: gha-${{ github.run_id }}-${{ github.run_attempt }}
+        run: >-
+          python scripts/forecast_bundles/dr002_shadow_producer_execution_v1.py
+          --source-receipt _runtime/dr002_gate2b3b_input/gha-37133694090-1/source_capture_receipt.json
+          --capture-manifest _runtime/dr002_gate2b3b_input/gha-37133694090-1/capture_manifest.json
+          --raw-source _runtime/dr002_gate2b3b_input/gha-37133694090-1/raw/openf1_weather.response.json
+          --implementation-git-sha "$IMPLEMENTATION_SHA"
+          --run-id "$SHADOW_RUN_ID"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dr002-shadow-execution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/dr002_gate2b3b_shadow/**
+          if-no-files-found: warn
