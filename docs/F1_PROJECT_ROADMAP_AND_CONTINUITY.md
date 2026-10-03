@@ -1,12 +1,13 @@
 # F1 Prediction Engine — Project Roadmap and Continuity Spine
 
-**Status:** Candidate canonical continuity document — review-ready, not yet landed in the repository  
+**Status:** Canonical continuity spine on main — landed via merged PR #124, merge commit `3da3fca55e62356b387a6e2724fa08b42cb60d8e`  
 **Prepared:** 2026-10-02  
+**Current-state checkpoint:** 2026-10-03  
 **Primary implementation route:** 1B / Engine Optimization Active Workstream  
 **Repository:** `F1Lllewellyn/f1-data-publisher`  
-**Current observed `main`:** `0e757d1b54a1c9feb100b64216af0d107a482468`  
+**Current observed `main`:** `d719fbb10babac3760d33165a77094e983acef06`  
 **Current DR-002 status:** **PROPOSED — NOT ACTIVATED**  
-**Current open integrity PR:** #123 — Gate 2B-1, head `f14db284e59ba1d457d9265596164dd6f07518e4`, open/unmerged/mergeable at this checkpoint
+**Landed integrity PR:** #123 — Gate 2B-1, MERGED; merge commit `d719fbb10babac3760d33165a77094e983acef06`; reviewed implementation head `f14db284e59ba1d457d9265596164dd6f07518e4`
 
 ---
 
@@ -30,24 +31,24 @@ This document is not a substitute for detailed gate checkpoints, the Enhancement
 
 ## 0A. Current state — read this first
 
-**As of 2026-10-02:**
+**As of 2026-10-03:**
 
 - Active route: **1B / Engine Optimization**.
 - Stable engine: **protected**.
 - DR-002: **PROPOSED — NOT ACTIVATED**.
 - Gate 2A: **MERGED / isolated contract validated** via PR #122.
-- Gate 2B-1: **IMPLEMENTED / adviser-reviewed / OPEN / NOT MERGED** via PR #123.
-- PR #123 head: `f14db284e59ba1d457d9265596164dd6f07518e4`.
-- Current observed `main`: `0e757d1b54a1c9feb100b64216af0d107a482468`.
+- Gate 2B-1: **MERGED / isolated receipt-verifier contract landed** via PR #123.
+- PR #123 merge commit: `d719fbb10babac3760d33165a77094e983acef06`; reviewed implementation head: `f14db284e59ba1d457d9265596164dd6f07518e4`.
+- Continuity spine: **MERGED** via PR #124, merge commit `3da3fca55e62356b387a6e2724fa08b42cb60d8e`.
+- Current observed `main`: `d719fbb10babac3760d33165a77094e983acef06`.
 - Current scheduled 1B support chain: active.
 - Forecast gate: **OFF**.
 - Promotion: **NOT ALLOWED**.
 - Stable-engine modification: **false**.
 - Canonical-workbook overwrite: **false**.
 - Downstream readiness/context chain: operational when sources are clean; no automatic stable prediction overwrite.
-- Next material decision: **merge or hold PR #123**.
-- After a clean Gate 2B-1 landing, next architecture work: **Gate 2B-2 Capture Provenance Pilot**.
-- Gate 2B-2 is **not started** and should first be designed read-only before Coder/Work implementation.
+- Next material decision: **design Gate 2B-2 — Capture Provenance Pilot**.
+- Gate 2B-2 is **NOT STARTED**; architecture/read-only design comes first. Coder/Work implementation is not yet authorized.
 
 A future chat should be able to read this block, the authority rules below, and the newest relevant checkpoint before doing any deeper reconstruction.
 
@@ -61,7 +62,7 @@ For stored project state, apply this order:
 
 1. Current explicit user instruction.
 2. Newer dated control/checkpoint documents that explicitly supersede older ones.
-3. This continuity spine once it is formally landed and kept current.
+3. This continuity spine, landed via PR #124 and kept current.
 4. Current repository code, PR state, generated artifacts, and validated test evidence.
 5. The latest Project Chat Ledger and Enhancement Ledger rules where not superseded.
 6. Older continuity/control documents.
@@ -433,7 +434,7 @@ Gate 2A's 41 offline tests prove classifier behavior. They do not prove a real s
 
 #### Gate 2B-1 — offline receipt/verifier foundation
 
-PR #123 implements the next bounded layer and remains open/unmerged at this checkpoint.
+At the 2026-10-02 checkpoint, PR #123 implemented the next bounded layer and was open/unmerged. It was science/architecture reviewed and merged on 2026-10-03 as `d719fbb10babac3760d33165a77094e983acef06`; the offline receipt/verifier foundation is now on main.
 
 It adds one strict receipt envelope with seven typed receipt classes:
 
@@ -455,11 +456,11 @@ The reviewed PR contains exactly six files, reports 41 Gate 2A + 75 Gate 2B-1 pa
 
 ---
 
-## 6. Current operational state — 2026-10-02
+## 6. Current operational state — 2026-10-03
 
 Older June documents repeatedly say “production automation OFF.” That statement must now be interpreted historically and by scope.
 
-The repository currently has scheduled operational support chains actively producing `latest/` and `history/` artifacts. Current observed evidence on 2026-10-02 shows:
+The repository has scheduled operational support chains producing `latest/` and `history/` artifacts. The operational evidence observed on 2026-10-02 showed:
 
 - the 1B control-room scheduled chain may execute `full_run_chain`;
 - the current source/session processor is producing live readiness artifacts;
@@ -475,9 +476,9 @@ This means **operational support automation is active**, while **forecast-gate a
 
 Current observed `main` is:
 
-`0e757d1b54a1c9feb100b64216af0d107a482468`
+`d719fbb10babac3760d33165a77094e983acef06`
 
-Since the previously reviewed `84aa38cc...` checkpoint, the repository advanced through scheduled/generated `latest/` and `history/` activity. A targeted comparison found no changes to the protected DR-002 implementation/contract files used for the Gate 2B-1 review.
+At the 2026-10-02 checkpoint (`0e757d1b54a1c9feb100b64216af0d107a482468`), the repository had advanced since the previously reviewed `84aa38cc...` through scheduled/generated `latest/` and `history/` activity. That targeted comparison found no changes to the protected DR-002 implementation/contract files used for the Gate 2B-1 review. PR #124 subsequently landed the continuity spine, and PR #123 landed the isolated Gate 2B-1 foundation; neither landing activated DR-002 or changed production/model/workbook behavior.
 
 A newly generated `cross_car_microdelta_forensics` output on 2026-10-02 correctly returned `no_action` because the required driver-session summary schema was unavailable. It explicitly records no stable-engine modification, no canonical-workbook overwrite and no promotion. It is experimental evidence, not a new main-roadmap activation.
 
@@ -496,7 +497,7 @@ A newly generated `cross_car_microdelta_forensics` output on 2026-10-02 correctl
 | v33 sandbox chain | Completed rehearsal / review-only | End-to-end gated process could be decomposed and rehearsed | It was not production activation |
 | Continuity Specialist / bridge governance | Historical operational control | Strong lessons on transport, evidence states, duplicate sends and chain of custody | Pipedream/Gmail bridge is not the desired final processing architecture |
 | Gate 2A / PR #122 | **Merged / isolated validated** | Deterministic forecast classification and fail-closed integrity contract | No production enforcement or real execution authentication |
-| Gate 2B-1 / PR #123 | **Implemented + adviser-reviewed + open/unmerged** | Offline receipt graph/verifier behavior, 41+75 tests | No live receipt adapters, production authentication or live forecast repair |
+| Gate 2B-1 / PR #123 | **MERGED / isolated validated** | Offline receipt graph/verifier behavior, 41+75 tests; landed via merge commit `d719fbb10babac3760d33165a77094e983acef06` | No live source-capture receipt adapter, production authentication, authenticated historical first-observation proof, live forecast repair or DR-002 production enforcement |
 | DR-002 overall | **PROPOSED — NOT ACTIVATED** | Architecture and initial isolated contracts exist | Production leakage/provenance problem is not solved |
 | `pre_qualifying` gate | Proposed only | Architectural need identified | Not active |
 | `final_pre_race` gate | Proposed only | Need for independently verified FIA final grid identified | Not active; no final deadline policy activated |
@@ -571,11 +572,13 @@ The repository-visible bridge route historically included Gmail -> Pipedream -> 
 
 ### Gate 2B-1 — Offline receipt/verifier contract
 
-**State:** implementation complete in PR #123; reviewed; not merged.  
-**Next material decision:** merge or hold PR #123.  
+**State:** implementation completed; science/architecture reviewed; PR #123 merged as `d719fbb10babac3760d33165a77094e983acef06`. Gate 2B-1 is now the landed offline receipt/verifier foundation.  
+**Next material decision:** design Gate 2B-2 — Capture Provenance Pilot; architecture/read-only design first, with Coder implementation not yet authorized.  
 **Do not redo the implementation simply to repeat already-completed work unless relevant code changed.**
 
 ### Gate 2B-2 — Capture provenance pilot
+
+**State:** NOT STARTED. Architecture/read-only design must precede separately authorized Coder implementation.
 
 **Goal:** adapt one bounded existing capture path to emit trustworthy, event/session-scoped source-capture evidence without redesigning every source system at once.
 
@@ -818,7 +821,7 @@ Authoritative merged Gate 2A checkpoint.
 
 ### `docs/DR002_GATE2B1_CHECKPOINT_2026-09-29.md`
 
-Exists only in PR #123 until that PR is merged. It is the detailed Gate 2B-1 checkpoint, not yet main-branch history.
+Now on main via merged PR #123 (`d719fbb10babac3760d33165a77094e983acef06`). It is the detailed checkpoint for the landed offline Gate 2B-1 foundation.
 
 ---
 
