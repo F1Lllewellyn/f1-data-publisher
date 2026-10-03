@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-03T10:33:18.639678Z",
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "forecast_state_changed": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-10-03T09:00:00+00:00",
+    "date_start": "2026-10-03T08:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1308,
+    "session_key": 11730,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_readiness_materially_improved": true,
+  "stable_order_overwrite_allowed": false
+}
