@@ -171,7 +171,7 @@ def _decoded_bundle_statement(bundle_bytes):
         raw = base64.b64decode(payload, validate=True)
     except Exception:
         raise BindingError('malformed_dsse_payload')
-    return _strict_json_bytes(raw, 'malformed_dsse_statement')
+    return bundle, _strict_json_bytes(raw, 'malformed_dsse_statement')
 
 
 def _validate_subject(statement, exact_digest):
@@ -187,7 +187,7 @@ def _validate_subject(statement, exact_digest):
             and set(digest) == {'sha256'}, 'subject_digest_mismatch')
 
 
-def _validate_verified_result(verified, bundle_statement, exact_digest, identity):
+def _validate_verified_result(verified, saved_bundle, bundle_statement, exact_digest, identity):
     require(isinstance(verified, dict)
             and set(verified) == {'verification_status', 'verifier', 'result'},
             'missing_or_malformed_verified_result')
@@ -195,6 +195,7 @@ def _validate_verified_result(verified, bundle_statement, exact_digest, identity
     require(verified['verifier'] == APPROVED_VERIFIER, 'unapproved_verifier')
     result = _dict(verified['result'], 'malformed_verified_result')
     require(result.get('mediaType') == VERIFICATION_MEDIA_TYPE, 'verification_media_type_mismatch')
+    require(result.get('bundle') == saved_bundle, 'verified_bundle_mismatch')
     statement = _dict(result.get('statement'), 'missing_verified_statement')
     require(statement == bundle_statement, 'verified_statement_bundle_mismatch')
     _validate_subject(statement, exact_digest)
@@ -298,9 +299,9 @@ def build_verified_github_receipt_binding(
         canonical_digest = receipt_sha256(receipt)
         require(exact_digest == canonical_digest, 'canonical_exact_digest_mismatch')
 
-        bundle_statement = _decoded_bundle_statement(attestation_bundle_bytes)
+        saved_bundle, bundle_statement = _decoded_bundle_statement(attestation_bundle_bytes)
         tlog_time = _validate_verified_result(
-            verified_attestation_result, bundle_statement, exact_digest, identity)
+            verified_attestation_result, saved_bundle, bundle_statement, exact_digest, identity)
 
         created = _utc(receipt['receipt_created_utc'], 'malformed_receipt_created_utc')
         require(tlog_time >= created, 'verified_tlog_before_receipt_creation')
