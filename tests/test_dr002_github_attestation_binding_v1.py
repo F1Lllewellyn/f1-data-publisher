@@ -150,17 +150,6 @@ def fixture(*, live=False):
         "runInvocationURI": ident["run_invocation_uri"],
     }
     tlog = "2026-10-04T19:42:36Z"
-    result = {
-        "mediaType": "application/vnd.dev.sigstore.verificationresult+json;version=0.1",
-        "signature": {"certificate": certificate},
-        "verifiedTimestamps": [{"type": "Tlog", "uri": "https://rekor.sigstore.dev", "timestamp": tlog}],
-        "statement": statement,
-    }
-    verified = {
-        "verification_status": "VERIFIED",
-        "verifier": "github_cli_attestation_verify",
-        "result": result,
-    }
     bundle = {
         "mediaType": "application/vnd.dev.sigstore.bundle.v0.3+json",
         "verificationMaterial": {"certificate": {"rawBytes": "fixture"}, "tlogEntries": []},
@@ -169,6 +158,18 @@ def fixture(*, live=False):
             "payloadType": "application/vnd.in-toto+json",
             "signatures": [{"sig": "fixture-signature"}],
         },
+    }
+    result = {
+        "mediaType": "application/vnd.dev.sigstore.verificationresult+json;version=0.1",
+        "signature": {"certificate": certificate},
+        "verifiedTimestamps": [{"type": "Tlog", "uri": "https://rekor.sigstore.dev", "timestamp": tlog}],
+        "statement": statement,
+        "bundle": copy.deepcopy(bundle),
+    }
+    verified = {
+        "verification_status": "VERIFIED",
+        "verifier": "github_cli_attestation_verify",
+        "result": result,
     }
     ref = ("https://github.com/F1Lllewellyn/f1-data-publisher/attestations/52636060"
            if live else "https://github.com/owner/repo/attestations/456")
@@ -246,6 +247,7 @@ class BridgeTests(unittest.TestCase):
         bundle = json.loads(parts[2])
         bundle["dsseEnvelope"]["payload"] = base64.b64encode(canonical(statement)).decode()
         parts[2] = canonical(bundle)
+        parts[3]["result"]["bundle"] = copy.deepcopy(bundle)
         self.assertHold(tuple(parts))
 
     def test_09_subject_name_or_count_mismatch_holds(self):
@@ -259,6 +261,7 @@ class BridgeTests(unittest.TestCase):
             bundle = json.loads(parts[2])
             bundle["dsseEnvelope"]["payload"] = base64.b64encode(canonical(statement)).decode()
             parts[2] = canonical(bundle)
+            parts[3]["result"]["bundle"] = copy.deepcopy(bundle)
             self.assertHold(tuple(parts))
 
     def test_10_statement_predicate_build_type_mismatch_holds(self):
@@ -277,6 +280,7 @@ class BridgeTests(unittest.TestCase):
             bundle["dsseEnvelope"]["payload"] = base64.b64encode(
                 canonical(parts[3]["result"]["statement"])).decode()
             parts[2] = canonical(bundle)
+            parts[3]["result"]["bundle"] = copy.deepcopy(bundle)
             self.assertHold(tuple(parts))
 
     def test_11_repository_mismatch_holds(self):
