@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur__post_event__stable_baseline__20261004T161414Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "season": "2026",
+  "round": "",
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "gate": "post_event",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "Engine_2026-06-07_STABLE",
+  "forecast_lock_utc": "2026-10-04T16:14:14Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

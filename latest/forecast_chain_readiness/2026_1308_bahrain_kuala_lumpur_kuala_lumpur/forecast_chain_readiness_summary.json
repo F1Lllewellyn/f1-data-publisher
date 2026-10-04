@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-10-04T11:44:19Z",
+  "run_timestamp_utc": "2026-10-04T16:14:14Z",
   "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-  "gate_request": "race_result",
+  "gate_request": "post_event",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,
