@@ -2,6 +2,7 @@ import ast
 import base64
 import copy
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -148,11 +149,11 @@ def fixture(*, live=False):
         "buildTrigger": ident["workflow_trigger"],
         "runInvocationURI": ident["run_invocation_uri"],
     }
+    tlog = "2026-10-04T19:42:36Z"
     result = {
         "mediaType": "application/vnd.dev.sigstore.verificationresult+json;version=0.1",
         "signature": {"certificate": certificate},
-        "verifiedTimestamps": [{"type": "Tlog", "uri": "https://rekor.sigstore.dev",
-                                "timestamp": "2026-10-04T19:42:36Z"}],
+        "verifiedTimestamps": [{"type": "Tlog", "uri": "https://rekor.sigstore.dev", "timestamp": tlog}],
         "statement": statement,
     }
     verified = {
@@ -196,6 +197,11 @@ class BridgeTests(unittest.TestCase):
         fn(parts[3])
         return tuple(parts)
 
+    def mutate_identity(self, fn):
+        parts = list(copy.deepcopy(self.parts))
+        fn(parts[4])
+        return tuple(parts)
+
     def test_01_success_and_gate2b1_shape(self):
         receipt, *_ = self.parts
         result = call(self.parts)
@@ -210,39 +216,35 @@ class BridgeTests(unittest.TestCase):
         self.assertHold(tuple(parts))
 
     def test_03_malformed_receipt_holds(self):
-        parts = list(self.parts)
-        parts[1] = b'{'
+        parts = list(self.parts); parts[1] = b'{'
         self.assertHold(tuple(parts))
 
     def test_04_wrong_receipt_type_holds(self):
         parts = list(self.parts)
-        receipt = copy.deepcopy(parts[0])
-        receipt["receipt_type"] = "producer_execution"
+        receipt = copy.deepcopy(parts[0]); receipt["receipt_type"] = "producer_execution"
         parts[1] = canonical(receipt)
         self.assertHold(tuple(parts))
 
     def test_05_parented_source_capture_holds(self):
         parts = list(self.parts)
-        receipt = copy.deepcopy(parts[0])
-        receipt["parent_receipt_ids"] = ["parent"]
+        receipt = copy.deepcopy(parts[0]); receipt["parent_receipt_ids"] = ["parent"]
         parts[1] = canonical(receipt)
         self.assertHold(tuple(parts))
 
     def test_06_missing_verified_result_holds(self):
-        parts = list(self.parts)
-        parts[3] = None
+        parts = list(self.parts); parts[3] = None
         self.assertHold(tuple(parts))
 
     def test_07_failed_verification_status_holds(self):
-        self.assertHold(self.mutate_verified(
-            lambda v: v.__setitem__("verification_status", "FAILED")))
+        self.assertHold(self.mutate_verified(lambda v: v.__setitem__("verification_status", "FAILED")))
 
     def test_08_subject_digest_mismatch_holds(self):
-        parts = list(copy.deepcopy(self.parts))
-        parts[3]["result"]["statement"]["subject"][0]["digest"]["sha256"] = "0" * 64
+        def change(v):
+            v["result"]["statement"]["subject"][0]["digest"]["sha256"] = "0" * 64
+        parts = list(self.mutate_verified(change))
+        statement = parts[3]["result"]["statement"]
         bundle = json.loads(parts[2])
-        bundle["dsseEnvelope"]["payload"] = base64.b64encode(
-            canonical(parts[3]["result"]["statement"])).decode()
+        bundle["dsseEnvelope"]["payload"] = base64.b64encode(canonical(statement)).decode()
         parts[2] = canonical(bundle)
         self.assertHold(tuple(parts))
 
@@ -294,10 +296,8 @@ class BridgeTests(unittest.TestCase):
 
     def test_14_source_and_signer_commit_mismatch_holds(self):
         variants = [
-            lambda v: v["result"]["signature"]["certificate"].__setitem__(
-                "buildSignerDigest", "b" * 40),
-            lambda v: v["result"]["signature"]["certificate"].__setitem__(
-                "sourceRepositoryDigest", "b" * 40),
+            lambda v: v["result"]["signature"]["certificate"].__setitem__("buildSignerDigest", "b" * 40),
+            lambda v: v["result"]["signature"]["certificate"].__setitem__("sourceRepositoryDigest", "b" * 40),
         ]
         for fn in variants:
             self.assertHold(self.mutate_verified(fn))
@@ -332,8 +332,7 @@ class BridgeTests(unittest.TestCase):
                 "timestamp", "2026-10-04T19:42:34Z")))
 
     def test_21_bad_verification_ref_holds(self):
-        parts = list(self.parts)
-        parts[5] = "https://example.invalid/attestation/1"
+        parts = list(self.parts); parts[5] = "https://example.invalid/attestation/1"
         self.assertHold(tuple(parts))
 
     def test_22_false_trust_ceilings_preserved(self):
@@ -348,8 +347,7 @@ class BridgeTests(unittest.TestCase):
     def test_23_exact_canonical_equality_proved(self):
         result = call(self.parts)
         self.assertEqual(result["exact_receipt_sha256"], result["canonical_receipt_sha256"])
-        parts = list(self.parts)
-        parts[1] += b"\n"
+        parts = list(self.parts); parts[1] += b"\n"
         self.assertHold(tuple(parts))
 
     def test_24_accepted_150_compatibility_projection(self):
@@ -377,9 +375,7 @@ class BridgeTests(unittest.TestCase):
     def test_25_module_is_pure_offline(self):
         source = (BUNDLES / "dr002_github_attestation_binding_v1.py").read_text()
         tree = ast.parse(source)
-        forbidden_import_roots = {
-            "requests", "socket", "subprocess", "urllib.request", "http", "time", "os"
-        }
+        forbidden_import_roots = {"requests", "socket", "subprocess", "urllib.request", "http", "time", "os"}
         imports = set()
         calls = []
         for node in ast.walk(tree):
@@ -392,12 +388,9 @@ class BridgeTests(unittest.TestCase):
                     calls.append(node.func.id)
                 elif isinstance(node.func, ast.Attribute):
                     calls.append(node.func.attr)
-        self.assertTrue(all(
-            not any(name == bad or name.startswith(bad + ".") for bad in forbidden_import_roots)
-            for name in imports))
-        for name in (
-            "open", "read_bytes", "write_bytes", "read_text", "write_text", "system", "popen"
-        ):
+        self.assertTrue(all(not any(name == bad or name.startswith(bad + ".")
+                                    for bad in forbidden_import_roots) for name in imports))
+        for name in ("open", "read_bytes", "write_bytes", "read_text", "write_text", "system", "popen"):
             self.assertNotIn(name, calls)
 
     def test_26_bundle_statement_must_match_verified_result(self):
