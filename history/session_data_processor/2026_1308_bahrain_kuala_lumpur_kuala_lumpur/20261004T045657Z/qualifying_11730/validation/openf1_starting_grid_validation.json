@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2089,
+    "ok": true,
+    "sha256": "df0202a203eba2772ac7a45afc6514d7157b27f032069cb60e1786525bf7cef8",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/raw/openf1_starting_grid.json",
+  "json_sha256": "14666989b3d32e0ed01317e4baf7d4bb210c3c0b45d73ade6d5293cd31056c95",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
