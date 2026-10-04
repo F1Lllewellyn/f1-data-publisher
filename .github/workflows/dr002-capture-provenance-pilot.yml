@@ -3,12 +3,16 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  id-token: write
+  attestations: write
 jobs:
   fixed-weather-capture:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -20,6 +24,143 @@ jobs:
           python scripts/session_data_processor/dr002_capture_provenance_pilot_v1.py
           --run-id gha-${{ github.run_id }}-${{ github.run_attempt }}
           --implementation-git-sha ${{ github.sha }}
+      - name: Attest exact successful source capture receipt
+        id: attest_capture
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2 (immutable release)
+        with:
+          subject-path: _runtime/dr002_gate2b2_capture_pilot/gha-${{ github.run_id }}-${{ github.run_attempt }}/source_capture_receipt.json
+          push-to-registry: false
+          create-storage-record: false
+      - name: Preserve capture attestation bundle and factual metadata
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest_capture.outputs.bundle-path }}
+          ATTESTATION_ID: ${{ steps.attest_capture.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest_capture.outputs.attestation-url }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+        run: |
+          python - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import sys
+
+          sys.path.insert(0, str(Path('scripts/forecast_bundles').resolve()))
+          from verify_forecast_integrity_receipts_v1 import (
+              canonical_json_bytes, receipt_sha256, validate_receipt_envelope,
+              verify_temporal_bindings,
+          )
+
+          run_id = os.environ['RUN_ID']
+          attempt = os.environ['RUN_ATTEMPT']
+          head = os.environ['HEAD_SHA']
+          repository = os.environ['REPOSITORY']
+          workflow_path = '.github/workflows/dr002-capture-provenance-pilot.yml'
+          if not re.fullmatch(r'[0-9]+', run_id) or not re.fullmatch(r'[0-9]+', attempt):
+              raise ValueError('Invalid GitHub run identity')
+          if not re.fullmatch(r'[0-9a-f]{40}', head):
+              raise ValueError('Invalid GitHub head')
+          if repository != 'F1Lllewellyn/f1-data-publisher':
+              raise ValueError('Unexpected repository')
+          if os.environ['WORKFLOW_REF'] != repository + '/' + workflow_path + '@refs/heads/main':
+              raise ValueError('Unexpected workflow ref')
+          root = Path('_runtime/dr002_gate2b2_capture_pilot') / ('gha-' + run_id + '-' + attempt)
+          subject = root / 'source_capture_receipt.json'
+          raw_path = root / 'raw/openf1_weather.response.json'
+          subject_bytes = subject.read_bytes()
+          receipt = json.loads(subject_bytes)
+          manifest = json.loads((root / 'capture_manifest.json').read_bytes())
+          validate_receipt_envelope(receipt)
+          verify_temporal_bindings(receipt)
+          scope = dict(event_id='2026_1295_azerbaijan_baku_baku', meeting_id='1295', session_id='11371')
+          uri = 'https://api.openf1.org/v1/weather?session_key=11371'
+          payload = receipt['payload']
+          if receipt['receipt_type'] != 'source_capture' or receipt['parent_receipt_ids']:
+              raise ValueError('Expected parentless source capture')
+          if receipt['scope'] != scope or any(manifest[k] != v for k, v in scope.items()):
+              raise ValueError('Capture scope mismatch')
+          if payload['source_uri'] != uri or manifest['request_uri'] != uri or payload['source_id'] != 'openf1:weather:1295:11371':
+              raise ValueError('Capture source mismatch')
+          implementation = 'scripts/session_data_processor/dr002_capture_provenance_pilot_v1.py'
+          if payload['implementation'] != implementation or manifest['implementation'] != implementation:
+              raise ValueError('Capture implementation mismatch')
+          if manifest['validation_status'] != 'CAPTURED_UNBOUND' or manifest['implementation_git_sha'] != head:
+              raise ValueError('Capture status/run head mismatch')
+          if manifest['run_id'] != root.name or manifest['receipt_path'] != subject.as_posix():
+              raise ValueError('Capture run/receipt path mismatch')
+          if payload['capture_ref'] != raw_path.as_posix() or manifest['raw_artifact_path'] != raw_path.as_posix():
+              raise ValueError('Capture raw path mismatch')
+          if manifest['receipt_sha256'] != receipt_sha256(receipt):
+              raise ValueError('Canonical receipt hash mismatch')
+          for key in ('first_observed_utc', 'ingested_utc'):
+              if payload[key] != manifest[key]:
+                  raise ValueError('Capture observation mismatch')
+          if manifest['response_completed_utc'] != payload['first_observed_utc'] or manifest['receipt_created_utc'] != receipt['receipt_created_utc']:
+              raise ValueError('Capture timestamp mismatch')
+          if payload['event_time_utc'] is not None or payload['publisher_time_utc'] is not None:
+              raise ValueError('Unsupported publication time')
+          if manifest['binding_status'] != 'UNBOUND':
+              raise ValueError('Unsupported binding claim')
+          for key in ('production_authenticated', 'historical_availability_proven', 'dr002_activated'):
+              if manifest[key] is not False:
+                  raise ValueError('Unsupported trust claim')
+          raw_bytes = raw_path.read_bytes()
+          source_digest = hashlib.sha256(raw_bytes).hexdigest()
+          if source_digest != payload['source_sha256'] or source_digest != manifest['source_sha256']:
+              raise ValueError('Exact raw response hash mismatch')
+          if manifest['readback_verified'] is not True or manifest['readback_sha256'] != source_digest or manifest['byte_count'] != len(raw_bytes):
+              raise ValueError('Raw persistence facts mismatch')
+          identity = dict(source_id=payload['source_id'], **scope,
+                          source_sha256=source_digest, first_observed_utc=payload['first_observed_utc'])
+          if receipt['receipt_id'] != 'source_capture:' + hashlib.sha256(canonical_json_bytes(identity)).hexdigest():
+              raise ValueError('Capture receipt identity mismatch')
+          digest = hashlib.sha256(subject_bytes).hexdigest()
+          bundle_bytes = Path(os.environ['ATTESTATION_BUNDLE_PATH']).read_bytes()
+          bundle = json.loads(bundle_bytes)
+          # Packaging consistency ONLY; independent signature verification is later.
+          statement = json.loads(base64.b64decode(bundle['dsseEnvelope']['payload'], validate=True))
+          subjects = statement['subject']
+          if len(subjects) != 1 or subjects[0]['name'] != subject.name or subjects[0]['digest'].get('sha256') != digest:
+              raise ValueError('Attestation subject/receipt mismatch')
+          attestation_id = os.environ['ATTESTATION_ID']
+          attestation_url = os.environ['ATTESTATION_URL']
+          if not re.fullmatch(r'[0-9]+', attestation_id) or attestation_url != 'https://github.com/' + repository + '/attestations/' + attestation_id:
+              raise ValueError('Missing or inconsistent attestation outputs')
+          bundle_target = root / 'github_attestation.bundle.json'
+          with bundle_target.open('xb') as handle:
+              handle.write(bundle_bytes)
+          if bundle_target.read_bytes() != bundle_bytes:
+              raise ValueError('Bundle readback mismatch')
+          metadata = dict(
+              schema_version='dr002-github-source-capture-attestation-metadata-v1',
+              attestation_id=attestation_id, attestation_url=attestation_url,
+              subject_relative_path=subject.as_posix(), subject_sha256=digest,
+              repository=repository, workflow_path=workflow_path,
+              workflow_name=os.environ['WORKFLOW_NAME'], workflow_ref=os.environ['WORKFLOW_REF'],
+              git_head_sha=head, run_id=run_id, run_attempt=attempt,
+              receipt_id=receipt['receipt_id'], source_uri=payload['source_uri'],
+              source_sha256=source_digest, scope=receipt['scope'], capture_ref=payload['capture_ref'],
+              first_observed_utc=payload['first_observed_utc'], ingested_utc=payload['ingested_utc'],
+              binding_status='UNBOUND', production_authenticated=False,
+              historical_availability_proven=False, dr002_activated=False,
+          )
+          metadata_bytes = canonical_json_bytes(metadata)
+          if subject.read_bytes() != subject_bytes:
+              raise ValueError('Immutable receipt mismatch')
+          metadata_target = root / 'github_attestation_metadata.json'
+          with metadata_target.open('xb') as handle:
+              handle.write(metadata_bytes)
+          if metadata_target.read_bytes() != metadata_bytes or subject.read_bytes() != subject_bytes:
+              raise ValueError('Metadata readback or immutable receipt mismatch')
+          PY
       - name: Upload runtime-only evidence and HOLD diagnostics
         if: always()
         uses: actions/upload-artifact@v4
