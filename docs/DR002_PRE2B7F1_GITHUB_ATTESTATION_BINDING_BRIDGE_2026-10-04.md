@@ -2,7 +2,7 @@
 
 Work order: `F1-WO-DR002-PRE2B7F1-001` / Issue #152.  
 Status: implementation complete, pending independent Science / Architecture Adviser review.  
-DR-002 remains **PROPOSED — NOT ACTIVATED**. Forecast gate remains OFF. Promotion remains NOT ALLOWED.
+DR-002 remains **PROPOSED — NOT ACTIVATED**. Forecast gate OFF. Promotion NOT ALLOWED.
 
 ## Purpose
 
@@ -53,7 +53,7 @@ The attested subject must be exactly `source_capture_receipt.json`, its SHA-256 
 
 Noncanonical receipt bytes fail closed. The adapter never silently reserializes an attested file.
 
-The saved bundle's decoded DSSE statement must exactly equal the statement returned by the external verified-result boundary. The verified result must also match the expected GitHub repository, signer workflow, `refs/heads/main`, source/signer commit, GitHub-hosted runner, `workflow_dispatch` trigger, exact run/attempt URI and GitHub OIDC issuer.
+The external verifier's returned bundle must be JSON-equivalent to the exact saved bundle bytes, and the saved bundle's decoded DSSE statement must exactly equal the statement returned by the external verified-result boundary. The verified result must also match the expected GitHub repository, signer workflow, `refs/heads/main`, source/signer commit, GitHub-hosted runner, `workflow_dispatch` trigger, exact run/attempt URI and GitHub OIDC issuer.
 
 At least one externally verified Tlog timestamp is required. The earliest verified Tlog timestamp is used only as an upper bound proving the exact attested receipt bytes existed **no later than** that time. It does not authenticate the receipt's internal `first_observed_utc`.
 
@@ -88,7 +88,21 @@ Command:
 
 Result: **26 tests PASS; 0 failures/errors**.
 
-Coverage includes canonical success and unchanged Gate 2B-1 binding-shape acceptance; noncanonical/malformed/wrong-type/parented receipt HOLD; missing/failed verifier result HOLD; subject/statement/build and GitHub identity mismatch HOLD; missing/too-early Tlog HOLD; malformed verification reference HOLD; exact/canonical equality; false trust ceilings; deterministic/pure/offline checks; and bundle-statement equality with the external verified result.
+Coverage includes:
+
+- canonical success and unchanged Gate 2B-1 binding-shape acceptance;
+- noncanonical/malformed/wrong-type/parented receipt HOLD;
+- missing/failed verifier result HOLD;
+- subject count/name/hash mismatch HOLD;
+- statement/predicate/build-type mismatch HOLD;
+- repository/workflow/ref/source and signer commit/runner/trigger/run-attempt/OIDC mismatch HOLD;
+- missing or too-early Tlog timestamp HOLD;
+- malformed durable verification reference HOLD;
+- exact/canonical equality proved rather than assumed;
+- false trust ceilings retained;
+- deterministic/pure/offline implementation checks;
+- exact saved-bundle equality with the external verifier result;
+- bundle statement must match the externally verified statement.
 
 No workflow, OpenF1 request, cryptographic verifier, or unrelated suite was executed by the focused test run.
 
@@ -96,7 +110,11 @@ No workflow, OpenF1 request, cryptographic verifier, or unrelated suite was exec
 
 A separate read-only local compatibility check used the **already accepted exact #150 artifact bytes** from artifact `11312353979`; it did not redownload a source, dispatch a workflow, or rerun cryptographic verification.
 
-Inputs included exact `source_capture_receipt.json` bytes, exact `github_attestation.bundle.json` bytes, and the previously accepted external GitHub CLI verification facts for attestation `52636060`.
+Inputs included exact:
+
+- `source_capture_receipt.json` bytes;
+- `github_attestation.bundle.json` bytes;
+- previously accepted external GitHub CLI verification facts for attestation `52636060`.
 
 Output:
 
