@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-10-03T12:00:48Z",
+      "run_id": "2026-10-04T01:59:32Z",
       "score": 200,
       "source_backed": true,
       "source_status": "clean"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-03T12:00:48Z",
+        "run_id": "2026-10-04T01:59:32Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -36,7 +36,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
-        "run_id": "20261003T120036Z",
+        "run_id": "20261004T015924Z",
         "score": 130,
         "status": "clean"
       },
@@ -274,7 +274,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-03T12:00:48Z",
+        "run_id": "2026-10-04T01:59:32Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -286,13 +286,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261003T120048Z",
+        "run_id": "20261004T015932Z",
         "score": 100,
         "status": "clean"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261003T120048Z",
+        "run_id": "20261004T015932Z",
         "score": 100,
         "status": "clean"
       }

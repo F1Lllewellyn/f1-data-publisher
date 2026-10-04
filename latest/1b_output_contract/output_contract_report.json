@@ -1,11 +1,11 @@
 {
   "canonical_workbook_overwrite": false,
-  "generated_at_utc": "2026-10-03T12:18:00Z",
+  "generated_at_utc": "2026-10-04T02:17:34Z",
   "input_selection": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-03T12:00:48Z",
+        "run_id": "2026-10-04T01:59:32Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -15,7 +15,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-03T12:00:48Z",
+          "run_id": "2026-10-04T01:59:32Z",
           "score": 200,
           "source_backed": true,
           "source_status": "clean"
@@ -39,7 +39,7 @@
         },
         {
           "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
-          "run_id": "20261003T120036Z",
+          "run_id": "20261004T015924Z",
           "score": 130,
           "status": "clean"
         },
@@ -277,7 +277,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-03T12:00:48Z",
+          "run_id": "2026-10-04T01:59:32Z",
           "score": 200,
           "source_backed": true,
           "source_status": "clean"
@@ -289,13 +289,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261003T120048Z",
+          "run_id": "20261004T015932Z",
           "score": 100,
           "status": "clean"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261003T120048Z",
+          "run_id": "20261004T015932Z",
           "score": 100,
           "status": "clean"
         }
@@ -308,7 +308,7 @@
   "notification_recommended": true,
   "outputs": {
     "combined_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
-    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261003T121759Z/bundle_snapshot.json",
+    "history_bundle_snapshot": "history/forecast_bundle_ledger/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261004T021734Z/bundle_snapshot.json",
     "input_selection_report": "latest/1b_output_contract/input_selection_report.json",
     "last_good_state": "latest/last_good_state.json",
     "latest_bundle_snapshot": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
@@ -316,7 +316,7 @@
   },
   "promotion_allowed": false,
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261003T121759Z",
+  "run_id": "20261004T021734Z",
   "schema_version": "f1_1b_output_contract_report_v20",
   "source_status": "clean",
   "stable_engine_modified": false,
