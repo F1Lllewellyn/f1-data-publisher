@@ -1,0 +1,652 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-10-04T11:01:13.968810Z",
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-10-04T11:01:13.969891Z",
+    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-10-04T09:00:00+00:00",
+      "date_start": "2026-10-04T07:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1308,
+      "session_key": 11731,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 296.43,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "dc96db34d31e75367a4804b64b516c44b367773cf02c3a08d54cb88178f6ef6b",
+      "size_bytes": 707,
+      "timestamp_utc": "2026-10-04T06:04:47.946811Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 296.43,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "0e85a19742f749a7602bf75b5601b94aa2046ebebd476a77d1663c8bf1f3a657",
+      "size_bytes": 1572,
+      "timestamp_utc": "2026-10-04T06:04:47.946657Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 296.43,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "671b53e78c76b5d60c75e3f1ed50af08ba8c445a5414655b61a67c8f708f73be",
+      "size_bytes": 578,
+      "timestamp_utc": "2026-10-04T06:04:47.946559Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [
+          "fia_final_grid_unverified"
+        ],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 22,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 21448
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1145
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 73
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 880
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 328
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [
+          "fia_final_grid_unverified"
+        ],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 97
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 254
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261004T110100Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-10-04T09:00:00+00:00",
+    "date_start": "2026-10-04T07:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1308,
+    "session_key": 11731,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "1671f3f6d19cd7bd64dac286d6fca75dadc1eaa0bad75556d13a74de2fb1d554",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_drivers.json",
+      "json_sha256": "319b13c38e15141531036223819cbafd24f0326961264444c8e614b434799ae3",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 3044250,
+        "ok": true,
+        "sha256": "8b4bcab70502c7031839252af05985c8134e9edc402bb0b1ff0aaeff9e1a8dcd",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_intervals.json",
+      "json_sha256": "8f9ad512fd587d65e066020380361dab219c31227d2e1f6bdce8d63a35349969",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 21448,
+      "status": "clean",
+      "timestamp_rows": 21448
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 527507,
+        "ok": true,
+        "sha256": "22ff30395ad1cc1c87bcfcb4be31e1e0a903e03f307724a976ff124b16f0e3d2",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_laps.json",
+      "json_sha256": "3a20c263080c6280397be6ed610add720d2d579107e74ebe6d14d564b11c11a9",
+      "max_lap_number": 55.0,
+      "missing_required_columns": [],
+      "rows": 1145,
+      "status": "clean",
+      "timestamp_rows": 1145
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_pit.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 13101,
+        "ok": true,
+        "sha256": "316bf1cebb70dd6a0a0a4dab726021c5c23e1f198e0a5ccc2eb1c617a1104500",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_pit.json",
+      "json_sha256": "d102d5d9ed652c6ef4b0d32119131a40f4b8b44ca7bced85f7b4567aa47a3a8d",
+      "max_lap_number": 45.0,
+      "missing_required_columns": [],
+      "rows": 73,
+      "status": "clean",
+      "timestamp_rows": 73
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 101676,
+        "ok": true,
+        "sha256": "45368ba95d77690bd207840f7c25c84afc3e5fae631d1fd43267a08b1913c1a9",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_position.json",
+      "json_sha256": "1f9a4f48f9ccafc3fa4c344e4a54158669a1682d8b570ac4e32dbbd87a611156",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 880,
+      "status": "clean",
+      "timestamp_rows": 880
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_race_control.csv",
+      "driver_count": 5,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 79757,
+        "ok": true,
+        "sha256": "c43b96957f22abbbfd272f1ab90e455dbc080ee9a035a06f784e2e3b79e6c838",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_race_control.json",
+      "json_sha256": "1252cf03fed21f9c381ece2e80328667ebf91021468ab76a223c4ca56ea55b23",
+      "max_lap_number": 55.0,
+      "missing_required_columns": [],
+      "rows": 328,
+      "status": "clean",
+      "timestamp_rows": 328
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4053,
+        "ok": true,
+        "sha256": "9699ccd8fa86169caebbe45fa467f56f2e1ee185ea6bf8f243d3ddb8380ed879",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_session_result.json",
+      "json_sha256": "d8bde524a961cc1323e4d549d096c2897fc92e6deebd0dc338f07e73d6f62620",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 394,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_sessions.json",
+      "json_sha256": "5dec32ed04d697f68b57faa9a9b00630265da954c5413dd1e266d8b1aedc9b7d",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [
+        "fia_final_grid_unverified"
+      ],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2089,
+        "ok": true,
+        "sha256": "df0202a203eba2772ac7a45afc6514d7157b27f032069cb60e1786525bf7cef8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_starting_grid.json",
+      "json_sha256": "14666989b3d32e0ed01317e4baf7d4bb210c3c0b45d73ade6d5293cd31056c95",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "provenance": {
+        "changed_since_prior_target_snapshot": null,
+        "changed_since_qualifying_snapshot": false,
+        "direct_target_fetch": {
+          "bytes": 0,
+          "error": "<HTTPError 404: 'Not Found'>",
+          "ok": false
+        },
+        "forecast_as_of_eligible": false,
+        "meeting_key": 1308,
+        "observed_at_utc": "2026-10-04T11:01:13.963983Z",
+        "observed_before_target_start": false,
+        "official_final_grid_verified": false,
+        "openf1_row_status": "clean",
+        "prior_qualifying_snapshot_sha256": "14666989b3d32e0ed01317e4baf7d4bb210c3c0b45d73ade6d5293cd31056c95",
+        "prior_target_snapshot_sha256": null,
+        "resolution": "unique_same_meeting_qualifying_before_target",
+        "source_session_key": 11730,
+        "source_session_name": "Qualifying",
+        "target_session_key": 11731
+      },
+      "rows": 22,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 14093,
+        "ok": true,
+        "sha256": "b69646c79c683ac60f6dfc33c0a8dcaa099d4f1c2535e6ded3a91aee7613b49f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_stints.json",
+      "json_sha256": "9032f8bec33d84e36513375ff50f3c4b74004640a79cd05a5acb80ffba863027",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 97,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 54687,
+        "ok": true,
+        "sha256": "a2f1c46e8d0b764804361739d1f8c82c262bd0c4c057fa43d474761887301168",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.json",
+      "json_sha256": "63fc2518437382b8f083957ed3d694ae0a9f7b08b637ac40a2124ecffc5d1796",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 254,
+      "status": "clean",
+      "timestamp_rows": 254
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json"
+  }
+}

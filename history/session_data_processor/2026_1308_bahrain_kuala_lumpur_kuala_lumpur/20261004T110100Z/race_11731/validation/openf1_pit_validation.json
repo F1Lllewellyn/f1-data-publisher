@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_pit.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 13101,
+    "ok": true,
+    "sha256": "316bf1cebb70dd6a0a0a4dab726021c5c23e1f198e0a5ccc2eb1c617a1104500",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_pit.json",
+  "json_sha256": "d102d5d9ed652c6ef4b0d32119131a40f4b8b44ca7bced85f7b4567aa47a3a8d",
+  "max_lap_number": 45.0,
+  "missing_required_columns": [],
+  "rows": 73,
+  "status": "clean",
+  "timestamp_rows": 73
+}
