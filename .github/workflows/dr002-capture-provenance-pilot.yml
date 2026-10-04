@@ -3,12 +3,16 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  id-token: write
+  attestations: write
 jobs:
   fixed-weather-capture:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -20,6 +24,112 @@ jobs:
           python scripts/session_data_processor/dr002_capture_provenance_pilot_v1.py
           --run-id gha-${{ github.run_id }}-${{ github.run_attempt }}
           --implementation-git-sha ${{ github.sha }}
+      - name: Attest exact successful source capture receipt
+        id: attest_capture
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2 (immutable release)
+        with:
+          subject-path: _runtime/dr002_gate2b2_capture_pilot/gha-${{ github.run_id }}-${{ github.run_attempt }}/source_capture_receipt.json
+          push-to-registry: false
+          create-storage-record: false
+      - name: Preserve attestation bundle and factual metadata
+        env:
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest_capture.outputs.bundle-path }}
+          ATTESTATION_ID: ${{ steps.attest_capture.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest_capture.outputs.attestation-url }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+        run: |
+          python - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          run_id = os.environ["RUN_ID"]
+          attempt = os.environ["RUN_ATTEMPT"]
+          if not run_id.isdigit() or not attempt.isdigit():
+              raise ValueError("Invalid GitHub run identity")
+          root = Path("_runtime/dr002_gate2b2_capture_pilot") / ("gha-" + run_id + "-" + attempt)
+          subject = root / "source_capture_receipt.json"
+          manifest_path = root / "capture_manifest.json"
+          raw_path = root / "raw/openf1_weather.response.json"
+          subject_bytes = subject.read_bytes()
+          manifest = json.loads(manifest_path.read_bytes())
+          receipt = json.loads(subject_bytes)
+          if manifest["validation_status"] != "CAPTURED_UNBOUND":
+              raise ValueError("Only successful CAPTURED_UNBOUND capture may be attested")
+          if manifest["implementation_git_sha"] != os.environ["HEAD_SHA"]:
+              raise ValueError("Capture manifest/run head mismatch")
+          if manifest["binding_status"] != "UNBOUND":
+              raise ValueError("Unexpected binding status")
+          for field in ("production_authenticated", "historical_availability_proven", "dr002_activated"):
+              if manifest[field] is not False:
+                  raise ValueError("Unsupported trust claim")
+          if receipt["receipt_type"] != "source_capture":
+              raise ValueError("Unexpected receipt type")
+          expected_scope = {"event_id":"2026_1295_azerbaijan_baku_baku","meeting_id":"1295","session_id":"11371"}
+          expected_uri = "https://api.openf1.org/v1/weather?session_key=11371"
+          if receipt["scope"] != expected_scope or receipt["payload"]["source_uri"] != expected_uri:
+              raise ValueError("Unexpected receipt scope/source URI")
+          raw_digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+          if raw_digest != receipt["payload"]["source_sha256"] or raw_digest != manifest["source_sha256"]:
+              raise ValueError("Raw source hash mismatch")
+          digest = hashlib.sha256(subject_bytes).hexdigest()
+          if digest != manifest["receipt_sha256"]:
+              raise ValueError("Receipt hash mismatch")
+          if receipt["receipt_id"] != manifest.get("receipt_path", "").split("/")[-1] and not receipt["receipt_id"].startswith("source_capture:"):
+              raise ValueError("Unexpected receipt identity")
+          if receipt["payload"]["first_observed_utc"] != manifest["first_observed_utc"] or receipt["payload"]["ingested_utc"] != manifest["ingested_utc"]:
+              raise ValueError("Observation identity mismatch")
+          bundle_bytes = Path(os.environ["ATTESTATION_BUNDLE_PATH"]).read_bytes()
+          bundle = json.loads(bundle_bytes)
+          statement = json.loads(base64.b64decode(bundle["dsseEnvelope"]["payload"], validate=True))
+          subjects = statement["subject"]
+          if len(subjects) != 1 or subjects[0]["digest"].get("sha256") != digest:
+              raise ValueError("Attestation subject/receipt mismatch")
+          attestation_id = os.environ["ATTESTATION_ID"]
+          attestation_url = os.environ["ATTESTATION_URL"]
+          repository = os.environ["REPOSITORY"]
+          if not attestation_id.isdigit() or attestation_url != "https://github.com/" + repository + "/attestations/" + attestation_id:
+              raise ValueError("Missing or inconsistent attestation outputs")
+          bundle_target = root / "github_attestation.bundle.json"
+          bundle_target.write_bytes(bundle_bytes)
+          if bundle_target.read_bytes() != bundle_bytes:
+              raise ValueError("Bundle readback mismatch")
+          metadata = {
+              "schema_version": "dr002-github-source-capture-attestation-metadata-v1",
+              "attestation_id": attestation_id,
+              "attestation_url": attestation_url,
+              "subject_relative_path": subject.as_posix(),
+              "subject_sha256": digest,
+              "repository": repository,
+              "workflow_path": ".github/workflows/dr002-capture-provenance-pilot.yml",
+              "workflow_name": os.environ["WORKFLOW_NAME"],
+              "workflow_ref": os.environ["WORKFLOW_REF"],
+              "git_head_sha": os.environ["HEAD_SHA"],
+              "run_id": run_id,
+              "run_attempt": attempt,
+              "receipt_id": receipt["receipt_id"],
+              "source_uri": receipt["payload"]["source_uri"],
+              "source_sha256": receipt["payload"]["source_sha256"],
+              "first_observed_utc": receipt["payload"]["first_observed_utc"],
+              "ingested_utc": receipt["payload"]["ingested_utc"],
+              "binding_status": "UNBOUND",
+              "production_authenticated": False,
+              "historical_availability_proven": False,
+              "dr002_activated": False,
+          }
+          metadata_bytes = (json.dumps(metadata, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+          metadata_target = root / "github_attestation_metadata.json"
+          metadata_target.write_bytes(metadata_bytes)
+          if metadata_target.read_bytes() != metadata_bytes or subject.read_bytes() != subject_bytes:
+              raise ValueError("Metadata readback or immutable subject mismatch")
+          PY
       - name: Upload runtime-only evidence and HOLD diagnostics
         if: always()
         uses: actions/upload-artifact@v4
