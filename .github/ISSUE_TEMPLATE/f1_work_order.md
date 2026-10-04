@@ -18,6 +18,9 @@ observed_main_sha:
 accepted_predecessor: <!-- Accepted PR/checkpoint, exact reviewed SHA and evidence -->
 previous_work_order_id:
 
+recommended_coder_setting: <!-- Default Sol Medium; escalate only per handoff contract -->
+model_reason: <!-- One line: why this is the least expensive setting that preserves quality -->
+
 ## Objective
 
 ## Authorized scope
@@ -49,6 +52,7 @@ Read docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md.
 Publish AUTHORIZED only with actual user/Adviser authority under that contract.
 Provide enough task-specific detail to execute without reconstructing chat history.
 Reference permanent governance; do not duplicate it. Task-specific restrictions belong here.
+Follow the handoff contract's work-credit economy: default Sol Medium, escalate only when justified, and keep bounded work orders concise (ordinary soft budget ~2,000 words).
 Relevant path/blob_sha fingerprints are mandatory for implementation work.
 observed_main_sha is evidence, not a global equality lock.
 Coder must fetch fresh main; changed/missing/ambiguous relevant dependencies => HOLD.
