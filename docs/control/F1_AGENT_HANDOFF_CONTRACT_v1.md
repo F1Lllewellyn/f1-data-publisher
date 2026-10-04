@@ -64,6 +64,46 @@ Reopen previously accepted reasoning/evidence only when a relevant dependency ch
 
 The Adviser records ACCEPT / HOLD / the proposed next decision through GitHub history within explicit authority. Keep accepted/closed work orders for audit. Do not authorize a successor while another authorized work order remains open.
 
+## Work-credit economy and Coder model selection
+
+Work-credit efficiency is a permanent project constraint. Compress coordination, not cognition.
+
+### Model-selection default
+
+Use the **least expensive Coder setting that preserves expected outcome quality**. Do not select a more expensive model/effort merely because the task touches important code.
+
+Default ladder:
+
+- **GPT-5.6 Sol — Medium:** default for merges, docs/evidence work, deterministic bounded implementation, ordinary 1–4 file changes, and well-specified tests.
+- **GPT-5.6 Sol — High:** bounded work with subtle correctness/security/provenance/temporal semantics where the architecture and acceptance criteria are already decided.
+- **GPT-6 Astra — Low:** open-ended diagnosis, unfamiliar cross-system debugging, or solution discovery where Sol has encountered a concrete ambiguity/HOLD or the Adviser explicitly identifies meaningful unresolved design search.
+- **GPT-6 Astra — Medium:** exceptional architecture-critical or multi-system work with genuinely unresolved competing designs or failure hypotheses.
+- **GPT-6 Astra — High:** not a normal project setting. Use only with explicit Adviser justification that states why lower settings are inadequate.
+
+Do not use Astra merely for implementation of an Adviser-specified architecture. Escalate after evidence of need, not pre-emptively.
+
+Every authorized work order must state one recommended Coder setting and a one-line reason. If the task changes materially, the Adviser may revise that recommendation in GitHub before execution.
+
+### Coordination-size discipline
+
+Permanent controls belong in this contract and canonical control documents; **do not restate them in each work order**.
+
+A work order should contain only what is necessary to execute the current delta:
+objective → exact allowed delta → relevant dependency fingerprints → task-specific acceptance/tests → task-specific HOLD/prohibitions → expected Work Result.
+
+Reference accepted checkpoints/PRs by identifier, reviewed SHA/blob and relevant fact instead of reproducing their full reasoning. Do not duplicate generic trust ceilings, stable-engine protections, activation rules, replay rules, or handoff rules unless the current task changes or tests one of them.
+
+Prefer a concise work order. As a soft budget, keep ordinary bounded orders under roughly **2,000 words**; exceeding that requires a short explicit justification in the order. Safety/scientific precision outranks the word budget, but repetition never does.
+
+### Execution economy
+
+- Do not rerun unchanged accepted tests/evidence as ceremony.
+- Do not redownload/reverify accepted artifacts unless a dependency, trust boundary, or evidence claim changed.
+- Batch read/reason/test work before final GitHub publication mutations where practical.
+- Preserve partial valid work across transport/session interruption only when its bytes/state can be independently re-established; otherwise reconstruct from canonical GitHub state.
+- A transport/UI failure is not evidence invalidating scientific work.
+- Adviser review should use targeted delta verification and reopen prior reasoning only under the invalidation rules above.
+
 ## Human authority and activation
 
 The user remains approval authority for material project decisions. After this system is explicitly accepted and activated, "do it", "proceed", "keep going" and "what's next?" authorize the Adviser to publish ONE bounded GitHub work-order issue. They do not authorize Adviser-side implementation mutation. Coder remains implementation executor.
