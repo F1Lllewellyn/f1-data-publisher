@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "control_room_overlay",
+  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+  "gate": "race_result",
+  "generated_utc": "2026-10-04T11:44:19Z",
+  "promotion_allowed": false,
+  "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "row_count": 34,
+  "run_id": "20261004T114419Z",
+  "source_counts": {
+    "drivers": 854,
+    "intervals": 168868,
+    "pit": 230,
+    "position": 14925,
+    "race_control": 3046,
+    "source_readiness": 9,
+    "starting_grid": 110,
+    "stints": 2506,
+    "weather": 6065
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
