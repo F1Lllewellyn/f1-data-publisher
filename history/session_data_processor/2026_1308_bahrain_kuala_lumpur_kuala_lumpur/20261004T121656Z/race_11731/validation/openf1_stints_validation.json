@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 14093,
+    "ok": true,
+    "sha256": "b69646c79c683ac60f6dfc33c0a8dcaa099d4f1c2535e6ded3a91aee7613b49f",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_stints.json",
+  "json_sha256": "9032f8bec33d84e36513375ff50f3c4b74004640a79cd05a5acb80ffba863027",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 97,
+  "status": "clean",
+  "timestamp_rows": 0
+}

@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-04T11:01:13.971553Z"
+  "updated_utc": "2026-10-04T12:17:12.613981Z"
 }
