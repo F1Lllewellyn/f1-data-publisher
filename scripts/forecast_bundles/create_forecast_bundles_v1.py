@@ -15,7 +15,7 @@ from pathlib import Path
 
 GATES = ["pre_weekend", "post_fp3", "post_qualifying", "race_result", "post_event"]
 LANES = {
-    "stable_baseline": "Engine_2026-06-07_STABLE",
+    "stable_baseline": "StableBaseline_LanePolicy_v1",
     "control_room_overlay": "MethodE_ControlRoom_Overlay",
     "experimental_challenger": "Integrated_Recalibrated_Specialist_Challenger",
 }
@@ -188,7 +188,14 @@ def create_bundle(repo: Path, event_id: str, season: str, round_no: str, race_na
     write_csv(bdir/'forecast_rows.csv', FORECAST_COLS, forecast_rows)
     src_rows=[{'source_id':'forecast_source','source_name':str(found_path) if found_path else 'missing','source_type':'csv' if found_path else 'missing','source_path_or_uri':str(found_path) if found_path else '', 'source_timestamp_utc':lock_time, 'source_sha256':sha(found_path) if found_path else '', 'source_role':'forecast_source','gate_allowed':str(source_found),'notes':'Actual forecast source copied into immutable bundle.' if source_found else 'Missing source blocks validation.'}]
     write_csv(bdir/'source_snapshot_manifest.csv', ['source_id','source_name','source_type','source_path_or_uri','source_timestamp_utc','source_sha256','source_role','gate_allowed','notes'], src_rows)
-    (bdir/'engine_lane_config.json').write_text(json.dumps({'engine_lane':lane,'engine_lane_config':config,'stable_engine_touched':False,'canonical_workbook_touched':False}, indent=2), encoding='utf-8')
+    (bdir/'engine_lane_config.json').write_text(json.dumps({
+        'engine_lane':lane,
+        'engine_lane_config':config,
+        'stable_engine_touched':False,
+        'canonical_workbook_touched':False,
+        'stable_engine_execution_proven':False,
+        'historical_stable_engine_execution_claimed':False,
+    }, indent=2), encoding='utf-8')
     write_csv(bdir/'forecast_attribution.csv', ['attribution_id','gate','engine_lane','feature_family','input_source','directional_effect','weight_class','confidence','proof_loop_status','notes'], [{'attribution_id':bundle_id+'__ATTR','gate':gate,'engine_lane':lane,'feature_family':'bundle_lock','input_source':str(found_path) if found_path else 'missing','directional_effect':'locked' if source_found else 'blocked','weight_class':'source','confidence':'high' if source_found else 'none','proof_loop_status':'ready_for_scoring' if source_found else 'blocked','notes':''}])
     write_csv(bdir/'stable_vs_challenger_delta.csv', ['event_id','gate','metric','stable_baseline_value','control_room_overlay_value','experimental_challenger_value','overlay_delta_vs_stable','challenger_delta_vs_stable','promotion_gate_relevance','notes'], [{'event_id':event_id,'gate':gate,'metric':'pending_cross_lane_delta','promotion_gate_relevance':'pending','notes':'Computed after all lane bundles are present.'}])
     (bdir/'method_e_proof_loop_gate_record.json').write_text(json.dumps({'bundle_id':bundle_id,'gate':gate,'engine_lane':lane,'source_found':source_found,'proof_loop_status':'ready_for_post_event_scoring' if source_found else 'blocked_missing_forecast_source'}, indent=2), encoding='utf-8')
