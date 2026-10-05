@@ -7,6 +7,8 @@ import json, os, re, sys
 from pathlib import Path
 from datetime import datetime, timezone
 
+from f1_workflow_shell_scan_v1 import ShellScanError, shell_visible_text
+
 REPO = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
 WF_DIR = REPO / ".github" / "workflows"
 OUT = REPO / "_runtime" / "workflow_meta_health"
@@ -39,8 +41,13 @@ def check_shell_balance(file: Path, text: str):
                 block.append(line[base_indent+2:] if len(line) >= base_indent+2 else line.lstrip())
                 j += 1
             script = "\n".join(block)
-            if_count = len(re.findall(r"(?m)^\s*if\b", script))
-            fi_count = len(re.findall(r"(?m)^\s*fi\b", script))
+            try:
+                visible = shell_visible_text(script)
+            except ShellScanError as exc:
+                add_issue("fail", file, f"Shell heredoc scan failed: {exc}", i+1)
+                visible = script  # Never mask remaining text on a scan failure.
+            if_count = len(re.findall(r"(?m)^\s*if\b", visible))
+            fi_count = len(re.findall(r"(?m)^\s*fi\b", visible))
             if if_count != fi_count:
                 add_issue("fail", file, f"Bash if/fi imbalance in run block: if={if_count}, fi={fi_count}", i+1)
             checks.append({"file": str(file), "run_block_line": i+1, "if_count": if_count, "fi_count": fi_count})
