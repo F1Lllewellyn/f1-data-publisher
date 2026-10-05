@@ -1,7 +1,7 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-10-05T06:57:56.682009Z`
-Status: **fail**
+Created UTC: `2026-10-05T15:57:18.147636Z`
+Status: **pass**
 
 ## Confirmed Data
 - Latest event: `Bahrain - Kuala Lumpur - Kuala Lumpur`
@@ -18,8 +18,7 @@ Status: **fail**
 - `governance_guard`: **pass**
 
 ## Failed steps
-- `workflow_static_validator`
-- `workflow_meta_health_v1`
+- None
 
 ## Governance
 - Stable engine modified: `false`

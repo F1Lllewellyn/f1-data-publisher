@@ -32,7 +32,7 @@ path,size_bytes,category,recommended_action,reason,path_length
 .github/workflows/f1-forecast-use-dry-review.yml,1871,active_architecture,keep,Inside active architecture root.,102
 .github/workflows/f1-live-source-feed-capture-experimental.yml,4634,active_architecture,keep,Inside active architecture root.,116
 .github/workflows/f1-openf1-lightweight-source-closure.yml,2242,active_architecture,keep,Inside active architecture root.,112
-.github/workflows/f1-peak-elite-control-room-one-click-v1.yml,9718,active_architecture,keep,Inside active architecture root.,115
+.github/workflows/f1-peak-elite-control-room-one-click-v1.yml,9852,active_architecture,keep,Inside active architecture root.,115
 .github/workflows/f1-post-race-scoring-loop.yml,1878,active_architecture,keep,Inside active architecture root.,101
 .github/workflows/f1-race-weekend-operating-rhythm.yml,1805,active_architecture,keep,Inside active architecture root.,108
 .github/workflows/f1-season-archive-publisher.yml,2287,active_architecture,keep,Inside active architecture root.,103
@@ -824,11 +824,11 @@ _backups/F1_1A_Cumulative_Validation_Hotfix_2026-06-11_20260611_201219/.github/w
 _backups/F1_1A_Cumulative_Validation_Hotfix_2026-06-11_20260611_201219/scripts/forecast_bundles/create_forecast_bundles_v1.py,16186,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,179
 _runtime/peak_elite/workflow_repair/WORKFLOW_COMMIT_BLOCK_REPAIR_REPORT.md,360,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,128
 _runtime/peak_elite/workflow_repair/workflow_commit_block_repair_report.json,11605,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
-_runtime/peak_elite/workflow_static_validation/WORKFLOW_STATIC_VALIDATION.md,2117,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
-_runtime/peak_elite/workflow_static_validation/workflow_static_validation.json,11074,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,132
+_runtime/peak_elite/workflow_static_validation/WORKFLOW_STATIC_VALIDATION.md,1922,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,130
+_runtime/peak_elite/workflow_static_validation/workflow_static_validation.json,10821,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,132
 _runtime/workbook_persistence_handoff_guard/workbook_persistence_handoff_guard_report.json,633,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,144
-_runtime/workflow_meta_health/WORKFLOW_META_HEALTH_REPORT.md,506,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,114
-_runtime/workflow_meta_health/workflow_meta_health.json,766,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,109
+_runtime/workflow_meta_health/WORKFLOW_META_HEALTH_REPORT.md,165,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,114
+_runtime/workflow_meta_health/workflow_meta_health.json,267,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,109
 config/autopilot_allowed_tests.json,462,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,89
 config/local_1c_gmail_autopilot_bridge_settings.json,561,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,106
 config/protected_paths.json,752,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,81
@@ -878,6 +878,10 @@ docs/DR002_PRE2B7D2_LIVE_GITHUB_ATTESTED_SHADOW_2026-10-03.md,16714,active_archi
 docs/DR002_PRE2B7E1_GITHUB_ATTESTED_CAPTURE_2026-10-03.md,10584,active_architecture,keep,Inside active architecture root.,111
 docs/DR002_PRE2B7E2_LIVE_GITHUB_ATTESTED_CAPTURE_2026-10-04.md,23098,active_architecture,keep,Inside active architecture root.,116
 docs/DR002_PRE2B7F1_GITHUB_ATTESTATION_BINDING_BRIDGE_2026-10-04.md,8355,active_architecture,keep,Inside active architecture root.,121
+docs/DR002_PRE2B7F2_VERIFIED_SOURCE_CONSUMER_2026-10-04.md,9215,active_architecture,keep,Inside active architecture root.,112
+docs/DR002_PRE2B7G1_STABLE_ENGINE_EXECUTION_SURFACE_2026-10-05.md,17382,active_architecture,keep,Inside active architecture root.,119
+docs/DR002_PRE2B7G2_STABLE_HISTORICAL_ARTIFACT_CUSTODY_2026-10-05.md,17029,active_architecture,keep,Inside active architecture root.,122
+docs/DR002_PRE2B7G3_STABLE_LANE_METADATA_TRUTH_2026-10-05.md,4329,active_architecture,keep,Inside active architecture root.,114
 docs/Elite_Operational_Proof_Pattern_Control_FULL7_Report_2026-06-10.md,2010,active_architecture,keep,Inside active architecture root.,125
 docs/F1_1A_ACTUAL_FORECAST_PRODUCER_SOURCE_DISCOVERY_INSTALLER_FIX_REPORT_2026-06-12.md,1283,active_architecture,keep,Inside active architecture root.,141
 docs/F1_1A_ACTUAL_FORECAST_PRODUCER_V1_INSTALL_REPORT_2026-06-12.md,563,active_architecture,keep,Inside active architecture root.,121
@@ -950,8 +954,10 @@ docs/F1_OPENF1_POSTRACE_EMPTY_FEATURE_HOTFIX_INSTALL_REPORT.md,725,active_archit
 docs/F1_OPERATIONAL_CONTROL_ROOM_WORKBOOK_READY_2026-06-10.md,654,active_architecture,keep,Inside active architecture root.,115
 docs/F1_OPERATIONAL_USE_ALL5_PATCH_INSTALL_REPORT.md,667,active_architecture,keep,Inside active architecture root.,106
 docs/F1_OPERATIONAL_USE_RUNBOOK_2026-06-10.md,779,active_architecture,keep,Inside active architecture root.,99
+docs/F1_PEAK_ELITE_HEREDOC_VALIDATOR_FIX_2026-10-04.md,7526,active_architecture,keep,Inside active architecture root.,108
 docs/F1_PEAK_ELITE_LONGPATH_RECOVERY_AND_HYGIENE_2026-06-13.md,1226,active_architecture,keep,Inside active architecture root.,116
 docs/F1_PEAK_ELITE_REPO_HYGIENE_2026-06-13.md,1087,active_architecture,keep,Inside active architecture root.,99
+docs/F1_PEAK_ELITE_SAFE_PUSH_DIRTY_WORKTREE_FIX_2026-10-05.md,6123,active_architecture,keep,Inside active architecture root.,115
 docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md,1996,active_architecture,keep,Inside active architecture root.,93
 docs/F1_POST_RACE_SCORING_LOOP_READY_2026-06-10.md,212,active_architecture,keep,Inside active architecture root.,104
 docs/F1_PROJECT_ROADMAP_AND_CONTINUITY.md,48590,active_architecture,keep,Inside active architecture root.,95
@@ -4268,6 +4274,9 @@ history/autorepair/session_workbook_recovery/20261005T011524Z/autorepair_status.
 history/autorepair/session_workbook_recovery/20261005T020046Z/autorepair_manifest.json,992,active_architecture,keep,Inside active architecture root.,140
 history/autorepair/session_workbook_recovery/20261005T020046Z/autorepair_report.md,1039,active_architecture,keep,Inside active architecture root.,136
 history/autorepair/session_workbook_recovery/20261005T020046Z/autorepair_status.json,3510,active_architecture,keep,Inside active architecture root.,138
+history/autorepair/session_workbook_recovery/20261005T071813Z/autorepair_manifest.json,992,active_architecture,keep,Inside active architecture root.,140
+history/autorepair/session_workbook_recovery/20261005T071813Z/autorepair_report.md,1039,active_architecture,keep,Inside active architecture root.,136
+history/autorepair/session_workbook_recovery/20261005T071813Z/autorepair_status.json,3510,active_architecture,keep,Inside active architecture root.,138
 history/chat_context/20260612T232248Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,719,active_architecture,keep,Inside active architecture root.,135
 history/chat_context/20260612T232248Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,717,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/20260613T100954Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,719,active_architecture,keep,Inside active architecture root.,135
@@ -8886,6 +8895,10 @@ history/chat_context/20261005T005153Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.m
 history/chat_context/20261005T005153Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,718,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/20261005T055222Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,720,active_architecture,keep,Inside active architecture root.,135
 history/chat_context/20261005T055222Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,718,active_architecture,keep,Inside active architecture root.,132
+history/chat_context/20261005T065754Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,720,active_architecture,keep,Inside active architecture root.,135
+history/chat_context/20261005T065754Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,718,active_architecture,keep,Inside active architecture root.,132
+history/chat_context/20261005T124422Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,720,active_architecture,keep,Inside active architecture root.,135
+history/chat_context/20261005T124422Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,718,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/combined_context_index.json,895,active_architecture,keep,Inside active architecture root.,155
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/fantasy_predictions_context.md,1694,active_architecture,keep,Inside active architecture root.,158
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/race_predictions_context.md,1687,active_architecture,keep,Inside active architecture root.,155
@@ -48276,6 +48289,12 @@ history/readiness_dashboards/20261005T005153Z/race_predictions_readiness_state.j
 history/readiness_dashboards/20261005T055222Z/combined_readiness_dashboard.json,1433,active_architecture,keep,Inside active architecture root.,133
 history/readiness_dashboards/20261005T055222Z/fantasy_readiness_state.json,569,active_architecture,keep,Inside active architecture root.,128
 history/readiness_dashboards/20261005T055222Z/race_predictions_readiness_state.json,564,active_architecture,keep,Inside active architecture root.,137
+history/readiness_dashboards/20261005T065754Z/combined_readiness_dashboard.json,1428,active_architecture,keep,Inside active architecture root.,133
+history/readiness_dashboards/20261005T065754Z/fantasy_readiness_state.json,569,active_architecture,keep,Inside active architecture root.,128
+history/readiness_dashboards/20261005T065754Z/race_predictions_readiness_state.json,564,active_architecture,keep,Inside active architecture root.,137
+history/readiness_dashboards/20261005T124422Z/combined_readiness_dashboard.json,1433,active_architecture,keep,Inside active architecture root.,133
+history/readiness_dashboards/20261005T124422Z/fantasy_readiness_state.json,569,active_architecture,keep,Inside active architecture root.,128
+history/readiness_dashboards/20261005T124422Z/race_predictions_readiness_state.json,564,active_architecture,keep,Inside active architecture root.,137
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/forecast_bundle_ledger_snapshot.json,740,active_architecture,keep,Inside active architecture root.,191
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,177
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,178
@@ -70126,6 +70145,44 @@ history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261
 history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T020032Z/race_11731/validation/openf1_weather_validation.json,912,active_architecture,keep,Inside active architecture root.,198
 history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T020032Z/race_11731/workbook_kpi_readiness.csv,413,active_architecture,keep,Inside active architecture root.,183
 history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T020032Z/race_11731/workbook_kpi_readiness.json,2069,active_architecture,keep,Inside active architecture root.,184
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/forecast_bundle_ledger_snapshot.json,750,active_architecture,keep,Inside active architecture root.,193
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,180
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_intervals.csv,1303504,active_architecture,keep,Inside active architecture root.,181
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_intervals.json,3945067,active_architecture,keep,Inside active architecture root.,182
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_laps.csv,258024,active_architecture,keep,Inside active architecture root.,176
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_laps.json,821242,active_architecture,keep,Inside active architecture root.,177
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_pit.csv,4582,active_architecture,keep,Inside active architecture root.,175
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_pit.json,17044,active_architecture,keep,Inside active architecture root.,176
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_position.csv,44528,active_architecture,keep,Inside active architecture root.,180
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_position.json,133357,active_architecture,keep,Inside active architecture root.,181
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_race_control.csv,31001,active_architecture,keep,Inside active architecture root.,184
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_race_control.json,103374,active_architecture,keep,Inside active architecture root.,185
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_session_result.csv,1331,active_architecture,keep,Inside active architecture root.,186
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_session_result.json,5638,active_architecture,keep,Inside active architecture root.,187
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_sessions.csv,316,active_architecture,keep,Inside active architecture root.,180
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_sessions.json,462,active_architecture,keep,Inside active architecture root.,181
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_starting_grid.csv,579,active_architecture,keep,Inside active architecture root.,185
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_starting_grid.json,2882,active_architecture,keep,Inside active architecture root.,186
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_stints.csv,3034,active_architecture,keep,Inside active architecture root.,178
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_stints.json,19332,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_weather.csv,19497,active_architecture,keep,Inside active architecture root.,179
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/raw/openf1_weather.json,71452,active_architecture,keep,Inside active architecture root.,180
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/sandbox_workbook_update_plan.json,423,active_architecture,keep,Inside active architecture root.,190
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/source_readiness_manifest.json,21519,active_architecture,keep,Inside active architecture root.,187
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_drivers_validation.json,952,active_architecture,keep,Inside active architecture root.,198
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_intervals_validation.json,847,active_architecture,keep,Inside active architecture root.,200
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_laps_validation.json,1056,active_architecture,keep,Inside active architecture root.,195
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_pit_validation.json,864,active_architecture,keep,Inside active architecture root.,194
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_position_validation.json,818,active_architecture,keep,Inside active architecture root.,199
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_race_control_validation.json,924,active_architecture,keep,Inside active architecture root.,203
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_session_result_validation.json,925,active_architecture,keep,Inside active architecture root.,205
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_sessions_validation.json,934,active_architecture,keep,Inside active architecture root.,199
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_starting_grid_validation.json,1746,active_architecture,keep,Inside active architecture root.,204
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_stints_validation.json,873,active_architecture,keep,Inside active architecture root.,197
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/validation/openf1_weather_validation.json,912,active_architecture,keep,Inside active architecture root.,198
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/workbook_kpi_readiness.csv,413,active_architecture,keep,Inside active architecture root.,183
+history/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261005T065742Z/race_11731/workbook_kpi_readiness.json,2069,active_architecture,keep,Inside active architecture root.,184
 history/session_gate_watch_v27/20260613T165637Z/gate_decision.json,2997,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20260614T103047Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20260614T161138Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
@@ -71166,6 +71223,7 @@ history/session_gate_watch_v27/20261004T142201Z/gate_decision.json,3004,active_a
 history/session_gate_watch_v27/20261004T182129Z/gate_decision.json,2997,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20261005T005130Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20261005T065729Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
+history/session_gate_watch_v27/20261005T155647Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
 history/workbook_kpi_refresh_applier/20260612T184142Z/F1_Workbook_KPI_SANDBOX_Refresh_unknown_event_session_20260612T184142Z.xlsx,9011,active_architecture,keep,Inside active architecture root.,183
 history/workbook_kpi_refresh_applier/20260612T184142Z/refreshed_workbook_kpi_readiness.csv,143,active_architecture,keep,Inside active architecture root.,144
 history/workbook_kpi_refresh_applier/20260612T184142Z/sandbox_workbook_update_plan_applied.json,315,active_architecture,keep,Inside active architecture root.,149
@@ -95846,6 +95904,30 @@ history/workbook_kpi_refresh_applier/20261005T022334Z/upstream_data_readiness_sn
 history/workbook_kpi_refresh_applier/20261005T022334Z/upstream_latest_manifest_snapshot.json,581,active_architecture,keep,Inside active architecture root.,146
 history/workbook_kpi_refresh_applier/20261005T022334Z/workbook_kpi_refresh_manifest.json,2551,active_architecture,keep,Inside active architecture root.,142
 history/workbook_kpi_refresh_applier/20261005T022334Z/workbook_kpi_refresh_report.md,1433,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261005T065754Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T065754Z.xlsx,10343,active_architecture,keep,Inside active architecture root.,207
+history/workbook_kpi_refresh_applier/20261005T065754Z/refreshed_workbook_kpi_readiness.csv,413,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261005T065754Z/sandbox_workbook_update_plan_applied.json,767,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261005T065754Z/upstream_combined_source_manifest_snapshot.json,719,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261005T065754Z/upstream_data_readiness_snapshot.json,1580,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261005T065754Z/upstream_latest_manifest_snapshot.json,581,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261005T065754Z/workbook_kpi_refresh_manifest.json,2551,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261005T065754Z/workbook_kpi_refresh_report.md,1433,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261005T071813Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T071813Z.xlsx,10341,active_architecture,keep,Inside active architecture root.,207
+history/workbook_kpi_refresh_applier/20261005T071813Z/refreshed_workbook_kpi_readiness.csv,413,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261005T071813Z/sandbox_workbook_update_plan_applied.json,767,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261005T071813Z/upstream_combined_source_manifest_snapshot.json,719,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261005T071813Z/upstream_data_readiness_snapshot.json,1580,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261005T071813Z/upstream_latest_manifest_snapshot.json,581,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261005T071813Z/workbook_kpi_refresh_manifest.json,2551,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261005T071813Z/workbook_kpi_refresh_report.md,1433,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261005T091654Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T091654Z.xlsx,10342,active_architecture,keep,Inside active architecture root.,207
+history/workbook_kpi_refresh_applier/20261005T091654Z/refreshed_workbook_kpi_readiness.csv,413,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261005T091654Z/sandbox_workbook_update_plan_applied.json,767,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261005T091654Z/upstream_combined_source_manifest_snapshot.json,719,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261005T091654Z/upstream_data_readiness_snapshot.json,1580,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261005T091654Z/upstream_latest_manifest_snapshot.json,581,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261005T091654Z/workbook_kpi_refresh_manifest.json,2551,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261005T091654Z/workbook_kpi_refresh_report.md,1433,active_architecture,keep,Inside active architecture root.,138
 install_f1_github_automation_clean.py,8528,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,91
 install_reports/F1_1A_CUMULATIVE_GITHUB_PRODUCTION_V2_1_2026-06-11_install_report.md,2491,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,138
 installer/Install-F1-1A-GitHub-LongPath-Backup-Cleanup-Fix.ps1,5460,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,116
@@ -96682,7 +96764,7 @@ latest/readiness_handoff/fantasy_predictions_readiness.json,334,active_architect
 latest/readiness_handoff/race_predictions_readiness.json,337,active_architecture,keep,Inside active architecture root.,110
 latest/readiness_handoff/race_reports_readiness.json,388,active_architecture,keep,Inside active architecture root.,106
 latest/repo_canonicalization/REPO_CANONICALIZATION_REPORT.md,810,active_architecture,keep,Inside active architecture root.,114
-latest/repo_canonicalization/repo_canonicalization_inventory.csv,18111342,active_architecture,keep,Inside active architecture root.,118
+latest/repo_canonicalization/repo_canonicalization_inventory.csv,18149188,active_architecture,keep,Inside active architecture root.,118
 latest/repo_canonicalization/repo_canonicalization_report.json,41841,active_architecture,keep,Inside active architecture root.,116
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/forecast_bundle_ledger_snapshot.json,741,active_architecture,keep,Inside active architecture root.,173
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,159
@@ -98266,7 +98348,7 @@ latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_1
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.csv,19497,active_architecture,keep,Inside active architecture root.,161
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.json,71452,active_architecture,keep,Inside active architecture root.,162
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json,423,active_architecture,keep,Inside active architecture root.,172
-latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json,21516,active_architecture,keep,Inside active architecture root.,169
+latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json,21519,active_architecture,keep,Inside active architecture root.,169
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/validation/openf1_drivers_validation.json,952,active_architecture,keep,Inside active architecture root.,180
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/validation/openf1_intervals_validation.json,847,active_architecture,keep,Inside active architecture root.,182
 latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/validation/openf1_laps_validation.json,1056,active_architecture,keep,Inside active architecture root.,177
@@ -98521,6 +98603,9 @@ latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Ku
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T011524Z.xlsx,10341,active_architecture,keep,Inside active architecture root.,189
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T020047Z.xlsx,10339,active_architecture,keep,Inside active architecture root.,189
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T022334Z.xlsx,10341,active_architecture,keep,Inside active architecture root.,189
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T065754Z.xlsx,10343,active_architecture,keep,Inside active architecture root.,189
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T071813Z.xlsx,10341,active_architecture,keep,Inside active architecture root.,189
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261005T091654Z.xlsx,10342,active_architecture,keep,Inside active architecture root.,189
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Belgium_-_Spa-Francorchamps_-_Spa-Francorchamps_session_20260717T131440Z.xlsx,10314,active_architecture,keep,Inside active architecture root.,199
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Belgium_-_Spa-Francorchamps_-_Spa-Francorchamps_session_20260717T145459Z.xlsx,10307,active_architecture,keep,Inside active architecture root.,199
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Belgium_-_Spa-Francorchamps_-_Spa-Francorchamps_session_20260717T153759Z.xlsx,10306,active_architecture,keep,Inside active architecture root.,199
@@ -101562,7 +101647,7 @@ scripts/elite/elite_weekend_engine_v2.py,14732,active_architecture,keep,Inside a
 scripts/fantasy_value_backtester.py,1463,active_architecture,keep,Inside active architecture root.,89
 scripts/forecast/build_dry_forecast_cycle.py,7515,active_architecture,keep,Inside active architecture root.,98
 scripts/forecast/build_forecast_use_dry_review.py,6995,active_architecture,keep,Inside active architecture root.,103
-scripts/forecast_bundles/create_forecast_bundles_v1.py,17283,active_architecture,keep,Inside active architecture root.,108
+scripts/forecast_bundles/create_forecast_bundles_v1.py,17437,active_architecture,keep,Inside active architecture root.,108
 scripts/forecast_bundles/dr002_contained_producer_shadow_v1.py,8355,active_architecture,keep,Inside active architecture root.,116
 scripts/forecast_bundles/dr002_frozen_evidence_manifest_v1.py,9190,active_architecture,keep,Inside active architecture root.,115
 scripts/forecast_bundles/dr002_frozen_producer_shadow_pilot_v1.py,14518,active_architecture,keep,Inside active architecture root.,119
@@ -101571,11 +101656,12 @@ scripts/forecast_bundles/dr002_github_attestation_binding_v1.py,15452,active_arc
 scripts/forecast_bundles/dr002_lock_boundary_revision_v1.py,11255,active_architecture,keep,Inside active architecture root.,113
 scripts/forecast_bundles/dr002_replay_leakage_evidence_v1.py,12037,active_architecture,keep,Inside active architecture root.,114
 scripts/forecast_bundles/dr002_shadow_producer_execution_v1.py,11861,active_architecture,keep,Inside active architecture root.,116
+scripts/forecast_bundles/dr002_verified_source_consumer_v1.py,5914,active_architecture,keep,Inside active architecture root.,115
 scripts/forecast_bundles/forecast_integrity_contract_v1.py,11340,active_architecture,keep,Inside active architecture root.,112
 scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py,17033,active_architecture,keep,Inside active architecture root.,119
 scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py,5143,active_architecture,keep,Inside active architecture root.,118
 scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py,22170,active_architecture,keep,Inside active architecture root.,119
-scripts/forecast_bundles/write_gate_forecast_rows_v1.py,7798,active_architecture,keep,Inside active architecture root.,109
+scripts/forecast_bundles/write_gate_forecast_rows_v1.py,8304,active_architecture,keep,Inside active architecture root.,109
 scripts/forecasts/produce_actual_forecast_rows_v1.py,26757,active_architecture,keep,Inside active architecture root.,106
 scripts/live_capture/run_live_source_feed_capture.py,23123,active_architecture,keep,Inside active architecture root.,106
 scripts/maintenance/cleanup_placeholder_bundles_and_node_actions_v1.py,5680,active_architecture,keep,Inside active architecture root.,124
@@ -101599,8 +101685,9 @@ scripts/ops/f1_peak_elite_orchestrator_v1.py,12624,active_architecture,keep,Insi
 scripts/ops/f1_repo_canonicalization_v1.py,10228,active_architecture,keep,Inside active architecture root.,96
 scripts/ops/f1_workbook_persistence_handoff_guard_v1.py,8139,active_architecture,keep,Inside active architecture root.,109
 scripts/ops/f1_workflow_commit_block_repair_v1.py,9211,active_architecture,keep,Inside active architecture root.,103
-scripts/ops/f1_workflow_meta_health_check_v1.py,3875,active_architecture,keep,Inside active architecture root.,101
-scripts/ops/f1_workflow_static_validator_v2.py,8019,active_architecture,keep,Inside active architecture root.,100
+scripts/ops/f1_workflow_meta_health_check_v1.py,4226,active_architecture,keep,Inside active architecture root.,101
+scripts/ops/f1_workflow_shell_scan_v1.py,4344,active_architecture,keep,Inside active architecture root.,94
+scripts/ops/f1_workflow_static_validator_v2.py,8397,active_architecture,keep,Inside active architecture root.,100
 scripts/ops/grid_provenance_acceptance_v1.py,7357,active_architecture,keep,Inside active architecture root.,98
 scripts/ops/safe_git_push_rebase_retry.sh,1340,active_architecture,keep,Inside active architecture root.,95
 scripts/ops/test_peak_safe_test_worktree.py,9412,active_architecture,keep,Inside active architecture root.,97
@@ -101639,8 +101726,12 @@ tests/test_dr002_github_attestation_binding_v1.py,17972,active_architecture,keep
 tests/test_dr002_lock_boundary_revision_v1.py,11675,active_architecture,keep,Inside active architecture root.,99
 tests/test_dr002_replay_leakage_evidence_v1.py,14994,active_architecture,keep,Inside active architecture root.,100
 tests/test_dr002_shadow_producer_execution_v1.py,9903,active_architecture,keep,Inside active architecture root.,102
+tests/test_dr002_stable_lane_metadata_truth_v1.py,7909,active_architecture,keep,Inside active architecture root.,103
+tests/test_dr002_verified_source_consumer_v1.py,12863,active_architecture,keep,Inside active architecture root.,101
+tests/test_f1_workflow_heredoc_validation_v1.py,10185,active_architecture,keep,Inside active architecture root.,101
 tests/test_forecast_integrity_contract_v1.py,12431,active_architecture,keep,Inside active architecture root.,98
 tests/test_forecast_integrity_receipts_v1.py,22995,active_architecture,keep,Inside active architecture root.,98
+tests/test_peak_elite_safe_push_clean_worktree_v1.py,7104,active_architecture,keep,Inside active architecture root.,106
 tests/validate_openf1_high_frequency_output.py,3565,active_architecture,keep,Inside active architecture root.,100
 workbook_bridge/elite_control_room_export_manifest.csv,721,active_architecture,keep,Inside active architecture root.,108
 workbooks/F1_2026_Prediction_Model_Data_Workbook_OPERATIONAL_CONTROL_ROOM_READY_2026-06-10.xlsx,29186,active_architecture,keep,Inside active architecture root.,149

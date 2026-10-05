@@ -1,8 +1,8 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-10-05T06:58:03.648065Z`
+Created UTC: `2026-10-05T15:57:24.681090Z`
 Operation: `full_run_chain`
-Status: **fail**
+Status: **pass_with_warnings**
 
 ## Latest source state
 - Race/event: `Bahrain - Kuala Lumpur - Kuala Lumpur`
@@ -13,14 +13,14 @@ Status: **fail**
 
 ## Steps
 - `workflow_commit_block_repair`: PASS (`0`)
-- `workflow_static_validation`: FAIL (`1`)
-- `workflow_meta_health_v1`: FAIL (`1`)
+- `workflow_static_validation`: PASS (`0`)
+- `workflow_meta_health_v1`: PASS (`0`)
 - `repo_canonicalization_safe_apply`: PASS (`0`)
 - `source_readiness_classifier_v2_self_test`: PASS (`0`)
 - `session_data_processor_run_now`: PASS (`0`)
 - `workbook_kpi_refresh_apply`: PASS (`0`)
 - `dashboard_readiness_publish`: PASS (`0`)
-- `peak_elite_health_after_run`: PASS (`1`)
+- `peak_elite_health_after_run`: PASS (`0`)
 - `cleanup_inventory_report_only`: PASS (`0`)
 
 ## Governance
@@ -30,4 +30,4 @@ Status: **fail**
 - 2026 no-DRS rule: active by project governance; this layer does not create DRS assumptions
 
 ## Interpretation
-The orchestration layer failed before reaching production-ready state. Review the failed step tails in the runtime artifact.
+The processor produced source-backed artifacts, but readiness is not clean. Use as confidence/risk context, not automatic stable-prediction promotion.
