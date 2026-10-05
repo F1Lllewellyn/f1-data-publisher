@@ -2,24 +2,24 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-10-04T01:59:32Z",
-      "score": 200,
+      "run_id": "2026-10-05T15:57:16Z",
+      "score": 100,
       "source_backed": true,
-      "source_status": "clean"
+      "source_status": "needs_manual_review"
     }
   ],
   "source": {
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-04T01:59:32Z",
-        "score": 200,
+        "run_id": "2026-10-05T15:57:16Z",
+        "score": 100,
         "source_backed": true,
-        "source_status": "clean"
+        "source_status": "needs_manual_review"
       }
     ],
     "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-    "selected_source_manifest": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
+    "selected_source_manifest": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
     "selection_rule": "follow_dashboard_session_manifest_or_block",
     "source_candidates": [
       {
@@ -29,6 +29,12 @@
         "status": "clean"
       },
       {
+        "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
+        "run_id": "20261005T155659Z",
+        "score": -130,
+        "status": "needs_manual_review"
+      },
+      {
         "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_3_11729/source_readiness_manifest.json",
         "run_id": "20261003T062538Z",
         "score": 130,
@@ -36,7 +42,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
-        "run_id": "20261004T015924Z",
+        "run_id": "20261004T060439Z",
         "score": 130,
         "status": "clean"
       },
@@ -274,10 +280,10 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-04T01:59:32Z",
-        "score": 200,
+        "run_id": "2026-10-05T15:57:16Z",
+        "score": 100,
         "source_backed": true,
-        "source_status": "clean"
+        "source_status": "needs_manual_review"
       }
     ],
     "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
@@ -286,15 +292,15 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261004T015932Z",
-        "score": 100,
-        "status": "clean"
+        "run_id": "20261005T155715Z",
+        "score": -50,
+        "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261004T015932Z",
-        "score": 100,
-        "status": "clean"
+        "run_id": "20261005T155715Z",
+        "score": -50,
+        "status": "needs_manual_review"
       }
     ]
   }
