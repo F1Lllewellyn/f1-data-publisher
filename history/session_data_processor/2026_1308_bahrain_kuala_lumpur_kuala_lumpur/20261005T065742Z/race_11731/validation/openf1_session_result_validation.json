@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "points",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 4053,
+    "ok": true,
+    "sha256": "9699ccd8fa86169caebbe45fa467f56f2e1ee185ea6bf8f243d3ddb8380ed879",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_session_result.json",
+  "json_sha256": "d8bde524a961cc1323e4d549d096c2897fc92e6deebd0dc338f07e73d6f62620",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}

@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 54687,
+    "ok": true,
+    "sha256": "a2f1c46e8d0b764804361739d1f8c82c262bd0c4c057fa43d474761887301168",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_weather.json",
+  "json_sha256": "63fc2518437382b8f083957ed3d694ae0a9f7b08b637ac40a2124ecffc5d1796",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 254,
+  "status": "clean",
+  "timestamp_rows": 254
+}
