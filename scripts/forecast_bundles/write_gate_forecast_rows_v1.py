@@ -22,10 +22,14 @@ REQUIRED_COLUMNS = [
     'stable_vs_challenger_delta_note','method_e_attribution_note','promotion_gate_eligible','notes'
 ]
 LANE_CONFIG = {
-    'stable_baseline':'Engine_2026-06-07_STABLE',
+    'stable_baseline':'StableBaseline_LanePolicy_v1',
     'control_room_overlay':'MethodE_ControlRoom_Overlay',
     'experimental_challenger':'IntegratedSpecialist_RecalibratedReliability_EOL_EXPERIMENTAL'
 }
+STABLE_LANE_NOTE = (
+    'stable_baseline is a lane/policy label; no separate protected stable-engine '
+    'execution is claimed.'
+)
 
 def utcnow():
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z')
@@ -61,7 +65,12 @@ def normalize_rows(rows, event_id, gate, lane):
         nr['event_id']=nr['event_id'] or event_id
         nr['gate']=gate
         nr['engine_lane']=lane
-        nr['engine_lane_config']=nr['engine_lane_config'] or LANE_CONFIG[lane]
+        if lane == 'stable_baseline':
+            # Fail closed over stale source metadata: this identifies a lane policy,
+            # not execution of the protected historical stable engine.
+            nr['engine_lane_config']=LANE_CONFIG[lane]
+        else:
+            nr['engine_lane_config']=nr['engine_lane_config'] or LANE_CONFIG[lane]
         nr['forecast_timestamp_utc']=nr['forecast_timestamp_utc'] or ts
         nr['forecast_lock_utc']=''  # Set by Forecast Bundle Locker, not source writer.
         nr['driver_number']=nr['driver_number'] or r.get('driver','') or r.get('driver_id','')
@@ -72,7 +81,10 @@ def normalize_rows(rows, event_id, gate, lane):
         nr['predicted_dnf_probability']=nr['predicted_dnf_probability'] or r.get('dnf_probability','') or r.get('predicted_dnf_probability','')
         nr['confidence_score']=nr['confidence_score'] or r.get('confidence','') or r.get('confidence_score','')
         nr['promotion_gate_eligible']='False'
-        nr['notes']=(nr['notes'] + ' | ' if nr['notes'] else '') + 'Actual forecast source row normalized before bundle lock. Promotion eligibility remains false until scoring.'
+        note = 'Actual forecast source row normalized before bundle lock. Promotion eligibility remains false until scoring.'
+        if lane == 'stable_baseline':
+            note += ' ' + STABLE_LANE_NOTE
+        nr['notes']=(nr['notes'] + ' | ' if nr['notes'] else '') + note
         out.append(nr)
     return out
 
