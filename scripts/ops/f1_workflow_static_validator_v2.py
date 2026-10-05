@@ -19,6 +19,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
+from f1_workflow_shell_scan_v1 import ShellScanError, shell_visible_text
+
 ROOT = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
 WF_DIR = ROOT / ".github" / "workflows"
 OUT = ROOT / "_runtime" / "peak_elite" / "workflow_static_validation"
@@ -115,8 +117,13 @@ def validate_workflow(path: Path) -> Dict[str, Any]:
         error = bash_validate(script)
         if error and error != "bash_unavailable":
             issues.append({"severity": "fail", "line": line_no, "message": "bash_n_failed", "detail": error[-1200:]})
-        if_count = len(re.findall(r"(?m)^\s*if\b", script))
-        fi_count = len(re.findall(r"(?m)^\s*fi\b", script))
+        try:
+            visible = shell_visible_text(script)
+        except ShellScanError as exc:
+            issues.append({"severity": "fail", "line": line_no, "message": "shell_heredoc_scan_failed", "detail": str(exc)})
+            visible = script  # Never mask remaining text on a scan failure.
+        if_count = len(re.findall(r"(?m)^\s*if\b", visible))
+        fi_count = len(re.findall(r"(?m)^\s*fi\b", visible))
         if if_count != fi_count:
             issues.append({"severity": "fail", "line": line_no, "message": f"meta_if_fi_imbalance if={if_count} fi={fi_count}"})
         for n, script_line in enumerate(script.splitlines(), start=line_no):
