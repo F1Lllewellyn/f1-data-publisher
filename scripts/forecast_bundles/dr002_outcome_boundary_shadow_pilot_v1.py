@@ -19,7 +19,6 @@ import verify_forecast_integrity_receipts_v1 as receipt_contract
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LOCK_RUNTIME_ROOT = REPO_ROOT / "_runtime/dr002_pre2b7h_forecast_lock_shadow"
 OUTCOME_RUNTIME_ROOT = REPO_ROOT / "_runtime/dr002_pre2b7i_outcome_boundary_shadow"
-WORKFLOW_PATH = ".github/workflows/dr002-outcome-boundary-shadow-pilot.yml"
 SCHEMA = "dr002-outcome-boundary-shadow-pilot-v1"
 STATUS = "SHADOW_OUTCOME_BOUNDARY_ONLY_NOT_PRODUCTION"
 MODE = "manual_github_synthetic_outcome_boundary_shadow"
@@ -118,6 +117,9 @@ def verify_lock_shadow(
     github_run_id,
     github_run_attempt,
 ):
+    caller_workflow_path = lock_shadow.validate_workflow_ref(
+        workflow_ref, repository, git_ref
+    )
     producer_root, producer_manifest, producer_manifest_bytes, forecast_bytes = (
         lock_shadow.verify_producer_shadow(run_id, implementation_git_sha)
     )
@@ -134,7 +136,7 @@ def verify_lock_shadow(
     )
     expected_identity = {
         "repository": repository,
-        "workflow_path": WORKFLOW_PATH,
+        "workflow_path": caller_workflow_path,
         "workflow_name": workflow,
         "workflow_ref": workflow_ref,
         "git_ref": git_ref,
@@ -264,9 +266,8 @@ def run_outcome_boundary_shadow(
         "invalid_repository",
     )
     require(workflow and git_ref == "refs/heads/main", "invalid_workflow_or_ref")
-    require(
-        workflow_ref == repository + "/" + WORKFLOW_PATH + "@" + git_ref,
-        "workflow_ref_mismatch",
+    caller_workflow_path = lock_shadow.validate_workflow_ref(
+        workflow_ref, repository, git_ref
     )
     forecast, producer, producer_manifest_bytes, lock_manifest_bytes = verify_lock_shadow(
         run_id,
@@ -351,7 +352,7 @@ def run_outcome_boundary_shadow(
             "status": STATUS,
             "execution_mode": MODE,
             "repository": repository,
-            "workflow_path": WORKFLOW_PATH,
+            "workflow_path": caller_workflow_path,
             "workflow_name": workflow,
             "workflow_ref": workflow_ref,
             "git_ref": git_ref,

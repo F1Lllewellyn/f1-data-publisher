@@ -1,4 +1,4 @@
-"""Focused offline tests for the corrected pre-2B-7I1R capability."""
+"""Focused offline tests for pre-2B-7I3 workflow-identity composability."""
 import ast
 import base64
 from datetime import datetime, timedelta, timezone
@@ -18,6 +18,7 @@ sys.path.insert(0, str(SCRIPTS))
 import dr002_outcome_boundary_shadow_pilot_v1 as pilot
 
 WORKFLOW_PATH = ".github/workflows/dr002-outcome-boundary-shadow-pilot.yml"
+REVISION_WORKFLOW_PATH = ".github/workflows/dr002-revision-shadow-pilot.yml"
 WORKFLOW = (ROOT / WORKFLOW_PATH).read_text(encoding="utf-8")
 PRODUCER_WRAPPER = "scripts/forecast_bundles/dr002_frozen_producer_shadow_pilot_v1.py"
 LOCK_WRAPPER = "scripts/forecast_bundles/dr002_forecast_lock_shadow_pilot_v1.py"
@@ -195,26 +196,60 @@ class OutcomeBoundaryShadowTests(unittest.TestCase):
             item.start()
             self.addCleanup(item.stop)
 
-    def run_shadow(self, lock_root=None):
+    def caller_lock_root(self, workflow_path, workflow_name):
+        if workflow_path == WORKFLOW_PATH:
+            return self.lock_root
+        root = Path(self.temp.name) / ("lock-" + Path(workflow_path).stem)
+        shutil.copytree(self.lock_root, root)
+        target = root / "gha-123-1/lock_execution_manifest.json"
+        manifest = json.loads(target.read_bytes())
+        manifest.update(
+            workflow_path=workflow_path,
+            workflow_name=workflow_name,
+            workflow_ref="example/project/" + workflow_path + "@refs/heads/main",
+        )
+        target.write_text(
+            json.dumps(manifest, sort_keys=True, separators=(",", ":")) + "\n",
+            encoding="utf-8",
+        )
+        return root
+
+    def run_shadow(
+        self,
+        lock_root=None,
+        *,
+        workflow_path=WORKFLOW_PATH,
+        workflow_name="DR-002 synthetic outcome boundary shadow pilot",
+        workflow_ref=None,
+        repository="example/project",
+        git_ref="refs/heads/main",
+        outcome_root=None,
+    ):
         selected_lock_root = lock_root or self.lock_root
+        selected_outcome_root = outcome_root or self.outcome_root
+        workflow_ref = workflow_ref or (
+            repository + "/" + workflow_path + "@" + git_ref
+        )
         lock_manifest = json.loads(
             (selected_lock_root / "gha-123-1/lock_execution_manifest.json").read_bytes()
         )
         start = lock_manifest["lock_receipt_created_utc"]
         times = iter((plus_seconds(start, 1), plus_seconds(start, 2), plus_seconds(start, 3)))
-        with patch.object(pilot, "LOCK_RUNTIME_ROOT", selected_lock_root):
+        with patch.object(pilot, "LOCK_RUNTIME_ROOT", selected_lock_root), patch.object(
+            pilot, "OUTCOME_RUNTIME_ROOT", selected_outcome_root
+        ):
             result = pilot.run_outcome_boundary_shadow(
                 run_id="gha-123-1",
                 implementation_git_sha="a" * 40,
-                repository="example/project",
-                workflow="DR-002 synthetic outcome boundary shadow pilot",
-                workflow_ref="example/project/" + WORKFLOW_PATH + "@refs/heads/main",
-                git_ref="refs/heads/main",
+                repository=repository,
+                workflow=workflow_name,
+                workflow_ref=workflow_ref,
+                git_ref=git_ref,
                 github_run_id="123",
                 github_run_attempt="1",
                 clock=lambda: next(times),
             )
-        return result, self.outcome_root / "gha-123-1"
+        return result, selected_outcome_root / "gha-123-1"
 
     def test_composed_lock_manifest_records_truthful_outer_identity(self):
         manifest, _ = self.run_shadow()
@@ -235,6 +270,77 @@ class OutcomeBoundaryShadowTests(unittest.TestCase):
         for key, value in expected.items():
             self.assertEqual(lock_manifest[key], value)
             self.assertEqual(manifest[key], value)
+
+    def test_future_revision_workflow_ref_accepted_and_recorded_truthfully(self):
+        workflow_name = "DR-002 synthetic revision shadow pilot"
+        lock_root = self.caller_lock_root(REVISION_WORKFLOW_PATH, workflow_name)
+        manifest, _ = self.run_shadow(
+            lock_root,
+            workflow_path=REVISION_WORKFLOW_PATH,
+            workflow_name=workflow_name,
+        )
+        expected = {
+            "workflow_path": REVISION_WORKFLOW_PATH,
+            "workflow_name": workflow_name,
+            "workflow_ref": (
+                "example/project/" + REVISION_WORKFLOW_PATH + "@refs/heads/main"
+            ),
+            "repository": "example/project",
+            "git_ref": "refs/heads/main",
+            "implementation_git_sha": "a" * 40,
+            "github_run_id": "123",
+            "github_run_attempt": "1",
+        }
+        for key, value in expected.items():
+            self.assertEqual(manifest[key], value)
+
+    def test_direct_and_composed_calls_preserve_exact_outcome_evidence(self):
+        direct_root = Path(self.temp.name) / "direct-outcome"
+        revision_root = Path(self.temp.name) / "revision-outcome"
+        revision_name = "DR-002 synthetic revision shadow pilot"
+        revision_lock = self.caller_lock_root(REVISION_WORKFLOW_PATH, revision_name)
+        direct_manifest, direct = self.run_shadow(outcome_root=direct_root)
+        revision_manifest, revision = self.run_shadow(
+            revision_lock,
+            workflow_path=REVISION_WORKFLOW_PATH,
+            workflow_name=revision_name,
+            outcome_root=revision_root,
+        )
+        evidence = (
+            "synthetic_outcome_payload.json",
+            "outcome_source_capture_receipt.json",
+            "outcome_boundary_receipt.json",
+            "outcome_boundary_report.md",
+        )
+        for name in evidence:
+            self.assertEqual((direct / name).read_bytes(), (revision / name).read_bytes())
+        self.assertEqual(direct_manifest["evidence_sha256"], revision_manifest["evidence_sha256"])
+        self.assertEqual(
+            direct_manifest["synthetic_outcome_payload_sha256"],
+            revision_manifest["synthetic_outcome_payload_sha256"],
+        )
+        self.assertEqual(
+            direct_manifest["outcome_capture_receipt_sha256"],
+            revision_manifest["outcome_capture_receipt_sha256"],
+        )
+        self.assertEqual(
+            direct_manifest["outcome_boundary_receipt_sha256"],
+            revision_manifest["outcome_boundary_receipt_sha256"],
+        )
+        differences = {
+            key
+            for key in direct_manifest
+            if direct_manifest[key] != revision_manifest[key]
+        }
+        self.assertEqual(
+            differences,
+            {
+                "workflow_path",
+                "workflow_name",
+                "workflow_ref",
+                "lock_execution_manifest_sha256",
+            },
+        )
 
     def test_exact_payload_receipt_hashes_and_required_package(self):
         manifest, output = self.run_shadow()
@@ -361,6 +467,64 @@ class OutcomeBoundaryShadowTests(unittest.TestCase):
                 ):
                     self.run_shadow(lock_root=work)
 
+    def test_direct_identity_cannot_replace_actual_revision_caller(self):
+        with self.assertRaisesRegex(
+            pilot.OutcomeBoundaryShadowError, "lock_shadow_identity_mismatch"
+        ):
+            self.run_shadow(
+                self.lock_root,
+                workflow_path=REVISION_WORKFLOW_PATH,
+                workflow_name="DR-002 synthetic revision shadow pilot",
+            )
+
+    def test_revision_identity_cannot_replace_actual_direct_caller(self):
+        revision_lock = self.caller_lock_root(
+            REVISION_WORKFLOW_PATH, "DR-002 synthetic revision shadow pilot"
+        )
+        with self.assertRaisesRegex(
+            pilot.OutcomeBoundaryShadowError, "lock_shadow_identity_mismatch"
+        ):
+            self.run_shadow(revision_lock)
+
+    def test_invalid_caller_workflow_refs_fail_closed_before_output(self):
+        invalid = {
+            "repository_mismatch": (
+                "other/project/" + WORKFLOW_PATH + "@refs/heads/main",
+                "workflow_repository_mismatch",
+            ),
+            "ref_mismatch": (
+                "example/project/" + WORKFLOW_PATH + "@refs/heads/topic",
+                "workflow_ref_mismatch",
+            ),
+            "malformed": ("not-a-workflow-ref", "malformed_workflow_ref"),
+            "traversal": (
+                "example/project/.github/workflows/../evil.yml@refs/heads/main",
+                "workflow_path_not_normalized",
+            ),
+            "outside_workflows": (
+                "example/project/scripts/evil.yml@refs/heads/main",
+                "workflow_path_not_normalized",
+            ),
+            "nested": (
+                "example/project/.github/workflows/nested/evil.yml@refs/heads/main",
+                "workflow_path_not_normalized",
+            ),
+            "empty": (
+                "example/project/.github/workflows/@refs/heads/main",
+                "workflow_path_not_normalized",
+            ),
+            "non_yaml": (
+                "example/project/.github/workflows/evil.txt@refs/heads/main",
+                "malformed_workflow_filename",
+            ),
+        }
+        for name, (workflow_ref, reason) in invalid.items():
+            with self.subTest(name=name), self.assertRaisesRegex(
+                pilot.lock_shadow.LockShadowError, reason
+            ):
+                self.run_shadow(workflow_ref=workflow_ref)
+        self.assertFalse(self.outcome_root.exists())
+
 
 class AttestationPreservationTests(unittest.TestCase):
     def setUp(self):
@@ -478,6 +642,8 @@ class StaticBoundaryTests(unittest.TestCase):
             ".github/workflows/dr002-forecast-lock-shadow-pilot.yml": "4daa7c0ebb22f9b31dd35f5b0109c2eb227a976c",
             "docs/DR002_PRE2B7H2_LIVE_GITHUB_ATTESTED_LOCK_SHADOW_2026-10-05.md": "1e6177001a7e939cb18af6d8581748559d5bc859",
             "docs/DR002_PRE2B7H3_LOCK_SHADOW_WORKFLOW_IDENTITY_COMPOSABILITY_2026-10-06.md": "c48c6f80633c19232ef664c6724eb35342c974ac",
+            ".github/workflows/dr002-outcome-boundary-shadow-pilot.yml": "5ebe0dcaed10583bacd56687bd92d971f561f680",
+            "docs/DR002_PRE2B7I2_LIVE_GITHUB_ATTESTED_OUTCOME_BOUNDARY_SHADOW_2026-10-06.md": "df1b309b185e55300eedad7889971b1f8cc46d4f",
             "docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md": "85ce44807ef159b5ba5d3bfd543ea1f945097f77",
         }
         for path, digest in expected.items():
@@ -486,21 +652,17 @@ class StaticBoundaryTests(unittest.TestCase):
 
     def test_documented_checkpoint_is_exact_and_final(self):
         doc = (
-            ROOT / "docs/DR002_PRE2B7I1R_GITHUB_ATTESTED_OUTCOME_BOUNDARY_SHADOW_2026-10-06.md"
+            ROOT / "docs/DR002_PRE2B7I3_OUTCOME_BOUNDARY_WORKFLOW_IDENTITY_COMPOSABILITY_2026-10-06.md"
         ).read_text(encoding="utf-8")
-        checkpoint = """outcome_boundary_shadow_capability_installed: true
-truthful_composed_lock_workflow_identity: true
-live_outcome_boundary_run_executed: false
-separate_synthetic_outcome_capture_constructed: true
-gate2b4_outcome_boundary_constructor_used: true
-boundary_equals_outcome_first_observed: true
-outcome_capture_externally_bound: false
-outcome_boundary_receipt_externally_bound: false
-outcome_clock_authenticated: false
-outcome_source_publisher_authenticated: false
-observation_completeness_proven: false
+        checkpoint = """outcome_boundary_workflow_identity_composable: true
+direct_outcome_workflow_identity_preserved: true
+future_revision_workflow_identity_truthful: true
+historical_i2_evidence_rewritten: false
+outcome_boundary_mechanics_modified: false
+trust_ceiling_modified: false
+live_workflow_run_executed: false
 revision_proof_completed: false
-production_outcome_boundary_proven: false
+observation_completeness_proven: false
 dr002_activated: false
 promotion_allowed: false"""
         self.assertTrue(doc.endswith("```text\n" + checkpoint + "\n```\n"))
