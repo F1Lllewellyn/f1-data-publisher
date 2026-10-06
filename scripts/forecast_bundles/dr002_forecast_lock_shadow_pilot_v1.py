@@ -96,6 +96,32 @@ def persist_checked(path, data):
     return sha256(data)
 
 
+def validate_workflow_ref(workflow_ref, repository, git_ref):
+    """Return the truthful normalized caller workflow path or fail closed."""
+    require(isinstance(workflow_ref, str) and workflow_ref, "malformed_workflow_ref")
+    require("\\" not in workflow_ref, "malformed_workflow_ref")
+    match = re.fullmatch(
+        r"([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)/([^@]+)@(.+)", workflow_ref
+    )
+    require(match is not None, "malformed_workflow_ref")
+    caller_repository, workflow_path, caller_ref = match.groups()
+    require(caller_repository == repository, "workflow_repository_mismatch")
+    require(caller_ref == git_ref, "workflow_ref_mismatch")
+    parts = workflow_path.split("/")
+    require(
+        len(parts) == 3
+        and parts[:2] == [".github", "workflows"]
+        and all(part not in ("", ".", "..") for part in parts),
+        "workflow_path_not_normalized",
+    )
+    require(
+        re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*\.(?:yml|yaml)", parts[2])
+        is not None,
+        "malformed_workflow_filename",
+    )
+    return "/".join(parts)
+
+
 def producer_receipt(forecast, manifest, payload_sha):
     payload = {
         "implementation": manifest["producer_implementation"],
@@ -361,11 +387,11 @@ def run_lock_shadow(
         and re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository),
         "invalid_repository",
     )
-    require(workflow and git_ref == "refs/heads/main", "invalid_workflow_or_ref")
     require(
-        workflow_ref == repository + "/" + WORKFLOW_PATH + "@" + git_ref,
-        "workflow_ref_mismatch",
+        isinstance(workflow, str) and workflow.strip() and git_ref == "refs/heads/main",
+        "invalid_workflow_or_ref",
     )
+    workflow_path = validate_workflow_ref(workflow_ref, repository, git_ref)
     producer_root, shadow_manifest, shadow_manifest_bytes, forecast_bytes = (
         verify_producer_shadow(run_id, implementation_git_sha)
     )
@@ -444,7 +470,7 @@ def run_lock_shadow(
             "status": STATUS,
             "execution_mode": MODE,
             "repository": repository,
-            "workflow_path": WORKFLOW_PATH,
+            "workflow_path": workflow_path,
             "workflow_name": workflow,
             "workflow_ref": workflow_ref,
             "git_ref": git_ref,
