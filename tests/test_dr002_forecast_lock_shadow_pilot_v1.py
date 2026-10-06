@@ -178,7 +178,12 @@ class LockShadowTests(unittest.TestCase):
         self.addCleanup(self.patch_producer_root.stop)
         self.addCleanup(self.patch_lock_root.stop)
 
-    def run_shadow(self):
+    def run_shadow(
+        self,
+        workflow_path=WORKFLOW_PATH,
+        workflow_name="DR-002 synthetic forecast lock shadow pilot",
+        lock_root=None,
+    ):
         source_manifest = json.loads(
             (self.producer_root / "gha-123-1/execution_manifest.json").read_bytes()
         )
@@ -188,18 +193,66 @@ class LockShadowTests(unittest.TestCase):
                 plus_seconds(source_manifest["forecast_generation_utc"], 2),
             )
         )
-        result = pilot.run_lock_shadow(
-            run_id="gha-123-1",
-            implementation_git_sha="a" * 40,
-            repository="example/project",
-            workflow="DR-002 synthetic forecast lock shadow pilot",
-            workflow_ref="example/project/" + WORKFLOW_PATH + "@refs/heads/main",
-            git_ref="refs/heads/main",
-            github_run_id="123",
-            github_run_attempt="1",
-            clock=lambda: next(times),
+        selected_root = lock_root or self.lock_root
+        with patch.object(pilot, "LOCK_RUNTIME_ROOT", selected_root):
+            result = pilot.run_lock_shadow(
+                run_id="gha-123-1",
+                implementation_git_sha="a" * 40,
+                repository="example/project",
+                workflow=workflow_name,
+                workflow_ref="example/project/" + workflow_path + "@refs/heads/main",
+                git_ref="refs/heads/main",
+                github_run_id="123",
+                github_run_attempt="1",
+                clock=lambda: next(times),
+            )
+        return result, selected_root / "gha-123-1"
+
+    def test_direct_and_composed_workflow_identity_are_recorded_truthfully(self):
+        manifest, _ = self.run_shadow()
+        self.assertEqual(manifest["workflow_path"], WORKFLOW_PATH)
+        self.assertEqual(
+            manifest["workflow_ref"],
+            "example/project/" + WORKFLOW_PATH + "@refs/heads/main",
         )
-        return result, self.lock_root / "gha-123-1"
+        self.assertEqual(manifest["workflow_name"], "DR-002 synthetic forecast lock shadow pilot")
+
+    def test_composed_outcome_workflow_identity_is_accepted_and_recorded(self):
+        composed = ".github/workflows/dr002-outcome-boundary-shadow-pilot.yml"
+        name = "DR-002 synthetic outcome boundary shadow pilot"
+        manifest, _ = self.run_shadow(workflow_path=composed, workflow_name=name)
+        self.assertEqual(manifest["workflow_path"], composed)
+        self.assertEqual(
+            manifest["workflow_ref"],
+            "example/project/" + composed + "@refs/heads/main",
+        )
+        self.assertEqual(manifest["workflow_name"], name)
+
+    def test_composition_changes_identity_only_not_lock_mechanics(self):
+        direct_manifest, direct = self.run_shadow(lock_root=self.work / "direct-lock")
+        composed_path = ".github/workflows/dr002-outcome-boundary-shadow-pilot.yml"
+        composed_manifest, composed = self.run_shadow(
+            workflow_path=composed_path,
+            workflow_name="DR-002 synthetic outcome boundary shadow pilot",
+            lock_root=self.work / "composed-lock",
+        )
+        for name in (
+            "forecast_payload.csv",
+            "producer_execution_receipt.json",
+            "forecast_lock_receipt.json",
+            "lock_report.md",
+        ):
+            self.assertEqual((direct / name).read_bytes(), (composed / name).read_bytes())
+        for field in (
+            "forecast_payload_sha256",
+            "producer_receipt_sha256",
+            "lock_receipt_sha256",
+            "internal_lock_utc",
+            "lock_receipt_created_utc",
+            "storage_ref",
+            "evidence_sha256",
+        ):
+            self.assertEqual(direct_manifest[field], composed_manifest[field])
 
     def test_exact_forecast_payload_copy_and_all_pre_attestation_hashes(self):
         manifest, output = self.run_shadow()
@@ -319,6 +372,32 @@ class LockShadowTests(unittest.TestCase):
         for field, value in (("run_id", "wrong"), ("git_ref", "refs/heads/topic")):
             with self.subTest(field=field), self.assertRaises(pilot.LockShadowError):
                 pilot.run_lock_shadow(**{**common, field: value})
+
+    def test_malformed_or_mismatched_workflow_identity_fails_closed(self):
+        common = dict(
+            run_id="gha-123-1",
+            implementation_git_sha="a" * 40,
+            repository="example/project",
+            workflow="caller display name",
+            git_ref="refs/heads/main",
+            github_run_id="123",
+            github_run_attempt="1",
+        )
+        invalid = (
+            ("other/project/.github/workflows/caller.yml@refs/heads/main", "workflow_repository_mismatch"),
+            ("example/project/.github/workflows/caller.yml@refs/heads/topic", "workflow_ref_mismatch"),
+            ("not-a-workflow-ref", "malformed_workflow_ref"),
+            ("example/project/.github/workflows/../caller.yml@refs/heads/main", "workflow_path_not_normalized"),
+            ("example/project/scripts/caller.yml@refs/heads/main", "workflow_path_not_normalized"),
+            ("example/project/.github/workflows/@refs/heads/main", "workflow_path_not_normalized"),
+            ("example/project/.github/workflows/caller.txt@refs/heads/main", "malformed_workflow_filename"),
+            ("example/project/.github/workflows/sub/caller.yml@refs/heads/main", "workflow_path_not_normalized"),
+        )
+        for workflow_ref, reason in invalid:
+            with self.subTest(workflow_ref=workflow_ref), self.assertRaisesRegex(
+                pilot.LockShadowError, reason
+            ):
+                pilot.run_lock_shadow(**common, workflow_ref=workflow_ref)
 
 
 class AttestationPreservationTests(unittest.TestCase):
