@@ -1,0 +1,62 @@
+name: DR-002 OpenF1 stream capture shadow
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+jobs:
+  capture-shadow:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Install bounded MQTT client dependency
+        run: python -m pip install --disable-pip-version-check --no-input paho-mqtt==2.1.0
+      - name: One bounded OpenF1 stream capture shadow
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          OPENF1_USERNAME: ${{ secrets.OPENF1_USERNAME }}
+          OPENF1_PASSWORD: ${{ secrets.OPENF1_PASSWORD }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: python scripts/forecast_bundles/dr002_openf1_stream_capture_shadow_v1.py
+      - name: Attest exact successful capture execution manifest
+        id: attest_capture
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: _runtime/dr002_pre2b7k_openf1_stream_capture_shadow/gha-${{ github.run_id }}-${{ github.run_attempt }}/capture_execution_manifest.json
+          push-to-registry: false
+          create-storage-record: false
+      - name: Preserve attestation bundle and factual metadata
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest_capture.outputs.bundle-path }}
+          ATTESTATION_ID: ${{ steps.attest_capture.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest_capture.outputs.attestation-url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: python scripts/forecast_bundles/dr002_openf1_stream_capture_shadow_v1.py preserve-attestation
+      - name: Preserve run-scoped shadow evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: dr002-openf1-stream-capture-shadow-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/dr002_pre2b7k_openf1_stream_capture_shadow/gha-${{ github.run_id }}-${{ github.run_attempt }}/**
+          if-no-files-found: error
