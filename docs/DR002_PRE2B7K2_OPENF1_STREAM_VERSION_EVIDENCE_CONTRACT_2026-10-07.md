@@ -50,7 +50,7 @@ Different topics with the same `_key` remain distinct identities. Non-monotonic 
 
 ## K1 composition
 
-An optional K1 assessment is accepted only when its schema, assessment type, status, coverage fact, receipt-binding fact, and immutable trust ceilings are structurally compatible with the accepted K1 contract. K1 `PROVEN` preserves declared-window schedule coverage as a separate true fact. K1 `INCOMPLETE` preserves it as false. Omitting K1 reports coverage as not supplied and unproven.
+An optional K1 assessment is accepted only when its schema, assessment type, status, coverage fact, immutable trust ceilings, and `all_successful_observations_receipt_bound=true` are structurally compatible with the accepted K1 contract. K1 `PROVEN` preserves declared-window schedule coverage as a separate true fact. K1 `INCOMPLETE` preserves it as false. Omitting K1 reports coverage as not supplied and unproven. Forged PROVEN or INCOMPLETE inputs with unbound successful observations fail closed to `HOLD`.
 
 K1 is not reimplemented. No K1 status can upgrade OpenF1 publisher or global completeness.
 
@@ -78,7 +78,7 @@ Caller attempts to assert any of these fields true fail closed to `HOLD`. OpenF1
 
 ## Focused verification
 
-Cheap syntax compilation and direct import succeeded. The focused suite ran 23 tests successfully:
+Cheap syntax compilation and direct import succeeded. The focused suite ran 25 tests successfully:
 
 ```text
 python3 -m py_compile \
@@ -87,11 +87,11 @@ python3 -m py_compile \
 
 python3 -m unittest -v tests/test_dr002_openf1_stream_version_evidence_v1.py
 
-Ran 23 tests
+Ran 25 tests
 OK
 ```
 
-The suite covers valid synthetic evidence; exact raw-byte hashes; same-topic/same-key grouping; cross-topic key separation; per-object `_id` ordering; non-contiguous identifiers; duplicate identifiers; malformed JSON and duplicate keys; missing or invalid identifiers and keys; undeclared topics; malformed or duplicate receive indexes; non-monotonic receive order; immutable completeness ceilings; K1 proven/incomplete composition and malformed K1 rejection; caller assertion rejection; determinism; absence of a new receipt type; pure/offline implementation; and all named dependency pins.
+The suite covers valid synthetic evidence; exact raw-byte hashes; same-topic/same-key grouping; cross-topic key separation; per-object `_id` ordering; non-contiguous identifiers; duplicate identifiers; malformed JSON and duplicate keys; missing or invalid identifiers and keys; undeclared topics; malformed or duplicate receive indexes; non-monotonic receive order; immutable completeness ceilings; K1 proven/incomplete composition; explicit rejection of forged PROVEN+false and INCOMPLETE+false receipt-binding facts; malformed K1 rejection; caller assertion rejection; determinism; absence of a new receipt type; pure/offline implementation; and all named dependency pins.
 
 ## Accepted dependency pins
 
