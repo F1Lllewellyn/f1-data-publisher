@@ -66,7 +66,46 @@ class OpenF1HistoricalRestCaptureTests(unittest.TestCase):
         expected = "https://api.openf1.org/v1/weather?driver_number=44&session_key=11371"
         self.assertEqual(left["canonical_request_uri"], expected)
         self.assertEqual(left["canonical_request_uri"], right["canonical_request_uri"])
+        self.assertEqual(left["source_id"], right["source_id"])
         self.assertEqual(left["source_capture_receipt_bytes"], right["source_capture_receipt_bytes"])
+
+    def test_source_id_binds_exact_canonical_request_filters(self):
+        first = self.assess(request_params={"session_key": 11371, "driver_number": 44})
+        different = self.assess(request_params={"session_key": 11371, "driver_number": 1})
+        reordered = self.assess(request_params={"driver_number": 44, "session_key": 11371})
+        self.assertNotEqual(first["source_id"], different["source_id"])
+        self.assertEqual(first["source_id"], reordered["source_id"])
+
+    def test_supplied_request_scope_keys_must_match_dr002_scope(self):
+        valid = self.assess(request_params={"meeting_key": 1295, "session_key": "11371"})
+        self.assertEqual(valid["status"], m.VALIDATED)
+        cases = (
+            ({"session_key": 99999}, "request_session_scope_mismatch"),
+            ({"meeting_key": "9999"}, "request_meeting_scope_mismatch"),
+        )
+        for request_params, reason in cases:
+            with self.subTest(request_params=request_params):
+                result = self.assess(request_params=request_params)
+                self.assertEqual(result["status"], m.HOLD)
+                self.assertIn(reason, result["reason_codes"])
+
+    def test_response_records_with_foreign_scope_hold(self):
+        cases = (
+            (b'[{"session_key":99999}]', "response_session_scope_mismatch"),
+            (b'{"meeting_key":9999}', "response_meeting_scope_mismatch"),
+            (b'{"data":[{"session_key":"foreign"}]}', "response_session_scope_mismatch"),
+        )
+        for raw, reason in cases:
+            with self.subTest(raw=raw):
+                result = self.assess(raw_response_bytes=raw)
+                self.assertEqual(result["status"], m.HOLD)
+                self.assertIn(reason, result["reason_codes"])
+
+    def test_response_scope_accepts_matching_numeric_or_string_keys(self):
+        result = self.assess(
+            raw_response_bytes=b'[{"session_key":11371,"meeting_key":"1295"}]'
+        )
+        self.assertEqual(result["status"], m.VALIDATED)
 
     def test_observation_exactly_at_1800_seconds_validates(self):
         result = self.assess(first_observed_utc="2026-10-07T14:30:00Z")
