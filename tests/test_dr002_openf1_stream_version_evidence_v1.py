@@ -186,6 +186,16 @@ class OpenF1StreamVersionEvidenceTests(unittest.TestCase):
         self.assertEqual(result["k1_observer_coverage_status"], m.K1_INCOMPLETE)
         self.assertFalse(result["declared_window_schedule_coverage_proven"])
 
+    def test_forged_k1_proven_with_unbound_successes_holds(self):
+        forged = self.k1(m.K1_PROVEN)
+        forged["all_successful_observations_receipt_bound"] = False
+        self.assert_hold(k1_assessment=forged)
+
+    def test_forged_k1_incomplete_with_unbound_successes_holds(self):
+        forged = self.k1(m.K1_INCOMPLETE)
+        forged["all_successful_observations_receipt_bound"] = False
+        self.assert_hold(k1_assessment=forged)
+
     def test_malformed_or_incompatible_k1_holds(self):
         malformed = self.k1()
         malformed["publisher_revision_completeness_proven"] = True
