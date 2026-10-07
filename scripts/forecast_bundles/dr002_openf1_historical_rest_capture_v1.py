@@ -95,6 +95,38 @@ def canonical_request_uri(endpoint, request_params):
     return API_BASE + "/" + endpoint + "?" + query
 
 
+def _scope_value_matches(value, expected):
+    if type(value) is str:
+        return value == expected
+    if type(value) is int:
+        return str(value) == expected
+    return False
+
+
+def _validate_request_scope(request_params, *, meeting_id, session_id):
+    if "session_key" in request_params:
+        _require(_scope_value_matches(request_params["session_key"], session_id),
+                 "request_session_scope_mismatch")
+    if "meeting_key" in request_params:
+        _require(_scope_value_matches(request_params["meeting_key"], meeting_id),
+                 "request_meeting_scope_mismatch")
+
+
+def _validate_response_scope(value, *, meeting_id, session_id):
+    if type(value) is dict:
+        if "session_key" in value:
+            _require(_scope_value_matches(value["session_key"], session_id),
+                     "response_session_scope_mismatch")
+        if "meeting_key" in value:
+            _require(_scope_value_matches(value["meeting_key"], meeting_id),
+                     "response_meeting_scope_mismatch")
+        for item in value.values():
+            _validate_response_scope(item, meeting_id=meeting_id, session_id=session_id)
+    elif type(value) is list:
+        for item in value:
+            _validate_response_scope(item, meeting_id=meeting_id, session_id=session_id)
+
+
 def _strict_response_json(raw_bytes):
     _require(type(raw_bytes) is bytes and bool(raw_bytes), "raw_response_not_bytes")
 
@@ -195,7 +227,11 @@ def assess_openf1_historical_rest_capture(
         _text(capture_ref, "malformed_capture_ref")
         _text(implementation, "malformed_implementation")
         uri = canonical_request_uri(endpoint, request_params)
-        source_id = "openf1:" + endpoint + ":" + meeting_id + ":" + session_id
+        _validate_request_scope(request_params, meeting_id=meeting_id, session_id=session_id)
+        source_id = (
+            "openf1:" + endpoint + ":"
+            + receipt_contract.sha256(uri.encode("utf-8"))
+        )
         result.update(canonical_request_uri=uri, source_id=source_id)
 
         session_end = receipt_contract._time(session_end_utc)
@@ -215,6 +251,7 @@ def assess_openf1_historical_rest_capture(
             receipt_contract._time(publisher_time_utc)
         _require(type(http_status) is int and http_status == 200, "http_status_not_200")
         parsed = _strict_response_json(raw_response_bytes)
+        _validate_response_scope(parsed, meeting_id=meeting_id, session_id=session_id)
         response_sha = receipt_contract.sha256(raw_response_bytes)
         result["raw_response_sha256"] = response_sha
         result["row_count"] = len(parsed) if type(parsed) is list else None
