@@ -179,7 +179,7 @@ That transparency-log fact does not authenticate the internal revision first-obs
 
 ## Resume checkpoint and dependency state
 
-The Adviser resume checkpoint pinned this exact run and recorded all named accepted dependency blobs as unchanged. No named dependency changed after that checkpoint. Fresh `main` at publication inspection was `34640d94df841d7fdd67fc12c3ab1e685a5bcc67`, exactly the run head. Per the resume instruction, broad run discovery, J1 implementation review, overlap search, and dependency-fingerprint reconciliation were not repeated. The authorized checkpoint path did not exist on `main` before this Work Result.
+The Adviser resume checkpoint pinned this exact run and recorded all named accepted dependency blobs as unchanged. No named dependency changed after that checkpoint. Fresh `main` at branch creation was `34640d94df841d7fdd67fc12c3ab1e685a5bcc67`, exactly the run head. Before the PR opened, `main` advanced to `9241dc5edf459a61cfcbf11777db9c0f124e5246` through the unrelated `Scheduled forecast/fantasy readiness dashboard refresh` commit; its changed paths are limited to readiness-dashboard and chat-context outputs and do not include any named dependency. Per the resume instruction, broad run discovery, J1 implementation review, overlap search, and dependency-fingerprint reconciliation were not repeated. The authorized checkpoint path did not exist on `main` before this Work Result.
 
 ## Prohibited actions and claim ceiling
 
