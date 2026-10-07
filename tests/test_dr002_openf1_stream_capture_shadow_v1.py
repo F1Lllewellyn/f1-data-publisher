@@ -143,6 +143,26 @@ class OpenF1StreamCaptureShadowTests(unittest.TestCase):
         self.assertEqual((token, expires), ("token", 3600))
         self.assertIsInstance(observed["context"], m.ssl.SSLContext)
 
+    def test_documented_string_token_expiry_normalizes_to_integer_manifest_seconds(self):
+        response = Response(b'{"access_token":"token","expires_in":"3600"}')
+        with mock.patch.object(m.urllib.request, "urlopen", return_value=response):
+            result, _ = self.execute(
+                token_fetcher=lambda username, password: m.acquire_openf1_token(username, password)
+            )
+        expires = result["manifest"]["token_declared_expires_in_seconds"]
+        self.assertEqual(expires, 3600)
+        self.assertIs(type(expires), int)
+
+    def test_token_expiry_rejects_boolean_malformed_and_non_positive_values(self):
+        invalid_values = (True, False, "", "0", "-1", "+1", "1.0", " 3600 ", "abc", 0, -1, 1.0)
+        for expires in invalid_values:
+            with self.subTest(expires=expires):
+                body = json.dumps({"access_token": "token", "expires_in": expires}).encode()
+                with mock.patch.object(m.urllib.request, "urlopen", return_value=Response(body)):
+                    with self.assertRaises(m.CaptureHold) as caught:
+                        m.acquire_openf1_token("user", "password")
+                self.assertEqual(str(caught.exception), "openf1_token_expiry_invalid")
+
     def test_credentials_and_token_never_serialize(self):
         result, _ = self.execute()
         all_bytes = b"".join(path.read_bytes() for path in result["root"].rglob("*") if path.is_file())
