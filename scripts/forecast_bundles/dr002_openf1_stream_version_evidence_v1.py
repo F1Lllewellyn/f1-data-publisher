@@ -83,7 +83,7 @@ def _validate_k1_assessment(assessment):
     coverage = assessment.get("declared_window_schedule_coverage_proven")
     _require(isinstance(coverage, bool) and coverage == (status == K1_PROVEN),
              "incompatible_k1_coverage_fact")
-    _require(isinstance(assessment.get("all_successful_observations_receipt_bound"), bool),
+    _require(assessment.get("all_successful_observations_receipt_bound") is True,
              "incompatible_k1_receipt_binding_fact")
     for field in K1_TRUST_CEILINGS:
         _require(field in assessment and assessment[field] is False,
