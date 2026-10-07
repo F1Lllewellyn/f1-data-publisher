@@ -35,7 +35,7 @@ Either missing value fails closed. Neither credential nor the access token is lo
 
 ## Credential and connection handling
 
-Token acquisition is fixed to an HTTPS `POST` at `https://api.openf1.org/token` with `application/x-www-form-urlencoded` username/password data and a default certificate-verifying TLS context. Only the access token and optional declared expiry seconds are parsed. Network, HTTP, and response errors are converted to fixed sanitized reason codes without response bodies, headers, credentials, or tokens.
+Token acquisition is fixed to an HTTPS `POST` at `https://api.openf1.org/token` with `application/x-www-form-urlencoded` username/password data and a default certificate-verifying TLS context. Only the access token and optional declared expiry seconds are parsed. A positive integer or positive ASCII decimal string is accepted for `expires_in` and normalized to integer seconds; booleans, malformed values, zero, and negative values fail closed. Network, HTTP, and response errors are converted to fixed sanitized reason codes without response bodies, headers, credentials, or tokens.
 
 The access token stays in process memory and is used only as the MQTT password. MQTT uses:
 
@@ -127,11 +127,11 @@ python3 -c "from pathlib import Path; import yaml; yaml.safe_load(Path('.github/
 
 python3 -m unittest -v tests/test_dr002_openf1_stream_capture_shadow_v1.py
 
-Ran 27 tests
+Ran 29 tests
 OK
 ```
 
-The suite proves the exact constants, manual/main-only workflow, least permissions, immutable action pins, secret handling, fail-closed credential behavior, fixed token request, sanitized errors, TLS verification, bounded non-reconnecting MQTT behavior, single non-wildcard topic, zero/malformed/duplicate/K2 HOLD handling, exact byte preservation and hashing, successful unchanged-K2 composition, exact manifest/K2 bindings, absence of fabricated K1 coverage, workflow identity, immutable trust ceilings, assertion rejection, exact future attestation subject, prohibited-path absence, offline testing, and unchanged dependencies.
+The suite proves the exact constants, manual/main-only workflow, least permissions, immutable action pins, secret handling, fail-closed credential behavior, fixed token request, provider-documented string-expiry normalization to integer manifest seconds, invalid-expiry rejection, sanitized errors, TLS verification, bounded non-reconnecting MQTT behavior, single non-wildcard topic, zero/malformed/duplicate/K2 HOLD handling, exact byte preservation and hashing, successful unchanged-K2 composition, exact manifest/K2 bindings, absence of fabricated K1 coverage, workflow identity, immutable trust ceilings, assertion rejection, exact future attestation subject, prohibited-path absence, offline testing, and unchanged dependencies.
 
 ## Accepted dependency pins
 
