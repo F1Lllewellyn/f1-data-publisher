@@ -33,7 +33,9 @@ It performs no network, filesystem, clock, subprocess, environment, credential, 
 
 ## Deterministic request and exact-byte handling
 
-The canonical request URI is built from the fixed API base, one safe endpoint segment, and key-sorted UTF-8 percent-encoded scalar parameters. Parameter order supplied by the caller cannot change the URI or receipt.
+The canonical request URI is built from the fixed API base, one safe endpoint segment, and key-sorted UTF-8 percent-encoded scalar parameters. Parameter order supplied by the caller cannot change the URI or receipt. `source_id` includes the SHA-256 of that exact canonical URI, so different filters cannot alias while reordered equivalent parameters retain the same source identity.
+
+If the request parameters include `session_key` or `meeting_key`, each must match the corresponding DR-002 scope value. After strict parsing, any response object at any nesting depth that exposes either key must also match that scope; foreign session or meeting records fail closed.
 
 The raw response must be non-empty exact `bytes`. Its SHA-256 is computed before any JSON interpretation, and the same bytes are returned unchanged in the assessment. JSON is parsed only for structural acceptance and list row count. Duplicate keys at any nesting depth, malformed JSON, non-standard numeric constants, and top-level scalar JSON fail closed. Top-level lists and objects are accepted; only lists receive a numeric `row_count`.
 
@@ -61,7 +63,7 @@ Observation exactly at the boundary is eligible. Observation one microsecond bef
 
 A validated assessment creates canonical bytes for the existing Gate 2B-1 `source_capture` receipt type. No new scientific receipt type is introduced. The receipt is parentless and uses the existing schema fields exactly:
 
-- `source_id` derived deterministically from OpenF1, endpoint, meeting, and session;
+- `source_id` derived deterministically from OpenF1 endpoint plus the exact canonical request-URI SHA-256;
 - canonical `source_uri`;
 - `source_sha256` equal to the exact raw-response SHA-256;
 - explicit valid event/publisher times or `null`;
@@ -100,11 +102,11 @@ python3 -m py_compile \
 
 python3 -m unittest -v tests/test_dr002_openf1_historical_rest_capture_v1.py
 
-Ran 22 tests
+Ran 26 tests
 OK
 ```
 
-The suite covers valid list/object responses, exact noncanonical raw bytes, deterministic parameter ordering, the exact boundary and one-microsecond failure, both chronology failures, HTTP failure, malformed and duplicate-key JSON, malformed endpoints/parameters, unchanged parentless receipt validation, exact source/receipt hashes, absence of fabricated verified bindings, immutable trust ceilings, rejected trust assertions, deterministic repetition, pure/offline behavior, optional timestamp handling, no new receipt type, and all named dependency pins.
+The suite covers valid list/object responses, exact noncanonical raw bytes, deterministic parameter ordering, filter-sensitive source identity, request-to-DR-002 scope matching, foreign response-scope rejection, matching numeric/string response keys, the exact boundary and one-microsecond failure, both chronology failures, HTTP failure, malformed and duplicate-key JSON, malformed endpoints/parameters, unchanged parentless receipt validation, exact source/receipt hashes, absence of fabricated verified bindings, immutable trust ceilings, rejected trust assertions, deterministic repetition, pure/offline behavior, optional timestamp handling, no new receipt type, and all named dependency pins.
 
 ## Accepted dependency pins
 
