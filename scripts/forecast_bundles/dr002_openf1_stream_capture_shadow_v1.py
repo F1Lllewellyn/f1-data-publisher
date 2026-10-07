@@ -136,8 +136,12 @@ def acquire_openf1_token(username, password):
     _require(isinstance(token, str) and token, "openf1_access_token_missing")
     expires = value.get("expires_in")
     if expires is not None:
-        _require(isinstance(expires, int) and not isinstance(expires, bool) and expires > 0,
-                 "openf1_token_expiry_invalid")
+        _require(not isinstance(expires, bool), "openf1_token_expiry_invalid")
+        if isinstance(expires, str):
+            _require(re.fullmatch(r"[0-9]+", expires) is not None,
+                     "openf1_token_expiry_invalid")
+            expires = int(expires)
+        _require(isinstance(expires, int) and expires > 0, "openf1_token_expiry_invalid")
     return token, expires
 
 
