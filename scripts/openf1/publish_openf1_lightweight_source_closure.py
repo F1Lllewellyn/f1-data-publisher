@@ -30,6 +30,7 @@ FORECAST_BUNDLES_DIR = Path(__file__).resolve().parents[1] / "forecast_bundles"
 if str(FORECAST_BUNDLES_DIR) not in sys.path:
     sys.path.insert(0, str(FORECAST_BUNDLES_DIR))
 import dr002_openf1_historical_rest_capture_v1 as historical_rest_contract
+import dr002_openf1_drivers_producer_adapter_v1 as drivers_adapter_contract
 
 API_BASE = "https://api.openf1.org/v1"
 ROOT = Path.cwd()
@@ -59,6 +60,7 @@ SHADOW_WORKFLOW_NAME = "F1 OpenF1 Lightweight Source Closure"
 SHADOW_WORKFLOW_PATH = ".github/workflows/f1-openf1-lightweight-source-closure.yml"
 SHADOW_REPOSITORY = "F1Lllewellyn/f1-data-publisher"
 SHADOW_ENDPOINT = "weather"
+SHADOW_ENDPOINTS = ("weather", "drivers")
 SHADOW_IMPLEMENTATION = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 
 
@@ -91,6 +93,18 @@ def _positive_decimal(value: Any, reason: str) -> str:
     text = str(value)
     _shadow_require(re.fullmatch(r"[1-9][0-9]*", text) is not None, reason)
     return text
+
+
+def _selected_shadow_endpoint(value: Any) -> str:
+    _shadow_require(type(value) is str and value in SHADOW_ENDPOINTS,
+                    "provenance_shadow_endpoint_unsupported")
+    return value
+
+
+def _sha256_text(value: Any, reason: str) -> str:
+    _shadow_require(type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None,
+                    reason)
+    return value
 
 
 def _required_text(value: Any, reason: str) -> str:
@@ -188,7 +202,10 @@ def _validate_shadow_identity(
     }
 
 
-def _selected_session(sessions: List[Any], selected_session_key: str, season: int) -> Dict[str, Any]:
+def _selected_session(
+    sessions: List[Any], selected_session_key: str, season: int, *,
+    reject_malformed_rows: bool = False,
+) -> Dict[str, Any]:
     matches = []
     for row in sessions:
         if type(row) is not dict:
@@ -196,6 +213,8 @@ def _selected_session(sessions: List[Any], selected_session_key: str, season: in
         try:
             row_key = _positive_decimal(row.get("session_key"), "malformed_session_metadata")
         except ProvenanceShadowHold:
+            if reject_malformed_rows:
+                raise
             continue
         if row_key == selected_session_key:
             matches.append(row)
@@ -227,17 +246,42 @@ def _persist_shadow_metadata(
 ) -> None:
     write_bytes(root / "historical_rest_capture_assessment.json", _json_bytes(assessment))
     write_bytes(root / "shadow_manifest.json", _json_bytes(manifest))
-    report = [
-        "# DR-002 pre-2B-7K4R2 OpenF1 historical REST provenance shadow",
-        "",
-        f"Status: {manifest['status']}",
-        f"Reason: {manifest.get('reason')}",
-        "",
-        "Integration capability only. This is not blind validation, stable-engine execution,",
-        "production enforcement, DR-002 activation, promotion, or an accuracy claim.",
-        "",
-        "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
-    ]
+    if manifest.get("selected_endpoint") == "drivers":
+        report = [
+            "# DR-002 pre-2B-7K4R7 OpenF1 drivers historical REST provenance shadow",
+            "",
+            f"Status: {manifest['status']}",
+            f"Reason: {manifest.get('reason')}",
+            "Selected endpoint: drivers",
+            f"K4R1 status: {manifest.get('k4r1_status')}",
+            f"K4R6 status: {manifest.get('k4r6_status')}",
+            f"Driver rows: {manifest.get('drivers_row_count')}",
+            f"Unique drivers: {manifest.get('drivers_unique_driver_count')}",
+            f"Derived CSV SHA-256: {manifest.get('drivers_derived_csv_sha256')}",
+            f"Derived runtime identity: {manifest.get('drivers_derived_runtime_identity')}",
+            "",
+            "The raw drivers response and parentless source-capture receipt are the source",
+            "evidence. Derived CSV metadata is runtime metadata only; no CSV was persisted.",
+            "OpenF1 is not official FIA/F1 roster authority and this does not prove earlier",
+            "historical availability, complete revisions, a trustworthy final grid, or a forecast.",
+            "",
+            "Integration capability only. This is not blind validation, stable-engine execution,",
+            "production enforcement, DR-002 activation, promotion, or an accuracy claim.",
+            "",
+            "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
+        ]
+    else:
+        report = [
+            "# DR-002 pre-2B-7K4R2 OpenF1 historical REST provenance shadow",
+            "",
+            f"Status: {manifest['status']}",
+            f"Reason: {manifest.get('reason')}",
+            "",
+            "Integration capability only. This is not blind validation, stable-engine execution,",
+            "production enforcement, DR-002 activation, promotion, or an accuracy claim.",
+            "",
+            "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
+        ]
     write_bytes(root / "shadow_report.md", ("\n".join(report) + "\n").encode("utf-8"))
 
 
@@ -258,8 +302,11 @@ def run_provenance_shadow(
     assessor: Any = historical_rest_contract.assess_openf1_historical_rest_capture,
     write_bytes: Any = _default_write_bytes,
     read_bytes: Any = lambda path: path.read_bytes(),
+    endpoint: Any = SHADOW_ENDPOINT,
+    drivers_adapter: Any = drivers_adapter_contract.adapt_openf1_drivers_to_producer_input,
 ) -> Dict[str, Any]:
-    """Run one manual, main-only, exact-byte historical weather shadow."""
+    """Run one manual, main-only, exact-byte historical weather/drivers shadow."""
+    selected_endpoint = _selected_shadow_endpoint(endpoint)
     selected_key = _positive_decimal(session_key, "selected_session_key_malformed")
     run_id_text = _positive_decimal(run_id, "workflow_run_id_malformed")
     run_attempt_text = _positive_decimal(run_attempt, "workflow_run_attempt_malformed")
@@ -297,6 +344,22 @@ def run_provenance_shadow(
         "dr002_activated": False,
         "promotion_allowed": False,
     }
+    if selected_endpoint == "drivers":
+        manifest.update(
+            selected_endpoint="drivers",
+            raw_response_filename="drivers.response.json",
+            k4r6_status=drivers_adapter_contract.HOLD,
+            drivers_row_count=None,
+            drivers_unique_driver_count=None,
+            drivers_derived_csv_sha256=None,
+            drivers_derived_runtime_identity=None,
+            derived_csv_persisted=False,
+            derived_csv_is_source_evidence=False,
+            new_scientific_receipt_created=False,
+            normalization_receipt_created=False,
+            openf1_official_f1_roster_authority=False,
+            historical_availability_before_first_observation_proven=False,
+        )
     assessment_projection: Dict[str, Any] = {
         "status": historical_rest_contract.HOLD,
         "reason_codes": ["shadow_not_completed"],
@@ -327,7 +390,12 @@ def run_provenance_shadow(
             expected_type=list,
             reason="malformed_session_discovery_response",
         )
-        scope = _selected_session(sessions, selected_key, int(season))
+        scope = _selected_session(
+            sessions,
+            selected_key,
+            int(season),
+            reject_malformed_rows=selected_endpoint == "drivers",
+        )
         manifest.update({key: scope[key] for key in ("event_id", "meeting_id", "session_id")})
 
         eligibility = scope["session_end"] + dt.timedelta(
@@ -340,19 +408,19 @@ def run_provenance_shadow(
             "selected_session_before_historical_window",
         )
 
-        weather_uri = f"{API_BASE}/weather?session_key={selected_key}"
-        weather_response = http_get(
-            weather_uri,
+        source_uri = f"{API_BASE}/{selected_endpoint}?session_key={selected_key}"
+        source_response = http_get(
+            source_uri,
             timeout=REQUEST_TIMEOUT,
             headers={"Accept": "application/json", "Accept-Encoding": "identity"},
         )
-        http_status = getattr(weather_response, "status_code", None)
-        raw_response_bytes = getattr(weather_response, "content", None)
+        http_status = getattr(source_response, "status_code", None)
+        raw_response_bytes = getattr(source_response, "content", None)
         _shadow_require(type(raw_response_bytes) is bytes, "raw_response_not_bytes")
         first_observed_utc = _clock_utc(clock)
         manifest["first_observed_utc"] = first_observed_utc
 
-        raw_path = root / "weather.response.json"
+        raw_path = root / f"{selected_endpoint}.response.json"
         write_bytes(raw_path, raw_response_bytes)
         raw_readback = read_bytes(raw_path)
         _shadow_require(raw_readback == raw_response_bytes, "raw_response_readback_mismatch")
@@ -362,7 +430,7 @@ def run_provenance_shadow(
         ingested_utc = _clock_utc(clock)
         receipt_created_utc = _clock_utc(clock)
         manifest.update(
-            canonical_request_uri=weather_uri,
+            canonical_request_uri=source_uri,
             raw_response_sha256=raw_sha,
             ingested_utc=ingested_utc,
             receipt_created_utc=receipt_created_utc,
@@ -372,7 +440,7 @@ def run_provenance_shadow(
             event_id=scope["event_id"],
             meeting_id=scope["meeting_id"],
             session_id=scope["session_id"],
-            endpoint=SHADOW_ENDPOINT,
+            endpoint=selected_endpoint,
             request_params={"session_key": selected_key},
             raw_response_bytes=raw_response_bytes,
             http_status=http_status,
@@ -390,7 +458,7 @@ def run_provenance_shadow(
             assessment.get("status") == historical_rest_contract.VALIDATED,
             "k4r1_hold:" + ",".join(assessment.get("reason_codes") or ["unspecified"]),
         )
-        _shadow_require(assessment.get("canonical_request_uri") == weather_uri,
+        _shadow_require(assessment.get("canonical_request_uri") == source_uri,
                         "k4r1_request_uri_mismatch")
         _shadow_require(assessment.get("raw_response_sha256") == raw_sha,
                         "k4r1_raw_response_hash_mismatch")
@@ -405,13 +473,91 @@ def run_provenance_shadow(
             expected_type=dict,
             reason="k4r1_receipt_malformed",
         )
+        _shadow_require(
+            historical_rest_contract.receipt_contract.canonical_json_bytes(receipt)
+            == receipt_bytes,
+            "k4r1_receipt_not_canonical",
+        )
         _shadow_require(receipt.get("receipt_type") == "source_capture",
                         "k4r1_receipt_type_mismatch")
+        _shadow_require(receipt.get("parent_receipt_ids") == [],
+                        "k4r1_receipt_has_parents")
+        _shadow_require(receipt.get("scope") == {
+            "event_id": scope["event_id"],
+            "meeting_id": scope["meeting_id"],
+            "session_id": scope["session_id"],
+        }, "k4r1_receipt_scope_mismatch")
+        receipt_payload = receipt.get("payload")
+        _shadow_require(type(receipt_payload) is dict, "k4r1_receipt_payload_malformed")
+        _shadow_require(receipt_payload.get("source_uri") == source_uri,
+                        "k4r1_receipt_source_uri_mismatch")
+        expected_source_id = (
+            f"openf1:{selected_endpoint}:"
+            + hashlib.sha256(source_uri.encode("utf-8")).hexdigest()
+        )
+        _shadow_require(receipt_payload.get("source_id") == expected_source_id,
+                        "k4r1_receipt_source_id_mismatch")
+        _shadow_require(receipt_payload.get("source_sha256") == raw_sha,
+                        "k4r1_receipt_source_hash_mismatch")
         _shadow_require("verified_receipt_bindings" not in receipt,
                         "verified_receipt_bindings_forbidden")
         receipt_path = root / "source_capture_receipt.json"
         write_bytes(receipt_path, receipt_bytes)
-        _shadow_require(read_bytes(receipt_path) == receipt_bytes, "receipt_readback_mismatch")
+        receipt_readback = read_bytes(receipt_path)
+        _shadow_require(receipt_readback == receipt_bytes, "receipt_readback_mismatch")
+
+        if selected_endpoint == "drivers":
+            adapter_result = drivers_adapter(
+                source_capture_receipt_bytes=receipt_readback,
+                raw_drivers_response_bytes=raw_readback,
+                event_id=scope["event_id"],
+                meeting_id=scope["meeting_id"],
+                session_id=scope["session_id"],
+            )
+            _shadow_require(type(adapter_result) is dict, "k4r6_result_malformed")
+            manifest["k4r6_status"] = adapter_result.get("status")
+            _shadow_require(
+                adapter_result.get("status") == drivers_adapter_contract.VALIDATED,
+                "k4r6_hold:" + ",".join(
+                    adapter_result.get("reason_codes") or ["unspecified"]
+                ),
+            )
+            derived_sha = _sha256_text(
+                adapter_result.get("producer_input_sha256"),
+                "k4r6_derived_csv_hash_malformed",
+            )
+            _shadow_require(
+                adapter_result.get("derived_runtime_identity")
+                == "derived:openf1-drivers-csv:" + derived_sha,
+                "k4r6_derived_runtime_identity_mismatch",
+            )
+            driver_rows = adapter_result.get("row_count")
+            unique_drivers = adapter_result.get("unique_driver_count")
+            _shadow_require(type(driver_rows) is int and driver_rows > 0,
+                            "k4r6_driver_row_count_malformed")
+            _shadow_require(type(unique_drivers) is int
+                            and 0 < unique_drivers <= driver_rows,
+                            "k4r6_unique_driver_count_malformed")
+            _shadow_require(adapter_result.get("scope") == receipt["scope"],
+                            "k4r6_scope_mismatch")
+            _shadow_require(adapter_result.get("source_receipt_id") == receipt["receipt_id"],
+                            "k4r6_receipt_id_mismatch")
+            _shadow_require(adapter_result.get("raw_source_sha256") == raw_sha,
+                            "k4r6_raw_source_hash_mismatch")
+            for flag in (
+                "derived_csv_is_source_evidence",
+                "new_scientific_receipt_created",
+                "normalization_receipt_created",
+                "verified_receipt_bindings_created",
+            ):
+                _shadow_require(adapter_result.get(flag) is False,
+                                "k4r6_forbidden_claim:" + flag)
+            manifest.update(
+                drivers_row_count=driver_rows,
+                drivers_unique_driver_count=unique_drivers,
+                drivers_derived_csv_sha256=derived_sha,
+                drivers_derived_runtime_identity=adapter_result["derived_runtime_identity"],
+            )
 
         manifest.update(
             status=historical_rest_contract.VALIDATED,
@@ -646,6 +792,7 @@ def main() -> int:
     parser.add_argument("--completed-only", default="true")
     parser.add_argument("--output-root", default=".")
     parser.add_argument("--provenance-shadow-session-key", default="")
+    parser.add_argument("--provenance-shadow-endpoint", default=SHADOW_ENDPOINT)
     parser.add_argument("--github-repository", default="")
     parser.add_argument("--github-workflow", default="")
     parser.add_argument("--github-workflow-ref", default="")
@@ -658,6 +805,18 @@ def main() -> int:
     season = int(args.season)
     completed_only = str(args.completed_only).lower() not in {"false", "0", "no"}
     output_root = Path(args.output_root).resolve()
+    try:
+        selected_shadow_endpoint = _selected_shadow_endpoint(
+            args.provenance_shadow_endpoint
+        )
+        _shadow_require(
+            selected_shadow_endpoint == SHADOW_ENDPOINT
+            or bool(args.provenance_shadow_session_key),
+            "drivers_shadow_requires_explicit_session_key",
+        )
+    except ProvenanceShadowHold as exc:
+        print(f"OpenF1 historical REST provenance shadow HOLD: {exc}", file=sys.stderr)
+        return 1
     if args.provenance_shadow_session_key:
         try:
             result = run_provenance_shadow(
@@ -671,6 +830,7 @@ def main() -> int:
                 head_sha=args.github_sha,
                 run_id=args.github_run_id,
                 run_attempt=args.github_run_attempt,
+                endpoint=selected_shadow_endpoint,
             )
         except ProvenanceShadowHold as exc:
             print(f"OpenF1 historical REST provenance shadow HOLD: {exc}", file=sys.stderr)
