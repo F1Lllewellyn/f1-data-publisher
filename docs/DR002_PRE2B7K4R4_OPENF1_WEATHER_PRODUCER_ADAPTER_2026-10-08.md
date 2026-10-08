@@ -32,7 +32,7 @@ The raw response must be a nonempty top-level JSON list. Every row must contain 
 
 `date,session_key,meeting_key,air_temperature,track_temperature,humidity,pressure,rainfall,wind_direction,wind_speed`
 
-Every session and meeting key must match the explicit request scope. Dates must be timezone-aware UTC values in the unchanged receipt contract's `Z` form. Weather values must be finite integer or floating-point scalars; booleans are rejected. Duplicate JSON keys, nonfinite constants, malformed rows, missing/extra fields, foreign scope, unsupported values, an object top level, and an empty list all fail closed.
+Every session and meeting key must match the explicit request scope. OpenF1 source-row dates must be valid timezone-aware UTC timestamps and may use either `Z` or the observed OpenF1 `+00:00` suffix; naive timestamps and non-UTC offsets fail closed. The exact original accepted source-date string is preserved in the derived CSV. This source syntax is intentionally distinct from Gate 2B-1 receipt timestamps, whose unchanged canonical contract remains `Z`-only. Weather values must be finite integer or floating-point scalars; booleans are rejected. Duplicate JSON keys, nonfinite constants, malformed rows, missing/extra fields, foreign scope, unsupported values, an object top level, and an empty list all fail closed.
 
 ## Deterministic CSV representation
 

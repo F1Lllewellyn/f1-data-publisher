@@ -6,9 +6,11 @@ representation only; this module creates no receipt, file, network request,
 clock observation, or trust upgrade.
 """
 import csv
+from datetime import datetime
 import io
 import json
 import math
+import re
 
 import dr002_frozen_evidence_manifest_v1 as frozen_contract
 import dr002_openf1_historical_rest_capture_v1 as capture_contract
@@ -31,6 +33,9 @@ WEATHER_FIELDS = (
     "wind_speed",
 )
 NUMERIC_WEATHER_FIELDS = WEATHER_FIELDS[3:]
+SOURCE_UTC_DATE = re.compile(
+    r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|\+00:00)"
+)
 DEPENDENCY_BLOBS = {
     "scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py":
         "ccd17a28744f0e7c6706c3be9562d57b7dcea0ae",
@@ -102,16 +107,26 @@ def _scope_value_matches(value, expected):
             or (type(value) is int and str(value) == expected))
 
 
+def _validate_source_utc_date(value):
+    _require(type(value) is str and SOURCE_UTC_DATE.fullmatch(value) is not None,
+             "malformed_or_non_utc_weather_date")
+    parseable = value[:-1] + "+00:00" if value.endswith("Z") else value
+    try:
+        parsed = datetime.fromisoformat(parseable)
+    except ValueError:
+        raise WeatherAdapterInputError("malformed_or_non_utc_weather_date")
+    _require(parsed.tzinfo is not None and parsed.utcoffset() is not None
+             and parsed.utcoffset().total_seconds() == 0,
+             "malformed_or_non_utc_weather_date")
+
+
 def _validate_weather_rows(rows, *, meeting_id, session_id):
     _require(bool(rows), "empty_weather_response")
     expected_fields = set(WEATHER_FIELDS)
     for row in rows:
         _require(type(row) is dict and set(row) == expected_fields,
                  "malformed_weather_row_fields")
-        try:
-            receipt_contract._time(row["date"])
-        except (receipt_contract.ReceiptError, TypeError, ValueError, AttributeError):
-            raise WeatherAdapterInputError("malformed_or_non_utc_weather_date")
+        _validate_source_utc_date(row["date"])
         _require(_scope_value_matches(row["session_key"], session_id),
                  "weather_session_scope_mismatch")
         _require(_scope_value_matches(row["meeting_key"], meeting_id),

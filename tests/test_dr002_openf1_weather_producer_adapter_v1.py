@@ -36,7 +36,7 @@ class OpenF1WeatherProducerAdapterTests(unittest.TestCase):
         }
         self.rows = [
             {
-                "date": "2026-09-24T12:01:02.123456Z",
+                "date": "2026-09-24T11:45:49.748000+00:00",
                 "session_key": 11371,
                 "meeting_key": 1295,
                 "air_temperature": 23.4,
@@ -143,6 +143,15 @@ class OpenF1WeatherProducerAdapterTests(unittest.TestCase):
         rows = list(csv.DictReader(io.StringIO(data, newline="")))
         self.assertEqual([row["date"] for row in rows],
                          [row["date"] for row in self.rows])
+
+    def test_actual_k4r3_plus_zero_source_timestamp_is_preserved_exactly(self):
+        actual = "2026-09-24T11:45:49.748000+00:00"
+        result = self.adapt()
+        rows = list(csv.DictReader(io.StringIO(
+            result["producer_input_csv_bytes"].decode("utf-8"), newline=""
+        )))
+        self.assertEqual(rows[0]["date"], actual)
+        self.assertEqual(self.rows[0]["date"], actual)
 
     def test_repeated_call_is_deterministic(self):
         self.assertEqual(self.adapt(), self.adapt())
@@ -315,7 +324,7 @@ class OpenF1WeatherProducerAdapterTests(unittest.TestCase):
         }
         self.assertFalse(imported & {
             "pathlib", "os", "subprocess", "socket", "requests", "urllib",
-            "datetime", "time", "glob", "tempfile",
+            "time", "glob", "tempfile",
         })
         for forbidden in (
             "Path(", "open(", ".read_", ".write_", "datetime.now", "utcnow",
