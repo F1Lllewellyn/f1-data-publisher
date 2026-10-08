@@ -33,8 +33,14 @@
     "status": "manual_non_default_integration_capability_only",
     "workflow_dispatch_input": "provenance_shadow_session_key",
     "default": "",
+    "endpoint_workflow_dispatch_input": "provenance_shadow_endpoint",
     "allowed_ref": "refs/heads/main",
     "endpoint": "weather",
+    "allowed_endpoints": [
+      "weather",
+      "drivers"
+    ],
+    "default_endpoint": "weather",
     "selected_session_count": 1,
     "historical_window_delay_seconds": 1800,
     "api_base": "https://api.openf1.org/v1",
@@ -44,6 +50,18 @@
     "writes_latest_or_history": false,
     "requires_credentials_or_paid_live_access": false,
     "creates_verified_receipt_bindings": false,
+    "drivers_mode": {
+      "raw_filename": "drivers.response.json",
+      "request_parameters": [
+        "session_key"
+      ],
+      "requires_k4r6_validation": true,
+      "persists_derived_csv": false,
+      "derived_csv_is_source_evidence": false,
+      "creates_scientific_or_normalization_receipt": false,
+      "openf1_official_f1_roster_authority": false,
+      "historical_availability_before_first_observation_proven": false
+    },
     "dr002_activated": false,
     "promotion_allowed": false
   },

@@ -15,6 +15,14 @@ on:
         description: 'Optional exact historical session key for manual provenance shadow only'
         required: false
         default: ''
+      provenance_shadow_endpoint:
+        description: 'Historical provenance shadow endpoint'
+        required: false
+        type: choice
+        options:
+          - weather
+          - drivers
+        default: weather
   schedule:
     # Lightweight only. Runs after common race-weekend session windows.
     - cron: '20 12 * * 5'
@@ -37,7 +45,14 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Reject drivers shadow without explicit session
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_endpoint == 'drivers' && github.event.inputs.provenance_shadow_session_key == '' }}
+        run: |
+          echo "Drivers provenance shadow requires an explicit historical session key."
+          exit 1
+
       - name: Checkout repository
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_endpoint != 'drivers' || github.event.inputs.provenance_shadow_session_key != '' }}
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -60,11 +75,14 @@ jobs:
           exit 1
 
       - name: Run lightweight OpenF1 source closure publisher
+        env:
+          PROVENANCE_SHADOW_ENDPOINT: ${{ github.event.inputs.provenance_shadow_endpoint || 'weather' }}
         run: |
           python scripts/openf1/publish_openf1_lightweight_source_closure.py \
             --season "${{ github.event.inputs.season || '2026' }}" \
             --completed-only "${{ github.event.inputs.completed_only || 'true' }}" \
             --provenance-shadow-session-key "${{ github.event.inputs.provenance_shadow_session_key || '' }}" \
+            --provenance-shadow-endpoint "$PROVENANCE_SHADOW_ENDPOINT" \
             --github-repository "${{ github.repository }}" \
             --github-workflow "${{ github.workflow }}" \
             --github-workflow-ref "${{ github.workflow_ref }}" \
@@ -86,7 +104,7 @@ jobs:
         if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_session_key != '' && github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v6
         with:
-          name: dr002-pre2b7k4r2-openf1-historical-rest-shadow
+          name: ${{ github.event.inputs.provenance_shadow_endpoint == 'drivers' && 'dr002-pre2b7k4r7-openf1-drivers-historical-rest-shadow' || 'dr002-pre2b7k4r2-openf1-historical-rest-shadow' }}
           path: |
             _runtime/dr002_pre2b7k4r2_openf1_historical_rest_shadow/gha-${{ github.run_id }}-${{ github.run_attempt }}/**
           retention-days: 30
