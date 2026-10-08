@@ -255,6 +255,14 @@ class OpenF1WeatherProducerAdapterTests(unittest.TestCase):
                 receipt_bytes=self.receipt_for_unvalidated_raw(raw), raw=raw
             ))
 
+    def test_well_formed_naive_source_timestamp_holds(self):
+        rows = copy.deepcopy(self.rows)
+        rows[0]["date"] = "2026-09-24T12:00:00"
+        raw = self.raw_bytes(rows)
+        self.assert_hold_without_partial_output(self.adapt(
+            receipt_bytes=self.receipt_for_unvalidated_raw(raw), raw=raw
+        ))
+
     def test_bool_and_nonfinite_numeric_evidence_hold(self):
         rows = copy.deepcopy(self.rows)
         rows[0]["rainfall"] = True
