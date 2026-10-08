@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-10-08T06:37:55Z",
+      "run_id": "2026-10-08T19:54:22Z",
       "score": 100,
       "source_backed": true,
       "source_status": "needs_manual_review"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-08T06:37:55Z",
+        "run_id": "2026-10-08T19:54:22Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -280,7 +280,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-08T06:37:55Z",
+        "run_id": "2026-10-08T19:54:22Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -292,13 +292,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261008T063754Z",
+        "run_id": "20261008T195422Z",
         "score": -50,
         "status": "needs_manual_review"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261008T063754Z",
+        "run_id": "20261008T195422Z",
         "score": -50,
         "status": "needs_manual_review"
       }
