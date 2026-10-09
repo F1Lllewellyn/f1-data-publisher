@@ -6,25 +6,25 @@
     "race_reports": "blocked"
   },
   "event": {
-    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11731,
-    "session_name": "Race"
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "session_key": 11379,
+    "session_name": "Sprint Qualifying"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-09T06:55:12Z",
-  "material_change_detected": false,
+  "generated_at_utc": "2026-10-09T14:08:20Z",
+  "material_change_detected": true,
   "notification_recommended": false,
   "outputs": {
     "combined_csv": "latest/downstream_consumers/combined_downstream_consumer_manifest.csv",
     "combined_manifest": "latest/downstream_consumers/combined_downstream_consumer_manifest.json",
     "fantasy_predictions_input": "latest/downstream_consumers/fantasy_predictions/consumer_input.json",
-    "history_manifest": "history/downstream_consumers/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/20261009T065511Z/combined_downstream_consumer_manifest.json",
+    "history_manifest": "history/downstream_consumers/2026_1296_singapore_marina_bay_singapore/20261009T140819Z/combined_downstream_consumer_manifest.json",
     "race_predictions_input": "latest/downstream_consumers/race_predictions/consumer_input.json",
     "race_reports_input": "latest/downstream_consumers/race_reports/consumer_input.json"
   },
   "promotion_allowed": false,
-  "run_id": "20261009T065511Z",
+  "run_id": "20261009T140819Z",
   "schema_version": "f1_1b_downstream_consumer_wiring_v24",
   "stable_engine_modified": false,
   "status": "blocked"

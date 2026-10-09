@@ -3,7 +3,7 @@
   "blocked": true,
   "readiness_quality": "blocked_manual_review_required_source",
   "ready_for_use": false,
-  "session_type": "Race",
+  "session_type": "Qualifying",
   "source_needs_manual_review": true,
   "source_status": "needs_manual_review",
   "workbook_source_status": "needs_manual_review"

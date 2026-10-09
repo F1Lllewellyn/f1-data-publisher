@@ -1,18 +1,18 @@
 {
   "event": {
-    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11731,
-    "session_name": "Race"
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "session_key": 11379,
+    "session_name": "Sprint Qualifying"
   },
-  "generated_at_utc": "2026-10-09T06:55:11Z",
+  "generated_at_utc": "2026-10-09T14:08:19Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
       "blocked": true,
       "readiness_quality": "blocked_manual_review_required_source",
       "ready_for_use": false,
-      "session_type": "Race",
+      "session_type": "Qualifying",
       "source_needs_manual_review": true,
       "source_status": "needs_manual_review",
       "workbook_source_status": "needs_manual_review"
@@ -22,7 +22,7 @@
       "blocked": true,
       "readiness_quality": "blocked_manual_review_required_source",
       "ready_for_use": false,
-      "session_type": "Race",
+      "session_type": "Qualifying",
       "source_needs_manual_review": true,
       "source_status": "needs_manual_review",
       "workbook_source_status": "needs_manual_review"
@@ -33,7 +33,7 @@
       "readiness_quality": "blocked_manual_review_required_source",
       "ready_for_full_report": false,
       "ready_for_readiness_context": false,
-      "session_type": "Race",
+      "session_type": "Qualifying",
       "source_needs_manual_review": true,
       "source_status": "needs_manual_review",
       "workbook_source_status": "needs_manual_review"
