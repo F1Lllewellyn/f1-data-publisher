@@ -22,6 +22,7 @@ on:
         options:
           - weather
           - drivers
+          - starting_grid
         default: weather
   schedule:
     # Lightweight only. Runs after common race-weekend session windows.
@@ -45,14 +46,26 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Reject unsupported provenance shadow endpoint
+        if: ${{ github.event_name == 'workflow_dispatch' && !contains(fromJSON('["weather","drivers","starting_grid"]'), github.event.inputs.provenance_shadow_endpoint) }}
+        run: |
+          echo "Unsupported provenance shadow endpoint."
+          exit 1
+
       - name: Reject drivers shadow without explicit session
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_endpoint == 'drivers' && github.event.inputs.provenance_shadow_session_key == '' }}
         run: |
           echo "Drivers provenance shadow requires an explicit historical session key."
           exit 1
 
+      - name: Reject starting-grid shadow without explicit session
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_endpoint == 'starting_grid' && github.event.inputs.provenance_shadow_session_key == '' }}
+        run: |
+          echo "Starting-grid provenance shadow requires an explicit historical Race session key."
+          exit 1
+
       - name: Checkout repository
-        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_endpoint != 'drivers' || github.event.inputs.provenance_shadow_session_key != '' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_endpoint == 'weather' || github.event.inputs.provenance_shadow_session_key != '' }}
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -104,7 +117,7 @@ jobs:
         if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_session_key != '' && github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ github.event.inputs.provenance_shadow_endpoint == 'drivers' && 'dr002-pre2b7k4r7-openf1-drivers-historical-rest-shadow' || 'dr002-pre2b7k4r2-openf1-historical-rest-shadow' }}
+          name: ${{ github.event.inputs.provenance_shadow_endpoint == 'starting_grid' && 'dr002-pre2b7k4r15-openf1-starting-grid-historical-shadow' || github.event.inputs.provenance_shadow_endpoint == 'drivers' && 'dr002-pre2b7k4r7-openf1-drivers-historical-rest-shadow' || 'dr002-pre2b7k4r2-openf1-historical-rest-shadow' }}
           path: |
             _runtime/dr002_pre2b7k4r2_openf1_historical_rest_shadow/gha-${{ github.run_id }}-${{ github.run_attempt }}/**
           retention-days: 30

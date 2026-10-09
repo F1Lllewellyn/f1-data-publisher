@@ -31,6 +31,7 @@ if str(FORECAST_BUNDLES_DIR) not in sys.path:
     sys.path.insert(0, str(FORECAST_BUNDLES_DIR))
 import dr002_openf1_historical_rest_capture_v1 as historical_rest_contract
 import dr002_openf1_drivers_producer_adapter_v1 as drivers_adapter_contract
+import dr002_openf1_starting_grid_producer_adapter_v1 as starting_grid_adapter_contract
 
 API_BASE = "https://api.openf1.org/v1"
 ROOT = Path.cwd()
@@ -60,8 +61,12 @@ SHADOW_WORKFLOW_NAME = "F1 OpenF1 Lightweight Source Closure"
 SHADOW_WORKFLOW_PATH = ".github/workflows/f1-openf1-lightweight-source-closure.yml"
 SHADOW_REPOSITORY = "F1Lllewellyn/f1-data-publisher"
 SHADOW_ENDPOINT = "weather"
-SHADOW_ENDPOINTS = ("weather", "drivers")
+SHADOW_ENDPOINTS = ("weather", "drivers", "starting_grid")
 SHADOW_IMPLEMENTATION = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
+SHADOW_MAX_RESPONSE_BYTES = 8 * 1024 * 1024
+STARTING_GRID_SHADOW_SCHEMA_VERSION = (
+    "dr002-pre2b7k4r15-openf1-starting-grid-historical-shadow-v1"
+)
 
 
 class ProvenanceShadowHold(RuntimeError):
@@ -237,6 +242,77 @@ def _selected_session(
     }
 
 
+def _selected_race_session(
+    sessions: List[Any], selected_session_key: str, season: int,
+) -> Dict[str, Any]:
+    """Select one fully described, completed Race session or fail closed."""
+    scope = _selected_session(
+        sessions,
+        selected_session_key,
+        season,
+        reject_malformed_rows=True,
+    )
+    selected = next(
+        row for row in sessions
+        if str(row.get("session_key")) == selected_session_key
+    )
+    _shadow_require(
+        selected.get("session_name") == "Race"
+        and selected.get("session_type") == "Race",
+        "selected_session_not_race",
+    )
+    return scope
+
+
+def _response_header(response: Any, name: str) -> Optional[str]:
+    headers = getattr(response, "headers", None)
+    if headers is None:
+        return None
+    try:
+        direct = headers.get(name)
+        if direct is not None:
+            return direct
+        for key, value in headers.items():
+            if type(key) is str and key.lower() == name.lower():
+                return value
+        return None
+    except (AttributeError, TypeError):
+        raise ProvenanceShadowHold("response_headers_malformed")
+
+
+def _validated_starting_grid_response(
+    response: Any, *, expected_uri: str, label: str,
+) -> bytes:
+    """Validate bounded, non-redirected JSON HTTP evidence for K4R15."""
+    _shadow_require(
+        getattr(response, "status_code", None) == 200,
+        f"{label}_http_status_not_200",
+    )
+    _shadow_require(
+        getattr(response, "url", None) == expected_uri,
+        f"{label}_final_url_mismatch",
+    )
+    history = getattr(response, "history", None)
+    _shadow_require(
+        isinstance(history, (list, tuple)) and len(history) == 0,
+        f"{label}_redirect_forbidden",
+    )
+    content_type = _response_header(response, "Content-Type")
+    if content_type is not None:
+        _shadow_require(
+            type(content_type) is str
+            and content_type.split(";", 1)[0].strip().lower() == "application/json",
+            f"{label}_content_type_not_json",
+        )
+    content = getattr(response, "content", None)
+    _shadow_require(type(content) is bytes, f"{label}_response_not_bytes")
+    _shadow_require(
+        0 < len(content) <= SHADOW_MAX_RESPONSE_BYTES,
+        f"{label}_response_size_out_of_bounds",
+    )
+    return content
+
+
 def _persist_shadow_metadata(
     root: Path,
     *,
@@ -267,6 +343,32 @@ def _persist_shadow_metadata(
             "",
             "Integration capability only. This is not blind validation, stable-engine execution,",
             "production enforcement, DR-002 activation, promotion, or an accuracy claim.",
+            "",
+            "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
+        ]
+    elif manifest.get("selected_endpoint") == "starting_grid":
+        report = [
+            "# DR-002 pre-2B-7K4R15 OpenF1 Race starting-grid historical shadow",
+            "",
+            f"Status: {manifest['status']}",
+            f"Reason: {manifest.get('reason')}",
+            "Selected endpoint: starting_grid",
+            f"K4R1 status: {manifest.get('k4r1_status')}",
+            f"K4R14 status: {manifest.get('k4r14_status')}",
+            f"Grid rows: {manifest.get('starting_grid_row_count')}",
+            f"Unique drivers: {manifest.get('starting_grid_unique_driver_count')}",
+            f"Grid slots: {manifest.get('starting_grid_slot_count')}",
+            f"Derived CSV SHA-256: {manifest.get('starting_grid_derived_csv_sha256')}",
+            f"Derived runtime identity: {manifest.get('starting_grid_derived_runtime_identity')}",
+            "",
+            "The raw sessions discovery, raw starting_grid response, and parentless",
+            "source-capture receipt are retained provenance evidence. The K4R14 CSV",
+            "is derived runtime metadata only and was not persisted.",
+            "OpenF1 is unofficial and this does not authenticate an official FIA final",
+            "grid, prove historical pre-race availability, or generate a forecast.",
+            "",
+            "Integration capability only. No producer, model, stable engine, workflow",
+            "dispatch, repository mutation, activation, promotion, or accuracy claim.",
             "",
             "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
         ]
@@ -304,8 +406,11 @@ def run_provenance_shadow(
     read_bytes: Any = lambda path: path.read_bytes(),
     endpoint: Any = SHADOW_ENDPOINT,
     drivers_adapter: Any = drivers_adapter_contract.adapt_openf1_drivers_to_producer_input,
+    starting_grid_adapter: Any = (
+        starting_grid_adapter_contract.adapt_openf1_starting_grid_to_producer_input
+    ),
 ) -> Dict[str, Any]:
-    """Run one manual, main-only, exact-byte historical weather/drivers shadow."""
+    """Run one manual, main-only, exact-byte historical provenance shadow."""
     selected_endpoint = _selected_shadow_endpoint(endpoint)
     selected_key = _positive_decimal(session_key, "selected_session_key_malformed")
     run_id_text = _positive_decimal(run_id, "workflow_run_id_malformed")
@@ -314,7 +419,11 @@ def run_provenance_shadow(
             / f"gha-{run_id_text}-{run_attempt_text}")
     root.mkdir(parents=True, exist_ok=False)
     manifest: Dict[str, Any] = {
-        "schema_version": SHADOW_SCHEMA_VERSION,
+        "schema_version": (
+            STARTING_GRID_SHADOW_SCHEMA_VERSION
+            if selected_endpoint == "starting_grid"
+            else SHADOW_SCHEMA_VERSION
+        ),
         "status": historical_rest_contract.HOLD,
         "reason": None,
         "repository": repository,
@@ -360,6 +469,59 @@ def run_provenance_shadow(
             openf1_official_f1_roster_authority=False,
             historical_availability_before_first_observation_proven=False,
         )
+    elif selected_endpoint == "starting_grid":
+        manifest.update(
+            selected_endpoint="starting_grid",
+            session_metadata_source_type="OPENF1_PROVIDER_DISCOVERY_CLAIM",
+            race_session_name="Race",
+            race_session_type="Race",
+            race_session_name_asserted=True,
+            race_session_type_asserted=True,
+            session_kind_asserted=True,
+            session_kind_assertion_authenticated=False,
+            discovery_source_capture_receipt_created=False,
+            raw_response_filename="starting_grid.response.json",
+            session_discovery_filename="sessions.response.json",
+            session_discovery_request_uri=None,
+            session_discovery_raw_sha256=None,
+            session_discovery_actual_received_utc=None,
+            discovery_response_sha256=None,
+            discovery_first_observed_utc=None,
+            starting_grid_raw_sha256=None,
+            k4r14_status=starting_grid_adapter_contract.HOLD,
+            starting_grid_row_count=None,
+            starting_grid_unique_driver_count=None,
+            starting_grid_slot_count=None,
+            starting_grid_derived_csv_sha256=None,
+            starting_grid_derived_runtime_identity=None,
+            grid_row_count=None,
+            unique_driver_count=None,
+            slot_count=None,
+            derived_csv_sha256=None,
+            derived_runtime_identity=None,
+            source_receipt_id=None,
+            raw_source_id=None,
+            frozen_evidence_manifest_sha256=None,
+            frozen_evidence_binding_status=None,
+            derived_csv_persisted=False,
+            official_fia_grid_authenticated=False,
+            official_final_grid_verified=False,
+            source_earliest_availability_verified=False,
+            historical_pre_race_availability_proven=False,
+            race_session_authority_authenticated=False,
+            derived_csv_is_source_evidence=False,
+            verified_receipt_bindings_created=False,
+            new_scientific_receipt_created=False,
+            blind_validation_eligible=False,
+            stable_engine_execution_proven=False,
+            production_forecast_generated=False,
+            commercial_or_redistribution_permission_claimed=False,
+            revision_completeness_verified=False,
+            official_final_grid_revision_verified=False,
+            provider_revision_history_verified=False,
+            historical_availability_proven=False,
+            pre_race_availability_proven=False,
+        )
     assessment_projection: Dict[str, Any] = {
         "status": historical_rest_contract.HOLD,
         "reason_codes": ["shadow_not_completed"],
@@ -377,25 +539,57 @@ def run_provenance_shadow(
         manifest.update(identity)
 
         discovery_uri = f"{API_BASE}/sessions?year={int(season)}"
-        discovery_response = http_get(
-            discovery_uri,
-            timeout=REQUEST_TIMEOUT,
-            headers={"Accept": "application/json", "Accept-Encoding": "identity"},
-        )
-        discovery_status = getattr(discovery_response, "status_code", None)
-        discovery_bytes = getattr(discovery_response, "content", None)
-        _shadow_require(discovery_status == 200, "session_discovery_http_status_not_200")
+        discovery_request_options = {
+            "timeout": REQUEST_TIMEOUT,
+            "headers": {"Accept": "application/json", "Accept-Encoding": "identity"},
+        }
+        if selected_endpoint == "starting_grid":
+            discovery_request_options["allow_redirects"] = False
+        discovery_response = http_get(discovery_uri, **discovery_request_options)
+        if selected_endpoint == "starting_grid":
+            discovery_bytes = _validated_starting_grid_response(
+                discovery_response,
+                expected_uri=discovery_uri,
+                label="session_discovery",
+            )
+            discovery_actual_received_utc = _clock_utc(clock)
+            discovery_path = root / "sessions.response.json"
+            write_bytes(discovery_path, discovery_bytes)
+            discovery_readback = read_bytes(discovery_path)
+            _shadow_require(
+                discovery_readback == discovery_bytes,
+                "session_discovery_readback_mismatch",
+            )
+            discovery_sha = hashlib.sha256(discovery_bytes).hexdigest()
+            _shadow_require(
+                hashlib.sha256(discovery_readback).hexdigest() == discovery_sha,
+                "session_discovery_readback_hash_mismatch",
+            )
+            manifest.update(
+                session_discovery_request_uri=discovery_uri,
+                session_discovery_raw_sha256=discovery_sha,
+                session_discovery_actual_received_utc=discovery_actual_received_utc,
+                discovery_response_sha256=discovery_sha,
+                discovery_first_observed_utc=discovery_actual_received_utc,
+            )
+        else:
+            discovery_status = getattr(discovery_response, "status_code", None)
+            discovery_bytes = getattr(discovery_response, "content", None)
+            _shadow_require(discovery_status == 200, "session_discovery_http_status_not_200")
         sessions = _strict_json_bytes(
             discovery_bytes,
             expected_type=list,
             reason="malformed_session_discovery_response",
         )
-        scope = _selected_session(
-            sessions,
-            selected_key,
-            int(season),
-            reject_malformed_rows=selected_endpoint == "drivers",
-        )
+        if selected_endpoint == "starting_grid":
+            scope = _selected_race_session(sessions, selected_key, int(season))
+        else:
+            scope = _selected_session(
+                sessions,
+                selected_key,
+                int(season),
+                reject_malformed_rows=selected_endpoint == "drivers",
+            )
         manifest.update({key: scope[key] for key in ("event_id", "meeting_id", "session_id")})
 
         eligibility = scope["session_end"] + dt.timedelta(
@@ -403,20 +597,38 @@ def run_provenance_shadow(
         )
         manifest["historical_window_eligible_utc"] = _format_utc(eligibility)
         eligibility_check_utc = _clock_utc(clock)
+        if selected_endpoint == "starting_grid":
+            _shadow_require(
+                _parse_utc(
+                    manifest["session_discovery_actual_received_utc"],
+                    "shadow_clock_not_utc",
+                )
+                <= _parse_utc(eligibility_check_utc, "shadow_clock_not_utc"),
+                "session_discovery_clock_after_eligibility_check",
+            )
         _shadow_require(
             _parse_utc(eligibility_check_utc, "shadow_clock_not_utc") >= eligibility,
             "selected_session_before_historical_window",
         )
 
         source_uri = f"{API_BASE}/{selected_endpoint}?session_key={selected_key}"
-        source_response = http_get(
-            source_uri,
-            timeout=REQUEST_TIMEOUT,
-            headers={"Accept": "application/json", "Accept-Encoding": "identity"},
-        )
+        source_request_options = {
+            "timeout": REQUEST_TIMEOUT,
+            "headers": {"Accept": "application/json", "Accept-Encoding": "identity"},
+        }
+        if selected_endpoint == "starting_grid":
+            source_request_options["allow_redirects"] = False
+        source_response = http_get(source_uri, **source_request_options)
         http_status = getattr(source_response, "status_code", None)
-        raw_response_bytes = getattr(source_response, "content", None)
-        _shadow_require(type(raw_response_bytes) is bytes, "raw_response_not_bytes")
+        if selected_endpoint == "starting_grid":
+            raw_response_bytes = _validated_starting_grid_response(
+                source_response,
+                expected_uri=source_uri,
+                label="starting_grid",
+            )
+        else:
+            raw_response_bytes = getattr(source_response, "content", None)
+            _shadow_require(type(raw_response_bytes) is bytes, "raw_response_not_bytes")
         first_observed_utc = _clock_utc(clock)
         manifest["first_observed_utc"] = first_observed_utc
 
@@ -429,12 +641,30 @@ def run_provenance_shadow(
                         "raw_response_readback_hash_mismatch")
         ingested_utc = _clock_utc(clock)
         receipt_created_utc = _clock_utc(clock)
+        if selected_endpoint == "starting_grid":
+            chronological = [
+                manifest["session_discovery_actual_received_utc"],
+                eligibility_check_utc,
+                first_observed_utc,
+                ingested_utc,
+                receipt_created_utc,
+            ]
+            _shadow_require(
+                all(
+                    _parse_utc(earlier, "shadow_clock_not_utc")
+                    <= _parse_utc(later, "shadow_clock_not_utc")
+                    for earlier, later in zip(chronological, chronological[1:])
+                ),
+                "shadow_clock_chronology_invalid",
+            )
         manifest.update(
             canonical_request_uri=source_uri,
             raw_response_sha256=raw_sha,
             ingested_utc=ingested_utc,
             receipt_created_utc=receipt_created_utc,
         )
+        if selected_endpoint == "starting_grid":
+            manifest["starting_grid_raw_sha256"] = raw_sha
 
         assessment = assessor(
             event_id=scope["event_id"],
@@ -557,6 +787,143 @@ def run_provenance_shadow(
                 drivers_unique_driver_count=unique_drivers,
                 drivers_derived_csv_sha256=derived_sha,
                 drivers_derived_runtime_identity=adapter_result["derived_runtime_identity"],
+            )
+        elif selected_endpoint == "starting_grid":
+            adapter_result = starting_grid_adapter(
+                source_capture_receipt_bytes=receipt_readback,
+                raw_starting_grid_response_bytes=raw_readback,
+                event_id=scope["event_id"],
+                meeting_id=scope["meeting_id"],
+                session_id=scope["session_id"],
+                session_kind="Race",
+            )
+            _shadow_require(type(adapter_result) is dict, "k4r14_result_malformed")
+            manifest["k4r14_status"] = adapter_result.get("status")
+            _shadow_require(
+                adapter_result.get("status") == starting_grid_adapter_contract.VALIDATED,
+                "k4r14_hold:" + ",".join(
+                    adapter_result.get("reason_codes") or ["unspecified"]
+                ),
+            )
+            _shadow_require(adapter_result.get("scope") == receipt["scope"],
+                            "k4r14_scope_mismatch")
+            _shadow_require(adapter_result.get("session_kind") == "Race",
+                            "k4r14_session_kind_mismatch")
+            _shadow_require(adapter_result.get("session_kind_asserted") is True,
+                            "k4r14_session_kind_not_asserted")
+            _shadow_require(
+                adapter_result.get("session_kind_assertion_authenticated") is False,
+                "k4r14_session_kind_authentication_forbidden",
+            )
+            _shadow_require(
+                adapter_result.get("provider_category")
+                == "UNOFFICIAL_OPENF1_DOCUMENTED_REST",
+                "k4r14_provider_category_mismatch",
+            )
+            _shadow_require(
+                adapter_result.get("source_receipt_id") == receipt["receipt_id"],
+                "k4r14_receipt_id_mismatch",
+            )
+            _shadow_require(
+                adapter_result.get("raw_source_id") == receipt_payload["source_id"],
+                "k4r14_raw_source_id_mismatch",
+            )
+            _shadow_require(adapter_result.get("raw_source_sha256") == raw_sha,
+                            "k4r14_raw_source_hash_mismatch")
+            derived_sha = _sha256_text(
+                adapter_result.get("producer_input_sha256"),
+                "k4r14_derived_csv_hash_malformed",
+            )
+            derived_csv_bytes = adapter_result.get("producer_input_csv_bytes")
+            _shadow_require(
+                type(derived_csv_bytes) is bytes
+                and hashlib.sha256(derived_csv_bytes).hexdigest() == derived_sha,
+                "k4r14_derived_csv_hash_mismatch",
+            )
+            _shadow_require(derived_sha != raw_sha,
+                            "k4r14_derived_csv_not_distinct_from_raw")
+            _shadow_require(
+                adapter_result.get("derived_runtime_identity")
+                == "derived:openf1-starting-grid-csv:" + derived_sha,
+                "k4r14_derived_runtime_identity_mismatch",
+            )
+            _shadow_require(
+                adapter_result.get("derived_runtime_identity")
+                != receipt_payload["source_id"],
+                "k4r14_derived_identity_not_distinct_from_source",
+            )
+            row_count = adapter_result.get("row_count")
+            unique_drivers = adapter_result.get("unique_driver_count")
+            slot_count = adapter_result.get("slot_count")
+            _shadow_require(type(row_count) is int and row_count > 0,
+                            "k4r14_row_count_malformed")
+            _shadow_require(type(unique_drivers) is int and unique_drivers == row_count,
+                            "k4r14_unique_driver_count_malformed")
+            _shadow_require(type(slot_count) is int and slot_count == row_count,
+                            "k4r14_slot_count_malformed")
+            _shadow_require(assessment.get("row_count") == row_count,
+                            "k4r1_k4r14_row_count_mismatch")
+            frozen_manifest = adapter_result.get("frozen_evidence_manifest")
+            frozen_sha = _sha256_text(
+                adapter_result.get("frozen_evidence_manifest_sha256"),
+                "k4r14_frozen_manifest_hash_malformed",
+            )
+            _shadow_require(type(frozen_manifest) is dict,
+                            "k4r14_frozen_manifest_malformed")
+            try:
+                starting_grid_adapter_contract.frozen_contract.validate_frozen_evidence_manifest({
+                    "manifest": frozen_manifest,
+                    "frozen_evidence_manifest_sha256": frozen_sha,
+                })
+            except Exception as exc:
+                raise ProvenanceShadowHold("k4r14_frozen_manifest_invalid") from exc
+            _shadow_require(
+                frozen_manifest.get("scope") == {
+                    "event_id": scope["event_id"],
+                    "meeting_id": scope["meeting_id"],
+                    "allowed_session_ids": [scope["session_id"]],
+                },
+                "k4r14_frozen_manifest_scope_mismatch",
+            )
+            frozen_evidence = frozen_manifest.get("evidence")
+            _shadow_require(
+                type(frozen_evidence) is list
+                and len(frozen_evidence) == 1
+                and frozen_evidence[0].get("receipt_id") == receipt["receipt_id"]
+                and frozen_evidence[0].get("source_id") == receipt_payload["source_id"]
+                and frozen_evidence[0].get("source_sha256") == raw_sha,
+                "k4r14_frozen_manifest_binding_mismatch",
+            )
+            _shadow_require(
+                frozen_manifest.get("trust", {}).get("binding_status") == "UNBOUND",
+                "k4r14_binding_status_mismatch",
+            )
+            for flag in starting_grid_adapter_contract.CLAIM_CEILINGS:
+                _shadow_require(adapter_result.get(flag) is False,
+                                "k4r14_forbidden_claim:" + flag)
+                manifest[flag] = False
+            _shadow_require(
+                adapter_result.get("commercial_or_redistribution_permission_claimed")
+                is False,
+                "k4r14_forbidden_claim:commercial_or_redistribution_permission_claimed",
+            )
+            manifest.update(
+                starting_grid_row_count=row_count,
+                starting_grid_unique_driver_count=unique_drivers,
+                starting_grid_slot_count=slot_count,
+                starting_grid_derived_csv_sha256=derived_sha,
+                starting_grid_derived_runtime_identity=(
+                    adapter_result["derived_runtime_identity"]
+                ),
+                grid_row_count=row_count,
+                unique_driver_count=unique_drivers,
+                slot_count=slot_count,
+                derived_csv_sha256=derived_sha,
+                derived_runtime_identity=adapter_result["derived_runtime_identity"],
+                source_receipt_id=receipt["receipt_id"],
+                raw_source_id=receipt_payload["source_id"],
+                frozen_evidence_manifest_sha256=frozen_sha,
+                frozen_evidence_binding_status="UNBOUND",
             )
 
         manifest.update(
@@ -809,11 +1176,16 @@ def main() -> int:
         selected_shadow_endpoint = _selected_shadow_endpoint(
             args.provenance_shadow_endpoint
         )
-        _shadow_require(
-            selected_shadow_endpoint == SHADOW_ENDPOINT
-            or bool(args.provenance_shadow_session_key),
-            "drivers_shadow_requires_explicit_session_key",
-        )
+        if selected_shadow_endpoint == "drivers":
+            _shadow_require(
+                bool(args.provenance_shadow_session_key),
+                "drivers_shadow_requires_explicit_session_key",
+            )
+        elif selected_shadow_endpoint == "starting_grid":
+            _shadow_require(
+                bool(args.provenance_shadow_session_key),
+                "starting_grid_shadow_requires_explicit_session_key",
+            )
     except ProvenanceShadowHold as exc:
         print(f"OpenF1 historical REST provenance shadow HOLD: {exc}", file=sys.stderr)
         return 1

@@ -38,7 +38,8 @@
     "endpoint": "weather",
     "allowed_endpoints": [
       "weather",
-      "drivers"
+      "drivers",
+      "starting_grid"
     ],
     "default_endpoint": "weather",
     "selected_session_count": 1,
@@ -61,6 +62,30 @@
       "creates_scientific_or_normalization_receipt": false,
       "openf1_official_f1_roster_authority": false,
       "historical_availability_before_first_observation_proven": false
+    },
+    "starting_grid_mode": {
+      "manual_only": true,
+      "requires_explicit_historical_race_session_key": true,
+      "session_discovery_raw_filename": "sessions.response.json",
+      "raw_filename": "starting_grid.response.json",
+      "request_parameters": [
+        "session_key"
+      ],
+      "maximum_response_bytes": 8388608,
+      "requires_exact_final_url": true,
+      "redirects_allowed": false,
+      "requires_json_content_type_when_exposed": true,
+      "requires_k4r1_validation": true,
+      "requires_k4r14_validation": true,
+      "required_session_name": "Race",
+      "required_session_type": "Race",
+      "persists_derived_csv": false,
+      "derived_csv_is_source_evidence": false,
+      "official_fia_grid_authenticated": false,
+      "official_final_grid_verified": false,
+      "historical_pre_race_availability_proven": false,
+      "stable_engine_execution_proven": false,
+      "production_forecast_generated": false
     },
     "dr002_activated": false,
     "promotion_allowed": false
