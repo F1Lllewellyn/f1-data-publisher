@@ -32,11 +32,11 @@ spec.loader.exec_module(m)
 
 DEPENDENCY_BLOBS = {
     "scripts/openf1/publish_openf1_lightweight_source_closure.py":
-        "f2e28d326255a48a48f873d101cd3e3e99955c1f",
+        "09a7cb5dd306e45eecc96f3bd7a719875e04a7d8",
     ".github/workflows/f1-openf1-lightweight-source-closure.yml":
-        "c32bd7bb2f8a84d1bb4e8995be246c389418f512",
+        "d277ceaaffbb148dbde4b0c32bfbbcd8664e4329",
     "configs/openf1/openf1_lightweight_source_closure_policy.json":
-        "f386d8b6dd7025b313a1ea082ef699c4b1bd2e7c",
+        "72f815876d12a88e0c2b5d81b5d6dad66688dbca",
     "tests/test_openf1_lightweight_source_closure_provenance_shadow_v1.py":
         "bbe623a48322d273990dd34d05fedf133f1af828",
     "tests/test_openf1_lightweight_source_closure_drivers_provenance_shadow_v1.py":
@@ -54,8 +54,9 @@ DEPENDENCY_BLOBS = {
 }
 MODIFIED = {
     "scripts/openf1/publish_openf1_lightweight_source_closure.py",
-    ".github/workflows/f1-openf1-lightweight-source-closure.yml",
     "configs/openf1/openf1_lightweight_source_closure_policy.json",
+    "tests/test_openf1_lightweight_source_closure_drivers_provenance_shadow_v1.py",
+    "scripts/forecast_bundles/dr002_openf1_starting_grid_producer_adapter_v1.py",
 }
 
 
@@ -94,12 +95,24 @@ class Clock:
 
 
 DISCOVERY_URI = "https://api.openf1.org/v1/sessions?year=2026"
-GRID_URI = "https://api.openf1.org/v1/starting_grid?session_key=11442"
+GRID_URI = "https://api.openf1.org/v1/starting_grid?session_key=11230"
 
 
-def session_bytes(**changes):
-    row = {
-        "session_key": 11442,
+def session_bytes(*, target_changes=None, extra_rows=None, **changes):
+    source = {
+        "session_key": 11230,
+        "meeting_key": 1279,
+        "year": 2026,
+        "country_name": "Australia",
+        "location": "Melbourne",
+        "circuit_short_name": "Melbourne",
+        "session_name": "Qualifying",
+        "session_type": "Qualifying",
+        "date_start": "2026-03-07T05:00:00Z",
+        "date_end": "2026-03-07T06:00:00Z",
+    }
+    target = {
+        "session_key": 11234,
         "meeting_key": 1279,
         "year": 2026,
         "country_name": "Australia",
@@ -107,17 +120,21 @@ def session_bytes(**changes):
         "circuit_short_name": "Melbourne",
         "session_name": "Race",
         "session_type": "Race",
+        "date_start": "2026-03-08T04:00:00Z",
         "date_end": "2026-03-08T06:00:00Z",
     }
-    row.update(changes)
-    return json.dumps([row], separators=(",", ":")).encode()
+    source.update(changes)
+    target.update(target_changes or {})
+    rows = [source, target]
+    rows.extend(extra_rows or [])
+    return json.dumps(rows, separators=(",", ":")).encode()
 
 
 GRID_ROWS = [
     {"position": 1, "driver_number": 44, "lap_duration": 75.1,
-     "meeting_key": 1279, "session_key": 11442},
+     "meeting_key": 1279, "session_key": 11230},
     {"position": 2, "driver_number": 16, "lap_duration": None,
-     "meeting_key": 1279, "session_key": 11442},
+     "meeting_key": 1279, "session_key": 11230},
 ]
 GRID_BYTES = json.dumps(GRID_ROWS, separators=(",", ":")).encode()
 
@@ -134,7 +151,7 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
             Response(200, GRID_BYTES, GRID_URI),
         ])
         options = {
-            "session_key": "11442",
+            "session_key": "11230",
             "season": 2026,
             "output_root": self.output_root,
             "repository": "F1Lllewellyn/f1-data-publisher",
@@ -289,7 +306,7 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
 
     # 10
     def test_discovery_json_must_be_strict_list(self):
-        for content in (b"{}", b"[", b'[{"session_key":11442,"session_key":11442}]',
+        for content in (b"{}", b"[", b'[{"session_key":11230,"session_key":11230}]',
                         b'[{"session_key":NaN}]'):
             alternate = tempfile.TemporaryDirectory()
             self.addCleanup(alternate.cleanup)
@@ -324,9 +341,11 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         self.assertEqual(len(getter.calls), 1)
 
     # 13
-    def test_selected_session_name_and_type_must_both_be_exact_race(self):
-        for changes in ({"session_name": "race"}, {"session_type": "Sprint"},
-                        {"session_name": None}, {"session_type": "Race "}):
+    def test_selected_source_name_and_type_must_both_be_exact_qualifying(self):
+        for changes in ({"session_name": "Sprint Qualifying"},
+                        {"session_type": "Sprint"}, {"session_name": "Race"},
+                        {"session_name": "Practice 2"}, {"session_name": None},
+                        {"session_type": "Qualifying "}):
             alternate = tempfile.TemporaryDirectory()
             self.addCleanup(alternate.cleanup)
             getter = SequencedGet([
@@ -334,13 +353,15 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
             ])
             options, _ = self.options(output_root=Path(alternate.name), http_get=getter)
             with self.assertRaisesRegex(m.ProvenanceShadowHold,
-                                        "selected_session_not_race"):
+                                        "selected_grid_source_not_qualifying"):
                 m.run_provenance_shadow(**options)
 
     # 14
     def test_selected_session_year_ids_and_completed_end_are_required(self):
         cases = ({"year": 2025}, {"meeting_key": 0}, {"date_end": None},
-                 {"date_end": "2026-03-08T06:00:00"})
+                 {"date_start": None},
+                 {"date_end": "2026-03-08T06:00:00"},
+                 {"date_start": "2026-03-07T07:00:00Z"})
         for changes in cases:
             alternate = tempfile.TemporaryDirectory()
             self.addCleanup(alternate.cleanup)
@@ -351,12 +372,79 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
             with self.assertRaises(m.ProvenanceShadowHold):
                 m.run_provenance_shadow(**options)
 
+    def test_target_race_must_be_exactly_one_distinct_same_meeting_row(self):
+        source, target = json.loads(session_bytes())
+        cases = (
+            ([source], "target_race_not_unique"),
+            ([source, target, dict(target, session_key=11235)],
+             "target_race_not_unique"),
+            ([source, dict(target, meeting_key=9999)], "target_race_not_unique"),
+            ([source, dict(target, session_key=11230)],
+             "selected_session_not_unique"),
+        )
+        for rows, reason in cases:
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            raw = json.dumps(rows, separators=(",", ":")).encode()
+            getter = SequencedGet([Response(200, raw, DISCOVERY_URI)])
+            options, _ = self.options(output_root=Path(alternate.name), http_get=getter)
+            with self.subTest(reason=reason), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, reason
+            ):
+                m.run_provenance_shadow(**options)
+            self.assertEqual(len(getter.calls), 1)
+
+    def test_target_race_identity_and_chronology_are_fail_closed(self):
+        cases = (
+            ({"year": 2025}, "target_race_year_mismatch"),
+            ({"circuit_short_name": "Albert Park"},
+             "target_race_event_identity_mismatch"),
+            ({"location": "Sydney"}, "target_race_event_identity_mismatch"),
+            ({"date_start": "2026-03-07T05:30:00Z"},
+             "target_race_not_after_qualifying_source"),
+            ({"date_start": "2026-03-08T07:00:00Z",
+              "date_end": "2026-03-08T06:00:00Z"},
+             "target_race_chronology_invalid"),
+        )
+        for changes, reason in cases:
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            getter = SequencedGet([
+                Response(200, session_bytes(target_changes=changes), DISCOVERY_URI)
+            ])
+            options, _ = self.options(output_root=Path(alternate.name), http_get=getter)
+            with self.subTest(reason=reason), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, reason
+            ):
+                m.run_provenance_shadow(**options)
+            self.assertEqual(len(getter.calls), 1)
+
+    def test_cancelled_source_or_target_holds_before_grid_get(self):
+        cases = (
+            ({"cancelled": True}, None, "selected_grid_source_cancelled"),
+            ({}, {"status": "Cancelled"}, "target_race_cancelled"),
+        )
+        for source_changes, target_changes, reason in cases:
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            getter = SequencedGet([Response(
+                200,
+                session_bytes(target_changes=target_changes, **source_changes),
+                DISCOVERY_URI,
+            )])
+            options, _ = self.options(output_root=Path(alternate.name), http_get=getter)
+            with self.subTest(reason=reason), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, reason
+            ):
+                m.run_provenance_shadow(**options)
+            self.assertEqual(len(getter.calls), 1)
+
     # 15
     def test_historical_window_gate_precedes_grid_request(self):
         getter = SequencedGet([Response(200, session_bytes(), DISCOVERY_URI)])
         options, _ = self.options(
             http_get=getter,
-            clock=Clock(["2026-03-08T06:29:59Z", "2026-03-08T06:29:59Z"]),
+            clock=Clock(["2026-03-07T06:29:59Z", "2026-03-07T06:29:59Z"]),
         )
         with self.assertRaisesRegex(m.ProvenanceShadowHold,
                                     "selected_session_before_historical_window"):
@@ -420,9 +508,9 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         call = calls[0]
         self.assertEqual(call["endpoint"], "starting_grid")
-        self.assertEqual(call["request_params"], {"session_key": "11442"})
+        self.assertEqual(call["request_params"], {"session_key": "11230"})
         self.assertEqual(call["raw_response_bytes"], GRID_BYTES)
-        self.assertEqual(call["session_end_utc"], "2026-03-08T06:00:00Z")
+        self.assertEqual(call["session_end_utc"], "2026-03-07T06:00:00Z")
 
     # 19
     def test_receipt_is_canonical_parentless_and_exactly_bound(self):
@@ -439,7 +527,7 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
                          manifest["raw_response_sha256"])
 
     # 20
-    def test_unchanged_k4r14_receives_readback_bytes_and_race_assertion(self):
+    def test_corrected_k4r14_receives_source_bytes_and_distinct_target(self):
         calls = []
 
         def adapter(**kwargs):
@@ -450,7 +538,8 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
 
         manifest, _ = self.run_valid(starting_grid_adapter=adapter)
         self.assertEqual(len(calls), 1)
-        self.assertEqual(calls[0]["session_kind"], "Race")
+        self.assertEqual(calls[0]["source_session_kind"], "Qualifying")
+        self.assertEqual(calls[0]["target_race_session_id"], "11234")
         self.assertEqual(calls[0]["raw_starting_grid_response_bytes"], GRID_BYTES)
         self.assertEqual(manifest["k4r14_status"],
                          m.starting_grid_adapter_contract.VALIDATED)
@@ -483,10 +572,12 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         manifest, _ = self.run_valid()
         self.assertEqual(manifest["session_metadata_source_type"],
                          "OPENF1_PROVIDER_DISCOVERY_CLAIM")
-        self.assertEqual(manifest["race_session_name"], "Race")
-        self.assertEqual(manifest["race_session_type"], "Race")
-        self.assertTrue(manifest["race_session_name_asserted"])
-        self.assertTrue(manifest["race_session_type_asserted"])
+        self.assertEqual(manifest["grid_source_session_id"], "11230")
+        self.assertEqual(manifest["grid_source_session_kind"], "Qualifying")
+        self.assertEqual(manifest["grid_target_race_session_id"], "11234")
+        self.assertEqual(manifest["grid_target_race_session_kind"], "Race")
+        self.assertEqual(manifest["source_to_race_link_evidence_type"],
+                         "OPENF1_PROVIDER_DISCOVERY_CLAIM")
         self.assertEqual(manifest["discovery_response_sha256"],
                          manifest["session_discovery_raw_sha256"])
         self.assertEqual(manifest["starting_grid_raw_sha256"],
@@ -505,6 +596,8 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         self.assertEqual(manifest["slot_count"], 2)
         self.assertFalse(manifest["commercial_or_redistribution_permission_claimed"])
         self.assertFalse(manifest["derived_csv_persisted"])
+        self.assertFalse(manifest["producer_input_csv_is_target_race_scoped"])
+        self.assertFalse(manifest["cross_session_join_authorized"])
 
     # 23
     def test_no_csv_latest_history_credentials_or_repository_mutation(self):
@@ -552,8 +645,10 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         grid = mode["starting_grid_mode"]
         self.assertTrue(grid["manual_only"])
         self.assertEqual(grid["maximum_response_bytes"], 8 * 1024 * 1024)
-        self.assertEqual(grid["required_session_name"], "Race")
-        self.assertEqual(grid["required_session_type"], "Race")
+        self.assertEqual(grid["required_source_session_name"], "Qualifying")
+        self.assertEqual(grid["required_source_session_type"], "Qualifying")
+        self.assertEqual(grid["required_target_session_name"], "Race")
+        self.assertEqual(grid["required_target_session_type"], "Race")
         self.assertTrue(grid["requires_k4r1_validation"])
         self.assertTrue(grid["requires_k4r14_validation"])
         self.assertFalse(grid["persists_derived_csv"])
@@ -640,9 +735,15 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
                 m.run_provenance_shadow(**options)
 
     # 31
-    def test_future_race_holds_before_grid_get(self):
+    def test_future_qualifying_source_holds_before_grid_get(self):
         getter = SequencedGet([
-            Response(200, session_bytes(date_end="2027-03-08T06:00:00Z"), DISCOVERY_URI)
+            Response(200, session_bytes(
+                date_end="2027-03-07T06:00:00Z",
+                target_changes={
+                    "date_start": "2027-03-08T04:00:00Z",
+                    "date_end": "2027-03-08T06:00:00Z",
+                },
+            ), DISCOVERY_URI)
         ])
         options, _ = self.options(http_get=getter)
         with self.assertRaisesRegex(m.ProvenanceShadowHold,
