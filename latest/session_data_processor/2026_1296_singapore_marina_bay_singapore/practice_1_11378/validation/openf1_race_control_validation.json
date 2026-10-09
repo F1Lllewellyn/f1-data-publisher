@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 18203,
+    "ok": true,
+    "sha256": "c6bacf2696f6bfa979d0c8d71de29e5ef2138d50fde34e981c2827250e08ccdd",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/raw/openf1_race_control.json",
+  "json_sha256": "718709c35f811c9af90db244ec3cb7ad20cdf02926d2859cca010ff7d1f1b8f3",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 72,
+  "status": "clean",
+  "timestamp_rows": 72
+}

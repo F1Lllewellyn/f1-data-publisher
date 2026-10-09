@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 272278,
+    "ok": true,
+    "sha256": "63b5b90a183cb7607772cde4aba350b535a6eca98e85c3bb13b7a1badeb5687d",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/raw/openf1_laps.json",
+  "json_sha256": "dcbd51a0f84018f8a24ac56d7e572d925af8e54119d8aacbf98ca3454724371d",
+  "max_lap_number": 31.0,
+  "missing_required_columns": [],
+  "rows": 568,
+  "status": "clean",
+  "timestamp_rows": 567
+}

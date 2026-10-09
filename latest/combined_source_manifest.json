@@ -1,15 +1,15 @@
 {
-  "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1296_singapore_marina_bay_singapore",
+  "overall_status": "clean",
   "promotion_allowed": false,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "combined_source_manifest_v2_session_processor",
-  "session_key": 11731,
+  "session_key": 11378,
   "source_layers": {
     "forecast_bundles": "latest/forecast_bundles",
     "openf1_lightweight_source_closure": "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
-    "session_data_processor": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json"
+    "session_data_processor": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/source_readiness_manifest.json"
   },
-  "source_needs_manual_review": true,
-  "updated_utc": "2026-10-05T15:57:15.642864Z"
+  "source_needs_manual_review": false,
+  "updated_utc": "2026-10-09T11:56:00.402444Z"
 }
