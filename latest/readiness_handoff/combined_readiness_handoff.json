@@ -5,43 +5,43 @@
     "session_key": 11379,
     "session_name": "Sprint Qualifying"
   },
-  "generated_at_utc": "2026-10-09T14:08:19Z",
+  "generated_at_utc": "2026-10-09T19:52:03Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
-      "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
-      "ready_for_use": false,
+      "blocked": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": true,
       "session_type": "Qualifying",
-      "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
-      "workbook_source_status": "needs_manual_review"
+      "source_needs_manual_review": false,
+      "source_status": "clean",
+      "workbook_source_status": "clean"
     },
     "race_predictions": {
       "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
-      "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
-      "ready_for_use": false,
+      "blocked": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_use": true,
       "session_type": "Qualifying",
-      "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
-      "workbook_source_status": "needs_manual_review"
+      "source_needs_manual_review": false,
+      "source_status": "clean",
+      "workbook_source_status": "clean"
     },
     "race_reports": {
       "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
-      "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
-      "ready_for_full_report": false,
-      "ready_for_readiness_context": false,
+      "blocked": false,
+      "readiness_quality": "usable_with_optional_context_gaps",
+      "ready_for_full_report": true,
+      "ready_for_readiness_context": true,
       "session_type": "Qualifying",
-      "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
-      "workbook_source_status": "needs_manual_review"
+      "source_needs_manual_review": false,
+      "source_status": "clean",
+      "workbook_source_status": "clean"
     }
   },
   "promotion_allowed": false,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "f1_1b_combined_readiness_handoff_v20",
-  "source_status": "needs_manual_review",
-  "workbook_status": "needs_manual_review"
+  "source_status": "clean",
+  "workbook_status": "clean"
 }
