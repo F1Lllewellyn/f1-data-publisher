@@ -1,0 +1,183 @@
+name: DR-002 manual FIA final-grid capture attestation shadow
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+jobs:
+  fixed-fia-final-grid-capture:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fixed historical FIA Australian GP final-grid capture (one request)
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: >-
+          python scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py
+          --github-run-id ${{ github.run_id }}
+          --github-run-attempt ${{ github.run_attempt }}
+          --repository ${{ github.repository }}
+          --implementation-git-sha ${{ github.sha }}
+          --workflow-ref ${{ github.workflow_ref }}
+      - name: Attest exact successful source capture receipt
+        id: attest_capture
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: _runtime/dr002_fia_final_grid_capture_shadow/gha-${{ github.run_id }}-${{ github.run_attempt }}/source_capture_receipt.json
+          push-to-registry: false
+          create-storage-record: false
+      - name: Preserve attestation bundle and bounded factual metadata
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest_capture.outputs.bundle-path }}
+          ATTESTATION_ID: ${{ steps.attest_capture.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest_capture.outputs.attestation-url }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+        run: |
+          python - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import sys
+
+          sys.path.insert(0, str(Path('scripts/forecast_bundles').resolve()))
+          import dr002_fia_final_grid_capture_pilot_v1 as pilot
+          from verify_forecast_integrity_receipts_v1 import (
+              canonical_json_bytes,
+              validate_receipt_envelope,
+              verify_temporal_bindings,
+          )
+
+          repository = os.environ['REPOSITORY']
+          head = os.environ['HEAD_SHA']
+          run_id = os.environ['RUN_ID']
+          attempt = os.environ['RUN_ATTEMPT']
+          if repository != pilot.REPOSITORY:
+              raise ValueError('Unexpected repository')
+          if not re.fullmatch(r'[0-9a-f]{40}', head):
+              raise ValueError('Invalid checkout SHA')
+          if not re.fullmatch(r'[1-9][0-9]*', run_id) or not re.fullmatch(r'[1-9][0-9]*', attempt):
+              raise ValueError('Invalid GitHub run identity')
+          expected_ref = repository + '/' + pilot.WORKFLOW_PATH + '@refs/heads/main'
+          if os.environ['WORKFLOW_REF'] != expected_ref:
+              raise ValueError('Unexpected workflow ref')
+
+          root = pilot.ROOT / ('gha-' + run_id + '-' + attempt)
+          subject = root / 'source_capture_receipt.json'
+          raw_path = root / 'raw/fia_final_starting_grid_doc_55.pdf'
+          manifest_path = root / 'capture_manifest.json'
+          candidate_path = root / 'source_candidate_manifest.json'
+          subject_bytes = subject.read_bytes()
+          raw_bytes = raw_path.read_bytes()
+          manifest = json.loads(manifest_path.read_bytes())
+          candidate_manifest = json.loads(candidate_path.read_bytes())
+          receipt = json.loads(subject_bytes)
+          validate_receipt_envelope(receipt)
+          verify_temporal_bindings(receipt)
+          if subject_bytes != canonical_json_bytes(receipt):
+              raise ValueError('Noncanonical receipt bytes')
+          if receipt['receipt_type'] != 'source_capture' or receipt['parent_receipt_ids']:
+              raise ValueError('Expected parentless source capture')
+          if receipt['scope'] != pilot.SCOPE or receipt['payload']['source_uri'] != pilot.PDF_URI:
+              raise ValueError('Fixed source or scope mismatch')
+          if receipt['payload']['implementation'] != pilot.IMPLEMENTATION:
+              raise ValueError('Implementation mismatch')
+          if manifest['validation_status'] != 'CAPTURED_UNBOUND_CANDIDATE':
+              raise ValueError('Capture did not succeed')
+          if manifest['implementation_git_sha'] != head or manifest['workflow_ref'] != expected_ref:
+              raise ValueError('Run provenance mismatch')
+          if manifest['github_run_id'] != run_id or manifest['github_run_attempt'] != attempt:
+              raise ValueError('Run identity mismatch')
+          if manifest['http_get_count'] != 1 or manifest['binding_status'] != 'UNBOUND':
+              raise ValueError('Unexpected request or binding status')
+          for key in pilot.FALSE_CLAIMS:
+              if manifest[key] is not False:
+                  raise ValueError('Unsupported trust claim')
+          source_digest = hashlib.sha256(raw_bytes).hexdigest()
+          receipt_digest = hashlib.sha256(subject_bytes).hexdigest()
+          if source_digest != receipt['payload']['source_sha256']:
+              raise ValueError('Raw source digest mismatch')
+          if manifest['raw_document_sha256'] != source_digest or manifest['readback_sha256'] != source_digest:
+              raise ValueError('Manifest raw digest mismatch')
+          if manifest['source_capture_receipt_id'] != receipt['receipt_id']:
+              raise ValueError('Receipt identity mismatch')
+          if manifest['source_capture_receipt_sha256'] != receipt_digest:
+              raise ValueError('Receipt digest mismatch')
+          if candidate_manifest['source_capture_receipt_id'] != receipt['receipt_id']:
+              raise ValueError('Candidate receipt identity mismatch')
+          if candidate_manifest['source_capture_receipt_sha256'] != receipt_digest:
+              raise ValueError('Candidate receipt digest mismatch')
+          if candidate_manifest['binding_status'] != 'UNBOUND':
+              raise ValueError('Candidate binding status mismatch')
+
+          bundle_bytes = Path(os.environ['ATTESTATION_BUNDLE_PATH']).read_bytes()
+          bundle = json.loads(bundle_bytes)
+          statement = json.loads(base64.b64decode(bundle['dsseEnvelope']['payload'], validate=True))
+          subjects = statement['subject']
+          if len(subjects) != 1 or subjects[0]['name'] != subject.name:
+              raise ValueError('Attestation subject count or name mismatch')
+          if subjects[0]['digest'] != {'sha256': receipt_digest}:
+              raise ValueError('Attestation subject digest mismatch')
+          attestation_id = os.environ['ATTESTATION_ID']
+          attestation_url = os.environ['ATTESTATION_URL']
+          expected_url = 'https://github.com/' + repository + '/attestations/' + attestation_id
+          if not re.fullmatch(r'[0-9]+', attestation_id) or attestation_url != expected_url:
+              raise ValueError('Invalid attestation output')
+
+          bundle_target = root / 'github_attestation.bundle.json'
+          with bundle_target.open('xb') as handle:
+              handle.write(bundle_bytes)
+          if bundle_target.read_bytes() != bundle_bytes:
+              raise ValueError('Attestation bundle readback mismatch')
+          metadata = {
+              'schema_version': 'dr002-fia-final-grid-github-attestation-metadata-v1',
+              'attestation_id': attestation_id,
+              'attestation_url': attestation_url,
+              'subject_relative_path': subject.as_posix(),
+              'subject_sha256': receipt_digest,
+              'repository': repository,
+              'workflow_path': pilot.WORKFLOW_PATH,
+              'workflow_ref': expected_ref,
+              'git_head_sha': head,
+              'run_id': run_id,
+              'run_attempt': attempt,
+              'receipt_id': receipt['receipt_id'],
+              'source_uri': pilot.PDF_URI,
+              'source_sha256': source_digest,
+              'first_observed_utc': receipt['payload']['first_observed_utc'],
+              'binding_status': 'UNBOUND',
+              'production_authenticated': False,
+              'official_source_authenticated': False,
+              'historical_availability_verified': False,
+              'dr002_activated': False,
+          }
+          metadata_bytes = canonical_json_bytes(metadata)
+          metadata_target = root / 'github_attestation_metadata.json'
+          with metadata_target.open('xb') as handle:
+              handle.write(metadata_bytes)
+          if metadata_target.read_bytes() != metadata_bytes or subject.read_bytes() != subject_bytes:
+              raise ValueError('Metadata or immutable receipt readback mismatch')
+          PY
+      - name: Upload runtime-only evidence and HOLD diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dr002-fia-final-grid-capture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/dr002_fia_final_grid_capture_shadow/**
+          if-no-files-found: warn
+          retention-days: 14
