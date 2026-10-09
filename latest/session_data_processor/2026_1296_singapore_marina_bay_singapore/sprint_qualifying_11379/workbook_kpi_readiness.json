@@ -1,8 +1,8 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-09T13:48:38.282908Z",
+  "created_utc": "2026-10-09T18:08:30.921787Z",
   "event_id": "2026_1296_singapore_marina_bay_singapore",
-  "overall_status": "needs_manual_review",
+  "overall_status": "clean",
   "race_name": "Singapore - Marina Bay - Singapore",
   "sandbox_workbook_created": false,
   "schema_version": "workbook_kpi_readiness_v1_session_processor",
@@ -53,10 +53,10 @@
       "status": "clean"
     },
     "openf1_session_result": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_sessions": {
       "driver_count": 0,
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,
@@ -79,7 +79,7 @@
     "openf1_weather": {
       "driver_count": 0,
       "max_lap_number": null,
-      "rows": 91,
+      "rows": 98,
       "status": "clean"
     }
   }

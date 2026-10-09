@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 10736,
+    "ok": true,
+    "sha256": "288cbb4c71c9ba4dac6ab68cbb4119a73049d25e5e3ef77a53c9a8da3a4453b0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_stints.json",
+  "json_sha256": "5dee3949335c174456edb8a5010cf7bcef62c0bef68d20db072cf2520f5df7d0",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 74,
+  "status": "clean",
+  "timestamp_rows": 0
+}

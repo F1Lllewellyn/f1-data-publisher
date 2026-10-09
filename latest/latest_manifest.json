@@ -2,12 +2,12 @@
   "canonical_workbook_modified": false,
   "event_id": "2026_1296_singapore_marina_bay_singapore",
   "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
   "session_key": 11379,
   "session_name": "Sprint Qualifying",
   "stable_engine_modified": false,
-  "updated_utc": "2026-10-09T13:48:38.285126Z"
+  "updated_utc": "2026-10-09T18:08:30.924165Z"
 }
