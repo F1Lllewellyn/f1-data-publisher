@@ -1,0 +1,3 @@
+# Forecast bundle 2026_1296_singapore_marina_bay_singapore__pre_weekend__experimental_challenger__20261009T062125Z
+
+Status: locked

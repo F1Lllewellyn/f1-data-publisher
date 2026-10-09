@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-10-09T06:21:25Z",
+  "event_id": "2026_1296_singapore_marina_bay_singapore",
+  "race_name": "Singapore - Marina Bay - Singapore",
+  "gate": "pre_weekend",
+  "scheduled_run": false,
+  "detected_sources": [],
+  "skipped_missing_sources": [],
+  "bundles": [
+    {
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__pre_weekend__stable_baseline__20261009T062125Z",
+      "gate": "pre_weekend",
+      "engine_lane": "stable_baseline",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261009T062125Z/pre_weekend/stable_baseline",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__pre_weekend__control_room_overlay__20261009T062125Z",
+      "gate": "pre_weekend",
+      "engine_lane": "control_room_overlay",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261009T062125Z/pre_weekend/control_room_overlay",
+      "latest_dir": ""
+    },
+    {
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__pre_weekend__experimental_challenger__20261009T062125Z",
+      "gate": "pre_weekend",
+      "engine_lane": "experimental_challenger",
+      "source_found": true,
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261009T062125Z/pre_weekend/experimental_challenger",
+      "latest_dir": ""
+    }
+  ]
+}
