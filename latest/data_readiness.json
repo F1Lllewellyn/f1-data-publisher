@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1296_singapore_marina_bay_singapore",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Singapore - Marina Bay - Singapore",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-09T18:08:30.924349Z"
+  "updated_utc": "2026-10-09T18:54:48.929722Z"
 }
