@@ -104,7 +104,12 @@ def _canonical_fia_uri(value, *, purpose):
         port = parsed.port
     except ValueError:
         return None, code
-    if parsed.scheme != "https" or not parsed.netloc or parsed.query or parsed.fragment:
+    if (
+        parsed.scheme != "https"
+        or not parsed.netloc
+        or "?" in value
+        or "#" in value
+    ):
         return None, code
     if parsed.username is not None or parsed.password is not None or port is not None:
         return None, code
@@ -187,7 +192,7 @@ def assess_fia_grid_document_candidate(
     """Validate an unauthenticated offline document candidate, fail closed."""
     reasons = []
 
-    if document_type not in DOCUMENT_TYPE_TITLES:
+    if not isinstance(document_type, str) or document_type not in DOCUMENT_TYPE_TITLES:
         reasons.append("unsupported_document_type")
     elif _normalized_title(document_title) != DOCUMENT_TYPE_TITLES[document_type]:
         reasons.append("document_title_type_mismatch")

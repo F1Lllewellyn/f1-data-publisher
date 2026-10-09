@@ -89,6 +89,12 @@ class FiaGridDocumentCandidateTests(unittest.TestCase):
             with self.subTest(value=value):
                 self.assert_hold("unsupported_document_type", document_type=value)
 
+    def test_unhashable_invalid_document_types_hold_without_partial_identity(self):
+        for value in ([], {}):
+            with self.subTest(value=value):
+                result = self.assert_hold("unsupported_document_type", document_type=value)
+                self.assertNotIn("document_candidate", result)
+
     def test_wrong_document_title_holds(self):
         for value in ("Final Qualifying Classification", "Sprint Grid", "Race Result", "Starting Grid"):
             with self.subTest(value=value):
@@ -130,6 +136,20 @@ class FiaGridDocumentCandidateTests(unittest.TestCase):
             with self.subTest(value=value):
                 result = self.assess(official_index_uri=value)
                 self.assertEqual(result["status"], "HOLD")
+
+    def test_empty_query_and_fragment_aliases_hold_for_both_uri_inputs(self):
+        for field in ("document_uri", "official_index_uri"):
+            for suffix in ("?", "#"):
+                with self.subTest(field=field, suffix=suffix):
+                    result = self.assess(**{field: self.kwargs[field] + suffix})
+                    self.assertEqual(result["status"], "HOLD")
+                    self.assertIn("invalid_" + field, result["reason_codes"])
+
+    def test_canonical_percent_encoded_event_path_remains_valid(self):
+        result = self.assess()
+        self.assertEqual(result["status"], m.VALIDATED_STATUS)
+        self.assertIn("Australian%20Grand%20Prix", result["document_candidate"]["document_uri"])
+        self.assertIn("Australian%20Grand%20Prix", result["document_candidate"]["official_index_uri"])
 
     def test_same_uri_changed_bytes_create_separate_content_versions(self):
         first = self.assess()["document_candidate"]
