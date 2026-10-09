@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_session_result.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 4302,
+    "ok": true,
+    "sha256": "44d4d60b30c6647989b0fb2b2f5cd3723f011589d2a2fdcbcaf55af28b5b52f6",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_session_result.json",
+  "json_sha256": "ae56f8831503d30644899e7ed75d67736b56fd60f36385e2bc01211e2829f2a7",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
