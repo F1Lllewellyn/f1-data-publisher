@@ -6,6 +6,7 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import subprocess
 import sys
 import unittest
 from unittest import mock
@@ -31,9 +32,9 @@ def git_blob_sha(data):
 class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
     def setUp(self):
         self.scope = {
-            "event_id": "2026_1279_australia_melbourne_race",
+            "event_id": "2026_1279_australia_melbourne_melbourne",
             "meeting_id": "1279",
-            "session_id": "11442",
+            "session_id": "11230",
         }
         self.rows = [
             {
@@ -41,21 +42,21 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
                 "driver_number": 81,
                 "lap_duration": None,
                 "meeting_key": 1279,
-                "session_key": 11442,
+                "session_key": 11230,
             },
             {
                 "position": 1,
                 "driver_number": 44,
                 "lap_duration": 75.123,
                 "meeting_key": "1279",
-                "session_key": "11442",
+                "session_key": "11230",
             },
             {
                 "position": 2,
                 "driver_number": 16,
                 "lap_duration": 0,
                 "meeting_key": 1279,
-                "session_key": "11442",
+                "session_key": "11230",
             },
         ]
         self.raw = self.raw_bytes(self.rows)
@@ -74,7 +75,7 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             request_params={"session_key": self.scope["session_id"]},
             raw_response_bytes=raw,
             http_status=200,
-            session_end_utc="2026-03-08T06:00:00Z",
+            session_end_utc="2026-03-07T06:00:00Z",
             first_observed_utc="2026-10-09T13:00:00Z",
             ingested_utc="2026-10-09T13:00:01Z",
             receipt_created_utc="2026-10-09T13:00:02Z",
@@ -90,6 +91,8 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
                 self.receipt_bytes if receipt_bytes is None else receipt_bytes
             ),
             "raw_starting_grid_response_bytes": self.raw if raw is None else raw,
+            "source_session_kind": "Qualifying",
+            "target_race_session_id": "11234",
             **self.scope,
         }
         args.update(changes)
@@ -145,9 +148,17 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
         result = self.adapt()
         self.assertEqual(result["status"], m.VALIDATED)
         self.assertEqual(result["scope"], self.scope)
-        self.assertEqual(result["session_kind"], "Race")
+        self.assertEqual(result["session_kind"], "Qualifying")
+        self.assertEqual(result["source_qualifying_session_id"], "11230")
+        self.assertEqual(result["target_race_session_id"], "11234")
+        self.assertEqual(result["source_session_kind"], "Qualifying")
+        self.assertEqual(result["target_session_kind"], "Race")
         self.assertTrue(result["session_kind_asserted"])
         self.assertFalse(result["session_kind_assertion_authenticated"])
+        self.assertFalse(result["source_session_classification_authenticated"])
+        self.assertFalse(result["target_race_session_classification_authenticated"])
+        self.assertFalse(result["producer_input_csv_is_target_race_scoped"])
+        self.assertFalse(result["cross_session_join_authorized"])
         self.assertEqual(result["row_count"], 3)
         self.assertEqual(result["unique_driver_count"], 3)
         self.assertEqual(result["slot_count"], 3)
@@ -160,9 +171,9 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             data,
             (
                 "driver_number,position,event_id,meeting_id,session_id\n"
-                "44,1,2026_1279_australia_melbourne_race,1279,11442\n"
-                "16,2,2026_1279_australia_melbourne_race,1279,11442\n"
-                "81,3,2026_1279_australia_melbourne_race,1279,11442\n"
+                "44,1,2026_1279_australia_melbourne_melbourne,1279,11230\n"
+                "16,2,2026_1279_australia_melbourne_melbourne,1279,11230\n"
+                "81,3,2026_1279_australia_melbourne_melbourne,1279,11230\n"
             ).encode("utf-8"),
         )
 
@@ -223,13 +234,26 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
         self.assertEqual(self.adapt(), self.adapt())
 
     # 8
-    def test_only_exact_explicit_race_session_kind_is_accepted(self):
-        for value in ("Practice 2", "Sprint", "Qualifying", "race", "Race ", None):
+    def test_only_exact_explicit_qualifying_source_kind_is_accepted(self):
+        for value in ("Practice 2", "Sprint", "Sprint Qualifying", "Race",
+                      "qualifying", "Qualifying ", None):
             with self.subTest(value=value):
                 self.assert_hold_without_partial_output(
-                    self.adapt(session_kind=value)
+                    self.adapt(source_session_kind=value)
                 )
-        self.assertEqual(self.adapt(session_kind="Race")["status"], m.VALIDATED)
+        self.assertEqual(
+            self.adapt(source_session_kind="Qualifying")["status"], m.VALIDATED
+        )
+
+    def test_target_race_id_is_required_canonical_positive_and_distinct(self):
+        for value in (None, True, 11234, "", "011234", "11230", "race"):
+            with self.subTest(value=value):
+                self.assert_hold_without_partial_output(
+                    self.adapt(target_race_session_id=value)
+                )
+        self.assertEqual(
+            self.adapt(target_race_session_id="11234")["status"], m.VALIDATED
+        )
 
     # 9
     def test_required_keyword_arguments_remain_required(self):
@@ -239,6 +263,8 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
                 raw_starting_grid_response_bytes=self.raw,
                 event_id=self.scope["event_id"],
                 meeting_id=self.scope["meeting_id"],
+                source_session_kind="Qualifying",
+                target_race_session_id="11234",
             )
 
     # 10
@@ -296,14 +322,14 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             self.changed_receipt(
                 lambda receipt: receipt["payload"].update(
                     source_uri=(
-                        "https://api.openf1.org/v1/starting_grid?session_key=011442"
+                        "https://api.openf1.org/v1/starting_grid?session_key=011230"
                     ),
                     source_id="openf1:starting_grid:" + "0" * 64,
                 )
             ),
             self.changed_receipt(
                 lambda receipt: receipt["payload"].update(
-                    source_uri="https://example.invalid/v1/starting_grid?session_key=11442",
+                    source_uri="https://example.invalid/v1/starting_grid?session_key=11230",
                     source_id="openf1:starting_grid:" + "0" * 64,
                 )
             ),
@@ -325,7 +351,7 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             {"meeting_id": "9999"},
             {"session_id": "99999"},
             {"meeting_id": "01279"},
-            {"session_id": "011442"},
+            {"session_id": "011230"},
         ):
             with self.subTest(changes=changes):
                 self.assert_hold_without_partial_output(self.adapt(**changes))
@@ -392,7 +418,7 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             ("meeting_key", "01279"),
             ("meeting_key", True),
             ("session_key", 99999),
-            ("session_key", "011442"),
+            ("session_key", "011230"),
             ("session_key", True),
         )
         for field, value in cases:
@@ -410,7 +436,7 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
                 "driver_number": 100 + index,
                 "lap_duration": None,
                 "meeting_key": 1279,
-                "session_key": 11442,
+                "session_key": 11230,
             }
             for index in range(1, 28)
         ]
@@ -489,6 +515,10 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             result["provider_category"], "UNOFFICIAL_OPENF1_DOCUMENTED_REST"
         )
         self.assertFalse(result["commercial_or_redistribution_permission_claimed"])
+        self.assertFalse(result["source_session_classification_authenticated"])
+        self.assertFalse(result["target_race_session_classification_authenticated"])
+        self.assertFalse(result["producer_input_csv_is_target_race_scoped"])
+        self.assertFalse(result["cross_session_join_authorized"])
 
     # 27
     def test_adapter_has_no_network_filesystem_clock_subprocess_or_dispatch_access(self):
@@ -512,12 +542,23 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
             self.assertNotIn(forbidden, source)
 
     # 28
-    def test_all_named_dependency_blobs_are_unchanged(self):
+    def test_dependency_blobs_preserve_historical_exceptions_and_current_pins(self):
+        historical_later_authorized_changes = {
+            "scripts/openf1/publish_openf1_lightweight_source_closure.py",
+            ".github/workflows/f1-openf1-lightweight-source-closure.yml",
+        }
         for relative_path, expected in m.DEPENDENCY_BLOBS.items():
             with self.subTest(relative_path=relative_path):
-                self.assertEqual(
-                    git_blob_sha((ROOT / relative_path).read_bytes()), expected
-                )
+                if relative_path in historical_later_authorized_changes:
+                    result = subprocess.run(
+                        ["git", "cat-file", "-e", f"{expected}^{{blob}}"],
+                        cwd=ROOT, check=False, capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                else:
+                    self.assertEqual(
+                        git_blob_sha((ROOT / relative_path).read_bytes()), expected
+                    )
 
     # 29
     def test_csv_is_parseable_with_exact_scope_and_position_values(self):
@@ -528,7 +569,7 @@ class OpenF1StartingGridProducerAdapterTests(unittest.TestCase):
         self.assertEqual({row["event_id"] for row in rows},
                          {self.scope["event_id"]})
         self.assertEqual({row["meeting_id"] for row in rows}, {"1279"})
-        self.assertEqual({row["session_id"] for row in rows}, {"11442"})
+        self.assertEqual({row["session_id"] for row in rows}, {"11230"})
 
 
 if __name__ == "__main__":

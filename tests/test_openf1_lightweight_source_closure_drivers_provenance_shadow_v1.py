@@ -528,7 +528,10 @@ class DriversProvenanceShadowTests(unittest.TestCase):
         shadow = policy["provenance_shadow"]
         self.assertEqual(shadow["endpoint"], "weather")
         self.assertEqual(shadow["default_endpoint"], "weather")
-        self.assertEqual(shadow["allowed_endpoints"], ["weather", "drivers"])
+        self.assertEqual(
+            shadow["allowed_endpoints"],
+            ["weather", "drivers", "starting_grid"],
+        )
         drivers = shadow["drivers_mode"]
         self.assertEqual(drivers["raw_filename"], "drivers.response.json")
         self.assertEqual(drivers["request_parameters"], ["session_key"])

@@ -65,7 +65,7 @@ SHADOW_ENDPOINTS = ("weather", "drivers", "starting_grid")
 SHADOW_IMPLEMENTATION = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 SHADOW_MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 STARTING_GRID_SHADOW_SCHEMA_VERSION = (
-    "dr002-pre2b7k4r15-openf1-starting-grid-historical-shadow-v1"
+    "dr002-pre2b7k4r16-openf1-qualifying-grid-race-target-shadow-v1"
 )
 
 
@@ -242,26 +242,113 @@ def _selected_session(
     }
 
 
-def _selected_race_session(
+def _session_not_cancelled(row: Dict[str, Any], reason: str) -> None:
+    for field in ("cancelled", "canceled", "is_cancelled", "is_canceled"):
+        if field in row:
+            _shadow_require(row[field] is False, reason)
+    for field in ("status", "session_status"):
+        if field in row:
+            status = _required_text(row[field], reason).lower()
+            _shadow_require(status not in {"cancelled", "canceled"}, reason)
+
+
+def _selected_qualifying_source_and_race_target(
     sessions: List[Any], selected_session_key: str, season: int,
 ) -> Dict[str, Any]:
-    """Select one fully described, completed Race session or fail closed."""
-    scope = _selected_session(
+    """Select one Qualifying grid source and one later same-event Race target."""
+    source_scope = _selected_session(
         sessions,
         selected_session_key,
         season,
         reject_malformed_rows=True,
     )
-    selected = next(
+    source = next(
         row for row in sessions
         if str(row.get("session_key")) == selected_session_key
     )
     _shadow_require(
-        selected.get("session_name") == "Race"
-        and selected.get("session_type") == "Race",
-        "selected_session_not_race",
+        source.get("session_name") == "Qualifying"
+        and source.get("session_type") == "Qualifying",
+        "selected_grid_source_not_qualifying",
     )
-    return scope
+    _session_not_cancelled(source, "selected_grid_source_cancelled")
+    source_start = _parse_utc(
+        source.get("date_start"), "malformed_session_metadata"
+    )
+    _shadow_require(source_scope["session_end"] >= source_start,
+                    "grid_source_chronology_invalid")
+
+    source_year = _positive_decimal(source.get("year"), "malformed_session_metadata")
+    source_meeting = source_scope["meeting_id"]
+    source_country = _required_text(
+        source.get("country_name"), "malformed_session_metadata"
+    )
+    source_location = _required_text(
+        source.get("location"), "malformed_session_metadata"
+    )
+    source_circuit = _required_text(
+        source.get("circuit_short_name"), "malformed_session_metadata"
+    )
+
+    race_candidates = []
+    for row in sessions:
+        if type(row) is not dict:
+            raise ProvenanceShadowHold("malformed_session_metadata")
+        if row.get("session_name") != "Race" or row.get("session_type") != "Race":
+            continue
+        race_key = _positive_decimal(
+            row.get("session_key"), "malformed_target_race_metadata"
+        )
+        meeting_key = _positive_decimal(
+            row.get("meeting_key"), "malformed_target_race_metadata"
+        )
+        year = _positive_decimal(row.get("year"), "malformed_target_race_metadata")
+        if meeting_key != source_meeting:
+            continue
+        _shadow_require(year == source_year == str(season),
+                        "target_race_year_mismatch")
+        _shadow_require(race_key != selected_session_key,
+                        "target_race_matches_source_session")
+        _session_not_cancelled(row, "target_race_cancelled")
+        country = _required_text(
+            row.get("country_name"), "malformed_target_race_metadata"
+        )
+        location = _required_text(
+            row.get("location"), "malformed_target_race_metadata"
+        )
+        circuit = _required_text(
+            row.get("circuit_short_name"), "malformed_target_race_metadata"
+        )
+        _shadow_require(
+            (country, location, circuit)
+            == (source_country, source_location, source_circuit),
+            "target_race_event_identity_mismatch",
+        )
+        race_start = _parse_utc(
+            row.get("date_start"), "malformed_target_race_metadata"
+        )
+        race_end = _parse_utc(row.get("date_end"), "malformed_target_race_metadata")
+        _shadow_require(race_end >= race_start, "target_race_chronology_invalid")
+        _shadow_require(
+            race_start > source_scope["session_end"],
+            "target_race_not_after_qualifying_source",
+        )
+        race_candidates.append({
+            "session_id": race_key,
+            "session_start_utc": _format_utc(race_start),
+            "session_end_utc": _format_utc(race_end),
+        })
+
+    _shadow_require(len(race_candidates) == 1, "target_race_not_unique")
+    return {
+        **source_scope,
+        "source_session_start_utc": _format_utc(source_start),
+        "source_session_kind": "Qualifying",
+        "target_race_session_id": race_candidates[0]["session_id"],
+        "target_race_session_kind": "Race",
+        "target_race_start_utc": race_candidates[0]["session_start_utc"],
+        "target_race_end_utc": race_candidates[0]["session_end_utc"],
+    }
 
 
 def _response_header(response: Any, name: str) -> Optional[str]:
@@ -348,11 +435,13 @@ def _persist_shadow_metadata(
         ]
     elif manifest.get("selected_endpoint") == "starting_grid":
         report = [
-            "# DR-002 pre-2B-7K4R15 OpenF1 Race starting-grid historical shadow",
+            "# DR-002 pre-2B-7K4R16 OpenF1 Qualifying grid / Race target shadow",
             "",
             f"Status: {manifest['status']}",
             f"Reason: {manifest.get('reason')}",
             "Selected endpoint: starting_grid",
+            f"Grid source: Qualifying session {manifest.get('grid_source_session_id')}",
+            f"Race target: Race session {manifest.get('grid_target_race_session_id')}",
             f"K4R1 status: {manifest.get('k4r1_status')}",
             f"K4R14 status: {manifest.get('k4r14_status')}",
             f"Grid rows: {manifest.get('starting_grid_row_count')}",
@@ -361,9 +450,11 @@ def _persist_shadow_metadata(
             f"Derived CSV SHA-256: {manifest.get('starting_grid_derived_csv_sha256')}",
             f"Derived runtime identity: {manifest.get('starting_grid_derived_runtime_identity')}",
             "",
-            "The raw sessions discovery, raw starting_grid response, and parentless",
-            "source-capture receipt are retained provenance evidence. The K4R14 CSV",
-            "is derived runtime metadata only and was not persisted.",
+            "The raw sessions discovery links a provider-reported Qualifying source",
+            "to a distinct later Race target in the same event. The parentless K4R1",
+            "receipt and derived CSV remain scoped to the Qualifying source session.",
+            "The K4R14 CSV is runtime metadata only and was not persisted or joined",
+            "to the Race target.",
             "OpenF1 is unofficial and this does not authenticate an official FIA final",
             "grid, prove historical pre-race availability, or generate a forecast.",
             "",
@@ -473,12 +564,19 @@ def run_provenance_shadow(
         manifest.update(
             selected_endpoint="starting_grid",
             session_metadata_source_type="OPENF1_PROVIDER_DISCOVERY_CLAIM",
-            race_session_name="Race",
-            race_session_type="Race",
-            race_session_name_asserted=True,
-            race_session_type_asserted=True,
-            session_kind_asserted=True,
-            session_kind_assertion_authenticated=False,
+            grid_source_session_id=selected_key,
+            grid_source_session_kind="Qualifying",
+            grid_source_start_utc=None,
+            grid_source_end_utc=None,
+            grid_target_race_session_id=None,
+            grid_target_race_session_kind="Race",
+            grid_target_race_start_utc=None,
+            grid_target_race_end_utc=None,
+            source_to_race_link_evidence_type="OPENF1_PROVIDER_DISCOVERY_CLAIM",
+            source_session_classification_authenticated=False,
+            target_race_session_classification_authenticated=False,
+            producer_input_csv_is_target_race_scoped=False,
+            cross_session_join_authorized=False,
             discovery_source_capture_receipt_created=False,
             raw_response_filename="starting_grid.response.json",
             session_discovery_filename="sessions.response.json",
@@ -582,7 +680,19 @@ def run_provenance_shadow(
             reason="malformed_session_discovery_response",
         )
         if selected_endpoint == "starting_grid":
-            scope = _selected_race_session(sessions, selected_key, int(season))
+            scope = _selected_qualifying_source_and_race_target(
+                sessions, selected_key, int(season)
+            )
+            manifest.update(
+                grid_source_session_id=scope["session_id"],
+                grid_source_session_kind=scope["source_session_kind"],
+                grid_source_start_utc=scope["source_session_start_utc"],
+                grid_source_end_utc=scope["session_end_utc"],
+                grid_target_race_session_id=scope["target_race_session_id"],
+                grid_target_race_session_kind=scope["target_race_session_kind"],
+                grid_target_race_start_utc=scope["target_race_start_utc"],
+                grid_target_race_end_utc=scope["target_race_end_utc"],
+            )
         else:
             scope = _selected_session(
                 sessions,
@@ -795,7 +905,8 @@ def run_provenance_shadow(
                 event_id=scope["event_id"],
                 meeting_id=scope["meeting_id"],
                 session_id=scope["session_id"],
-                session_kind="Race",
+                source_session_kind="Qualifying",
+                target_race_session_id=scope["target_race_session_id"],
             )
             _shadow_require(type(adapter_result) is dict, "k4r14_result_malformed")
             manifest["k4r14_status"] = adapter_result.get("status")
@@ -807,14 +918,37 @@ def run_provenance_shadow(
             )
             _shadow_require(adapter_result.get("scope") == receipt["scope"],
                             "k4r14_scope_mismatch")
-            _shadow_require(adapter_result.get("session_kind") == "Race",
+            _shadow_require(adapter_result.get("session_kind") == "Qualifying",
                             "k4r14_session_kind_mismatch")
+            _shadow_require(
+                adapter_result.get("source_qualifying_session_id")
+                == scope["session_id"],
+                "k4r14_source_session_id_mismatch",
+            )
+            _shadow_require(
+                adapter_result.get("target_race_session_id")
+                == scope["target_race_session_id"],
+                "k4r14_target_race_session_id_mismatch",
+            )
+            _shadow_require(
+                adapter_result.get("source_session_kind") == "Qualifying"
+                and adapter_result.get("target_session_kind") == "Race",
+                "k4r14_source_target_kind_mismatch",
+            )
             _shadow_require(adapter_result.get("session_kind_asserted") is True,
                             "k4r14_session_kind_not_asserted")
             _shadow_require(
                 adapter_result.get("session_kind_assertion_authenticated") is False,
                 "k4r14_session_kind_authentication_forbidden",
             )
+            for flag in (
+                "source_session_classification_authenticated",
+                "target_race_session_classification_authenticated",
+                "producer_input_csv_is_target_race_scoped",
+                "cross_session_join_authorized",
+            ):
+                _shadow_require(adapter_result.get(flag) is False,
+                                "k4r14_forbidden_claim:" + flag)
             _shadow_require(
                 adapter_result.get("provider_category")
                 == "UNOFFICIAL_OPENF1_DOCUMENTED_REST",

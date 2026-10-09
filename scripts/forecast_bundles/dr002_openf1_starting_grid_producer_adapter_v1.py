@@ -17,10 +17,11 @@ import dr002_openf1_historical_rest_capture_v1 as capture_contract
 import verify_forecast_integrity_receipts_v1 as receipt_contract
 
 
-SCHEMA_VERSION = "dr002-openf1-starting-grid-producer-adapter-v1"
+SCHEMA_VERSION = "dr002-openf1-starting-grid-producer-adapter-v2"
 VALIDATED = "OPENF1_STARTING_GRID_POST_EVENT_MECHANICS_VALIDATED_UNOFFICIAL"
 HOLD = "HOLD"
-SESSION_KIND = "Race"
+SOURCE_SESSION_KIND = "Qualifying"
+TARGET_SESSION_KIND = "Race"
 MAX_GRID_ROWS = 26
 DOCUMENTED_FIELDS = frozenset({
     "position",
@@ -211,6 +212,10 @@ def _hold(exc):
         "status": HOLD,
         "reason_codes": [_reason(exc)],
         "session_kind_asserted": False,
+        "source_session_classification_authenticated": False,
+        "target_race_session_classification_authenticated": False,
+        "producer_input_csv_is_target_race_scoped": False,
+        "cross_session_join_authorized": False,
         **{field: False for field in CLAIM_CEILINGS},
     }
 
@@ -222,14 +227,15 @@ def adapt_openf1_starting_grid_to_producer_input(
     event_id,
     meeting_id,
     session_id,
-    session_kind=SESSION_KIND,
+    source_session_kind,
+    target_race_session_id,
 ):
     """Validate exact raw evidence and return deterministic ``starting_grid.csv``.
 
-    ``session_kind='Race'`` is only an explicit caller assertion.  It is not an
-    authenticated session classification and cannot bridge a Practice, Sprint,
-    or Qualifying capture into race-grid scope.  Any failure returns HOLD with
-    no frozen manifest, source identity, digest, or derived CSV bytes.
+    The receipt and CSV remain scoped to the Qualifying source session.  The
+    target Race ID is an unauthenticated caller assertion only and does not
+    authorize a cross-session producer join.  Any failure returns HOLD with no
+    frozen manifest, source identity, digest, or derived CSV bytes.
     """
     try:
         scope = {
@@ -241,8 +247,16 @@ def adapt_openf1_starting_grid_to_producer_input(
                 session_id, "malformed_session_id"
             ),
         }
-        _require(type(session_kind) is str and session_kind == SESSION_KIND,
-                 "session_kind_not_race")
+        _require(
+            type(source_session_kind) is str
+            and source_session_kind == SOURCE_SESSION_KIND,
+            "source_session_kind_not_qualifying",
+        )
+        target_race_id = _canonical_positive_decimal_text(
+            target_race_session_id, "malformed_target_race_session_id"
+        )
+        _require(target_race_id != scope["session_id"],
+                 "target_race_session_matches_source_session")
 
         _require(type(source_capture_receipt_bytes) is bytes
                  and bool(source_capture_receipt_bytes),
@@ -333,9 +347,17 @@ def adapt_openf1_starting_grid_to_producer_input(
             "status": VALIDATED,
             "reason_codes": [],
             "scope": scope,
-            "session_kind": SESSION_KIND,
+            "session_kind": SOURCE_SESSION_KIND,
             "session_kind_asserted": True,
             "session_kind_assertion_authenticated": False,
+            "source_qualifying_session_id": scope["session_id"],
+            "target_race_session_id": target_race_id,
+            "source_session_kind": SOURCE_SESSION_KIND,
+            "target_session_kind": TARGET_SESSION_KIND,
+            "source_session_classification_authenticated": False,
+            "target_race_session_classification_authenticated": False,
+            "producer_input_csv_is_target_race_scoped": False,
+            "cross_session_join_authorized": False,
             "provider_category": "UNOFFICIAL_OPENF1_DOCUMENTED_REST",
             "commercial_or_redistribution_permission_claimed": False,
             "source_receipt_id": receipt["receipt_id"],
@@ -357,7 +379,8 @@ def adapt_openf1_starting_grid_to_producer_input(
                 "starting_grid.csv was deterministically derived from the "
                 "validated exact raw OpenF1 starting_grid content bound by "
                 "source_receipt_id; the CSV is a distinct runtime "
-                "representation, not source evidence or an official FIA grid"
+                "representation keyed to the Qualifying source session, not "
+                "source evidence, a target-Race join, or an official FIA grid"
             ),
             **{field: False for field in CLAIM_CEILINGS},
         }
