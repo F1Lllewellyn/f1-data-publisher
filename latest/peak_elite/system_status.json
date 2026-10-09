@@ -17,9 +17,9 @@
       "status": "pass"
     },
     "latest_data_readiness": {
-      "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-      "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-      "session_name": "Race",
+      "event_id": "2026_1296_singapore_marina_bay_singapore",
+      "race_name": "Singapore - Marina Bay - Singapore",
+      "session_name": "Sprint Qualifying",
       "source_status": "needs_manual_review",
       "status": "pass"
     },
@@ -29,7 +29,7 @@
       "status": "pass"
     }
   },
-  "created_utc": "2026-10-09T06:40:08.550287Z",
+  "created_utc": "2026-10-09T13:48:40.798364Z",
   "engine_authority": "health/readiness/automation only; no stable prediction promotion",
   "failed_steps": [],
   "promotion_allowed": false,
@@ -60,6 +60,7 @@
         "scripts/openf1/openf1_high_frequency_extract_checkpoint.py",
         "scripts/openf1/openf1_high_frequency_report_only.py",
         "scripts/validation/run_black_box_temporal_validation_v1.py",
+        "scripts/forecast_bundles/dr002_openf1_starting_grid_producer_adapter_v1.py",
         "scripts/forecast_bundles/dr002_outcome_boundary_shadow_pilot_v1.py",
         "scripts/forecast_bundles/dr002_github_attestation_binding_v1.py",
         "scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py",
@@ -74,6 +75,7 @@
         "scripts/forecast_bundles/dr002_revision_shadow_pilot_v1.py",
         "scripts/forecast_bundles/dr002_openf1_weather_drivers_frozen_producer_composition_v1.py",
         "scripts/forecast_bundles/dr002_openf1_stream_capture_shadow_v1.py",
+        "scripts/forecast_bundles/dr002_fia_grid_document_candidate_v1.py",
         "scripts/forecast_bundles/dr002_verified_source_consumer_v1.py",
         "scripts/forecast_bundles/dr002_contained_producer_shadow_v1.py",
         "scripts/forecast_bundles/dr002_openf1_weather_producer_adapter_v1.py",
@@ -86,6 +88,7 @@
         "scripts/forecast_bundles/dr002_lock_boundary_revision_v1.py",
         "scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py",
         "scripts/forecast_bundles/dr002_openf1_drivers_producer_adapter_v1.py",
+        "scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py",
         "scripts/admin/create_automation_baseline_snapshot.py",
         "scripts/ops/f1_workflow_commit_block_repair_v1.py",
         "scripts/ops/f1_openf1_live_restriction_guard_v27.py",
@@ -152,7 +155,7 @@
       ],
       "label": "workflow_static_validator",
       "ok": true,
-      "output_tail": "ile\": \".github/workflows/f1-race-weekend-operating-rhythm.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 1\n    },\n    {\n      \"file\": \".github/workflows/f1-season-archive-publisher.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-loop-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 7\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-run-now-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 4\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-safe-test-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-loop-v1.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-run-now-button-v1.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-safe-test-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-control-room-bridge.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 4\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-run-now-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-safe-test-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-scheduled.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-workflow-meta-health-safe-test-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 1\n    },\n    {\n      \"file\": \".github/workflows/f1_1c_repository_dispatch_catchall.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/f1_ai_pr_log_advisory_reviewer.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/f1_autopilot_patch_receiver.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/openf1-full-historical-auto-ingest.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 6\n    },\n    {\n      \"file\": \".github/workflows/openf1-post-race-auto-reliability.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 6\n    },\n    {\n      \"file\": \".github/workflows/openf1-prerace-auto-ingest.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 6\n    }\n  ],\n  \"run_block_count\": 163,\n  \"stable_engine_modified\": false,\n  \"status\": \"pass_with_warnings\",\n  \"warn_count\": 18,\n  \"workflow_count\": 56\n}\n",
+      "output_tail": "ile\": \".github/workflows/f1-race-weekend-operating-rhythm.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 1\n    },\n    {\n      \"file\": \".github/workflows/f1-season-archive-publisher.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-loop-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 7\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-run-now-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 4\n    },\n    {\n      \"file\": \".github/workflows/f1-session-autorepair-integrated-safe-test-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-loop-v1.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-run-now-button-v1.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-session-data-processor-safe-test-button-v1.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-control-room-bridge.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 4\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-run-now-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-safe-test-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 2\n    },\n    {\n      \"file\": \".github/workflows/f1-workbook-kpi-refresh-scheduled.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 3\n    },\n    {\n      \"file\": \".github/workflows/f1-workflow-meta-health-safe-test-button.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 1\n    },\n    {\n      \"file\": \".github/workflows/f1_1c_repository_dispatch_catchall.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/f1_ai_pr_log_advisory_reviewer.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/f1_autopilot_patch_receiver.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 0\n    },\n    {\n      \"file\": \".github/workflows/openf1-full-historical-auto-ingest.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 6\n    },\n    {\n      \"file\": \".github/workflows/openf1-post-race-auto-reliability.yml\",\n      \"issue_count\": 1,\n      \"issues\": [\n        {\n          \"line\": 1,\n          \"message\": \"utf8_bom_present\",\n          \"severity\": \"warn\"\n        }\n      ],\n      \"run_block_count\": 6\n    },\n    {\n      \"file\": \".github/workflows/openf1-prerace-auto-ingest.yml\",\n      \"issue_count\": 0,\n      \"issues\": [],\n      \"run_block_count\": 6\n    }\n  ],\n  \"run_block_count\": 164,\n  \"stable_engine_modified\": false,\n  \"status\": \"pass_with_warnings\",\n  \"warn_count\": 18,\n  \"workflow_count\": 57\n}\n",
       "returncode": 0
     },
     {
@@ -162,7 +165,7 @@
       ],
       "label": "workflow_meta_health_v1",
       "ok": true,
-      "output_tail": "{\n  \"created_utc\": \"2026-10-09T06:40:07.965153+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 163,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
+      "output_tail": "{\n  \"created_utc\": \"2026-10-09T13:48:39.992650+00:00\",\n  \"status\": \"Pass\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"checks_count\": 164,\n  \"stable_engine_modified\": false,\n  \"canonical_workbook_overwrite\": false,\n  \"promotion_allowed\": false,\n  \"commit_allowed\": false\n}\n",
       "returncode": 0
     },
     {
@@ -176,7 +179,7 @@
       ],
       "label": "session_processor_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.17\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-10-09T06:40:08.005259Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20261009T064008Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
+      "output_tail": "{\n  \"canonical_workbook_modified\": false,\n  \"checks\": {\n    \"policy_exists\": true,\n    \"promotion_allowed\": false,\n    \"protected_canonical_workbook\": true,\n    \"protected_stable_engine\": true,\n    \"python_version\": \"3.11.17\",\n    \"writable_runtime\": true\n  },\n  \"created_utc\": \"2026-10-09T13:48:40.058409Z\",\n  \"mode\": \"safe_test\",\n  \"promotion_allowed\": false,\n  \"run_id\": \"20261009T134840Z\",\n  \"schema_version\": \"session_processor_result_v1\",\n  \"stable_engine_modified\": false,\n  \"status\": \"safe_test_pass\"\n}\n",
       "returncode": 0
     },
     {
@@ -189,7 +192,7 @@
       ],
       "label": "workbook_kpi_refresh_safe_test",
       "ok": true,
-      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20261009T064008Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
+      "output_tail": "{\n  \"status\": \"safe_test_pass\",\n  \"run_id\": \"20261009T134840Z\",\n  \"repo_root\": \"/home/runner/work/f1-data-publisher/f1-data-publisher\",\n  \"discovered_session_processor_root\": \"latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379\",\n  \"session_processor_root_exists\": true,\n  \"required_session_sources_present\": true,\n  \"missing_session_sources\": [],\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false\n}\n",
       "returncode": 0
     },
     {

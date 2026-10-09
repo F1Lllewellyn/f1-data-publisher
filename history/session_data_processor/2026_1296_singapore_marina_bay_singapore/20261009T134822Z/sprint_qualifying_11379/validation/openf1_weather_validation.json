@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 19656,
+    "ok": true,
+    "sha256": "8d3defba49c6fe2285609b5bba9839c1ccd48d4036b72a57ce7cb1ab13e5040a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/raw/openf1_weather.json",
+  "json_sha256": "23884176752683a3119f9339770fc13bbc32da3c4784d4120a38412232bde0d1",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 91,
+  "status": "clean",
+  "timestamp_rows": 91
+}
