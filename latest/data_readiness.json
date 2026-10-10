@@ -51,8 +51,8 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "rows": 103,
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-10T19:00:53.302629Z"
+  "updated_utc": "2026-10-10T20:02:39.635941Z"
 }
