@@ -1,14 +1,14 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-10-10T09:45:13.887830Z`
+Created UTC: `2026-10-10T15:52:15.676904Z`
 Operation: `full_run_chain`
 Status: **pass**
 
 ## Latest source state
 - Race/event: `Singapore - Marina Bay - Singapore`
-- Session: `Sprint Qualifying`
+- Session: `Qualifying`
 - Source status: `clean`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps

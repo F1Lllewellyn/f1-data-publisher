@@ -1,14 +1,14 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-10-10T09:45:06.928268Z`
+Created UTC: `2026-10-10T15:52:08.606159Z`
 Status: **pass**
 
 ## Confirmed Data
 - Latest event: `Singapore - Marina Bay - Singapore`
-- Latest session: `Sprint Qualifying`
+- Latest session: `Qualifying`
 - Source status: `clean`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 
 ## System checks
 - `core_files`: **pass**

@@ -1,19 +1,19 @@
 {
   "event_id": "2026_1296_singapore_marina_bay_singapore",
-  "forecast_state_changed": false,
-  "material_readiness_improved": false,
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Singapore - Marina Bay - Singapore",
   "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-10-09T13:14:00+00:00",
-    "date_start": "2026-10-09T12:30:00+00:00",
+    "date_end": "2026-10-10T14:30:00+00:00",
+    "date_start": "2026-10-10T13:30:00+00:00",
     "gate": "post_qualifying",
     "meeting_key": 1296,
-    "session_key": 11379,
-    "session_name": "Sprint Qualifying",
+    "session_key": 11384,
+    "session_name": "Qualifying",
     "session_type": "Qualifying"
   },
   "source_needs_manual_review": false,
@@ -27,19 +27,19 @@
       "status": "needs_manual_review"
     },
     "openf1_laps": {
-      "rows": 287,
+      "rows": 363,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 74,
+      "rows": 103,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 998,
+      "rows": 1032,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 75,
+      "rows": 64,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -51,17 +51,17 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "rows": 22,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 74,
+      "rows": 103,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 98,
+      "rows": 88,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-10T08:14:31.646731Z"
+  "updated_utc": "2026-10-10T15:52:06.149722Z"
 }
