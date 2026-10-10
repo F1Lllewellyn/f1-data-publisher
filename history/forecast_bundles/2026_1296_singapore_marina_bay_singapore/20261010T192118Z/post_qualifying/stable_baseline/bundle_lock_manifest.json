@@ -1,0 +1,15 @@
+{
+  "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_qualifying__stable_baseline__20261010T192118Z",
+  "bundle_status": "locked",
+  "event_id": "2026_1296_singapore_marina_bay_singapore",
+  "season": "2026",
+  "round": "",
+  "race_name": "Singapore - Marina Bay - Singapore",
+  "gate": "post_qualifying",
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "StableBaseline_LanePolicy_v1",
+  "forecast_lock_utc": "2026-10-10T19:21:18Z",
+  "blind_validation_eligible": true,
+  "source_forecast_found": true,
+  "promotion_gate_status": "blocked"
+}

@@ -1,0 +1,8 @@
+{
+  "engine_lane": "stable_baseline",
+  "engine_lane_config": "StableBaseline_LanePolicy_v1",
+  "stable_engine_touched": false,
+  "canonical_workbook_touched": false,
+  "stable_engine_execution_proven": false,
+  "historical_stable_engine_execution_claimed": false
+}
