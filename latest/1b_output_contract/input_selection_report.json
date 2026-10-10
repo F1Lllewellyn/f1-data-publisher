@@ -2,7 +2,7 @@
   "dashboard_candidates": [
     {
       "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-10-09T19:31:06Z",
+      "run_id": "2026-10-09T23:28:42Z",
       "score": 200,
       "source_backed": true,
       "source_status": "clean"
@@ -12,7 +12,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-09T19:31:06Z",
+        "run_id": "2026-10-09T23:28:42Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -234,7 +234,7 @@
       },
       {
         "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/source_readiness_manifest.json",
-        "run_id": "20261009T193056Z",
+        "run_id": "20261009T232832Z",
         "score": 130,
         "status": "clean"
       },
@@ -292,7 +292,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-09T19:31:06Z",
+        "run_id": "2026-10-09T23:28:42Z",
         "score": 200,
         "source_backed": true,
         "source_status": "clean"
@@ -304,13 +304,13 @@
     "workbook_candidates": [
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261009T193106Z",
+        "run_id": "20261009T232842Z",
         "score": 100,
         "status": "clean"
       },
       {
         "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261009T193106Z",
+        "run_id": "20261009T232842Z",
         "score": 100,
         "status": "clean"
       }
