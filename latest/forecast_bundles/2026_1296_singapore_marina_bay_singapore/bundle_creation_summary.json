@@ -1,34 +1,34 @@
 {
-  "created_utc": "2026-10-11T07:37:33Z",
+  "created_utc": "2026-10-11T19:11:30Z",
   "event_id": "2026_1296_singapore_marina_bay_singapore",
   "race_name": "Singapore - Marina Bay - Singapore",
-  "gate": "post_qualifying",
+  "gate": "post_event",
   "scheduled_run": false,
   "detected_sources": [],
   "skipped_missing_sources": [],
   "bundles": [
     {
-      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_qualifying__stable_baseline__20261011T073733Z",
-      "gate": "post_qualifying",
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_event__stable_baseline__20261011T191130Z",
+      "gate": "post_event",
       "engine_lane": "stable_baseline",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T073733Z/post_qualifying/stable_baseline",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T191130Z/post_event/stable_baseline",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_qualifying__control_room_overlay__20261011T073733Z",
-      "gate": "post_qualifying",
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_event__control_room_overlay__20261011T191130Z",
+      "gate": "post_event",
       "engine_lane": "control_room_overlay",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T073733Z/post_qualifying/control_room_overlay",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T191130Z/post_event/control_room_overlay",
       "latest_dir": ""
     },
     {
-      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_qualifying__experimental_challenger__20261011T073733Z",
-      "gate": "post_qualifying",
+      "bundle_id": "2026_1296_singapore_marina_bay_singapore__post_event__experimental_challenger__20261011T191130Z",
+      "gate": "post_event",
       "engine_lane": "experimental_challenger",
       "source_found": true,
-      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T073733Z/post_qualifying/experimental_challenger",
+      "history_dir": "/home/runner/work/f1-data-publisher/f1-data-publisher/history/forecast_bundles/2026_1296_singapore_marina_bay_singapore/20261011T191130Z/post_event/experimental_challenger",
       "latest_dir": ""
     }
   ]
