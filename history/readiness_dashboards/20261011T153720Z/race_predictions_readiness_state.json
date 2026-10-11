@@ -1,0 +1,17 @@
+{
+  "ready_for_use": true,
+  "latest_session_state": "needs_manual_review",
+  "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
+  "generated_at_utc": "2026-10-11T15:37:20Z",
+  "source_status": "needs_manual_review",
+  "event_name": "Singapore - Marina Bay - Singapore",
+  "session_name": {
+    "date_end": "2026-10-11T14:00:00+00:00",
+    "date_start": "2026-10-11T12:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1296,
+    "session_key": 11388,
+    "session_name": "Race",
+    "session_type": "Race"
+  }
+}

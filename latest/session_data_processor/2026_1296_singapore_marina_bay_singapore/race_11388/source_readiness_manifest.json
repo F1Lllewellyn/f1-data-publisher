@@ -1,0 +1,655 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-10-11T15:37:20.246532Z",
+  "event_id": "2026_1296_singapore_marina_bay_singapore",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-10-11T15:37:20.247362Z",
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-10-11T14:00:00+00:00",
+      "date_start": "2026-10-11T12:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1296,
+      "session_key": 11388,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 408.18,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "8b4e21e0c6a8b7723ebd7b0e6db1c3803c84f39c2f723ee4d7a8dccc3f70e121",
+      "size_bytes": 701,
+      "timestamp_utc": "2026-10-11T08:49:09.675000Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 408.18,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "51a6f9b70d6cd13ee2d25a38ae54d3a7fb451dbaf190d4606006773bba2a1648",
+      "size_bytes": 1569,
+      "timestamp_utc": "2026-10-11T08:49:09.674698Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 408.18,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "1874efafae44f8e3beb395b77e3597c1d9ad22fc8e1b5252ab48513b625c3849",
+      "size_bytes": 572,
+      "timestamp_utc": "2026-10-11T08:49:09.674444Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Singapore - Marina Bay - Singapore",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [
+          "fia_final_grid_unverified",
+          "grid_revision_time_unestablished_after_start"
+        ],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 22,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 28131
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1240
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 25
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 396
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 155
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [
+          "fia_final_grid_unverified",
+          "grid_revision_time_unestablished_after_start"
+        ],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 47
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 160
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261011T153705Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-10-11T14:00:00+00:00",
+    "date_start": "2026-10-11T12:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1296,
+    "session_key": 11388,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "1b8985237ed4c04f1afccc454e94228c3ed578560041c4a24ca0a379525b1532",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_drivers.json",
+      "json_sha256": "064511e5c6cf52ea4c6d3631572b2c749d177289aba5787205fab3a0b3603d5e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_intervals.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 4007180,
+        "ok": true,
+        "sha256": "32a22c8fccae0629326e018e9fe5f6d3432c6f680deb932f487d08b66dacdd64",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_intervals.json",
+      "json_sha256": "3436d72f231a67bc98dc89c38f6bf57bfd46a21e477ee61e8c0abeae5755a0db",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 28131,
+      "status": "clean",
+      "timestamp_rows": 28131
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 596077,
+        "ok": true,
+        "sha256": "d811348c4d1628ce01bbe1d7552a3f0b27657906e86bc0902313df7b312ffd8a",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_laps.json",
+      "json_sha256": "1a704075dce3e79db3d84b58a9b5eed5e7d24dd4fb96cfcc3fe6bd3cc1ba91db",
+      "max_lap_number": 62.0,
+      "missing_required_columns": [],
+      "rows": 1240,
+      "status": "clean",
+      "timestamp_rows": 1240
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_pit.csv",
+      "driver_count": 20,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 4498,
+        "ok": true,
+        "sha256": "784bab14dcbfa0850238bc84b8ad04c98885f3a121a9afe03468faad192bbb94",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_pit.json",
+      "json_sha256": "4683f401460626b19a70bd4dd1ca924a821db4cf1c76dd38f6cb095b41ebe2e1",
+      "max_lap_number": 41.0,
+      "missing_required_columns": [],
+      "rows": 25,
+      "status": "clean",
+      "timestamp_rows": 25
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 45751,
+        "ok": true,
+        "sha256": "70f59804fcf54fb072483eb5b9f7e40ab22c20c0d4aaa6c2abec33e01b1f9d6e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_position.json",
+      "json_sha256": "13a0863e27186a98f330466383037995c289b04a42e47e744aafa554096ff6a5",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 396,
+      "status": "clean",
+      "timestamp_rows": 396
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_race_control.csv",
+      "driver_count": 11,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 40627,
+        "ok": true,
+        "sha256": "98f3d422d248fe468c3c2eb78d5ac10eb1df9c0d77af304af2a1f4230c77781f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_race_control.json",
+      "json_sha256": "eae27381fbe473a4162ee3e4b5e4c21b23253a2fdd0cbee6bc0de878dcef2e32",
+      "max_lap_number": 62.0,
+      "missing_required_columns": [],
+      "rows": 155,
+      "status": "clean",
+      "timestamp_rows": 155
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4041,
+        "ok": true,
+        "sha256": "334efde9edab1df413a47d9226f76d02bd9f76edbed741b606eb04141b1f10b9",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_session_result.json",
+      "json_sha256": "4c4cc4f054609a6ba953d3c8a35b514164274ea37a86896bc5f4d01e5fdf700c",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 392,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_sessions.json",
+      "json_sha256": "cc69c8be19052f069c84e4afa46929aeea19431b65d5054dc969552a71f34a3f",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [
+        "fia_final_grid_unverified",
+        "grid_revision_time_unestablished_after_start"
+      ],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2097,
+        "ok": true,
+        "sha256": "64cf458be5824149a43600bb2aa705351c8d512cf5a9f373b91c1f8f15ba7174",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_starting_grid.json",
+      "json_sha256": "b68ae6f3ef94242d5d0c402c156f1023ad7b3ba9433df5959cabbb691c8716bf",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "provenance": {
+        "changed_since_prior_target_snapshot": null,
+        "changed_since_qualifying_snapshot": true,
+        "direct_target_fetch": {
+          "bytes": 0,
+          "error": "<HTTPError 404: 'Not Found'>",
+          "ok": false
+        },
+        "forecast_as_of_eligible": false,
+        "meeting_key": 1296,
+        "observed_at_utc": "2026-10-11T15:37:20.242612Z",
+        "observed_before_target_start": false,
+        "official_final_grid_verified": false,
+        "openf1_row_status": "clean",
+        "prior_qualifying_snapshot_sha256": "39fdb3427423b1dc2f897d875f4f96d78c4f2bafb19d915d49a45fcbcdf7cf0e",
+        "prior_target_snapshot_sha256": null,
+        "resolution": "unique_same_meeting_qualifying_before_target",
+        "source_session_key": 11384,
+        "source_session_name": "Qualifying",
+        "target_session_key": 11388
+      },
+      "rows": 22,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 6824,
+        "ok": true,
+        "sha256": "1eeb6d2d3f31419aed17bda4a57d5284a60d28d2321760f2a52eb934511af766",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_stints.json",
+      "json_sha256": "0ed0f88764392b4ad5df10f14516b07370a36758da95b6e1697e7b0d86289424",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 47,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 34556,
+        "ok": true,
+        "sha256": "7ff95fde3028e96ad2c47fa34d03959c4dc37aab497999d61363a3e74009ab77",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_weather.json",
+      "json_sha256": "e57d69ece64481de44e1eaf93f93a95ff12d7cb6492ac8ba7491dc472918fd1b",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 160,
+      "status": "clean",
+      "timestamp_rows": 160
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.json"
+  }
+}
