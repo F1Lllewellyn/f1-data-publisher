@@ -1,39 +1,43 @@
 {
-  "blocked_consumers": [],
+  "blocked_consumers": [
+    "race_predictions",
+    "fantasy_predictions",
+    "race_reports"
+  ],
   "canonical_workbook_overwrite": false,
   "consumer_decisions": {
     "fantasy_predictions": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "fantasy_predictions",
-      "consumer_readiness": "ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     },
     "race_predictions": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "race_predictions",
-      "consumer_readiness": "ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     },
     "race_reports": {
-      "action": "notify_and_update_context",
+      "action": "blocked",
       "consumer": "race_reports",
-      "consumer_readiness": "full_report_ready",
+      "consumer_readiness": "blocked",
       "forecast_gate_activated": false,
       "material_change_detected": true,
-      "notification_recommended": true,
+      "notification_recommended": false,
       "promotion_allowed": false,
-      "ready": true,
-      "reason": "material readiness or forecast-relevant state changed"
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
     }
   },
   "context_paths": {
@@ -45,21 +49,21 @@
   "event": {
     "event_id": "2026_1296_singapore_marina_bay_singapore",
     "race_name": "Singapore - Marina Bay - Singapore",
-    "session_key": 11384,
-    "session_name": "Qualifying"
+    "session_key": 11388,
+    "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-11T09:05:56Z",
+  "generated_at_utc": "2026-10-11T15:55:32Z",
   "material_change_detected": true,
-  "notification_recommended": true,
+  "notification_recommended": false,
   "promotion_allowed": false,
-  "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261011T090556Z",
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261011T155532Z",
   "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
-  "should_notify": true,
-  "signature": "8a3d181e4727c20b1e25492b2130c69404aef2a987df4eb69a477a2dae766c53",
-  "source_status": "clean",
+  "should_notify": false,
+  "signature": "0f53e6d21b78aaaa1c7d4a146285b9181a7d569f174d1bd96e43aa64dbf4fe8e",
+  "source_status": "needs_manual_review",
   "stable_engine_modified": false,
-  "status": "pass",
-  "workbook_source_status": "clean"
+  "status": "blocked",
+  "workbook_source_status": "needs_manual_review"
 }

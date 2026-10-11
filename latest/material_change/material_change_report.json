@@ -1,17 +1,17 @@
 {
   "change_reason": "signature_changed",
-  "current_signature": "d0f01c09499c8ac98ba8f81502ab3c3a0ba78ed6cdae366ed4c88a0a36c43e58",
+  "current_signature": "501c4e846f4d9684c60a073a5c1689a37ae41ef7066c82549d9b66fe33b5f168",
   "event": {
     "event_id": "2026_1296_singapore_marina_bay_singapore",
     "race_name": "Singapore - Marina Bay - Singapore",
-    "session_key": 11384,
-    "session_name": "Qualifying"
+    "session_key": 11388,
+    "session_name": "Race"
   },
-  "generated_at_utc": "2026-10-11T09:05:56Z",
+  "generated_at_utc": "2026-10-11T15:55:32Z",
   "material_change_detected": true,
-  "notification_recommended": true,
-  "previous_signature": "97a10e6b07e099f4a3301edc0d939d3878ce0b47d17aabb54514c41ed0f76054",
+  "notification_recommended": false,
+  "previous_signature": "d0f01c09499c8ac98ba8f81502ab3c3a0ba78ed6cdae366ed4c88a0a36c43e58",
   "promotion_allowed": false,
   "schema_version": "f1_1b_material_change_v20",
-  "status": "usable_with_optional_context_gaps"
+  "status": "blocked"
 }

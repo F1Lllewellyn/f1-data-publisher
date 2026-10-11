@@ -1,18 +1,18 @@
 # F1 1B Notification Routing Summary v25
 
 ## Decision
-- Notification recommended: True
+- Notification recommended: False
 - External notification sent: false
 - Mode: decision-only; no ChatGPT automation, email, text, or forecast gate was activated.
 
 ## Event
 - Event: Singapore - Marina Bay - Singapore
-- Session: Qualifying
+- Session: Race
 
 ## Consumer Actions
-- race_predictions: notify_and_update_context — material readiness or forecast-relevant state changed
-- fantasy_predictions: notify_and_update_context — material readiness or forecast-relevant state changed
-- race_reports: notify_and_update_context — material readiness or forecast-relevant state changed
+- race_predictions: blocked — consumer not ready or source/workbook state is not clean/usable
+- fantasy_predictions: blocked — consumer not ready or source/workbook state is not clean/usable
+- race_reports: blocked — consumer not ready or source/workbook state is not clean/usable
 
 ## Safety Locks
 - Forecast gate: off
