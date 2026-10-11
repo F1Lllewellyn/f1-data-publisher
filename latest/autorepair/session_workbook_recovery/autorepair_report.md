@@ -8,8 +8,8 @@ Pass
 
 - Sandbox branch/layer: `Engine_2026-06-11_SANDBOX_AutoRepairOrchestrator`
 - Repair domain: `session_workbook_recovery`
-- Run ID: `20261011T072132Z`
-- Created UTC: `2026-10-11T07:21:33.408604+00:00`
+- Run ID: `20261011T075835Z`
+- Created UTC: `2026-10-11T07:58:36.344063+00:00`
 
 ## What it did
 
@@ -21,7 +21,7 @@ Pass
 - Repair attempted: `False`
 - Repair succeeded: `False`
 - Final workbook status: `refresh_applied`
-- Final workbook source status: `clean`
+- Final workbook source status: `needs_manual_review`
 
 ## Warnings
 
