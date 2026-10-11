@@ -1,13 +1,13 @@
 {
   "artifact_profile": "openf1-lightweight-source-closure",
-  "generated_utc": "2026-10-11T01:36:10.540662Z",
+  "generated_utc": "2026-10-11T07:36:16.544648Z",
   "season": 2026,
   "completed_only": true,
   "target_session_count": 100,
   "lanes": [
     {
       "lane": "weather",
-      "rows": 7526,
+      "rows": 7169,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -15,7 +15,7 @@
     },
     {
       "lane": "race_control",
-      "rows": 4982,
+      "rows": 4287,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -23,7 +23,7 @@
     },
     {
       "lane": "intervals",
-      "rows": 232475,
+      "rows": 142812,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -31,7 +31,7 @@
     },
     {
       "lane": "position",
-      "rows": 34054,
+      "rows": 32668,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -39,7 +39,7 @@
     },
     {
       "lane": "stints",
-      "rows": 4783,
+      "rows": 4566,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -47,7 +47,7 @@
     },
     {
       "lane": "pit",
-      "rows": 566,
+      "rows": 638,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -55,7 +55,7 @@
     },
     {
       "lane": "starting_grid",
-      "rows": 198,
+      "rows": 264,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -63,7 +63,7 @@
     },
     {
       "lane": "drivers",
-      "rows": 1133,
+      "rows": 1216,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -71,7 +71,7 @@
     },
     {
       "lane": "team_radio",
-      "rows": 644,
+      "rows": 521,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "opportunistic",
@@ -87,7 +87,7 @@
   ],
   "timestamp_policy": "dt.datetime.now(dt.UTC)",
   "no_drs_2026_assumption": true,
-  "previous_manifest_generated_utc": "2026-10-10T22:46:17.578104Z",
+  "previous_manifest_generated_utc": "2026-10-11T01:36:10.540662Z",
   "latest_zip": "openf1_lightweight_source_closure.zip",
-  "history_path": "history/openf1_lightweight_source_closure/20261011_011224"
+  "history_path": "history/openf1_lightweight_source_closure/20261011_071640"
 }
