@@ -2,7 +2,7 @@
   "status": "no_action",
   "reason": "no_driver_session_summary_csv_with_required_schema",
   "searched_root": ".",
-  "candidate_count": 3804,
+  "candidate_count": 3837,
   "candidate_examples": [
     "latest/workbook_kpi_refresh_applier/refreshed_workbook_kpi_readiness.csv",
     "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_2_11728/workbook_kpi_readiness.csv",
@@ -28,5 +28,5 @@
   "stable_engine_modified": false,
   "canonical_workbook_overwrite": false,
   "promotion_allowed": false,
-  "created_utc": "2026-10-10T21:01:12.358045+00:00"
+  "created_utc": "2026-10-11T22:32:14.350980+00:00"
 }
