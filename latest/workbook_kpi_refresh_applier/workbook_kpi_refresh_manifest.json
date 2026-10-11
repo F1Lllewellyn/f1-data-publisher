@@ -1,6 +1,6 @@
 {
   "commit_allowed": true,
-  "created_utc": "2026-10-11T19:02:15.812663+00:00",
+  "created_utc": "2026-10-11T19:03:46.311564+00:00",
   "governance": {
     "canonical_workbook_overwrite": false,
     "delete_authority": false,
@@ -12,43 +12,43 @@
   "outputs": [
     {
       "bytes": 767,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "ac1f441bf1d53db6d5ef74594d01a954ed12b76176bc50c88d0afc20ab60a6fb"
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "3263dcfdf66fad5b1ecb7009c51904229d124c9febafd30c3c83d4e784ff8a65"
     },
     {
-      "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/refreshed_workbook_kpi_readiness.csv",
-      "sha256": "81e780bdc39cc594f464309dbaaea0be5f06f1fe8ebffd9abadaaf2ea5aef83a"
+      "bytes": 413,
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "f979f88db36c1d00f55ad7b5b5b7092ebf84b273b8fb3381bc2d5d90f403f35f"
     },
     {
-      "bytes": 10335,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/F1_Workbook_KPI_SANDBOX_Refresh_Singapore_-_Marina_Bay_-_Singapore_session_20261011T190215Z.xlsx",
-      "sha256": "1e026a6a8acf26810ae4399658d664563ee306820ec9ad25e591ba668adc870c"
+      "bytes": 10340,
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261011T190346Z.xlsx",
+      "sha256": "e2537731dac6d11481f50562606ae657289db7fa34eaf8efaa6e85eff5b9cf18"
     },
     {
       "bytes": 575,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/upstream_latest_manifest_snapshot.json",
       "sha256": "2c1e8054d8ddd533d9f8bc71579a1f95ecda59abdd9d33fda40ff633b094e8a4"
     },
     {
       "bytes": 1574,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/upstream_data_readiness_snapshot.json",
       "sha256": "35c9b99244847237b4028c1413c429e46dc8927541bac2dd0fa533f96ca03cac"
     },
     {
       "bytes": 713,
-      "path": "history/workbook_kpi_refresh_applier/20261011T190215Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T190346Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "82ae7088acc79cbf8c16d85002830a9525ffa42274121a33ce7c133b3cd46690"
     }
   ],
-  "run_id": "20261011T190215Z",
+  "run_id": "20261011T190346Z",
   "source_artifacts": [
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/sandbox_workbook_update_plan.json",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.json",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.csv",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/forecast_bundle_ledger_snapshot.json"
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/forecast_bundle_ledger_snapshot.json"
   ],
-  "source_processor_root": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388",
+  "source_processor_root": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731",
   "source_status": "needs_manual_review",
   "warnings": [
     "source_classification=needs_manual_review"
