@@ -1,9 +1,9 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-11T09:05:59Z
+Generated UTC: 2026-10-11T15:34:49Z
 Event: Bahrain - Kuala Lumpur - Kuala Lumpur
 Session: {'date_end': '2026-10-04T09:00:00+00:00', 'date_start': '2026-10-04T07:00:00+00:00', 'gate': 'race_result', 'meeting_key': 1308, 'session_key': 11731, 'session_name': 'Race', 'session_type': 'Race'}
-Source status: clean
+Source status: needs_manual_review
 Dashboard readiness: READY
 
 ## Governance
