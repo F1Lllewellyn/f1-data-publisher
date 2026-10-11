@@ -6,8 +6,8 @@ Pass with warnings
 
 ## Run
 
-- Run ID: `20261011T011549Z`
-- Created UTC: `2026-10-11T01:15:49.882476+00:00`
+- Run ID: `20261011T015006Z`
+- Created UTC: `2026-10-11T01:50:06.688373+00:00`
 - Source status: `needs_manual_review`
 - Material change: `True`
 
@@ -17,12 +17,12 @@ Pass with warnings
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/sandbox_workbook_update_plan_applied.json` (3263dcfdf66f...)
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/refreshed_workbook_kpi_readiness.csv` (f979f88db36c...)
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261011T011549Z.xlsx` (010cf5c03da7...)
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/upstream_latest_manifest_snapshot.json` (7b8d4f137612...)
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/upstream_data_readiness_snapshot.json` (6cf866af3521...)
-- `history/workbook_kpi_refresh_applier/20261011T011549Z/upstream_combined_source_manifest_snapshot.json` (a6a6555298e9...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/sandbox_workbook_update_plan_applied.json` (3263dcfdf66f...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/refreshed_workbook_kpi_readiness.csv` (f979f88db36c...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261011T015006Z.xlsx` (2b887a576efa...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/upstream_latest_manifest_snapshot.json` (7b8d4f137612...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/upstream_data_readiness_snapshot.json` (6cf866af3521...)
+- `history/workbook_kpi_refresh_applier/20261011T015006Z/upstream_combined_source_manifest_snapshot.json` (a6a6555298e9...)
 
 ## Governance
 
