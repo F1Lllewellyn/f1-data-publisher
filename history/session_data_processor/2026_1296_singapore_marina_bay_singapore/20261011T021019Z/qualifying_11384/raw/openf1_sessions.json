@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 61,
+    "circuit_short_name": "Singapore",
+    "country_code": "SGP",
+    "country_key": 157,
+    "country_name": "Singapore",
+    "date_end": "2026-10-10T14:30:00+00:00",
+    "date_start": "2026-10-10T13:30:00+00:00",
+    "gmt_offset": "08:00:00",
+    "is_cancelled": false,
+    "location": "Marina Bay",
+    "meeting_key": 1296,
+    "session_key": 11384,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying",
+    "year": 2026
+  }
+]
