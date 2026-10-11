@@ -1,5 +1,5 @@
 {
-  "change_reason": "signature_changed",
+  "change_reason": "no_material_change",
   "current_signature": "501c4e846f4d9684c60a073a5c1689a37ae41ef7066c82549d9b66fe33b5f168",
   "event": {
     "event_id": "2026_1296_singapore_marina_bay_singapore",
@@ -7,10 +7,10 @@
     "session_key": 11388,
     "session_name": "Race"
   },
-  "generated_at_utc": "2026-10-11T15:55:32Z",
-  "material_change_detected": true,
+  "generated_at_utc": "2026-10-11T20:04:47Z",
+  "material_change_detected": false,
   "notification_recommended": false,
-  "previous_signature": "d0f01c09499c8ac98ba8f81502ab3c3a0ba78ed6cdae366ed4c88a0a36c43e58",
+  "previous_signature": "501c4e846f4d9684c60a073a5c1689a37ae41ef7066c82549d9b66fe33b5f168",
   "promotion_allowed": false,
   "schema_version": "f1_1b_material_change_v20",
   "status": "blocked"

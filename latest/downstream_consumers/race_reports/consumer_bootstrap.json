@@ -14,7 +14,7 @@
   "context_path": "latest/chat_context/race_reports_context.md",
   "disallowed_effect": "automatic PDF generation or report publication",
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-11T15:55:32Z",
+  "generated_at_utc": "2026-10-11T20:04:48Z",
   "input_manifest_path": "latest/downstream_consumers/race_reports/consumer_input.json",
   "promotion_allowed": false,
   "read_only": true,

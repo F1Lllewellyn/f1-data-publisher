@@ -8,11 +8,10 @@
     "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-11T15:55:32Z",
+  "generated_at_utc": "2026-10-11T20:04:48Z",
   "notification_recommended": false,
   "promotion_allowed": false,
   "reasons": [
-    "material_change_detected",
     "race_predictions_blocked",
     "fantasy_predictions_blocked",
     "race_reports_blocked"
