@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 6824,
+    "ok": true,
+    "sha256": "1eeb6d2d3f31419aed17bda4a57d5284a60d28d2321760f2a52eb934511af766",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_stints.json",
+  "json_sha256": "0ed0f88764392b4ad5df10f14516b07370a36758da95b6e1697e7b0d86289424",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 47,
+  "status": "clean",
+  "timestamp_rows": 0
+}
