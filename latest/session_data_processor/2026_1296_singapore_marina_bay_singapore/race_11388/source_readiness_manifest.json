@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-11T15:37:20.246532Z",
+  "created_utc": "2026-10-11T18:09:19.467761Z",
   "event_id": "2026_1296_singapore_marina_bay_singapore",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-11T15:37:20.247362Z",
+    "created_utc": "2026-10-11T18:09:19.469098Z",
     "event_id": "2026_1296_singapore_marina_bay_singapore",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -20,37 +20,37 @@
       "session_name": "Race",
       "session_type": "Race"
     },
-    "source_readiness_materially_improved": true,
+    "source_readiness_materially_improved": false,
     "stable_order_overwrite_allowed": false
   },
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 408.18,
+      "age_minutes": 151.99,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "8b4e21e0c6a8b7723ebd7b0e6db1c3803c84f39c2f723ee4d7a8dccc3f70e121",
-      "size_bytes": 701,
-      "timestamp_utc": "2026-10-11T08:49:09.675000Z"
+      "sha256": "0ec59d0d9e9d83ca98afc440b295c2e0c1f59bfd580c12824d75b31eac7e4a67",
+      "size_bytes": 712,
+      "timestamp_utc": "2026-10-11T15:37:20.249104Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 408.18,
+      "age_minutes": 151.99,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "51a6f9b70d6cd13ee2d25a38ae54d3a7fb451dbaf190d4606006773bba2a1648",
-      "size_bytes": 1569,
-      "timestamp_utc": "2026-10-11T08:49:09.674698Z"
+      "sha256": "a111960478a36f992da87edd89fd370600a4724e55b2fc8427d852f34bc8a5cd",
+      "size_bytes": 1572,
+      "timestamp_utc": "2026-10-11T15:37:20.248815Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 408.18,
+      "age_minutes": 151.99,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "1874efafae44f8e3beb395b77e3597c1d9ad22fc8e1b5252ab48513b625c3849",
-      "size_bytes": 572,
-      "timestamp_utc": "2026-10-11T08:49:09.674444Z"
+      "sha256": "c14c5340cd6dcfc363190b511d57eadabcf282bd5634972a9f52a40e94349556",
+      "size_bytes": 574,
+      "timestamp_utc": "2026-10-11T15:37:20.248445Z"
     }
   },
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "overall_status": "needs_manual_review",
   "promotion_allowed": false,
   "race_name": "Singapore - Marina Bay - Singapore",
@@ -248,12 +248,12 @@
   "readiness_delta": {
     "current_score": 0.2,
     "current_status": "needs_manual_review",
-    "delta": 0.2,
-    "previous_score": 0.0,
-    "previous_status": null
+    "delta": 0.0,
+    "previous_score": 0.2,
+    "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261011T153705Z",
+  "run_id": "20261011T180907Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-11T14:00:00+00:00",
@@ -552,7 +552,7 @@
       "max_lap_number": null,
       "missing_required_columns": [],
       "provenance": {
-        "changed_since_prior_target_snapshot": null,
+        "changed_since_prior_target_snapshot": false,
         "changed_since_qualifying_snapshot": true,
         "direct_target_fetch": {
           "bytes": 0,
@@ -561,12 +561,12 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1296,
-        "observed_at_utc": "2026-10-11T15:37:20.242612Z",
+        "observed_at_utc": "2026-10-11T18:09:19.462552Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",
         "prior_qualifying_snapshot_sha256": "39fdb3427423b1dc2f897d875f4f96d78c4f2bafb19d915d49a45fcbcdf7cf0e",
-        "prior_target_snapshot_sha256": null,
+        "prior_target_snapshot_sha256": "b68ae6f3ef94242d5d0c402c156f1023ad7b3ba9433df5959cabbb691c8716bf",
         "resolution": "unique_same_meeting_qualifying_before_target",
         "source_session_key": 11384,
         "source_session_name": "Qualifying",
