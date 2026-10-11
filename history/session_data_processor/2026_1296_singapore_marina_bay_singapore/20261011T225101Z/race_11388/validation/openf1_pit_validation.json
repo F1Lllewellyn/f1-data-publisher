@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_pit.csv",
+  "driver_count": 20,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 4498,
+    "ok": true,
+    "sha256": "784bab14dcbfa0850238bc84b8ad04c98885f3a121a9afe03468faad192bbb94",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_pit.json",
+  "json_sha256": "4683f401460626b19a70bd4dd1ca924a821db4cf1c76dd38f6cb095b41ebe2e1",
+  "max_lap_number": 41.0,
+  "missing_required_columns": [],
+  "rows": 25,
+  "status": "clean",
+  "timestamp_rows": 25
+}
