@@ -1,6 +1,6 @@
 {
   "commit_allowed": true,
-  "created_utc": "2026-10-11T08:49:09.845249+00:00",
+  "created_utc": "2026-10-11T14:13:36.414908+00:00",
   "governance": {
     "canonical_workbook_overwrite": false,
     "delete_authority": false,
@@ -11,44 +11,46 @@
   "material_change": true,
   "outputs": [
     {
-      "bytes": 753,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "87e2f8676cb6e90dea8cde7917f9003efa0c171ac76bc154190708992682f40c"
+      "bytes": 767,
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "3263dcfdf66fad5b1ecb7009c51904229d124c9febafd30c3c83d4e784ff8a65"
     },
     {
-      "bytes": 404,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/refreshed_workbook_kpi_readiness.csv",
-      "sha256": "eed9e546a54fb7f8de4fc07905ae788ce9657807d70dec599bb941a43186dccd"
+      "bytes": 413,
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "f979f88db36c1d00f55ad7b5b5b7092ebf84b273b8fb3381bc2d5d90f403f35f"
     },
     {
-      "bytes": 10307,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/F1_Workbook_KPI_SANDBOX_Refresh_Singapore_-_Marina_Bay_-_Singapore_session_20261011T084909Z.xlsx",
-      "sha256": "4c8f314da2bfb097ddef95819e0ad466635dd813bd78dd4309ab23e4f1c68ffb"
+      "bytes": 10342,
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261011T141336Z.xlsx",
+      "sha256": "6b04b3f94f96c678ec82f5020bdafa779b96045810da1ca3a5f7cf6215ca7ebe"
     },
     {
       "bytes": 573,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/upstream_latest_manifest_snapshot.json",
       "sha256": "378fcf5354921015305c76672d01685d3a75a07235ecb25e68cdd4449013b123"
     },
     {
       "bytes": 1570,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/upstream_data_readiness_snapshot.json",
       "sha256": "0f4652ddd4344ba4667663af7ef5749aad6b4dd04aa8d16db5f9f5c92c584af3"
     },
     {
       "bytes": 702,
-      "path": "history/workbook_kpi_refresh_applier/20261011T084909Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261011T141336Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "8e9eb01c89a37e5d1fe17c36d0c18df6358da2cb8932da18d8fa5e58a7ce6fd4"
     }
   ],
-  "run_id": "20261011T084909Z",
+  "run_id": "20261011T141336Z",
   "source_artifacts": [
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384/sandbox_workbook_update_plan.json",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384/workbook_kpi_readiness.json",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384/workbook_kpi_readiness.csv",
-    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384/forecast_bundle_ledger_snapshot.json"
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/forecast_bundle_ledger_snapshot.json"
   ],
-  "source_processor_root": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384",
-  "source_status": "clean",
-  "warnings": []
+  "source_processor_root": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ]
 }
