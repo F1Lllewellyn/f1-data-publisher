@@ -1,0 +1,28 @@
+{
+  "canonical_workbook_overwrite": false,
+  "decision_mode": "decision_only_no_external_send",
+  "event": {
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "session_key": 11388,
+    "session_name": "Race"
+  },
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-10-12T20:01:22Z",
+  "notification_recommended": false,
+  "promotion_allowed": false,
+  "reasons": [
+    "race_predictions_blocked",
+    "fantasy_predictions_blocked",
+    "race_reports_blocked"
+  ],
+  "routes": {
+    "fantasy_predictions_context": "latest/chat_context/fantasy_predictions_context.md",
+    "race_predictions_context": "latest/chat_context/race_predictions_context.md",
+    "race_reports_context": "latest/chat_context/race_reports_context.md",
+    "trigger_decision": "latest/consumer_trigger_governor/trigger_decision.json"
+  },
+  "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
+  "send_external_notification": false,
+  "stable_engine_modified": false
+}
