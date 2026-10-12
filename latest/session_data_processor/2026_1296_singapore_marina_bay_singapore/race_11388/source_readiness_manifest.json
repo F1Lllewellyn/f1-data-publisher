@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-12T02:40:22.058889Z",
+  "created_utc": "2026-10-12T09:46:19.904790Z",
   "event_id": "2026_1296_singapore_marina_bay_singapore",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-12T02:40:22.060277Z",
+    "created_utc": "2026-10-12T09:46:19.906321Z",
     "event_id": "2026_1296_singapore_marina_bay_singapore",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 45.49,
+      "age_minutes": 425.96,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "1f7ce777f50e17da907ebeb9964e8a03eab4888093f7b4ccad4cabd86f3b15c4",
+      "sha256": "d6a7dfe83e963299a97fdd8db54a594482df88f6bcb9b12c5cd42666b3382fef",
       "size_bytes": 712,
-      "timestamp_utc": "2026-10-12T01:54:52.487228Z"
+      "timestamp_utc": "2026-10-12T02:40:22.062391Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 45.49,
+      "age_minutes": 425.96,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "2cbfc70001fa50ba81f9ab672e468d88d3c1ff69c18d95aeb196f72abd0f2950",
+      "sha256": "be563caae199e34fc35518bd7bf5cb1a49e8526018cf02e7da17dba9eacc7318",
       "size_bytes": 1573,
-      "timestamp_utc": "2026-10-12T01:54:52.487017Z"
+      "timestamp_utc": "2026-10-12T02:40:22.062118Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 45.49,
+      "age_minutes": 425.96,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "f468a5f27414b5940b5991794ef74304f999cd42e6f62d25b7e75507f4fdb430",
+      "sha256": "7e3dec80589378cdb9ddefaef91e4c09737044bab6faac41150a998e46bc5e29",
       "size_bytes": 574,
-      "timestamp_utc": "2026-10-12T01:54:52.486875Z"
+      "timestamp_utc": "2026-10-12T02:40:22.061850Z"
     }
   },
   "material_readiness_improved": false,
@@ -253,7 +253,7 @@
     "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261012T024007Z",
+  "run_id": "20261012T094607Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-11T14:00:00+00:00",
@@ -561,7 +561,7 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1296,
-        "observed_at_utc": "2026-10-12T02:40:22.054092Z",
+        "observed_at_utc": "2026-10-12T09:46:19.899356Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",
