@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 45751,
+    "ok": true,
+    "sha256": "70f59804fcf54fb072483eb5b9f7e40ab22c20c0d4aaa6c2abec33e01b1f9d6e",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_position.json",
+  "json_sha256": "13a0863e27186a98f330466383037995c289b04a42e47e744aafa554096ff6a5",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 396,
+  "status": "clean",
+  "timestamp_rows": 396
+}
