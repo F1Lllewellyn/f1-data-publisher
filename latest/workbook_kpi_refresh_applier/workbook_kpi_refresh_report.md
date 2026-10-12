@@ -6,8 +6,8 @@ Pass with warnings
 
 ## Run
 
-- Run ID: `20261012T023109Z`
-- Created UTC: `2026-10-12T02:31:09.167034+00:00`
+- Run ID: `20261012T024022Z`
+- Created UTC: `2026-10-12T02:40:22.252657+00:00`
 - Source status: `needs_manual_review`
 - Material change: `True`
 
@@ -17,12 +17,12 @@ Pass with warnings
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/sandbox_workbook_update_plan_applied.json` (3263dcfdf66f...)
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/refreshed_workbook_kpi_readiness.csv` (f979f88db36c...)
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261012T023109Z.xlsx` (8903c294e68c...)
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/upstream_latest_manifest_snapshot.json` (84bdc27983ee...)
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/upstream_data_readiness_snapshot.json` (e20fbca08a2c...)
-- `history/workbook_kpi_refresh_applier/20261012T023109Z/upstream_combined_source_manifest_snapshot.json` (8b41fb9d5910...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/sandbox_workbook_update_plan_applied.json` (46aa74733334...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/refreshed_workbook_kpi_readiness.csv` (81e780bdc39c...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/F1_Workbook_KPI_SANDBOX_Refresh_Singapore_-_Marina_Bay_-_Singapore_session_20261012T024022Z.xlsx` (d279d629c875...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/upstream_latest_manifest_snapshot.json` (fc2cea00ab7c...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/upstream_data_readiness_snapshot.json` (519d5d675a74...)
+- `history/workbook_kpi_refresh_applier/20261012T024022Z/upstream_combined_source_manifest_snapshot.json` (f8289c5626f0...)
 
 ## Governance
 
