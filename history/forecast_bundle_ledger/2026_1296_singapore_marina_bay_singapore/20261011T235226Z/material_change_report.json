@@ -1,0 +1,17 @@
+{
+  "change_reason": "no_material_change",
+  "current_signature": "501c4e846f4d9684c60a073a5c1689a37ae41ef7066c82549d9b66fe33b5f168",
+  "event": {
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "session_key": 11388,
+    "session_name": "Race"
+  },
+  "generated_at_utc": "2026-10-11T23:52:26Z",
+  "material_change_detected": false,
+  "notification_recommended": false,
+  "previous_signature": "501c4e846f4d9684c60a073a5c1689a37ae41ef7066c82549d9b66fe33b5f168",
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_material_change_v20",
+  "status": "blocked"
+}
