@@ -1,0 +1,56 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-10-12T01:54:52.732175+00:00",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "outputs": [
+    {
+      "bytes": 767,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "a1b834676eb8c299fb3b88ae26f27abde1b6493036cbc867d9e31884dfe94142"
+    },
+    {
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "81e780bdc39cc594f464309dbaaea0be5f06f1fe8ebffd9abadaaf2ea5aef83a"
+    },
+    {
+      "bytes": 10339,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/F1_Workbook_KPI_SANDBOX_Refresh_Singapore_-_Marina_Bay_-_Singapore_session_20261012T015452Z.xlsx",
+      "sha256": "e021fe1205ea678f10d94866f464946d125828408e50cf2650cbb6e13f71d1dd"
+    },
+    {
+      "bytes": 575,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "84bdc27983ee966bc88b8616daa892023af04ba2c647ab2266dd6106b46fced7"
+    },
+    {
+      "bytes": 1574,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/upstream_data_readiness_snapshot.json",
+      "sha256": "e20fbca08a2c4f38104800bdb4574a3429fefcd2c986c6e044c0705e5b49f1c0"
+    },
+    {
+      "bytes": 713,
+      "path": "history/workbook_kpi_refresh_applier/20261012T015452Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "8b41fb9d5910bf499f515f8e05412cc71d1f674187e737da0d779d956e206fd9"
+    }
+  ],
+  "run_id": "20261012T015452Z",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_processor_root": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ]
+}
