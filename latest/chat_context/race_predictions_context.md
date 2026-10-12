@@ -3,7 +3,7 @@
 ## Confirmed Data
 - Event: Singapore - Marina Bay - Singapore
 - Session: Race / key 11388
-- Run ID: 20261011T235226Z
+- Run ID: 20261012T025745Z
 - Consumer readiness: blocked
 - Source status: needs_manual_review
 - Workbook source status: needs_manual_review

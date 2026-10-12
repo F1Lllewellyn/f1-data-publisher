@@ -1,0 +1,69 @@
+{
+  "blocked_consumers": [
+    "race_predictions",
+    "fantasy_predictions",
+    "race_reports"
+  ],
+  "canonical_workbook_overwrite": false,
+  "consumer_decisions": {
+    "fantasy_predictions": {
+      "action": "blocked",
+      "consumer": "fantasy_predictions",
+      "consumer_readiness": "blocked",
+      "forecast_gate_activated": false,
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
+    },
+    "race_predictions": {
+      "action": "blocked",
+      "consumer": "race_predictions",
+      "consumer_readiness": "blocked",
+      "forecast_gate_activated": false,
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
+    },
+    "race_reports": {
+      "action": "blocked",
+      "consumer": "race_reports",
+      "consumer_readiness": "blocked",
+      "forecast_gate_activated": false,
+      "material_change_detected": false,
+      "notification_recommended": false,
+      "promotion_allowed": false,
+      "ready": false,
+      "reason": "consumer not ready or source/workbook state is not clean/usable"
+    }
+  },
+  "context_paths": {
+    "fantasy_predictions": "latest/chat_context/fantasy_predictions_context.md",
+    "race_predictions": "latest/chat_context/race_predictions_context.md",
+    "race_reports": "latest/chat_context/race_reports_context.md"
+  },
+  "decision_mode": "decision_only_no_external_send",
+  "event": {
+    "event_id": "2026_1296_singapore_marina_bay_singapore",
+    "race_name": "Singapore - Marina Bay - Singapore",
+    "session_key": 11388,
+    "session_name": "Race"
+  },
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-10-12T02:57:46Z",
+  "material_change_detected": false,
+  "notification_recommended": false,
+  "promotion_allowed": false,
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261012T025745Z",
+  "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
+  "should_notify": false,
+  "signature": "5f6ddc917924df588dbb64106fc6f3bd27cab60b85f2fbf0aa27368339fdaca4",
+  "source_status": "needs_manual_review",
+  "stable_engine_modified": false,
+  "status": "blocked",
+  "workbook_source_status": "needs_manual_review"
+}
