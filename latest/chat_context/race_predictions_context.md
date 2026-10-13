@@ -1,14 +1,14 @@
 # F1 1B Race Predictions Context v25
 
 ## Confirmed Data
-- Event: Singapore - Marina Bay - Singapore
-- Session: Race / key 11388
-- Run ID: 20261012T200121Z
+- Event: Bahrain - Kuala Lumpur - Kuala Lumpur
+- Session: Race / key 11731
+- Run ID: 20261013T021434Z
 - Consumer readiness: blocked
 - Source status: needs_manual_review
 - Workbook source status: needs_manual_review
 - Readiness quality: blocked_manual_review_required_source
-- Material change detected: False
+- Material change detected: True
 - Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false

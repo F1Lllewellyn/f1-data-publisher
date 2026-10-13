@@ -6,7 +6,7 @@
 - Mode: decision-only; no ChatGPT automation, email, text, or forecast gate was activated.
 
 ## Event
-- Event: Singapore - Marina Bay - Singapore
+- Event: Bahrain - Kuala Lumpur - Kuala Lumpur
 - Session: Race
 
 ## Consumer Actions
