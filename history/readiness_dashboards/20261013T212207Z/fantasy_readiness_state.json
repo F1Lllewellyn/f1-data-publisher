@@ -1,0 +1,17 @@
+{
+  "ready_for_use": true,
+  "latest_session_state": "needs_manual_review",
+  "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution",
+  "generated_at_utc": "2026-10-13T21:22:07Z",
+  "source_status": "needs_manual_review",
+  "event_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+  "session_name": {
+    "date_end": "2026-10-04T09:00:00+00:00",
+    "date_start": "2026-10-04T07:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1308,
+    "session_key": 11731,
+    "session_name": "Race",
+    "session_type": "Race"
+  }
+}
