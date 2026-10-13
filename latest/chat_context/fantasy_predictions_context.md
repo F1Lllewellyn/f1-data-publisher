@@ -3,12 +3,12 @@
 ## Confirmed Data
 - Event: Bahrain - Kuala Lumpur - Kuala Lumpur
 - Session: Race / key 11731
-- Run ID: 20261013T021434Z
+- Run ID: 20261013T094101Z
 - Consumer readiness: blocked
 - Source status: needs_manual_review
 - Workbook source status: needs_manual_review
 - Readiness quality: blocked_manual_review_required_source
-- Material change detected: True
+- Material change detected: False
 - Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false
