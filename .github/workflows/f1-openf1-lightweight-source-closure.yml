@@ -136,3 +136,108 @@ jobs:
 
 
           fi
+# K4R28 manual-shadow custody follow-on job; original workflow above is unchanged.
+  openf1-manual-shadow-custody-attestation:
+    needs: openf1-lightweight-source-closure
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.provenance_shadow_session_key != '' &&
+        github.ref == 'refs/heads/main' &&
+        contains(fromJSON('["weather","drivers","starting_grid"]'), github.event.inputs.provenance_shadow_endpoint) &&
+        needs.openf1-lightweight-source-closure.result == 'success'
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout exact originating run head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Download same-run original provenance shadow artifact only
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ github.event.inputs.provenance_shadow_endpoint == 'starting_grid' && 'dr002-pre2b7k4r15-openf1-starting-grid-historical-shadow' || github.event.inputs.provenance_shadow_endpoint == 'drivers' && 'dr002-pre2b7k4r7-openf1-drivers-historical-rest-shadow' || 'dr002-pre2b7k4r2-openf1-historical-rest-shadow' }}
+          path: _runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/source_artifact
+
+      - name: Validate original evidence and prepare exact custody manifest
+        env:
+          ENDPOINT: ${{ github.event.inputs.provenance_shadow_endpoint }}
+          SESSION_KEY: ${{ github.event.inputs.provenance_shadow_session_key }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          GIT_REF: ${{ github.ref }}
+          HEAD_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python scripts/forecast_bundles/dr002_openf1_manual_shadow_custody_attestation_v1.py prepare \
+            --artifact-root _runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/source_artifact \
+            --output-dir "_runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/gha-${RUN_ID}-${RUN_ATTEMPT}" \
+            --endpoint "$ENDPOINT" \
+            --session-key "$SESSION_KEY" \
+            --repository "$REPOSITORY" \
+            --workflow "$WORKFLOW_NAME" \
+            --workflow-ref "$WORKFLOW_REF" \
+            --git-ref "$GIT_REF" \
+            --head-sha "$HEAD_SHA" \
+            --run-id "$RUN_ID" \
+            --run-attempt "$RUN_ATTEMPT"
+
+      - name: Attest exact successful custody manifest
+        id: attest_custody
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: _runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/gha-${{ github.run_id }}-${{ github.run_attempt }}/custody_manifest.json
+          push-to-registry: false
+          create-storage-record: false
+
+      - name: Preserve exact bundle and factual unverified metadata
+        env:
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest_custody.outputs.bundle-path }}
+          ATTESTATION_ID: ${{ steps.attest_custody.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest_custody.outputs.attestation-url }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          GIT_REF: ${{ github.ref }}
+          HEAD_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python scripts/forecast_bundles/dr002_openf1_manual_shadow_custody_attestation_v1.py preserve \
+            --custody-manifest "_runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/gha-${RUN_ID}-${RUN_ATTEMPT}/custody_manifest.json" \
+            --attestation-bundle "$ATTESTATION_BUNDLE_PATH" \
+            --output-dir "_runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/gha-${RUN_ID}-${RUN_ATTEMPT}" \
+            --attestation-id "$ATTESTATION_ID" \
+            --attestation-url "$ATTESTATION_URL" \
+            --repository "$REPOSITORY" \
+            --workflow "$WORKFLOW_NAME" \
+            --workflow-ref "$WORKFLOW_REF" \
+            --git-ref "$GIT_REF" \
+            --head-sha "$HEAD_SHA" \
+            --run-id "$RUN_ID" \
+            --run-attempt "$RUN_ATTEMPT"
+
+      - name: Preserve custody-only attestation package
+        uses: actions/upload-artifact@v6
+        with:
+          name: dr002-pre2b7k4r28-openf1-manual-shadow-custody-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            _runtime/dr002_pre2b7k4r28_openf1_manual_shadow_custody/gha-${{ github.run_id }}-${{ github.run_attempt }}/**
+          if-no-files-found: error
+          retention-days: 30
