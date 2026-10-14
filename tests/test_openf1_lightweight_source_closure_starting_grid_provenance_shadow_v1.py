@@ -32,31 +32,27 @@ spec.loader.exec_module(m)
 
 DEPENDENCY_BLOBS = {
     "scripts/openf1/publish_openf1_lightweight_source_closure.py":
-        "09a7cb5dd306e45eecc96f3bd7a719875e04a7d8",
+        "68ac7f83e4544576ae2e7074129071d95251e956",
+    "tests/test_openf1_lightweight_source_closure_starting_grid_provenance_shadow_v1.py":
+        "7b08a523c4df270c6c8fe367ed21804315f2a236",
     ".github/workflows/f1-openf1-lightweight-source-closure.yml":
         "d277ceaaffbb148dbde4b0c32bfbbcd8664e4329",
     "configs/openf1/openf1_lightweight_source_closure_policy.json":
-        "72f815876d12a88e0c2b5d81b5d6dad66688dbca",
+        "6ebb40e5fd42623a769eba8ee4feab09765c4b00",
     "tests/test_openf1_lightweight_source_closure_provenance_shadow_v1.py":
         "bbe623a48322d273990dd34d05fedf133f1af828",
     "tests/test_openf1_lightweight_source_closure_drivers_provenance_shadow_v1.py":
-        "97d3e8f2cfb8786410f13cb7fac40c11b1a91ee8",
+        "68ef40e9caaadf8c096c362accfc54f3fa994937",
     "scripts/forecast_bundles/dr002_openf1_historical_rest_capture_v1.py":
         "e68fa528cd73cd5c72afd97622a00d6e5b29be19",
     "scripts/forecast_bundles/dr002_openf1_starting_grid_producer_adapter_v1.py":
-        "6c435ccaa03515f3d8d9c6aa88bc9070cfe824be",
-    "scripts/forecast_bundles/dr002_openf1_drivers_producer_adapter_v1.py":
-        "357ac56a6cfe317e21d9ce71d78c58683e444a5a",
-    "scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py":
-        "ccd17a28744f0e7c6706c3be9562d57b7dcea0ae",
+        "702a1219c4b97450d7aeec16b5dd8409f2b73d75",
     "docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md":
         "85ce44807ef159b5ba5d3bfd543ea1f945097f77",
 }
 MODIFIED = {
     "scripts/openf1/publish_openf1_lightweight_source_closure.py",
-    "configs/openf1/openf1_lightweight_source_closure_policy.json",
-    "tests/test_openf1_lightweight_source_closure_drivers_provenance_shadow_v1.py",
-    "scripts/forecast_bundles/dr002_openf1_starting_grid_producer_adapter_v1.py",
+    "tests/test_openf1_lightweight_source_closure_starting_grid_provenance_shadow_v1.py",
 }
 
 
@@ -185,16 +181,33 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
         return (self.output_root / "_runtime" / m.SHADOW_RUNTIME_DIR
                 / "gha-247-1")
 
+    def persisted_diagnostics(self, output_root=None):
+        root = (Path(output_root or self.output_root) / "_runtime"
+                / m.SHADOW_RUNTIME_DIR / "gha-247-1")
+        manifest = json.loads((root / "shadow_manifest.json").read_bytes())
+        assessment = json.loads(
+            (root / "historical_rest_capture_assessment.json").read_bytes()
+        )
+        report = (root / "shadow_report.md").read_text()
+        return root, manifest, assessment, report
+
     # 1
     def test_valid_shadow_writes_exact_six_file_package(self):
         manifest, _ = self.run_valid()
         self.assertEqual(manifest["status"], m.historical_rest_contract.VALIDATED)
+        self.assertTrue(manifest["session_discovery_request_attempted"])
+        self.assertEqual(manifest["session_discovery_http_status_code"], 200)
+        self.assertTrue(manifest["starting_grid_request_attempted"])
+        self.assertEqual(manifest["starting_grid_http_status_code"], 200)
         self.assertEqual({path.name for path in self.runtime_root().iterdir()}, {
             "sessions.response.json", "starting_grid.response.json",
             "source_capture_receipt.json",
             "historical_rest_capture_assessment.json", "shadow_manifest.json",
             "shadow_report.md",
         })
+        report = (self.runtime_root() / "shadow_report.md").read_text()
+        self.assertIn("The raw sessions discovery links", report)
+        self.assertNotIn("No raw session-discovery data was accepted", report)
 
     # 2
     def test_exactly_one_discovery_and_one_grid_request(self):
@@ -221,12 +234,46 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
 
     # 4
     def test_discovery_status_must_be_200(self):
-        getter = SequencedGet([Response(503, b"[]", DISCOVERY_URI)])
-        options, _ = self.options(http_get=getter)
-        with self.assertRaisesRegex(m.ProvenanceShadowHold,
-                                    "session_discovery_http_status_not_200"):
-            m.run_provenance_shadow(**options)
-        self.assertEqual(len(getter.calls), 1)
+        for status in (429, 403, 404, 500, 503):
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            getter = SequencedGet([Response(status, b"[]", DISCOVERY_URI)])
+            options, _ = self.options(
+                output_root=Path(alternate.name), http_get=getter
+            )
+            with self.subTest(status=status), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, "session_discovery_http_status_not_200"
+            ):
+                m.run_provenance_shadow(**options)
+            root, manifest, assessment, report = self.persisted_diagnostics(
+                alternate.name
+            )
+            self.assertEqual(len(getter.calls), 1)
+            self.assertEqual({path.name for path in root.iterdir()}, {
+                "historical_rest_capture_assessment.json",
+                "shadow_manifest.json",
+                "shadow_report.md",
+            })
+            self.assertEqual(manifest["status"], m.historical_rest_contract.HOLD)
+            self.assertTrue(manifest["session_discovery_request_attempted"])
+            self.assertEqual(manifest["session_discovery_http_status_code"], status)
+            self.assertFalse(manifest["starting_grid_request_attempted"])
+            self.assertIsNone(manifest["starting_grid_http_status_code"])
+            self.assertIsNone(manifest["session_discovery_raw_sha256"])
+            self.assertIsNone(manifest["grid_source_session_id"])
+            self.assertIsNone(manifest["grid_source_session_kind"])
+            self.assertIsNone(manifest["grid_target_race_session_id"])
+            self.assertIsNone(manifest["grid_target_race_session_kind"])
+            self.assertIsNone(manifest["source_to_race_link_evidence_type"])
+            self.assertEqual(
+                assessment["reason_codes"],
+                ["session_discovery_http_status_not_200"],
+            )
+            self.assertIn(
+                "No raw session-discovery data was accepted; no source-to-Race link was established.",
+                report,
+            )
+            self.assertNotIn("The raw sessions discovery links", report)
 
     # 5
     def test_both_final_urls_must_be_exact(self):
@@ -655,7 +702,7 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
 
     # 27
     def test_grid_http_errors_hold_without_retry(self):
-        for status in (400, 403, 404, 429, 500, 503):
+        for status in (429, 404, 503):
             alternate = tempfile.TemporaryDirectory()
             self.addCleanup(alternate.cleanup)
             getter = SequencedGet([
@@ -667,7 +714,105 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
                 m.ProvenanceShadowHold, "starting_grid_http_status_not_200"
             ):
                 m.run_provenance_shadow(**options)
+            root, manifest, assessment, report = self.persisted_diagnostics(
+                alternate.name
+            )
             self.assertEqual(len(getter.calls), 2)
+            self.assertEqual({path.name for path in root.iterdir()}, {
+                "sessions.response.json",
+                "historical_rest_capture_assessment.json",
+                "shadow_manifest.json",
+                "shadow_report.md",
+            })
+            self.assertEqual(manifest["session_discovery_http_status_code"], 200)
+            self.assertEqual(manifest["starting_grid_http_status_code"], status)
+            self.assertTrue(manifest["starting_grid_request_attempted"])
+            self.assertRegex(manifest["session_discovery_raw_sha256"], r"^[0-9a-f]{64}$")
+            self.assertEqual(manifest["grid_target_race_session_id"], "11234")
+            self.assertIsNone(manifest["starting_grid_raw_sha256"])
+            self.assertEqual(
+                assessment["reason_codes"], ["starting_grid_http_status_not_200"]
+            )
+            self.assertIn("The subsequent starting-grid", report)
+            self.assertIn("response was rejected", report)
+            self.assertNotIn("The parentless K4R1", report)
+
+    def test_untrusted_error_body_and_headers_are_not_persisted_or_retried(self):
+        secret_markers = ("token-SHOULD-NOT-LEAK", "Cookie=private", "password=hunter2")
+        response = Response(
+            429,
+            json.dumps({"error": secret_markers[0], "password": secret_markers[2]}).encode(),
+            DISCOVERY_URI,
+            headers={
+                "Content-Type": "application/json",
+                "Retry-After": "1",
+                "Set-Cookie": secret_markers[1],
+            },
+        )
+        getter = SequencedGet([response])
+        options, _ = self.options(http_get=getter)
+        with self.assertRaisesRegex(
+            m.ProvenanceShadowHold, "session_discovery_http_status_not_200"
+        ):
+            m.run_provenance_shadow(**options)
+        root, manifest, _, report = self.persisted_diagnostics()
+        persisted = report + json.dumps(manifest, sort_keys=True)
+        persisted += "".join(
+            path.read_text() for path in root.iterdir() if path.suffix in {".json", ".md"}
+        )
+        self.assertEqual(len(getter.calls), 1)
+        for marker in secret_markers:
+            self.assertNotIn(marker, persisted)
+
+    def test_invalid_status_types_hold_without_fabricated_numeric_code(self):
+        for status in (True, "429", None, 99, 600):
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            getter = SequencedGet([Response(status, b"[]", DISCOVERY_URI)])
+            options, _ = self.options(
+                output_root=Path(alternate.name), http_get=getter
+            )
+            with self.subTest(status=status), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, "session_discovery_http_status_unavailable"
+            ):
+                m.run_provenance_shadow(**options)
+            root, manifest, assessment, _ = self.persisted_diagnostics(alternate.name)
+            self.assertEqual(len(getter.calls), 1)
+            self.assertIsNone(manifest["session_discovery_http_status_code"])
+            self.assertFalse(manifest["starting_grid_request_attempted"])
+            self.assertEqual(
+                assessment["reason_codes"],
+                ["session_discovery_http_status_unavailable"],
+            )
+            self.assertFalse((root / "sessions.response.json").exists())
+
+    def test_invalid_grid_status_types_hold_without_fabricated_numeric_code(self):
+        for status in (False, "503", None, 600):
+            alternate = tempfile.TemporaryDirectory()
+            self.addCleanup(alternate.cleanup)
+            getter = SequencedGet([
+                Response(200, session_bytes(), DISCOVERY_URI),
+                Response(status, b"[]", GRID_URI),
+            ])
+            options, _ = self.options(
+                output_root=Path(alternate.name), http_get=getter
+            )
+            with self.subTest(status=status), self.assertRaisesRegex(
+                m.ProvenanceShadowHold, "starting_grid_http_status_unavailable"
+            ):
+                m.run_provenance_shadow(**options)
+            root, manifest, assessment, report = self.persisted_diagnostics(
+                alternate.name
+            )
+            self.assertEqual(len(getter.calls), 2)
+            self.assertIsNone(manifest["starting_grid_http_status_code"])
+            self.assertEqual(manifest["session_discovery_http_status_code"], 200)
+            self.assertTrue((root / "sessions.response.json").exists())
+            self.assertFalse((root / "starting_grid.response.json").exists())
+            self.assertEqual(
+                assessment["reason_codes"], ["starting_grid_http_status_unavailable"]
+            )
+            self.assertIn("The subsequent starting-grid", report)
 
     # 28
     def test_malformed_duplicate_and_holey_grid_rows_hold_without_retry(self):
