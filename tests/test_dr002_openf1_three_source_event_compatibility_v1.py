@@ -160,6 +160,10 @@ class ThreeSourceEventCompatibilityTests(unittest.TestCase):
             "source_receipt_id": grid_receipt["receipt_id"],
             "raw_source_id": source_id,
             "frozen_evidence_binding_status": "UNBOUND",
+            "session_discovery_request_attempted": True,
+            "starting_grid_request_attempted": True,
+            "session_discovery_http_status_code": 200,
+            "starting_grid_http_status_code": 200,
             "source_session_classification_authenticated": False,
             "target_race_session_classification_authenticated": False,
             "producer_input_csv_is_target_race_scoped": False,
@@ -382,11 +386,36 @@ class ThreeSourceEventCompatibilityTests(unittest.TestCase):
 
     # 21
     def test_sprint_weekend_holds(self):
+        for name, kind in (
+            ("Sprint", "Sprint"),
+            ("sprint", "Practice"),
+            ("Practice", "SPRINT"),
+        ):
+            with self.subTest(name=name, kind=kind):
+                rows = copy.deepcopy(self.sessions)
+                rows.append(self.session("11372", name, kind,
+                                         "2026-09-25T08:00:00Z",
+                                         "2026-09-25T09:00:00Z"))
+                self.assert_hold_minimal(self.result_for_sessions(rows))
+
+    def test_duplicate_same_meeting_practice_2_holds(self):
         rows = copy.deepcopy(self.sessions)
-        rows.append(self.session("11372", "Sprint", "Sprint",
-                                 "2026-09-25T08:00:00Z",
-                                 "2026-09-25T09:00:00Z"))
+        rows.append(self.session("11370", "Practice 2", "Practice",
+                                 "2026-09-23T12:00:00Z",
+                                 "2026-09-23T13:00:00Z"))
         self.assert_hold_minimal(self.result_for_sessions(rows))
+
+    def test_ordinary_practice_1_and_3_remain_allowed(self):
+        rows = copy.deepcopy(self.sessions)
+        rows.extend((
+            self.session("11369", "Practice 1", "Practice",
+                         "2026-09-23T08:00:00Z",
+                         "2026-09-23T09:00:00Z"),
+            self.session("11372", "Practice 3", "Practice",
+                         "2026-09-25T08:00:00Z",
+                         "2026-09-25T09:00:00Z"),
+        ))
+        self.assertEqual(self.result_for_sessions(rows)["status"], m.VALIDATED)
 
     # 22
     def test_extra_qualifying_or_race_is_ambiguous_and_holds(self):
@@ -435,6 +464,38 @@ class ThreeSourceEventCompatibilityTests(unittest.TestCase):
         self.assert_hold_minimal(self.assess(
             grid_shadow_manifest_bytes=self.json_bytes(manifest)
         ))
+
+    def test_manifest_request_attempted_flags_must_be_exact_true(self):
+        for field in (
+            "session_discovery_request_attempted",
+            "starting_grid_request_attempted",
+        ):
+            for value in (None, False, 1):
+                with self.subTest(field=field, value=value):
+                    manifest = copy.deepcopy(self.manifest)
+                    if value is None:
+                        del manifest[field]
+                    else:
+                        manifest[field] = value
+                    self.assert_hold_minimal(self.assess(
+                        grid_shadow_manifest_bytes=self.json_bytes(manifest)
+                    ))
+
+    def test_manifest_http_statuses_must_be_exact_integer_200(self):
+        for field in (
+            "session_discovery_http_status_code",
+            "starting_grid_http_status_code",
+        ):
+            for value in (None, 429, 403, True, "200"):
+                with self.subTest(field=field, value=value):
+                    manifest = copy.deepcopy(self.manifest)
+                    if value is None:
+                        del manifest[field]
+                    else:
+                        manifest[field] = value
+                    self.assert_hold_minimal(self.assess(
+                        grid_shadow_manifest_bytes=self.json_bytes(manifest)
+                    ))
 
     # 27
     def test_weather_wrong_scope_hash_or_receipt_id_holds(self):

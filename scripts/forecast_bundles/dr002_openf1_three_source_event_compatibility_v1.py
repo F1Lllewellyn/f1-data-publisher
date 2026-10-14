@@ -254,16 +254,20 @@ def _validate_sessions(
         name = row.get("session_name")
         kind = row.get("session_type")
         _require(
-            not ((type(name) is str and "Sprint" in name)
-                 or (type(kind) is str and "Sprint" in kind)),
+            not ((type(name) is str and "sprint" in name.casefold())
+                 or (type(kind) is str and "sprint" in kind.casefold())),
             "sprint_weekend_not_supported",
         )
+    practice_rows = [row for row in same_meeting
+                     if row.get("session_name") == "Practice 2"
+                     and row.get("session_type") == "Practice"]
     qualifying_rows = [row for row in same_meeting
                        if row.get("session_name") == "Qualifying"
                        or row.get("session_type") == "Qualifying"]
     race_rows = [row for row in same_meeting
                  if row.get("session_name") == "Race"
                  or row.get("session_type") == "Race"]
+    _require(len(practice_rows) == 1, "practice_session_ambiguous")
     _require(len(qualifying_rows) == 1, "qualifying_session_ambiguous")
     _require(len(race_rows) == 1, "target_race_session_ambiguous")
     return practice, qualifying, race
@@ -393,6 +397,19 @@ def _validate_grid_manifest(
     }
     for field, expected in required.items():
         _require(manifest.get(field) == expected,
+                 "grid_shadow_manifest_mismatch:" + field)
+    for field in (
+        "session_discovery_request_attempted",
+        "starting_grid_request_attempted",
+    ):
+        _require(manifest.get(field) is True,
+                 "grid_shadow_manifest_mismatch:" + field)
+    for field in (
+        "session_discovery_http_status_code",
+        "starting_grid_http_status_code",
+    ):
+        value = manifest.get(field)
+        _require(type(value) is int and value == 200,
                  "grid_shadow_manifest_mismatch:" + field)
     for flag in (
         "source_session_classification_authenticated",
