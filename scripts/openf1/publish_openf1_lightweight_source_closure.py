@@ -367,6 +367,14 @@ def _response_header(response: Any, name: str) -> Optional[str]:
         raise ProvenanceShadowHold("response_headers_malformed")
 
 
+def _diagnostic_http_status_code(response: Any) -> Optional[int]:
+    """Return only a real, bounded HTTP status integer for diagnostics."""
+    status = getattr(response, "status_code", None)
+    if type(status) is int and 100 <= status <= 599:
+        return status
+    return None
+
+
 def _validated_starting_grid_response(
     response: Any, *, expected_uri: str, label: str,
 ) -> bytes:
@@ -434,14 +442,49 @@ def _persist_shadow_metadata(
             "DR-002 remains PROPOSED — NOT ACTIVATED. Forecast gate OFF. Promotion NOT ALLOWED.",
         ]
     elif manifest.get("selected_endpoint") == "starting_grid":
+        discovery_hash = manifest.get("session_discovery_raw_sha256")
+        target_race_id = manifest.get("grid_target_race_session_id")
+        grid_hash = manifest.get("starting_grid_raw_sha256")
+        if (manifest.get("status") == historical_rest_contract.VALIDATED
+                and discovery_hash and target_race_id and grid_hash):
+            evidence_report = [
+                "The raw sessions discovery links a provider-reported Qualifying source",
+                "to a distinct later Race target in the same event. The parentless K4R1",
+                "receipt and derived CSV remain scoped to the Qualifying source session.",
+                "The K4R14 CSV is runtime metadata only and was not persisted or joined",
+                "to the Race target.",
+            ]
+        elif not discovery_hash:
+            evidence_report = [
+                "No raw session-discovery data was accepted; no source-to-Race link was established.",
+                "No starting-grid source capture or source-capture receipt was created.",
+            ]
+        elif not target_race_id:
+            evidence_report = [
+                "Raw session-discovery data was accepted, but no unique source-to-Race link",
+                "was established. No starting-grid source capture or receipt was created.",
+            ]
+        elif not grid_hash:
+            evidence_report = [
+                "Raw session-discovery data was accepted and linked a provider-reported",
+                "Qualifying source to a distinct later Race target. The subsequent starting-grid",
+                "response was rejected; no starting-grid source capture or receipt was created.",
+            ]
+        else:
+            evidence_report = [
+                "Raw session-discovery and starting-grid data were accepted, but downstream",
+                "validation did not complete. No successful derived-grid result is claimed.",
+            ]
         report = [
-            "# DR-002 pre-2B-7K4R16 OpenF1 Qualifying grid / Race target shadow",
+            "# DR-002 pre-2B-7K4R19 OpenF1 Qualifying grid / Race target shadow",
             "",
             f"Status: {manifest['status']}",
             f"Reason: {manifest.get('reason')}",
             "Selected endpoint: starting_grid",
-            f"Grid source: Qualifying session {manifest.get('grid_source_session_id')}",
-            f"Race target: Race session {manifest.get('grid_target_race_session_id')}",
+            (f"Grid source: {manifest.get('grid_source_session_kind')} session "
+             f"{manifest.get('grid_source_session_id')}"),
+            (f"Race target: {manifest.get('grid_target_race_session_kind')} session "
+             f"{manifest.get('grid_target_race_session_id')}"),
             f"K4R1 status: {manifest.get('k4r1_status')}",
             f"K4R14 status: {manifest.get('k4r14_status')}",
             f"Grid rows: {manifest.get('starting_grid_row_count')}",
@@ -450,11 +493,7 @@ def _persist_shadow_metadata(
             f"Derived CSV SHA-256: {manifest.get('starting_grid_derived_csv_sha256')}",
             f"Derived runtime identity: {manifest.get('starting_grid_derived_runtime_identity')}",
             "",
-            "The raw sessions discovery links a provider-reported Qualifying source",
-            "to a distinct later Race target in the same event. The parentless K4R1",
-            "receipt and derived CSV remain scoped to the Qualifying source session.",
-            "The K4R14 CSV is runtime metadata only and was not persisted or joined",
-            "to the Race target.",
+            *evidence_report,
             "OpenF1 is unofficial and this does not authenticate an official FIA final",
             "grid, prove historical pre-race availability, or generate a forecast.",
             "",
@@ -564,15 +603,15 @@ def run_provenance_shadow(
         manifest.update(
             selected_endpoint="starting_grid",
             session_metadata_source_type="OPENF1_PROVIDER_DISCOVERY_CLAIM",
-            grid_source_session_id=selected_key,
-            grid_source_session_kind="Qualifying",
+            grid_source_session_id=None,
+            grid_source_session_kind=None,
             grid_source_start_utc=None,
             grid_source_end_utc=None,
             grid_target_race_session_id=None,
-            grid_target_race_session_kind="Race",
+            grid_target_race_session_kind=None,
             grid_target_race_start_utc=None,
             grid_target_race_end_utc=None,
-            source_to_race_link_evidence_type="OPENF1_PROVIDER_DISCOVERY_CLAIM",
+            source_to_race_link_evidence_type=None,
             source_session_classification_authenticated=False,
             target_race_session_classification_authenticated=False,
             producer_input_csv_is_target_race_scoped=False,
@@ -581,11 +620,15 @@ def run_provenance_shadow(
             raw_response_filename="starting_grid.response.json",
             session_discovery_filename="sessions.response.json",
             session_discovery_request_uri=None,
+            session_discovery_request_attempted=False,
+            session_discovery_http_status_code=None,
             session_discovery_raw_sha256=None,
             session_discovery_actual_received_utc=None,
             discovery_response_sha256=None,
             discovery_first_observed_utc=None,
             starting_grid_raw_sha256=None,
+            starting_grid_request_attempted=False,
+            starting_grid_http_status_code=None,
             k4r14_status=starting_grid_adapter_contract.HOLD,
             starting_grid_row_count=None,
             starting_grid_unique_driver_count=None,
@@ -643,8 +686,15 @@ def run_provenance_shadow(
         }
         if selected_endpoint == "starting_grid":
             discovery_request_options["allow_redirects"] = False
+            manifest["session_discovery_request_attempted"] = True
         discovery_response = http_get(discovery_uri, **discovery_request_options)
         if selected_endpoint == "starting_grid":
+            discovery_status = _diagnostic_http_status_code(discovery_response)
+            manifest["session_discovery_http_status_code"] = discovery_status
+            _shadow_require(
+                discovery_status is not None,
+                "session_discovery_http_status_unavailable",
+            )
             discovery_bytes = _validated_starting_grid_response(
                 discovery_response,
                 expected_uri=discovery_uri,
@@ -692,6 +742,9 @@ def run_provenance_shadow(
                 grid_target_race_session_kind=scope["target_race_session_kind"],
                 grid_target_race_start_utc=scope["target_race_start_utc"],
                 grid_target_race_end_utc=scope["target_race_end_utc"],
+                source_to_race_link_evidence_type=(
+                    "OPENF1_PROVIDER_DISCOVERY_CLAIM"
+                ),
             )
         else:
             scope = _selected_session(
@@ -728,9 +781,16 @@ def run_provenance_shadow(
         }
         if selected_endpoint == "starting_grid":
             source_request_options["allow_redirects"] = False
+            manifest["starting_grid_request_attempted"] = True
         source_response = http_get(source_uri, **source_request_options)
         http_status = getattr(source_response, "status_code", None)
         if selected_endpoint == "starting_grid":
+            http_status = _diagnostic_http_status_code(source_response)
+            manifest["starting_grid_http_status_code"] = http_status
+            _shadow_require(
+                http_status is not None,
+                "starting_grid_http_status_unavailable",
+            )
             raw_response_bytes = _validated_starting_grid_response(
                 source_response,
                 expected_uri=source_uri,
@@ -1083,10 +1143,22 @@ def run_provenance_shadow(
         reason = str(exc) or type(exc).__name__
         manifest.update(status=historical_rest_contract.HOLD, reason=reason)
         if assessment_projection.get("status") != historical_rest_contract.VALIDATED:
+            reason_codes = assessment_projection.get("reason_codes") or [reason]
+            if (
+                selected_endpoint == "starting_grid"
+                and reason_codes == ["shadow_not_completed"]
+                and reason in {
+                    "session_discovery_http_status_not_200",
+                    "session_discovery_http_status_unavailable",
+                    "starting_grid_http_status_not_200",
+                    "starting_grid_http_status_unavailable",
+                }
+            ):
+                reason_codes = [reason]
             assessment_projection = {
                 **assessment_projection,
                 "status": historical_rest_contract.HOLD,
-                "reason_codes": assessment_projection.get("reason_codes") or [reason],
+                "reason_codes": reason_codes,
             }
         try:
             _persist_shadow_metadata(
