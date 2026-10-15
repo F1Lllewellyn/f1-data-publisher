@@ -305,6 +305,56 @@ class ManualShadowCustodyAttestationTests(unittest.TestCase):
         result = json.loads(self.build("weather"))
         self.assertTrue(all(result[field] is False for field in m.FALSE_FLAGS))
 
+    def test_parse_utc_accepts_equivalent_z_and_zero_offset_only(self):
+        zulu = m._parse_utc("2026-09-26T11:00:00Z", "timestamp_malformed")
+        offset = m._parse_utc(
+            "2026-09-26T11:00:00+00:00", "timestamp_malformed"
+        )
+        self.assertEqual(zulu, offset)
+        self.assertEqual(zulu.utcoffset().total_seconds(), 0)
+
+        for invalid in (
+            "2026-09-26T11:00:00+01:00",
+            "2026-09-26T11:00:00-04:00",
+            "2026-09-26T11:00:00",
+            "2026-09-26T11:00:00+00:00 ",
+            None,
+        ):
+            with self.subTest(invalid=invalid):
+                self.assert_hold(
+                    lambda value=invalid: m._parse_utc(
+                        value, "timestamp_malformed"
+                    ),
+                    "timestamp_malformed",
+                )
+
+    def test_grid_accepts_synthetic_provider_zero_offset_timestamps(self):
+        sessions = json.loads(self.fixture.sessions_raw)
+        source = next(
+            row for row in sessions
+            if str(row["session_key"]) == self.fixture.qualifying_id
+        )
+        target = next(
+            row for row in sessions
+            if str(row["session_key"]) == self.fixture.race_id
+        )
+        source["date_end"] = "2026-09-25T13:00:00+00:00"
+        target["date_start"] = "2026-09-26T11:00:00+00:00"
+        sessions_raw = self.json_bytes(sessions)
+        members = self.artifact_members(
+            "starting_grid", sessions=sessions_raw
+        )
+        result = json.loads(self.build(
+            "starting_grid",
+            root=self.write_artifact("starting_grid", members=members),
+        ))
+
+        self.assertEqual(result["status"], m.STATUS)
+        self.assertTrue(all(result[field] is False for field in m.FALSE_FLAGS))
+        relation = result["source_to_target_relationship"]
+        self.assertFalse(relation["cross_session_producer_authorization"])
+        self.assertFalse(result["source_session_classification_authenticated"])
+
     # 7
     def test_manifest_contains_no_raw_source_bytes_paths_or_secrets(self):
         data = self.build("drivers")

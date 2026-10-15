@@ -7,7 +7,7 @@ production authority.
 """
 import argparse
 import base64
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import os
@@ -163,13 +163,18 @@ def _required_text(value, reason):
 
 
 def _parse_utc(value, reason):
-    _require(type(value) is str and value.endswith("Z"), reason)
+    _require(type(value) is str, reason)
+    if value.endswith("Z"):
+        iso_value = value[:-1] + "+00:00"
+    else:
+        _require(value.endswith("+00:00"), reason)
+        iso_value = value
     try:
-        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+        parsed = datetime.fromisoformat(iso_value)
     except ValueError as exc:
         raise CustodyHold(reason) from exc
-    _require(parsed.utcoffset() == timezone.utc.utcoffset(parsed), reason)
-    return parsed
+    _require(parsed.tzinfo is not None and parsed.utcoffset() == timedelta(0), reason)
+    return parsed.astimezone(timezone.utc)
 
 
 def _sha256(data):
