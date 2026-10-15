@@ -12,10 +12,10 @@
     "session_name": "Race"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-15T09:43:55Z",
+  "generated_at_utc": "2026-10-15T18:53:08Z",
   "notification_decision_path": "latest/notification_routing/notification_decision.json",
   "promotion_allowed": false,
-  "run_id": "20261015T094354Z",
+  "run_id": "20261015T185307Z",
   "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
   "stable_engine_modified": false,
   "trigger_decision_path": "latest/consumer_trigger_governor/trigger_decision.json"
