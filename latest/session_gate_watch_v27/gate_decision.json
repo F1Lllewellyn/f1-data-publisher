@@ -2,7 +2,7 @@
   "action": "scheduled_full_run_chain_enabled",
   "canonical_workbook_overwrite": false,
   "forecast_gate_activated": false,
-  "generated_utc": "2026-10-15T18:37:43.058141+00:00",
+  "generated_utc": "2026-10-15T21:46:10.205049+00:00",
   "guard_version": "v27",
   "mode": "scheduled_gate",
   "promotion_allowed": false,
@@ -11,19 +11,19 @@
   "should_yield": false,
   "source_signal": {
     "has_signal": true,
-    "newest_signal_age_minutes": 533.801,
+    "newest_signal_age_minutes": 173.037,
     "newest_signal_key": "completed_utc",
     "newest_signal_path": "latest/1b_output_contract/control_room_bridge_v25_completion_report.json",
-    "newest_timestamp_utc": "2026-10-15T09:43:55+00:00",
+    "newest_timestamp_utc": "2026-10-15T18:53:08+00:00",
     "observed_inputs": [
       {
         "exists": true,
         "path": "latest/1b_output_contract/control_room_bridge_v25_completion_report.json",
         "timestamps": [
           {
-            "age_minutes": 533.801,
+            "age_minutes": 173.037,
             "key": "completed_utc",
-            "timestamp_utc": "2026-10-15T09:43:55+00:00"
+            "timestamp_utc": "2026-10-15T18:53:08+00:00"
           }
         ]
       },
@@ -37,9 +37,9 @@
         "path": "latest/consumer_trigger_governor/trigger_decision.json",
         "timestamps": [
           {
-            "age_minutes": 533.801,
+            "age_minutes": 173.037,
             "key": "generated_at_utc",
-            "timestamp_utc": "2026-10-15T09:43:55+00:00"
+            "timestamp_utc": "2026-10-15T18:53:08+00:00"
           }
         ]
       },
@@ -48,9 +48,9 @@
         "path": "latest/notification_routing/notification_decision.json",
         "timestamps": [
           {
-            "age_minutes": 533.801,
+            "age_minutes": 173.037,
             "key": "generated_at_utc",
-            "timestamp_utc": "2026-10-15T09:43:55+00:00"
+            "timestamp_utc": "2026-10-15T18:53:08+00:00"
           }
         ]
       },
@@ -59,9 +59,9 @@
         "path": "latest/material_change/material_change_report.json",
         "timestamps": [
           {
-            "age_minutes": 533.818,
+            "age_minutes": 173.053,
             "key": "generated_at_utc",
-            "timestamp_utc": "2026-10-15T09:43:54+00:00"
+            "timestamp_utc": "2026-10-15T18:53:07+00:00"
           }
         ]
       },
@@ -70,9 +70,9 @@
         "path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
         "timestamps": [
           {
-            "age_minutes": 533.818,
+            "age_minutes": 173.053,
             "key": "generated_at_utc",
-            "timestamp_utc": "2026-10-15T09:43:54+00:00"
+            "timestamp_utc": "2026-10-15T18:53:07+00:00"
           }
         ]
       },
@@ -81,7 +81,7 @@
         "path": "latest/last_good_state.json",
         "timestamps": [
           {
-            "age_minutes": 6331.784,
+            "age_minutes": 6520.237,
             "key": "updated_at_utc",
             "timestamp_utc": "2026-10-11T09:05:56+00:00"
           }
