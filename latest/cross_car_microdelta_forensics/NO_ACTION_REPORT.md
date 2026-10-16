@@ -3,7 +3,7 @@
 - Status: no_action
 - Reason: no_driver_session_summary_csv_with_required_schema
 - Searched root: `.`
-- Candidate count: 3899
+- Candidate count: 3921
 - Stable engine modified: false
 - Canonical workbook overwrite: false
 - Promotion allowed: false
