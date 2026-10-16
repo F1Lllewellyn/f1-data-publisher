@@ -23,7 +23,6 @@ jobs:
       TRUSTED_WORKFLOW: .github/workflows/f1-openf1-lightweight-source-closure.yml
       TRUSTED_REF: refs/heads/main
       TRUSTED_REPOSITORY_ID: '1262398563'
-      WORK_ROOT: ${{ runner.temp }}/dr002-k4r37
 
     steps:
       - name: Reject any non-main or non-GitHub-hosted invocation
@@ -36,11 +35,15 @@ jobs:
           test "$ACTUAL_REPOSITORY" = "$GH_REPO" || { echo 'HOLD: repository mismatch'; exit 1; }
           test "$ACTUAL_REF" = "$TRUSTED_REF" || { echo 'HOLD: source ref mismatch'; exit 1; }
           test "$RUNNER_ENVIRONMENT" = 'github-hosted' || { echo 'HOLD: self-hosted runner forbidden'; exit 1; }
+          test -n "${RUNNER_TEMP:-}" && test -d "$RUNNER_TEMP" || { echo 'HOLD: runner temp missing'; exit 1; }
+          test -n "${GITHUB_ENV:-}" && test -f "$GITHUB_ENV" || { echo 'HOLD: GitHub environment file missing'; exit 1; }
+          printf 'WORK_ROOT=%s\n' "$RUNNER_TEMP/dr002-k4r37" >> "$GITHUB_ENV"
 
       - name: Preflight official GitHub trusted verification
         run: |
           set -euo pipefail
           umask 077
+          test "${WORK_ROOT:-}" = "$RUNNER_TEMP/dr002-k4r37" || { echo 'HOLD: unsafe work root'; exit 1; }
           rm -rf "$WORK_ROOT"
           mkdir -p "$WORK_ROOT"
           gh --version | sed -n '1p'
