@@ -61,7 +61,7 @@ jobs:
       - name: Reject starting-grid shadow without explicit session
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_endpoint == 'starting_grid' && github.event.inputs.provenance_shadow_session_key == '' }}
         run: |
-          echo "Starting-grid provenance shadow requires an explicit historical Race session key."
+          echo "Starting-grid provenance shadow requires an explicit historical Qualifying session key."
           exit 1
 
       - name: Checkout repository
