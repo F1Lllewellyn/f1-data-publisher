@@ -1,0 +1,697 @@
+name: DR-002 Austin Three-Source Trust Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      weather_run_id:
+        description: 'Original Austin Practice 2 WEATHER capture run ID'
+        required: true
+        type: string
+      drivers_run_id:
+        description: 'Original Austin Practice 2 DRIVERS capture run ID'
+        required: true
+        type: string
+      starting_grid_run_id:
+        description: 'Original Austin Qualifying STARTING_GRID capture run ID'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  attestations: read
+
+concurrency:
+  group: dr002-austin-three-source-trust-verify
+  cancel-in-progress: false
+
+jobs:
+  verify-austin-source-trust:
+    name: Verify future Austin source custody
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: F1Lllewellyn/f1-data-publisher
+      TRUSTED_WORKFLOW: .github/workflows/f1-openf1-lightweight-source-closure.yml
+      TRUSTED_WORKFLOW_NAME: F1 OpenF1 Lightweight Source Closure
+      TRUSTED_REF: refs/heads/main
+      TRUSTED_REPOSITORY_ID: '1262398563'
+
+    steps:
+      - name: Validate invocation, run selectors and safe work root
+        env:
+          ACTUAL_REPOSITORY: ${{ github.repository }}
+          ACTUAL_REF: ${{ github.ref }}
+          RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          INPUT_WEATHER_RUN_ID: ${{ inputs.weather_run_id }}
+          INPUT_DRIVERS_RUN_ID: ${{ inputs.drivers_run_id }}
+          INPUT_STARTING_GRID_RUN_ID: ${{ inputs.starting_grid_run_id }}
+        run: |
+          set -euo pipefail
+          test "$ACTUAL_REPOSITORY" = "$GH_REPO" || { echo 'HOLD: repository mismatch'; exit 1; }
+          test "$ACTUAL_REF" = "$TRUSTED_REF" || { echo 'HOLD: source ref mismatch'; exit 1; }
+          test "$RUNNER_ENVIRONMENT" = 'github-hosted' || { echo 'HOLD: self-hosted runner forbidden'; exit 1; }
+          test -n "${RUNNER_TEMP:-}" && test -d "$RUNNER_TEMP" || { echo 'HOLD: runner temp missing'; exit 1; }
+          test -n "${GITHUB_ENV:-}" && test -f "$GITHUB_ENV" || { echo 'HOLD: GitHub environment file missing'; exit 1; }
+          [[ "${GITHUB_RUN_ID:-}" =~ ^[1-9][0-9]*$ ]] || { echo 'HOLD: verifier run ID malformed'; exit 1; }
+          [[ "${GITHUB_RUN_ATTEMPT:-}" =~ ^[1-9][0-9]*$ ]] || { echo 'HOLD: verifier run attempt malformed'; exit 1; }
+          for value in "$INPUT_WEATHER_RUN_ID" "$INPUT_DRIVERS_RUN_ID" "$INPUT_STARTING_GRID_RUN_ID"; do
+            [[ "$value" =~ ^[1-9][0-9]*$ ]] || { echo 'HOLD: run selector must be a positive decimal'; exit 1; }
+          done
+          test "$INPUT_WEATHER_RUN_ID" != "$INPUT_DRIVERS_RUN_ID" || { echo 'HOLD: run selectors must be distinct'; exit 1; }
+          test "$INPUT_WEATHER_RUN_ID" != "$INPUT_STARTING_GRID_RUN_ID" || { echo 'HOLD: run selectors must be distinct'; exit 1; }
+          test "$INPUT_DRIVERS_RUN_ID" != "$INPUT_STARTING_GRID_RUN_ID" || { echo 'HOLD: run selectors must be distinct'; exit 1; }
+          case "$RUNNER_TEMP" in
+            /*) ;;
+            *) echo 'HOLD: runner temp is not absolute'; exit 1 ;;
+          esac
+          case "$RUNNER_TEMP" in
+            *$'\n'*|*'..'*) echo 'HOLD: unsafe runner temp'; exit 1 ;;
+          esac
+          WORK_ROOT_VALUE="$RUNNER_TEMP/dr002-k4r42-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          case "$WORK_ROOT_VALUE" in
+            "$RUNNER_TEMP"/dr002-k4r42-"$GITHUB_RUN_ID"-"$GITHUB_RUN_ATTEMPT") ;;
+            *) echo 'HOLD: unsafe work root'; exit 1 ;;
+          esac
+          {
+            printf 'WORK_ROOT=%s\n' "$WORK_ROOT_VALUE"
+            printf 'WEATHER_RUN_ID=%s\n' "$INPUT_WEATHER_RUN_ID"
+            printf 'DRIVERS_RUN_ID=%s\n' "$INPUT_DRIVERS_RUN_ID"
+            printf 'STARTING_GRID_RUN_ID=%s\n' "$INPUT_STARTING_GRID_RUN_ID"
+          } >> "$GITHUB_ENV"
+
+      - name: Preflight official GitHub trusted verification
+        run: |
+          set -euo pipefail
+          umask 077
+          EXPECTED_ROOT="$RUNNER_TEMP/dr002-k4r42-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test "${WORK_ROOT:-}" = "$EXPECTED_ROOT" || { echo 'HOLD: unsafe work root'; exit 1; }
+          case "$WORK_ROOT" in
+            "$RUNNER_TEMP"/dr002-k4r42-"$GITHUB_RUN_ID"-"$GITHUB_RUN_ATTEMPT") ;;
+            *) echo 'HOLD: cleanup guard rejected work root'; exit 1 ;;
+          esac
+          rm -rf -- "$WORK_ROOT"
+          mkdir -p "$WORK_ROOT/downloads" "$WORK_ROOT/extracted"
+          gh --version | sed -n '1p'
+          gh attestation verify --help > "$WORK_ROOT/verify-help.txt"
+          for flag in --repo --bundle --cert-identity --source-ref --source-digest --deny-self-hosted-runners --format; do
+            grep -q -- "$flag" "$WORK_ROOT/verify-help.txt" || { echo "HOLD: required gh flag unavailable: $flag"; exit 1; }
+          done
+          gh attestation trusted-root > "$WORK_ROOT/trusted-root.jsonl"
+          test -s "$WORK_ROOT/trusted-root.jsonl" || { echo 'HOLD: trusted Sigstore root unavailable'; exit 1; }
+          ROOT_SHA=$(sha256sum "$WORK_ROOT/trusted-root.jsonl" | cut -d' ' -f1)
+          ROOT_BYTES=$(wc -c < "$WORK_ROOT/trusted-root.jsonl")
+          printf 'trusted_root_access=PASS sha256=%s bytes=%s\n' "$ROOT_SHA" "$ROOT_BYTES"
+          rm -f "$WORK_ROOT/verify-help.txt" "$WORK_ROOT/trusted-root.jsonl"
+
+      - name: Authenticate run metadata and retrieve exact artifact pairs
+        run: |
+          set -euo pipefail
+          umask 077
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ["WORK_ROOT"])
+          policy = {
+              "weather": {
+                  "run": os.environ["WEATHER_RUN_ID"],
+                  "endpoint": "weather",
+                  "session": "11390",
+                  "source_name": "dr002-pre2b7k4r2-openf1-historical-rest-shadow",
+                  "raw_name": "weather.response.json",
+              },
+              "drivers": {
+                  "run": os.environ["DRIVERS_RUN_ID"],
+                  "endpoint": "drivers",
+                  "session": "11390",
+                  "source_name": "dr002-pre2b7k4r7-openf1-drivers-historical-rest-shadow",
+                  "raw_name": "drivers.response.json",
+              },
+              "starting_grid": {
+                  "run": os.environ["STARTING_GRID_RUN_ID"],
+                  "endpoint": "starting_grid",
+                  "session": "11392",
+                  "source_name": "dr002-pre2b7k4r15-openf1-starting-grid-historical-shadow",
+                  "raw_name": "starting_grid.response.json",
+              },
+          }
+          (root / "run-policy.json").write_text(
+              json.dumps(policy, sort_keys=True, separators=(",", ":")),
+              encoding="utf-8",
+          )
+          PY
+          for label in weather drivers starting_grid; do
+            RUN_ID=$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys.argv[2]]["run"])' "$WORK_ROOT/run-policy.json" "$label")
+            gh api "repos/${GH_REPO}/actions/runs/${RUN_ID}" > "$WORK_ROOT/downloads/${label}-run.json"
+            gh api "repos/${GH_REPO}/actions/runs/${RUN_ID}/jobs?per_page=100" > "$WORK_ROOT/downloads/${label}-jobs.json"
+            gh api "repos/${GH_REPO}/actions/runs/${RUN_ID}/artifacts?per_page=100" > "$WORK_ROOT/downloads/${label}-artifacts.json"
+          done
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+
+          root = Path(os.environ["WORK_ROOT"])
+          repository = os.environ["GH_REPO"]
+          workflow = os.environ["TRUSTED_WORKFLOW"]
+          policy = json.loads((root / "run-policy.json").read_text())
+          decimal = re.compile(r"[1-9][0-9]*")
+          hex40 = re.compile(r"[0-9a-f]{40}")
+
+          def hold(reason):
+              raise SystemExit("HOLD: " + reason)
+
+          def load(path, reason):
+              try:
+                  value = json.loads(path.read_text())
+              except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+                  hold(reason)
+              if type(value) is not dict:
+                  hold(reason)
+              return value
+
+          def exact(actual, expected, reason):
+              if actual != expected or type(actual) is not type(expected):
+                  hold(reason)
+
+          selection = {}
+          for label, spec in policy.items():
+              run = load(root / "downloads" / f"{label}-run.json", label + ":run-metadata")
+              jobs = load(root / "downloads" / f"{label}-jobs.json", label + ":jobs-metadata")
+              artifacts = load(root / "downloads" / f"{label}-artifacts.json", label + ":artifacts-metadata")
+              exact(str(run.get("id")), spec["run"], label + ":run-id")
+              exact(run.get("event"), "workflow_dispatch", label + ":run-event")
+              exact(run.get("status"), "completed", label + ":run-status")
+              exact(run.get("conclusion"), "success", label + ":run-conclusion")
+              exact(run.get("run_attempt"), 1, label + ":run-attempt")
+              exact(run.get("head_branch"), "main", label + ":run-branch")
+              exact(run.get("path"), workflow, label + ":run-workflow")
+              exact(run.get("repository", {}).get("full_name"), repository, label + ":repository")
+              exact(run.get("head_repository", {}).get("full_name"), repository, label + ":head-repository")
+              head = run.get("head_sha")
+              if type(head) is not str or not hex40.fullmatch(head):
+                  hold(label + ":run-head")
+              expected_url = f"https://github.com/{repository}/actions/runs/{spec['run']}"
+              exact(run.get("html_url"), expected_url, label + ":run-url")
+              job_rows = jobs.get("jobs")
+              if jobs.get("total_count") != 2 or type(job_rows) is not list or len(job_rows) != 2:
+                  hold(label + ":job-count")
+              by_name = {item.get("name"): item for item in job_rows if type(item) is dict}
+              expected_jobs = {
+                  "openf1-lightweight-source-closure",
+                  "openf1-manual-shadow-custody-attestation",
+              }
+              if set(by_name) != expected_jobs:
+                  hold(label + ":job-set")
+              for name in expected_jobs:
+                  exact(by_name[name].get("status"), "completed", label + ":job-status:" + name)
+                  exact(by_name[name].get("conclusion"), "success", label + ":job-conclusion:" + name)
+
+              rows = artifacts.get("artifacts")
+              if artifacts.get("total_count") != 2 or type(rows) is not list or len(rows) != 2:
+                  hold(label + ":artifact-count")
+              custody_name = f"dr002-pre2b7k4r28-openf1-manual-shadow-custody-{spec['run']}-1"
+              expected_names = {spec["source_name"], custody_name}
+              by_artifact = {item.get("name"): item for item in rows if type(item) is dict}
+              if set(by_artifact) != expected_names:
+                  hold(label + ":artifact-pair")
+              selected = {"head": head, "created_at": run.get("created_at"), "run_started_at": run.get("run_started_at"), "updated_at": run.get("updated_at")}
+              for kind, name in (("source", spec["source_name"]), ("custody", custody_name)):
+                  item = by_artifact[name]
+                  artifact_id = str(item.get("id"))
+                  if not decimal.fullmatch(artifact_id):
+                      hold(label + f":{kind}-artifact-id")
+                  exact(item.get("expired"), False, label + f":{kind}-artifact-expired")
+                  exact(str(item.get("workflow_run", {}).get("id")), spec["run"], label + f":{kind}-artifact-run")
+                  exact(item.get("workflow_run", {}).get("head_sha"), head, label + f":{kind}-artifact-head")
+                  exact(item.get("workflow_run", {}).get("head_branch"), "main", label + f":{kind}-artifact-branch")
+                  digest = item.get("digest")
+                  if digest is not None and (type(digest) is not str or not re.fullmatch(r"sha256:[0-9a-f]{64}", digest)):
+                      hold(label + f":{kind}-artifact-digest")
+                  selected[kind + "_id"] = artifact_id
+                  selected[kind + "_digest"] = digest
+              selection[label] = selected
+          (root / "artifact-selection.json").write_text(
+              json.dumps(selection, sort_keys=True, separators=(",", ":")), encoding="utf-8"
+          )
+          PY
+          for label in weather drivers starting_grid; do
+            SOURCE_ID=$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys.argv[2]]["source_id"])' "$WORK_ROOT/artifact-selection.json" "$label")
+            CUSTODY_ID=$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys.argv[2]]["custody_id"])' "$WORK_ROOT/artifact-selection.json" "$label")
+            gh api "repos/${GH_REPO}/actions/artifacts/${SOURCE_ID}/zip" > "$WORK_ROOT/downloads/${label}-source.zip"
+            gh api "repos/${GH_REPO}/actions/artifacts/${CUSTODY_ID}/zip" > "$WORK_ROOT/downloads/${label}-custody.zip"
+          done
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+          import zipfile
+
+          root = Path(os.environ["WORK_ROOT"])
+          policy = json.loads((root / "run-policy.json").read_text())
+          selection = json.loads((root / "artifact-selection.json").read_text())
+          common = {
+              "historical_rest_capture_assessment.json",
+              "shadow_manifest.json",
+              "shadow_report.md",
+              "source_capture_receipt.json",
+          }
+          source_members = {
+              "weather": common | {"weather.response.json"},
+              "drivers": common | {"drivers.response.json"},
+              "starting_grid": common | {"sessions.response.json", "starting_grid.response.json"},
+          }
+          custody_members = {
+              "custody_manifest.json",
+              "github_attestation.bundle.json",
+              "github_attestation_metadata.json",
+          }
+
+          def hold(reason):
+              raise SystemExit("HOLD: " + reason)
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def unzip_exact(archive, destination, expected, reason):
+              destination.mkdir(mode=0o700)
+              try:
+                  with zipfile.ZipFile(archive) as zf:
+                      infos = zf.infolist()
+                      names = [item.filename for item in infos]
+                      if len(names) != len(set(names)) or set(names) != expected:
+                          hold(reason + ":member-set")
+                      total = 0
+                      for info in infos:
+                          name = info.filename
+                          path = PurePosixPath(name)
+                          mode = info.external_attr >> 16
+                          if (
+                              len(name) > 128 or path.name != name or path.is_absolute()
+                              or name in {".", ".."} or "\\" in name or "%" in name
+                              or info.is_dir() or stat.S_ISLNK(mode) or info.flag_bits & 0x1
+                              or info.file_size <= 0 or info.file_size > 16 * 1024 * 1024
+                              or info.compress_size <= 0
+                              or info.file_size / info.compress_size > 200
+                          ):
+                              hold(reason + ":unsafe-member")
+                          total += info.file_size
+                          if total > 64 * 1024 * 1024:
+                              hold(reason + ":size-limit")
+                          data = zf.read(info)
+                          if len(data) != info.file_size:
+                              hold(reason + ":short-read")
+                          with (destination / name).open("xb") as handle:
+                              handle.write(data)
+              except (OSError, zipfile.BadZipFile, RuntimeError):
+                  hold(reason + ":invalid-archive")
+
+          for label in policy:
+              for kind, expected in (("source", source_members[label]), ("custody", custody_members)):
+                  archive = root / "downloads" / f"{label}-{kind}.zip"
+                  data = archive.read_bytes()
+                  if not data or len(data) > 80 * 1024 * 1024:
+                      hold(label + f":{kind}-archive-size")
+                  actual = sha(data)
+                  claimed = selection[label][kind + "_digest"]
+                  if claimed is not None and claimed != "sha256:" + actual:
+                      hold(label + f":{kind}-archive-digest")
+                  selection[label][kind + "_zip_sha256"] = actual
+                  unzip_exact(
+                      archive,
+                      root / "extracted" / f"{label}-{kind}",
+                      expected,
+                      label + f":{kind}-archive",
+                  )
+              print(
+                  f"{label}: authenticated_run_metadata=PASS run={policy[label]['run']} "
+                  f"source_artifact_id={selection[label]['source_id']} "
+                  f"source_zip_sha256={selection[label]['source_zip_sha256']} "
+                  f"custody_artifact_id={selection[label]['custody_id']} "
+                  f"custody_zip_sha256={selection[label]['custody_zip_sha256']}"
+              )
+          (root / "artifact-selection.json").write_text(
+              json.dumps(selection, sort_keys=True, separators=(",", ":")), encoding="utf-8"
+          )
+          PY
+
+      - name: Verify all custody manifests with official GitHub CLI
+        run: |
+          set -euo pipefail
+          for label in weather drivers starting_grid; do
+            HEAD_SHA=$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys.argv[2]]["head"])' "$WORK_ROOT/artifact-selection.json" "$label")
+            gh attestation verify "$WORK_ROOT/extracted/${label}-custody/custody_manifest.json" \
+              --repo "$GH_REPO" \
+              --bundle "$WORK_ROOT/extracted/${label}-custody/github_attestation.bundle.json" \
+              --cert-identity "https://github.com/${GH_REPO}/${TRUSTED_WORKFLOW}@${TRUSTED_REF}" \
+              --source-ref "$TRUSTED_REF" \
+              --source-digest "$HEAD_SHA" \
+              --deny-self-hosted-runners \
+              --format json > "$WORK_ROOT/${label}-verification.json"
+          done
+
+      - name: Enforce signed Austin scope and emit bounded diagnostics
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from datetime import datetime, timedelta, timezone
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+
+          root = Path(os.environ["WORK_ROOT"])
+          policy = json.loads((root / "run-policy.json").read_text())
+          selection = json.loads((root / "artifact-selection.json").read_text())
+          repository = os.environ["GH_REPO"]
+          repository_id = os.environ["TRUSTED_REPOSITORY_ID"]
+          workflow = os.environ["TRUSTED_WORKFLOW"]
+          workflow_name = os.environ["TRUSTED_WORKFLOW_NAME"]
+          ref = os.environ["TRUSTED_REF"]
+          identity = f"https://github.com/{repository}/{workflow}@{ref}"
+          event_id = "2026_1297_united_states_austin_austin"
+          race_start = datetime(2026, 10, 25, 20, 0, tzinfo=timezone.utc)
+          availability_gate = {
+              "weather": datetime(2026, 10, 23, 22, 30, tzinfo=timezone.utc),
+              "drivers": datetime(2026, 10, 23, 22, 30, tzinfo=timezone.utc),
+              "starting_grid": datetime(2026, 10, 24, 22, 30, tzinfo=timezone.utc),
+          }
+          roles = {
+              "weather": "PRACTICE_2_WEATHER_SOURCE_CAPTURE",
+              "drivers": "PRACTICE_2_DRIVERS_SOURCE_CAPTURE",
+              "starting_grid": "QUALIFYING_STARTING_GRID_SOURCE_CAPTURE_FOR_RACE_TARGET",
+          }
+          common_members = {
+              "historical_rest_capture_assessment.json",
+              "shadow_manifest.json",
+              "shadow_report.md",
+              "source_capture_receipt.json",
+          }
+          source_members = {
+              "weather": common_members | {"weather.response.json"},
+              "drivers": common_members | {"drivers.response.json"},
+              "starting_grid": common_members | {"sessions.response.json", "starting_grid.response.json"},
+          }
+          false_claims = {
+              "source_publisher_authenticated",
+              "first_observed_clock_authenticated",
+              "historical_availability_proven",
+              "source_capture_externally_attested_as_first_observed",
+              "verified_receipt_bindings_created",
+              "official_fia_final_grid_authenticated",
+              "revision_completeness_proven",
+              "production_authenticated",
+              "blind_validation_eligible",
+              "producer_execution_attempted",
+              "forecast_generated",
+              "forecast_locked",
+              "stable_engine_execution_proven",
+              "dr002_activated",
+              "promotion_allowed",
+          }
+
+          def hold(reason):
+              raise SystemExit("HOLD: " + reason)
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def strict_json(data, kind, reason):
+              def pairs(items):
+                  value = {}
+                  for key, item in items:
+                      if key in value:
+                          hold(reason + ":duplicate-key")
+                      value[key] = item
+                  return value
+              try:
+                  value = json.loads(
+                      data.decode("utf-8"), object_pairs_hook=pairs,
+                      parse_constant=lambda _v: hold(reason + ":nonfinite"),
+                  )
+              except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+                  hold(reason)
+              if type(value) is not kind:
+                  hold(reason)
+              return value
+
+          def canonical(value):
+              try:
+                  return json.dumps(
+                      value, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=True, allow_nan=False,
+                  ).encode("utf-8")
+              except (TypeError, ValueError):
+                  hold("canonical-json-failure")
+
+          def exact(actual, expected, reason):
+              if actual != expected or type(actual) is not type(expected):
+                  hold(reason)
+
+          def required(obj, key, reason):
+              if type(obj) is not dict or key not in obj:
+                  hold(reason)
+              return obj[key]
+
+          def utc(value, reason):
+              if type(value) is not str:
+                  hold(reason)
+              text = value[:-1] + "+00:00" if value.endswith("Z") else value
+              if not text.endswith("+00:00"):
+                  hold(reason)
+              try:
+                  parsed = datetime.fromisoformat(text)
+              except ValueError:
+                  hold(reason)
+              if parsed.tzinfo is None or parsed.utcoffset() != timedelta(0):
+                  hold(reason)
+              return parsed.astimezone(timezone.utc)
+
+          for label, spec in policy.items():
+              chosen = selection[label]
+              source_dir = root / "extracted" / f"{label}-source"
+              custody_dir = root / "extracted" / f"{label}-custody"
+              manifest_bytes = (custody_dir / "custody_manifest.json").read_bytes()
+              manifest_sha = sha(manifest_bytes)
+
+              report = strict_json(
+                  (root / f"{label}-verification.json").read_bytes(),
+                  list, label + ":official-verification-report",
+              )
+              if len(report) != 1 or type(report[0]) is not dict:
+                  hold(label + ":verification-result-count")
+              result = required(report[0], "verificationResult", label + ":verification-result")
+              signature = required(result, "signature", label + ":signature")
+              certificate = required(signature, "certificate", label + ":certificate")
+              timestamps = required(result, "verifiedTimestamps", label + ":verified-timestamps")
+              if type(timestamps) is not list or not timestamps:
+                  hold(label + ":verified-timestamp-empty")
+              exact(str(required(certificate, "sourceRepositoryIdentifier", label + ":signed-repository-id")), repository_id, label + ":signed-repository-id")
+              exact(required(certificate, "sourceRepositoryURI", label + ":signed-repository-uri"), f"https://github.com/{repository}", label + ":signed-repository-uri")
+              exact(required(certificate, "sourceRepositoryRef", label + ":signed-ref"), ref, label + ":signed-ref")
+              exact(required(certificate, "sourceRepositoryDigest", label + ":signed-commit"), chosen["head"], label + ":signed-commit")
+              exact(required(certificate, "runnerEnvironment", label + ":signed-runner"), "github-hosted", label + ":signed-runner")
+              exact(required(certificate, "runInvocationURI", label + ":signed-invocation"), f"https://github.com/{repository}/actions/runs/{spec['run']}/attempts/1", label + ":signed-invocation")
+              exact(required(certificate, "buildConfigURI", label + ":signed-workflow"), identity, label + ":signed-workflow")
+              exact(required(certificate, "buildConfigDigest", label + ":signed-workflow-commit"), chosen["head"], label + ":signed-workflow-commit")
+              exact(required(certificate, "buildTrigger", label + ":signed-trigger"), "workflow_dispatch", label + ":signed-trigger")
+              exact(required(certificate, "issuer", label + ":signed-issuer"), "https://token.actions.githubusercontent.com", label + ":signed-issuer")
+              exact(required(certificate, "subjectAlternativeName", label + ":signed-certificate-identity"), identity, label + ":signed-certificate-identity")
+              statement = required(result, "statement", label + ":statement")
+              exact(required(statement, "_type", label + ":statement-type"), "https://in-toto.io/Statement/v1", label + ":statement-type")
+              exact(required(statement, "predicateType", label + ":predicate-type"), "https://slsa.dev/provenance/v1", label + ":predicate-type")
+              subjects = required(statement, "subject", label + ":subject")
+              if type(subjects) is not list or len(subjects) != 1 or type(subjects[0]) is not dict:
+                  hold(label + ":subject-count")
+              subject = subjects[0]
+              name = required(subject, "name", label + ":subject-name")
+              if type(name) is not str or not name.endswith("custody_manifest.json"):
+                  hold(label + ":subject-name")
+              digest = required(subject, "digest", label + ":subject-digest")
+              if type(digest) is not dict or set(digest) != {"sha256"}:
+                  hold(label + ":subject-digest-shape")
+              exact(digest["sha256"], manifest_sha, label + ":subject-digest")
+
+              manifest = strict_json(manifest_bytes, dict, label + ":custody-manifest")
+              exact(manifest_bytes, canonical(manifest), label + ":manifest-canonical")
+              exact(manifest.get("schema_version"), "dr002-openf1-manual-shadow-custody-manifest-v1", label + ":manifest-schema")
+              exact(manifest.get("status"), "OPENF1_MANUAL_SHADOW_CUSTODY_MANIFEST_PREPARED_UNATTESTED", label + ":manifest-status")
+              exact(manifest.get("classification"), "CUSTODY_ONLY_NON_OPERATIONAL_SOURCE_EVIDENCE_INVENTORY", label + ":manifest-classification")
+              exact(manifest.get("source_endpoint"), spec["endpoint"], label + ":manifest-endpoint")
+              exact(manifest.get("input_evidence_role"), roles[label], label + ":manifest-role")
+              exact(manifest.get("custody_manifest_contains_no_raw_source_bytes"), True, label + ":custody-boundary")
+              exact(manifest.get("custody_manifest_prepared_for_github_attestation"), True, label + ":attestation-intent")
+              exact(manifest.get("source_session_classification_authenticated"), False, label + ":source-auth-claim")
+              for claim in false_claims:
+                  exact(manifest.get(claim), False, label + ":forbidden-claim:" + claim)
+              scope = manifest.get("source_scope")
+              if type(scope) is not dict:
+                  hold(label + ":source-scope")
+              exact(scope.get("event_id"), event_id, label + ":event")
+              exact(scope.get("meeting_id"), "1297", label + ":meeting")
+              exact(scope.get("session_id"), spec["session"], label + ":session")
+              claims = manifest.get("github_execution_claims")
+              expected_claims = {
+                  "repository": repository,
+                  "workflow": workflow_name,
+                  "workflow_ref": f"{repository}/{workflow}@{ref}",
+                  "ref": ref,
+                  "head_sha": chosen["head"],
+                  "run_id": spec["run"],
+                  "run_attempt": "1",
+                  "identity_basis": "MATCHED_ORIGINAL_PUBLISHER_SHADOW_MANIFEST_ONLY",
+              }
+              if type(claims) is not dict:
+                  hold(label + ":execution-claims")
+              for key, value in expected_claims.items():
+                  exact(claims.get(key), value, label + ":execution-claim:" + key)
+
+              inventory = manifest.get("original_artifact_members")
+              if type(inventory) is not list or len(inventory) != len(source_members[label]):
+                  hold(label + ":inventory")
+              indexed = {}
+              for item in inventory:
+                  if type(item) is not dict or type(item.get("member_name")) is not str:
+                      hold(label + ":inventory-entry")
+                  if item["member_name"] in indexed:
+                      hold(label + ":inventory-duplicate")
+                  indexed[item["member_name"]] = item
+              if set(indexed) != source_members[label]:
+                  hold(label + ":inventory-member-set")
+              exact(manifest.get("original_artifact_member_count"), len(indexed), label + ":member-count")
+              for member_name in source_members[label]:
+                  data = (source_dir / member_name).read_bytes()
+                  exact(indexed[member_name].get("sha256"), sha(data), label + ":member-hash:" + member_name)
+                  exact(indexed[member_name].get("byte_length"), len(data), label + ":member-length:" + member_name)
+
+              receipt_bytes = (source_dir / "source_capture_receipt.json").read_bytes()
+              receipt = strict_json(receipt_bytes, dict, label + ":receipt")
+              exact(receipt_bytes, canonical(receipt), label + ":receipt-canonical")
+              exact(receipt.get("receipt_type"), "source_capture", label + ":receipt-type")
+              exact(receipt.get("parent_receipt_ids"), [], label + ":receipt-parents")
+              exact(receipt.get("scope"), scope, label + ":receipt-scope")
+              identity_fields = {key: receipt[key] for key in ("receipt_type", "scope", "parent_receipt_ids", "payload")}
+              expected_receipt_id = "source_capture:" + sha(canonical(identity_fields))
+              exact(receipt.get("receipt_id"), expected_receipt_id, label + ":receipt-id")
+              exact(manifest.get("original_source_receipt_id"), expected_receipt_id, label + ":manifest-receipt-id")
+              raw = (source_dir / spec["raw_name"]).read_bytes()
+              rows = strict_json(raw, list, label + ":raw-response")
+              if not rows:
+                  hold(label + ":raw-response-empty")
+              for row in rows:
+                  if type(row) is not dict:
+                      hold(label + ":raw-row")
+                  exact(str(row.get("meeting_key")), "1297", label + ":raw-meeting")
+                  exact(str(row.get("session_key")), spec["session"], label + ":raw-session")
+              source_uri = f"https://api.openf1.org/v1/{spec['endpoint']}?session_key={spec['session']}"
+              payload = receipt.get("payload")
+              if type(payload) is not dict:
+                  hold(label + ":receipt-payload")
+              exact(payload.get("source_uri"), source_uri, label + ":source-uri")
+              exact(payload.get("source_id"), "openf1:" + spec["endpoint"] + ":" + sha(source_uri.encode("utf-8")), label + ":source-id")
+              exact(payload.get("source_sha256"), sha(raw), label + ":receipt-raw-hash")
+
+              run_created = utc(chosen["created_at"], label + ":run-created")
+              run_started = utc(chosen["run_started_at"], label + ":run-started")
+              run_updated = utc(chosen["updated_at"], label + ":run-updated")
+              first_observed = utc(payload.get("first_observed_utc"), label + ":first-observed")
+              ingested = utc(payload.get("ingested_utc"), label + ":ingested")
+              receipt_created = utc(receipt.get("receipt_created_utc"), label + ":receipt-created")
+              if not (availability_gate[label] <= run_created <= run_started <= first_observed <= ingested <= receipt_created <= run_updated < race_start):
+                  hold(label + ":temporal-order")
+
+              relationship = manifest.get("source_to_target_relationship")
+              if label == "starting_grid":
+                  expected_relationship = {
+                      "source_session_id": "11392",
+                      "source_session_kind": "Qualifying",
+                      "target_race_session_id": "11396",
+                      "target_race_session_kind": "Race",
+                      "relationship_evidence_type": "OPENF1_PROVIDER_DISCOVERY_CLAIM",
+                      "cross_session_producer_authorization": False,
+                  }
+                  exact(relationship, expected_relationship, label + ":source-target-relationship")
+                  sessions = strict_json((source_dir / "sessions.response.json").read_bytes(), list, label + ":sessions")
+                  source_rows = [row for row in sessions if type(row) is dict and str(row.get("session_key")) == "11392"]
+                  target_rows = [row for row in sessions if type(row) is dict and str(row.get("session_key")) == "11396"]
+                  if len(source_rows) != 1 or len(target_rows) != 1:
+                      hold(label + ":session-identity-not-unique")
+                  source, target = source_rows[0], target_rows[0]
+                  for row, name, kind, start, end in (
+                      (source, "Qualifying", "Qualifying", "2026-10-24T21:00:00+00:00", "2026-10-24T22:00:00+00:00"),
+                      (target, "Race", "Race", "2026-10-25T20:00:00+00:00", "2026-10-25T22:00:00+00:00"),
+                  ):
+                      exact(str(row.get("meeting_key")), "1297", label + ":session-meeting")
+                      exact(row.get("year"), 2026, label + ":session-year")
+                      exact(row.get("country_name"), "United States", label + ":session-country")
+                      exact(row.get("location"), "Austin", label + ":session-location")
+                      exact(row.get("circuit_short_name"), "Austin", label + ":session-circuit")
+                      exact(row.get("session_name"), name, label + ":session-name")
+                      exact(row.get("session_type"), kind, label + ":session-type")
+                      exact(row.get("date_start"), start, label + ":session-start")
+                      exact(row.get("date_end"), end, label + ":session-end")
+                  shadow = strict_json((source_dir / "shadow_manifest.json").read_bytes(), dict, label + ":shadow-manifest")
+                  exact(shadow.get("grid_source_session_id"), "11392", label + ":shadow-grid-source")
+                  exact(shadow.get("grid_target_race_session_id"), "11396", label + ":shadow-race-target")
+                  exact(shadow.get("grid_source_session_kind"), "Qualifying", label + ":shadow-grid-kind")
+                  exact(shadow.get("grid_target_race_session_kind"), "Race", label + ":shadow-target-kind")
+                  exact(shadow.get("session_discovery_request_uri"), "https://api.openf1.org/v1/sessions?year=2026", label + ":discovery-uri")
+                  exact(shadow.get("session_discovery_request_attempted"), True, label + ":discovery-attempted")
+                  exact(shadow.get("starting_grid_request_attempted"), True, label + ":grid-attempted")
+                  exact(shadow.get("session_discovery_http_status_code"), 200, label + ":discovery-status")
+                  exact(shadow.get("starting_grid_http_status_code"), 200, label + ":grid-status")
+                  exact(shadow.get("official_fia_grid_authenticated"), False, label + ":fia-grid-claim")
+              else:
+                  exact(relationship, None, label + ":unexpected-source-target-relationship")
+
+              metadata = strict_json(
+                  (custody_dir / "github_attestation_metadata.json").read_bytes(),
+                  dict, label + ":attestation-metadata",
+              )
+              exact(metadata.get("schema_version"), "dr002-openf1-manual-shadow-github-attestation-metadata-v1", label + ":metadata-schema")
+              exact(metadata.get("classification"), "LOCAL_DSSE_SUBJECT_CONSISTENCY_ONLY_NOT_CRYPTOGRAPHIC_VERIFICATION", label + ":metadata-classification")
+              exact(metadata.get("attestation_action"), "actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6", label + ":metadata-action")
+              attestation_id = metadata.get("attestation_id")
+              if type(attestation_id) is not str or not re.fullmatch(r"[1-9][0-9]*", attestation_id):
+                  hold(label + ":metadata-attestation-id")
+              exact(metadata.get("attestation_url"), f"https://github.com/{repository}/attestations/{attestation_id}", label + ":metadata-attestation-url")
+              exact(metadata.get("subject_sha256"), manifest_sha, label + ":metadata-subject")
+              exact(metadata.get("bundle_sha256"), sha((custody_dir / "github_attestation.bundle.json").read_bytes()), label + ":metadata-bundle")
+              exact(metadata.get("repository"), repository, label + ":metadata-repository")
+              exact(metadata.get("workflow_path"), workflow, label + ":metadata-workflow")
+              exact(metadata.get("workflow_name"), workflow_name, label + ":metadata-workflow-name")
+              exact(metadata.get("workflow_ref"), f"{repository}/{workflow}@{ref}", label + ":metadata-workflow-ref")
+              exact(metadata.get("git_ref"), ref, label + ":metadata-ref")
+              exact(metadata.get("git_head_sha"), chosen["head"], label + ":metadata-head")
+              exact(metadata.get("run_id"), spec["run"], label + ":metadata-run")
+              exact(metadata.get("run_attempt"), "1", label + ":metadata-attempt")
+              exact(metadata.get("dsse_subject_digest_consistency_checked"), True, label + ":metadata-subject-check")
+              exact(metadata.get("attestation_bundle_preserved_exactly"), True, label + ":metadata-bundle-preserved")
+              for claim in false_claims | {
+                  "cryptographic_signature_verified", "trusted_tlog_verified",
+                  "signed_issuer_verified", "signed_repository_verified",
+                  "signed_ref_verified", "signed_workflow_verified",
+              }:
+                  exact(metadata.get(claim), False, label + ":metadata-forbidden-claim:" + claim)
+
+              print(
+                  f"{label}: trusted_github_custody=PASS run={spec['run']} attempt=1 "
+                  f"source_artifact_id={chosen['source_id']} source_zip_sha256={chosen['source_zip_sha256']} "
+                  f"custody_artifact_id={chosen['custody_id']} custody_zip_sha256={chosen['custody_zip_sha256']} "
+                  f"manifest_sha256={manifest_sha} first_observed_utc={payload['first_observed_utc']} "
+                  f"official_attestation_verification=PASS"
+              )
+          print(
+              "K4R42_RUNTIME=PASS classification=AUSTIN_TRUSTED_GITHUB_CUSTODY_ONLY "
+              "provider_first_publication_authenticated=false revision_completeness_proven=false "
+              "official_fia_final_grid_authenticated=false prospective_candidate_created=false "
+              "forecast_locked=false dr002_activated=false promotion_allowed=false"
+          )
+          PY
