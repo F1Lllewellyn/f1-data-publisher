@@ -43,7 +43,18 @@ SESSION_TYPES = {
     "all": ["Practice", "Qualifying", "Sprint Qualifying", "Race", "Sprint"],
 }
 
-EXPECTED_ZERO_CANCELLED = ["Bahrain", "Saudi"]
+CANCELLED_MEETING_KEYS = frozenset({1282, 1283})
+PRESEASON_TEST_MEETING_KEYS = frozenset({1304, 1305})
+EXCLUDED_MEETING_KEYS = CANCELLED_MEETING_KEYS | PRESEASON_TEST_MEETING_KEYS
+
+
+def parse_session_keys(value):
+    if not value:
+        return frozenset()
+    try:
+        return frozenset(int(item.strip()) for item in value.split(",") if item.strip())
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("session keys must be comma-separated integers") from exc
 
 
 def parse_dt(x):
@@ -115,7 +126,7 @@ def write_frame(df, path):
         raise ValueError(path)
 
 
-def discover_sessions(client, year, mode, event_filter=""):
+def discover_sessions(client, year, mode, event_filter="", session_keys=frozenset()):
     data, meta = client.get("sessions", {"year": year})
     if data is None:
         raise RuntimeError(f"Could not fetch sessions: {meta}")
@@ -139,10 +150,22 @@ def discover_sessions(client, year, mode, event_filter=""):
         )
         completed = completed[mask].copy()
 
-    # Treat Bahrain/Saudi 2026 as expected-zero cancellations/non-events in this project.
-    if "country_name" in completed.columns:
-        cancelled_mask = completed["country_name"].astype(str).str.contains("Bahrain|Saudi", case=False, na=False)
-        completed = completed[~cancelled_mask].copy()
+    if year == 2026:
+        if "meeting_key" not in completed.columns:
+            raise RuntimeError("Missing meeting_key in 2026 session inventory")
+        meeting_keys = pd.to_numeric(completed["meeting_key"], errors="coerce")
+        if meeting_keys.isna().any() or (meeting_keys % 1 != 0).any():
+            raise RuntimeError("Invalid meeting_key in 2026 session inventory")
+        completed = completed.loc[~meeting_keys.isin(EXCLUDED_MEETING_KEYS)].copy()
+
+    if session_keys:
+        selected_keys = set(pd.to_numeric(completed["session_key"], errors="coerce").dropna().astype(int))
+        missing = sorted(session_keys - selected_keys)
+        if missing:
+            raise RuntimeError(f"Requested completed session keys not found: {missing}")
+        completed = completed.loc[
+            pd.to_numeric(completed["session_key"], errors="coerce").isin(session_keys)
+        ].copy()
 
     sort_cols = [c for c in ["date_start_dt", "meeting_key", "session_key"] if c in completed.columns]
     return completed.sort_values(sort_cols).reset_index(drop=True)
@@ -425,11 +448,14 @@ def fetch_race_ground_truth(client, year):
     return pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()
 
 
-def build_metrics(output_dir, mode, fm, client, year):
+def build_metrics(output_dir, mode, fm, client, year, skip_race_ground_truth=False):
     metrics_dir = output_dir / "metrics"
     metrics_dir.mkdir(exist_ok=True)
     ds = compute_driver_session_risk(fm)
     ds.to_csv(metrics_dir / "driver_session_risk_scores.csv", index=False)
+
+    if skip_race_ground_truth:
+        return
 
     if mode not in ["prerace", "all"]:
         return
@@ -534,6 +560,9 @@ def main():
     p.add_argument("--fetch-mode", choices=["driver_full_session", "chunked_then_fallback"], default="driver_full_session")
     p.add_argument("--output-dir", default="output/openf1_high_frequency")
     p.add_argument("--request-sleep", type=float, default=0.35)
+    p.add_argument("--session-keys", type=parse_session_keys, default=frozenset())
+    p.add_argument("--max-retries", type=int, default=5)
+    p.add_argument("--skip-race-ground-truth", action="store_true")
     p.add_argument("--warning-threshold", type=float, default=0.80)
     p.add_argument("--strict-threshold", type=float, default=0.90)
     args = p.parse_args()
@@ -543,14 +572,27 @@ def main():
         (output_dir / sub).mkdir(parents=True, exist_ok=True)
 
     token = os.environ.get("OPENF1_TOKEN", "").strip()
-    client = OpenF1Client(token=token, sleep_seconds=args.request_sleep)
+    client = OpenF1Client(token=token, sleep_seconds=args.request_sleep, max_retries=args.max_retries)
 
-    sessions = discover_sessions(client, args.year, args.mode, event_filter=args.event_filter)
+    sessions = discover_sessions(
+        client,
+        args.year,
+        args.mode,
+        event_filter=args.event_filter,
+        session_keys=args.session_keys,
+    )
     sessions.to_csv(output_dir / "manifests" / "completed_sessions_selected.csv", index=False)
 
     session_drivers, manifest = extract_raw(client, sessions, output_dir, args.fetch_mode)
     fm = build_feature_mart(output_dir, sessions, session_drivers)
-    build_metrics(output_dir, args.mode, fm, client, args.year)
+    build_metrics(
+        output_dir,
+        args.mode,
+        fm,
+        client,
+        args.year,
+        skip_race_ground_truth=args.skip_race_ground_truth,
+    )
     write_report(output_dir, args.year, args.mode)
 
     policy = {
