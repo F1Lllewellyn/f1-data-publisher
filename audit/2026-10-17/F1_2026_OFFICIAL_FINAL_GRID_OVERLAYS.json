@@ -1,0 +1,5191 @@
+{
+  "document_count": 23,
+  "documents": [
+    {
+      "document_date": "08 March 2026",
+      "document_number": 55,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 641704,
+      "fia_pdf_sha256": "354eabdb3a94fa7cfc302e42eba608b658d1dc6bb41cf22385b7483f1d8cffc9",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:23:37.726672Z",
+      "grand_prix": "Australia",
+      "meeting_key": 1279,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1279_australia_melbourne_melbourne/race_11234/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "41fd994daea894f17be025ccb507d5084915a0dbf8d18e5b9b34d43349f45a50",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11230
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Cars 3, 55 & 18 - Permitted to start - Stewards' document nos. 39, 40 & 43 | Nish Shetty Mathieu Remmerie Pedro Lamy Matthew Selley",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11234,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "14 March 2026",
+      "document_number": 44,
+      "document_time": "10:03",
+      "fia_pdf_bytes": 648692,
+      "fia_pdf_sha256": "c66a868329805fe7b1cf673a2592465e2849ec4799ab77f151780a412da29fa0",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:23:45.078520Z",
+      "grand_prix": "China",
+      "meeting_key": 1280,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1280_china_shanghai_shanghai/sprint_11240/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "1419fbbcbb953266283aa8d1f79df602e04d4b6e9827edacc4c81a3745947b5f",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11236
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Car 11 - Permitted to start - Stewards' document no. 35 | * PENALTIES | Nish Shetty Matthew Selley Pedro Lamy Zheng Honghai",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11240,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "15 March 2026",
+      "document_number": 71,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 647845,
+      "fia_pdf_sha256": "7eaf0e007bcd3b8674b5fb1ccc53c0af8d3a0dfd54f5fa875343b2720970c2f0",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:23:50.949086Z",
+      "grand_prix": "China",
+      "meeting_key": 1280,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1280_china_shanghai_shanghai/race_11245/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "a3446bff3b04983d1e78f286e49adf6c3298ba194d1a07596ede990aa634a1a8",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11241
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Nish Shetty Matthew Selley Pedro Lamy Zheng Honghai",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11245,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "29 March 2026",
+      "document_number": 55,
+      "document_time": "13:00",
+      "fia_pdf_bytes": 527978,
+      "fia_pdf_sha256": "c7d268b0ddf26caaecc6321552283737013bf7b57d56fe9ff66b6ab41a25f14f",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:23:55.415421Z",
+      "grand_prix": "Japan",
+      "meeting_key": 1281,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1281_japan_suzuka_suzuka/race_11253/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "875d044fd851d10b9f3b29762c817f8e7ca695c30aae95b193a485d8a9480816",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11249
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11253,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "02 May 2026",
+      "document_number": 42,
+      "document_time": "11:00",
+      "fia_pdf_bytes": 1236052,
+      "fia_pdf_sha256": "07120a672440e2f0d35abfc0a7b54a49893eab8b47cc043b1f5f6752322a840a",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:23:58.455550Z",
+      "grand_prix": "Miami",
+      "meeting_key": 1284,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1284_united_states_miami_gardens_miami/sprint_11275/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "072c42f952a15abe85f13cdced9a323615e7c733978b71263f54bb86e6488ec7",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11271
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Cars 18 & 14 - Permitted to start - Stewards' document nos. 32 & 33 | * PENALTIES | Car 41 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 40",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11275,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "03 May 2026",
+      "document_number": 79,
+      "document_time": "12:00",
+      "fia_pdf_bytes": 525273,
+      "fia_pdf_sha256": "8a61b3b3292208cf07d9e82b848387ab9acd297e4fee638395dbd0001e6a1d60",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:03.030008Z",
+      "grand_prix": "Miami",
+      "meeting_key": 1284,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1284_united_states_miami_gardens_miami/race_11280/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "76f03d25076531fd7a20d625a42ced60fd8f918c6fb834cad242ffa960d6430c",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11276
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Car 6 - Permitted to start - Stewards' document no. 71 | * PENALTIES | Car 6 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 75 | Nish Shetty Natalie Corsmit Vitantonio Liuzzi Steve Pence",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11280,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "23 May 2026",
+      "document_number": 50,
+      "document_time": "11:25",
+      "fia_pdf_bytes": 646520,
+      "fia_pdf_sha256": "b99ef28592ab9a1dfe57f24bc310a37b1b46f8d6533c758cf27a7be0dffcf98d",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:06.560473Z",
+      "grand_prix": "Canada",
+      "meeting_key": 1285,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1285_canada_montr_al_montreal/sprint_11286/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "7a242e01d778b17ce52fcf390605805f0f47210532f0bcec438347226afa833f",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11282
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": null,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": null,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": null,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Cars 30 & 23 - Permitted to start - Stewards' document nos. 27 & 30 | * PENALTIES | Garry Connelly Tanja Geilhausen Pedro Lamy Marcel Demers",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11286,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "24 May 2026",
+      "document_number": 91,
+      "document_time": "15:00",
+      "fia_pdf_bytes": 644239,
+      "fia_pdf_sha256": "1a137eb47ad2588c6d8d0cbcc969cf793fd65f35e6516299082c9091cdf51988",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:10.327452Z",
+      "grand_prix": "Canada",
+      "meeting_key": 1285,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1285_canada_montr_al_montreal/race_11291/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "673cbb36a0e941c24cb662450755194c3da909e134210abba1148434df633f03",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11287
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | document no. 89 | Garry Connelly Tanja Geilhausen Pedro Lamy Marcel Demers",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11291,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "07 June 2026",
+      "document_number": 68,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 645313,
+      "fia_pdf_sha256": "eaf1bfe037be4a7ebb175cbf3f97b0fc996a8f594161e8ea7c2531a7cf958869",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:15.025924Z",
+      "grand_prix": "Monaco",
+      "meeting_key": 1286,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1286_monaco_monte_carlo_monte_carlo/race_11299/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "17a16787f94354267207f7ed695a7b4adeb8a894b4a70e197a85d892bcc257f7",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11295
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11299,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "14 June 2026",
+      "document_number": 54,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 661503,
+      "fia_pdf_sha256": "823251318372a5b1fbc4505ee0022da49943509726b175c975c21647a865c108",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:19.604850Z",
+      "grand_prix": "Barcelona-Catalunya",
+      "meeting_key": 1287,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | document no. 52 | Felix Holter Natalie Corsmit Kipras Aleknavi ius Derek Warwick David Domingo",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11307,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "28 June 2026",
+      "document_number": 41,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 643683,
+      "fia_pdf_sha256": "675ba95ad8234513e1fa10c2a833a392eaf47ba95e6115044c3c80f084e94933",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:23.339720Z",
+      "grand_prix": "Austria",
+      "meeting_key": 1288,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11315,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "04 July 2026",
+      "document_number": 37,
+      "document_time": "11:01",
+      "fia_pdf_bytes": 652234,
+      "fia_pdf_sha256": "e87231a93a30498e29f8758d40ca26fe126121fe3ad25411b10a99b3987e3eef",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:26.689397Z",
+      "grand_prix": "Great Britain",
+      "meeting_key": 1289,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/sprint_11321/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "ed767ea0e0f07e92456f4499f76f64851a9a0c5f812a0e0aba1ad408f2fc92fa",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11317
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Gerd Ennser Tanja Geilhausen Mathieu Remmerie Pedro Lamy Richard Norbury",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11321,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "05 July 2026",
+      "document_number": 70,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 643147,
+      "fia_pdf_sha256": "e76cf4fee57cbb8ca843021ae7e7b66beaded99656e12dcff80a63004ce20f90",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:30.431684Z",
+      "grand_prix": "Great Britain",
+      "meeting_key": 1289,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 10 - 3 place grid penalty - Impeding another driver - Stewards' document no. 60 | Car 18 - 10 place grid penalty - Additional power unit elements have been used - Stewards' document no. 68 | Gerd Ennser Tanja Geilhausen Mathieu Remmerie Pedro Lamy Richard Norbury",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11326,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "19 July 2026",
+      "document_number": 56,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 529147,
+      "fia_pdf_sha256": "dab704dc11ebe13093644fdd56bacdf4d0ae81fa71ae2faee7660d05e1c16a2d",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:33.727702Z",
+      "grand_prix": "Belgium",
+      "meeting_key": 1290,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 22,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Cars 18, 1 & 55 - 10 place grid penalties - Additional power unit element has been used - Stewards' document nos. 22, 23 & 54 | Car 6 - 30 place grid penalty - Additional power unit elements have been used - Stewards' document no. 44 | Car 14 - 20 place grid penalty - Additional power unit elements have been used - Stewards' document no. 45 | Gerd Ennser Matthew Selley Alfonso Orihuela Pedro Lamy Lo\u00efc Bacquelaine",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11334,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "26 July 2026",
+      "document_number": 52,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 529629,
+      "fia_pdf_sha256": "01bc22af0b6ee1bf9cbc1fb66f6d0f3232fc7a6280c776d35b14a039a99ecb7f",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:37.606967Z",
+      "grand_prix": "Hungary",
+      "meeting_key": 1291,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 44 - 3 place grid penalty - Impeding another driver - Stewards' document no. 36 | Car 12 - 3 place grid penalty - Failing to slow for yellow flags - Stewards' document no. 41 | Car 11 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 50 | Garry Connelly Matthew Selley Richa Mergulhao Vitantonio Liuzzi Istv\u00e1n Moni",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11342,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "22 August 2026",
+      "document_number": 32,
+      "document_time": "11:00",
+      "fia_pdf_bytes": 509099,
+      "fia_pdf_sha256": "38f77a79b41a626808fdb1a43438a7cbe8ca97ce8868e7633bf6df9f0cbeff42",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:45.233854Z",
+      "grand_prix": "Netherlands",
+      "meeting_key": 1292,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_11348/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Yuki TSUNODA",
+          "driver_number": 22,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Cars 55 & 14 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document nos. 29 & 30 | Felix Holter Mathieu Remmerie Tomas Kunc Vitantonio Liuzzi Stijn Drinkenburg",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11348,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "23 August 2026",
+      "document_number": 61,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 710452,
+      "fia_pdf_sha256": "e089a636e595af906a4ab2489c695c12a0316f0531870323bbc3bc9645d284e2",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:50.312031Z",
+      "grand_prix": "Netherlands",
+      "meeting_key": 1292,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/race_11353/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Yuki TSUNODA",
+          "driver_number": 22,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Felix Holter Mathieu Remmerie Tomas Kunc Vitantonio Liuzzi Stijn Drinkenburg",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11353,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "06 September 2026",
+      "document_number": 59,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 508135,
+      "fia_pdf_sha256": "01a62de8b56a865ff3ff58e885321ab5363f1d6c6f8d945866698823d2ed743e",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:54.566015Z",
+      "grand_prix": "Italy",
+      "meeting_key": 1293,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Yuki TSUNODA",
+          "driver_number": 22,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 12 - 30 place grid penalty - Additional power unit elements have been used - Stewards' document no. 19 | Car 23 - 20 place grid penalty - Additional power unit elements have been used - Stewards' document no. 20 | Car 30 - 35 place grid penalty - Additional power unit elements have been used - Stewards' document no. 41 | Car 81 - 3 place grid penalty - Impeding another driver - Stewards' document no. 47 | Car 14 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions and additional power unit elements have been used - Stewards' | document no. 56 | Car 30 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 57 | Garry Connelly Mathieu Remmerie Vitantonio Liuzzi Iacopo Arcangeli",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11361,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "13 September 2026",
+      "document_number": 65,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 506244,
+      "fia_pdf_sha256": "97541092d8c84db4863de160b7cd2df4261180b84fd72bbd54eb5fdf2a579926",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:24:59.625237Z",
+      "grand_prix": "Spain (Madrid)",
+      "meeting_key": 1294,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "openf1_rows": 0,
+      "openf1_source_session_keys": [],
+      "participants": [
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 1,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 2,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 3,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 4,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 5,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 6,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 7,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 9,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 10,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 11,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 12,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 13,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 14,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Yuki TSUNODA",
+          "driver_number": 22,
+          "official_position": 15,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 16,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 17,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 18,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 20,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OPENF1_SOURCE_ABSENT",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 21,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": null,
+          "openf1_qualifying_source_position": null,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Cars 87 & 18 - Permitted to start - Stewards' document no. 55 | * PENALTIES | Car 18 - 40 place grid penalty - Additional power unit elements have been used - Stewards' document no. 41 | Car 55 - 3 place grid penalty - Impeding another driver - Stewards' document no. 46 | document no. 63 | Felix Holter Natalie Corsmit Mathieu Remmerie Derek Warwick David Domingo",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11369,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "26 September 2026",
+      "document_number": 58,
+      "document_time": "14:00",
+      "fia_pdf_bytes": 1262584,
+      "fia_pdf_sha256": "4f7db5288b73b9094e72dea50240a9491ad978f1e98238ac90d59ff790625695",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:25:03.617084Z",
+      "grand_prix": "Azerbaijan",
+      "meeting_key": 1295,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "ea3401aab1d67d99d9dda13f1f230451dd86ebd845a0fe643c1b1836178ce6a6",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11373
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 22,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 14 - 30 place grid penalty - Additional power unit elements have been used - Stewards' document nos. 20 & 34 | Car 18 - 20 place grid penalty - Additional power unit elements have been used - Stewards' document no. 21 | Car 11 - 3 place grid penalty - Impeding another driver - Stewards' document no. 48 | Car 55 - 5 place grid penalty - Failing to slow for yellow flags - Stewards' document no. 49",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11377,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "04 October 2026",
+      "document_number": 47,
+      "document_time": "14:03",
+      "fia_pdf_bytes": 308446,
+      "fia_pdf_sha256": "c8cb4b9dfa1c12e987b4c97e8c674d49fddd43f9a3dda2450c0bf794746974e2",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:25:07.776022Z",
+      "grand_prix": "Bahrain GP in Malaysia",
+      "meeting_key": 1308,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "14666989b3d32e0ed01317e4baf7d4bb210c3c0b45d73ade6d5293cd31056c95",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11730
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 22,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 43 - 5 place grid penalty - Causing a collision - Stewards' document no. 66 (2026 Azerbaijan Grand Prix) | Car 6 - 5 place grid penalty - Additional power unit element has been used - Stewards' document no. 17 | Car 43 - 10 place grid penalty - Additional power unit element has been used - Stewards' document no. 18 | Car 41 - 30 place grid penalty - Additional power unit elements have been used - Stewards' document no. 19 | Gerd Ennser Mathieu Remmerie Pedro Lamy Mazen Al Hilli",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11731,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "10 October 2026",
+      "document_number": 39,
+      "document_time": "16:00",
+      "fia_pdf_bytes": 1158085,
+      "fia_pdf_sha256": "017f13c6f30722e191fb6a11792b470169d4766fd4a110f164d84c5106a036de",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:25:11.955462Z",
+      "grand_prix": "Singapore",
+      "meeting_key": 1296,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_final_sprint_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_11383/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "cb5bcabf27bf056f5e0e31e6b775b172c513532c8ac6796532be570d89d579ca",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11379
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 20,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 21,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "* PENALTIES | Car 55 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 37",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11383,
+      "target_session_type": "Sprint",
+      "title": "Final Sprint Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    },
+    {
+      "document_date": "11 October 2026",
+      "document_number": 84,
+      "document_time": "19:00",
+      "fia_pdf_bytes": 308384,
+      "fia_pdf_sha256": "bd10822721ceacbccc9e6c149cc1462a53f15398202850237b6d0e825e525fcf",
+      "final_document_title_verified": true,
+      "first_local_observation_utc": "2026-10-17T14:25:17.065454Z",
+      "grand_prix": "Singapore",
+      "meeting_key": 1296,
+      "official_source_url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_final_starting_grid.pdf",
+      "openf1_raw_relative_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/raw/openf1_starting_grid.json",
+      "openf1_raw_sha256": "b68ae6f3ef94242d5d0c402c156f1023ad7b3ba9433df5959cabbb691c8716bf",
+      "openf1_rows": 22,
+      "openf1_source_session_keys": [
+        11384
+      ],
+      "participants": [
+        {
+          "comparison": "MATCH",
+          "driver_name": "Max VERSTAPPEN",
+          "driver_number": 3,
+          "official_position": 1,
+          "openf1_qualifying_source_position": 1,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Charles LECLERC",
+          "driver_number": 16,
+          "official_position": 2,
+          "openf1_qualifying_source_position": 2,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lewis HAMILTON",
+          "driver_number": 44,
+          "official_position": 3,
+          "openf1_qualifying_source_position": 3,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Kimi ANTONELLI",
+          "driver_number": 12,
+          "official_position": 4,
+          "openf1_qualifying_source_position": 4,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Lando NORRIS",
+          "driver_number": 1,
+          "official_position": 5,
+          "openf1_qualifying_source_position": 5,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oscar PIASTRI",
+          "driver_number": 81,
+          "official_position": 6,
+          "openf1_qualifying_source_position": 6,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Pierre GASLY",
+          "driver_number": 10,
+          "official_position": 7,
+          "openf1_qualifying_source_position": 7,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Liam LAWSON",
+          "driver_number": 30,
+          "official_position": 8,
+          "openf1_qualifying_source_position": 8,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Arvid LINDBLAD",
+          "driver_number": 41,
+          "official_position": 9,
+          "openf1_qualifying_source_position": 9,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Nico HULKENBERG",
+          "driver_number": 27,
+          "official_position": 10,
+          "openf1_qualifying_source_position": 10,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Oliver BEARMAN",
+          "driver_number": 87,
+          "official_position": 11,
+          "openf1_qualifying_source_position": 11,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Esteban OCON",
+          "driver_number": 31,
+          "official_position": 12,
+          "openf1_qualifying_source_position": 12,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Carlos SAINZ",
+          "driver_number": 55,
+          "official_position": 13,
+          "openf1_qualifying_source_position": 13,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Gabriel BORTOLETO",
+          "driver_number": 5,
+          "official_position": 14,
+          "openf1_qualifying_source_position": 14,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Franco COLAPINTO",
+          "driver_number": 43,
+          "official_position": 15,
+          "openf1_qualifying_source_position": 15,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Alexander ALBON",
+          "driver_number": 23,
+          "official_position": 16,
+          "openf1_qualifying_source_position": 16,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Sergio PEREZ",
+          "driver_number": 11,
+          "official_position": 17,
+          "openf1_qualifying_source_position": 17,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "Valtteri BOTTAS",
+          "driver_number": 77,
+          "official_position": 18,
+          "openf1_qualifying_source_position": 18,
+          "penalty_marker": false,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "MATCH",
+          "driver_name": "George RUSSELL",
+          "driver_number": 63,
+          "official_position": 19,
+          "openf1_qualifying_source_position": 19,
+          "penalty_marker": true,
+          "start_status": "GRID"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Fernando ALONSO",
+          "driver_number": 14,
+          "official_position": null,
+          "openf1_qualifying_source_position": 20,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Lance STROLL",
+          "driver_number": 18,
+          "official_position": null,
+          "openf1_qualifying_source_position": 21,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        },
+        {
+          "comparison": "OFFICIAL_PIT_LANE_SUPERSEDES_QUALIFYING_POSITION",
+          "driver_name": "Isack HADJAR",
+          "driver_number": 6,
+          "official_position": null,
+          "openf1_qualifying_source_position": 22,
+          "penalty_marker": true,
+          "start_status": "PIT_LANE"
+        }
+      ],
+      "penalty_and_revision_notes": "NOTES | Car 6 - Permitted to start - Stewards' document no. 71 | * PENALTIES | Car 63 - 60 place grid penalty - Additional power unit elements have been used - Stewards' document nos. 20 & 79 | Car 14 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions and additional power unit element has been used - Stewards' | document no. 80 | Car 18 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions - Stewards' document no. 81 | Car 6 - Required to start from the pit lane - Car modified whilst under Parc Ferm\u00e9 conditions and additional power unit elements have been used - Stewards' | document no. 83 | Felix Holter Matthew Selley Pedro Lamy Paul Ng",
+      "reconciliation_verdict": "VERIFIED_FIA_FINAL_GRID_FACTUAL_OVERLAY",
+      "revision_status": "CURRENT_FIA_FINAL_DOCUMENT_AT_2026_10_17_RETRIEVAL",
+      "source_as_of_classification": "POSTEVENT_HISTORICAL_AUDIT_ONLY",
+      "target_session_key": 11388,
+      "target_session_type": "Race",
+      "title": "Final Starting Grid",
+      "visual_page_validation": "VERIFIED_COMPLETE"
+    }
+  ],
+  "non_prospective": true,
+  "participant_records": 506,
+  "pdf_bytes_committed": false,
+  "pit_lane_starters": 22,
+  "schema": "f1_2026_official_final_grid_overlays_v1",
+  "source_scope": "23 exact Adviser-allowlisted FIA final-grid PDFs"
+}
