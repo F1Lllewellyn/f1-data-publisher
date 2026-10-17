@@ -1,0 +1,639 @@
+{
+  "schema_version": "F1_2026_historical_lightweight_existing_reuse_audit_v1",
+  "source_note": "October 16 postevent capture, not pre-race availability or engine consumer validation",
+  "as_of": "2026-10-17",
+  "counts_for_missing_current_processor_sessions": [
+    {
+      "round": 1,
+      "key": 11227,
+      "name": "Practice 1",
+      "event": "Australia",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 45,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 83,
+        "lightweight_source_closure/data/openf1_weather": 82
+      }
+    },
+    {
+      "round": 1,
+      "key": 11228,
+      "name": "Practice 2",
+      "event": "Australia",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 45,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 86,
+        "lightweight_source_closure/data/openf1_weather": 79
+      }
+    },
+    {
+      "round": 1,
+      "key": 11229,
+      "name": "Practice 3",
+      "event": "Australia",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 1,
+      "key": 11230,
+      "name": "Qualifying",
+      "event": "Australia",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 1,
+      "key": 11234,
+      "name": "Race",
+      "event": "Australia",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 15,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "key": 11235,
+      "name": "Practice 1",
+      "event": "China",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 49,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 37,
+        "lightweight_source_closure/data/openf1_weather": 84
+      }
+    },
+    {
+      "round": 2,
+      "key": 11236,
+      "name": "Sprint Qualifying",
+      "event": "China",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 43,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 60
+      }
+    },
+    {
+      "round": 2,
+      "key": 11240,
+      "name": "Sprint",
+      "event": "China",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "key": 11241,
+      "name": "Qualifying",
+      "event": "China",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 11,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "key": 11245,
+      "name": "Race",
+      "event": "China",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 19,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 88,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 41,
+        "lightweight_source_closure/data/openf1_weather": 152
+      }
+    },
+    {
+      "round": 3,
+      "key": 11246,
+      "name": "Practice 1",
+      "event": "Japan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 68,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 94,
+        "lightweight_source_closure/data/openf1_weather": 83
+      }
+    },
+    {
+      "round": 3,
+      "key": 11247,
+      "name": "Practice 2",
+      "event": "Japan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 3,
+      "key": 11248,
+      "name": "Practice 3",
+      "event": "Japan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 9,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 3,
+      "key": 11249,
+      "name": "Qualifying",
+      "event": "Japan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 26,
+        "lightweight_source_closure/data/openf1_starting_grid": 22,
+        "lightweight_source_closure/data/openf1_stints": 98,
+        "lightweight_source_closure/data/openf1_weather": 75
+      }
+    },
+    {
+      "round": 3,
+      "key": 11253,
+      "name": "Race",
+      "event": "Japan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 29,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 49,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 51,
+        "lightweight_source_closure/data/openf1_weather": 156
+      }
+    },
+    {
+      "round": 4,
+      "key": 11270,
+      "name": "Practice 1",
+      "event": "Miami",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "key": 11271,
+      "name": "Sprint Qualifying",
+      "event": "Miami",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "key": 11275,
+      "name": "Sprint",
+      "event": "Miami",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 19,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "key": 11276,
+      "name": "Qualifying",
+      "event": "Miami",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 66,
+        "lightweight_source_closure/data/openf1_starting_grid": 22,
+        "lightweight_source_closure/data/openf1_stints": 104,
+        "lightweight_source_closure/data/openf1_weather": 81
+      }
+    },
+    {
+      "round": 4,
+      "key": 11280,
+      "name": "Race",
+      "event": "Miami",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "key": 11281,
+      "name": "Practice 1",
+      "event": "Canada",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 8,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "key": 11282,
+      "name": "Sprint Qualifying",
+      "event": "Canada",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 56,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 65,
+        "lightweight_source_closure/data/openf1_starting_grid": 22,
+        "lightweight_source_closure/data/openf1_stints": 56,
+        "lightweight_source_closure/data/openf1_weather": 77
+      }
+    },
+    {
+      "round": 5,
+      "key": 11286,
+      "name": "Sprint",
+      "event": "Canada",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 6,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 71,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 28,
+        "lightweight_source_closure/data/openf1_weather": 76
+      }
+    },
+    {
+      "round": 5,
+      "key": 11287,
+      "name": "Qualifying",
+      "event": "Canada",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "key": 11291,
+      "name": "Race",
+      "event": "Canada",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 6,
+      "key": 11292,
+      "name": "Practice 1",
+      "event": "Monaco",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 6,
+      "key": 11293,
+      "name": "Practice 2",
+      "event": "Monaco",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 110,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 91,
+        "lightweight_source_closure/data/openf1_weather": 80
+      }
+    },
+    {
+      "round": 6,
+      "key": 11294,
+      "name": "Practice 3",
+      "event": "Monaco",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 73,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 82,
+        "lightweight_source_closure/data/openf1_weather": 79
+      }
+    },
+    {
+      "round": 6,
+      "key": 11295,
+      "name": "Qualifying",
+      "event": "Monaco",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 73,
+        "lightweight_source_closure/data/openf1_starting_grid": 22,
+        "lightweight_source_closure/data/openf1_stints": 100,
+        "lightweight_source_closure/data/openf1_weather": 84
+      }
+    },
+    {
+      "round": 6,
+      "key": 11299,
+      "name": "Race",
+      "event": "Monaco",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 269,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 208
+      }
+    },
+    {
+      "round": 7,
+      "key": 11300,
+      "name": "Practice 1",
+      "event": "Barcelona-Catalunya",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 8,
+      "key": 11308,
+      "name": "Practice 1",
+      "event": "Austria",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 55,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 99,
+        "lightweight_source_closure/data/openf1_weather": 77
+      }
+    },
+    {
+      "round": 9,
+      "key": 11316,
+      "name": "Practice 1",
+      "event": "Great Britain",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 9,
+      "key": 11321,
+      "name": "Sprint",
+      "event": "Great Britain",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 2,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 95,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 22,
+        "lightweight_source_closure/data/openf1_weather": 79
+      }
+    },
+    {
+      "round": 11,
+      "key": 11337,
+      "name": "Practice 3",
+      "event": "Hungary",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 67,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 89,
+        "lightweight_source_closure/data/openf1_weather": 80
+      }
+    },
+    {
+      "round": 15,
+      "key": 11370,
+      "name": "Practice 1",
+      "event": "Azerbaijan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 75
+      }
+    },
+    {
+      "round": 15,
+      "key": 11372,
+      "name": "Practice 3",
+      "event": "Azerbaijan",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 149,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 57,
+        "lightweight_source_closure/data/openf1_weather": 81
+      }
+    },
+    {
+      "round": 16,
+      "key": 11727,
+      "name": "Practice 1",
+      "event": "Bahrain GP (Malaysia / Sepang)",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 0,
+        "lightweight_source_closure/data/openf1_pit": 0,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 0,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 0,
+        "lightweight_source_closure/data/openf1_weather": 0
+      }
+    },
+    {
+      "round": 17,
+      "key": 11383,
+      "name": "Sprint",
+      "event": "Singapore",
+      "counts": {
+        "lightweight_source_closure/data/openf1_drivers": 22,
+        "lightweight_source_closure/data/openf1_pit": 54,
+        "openf1_position.csv": 0,
+        "lightweight_source_closure/data/openf1_race_control": 159,
+        "lightweight_source_closure/data/openf1_starting_grid": 0,
+        "lightweight_source_closure/data/openf1_stints": 76,
+        "lightweight_source_closure/data/openf1_weather": 127
+      }
+    }
+  ],
+  "per_lane": {
+    "lightweight_source_closure/data/openf1_drivers": {
+      "sessions_with_rows": 22,
+      "total_rows": 436
+    },
+    "lightweight_source_closure/data/openf1_pit": {
+      "sessions_with_rows": 6,
+      "total_rows": 166
+    },
+    "openf1_position.csv": {
+      "sessions_with_rows": 0,
+      "total_rows": 0
+    },
+    "lightweight_source_closure/data/openf1_race_control": {
+      "sessions_with_rows": 20,
+      "total_rows": 1665
+    },
+    "lightweight_source_closure/data/openf1_starting_grid": {
+      "sessions_with_rows": 4,
+      "total_rows": 88
+    },
+    "lightweight_source_closure/data/openf1_stints": {
+      "sessions_with_rows": 18,
+      "total_rows": 1294
+    },
+    "lightweight_source_closure/data/openf1_weather": {
+      "sessions_with_rows": 21,
+      "total_rows": 1975
+    }
+  },
+  "source_blobs": {
+    "lightweight_source_closure/data/openf1_drivers": "b3b4bfd87a2fe70ea607f96524a52cccd3aa0660",
+    "lightweight_source_closure/data/openf1_pit": "c8dea25377a2f3204903ee7e78f73319f4d3d844",
+    "lightweight_source_closure/data/openf1_race_control": "e7391dd3be70f45ee25f300faaf550cb8f525b8e",
+    "lightweight_source_closure/data/openf1_starting_grid": "f987ae489d537b0e7204a058571aae5d978d30b5",
+    "lightweight_source_closure/data/openf1_stints": "961c00b547c02d9d6e59a1a07ffb4860d43ad81f",
+    "lightweight_source_closure/data/openf1_weather": "4eeed1c9e5daf85e4e7c9bae917af37844f103f2"
+  },
+  "source_csv_row_counts": {
+    "lightweight_source_closure/data/openf1_drivers": 1209,
+    "lightweight_source_closure/data/openf1_pit": 497,
+    "lightweight_source_closure/data/openf1_race_control": 5074,
+    "lightweight_source_closure/data/openf1_starting_grid": 330,
+    "lightweight_source_closure/data/openf1_stints": 4558,
+    "lightweight_source_closure/data/openf1_weather": 7680
+  },
+  "excluded_interval_lane": "25MB existing interval CSV not downloaded; use existing processor files and summary"
+}
