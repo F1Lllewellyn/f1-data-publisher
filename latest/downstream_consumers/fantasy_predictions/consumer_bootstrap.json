@@ -14,7 +14,7 @@
   "context_path": "latest/chat_context/fantasy_predictions_context.md",
   "disallowed_effect": "automatic transfer execution, chip activation, or budget assumption without current fantasy data",
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-17T21:47:52Z",
+  "generated_at_utc": "2026-10-17T23:43:41Z",
   "input_manifest_path": "latest/downstream_consumers/fantasy_predictions/consumer_input.json",
   "promotion_allowed": false,
   "read_only": true,
