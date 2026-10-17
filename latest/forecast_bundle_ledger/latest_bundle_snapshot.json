@@ -12,7 +12,7 @@
     "session_key": 11731,
     "session_name": "Race"
   },
-  "generated_at_utc": "2026-10-16T22:24:58Z",
+  "generated_at_utc": "2026-10-17T05:20:37Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
@@ -50,7 +50,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-16T22:03:37Z",
+        "run_id": "2026-10-17T04:58:15Z",
         "score": 100,
         "source_backed": true,
         "source_status": "needs_manual_review"
@@ -60,7 +60,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-16T22:03:37Z",
+          "run_id": "2026-10-17T04:58:15Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -352,7 +352,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-16T22:03:37Z",
+          "run_id": "2026-10-17T04:58:15Z",
           "score": 100,
           "source_backed": true,
           "source_status": "needs_manual_review"
@@ -364,13 +364,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261016T220337Z",
+          "run_id": "20261017T045815Z",
           "score": -50,
           "status": "needs_manual_review"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261016T220337Z",
+          "run_id": "20261017T045815Z",
           "score": -50,
           "status": "needs_manual_review"
         }
@@ -378,7 +378,7 @@
     }
   },
   "promotion_allowed": false,
-  "run_id": "20261016T222458Z",
+  "run_id": "20261017T052036Z",
   "schema_version": "f1_1b_output_contract_v20",
   "signature": "9637b3c894f8bc84937a239a731ef997267bb2d6a23e3ff981d38996482a729b",
   "source": {
