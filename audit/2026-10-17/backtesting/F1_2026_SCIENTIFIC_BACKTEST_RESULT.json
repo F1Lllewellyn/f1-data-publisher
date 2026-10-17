@@ -1,0 +1,87 @@
+{
+  "negative_claims": {
+    "canonical_workbook_modified": false,
+    "dr002_activated": false,
+    "issue_309_modified": false,
+    "merged_or_promoted": false,
+    "predictions_published": false,
+    "production_latest_or_history_modified": false,
+    "provider_requested": false,
+    "retrospective_accuracy_claimed": false,
+    "scientifically_valid_full_backtest_completed": false,
+    "stable_engine_modified_or_executed": false,
+    "workflow_dispatched": false
+  },
+  "phase_1": {
+    "analytical_consumer": "scripts/forecasts/produce_actual_forecast_rows_v1.py",
+    "base_head": "61a865a9440720902c739c371da0a8c8b88979b8",
+    "base_pr": 310,
+    "events": 17,
+    "fia_grid_documents": 23,
+    "fia_grid_participants": 506,
+    "grid_overlay_consumer_checks": 23,
+    "miami_overlay_consumer_checks": 2,
+    "miami_position_rows": 621,
+    "miami_weather_rows": 100,
+    "optional_partial_by_source": {
+      "intervals": 67,
+      "pit": 33,
+      "race_control": 14,
+      "session_result": 19,
+      "starting_grid": 5,
+      "stints": 21
+    },
+    "optional_partial_records": 159,
+    "original_archive_sha256": "ed72021596ed3968c78dfd6690580af3a8c9a292a74df6eadd6ca24f6afec303",
+    "protected_systems_modified": false,
+    "reader_contract": "scripts/session_data_processor/f1_1b_output_contract_v16.py",
+    "required_source_holds": 0,
+    "schema": "f1_2026_historical_test_environment_v1",
+    "sessions": 85,
+    "source_files": 935,
+    "source_rows": 538111,
+    "status": "PHASE_1_PASS"
+  },
+  "phase_2": {
+    "archived_experimental_bundles_audited": 195,
+    "completed_events_considered": 17,
+    "diagnostic_cutoffs": 4,
+    "diagnostic_events": 2,
+    "diagnostic_metrics_not_accuracy_claim": {
+      "model_mae": 3.340909,
+      "model_nonfinish_brier": 0.122061,
+      "model_podium_overlap": 0.75,
+      "model_rmse": 4.838741,
+      "model_spearman_rho": 0.701299,
+      "model_top10_overlap": 0.775,
+      "model_winner_hit_rate": 0.5,
+      "retrospective_final_grid_mae": 2.681818,
+      "retrospective_final_grid_spearman_rho": 0.695087,
+      "team_prior_mae": 4.772727,
+      "team_prior_spearman_rho": 0.517222
+    },
+    "exact_participant_pre_race_bundles": 4,
+    "full_walk_forward_executed": false,
+    "pre_race_gate_bundles": 130,
+    "primary_hold": "Existing producer input manifests are season-wide, not event-scoped, and do not hash-bind underlying input bytes.",
+    "scientifically_eligible_cutoffs": 0,
+    "scientifically_eligible_events": 0
+  },
+  "ranked_corrective_priorities": [
+    "Persist immutable event-scoped input bytes and hashes at every future forecast cutoff.",
+    "Restrict the producer driver universe and every feature row to the target event/session relationship.",
+    "Persist nonblank win, podium and top-10 probabilities through the bundle-lock schema.",
+    "Numerically integrate energy, harvesting, battery and traffic features only when cutoff-safe observations exist.",
+    "Accumulate independently locked prospective events before model selection or calibration claims."
+  ],
+  "schema": "f1_2026_scientific_backtest_gate_v1",
+  "scientific_limitations": [
+    "The four exact-participant saved outputs cover only Belgium and Hungary and are correlated repeated cutoffs.",
+    "Underlying producer inputs are broad season snapshots with row counts but no immutable source hashes.",
+    "Final FIA grids were first observed post-event and their official document times follow all four saved cutoffs.",
+    "Only non-finish probability is populated; podium/top-10 calibration is unsupported.",
+    "Energy, harvesting, battery and traffic sources influence readiness counts only, not numeric predictions.",
+    "No DRS assumption was introduced."
+  ],
+  "terminal_status": "PHASE_1_PASS_PHASE_2_HOLD_EVENT_SCOPE"
+}

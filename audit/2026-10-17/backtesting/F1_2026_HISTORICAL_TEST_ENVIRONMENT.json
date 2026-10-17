@@ -1,0 +1,30 @@
+{
+  "analytical_consumer": "scripts/forecasts/produce_actual_forecast_rows_v1.py",
+  "base_head": "61a865a9440720902c739c371da0a8c8b88979b8",
+  "base_pr": 310,
+  "events": 17,
+  "fia_grid_documents": 23,
+  "fia_grid_participants": 506,
+  "grid_overlay_consumer_checks": 23,
+  "miami_overlay_consumer_checks": 2,
+  "miami_position_rows": 621,
+  "miami_weather_rows": 100,
+  "optional_partial_by_source": {
+    "intervals": 67,
+    "pit": 33,
+    "race_control": 14,
+    "session_result": 19,
+    "starting_grid": 5,
+    "stints": 21
+  },
+  "optional_partial_records": 159,
+  "original_archive_sha256": "ed72021596ed3968c78dfd6690580af3a8c9a292a74df6eadd6ca24f6afec303",
+  "protected_systems_modified": false,
+  "reader_contract": "scripts/session_data_processor/f1_1b_output_contract_v16.py",
+  "required_source_holds": 0,
+  "schema": "f1_2026_historical_test_environment_v1",
+  "sessions": 85,
+  "source_files": 935,
+  "source_rows": 538111,
+  "status": "PHASE_1_PASS"
+}
