@@ -2,7 +2,7 @@
   "action": "scheduled_full_run_chain_enabled",
   "canonical_workbook_overwrite": false,
   "forecast_gate_activated": false,
-  "generated_utc": "2026-10-17T00:24:39.687133+00:00",
+  "generated_utc": "2026-10-17T04:58:04.755657+00:00",
   "guard_version": "v27",
   "mode": "scheduled_gate",
   "promotion_allowed": false,
@@ -11,7 +11,7 @@
   "should_yield": false,
   "source_signal": {
     "has_signal": true,
-    "newest_signal_age_minutes": 119.678,
+    "newest_signal_age_minutes": 393.096,
     "newest_signal_key": "completed_utc",
     "newest_signal_path": "latest/1b_output_contract/control_room_bridge_v25_completion_report.json",
     "newest_timestamp_utc": "2026-10-16T22:24:59+00:00",
@@ -21,7 +21,7 @@
         "path": "latest/1b_output_contract/control_room_bridge_v25_completion_report.json",
         "timestamps": [
           {
-            "age_minutes": 119.678,
+            "age_minutes": 393.096,
             "key": "completed_utc",
             "timestamp_utc": "2026-10-16T22:24:59+00:00"
           }
@@ -37,7 +37,7 @@
         "path": "latest/consumer_trigger_governor/trigger_decision.json",
         "timestamps": [
           {
-            "age_minutes": 119.678,
+            "age_minutes": 393.096,
             "key": "generated_at_utc",
             "timestamp_utc": "2026-10-16T22:24:59+00:00"
           }
@@ -48,7 +48,7 @@
         "path": "latest/notification_routing/notification_decision.json",
         "timestamps": [
           {
-            "age_minutes": 119.678,
+            "age_minutes": 393.096,
             "key": "generated_at_utc",
             "timestamp_utc": "2026-10-16T22:24:59+00:00"
           }
@@ -59,7 +59,7 @@
         "path": "latest/material_change/material_change_report.json",
         "timestamps": [
           {
-            "age_minutes": 119.695,
+            "age_minutes": 393.113,
             "key": "generated_at_utc",
             "timestamp_utc": "2026-10-16T22:24:58+00:00"
           }
@@ -70,7 +70,7 @@
         "path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
         "timestamps": [
           {
-            "age_minutes": 119.695,
+            "age_minutes": 393.113,
             "key": "generated_at_utc",
             "timestamp_utc": "2026-10-16T22:24:58+00:00"
           }
@@ -81,7 +81,7 @@
         "path": "latest/last_good_state.json",
         "timestamps": [
           {
-            "age_minutes": 8118.728,
+            "age_minutes": 8392.146,
             "key": "updated_at_utc",
             "timestamp_utc": "2026-10-11T09:05:56+00:00"
           }
