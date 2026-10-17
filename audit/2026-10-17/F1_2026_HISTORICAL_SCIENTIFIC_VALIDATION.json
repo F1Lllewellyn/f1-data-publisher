@@ -1,0 +1,77 @@
+{
+  "as_of_date": "2026-10-17",
+  "coverage": {
+    "clean_sessions": 85,
+    "completed_events": 17,
+    "engine_reader_accessible_sessions": 85,
+    "expected_sessions": 85,
+    "fully_source_verified_sessions": 85,
+    "held_sessions": 0,
+    "missing_sessions": 0,
+    "partial_sessions": 0,
+    "sessions_missing_required_data": 0,
+    "sessions_requiring_review": 0
+  },
+  "fia_final_grids": {
+    "documents_retrieved_once": 23,
+    "documents_validated": 23,
+    "overlay_path": "audit/2026-10-17/F1_2026_OFFICIAL_FINAL_GRID_OVERLAYS.json",
+    "overlay_sha256": "383588d665c54ee14fe09fea293a06ae9076ca9795c6749e4766dc27177512e8",
+    "participant_records": 506,
+    "pit_lane_starters": 22
+  },
+  "miami_fp1_duplicate_resolution": {
+    "effective_status": "VERIFIED_EXACT_DEDUPLICATED_ANALYTICAL_OVERLAY",
+    "historical_only": true,
+    "meeting_key": 1284,
+    "raw_evidence_mutated": false,
+    "schema": "f1_2026_miami_fp1_duplicate_resolution_v1",
+    "session_key": 11270,
+    "source_preserving": true,
+    "sources": {
+      "position": {
+        "conflicting_datetime_driver_keys": 0,
+        "derived_git_blob": "73f6f321c04bfefa733fc3da5d7fd59e29e854a3",
+        "derived_relative_path": "audit/2026-10-17/derived/MIAMI_FP1_11270_openf1_position_derived_exact_deduplicated.json",
+        "derived_rows": 621,
+        "derived_sha256": "0a1d76feab00b16640b1451278658b08fb3cf2aa9110e3eab04dd57aaf8bba29",
+        "exact_duplicate_extra_rows": 49,
+        "original_rows": 670,
+        "raw_relative_path": "audit/2026-10-17/recovery/processor_outputs/latest/session_data_processor/2026_1284_united_states_miami_gardens_miami/practice_1_11270/raw/openf1_position.json",
+        "raw_sha256": "c2575a362b6df6102453dc7c933fce498012411857752e35a7fa8b15e9ffcf22"
+      },
+      "weather": {
+        "conflicting_datetime_driver_keys": 0,
+        "derived_git_blob": "3e4b596b277a4e2b319f7d34e9f48f207ea37b5d",
+        "derived_relative_path": "audit/2026-10-17/derived/MIAMI_FP1_11270_openf1_weather_derived_exact_deduplicated.json",
+        "derived_rows": 100,
+        "derived_sha256": "a8b49a9f7036f327bb25a29ab988d03a69a05e377b96d16955acdf0e5e3ddf8f",
+        "exact_duplicate_extra_rows": 1,
+        "original_rows": 101,
+        "raw_relative_path": "audit/2026-10-17/recovery/processor_outputs/latest/session_data_processor/2026_1284_united_states_miami_gardens_miami/practice_1_11270/raw/openf1_weather.json",
+        "raw_sha256": "8f4da320144f5d202e224fdbbf1cd05d2f4dc03a1e5a0c6baff95f69dfedc831"
+      }
+    }
+  },
+  "negative_claims": {
+    "canonical_workbook_modified": false,
+    "dr002_activated": false,
+    "forecast_or_prediction_test_run": false,
+    "issue_309_modified": false,
+    "merged_or_promoted": false,
+    "pre_race_availability_proven": false,
+    "stable_engine_modified_or_executed": false,
+    "workflow_dispatched": false
+  },
+  "offline_reader": {
+    "dated_grid_overlays": 23,
+    "failures": [],
+    "implementation": "scripts/session_data_processor/f1_1b_output_contract_v16.py",
+    "manifests": 85,
+    "source_files": 935,
+    "source_rows": 538111
+  },
+  "schema": "f1_2026_historical_scientific_validation_v1",
+  "terminal_status": "VERIFIED_COMPLETE_UNMERGED_CANDIDATE",
+  "unresolved_issues": []
+}

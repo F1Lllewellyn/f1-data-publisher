@@ -72,6 +72,14 @@
     "source_policy": "direct_api.openf1.org_v1_only"
   },
   "schema_version": "f1_2026_historical_recovery_validation_v1",
+  "scientific_hold_closure": {
+    "fia_documents": 23,
+    "fully_source_verified_sessions": 85,
+    "miami_exact_duplicate_extras_removed_in_derived_overlay": 50,
+    "status": "VERIFIED_COMPLETE_UNMERGED_CANDIDATE",
+    "structured_result": "audit/2026-10-17/F1_2026_HISTORICAL_SCIENTIFIC_VALIDATION.json",
+    "unresolved_holds": 0
+  },
   "scope": {
     "completed_events": 17,
     "expected_sessions": 85,
