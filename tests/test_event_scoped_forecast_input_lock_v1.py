@@ -33,6 +33,9 @@ class EventScopedInputContractTests(unittest.TestCase):
             "gate": self.fixture["gate"],
             "lane_name": self.fixture["lane_name"],
             "race_name": self.fixture["race_name"],
+            "product_contract_id": self.fixture["product_contract_id"],
+            "execution_mode": self.fixture["execution_mode"],
+            "contract_approved": self.fixture["contract_approved"],
             "participants": {
                 "source_name": "drivers",
                 "driver_numbers": self.fixture["participants"],
@@ -104,7 +107,8 @@ class EventScopedInputContractTests(unittest.TestCase):
         result = self.validate()
         self.assertEqual(result["status"], "EVENT_SCOPED_INPUT_PACKAGE_VALIDATED")
         self.assertEqual(result["participant_driver_numbers"], [1, 2])
-        self.assertEqual(len(result["sources"]), 3)
+        self.assertEqual(len(result["sources"]), 4)
+        self.assertEqual(result["source_driver_sets"]["position"], [1, 2])
         self.assertFalse(result["broad_discovery_used"])
         self.assertFalse(result["provider_request_made"])
 
@@ -167,6 +171,49 @@ class EventScopedInputContractTests(unittest.TestCase):
             MODULE.EventScopedInputError, "participant_source_universe_mismatch"
         ):
             self.validate(mutate)
+
+    def test_unchanged_producer_output_is_locked_with_exact_input_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "package"
+            output = Path(directory) / "locked"
+            root.mkdir()
+            _, request_bytes = self.build_package(root)
+            result = MODULE.produce_and_lock_event_scoped_forecast(
+                root, request_bytes, output, repo_root=ROOT
+            )
+            self.assertEqual(result["status"], "LOCKED_OUTPUT_WITH_RETAINED_INPUT_EVIDENCE")
+            self.assertEqual(result["participant_driver_numbers"], [1, 2])
+            self.assertEqual(result["row_count"], 2)
+            self.assertFalse(result["production_authenticated"])
+            self.assertFalse(result["contract_approved"])
+            manifest = MODULE.strict_json((output / "bundle_evidence_manifest.json").read_bytes())
+            for item in manifest["files"]:
+                data = (output / item["relative_path"]).read_bytes()
+                self.assertEqual(len(data), item["byte_count"])
+                self.assertEqual(MODULE.sha256(data), item["sha256"])
+            lock = MODULE.strict_json((output / "forecast_lock_receipt.json").read_bytes())
+            payload = (output / "forecast_payload.csv").read_bytes()
+            self.assertEqual(lock["payload"]["forecast_payload_sha256"], MODULE.sha256(payload))
+            rows = list(__import__("csv").DictReader(payload.decode("utf-8").splitlines()))
+            self.assertEqual({int(row["driver_number"]) for row in rows}, {1, 2})
+
+    def test_failed_validation_leaves_no_output_package(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "package"
+            output = Path(directory) / "locked"
+            root.mkdir()
+
+            def mutate(request, package_root):
+                source = request["sources"][0]
+                path = package_root / source["relative_path"]
+                path.write_bytes(b"mutated\n")
+
+            _, request_bytes = self.build_package(root, mutate)
+            with self.assertRaisesRegex(MODULE.EventScopedInputError, "source_hash_mismatch"):
+                MODULE.produce_and_lock_event_scoped_forecast(
+                    root, request_bytes, output, repo_root=ROOT
+                )
+            self.assertFalse(output.exists())
 
 
 if __name__ == "__main__":
