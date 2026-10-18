@@ -312,13 +312,22 @@ def build_driver_features(output_dir, session_key, driver_number, tolerance_ms=7
         merged["y"] = pd.NA
         merged["z"] = pd.NA
 
-    merged["rpm_safe"] = merged["rpm"].replace(0, pd.NA)
+    # Zero RPM has no defined speed/RPM efficiency ratio. Keep the source
+    # observation, but represent the derived ratio as missing rather than as
+    # measured zero performance.
+    merged["rpm_safe"] = merged["rpm"].astype(float).replace(0, np.nan)
     merged["efficiency_ratio_speed_per_rpm"] = merged["speed"] / merged["rpm_safe"]
     baseline = (
         merged.dropna(subset=["efficiency_ratio_speed_per_rpm", "n_gear"])
         .groupby("n_gear")["efficiency_ratio_speed_per_rpm"].median().to_dict()
     )
-    merged["efficiency_ratio_norm"] = merged["efficiency_ratio_speed_per_rpm"] / merged["n_gear"].map(baseline)
+    efficiency_baseline = pd.to_numeric(merged["n_gear"].map(baseline), errors="coerce")
+    efficiency_baseline = efficiency_baseline.where(
+        np.isfinite(efficiency_baseline) & efficiency_baseline.ne(0)
+    )
+    merged["efficiency_ratio_norm"] = (
+        merged["efficiency_ratio_speed_per_rpm"] / efficiency_baseline
+    )
 
     merged["speed_delta"] = merged["speed"].diff()
     merged["throttle_speed_mismatch"] = (
@@ -337,7 +346,7 @@ def build_driver_features(output_dir, session_key, driver_number, tolerance_ms=7
     merged["efficiency_loss_flag"] = (
         (merged["efficiency_ratio_norm"] < 0.965) &
         (merged["throttle"] >= 85) & (merged["brake"].fillna(0) < 1)
-    )
+    ).fillna(False)
 
     rpm_max = max(1, merged["rpm"].max(skipna=True))
     merged["load_proxy"] = (merged["throttle"].fillna(0) / 100.0) * (merged["rpm"].fillna(0) / rpm_max)
