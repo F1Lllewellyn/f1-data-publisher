@@ -1,0 +1,17 @@
+{
+  "change_reason": "no_material_change",
+  "current_signature": "9637b3c894f8bc84937a239a731ef997267bb2d6a23e3ff981d38996482a729b",
+  "event": {
+    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
+    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
+    "session_key": 11731,
+    "session_name": "Race"
+  },
+  "generated_at_utc": "2026-10-18T01:45:46Z",
+  "material_change_detected": false,
+  "notification_recommended": false,
+  "previous_signature": "9637b3c894f8bc84937a239a731ef997267bb2d6a23e3ff981d38996482a729b",
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_material_change_v20",
+  "status": "blocked"
+}
