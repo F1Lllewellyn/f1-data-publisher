@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from contextlib import ExitStack
 from contextlib import redirect_stdout
-from datetime import timezone
+from datetime import datetime, timezone
 import argparse
 import csv
 import hashlib
@@ -69,6 +69,19 @@ SOURCE_FIELDS = {
     "ingestion_required_at_cutoff",
     "verified_binding",
 }
+DRIVER_REQUIRED_SOURCES = frozenset(
+    ("drivers", "starting_grid", "intervals", "stints", "pit", "position")
+)
+# These are observation clocks in the accepted OpenF1 row contracts.  Static
+# sources and scheduled-event metadata (for example date_start/date_end) are
+# deliberately excluded: a future event time is not a future observation.
+OBSERVATION_TIMESTAMP_FIELDS = {
+    "intervals": "date",
+    "weather": "date",
+    "race_control": "date",
+    "pit": "date",
+    "position": "date",
+}
 
 
 class EventScopedInputError(ValueError):
@@ -127,6 +140,21 @@ def utc(value):
         raise EventScopedInputError("malformed_utc") from exc
     require(result.utcoffset() == timezone.utc.utcoffset(result), "non_utc_timestamp")
     return result
+
+
+def source_utc(value, reason):
+    require(type(value) is str and bool(value.strip()), reason)
+    text = value.strip()
+    try:
+        parsed = datetime.fromisoformat(text[:-1] + "+00:00" if text.endswith("Z") else text)
+    except ValueError as exc:
+        raise EventScopedInputError(reason) from exc
+    require(
+        parsed.tzinfo is not None
+        and parsed.utcoffset() == timezone.utc.utcoffset(parsed),
+        reason,
+    )
+    return parsed
 
 
 def canonical_relative_path(value):
@@ -262,12 +290,16 @@ def _validate_request_shape(request):
     require("drivers" in names, "missing_participant_source")
 
 
-def _driver_numbers(rows, *, unique=False):
+def _driver_numbers(rows, *, source_name, unique=False):
     values = set()
     for row in rows:
-        value = producer.to_int(
-            producer.find_key(row, ("driver_number", "number", "driverNumber"))
-        )
+        raw = producer.find_key(row, ("driver_number", "number", "driverNumber"))
+        value = producer.to_int(raw)
+        if source_name in DRIVER_REQUIRED_SOURCES:
+            require(
+                value is not None and value > 0,
+                "missing_or_invalid_driver_number:" + source_name,
+            )
         if value is not None:
             require(
                 value > 0 and (not unique or value not in values),
@@ -275,6 +307,27 @@ def _driver_numbers(rows, *, unique=False):
             )
             values.add(value)
     return values
+
+
+def _observation_time_bounds(source_name, rows, cutoff):
+    field = OBSERVATION_TIMESTAMP_FIELDS.get(source_name)
+    if field is None:
+        return None
+    parsed = []
+    for row in rows:
+        columns = {key.lower(): key for key in row}
+        require(field in columns, "missing_observation_timestamp:" + source_name)
+        observed = source_utc(
+            row.get(columns[field]), "malformed_observation_timestamp:" + source_name
+        )
+        require(observed <= cutoff, "source_observation_after_cutoff:" + source_name)
+        parsed.append(observed)
+    require(bool(parsed), "missing_observation_timestamp:" + source_name)
+    return {
+        "field": field,
+        "earliest_utc": min(parsed).isoformat().replace("+00:00", "Z"),
+        "latest_utc": max(parsed).isoformat().replace("+00:00", "Z"),
+    }
 
 
 def validate_event_scoped_input_package(package_root, request_bytes):
@@ -288,6 +341,7 @@ def validate_event_scoped_input_package(package_root, request_bytes):
     request = strict_json(request_bytes)
     _validate_request_shape(request)
     cutoff = request["forecast_cutoff_utc"]
+    cutoff_time = utc(cutoff)
     expected_participants = set(request["participants"]["driver_numbers"])
     source_records = []
     source_bytes = {}
@@ -367,7 +421,12 @@ def validate_event_scoped_input_package(package_root, request_bytes):
                 rows = producer.read_csv(validated_sources[source["source_name"]])
                 require(counts[source["source_name"]] == len(rows) > 0, "source_row_count_mismatch")
                 source_driver_sets[source["source_name"]] = _driver_numbers(
-                    rows, unique=source["source_name"] == "drivers"
+                    rows,
+                    source_name=source["source_name"],
+                    unique=source["source_name"] == "drivers",
+                )
+                observation_bounds = _observation_time_bounds(
+                    source["source_name"], rows, cutoff_time
                 )
                 source_bytes[source["source_name"]] = data
                 source_records.append(
@@ -377,6 +436,7 @@ def validate_event_scoped_input_package(package_root, request_bytes):
                         "receipt_id": receipt["receipt_id"],
                         "first_observed_utc": payload["first_observed_utc"],
                         "ingested_utc": payload["ingested_utc"],
+                        "observation_time_bounds": observation_bounds,
                     }
                 )
                 receipt_records.append(receipt)

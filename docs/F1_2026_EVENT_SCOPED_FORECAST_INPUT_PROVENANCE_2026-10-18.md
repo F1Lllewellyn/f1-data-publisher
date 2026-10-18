@@ -18,7 +18,9 @@ For one explicitly supplied prediction package, the bridge now:
 - validates the exact source and source-capture receipt bytes and SHA-256 values;
 - reuses `produce_actual_forecast_rows_v1.frozen_sources` for CSV structure and scope validation;
 - enforces source observation, ingestion and receipt-creation times at or before the declared cutoff;
+- enforces each row's source-specific observation clock for OpenF1 observation streams while leaving scheduled future event metadata semantically distinct;
 - requires an exact target-session `drivers` participant universe and rejects every driver-bearing source containing a driver outside it;
+- rejects missing, malformed and non-positive driver identities in every source where a driver is required, while preserving repeated observations for the same driver;
 - verifies the unchanged producer bytes against the declared Git commit before the single offline invocation;
 - checks that the producer output contains exactly the verified participant universe and requested event/gate/lane/timestamp;
 - builds the existing DR-002 input-manifest hash, producer-execution receipt and forecast-lock receipt; and
@@ -52,7 +54,7 @@ Command:
 python -m unittest -v tests.test_event_scoped_forecast_input_lock_v1
 ```
 
-Result: **7 passed**.
+Result after the targeted Adviser refinement: **9 passed**.
 
 Covered behavior:
 
@@ -63,8 +65,10 @@ Covered behavior:
 5. extra participant rejection;
 6. exact producer output, retained evidence and lock binding; and
 7. no output package left after validation failure.
+8. a source observation after cutoff is rejected even when receipt timestamps are internally pre-cutoff, while a future scheduled-event timestamp is accepted; and
+9. missing, malformed, zero and negative driver identities fail closed per driver-required row without rejecting legitimate repeated driver observations.
 
-Syntax compilation passed for the implementation and test module. `git diff --check` passed.
+The deterministic proof was rerun after the refinement. All five proof hashes remained identical to those above. Syntax compilation passed for the implementation and test module. `git diff --check` passed.
 
 ## Reused dependency pins
 

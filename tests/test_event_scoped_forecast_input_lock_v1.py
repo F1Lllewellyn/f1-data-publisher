@@ -103,6 +103,22 @@ class EventScopedInputContractTests(unittest.TestCase):
             _, request_bytes = self.build_package(root, mutate)
             return MODULE.validate_event_scoped_input_package(root, request_bytes)
 
+    def replace_source(self, request, root, source_name, data):
+        source = next(
+            item for item in request["sources"] if item["source_name"] == source_name
+        )
+        path = root / source["relative_path"]
+        path.write_bytes(data)
+        digest = hashlib.sha256(data).hexdigest()
+        source["source_sha256"] = digest
+        receipt_path = root / source["receipt_relative_path"]
+        receipt = MODULE.strict_json(receipt_path.read_bytes())
+        receipt["payload"]["source_sha256"] = digest
+        receipt_path.write_bytes(MODULE.canonical_json_bytes(receipt))
+        receipt_digest = MODULE.receipts.receipt_sha256(receipt)
+        source["receipt_sha256"] = receipt_digest
+        source["verified_binding"]["receipt_sha256"] = receipt_digest
+
     def test_valid_package_binds_exact_participants_and_sources(self):
         result = self.validate()
         self.assertEqual(result["status"], "EVENT_SCOPED_INPUT_PACKAGE_VALIDATED")
@@ -171,6 +187,64 @@ class EventScopedInputContractTests(unittest.TestCase):
             MODULE.EventScopedInputError, "participant_source_universe_mismatch"
         ):
             self.validate(mutate)
+
+    def test_source_observation_after_cutoff_rejected_but_future_schedule_allowed(self):
+        def future_schedule(request, root):
+            source = next(
+                item for item in request["sources"] if item["source_name"] == "weather"
+            )
+            path = root / source["relative_path"]
+            rows = path.read_bytes().replace(
+                b"date,air_temperature",
+                b"date,air_temperature,date_start",
+            ).replace(
+                b",25.0\n",
+                b",25.0,2026-10-25T19:00:00Z\n",
+            )
+            self.replace_source(request, root, "weather", rows)
+
+        accepted = self.validate(future_schedule)
+        self.assertEqual(accepted["status"], "EVENT_SCOPED_INPUT_PACKAGE_VALIDATED")
+
+        def future_observation(request, root):
+            source = next(
+                item for item in request["sources"] if item["source_name"] == "position"
+            )
+            path = root / source["relative_path"]
+            rows = path.read_bytes().replace(
+                b"2026-10-22T19:01:00Z",
+                b"2026-10-22T20:00:01Z",
+                1,
+            )
+            self.replace_source(request, root, "position", rows)
+
+        with self.assertRaisesRegex(
+            MODULE.EventScopedInputError, "source_observation_after_cutoff:position"
+        ):
+            self.validate(future_observation)
+
+    def test_required_driver_identity_fails_closed_per_row(self):
+        for invalid in (b"", b"malformed", b"0", b"-1"):
+            with self.subTest(driver_number=invalid):
+                def mutate(request, root, invalid=invalid):
+                    source = next(
+                        item
+                        for item in request["sources"]
+                        if item["source_name"] == "position"
+                    )
+                    path = root / source["relative_path"]
+                    rows = path.read_bytes() + (
+                        b"event-synthetic,meeting-synthetic,session-race,"
+                        + invalid
+                        + b",3,2026-10-22T19:02:00Z\n"
+                    )
+                    self.replace_source(request, root, "position", rows)
+
+                with self.assertRaisesRegex(
+                    MODULE.EventScopedInputError,
+                    "missing_or_invalid_driver_number:position",
+                ):
+                    self.validate(mutate)
 
     def test_unchanged_producer_output_is_locked_with_exact_input_evidence(self):
         with tempfile.TemporaryDirectory() as directory:
