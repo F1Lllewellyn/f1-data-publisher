@@ -224,7 +224,15 @@ class EventScopedInputContractTests(unittest.TestCase):
             self.validate(future_observation)
 
     def test_required_driver_identity_fails_closed_per_row(self):
-        for invalid in (b"", b"malformed", b"0", b"-1"):
+        for invalid in (
+            b"",
+            b"malformed",
+            b"NaN",
+            b"Infinity",
+            b"-Infinity",
+            b"0",
+            b"-1",
+        ):
             with self.subTest(driver_number=invalid):
                 def mutate(request, root, invalid=invalid):
                     source = next(
@@ -245,6 +253,47 @@ class EventScopedInputContractTests(unittest.TestCase):
                     "missing_or_invalid_driver_number:position",
                 ):
                     self.validate(mutate)
+
+    def test_fractional_driver_id_is_not_lossily_truncated(self):
+        for invalid in (b"1.5", b"2.9"):
+            with self.subTest(driver_number=invalid):
+                def mutate(request, root, invalid=invalid):
+                    source = next(
+                        item
+                        for item in request["sources"]
+                        if item["source_name"] == "position"
+                    )
+                    path = root / source["relative_path"]
+                    rows = path.read_bytes() + (
+                        b"event-synthetic,meeting-synthetic,session-race,"
+                        + invalid
+                        + b",3,2026-10-22T19:02:00Z\n"
+                    )
+                    self.replace_source(request, root, "position", rows)
+
+                with self.assertRaisesRegex(
+                    MODULE.EventScopedInputError,
+                    "missing_or_invalid_driver_number:position",
+                ):
+                    self.validate(mutate)
+
+    def test_integral_driver_representations_and_repeated_rows_remain_valid(self):
+        def mutate(request, root):
+            source = next(
+                item for item in request["sources"] if item["source_name"] == "position"
+            )
+            path = root / source["relative_path"]
+            rows = path.read_bytes().replace(
+                b",1,1,2026-10-22T19:00:00Z",
+                b",1.0,1,2026-10-22T19:00:00Z",
+            ).replace(
+                b",2,2,2026-10-22T19:00:00Z",
+                b",2e0,2,2026-10-22T19:00:00Z",
+            )
+            self.replace_source(request, root, "position", rows)
+
+        result = self.validate(mutate)
+        self.assertEqual(result["source_driver_sets"]["position"], [1, 2])
 
     def test_unchanged_producer_output_is_locked_with_exact_input_evidence(self):
         with tempfile.TemporaryDirectory() as directory:

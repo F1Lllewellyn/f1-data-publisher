@@ -10,6 +10,7 @@ from __future__ import annotations
 from contextlib import ExitStack
 from contextlib import redirect_stdout
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 import argparse
 import csv
 import hashlib
@@ -290,16 +291,38 @@ def _validate_request_shape(request):
     require("drivers" in names, "missing_participant_source")
 
 
+def _lossless_driver_number(raw, source_name, *, required):
+    if type(raw) is not str or not raw.strip():
+        require(not required, "missing_or_invalid_driver_number:" + source_name)
+        return None
+    text = raw.strip()
+    require(
+        re.fullmatch(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?", text)
+        is not None,
+        "missing_or_invalid_driver_number:" + source_name,
+    )
+    try:
+        numeric = Decimal(text)
+    except InvalidOperation as exc:
+        raise EventScopedInputError(
+            "missing_or_invalid_driver_number:" + source_name
+        ) from exc
+    require(
+        numeric.is_finite()
+        and numeric > 0
+        and numeric == numeric.to_integral_value(),
+        "missing_or_invalid_driver_number:" + source_name,
+    )
+    return int(numeric)
+
+
 def _driver_numbers(rows, *, source_name, unique=False):
     values = set()
     for row in rows:
         raw = producer.find_key(row, ("driver_number", "number", "driverNumber"))
-        value = producer.to_int(raw)
-        if source_name in DRIVER_REQUIRED_SOURCES:
-            require(
-                value is not None and value > 0,
-                "missing_or_invalid_driver_number:" + source_name,
-            )
+        value = _lossless_driver_number(
+            raw, source_name, required=source_name in DRIVER_REQUIRED_SOURCES
+        )
         if value is not None:
             require(
                 value > 0 and (not unique or value not in values),
