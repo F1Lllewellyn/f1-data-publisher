@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-18T17:31:18Z",
+  "generated_at_utc": "2026-10-18T18:36:42Z",
   "status": "dashboard_refreshed",
   "source_status": "needs_manual_review",
   "source_backed": true,
@@ -14,7 +14,7 @@
     "session_name": "Race",
     "session_type": "Race"
   },
-  "workbook_artifact": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_Kingdom_-_Silverstone_-_Silverstone_session_20260717T121925Z.xlsx",
+  "workbook_artifact": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261018T183642Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
   "autorepair_report": null,
