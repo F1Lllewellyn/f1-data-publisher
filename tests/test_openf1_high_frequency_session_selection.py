@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -107,7 +108,8 @@ class FeatureGenerationTests(unittest.TestCase):
         self.assertEqual(len(features), 1)
         self.assertTrue(np.isnan(features.loc[0, "efficiency_ratio_norm_mean"]))
         self.assertTrue(np.isnan(features.loc[0, "efficiency_ratio_norm_min"]))
-        self.assertEqual(features.loc[0, "efficiency_loss_count"], 0)
+        self.assertTrue(np.isnan(features.loc[0, "efficiency_loss_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "reliability_proxy_mean"]))
         self.assertEqual(features.loc[0, "samples"], 4)
 
     def test_valid_nonzero_efficiency_calculation_is_preserved(self):
@@ -139,6 +141,131 @@ class FeatureGenerationTests(unittest.TestCase):
         self.assertAlmostEqual(features.loc[0, "efficiency_ratio_norm_mean"], 1.0)
         self.assertAlmostEqual(features.loc[0, "efficiency_ratio_norm_min"], 1.0)
         self.assertEqual(features.loc[0, "efficiency_loss_count"], 0)
+
+    def test_out_of_contract_controls_are_missing_not_normal_or_anomalous(self):
+        dates = pd.date_range("2026-08-23T13:00:00Z", periods=4, freq="1s")
+        car_rows = [
+            {
+                "session_key": 11353,
+                "driver_number": 1,
+                "date": date,
+                "rpm": 10000,
+                "speed": 200,
+                "n_gear": 9,
+                "throttle": 104,
+                "brake": 104,
+            }
+            for date in dates
+        ]
+        location_rows = [
+            {"date": date, "x": i, "y": i, "z": 0}
+            for i, date in enumerate(dates)
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            self.write_chunks(root, car_rows, location_rows)
+            raw_path = next((root / "raw" / "car_data").rglob("*.parquet"))
+            raw_hash_before = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+            features = MODULE.build_driver_features(root, 11353, 1)
+            raw_hash_after = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+
+        self.assertEqual(raw_hash_before, raw_hash_after)
+        self.assertEqual(features.loc[0, "samples"], 4)
+        self.assertEqual(features.loc[0, "valid_throttle_samples"], 0)
+        self.assertEqual(features.loc[0, "valid_brake_samples"], 0)
+        self.assertEqual(features.loc[0, "valid_gear_samples"], 0)
+        self.assertEqual(features.loc[0, "valid_reliability_samples"], 0)
+        self.assertTrue(np.isnan(features.loc[0, "throttle_speed_mismatch_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "short_shift_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "efficiency_loss_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "thermal_stress_mean"]))
+        self.assertTrue(np.isnan(features.loc[0, "reliability_proxy_mean"]))
+
+    def test_missing_brake_cannot_be_assumed_to_mean_no_braking(self):
+        dates = pd.date_range("2026-08-23T13:00:00Z", periods=4, freq="1s")
+        car_rows = [
+            {
+                "session_key": 11353,
+                "driver_number": 1,
+                "date": date,
+                "rpm": 10000,
+                "speed": 200,
+                "n_gear": 8,
+                "throttle": 100,
+                "brake": np.nan,
+            }
+            for date in dates
+        ]
+        location_rows = [
+            {"date": date, "x": i, "y": i, "z": 0}
+            for i, date in enumerate(dates)
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            self.write_chunks(root, car_rows, location_rows)
+            features = MODULE.build_driver_features(root, 11353, 1)
+
+        self.assertEqual(features.loc[0, "valid_brake_samples"], 0)
+        self.assertTrue(np.isnan(features.loc[0, "throttle_speed_mismatch_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "efficiency_loss_count"]))
+        self.assertTrue(np.isnan(features.loc[0, "reliability_proxy_max"]))
+
+    def test_valid_control_boundaries_remain_defined(self):
+        dates = pd.date_range("2026-08-23T13:00:00Z", periods=4, freq="1s")
+        car_rows = [
+            {
+                "session_key": 11353,
+                "driver_number": 1,
+                "date": date,
+                "rpm": 10000,
+                "speed": 200,
+                "n_gear": 8,
+                "throttle": 100,
+                "brake": 100,
+            }
+            for date in dates
+        ]
+        location_rows = [
+            {"date": date, "x": i, "y": i, "z": 0}
+            for i, date in enumerate(dates)
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            self.write_chunks(root, car_rows, location_rows)
+            features = MODULE.build_driver_features(root, 11353, 1)
+
+        self.assertEqual(features.loc[0, "valid_throttle_samples"], 4)
+        self.assertEqual(features.loc[0, "valid_brake_samples"], 4)
+        self.assertEqual(features.loc[0, "valid_gear_samples"], 4)
+        self.assertEqual(features.loc[0, "valid_reliability_samples"], 3)
+        self.assertEqual(features.loc[0, "throttle_speed_mismatch_count"], 0)
+        self.assertEqual(features.loc[0, "efficiency_loss_count"], 0)
+        self.assertTrue(np.isfinite(features.loc[0, "reliability_proxy_mean"]))
+
+    def test_risk_consumer_omits_only_driver_with_no_defined_risk_bucket(self):
+        features = pd.DataFrame([
+            {
+                "meeting_key": 1292, "session_key": 11353, "session_name": "Race",
+                "session_type": "Race", "country_name": "Netherlands",
+                "driver_number": 1, "bucket_start": pd.Timestamp("2026-08-23T13:00:00Z"),
+                "reliability_proxy_max": np.nan, "efficiency_loss_count": np.nan,
+                "short_shift_count": np.nan, "thermal_stress_mean": np.nan,
+                "throttle_speed_mismatch_count": np.nan,
+            },
+            {
+                "meeting_key": 1292, "session_key": 11353, "session_name": "Race",
+                "session_type": "Race", "country_name": "Netherlands",
+                "driver_number": 3, "bucket_start": pd.Timestamp("2026-08-23T13:00:00Z"),
+                "reliability_proxy_max": 0.0, "efficiency_loss_count": 0.0,
+                "short_shift_count": 0.0, "thermal_stress_mean": 0.0,
+                "throttle_speed_mismatch_count": 0.0,
+            },
+        ])
+
+        risk = MODULE.compute_driver_session_risk(features)
+
+        self.assertEqual(risk["driver_number"].tolist(), [3])
+        self.assertTrue(np.isfinite(risk.loc[risk.index[0], "driver_session_risk"]))
 
 
 if __name__ == "__main__":

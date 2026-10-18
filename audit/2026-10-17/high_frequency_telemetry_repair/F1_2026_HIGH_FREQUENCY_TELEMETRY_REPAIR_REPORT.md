@@ -1,6 +1,6 @@
 # F1 2026 high-frequency telemetry repair — 18 October 2026
 
-**Terminal result: COMPLETE FOR THE AUTHORIZED 85-SESSION TELEMETRY SCOPE.** The country-name selector defect remains corrected, the five meeting-1308 sessions remain hash-verified, Netherlands Race session 11353 is recovered for all 22 historically verified participants, and the production 30-second feature builder now treats undefined efficiency ratios as missing values. No protected production system was changed.
+**Terminal result: COMPLETE FOR THE AUTHORIZED 85-SESSION TELEMETRY SCOPE.** The country-name selector defect remains corrected, the five meeting-1308 sessions remain hash-verified, Netherlands Race session 11353 is recovered for all 22 historically verified participants, and the production 30-second feature builder now fails closed on undefined or out-of-contract control signals. No protected production system was changed.
 
 ## Scope and result
 
@@ -35,11 +35,29 @@ The production feature correction is intentionally narrow:
 - Zero RPM remains in the source observations.
 - Speed/RPM ratios with a zero denominator are derived as missing, not zero performance.
 - A zero or non-finite gear baseline is also derived as missing.
-- Undefined ratios cannot create an efficiency-loss flag.
+- The documented OpenF1 analytical domains are enforced without changing raw bytes: throttle 0–100, brake 0/100, and integer gear 0–8.
+- Out-of-contract or unavailable readings become missing only in derived calculations; they are not clamped, interpolated, or converted to normal readings.
+- Undefined inputs cannot create anomaly flags, thermal load, efficiency loss, or a reliability score.
+- Bucket outputs include explicit valid-sample counts, and all-missing anomaly counts remain undefined rather than zero.
+- The risk consumer ranks only defined values and omits an entirely undefined driver/session rather than assigning zero risk.
 - Existing non-zero calculations retain their prior normalization.
 - Risk coefficients and the stable engine are unchanged.
 
-Six focused offline tests pass: four selector/allowlist tests plus gear-0/zero-RPM and valid non-zero efficiency regressions.
+Ten focused offline tests pass: four selector/allowlist tests plus zero-RPM, valid efficiency, invalid-control, missing-brake, valid-boundary and undefined-risk regressions. The invalid-control test also verifies that the source Parquet hash is unchanged after feature generation.
+
+## Independent signal-quality evidence
+
+The retained independent QA package was used without any provider request. Its SHA-256 is `7ad312acf8f2ae19c98bfe25a2e597f60f5d458edf85887a24ebf272b2a37f54`; the contained JSON evidence SHA-256 is `6eb84ec1770f88d0f1915835a54edf1c9c938484f22ecd117926e47f23c469cc`.
+
+The QA evidence references the OpenF1 `car_data` contract and confirms the following source domains: throttle is an integer percentage from 0 through 100, brake is 0 or 100, and `n_gear` is an integer from 0 through 8. Against those domains, Netherlands session 11353 contains:
+
+| Derived-invalid channel | Raw observations retained |
+|---|---:|
+| throttle = 104 | 97,054 |
+| brake = 104 | 97,622 |
+| n_gear outside 0–8 | 82 |
+
+These values are preserved as original source evidence. The correction changes only their analytical interpretation.
 
 ## Durable Netherlands recovery
 
@@ -74,27 +92,33 @@ Netherlands cumulative extraction manifest SHA-256: ddf16a608b1f41b7ea59e214ebcf
 
 ## Production feature and consumer validation
 
-The unchanged production feature path was run offline over all five meeting-1308 sessions plus Netherlands Race:
+The production feature path was run offline before and after the signal-validity correction over all five meeting-1308 sessions plus Netherlands Race:
 
 - 132/132 driver-session feature builds succeeded.
-- 33,506 30-second feature rows were produced.
-- 132 driver-session risk rows were produced by compute_driver_session_risk.
-- 15,881 buckets have an undefined efficiency mean and remain explicitly missing.
-- No negative efficiency-loss counts or undefined-ratio false flags were observed.
+- Feature row identity is unchanged: 33,506 before and 33,506 after, with a one-to-one match on session, driver and 30-second bucket.
+- Risk output identity is unchanged: 132 driver-session rows before and 132 after.
+- 15,881 buckets now have undefined reliability, efficiency-loss and thermal-stress results because their required efficiency input is unavailable; the prior implementation had silently represented that unavailable state as zero risk.
+- 5,130 throttle/speed mismatch counts and 22 short-shift counts are newly undefined where required control state is unavailable.
+- Among still-defined values, 2,287 reliability means, 91 reliability maxima, 1,997 thermal means, 118 thermal maxima, 51 short-shift counts, 28 mismatch counts and 8 efficiency-loss counts changed after invalid readings were excluded.
+- All 132 retained driver-session risk values changed and decreased; none increased. The mean absolute change is 0.0309699902 and the maximum is 0.1412385354. This is a correction of prior missing-as-zero/ranking behavior, not evidence of improved prediction accuracy.
 - The prior per-session feature counts remain unchanged for sessions 11727–11731; Netherlands adds 8,272 rows.
 
 Evidence hashes:
 
 - Five-session extraction manifest: 96a18997568ecb2d3aaba7a3fe9e1c520512e686d1dad12c4a8e3797ab827141.
-- Six-session feature manifest: bc87e9488ffbc748dbd8919c204a355241ff37371c785ed66781ae04a8aead79.
-- Six-session production feature mart: e45902f0d85f61682b738367d9b59b64b7f940fd51d672f4e79dd2c207da94c4.
-- Six-session driver-session risk scores: 0ddebf625c6ab24e5bf857cb9f87ed086474de444e8c63e72e6a871282f56454.
+- Before feature mart: e45902f0d85f61682b738367d9b59b64b7f940fd51d672f4e79dd2c207da94c4.
+- Before risk scores: 0ddebf625c6ab24e5bf857cb9f87ed086474de444e8c63e72e6a871282f56454.
+- After signal-validated feature mart: fe5bb6a645105e4d5d770c38dedd94b5ad492ed1174fd06862f5be54d995ad25.
+- After signal-validated risk scores: 6d824bd406058443fc63b2ddebce829129e98372f80cf176118a29d750501084.
+- After driver-session manifest: 97111782f8f2f0ef4fc7cb49c4ab7938e653b26e991993a090290df38f7b1d28.
+- Before/after summary: 25b98bd46a8554b81ac9c9219ab3d412e887f003d6dae682bb35e9c42eb17d3a.
+- Durable signal-quality validation bundle: `libfile_4df223e2446c819191d404eb393e1d96`, SHA-256 `3e8c531aef78ef475ed6d47118aa36403d4d510cb622bf2be6d47766c6441b29`.
 
 Reader/consumer status:
 
 - **Raw historical reader:** PASS for all 132 recovered driver-session pairs and 264 endpoint combinations.
-- **Production 30-second feature generator:** PASS for 132/132 driver-session pairs.
-- **Reliability-risk consumer:** PASS for 132 driver-session outputs.
+- **Production 30-second feature generator:** PASS for 132/132 driver-session pairs with explicit validity accounting.
+- **Reliability-risk consumer:** PASS for 132 driver-session outputs; no undefined bucket was converted to zero risk.
 - **Reporting compatibility:** PASS using the existing read-only manifest-field compatibility mapping.
 - **Fantasy consumer:** HOLD; the repository still declares fantasy authority but has no dedicated fantasy reader to exercise. This does not reduce source or production-feature coverage.
 
