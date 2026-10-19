@@ -1,0 +1,28 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-10-19T20:34:05.297403+00:00",
+  "outputs": [
+    {
+      "bytes": 3510,
+      "path": "history/autorepair/session_workbook_recovery/20261019T203404Z/autorepair_status.json",
+      "sha256": "217f55b0a279172d80d10d2b9f7054eec444cf1953edbb89a7462da4a74efc23"
+    },
+    {
+      "bytes": 1039,
+      "path": "history/autorepair/session_workbook_recovery/20261019T203404Z/autorepair_report.md",
+      "sha256": "ea255c5128ecb45be26ea76752acb8371f0f1b882900d227d95be4f1ec5a6c4a"
+    },
+    {
+      "bytes": 3510,
+      "path": "latest/autorepair/session_workbook_recovery/autorepair_status.json",
+      "sha256": "217f55b0a279172d80d10d2b9f7054eec444cf1953edbb89a7462da4a74efc23"
+    },
+    {
+      "bytes": 1039,
+      "path": "latest/autorepair/session_workbook_recovery/autorepair_report.md",
+      "sha256": "ea255c5128ecb45be26ea76752acb8371f0f1b882900d227d95be4f1ec5a6c4a"
+    }
+  ],
+  "run_id": "20261019T203404Z",
+  "sandbox_only": true
+}
