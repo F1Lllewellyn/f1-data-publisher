@@ -1,17 +1,10 @@
 {
-  "ready_for_use": true,
+  "ready_for_use": false,
+  "blocked": true,
   "latest_session_state": "needs_manual_review",
   "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
-  "generated_at_utc": "2026-10-20T07:49:10Z",
+  "generated_at_utc": "2026-10-20T12:57:49Z",
   "source_status": "needs_manual_review",
-  "event_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-  "session_name": {
-    "date_end": "2026-10-04T09:00:00+00:00",
-    "date_start": "2026-10-04T07:00:00+00:00",
-    "gate": "race_result",
-    "meeting_key": 1308,
-    "session_key": 11731,
-    "session_name": "Race",
-    "session_type": "Race"
-  }
+  "event_name": "unknown event",
+  "session_name": "unknown session"
 }
