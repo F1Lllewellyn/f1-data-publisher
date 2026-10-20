@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-20T13:15:54Z",
+  "generated_at_utc": "2026-10-20T17:56:22Z",
   "status": "dashboard_refreshed",
   "source_status": "needs_manual_review",
   "source_backed": false,
@@ -19,7 +19,7 @@
   "session_key": null,
   "event_name": "unknown event",
   "session_name": "unknown session",
-  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261020T125749Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261020T125749Z.xlsx",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261020T172302Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261020T172302Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
   "autorepair_report": null,
