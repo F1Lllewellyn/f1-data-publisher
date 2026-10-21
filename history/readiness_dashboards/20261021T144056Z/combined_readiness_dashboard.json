@@ -1,0 +1,41 @@
+{
+  "generated_at_utc": "2026-10-21T14:40:56Z",
+  "status": "dashboard_refreshed",
+  "source_status": "needs_manual_review",
+  "source_backed": false,
+  "commit_allowed": true,
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": false,
+  "readiness_reasons": [
+    "stale_authoritative_session",
+    "required_source_status_needs_manual_review",
+    "readiness_blocking_issues",
+    "readiness_requires_manual_review",
+    "required_source_evidence_unverified",
+    "workbook_event_session_mismatch"
+  ],
+  "event_id": null,
+  "meeting_key": null,
+  "session_key": null,
+  "event_name": "unknown event",
+  "session_name": "unknown session",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261021T144055Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261021T144055Z.xlsx",
+  "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+  "session_manifest": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
+  "autorepair_report": null,
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "race_predictions": {
+    "ready_for_use": false,
+    "blocked": true,
+    "latest_session_state": "needs_manual_review",
+    "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
+  },
+  "fantasy_predictions": {
+    "ready_for_use": false,
+    "blocked": true,
+    "latest_session_state": "needs_manual_review",
+    "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
+  }
+}
