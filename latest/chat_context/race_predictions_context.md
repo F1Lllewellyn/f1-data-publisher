@@ -3,12 +3,12 @@
 ## Confirmed Data
 - Event: unknown event
 - Session: unknown_session / key unknown
-- Run ID: 20261021T002948Z
+- Run ID: 20261021T045750Z
 - Consumer readiness: blocked
 - Source status: blocked
 - Workbook source status: needs_manual_review
 - Readiness quality: blocked_session_identity_mismatch
-- Material change detected: True
+- Material change detected: False
 - Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false
