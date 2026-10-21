@@ -1,11 +1,11 @@
 {
   "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
   "blocked": true,
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "blocked_session_identity_mismatch",
   "ready_for_full_report": false,
   "ready_for_readiness_context": false,
-  "session_type": "Race",
+  "session_type": "unknown",
   "source_needs_manual_review": true,
-  "source_status": "needs_manual_review",
+  "source_status": "blocked",
   "workbook_source_status": "needs_manual_review"
 }

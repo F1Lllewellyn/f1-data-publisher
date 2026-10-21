@@ -1,14 +1,14 @@
 # F1 1B Race Reports Context v25
 
 ## Confirmed Data
-- Event: Bahrain - Kuala Lumpur - Kuala Lumpur
-- Session: Race / key 11731
-- Run ID: 20261019T201535Z
+- Event: unknown event
+- Session: unknown_session / key unknown
+- Run ID: 20261021T002948Z
 - Consumer readiness: blocked
-- Source status: needs_manual_review
+- Source status: blocked
 - Workbook source status: needs_manual_review
-- Readiness quality: blocked_manual_review_required_source
-- Material change detected: False
+- Readiness quality: blocked_session_identity_mismatch
+- Material change detected: True
 - Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false

@@ -6,8 +6,8 @@
 - Mode: decision-only; no ChatGPT automation, email, text, or forecast gate was activated.
 
 ## Event
-- Event: Bahrain - Kuala Lumpur - Kuala Lumpur
-- Session: Race
+- Event: unknown event
+- Session: unknown_session
 
 ## Consumer Actions
 - race_predictions: blocked — consumer not ready or source/workbook state is not clean/usable

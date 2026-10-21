@@ -1,10 +1,10 @@
 {
   "event": {
-    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11731,
-    "session_name": "Race"
+    "event_id": "unknown_event",
+    "race_name": "unknown event",
+    "session_key": null,
+    "session_name": "unknown_session"
   },
-  "signature": "9637b3c894f8bc84937a239a731ef997267bb2d6a23e3ff981d38996482a729b",
-  "updated_at_utc": "2026-10-19T20:15:36Z"
+  "signature": "0af1c7f832ff272f112ff9f2418a9a3de86b1df0128ec94d17ebf2bc15ceada4",
+  "updated_at_utc": "2026-10-21T00:29:48Z"
 }

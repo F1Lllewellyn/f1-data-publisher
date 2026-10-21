@@ -2,16 +2,17 @@
   "canonical_workbook_overwrite": false,
   "decision_mode": "decision_only_no_external_send",
   "event": {
-    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11731,
-    "session_name": "Race"
+    "event_id": "unknown_event",
+    "race_name": "unknown event",
+    "session_key": null,
+    "session_name": "unknown_session"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-19T20:15:36Z",
+  "generated_at_utc": "2026-10-21T00:29:48Z",
   "notification_recommended": false,
   "promotion_allowed": false,
   "reasons": [
+    "material_change_detected",
     "race_predictions_blocked",
     "fantasy_predictions_blocked",
     "race_reports_blocked"

@@ -2,47 +2,47 @@
   "canonical_workbook_overwrite": false,
   "dashboard": {
     "manifest_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-    "source_backed": true,
+    "source_backed": false,
     "source_status": "needs_manual_review",
     "status": "dashboard_refreshed"
   },
   "event": {
-    "event_id": "2026_1308_bahrain_kuala_lumpur_kuala_lumpur",
-    "race_name": "Bahrain - Kuala Lumpur - Kuala Lumpur",
-    "session_key": 11731,
-    "session_name": "Race"
+    "event_id": "unknown_event",
+    "race_name": "unknown event",
+    "session_key": null,
+    "session_name": "unknown_session"
   },
-  "generated_at_utc": "2026-10-19T20:15:36Z",
+  "generated_at_utc": "2026-10-21T00:29:48Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
       "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
+      "readiness_quality": "blocked_session_identity_mismatch",
       "ready_for_use": false,
-      "session_type": "Race",
+      "session_type": "unknown",
       "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
+      "source_status": "blocked",
       "workbook_source_status": "needs_manual_review"
     },
     "race_predictions": {
       "allowed_effect": "readiness/confidence/risk context only; stable P1-P20 not overwritten",
       "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
+      "readiness_quality": "blocked_session_identity_mismatch",
       "ready_for_use": false,
-      "session_type": "Race",
+      "session_type": "unknown",
       "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
+      "source_status": "blocked",
       "workbook_source_status": "needs_manual_review"
     },
     "race_reports": {
       "allowed_effect": "report readiness/context only; no Full Report PDF generated automatically",
       "blocked": true,
-      "readiness_quality": "blocked_manual_review_required_source",
+      "readiness_quality": "blocked_session_identity_mismatch",
       "ready_for_full_report": false,
       "ready_for_readiness_context": false,
-      "session_type": "Race",
+      "session_type": "unknown",
       "source_needs_manual_review": true,
-      "source_status": "needs_manual_review",
+      "source_status": "blocked",
       "workbook_source_status": "needs_manual_review"
     }
   },
@@ -50,9 +50,9 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-19T19:51:37Z",
-        "score": 100,
-        "source_backed": true,
+        "run_id": "2026-10-21T00:07:57Z",
+        "score": 50,
+        "source_backed": false,
         "source_status": "needs_manual_review"
       }
     ],
@@ -60,14 +60,14 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-19T19:51:37Z",
-          "score": 100,
-          "source_backed": true,
+          "run_id": "2026-10-21T00:07:57Z",
+          "score": 50,
+          "source_backed": false,
           "source_status": "needs_manual_review"
         }
       ],
       "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "selected_source_manifest": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
+      "selected_source_manifest": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
       "selection_rule": "follow_dashboard_session_manifest_or_block",
       "source_candidates": [
         {
@@ -352,9 +352,9 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-19T19:51:37Z",
-          "score": 100,
-          "source_backed": true,
+          "run_id": "2026-10-21T00:07:57Z",
+          "score": 50,
+          "source_backed": false,
           "source_status": "needs_manual_review"
         }
       ],
@@ -364,13 +364,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261019T195136Z",
+          "run_id": "20261021T000757Z",
           "score": -50,
           "status": "needs_manual_review"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261019T195136Z",
+          "run_id": "20261021T000757Z",
           "score": -50,
           "status": "needs_manual_review"
         }
@@ -378,17 +378,17 @@
     }
   },
   "promotion_allowed": false,
-  "run_id": "20261019T201535Z",
+  "run_id": "20261021T002948Z",
   "schema_version": "f1_1b_output_contract_v20",
-  "signature": "9637b3c894f8bc84937a239a731ef997267bb2d6a23e3ff981d38996482a729b",
+  "signature": "0af1c7f832ff272f112ff9f2418a9a3de86b1df0128ec94d17ebf2bc15ceada4",
   "source": {
-    "manifest_path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
+    "manifest_path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
     "needs_manual_review": true,
     "optional_context_gaps": [],
-    "readiness_quality": "blocked_manual_review_required_source",
+    "readiness_quality": "blocked_session_identity_mismatch",
     "source_counts": {},
     "source_statuses": {},
-    "status": "needs_manual_review"
+    "status": "blocked"
   },
   "source_backed": false,
   "stable_engine_modified": false,
