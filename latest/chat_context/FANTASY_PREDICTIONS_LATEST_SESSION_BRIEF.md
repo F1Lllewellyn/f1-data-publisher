@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-22T19:26:43Z
+Generated UTC: 2026-10-22T20:47:56Z
 Event: unknown event
 Session: unknown session
 Source status: needs_manual_review
