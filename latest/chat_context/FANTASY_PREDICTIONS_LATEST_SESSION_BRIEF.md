@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-23T22:04:46Z
+Generated UTC: 2026-10-23T23:03:59Z
 Event: United States - Austin - Austin
 Session: Practice 1
 Source status: clean
