@@ -1,6 +1,6 @@
 {
   "artifact_profile": "openf1-lightweight-source-closure",
-  "generated_utc": "2026-10-23T17:09:47.358314Z",
+  "generated_utc": "2026-10-23T20:30:41.598657Z",
   "season": 2026,
   "completed_only": true,
   "target_session_count": 0,
@@ -87,7 +87,7 @@
   ],
   "timestamp_policy": "dt.datetime.now(dt.UTC)",
   "no_drs_2026_assumption": true,
-  "previous_manifest_generated_utc": "2026-10-23T14:44:46.352493Z",
+  "previous_manifest_generated_utc": "2026-10-23T17:09:47.358314Z",
   "latest_zip": "openf1_lightweight_source_closure.zip",
-  "history_path": "history/openf1_lightweight_source_closure/20261023_170946"
+  "history_path": "history/openf1_lightweight_source_closure/20261023_203040"
 }

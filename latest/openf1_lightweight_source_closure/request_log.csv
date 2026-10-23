@@ -1,2 +1,2 @@
 timestamp_utc,endpoint,strategy,params_json,rows,status,error,elapsed_seconds
-2026-10-23T17:09:47.135124Z,sessions,sessions_by_year,"{""year"": 2026}",0,http_401,"{""detail"":""Live F1 session in progress. Global API access (including past sessions) is restricted to authenticated users until the session ends. Get an API key here: https://buy.stripe.com/eVqcN41BPekP0iIalBcEw02""}",0.546
+2026-10-23T20:30:41.265280Z,sessions,sessions_by_year,"{""year"": 2026}",0,http_401,"{""detail"":""Live F1 session in progress. Global API access (including past sessions) is restricted to authenticated users until the session ends. Get an API key here: https://buy.stripe.com/eVqcN41BPekP0iIalBcEw02""}",0.439
