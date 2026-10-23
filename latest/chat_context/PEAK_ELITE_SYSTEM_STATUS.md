@@ -1,12 +1,12 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-10-23T18:42:27.793856Z`
+Created UTC: `2026-10-23T22:04:49.018770Z`
 Status: **pass**
 
 ## Confirmed Data
-- Latest event: `Singapore - Marina Bay - Singapore`
-- Latest session: `Race`
-- Source status: `needs_manual_review`
+- Latest event: `United States - Austin - Austin`
+- Latest session: `Practice 1`
+- Source status: `clean`
 - Workbook/KPI commit allowed: `True`
 - Workbook source status: `needs_manual_review`
 
