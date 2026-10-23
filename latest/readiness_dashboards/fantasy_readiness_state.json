@@ -1,10 +1,10 @@
 {
   "ready_for_use": false,
   "blocked": true,
-  "latest_session_state": "needs_manual_review",
+  "latest_session_state": "clean",
   "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution",
-  "generated_at_utc": "2026-10-23T18:42:25Z",
-  "source_status": "needs_manual_review",
-  "event_name": "unknown event",
-  "session_name": "unknown session"
+  "generated_at_utc": "2026-10-23T19:55:48Z",
+  "source_status": "clean",
+  "event_name": "United States - Austin - Austin",
+  "session_name": "Practice 1"
 }

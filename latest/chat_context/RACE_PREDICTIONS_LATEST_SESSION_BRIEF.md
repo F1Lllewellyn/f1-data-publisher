@@ -1,9 +1,9 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-10-23T18:42:25Z
-Event: unknown event
-Session: unknown session
-Source status: needs_manual_review
+Generated UTC: 2026-10-23T19:55:48Z
+Event: United States - Austin - Austin
+Session: Practice 1
+Source status: clean
 Dashboard readiness: NOT READY
 Diagnostic publishing allowed: true
 
