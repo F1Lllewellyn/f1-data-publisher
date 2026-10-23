@@ -1,13 +1,13 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1296_singapore_marina_bay_singapore",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1297_united_states_austin_austin",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11388,
-  "session_name": "Race",
+  "session_key": 11389,
+  "session_name": "Practice 1",
   "stable_engine_modified": false,
-  "updated_utc": "2026-10-12T19:47:51.328913Z"
+  "updated_utc": "2026-10-23T19:04:22.343532Z"
 }

@@ -1,6 +1,6 @@
 {
   "commit_allowed": true,
-  "created_utc": "2026-10-23T18:42:25.742610+00:00",
+  "created_utc": "2026-10-23T19:04:22.495473+00:00",
   "governance": {
     "canonical_workbook_overwrite": false,
     "delete_authority": false,
@@ -11,46 +11,44 @@
   "material_change": true,
   "outputs": [
     {
-      "bytes": 767,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "3263dcfdf66fad5b1ecb7009c51904229d124c9febafd30c3c83d4e784ff8a65"
+      "bytes": 753,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "d79a6a5f76396ad6722cd945720a0b38a6db621287f96676a153f7be31b74253"
     },
     {
-      "bytes": 413,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/refreshed_workbook_kpi_readiness.csv",
-      "sha256": "f979f88db36c1d00f55ad7b5b5b7092ebf84b273b8fb3381bc2d5d90f403f35f"
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "1f4b93b11f3ba8ee4960e038f20ab3d80993ef8518a626edf89b25162ed37462"
     },
     {
-      "bytes": 10339,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261023T184225Z.xlsx",
-      "sha256": "07bed637145fc2b3f8e996c93b768325ce4823db9e04379f2c6578098588c6ad"
+      "bytes": 10294,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261023T190422Z.xlsx",
+      "sha256": "d030cfde638a55179070ad1f0c93e51105e1fb4881471537d41fe2adfa4bbf33"
     },
     {
-      "bytes": 575,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "0a706bcdc0d66ae11a760ba2cf83f7843302c5af80e83a04f131f218a6f67105"
+      "bytes": 567,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "17e1a6e2090d260cb589edfce4c4241ae7e75436b75b2da4edee23caed2cd857"
     },
     {
-      "bytes": 1574,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/upstream_data_readiness_snapshot.json",
-      "sha256": "3ee0925ab3b79fce48d806b470303d20981d90db7f3090e6d98dfc04a54d4a15"
+      "bytes": 1564,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/upstream_data_readiness_snapshot.json",
+      "sha256": "73d1b0b13eb76429955c1e4a37535876052be19f9021592c9c25ad0632f1119d"
     },
     {
-      "bytes": 713,
-      "path": "history/workbook_kpi_refresh_applier/20261023T184225Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "f8f295489991013d4b109d56cceac5701cd43853af62cd5d0a6036f4446e1c32"
+      "bytes": 696,
+      "path": "history/workbook_kpi_refresh_applier/20261023T190422Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "6041870d1db6e308fdf61fbab00ed014f13ca93c7dad3419fb1c6e7f152a02b1"
     }
   ],
-  "run_id": "20261023T184225Z",
+  "run_id": "20261023T190422Z",
   "source_artifacts": [
-    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json",
-    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json",
-    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.csv",
-    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/forecast_bundle_ledger_snapshot.json"
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/forecast_bundle_ledger_snapshot.json"
   ],
-  "source_processor_root": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731",
-  "source_status": "needs_manual_review",
-  "warnings": [
-    "source_classification=needs_manual_review"
-  ]
+  "source_processor_root": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389",
+  "source_status": "clean",
+  "warnings": []
 }

@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 238106,
+    "ok": true,
+    "sha256": "2b73c3c58864301beca967fda439058132d864d7f8cc42bb4790229ad5518a6a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_laps.json",
+  "json_sha256": "5b69d506dbb97e68a3f5e0bef67a0c01325c7b1f6024f2c46fff9cb0f5c70602",
+  "max_lap_number": 26.0,
+  "missing_required_columns": [],
+  "rows": 507,
+  "status": "clean",
+  "timestamp_rows": 506
+}

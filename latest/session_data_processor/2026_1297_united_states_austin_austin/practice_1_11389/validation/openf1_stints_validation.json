@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 13587,
+    "ok": true,
+    "sha256": "3bf603f4fcab65d147953f510e170a60245dc76068947979dd0b81255f8a4631",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_stints.json",
+  "json_sha256": "2b07615d96f7b5e44934361f6ed94e50e29ff0b77c01d241f43c20facbeaef30",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 94,
+  "status": "clean",
+  "timestamp_rows": 0
+}

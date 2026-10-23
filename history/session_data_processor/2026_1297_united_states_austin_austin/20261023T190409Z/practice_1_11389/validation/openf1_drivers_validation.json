@@ -1,0 +1,34 @@
+{
+  "anomalies": [],
+  "columns": [
+    "broadcast_name",
+    "country_code",
+    "driver_number",
+    "first_name",
+    "full_name",
+    "headshot_url",
+    "last_name",
+    "meeting_key",
+    "name_acronym",
+    "session_key",
+    "team_colour",
+    "team_name"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_drivers.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "drivers",
+  "fetch": {
+    "bytes": 9020,
+    "ok": true,
+    "sha256": "77fbd8a45ee83e37853a37318559d45f5780e4291bf4f5a4b59360123396d01b",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/raw/openf1_drivers.json",
+  "json_sha256": "c5bc9b2a3a3b47c56a959f839fe26c40903bdf683295dd65b624ffa27a73a233",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
