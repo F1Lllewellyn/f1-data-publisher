@@ -1,0 +1,389 @@
+name: Real historical ZIP member range proof
+
+on:
+  push:
+    branches:
+      - test/2026-10-23-real-zip-member-range-01
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prove-range-member-retrieval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPOSITORY: F1Lllewellyn/f1-data-publisher
+      ARTIFACT_ID: "11916289450"
+      EXPECTED_ARCHIVE_SIZE: "603154203"
+      EXPECTED_ARCHIVE_DIGEST: sha256:4ca78ad6fbd1af8626429ef50166929c830f2a157520a92df7b92a182462c7dd
+      TARGET_MEMBER: raw/car_data/session_key=11227/driver_number=10/chunk_0000.parquet
+    steps:
+      - name: Install bounded Parquet validator
+        run: python -m pip install --quiet --disable-pip-version-check pyarrow==22.0.0
+
+      - name: Retrieve and validate one exact ZIP member
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import binascii
+          import hashlib
+          import http.client
+          import json
+          import os
+          import struct
+          import time
+          import urllib.parse
+          import zlib
+          from pathlib import Path, PurePosixPath
+
+          import pyarrow.parquet as pq
+
+          REPOSITORY = os.environ["REPOSITORY"]
+          ARTIFACT_ID = int(os.environ["ARTIFACT_ID"])
+          ARCHIVE_SIZE = int(os.environ["EXPECTED_ARCHIVE_SIZE"])
+          ARCHIVE_DIGEST = os.environ["EXPECTED_ARCHIVE_DIGEST"]
+          TARGET = os.environ["TARGET_MEMBER"]
+          TOKEN = os.environ["GH_TOKEN"]
+          MAX_TOTAL = 12 * 1024 * 1024
+          MAX_RANGE = 4 * 1024 * 1024
+          MAX_REQUESTS = 12
+          MAX_UNCOMPRESSED = 32 * 1024 * 1024
+          records = []
+          total_body = 0
+
+          class Hold(RuntimeError):
+              pass
+
+          def api_get(path):
+              conn = http.client.HTTPSConnection("api.github.com", timeout=30)
+              headers = {
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {TOKEN}",
+                  "User-Agent": "f1-bounded-range-proof",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              }
+              conn.request("GET", path, headers=headers)
+              response = conn.getresponse()
+              body = response.read(1024 * 1024 + 1)
+              status = response.status
+              location = response.getheader("Location")
+              conn.close()
+              return status, body, location
+
+          metadata_path = f"/repos/{REPOSITORY}/actions/artifacts/{ARTIFACT_ID}"
+          status, body, _ = api_get(metadata_path)
+          if status != 200 or len(body) > 1024 * 1024:
+              raise Hold(f"HOLD_ARTIFACT_METADATA_HTTP_{status}")
+          metadata = json.loads(body)
+          checks = {
+              "id": metadata.get("id") == ARTIFACT_ID,
+              "name": metadata.get("name") == "openf1-full-historical-auto-final-2026-19",
+              "size": metadata.get("size_in_bytes") == ARCHIVE_SIZE,
+              "digest": metadata.get("digest") == ARCHIVE_DIGEST,
+              "unexpired": metadata.get("expired") is False,
+          }
+          if not all(checks.values()):
+              raise Hold("HOLD_ARTIFACT_METADATA_MISMATCH:" + json.dumps(checks, sort_keys=True))
+
+          download_path = f"/repos/{REPOSITORY}/actions/artifacts/{ARTIFACT_ID}/zip"
+          status, body, signed_url = api_get(download_path)
+          if status != 302 or body:
+              raise Hold(f"HOLD_ARCHIVE_REDIRECT_HTTP_{status}")
+          parsed = urllib.parse.urlsplit(signed_url or "")
+          if parsed.scheme != "https" or not parsed.hostname or not parsed.hostname.endswith(".blob.core.windows.net"):
+              raise Hold("HOLD_UNEXPECTED_SIGNED_URL_ORIGIN")
+
+          def fetch_range(start, end, purpose):
+              nonlocal_marker = None
+              del nonlocal_marker
+              global total_body
+              if start < 0 or end < start or end >= ARCHIVE_SIZE:
+                  raise Hold(f"HOLD_INVALID_RANGE_{purpose}")
+              expected = end - start + 1
+              if expected > MAX_RANGE:
+                  raise Hold(f"HOLD_PER_RANGE_LIMIT_{purpose}")
+              if len(records) >= MAX_REQUESTS:
+                  raise Hold("HOLD_RANGE_REQUEST_LIMIT")
+              if total_body + expected > MAX_TOTAL:
+                  raise Hold("HOLD_AGGREGATE_RANGE_LIMIT")
+              conn = http.client.HTTPSConnection(parsed.hostname, parsed.port or 443, timeout=45)
+              target = parsed.path + (("?" + parsed.query) if parsed.query else "")
+              started = time.monotonic()
+              conn.request("GET", target, headers={"Range": f"bytes={start}-{end}", "User-Agent": "f1-bounded-range-proof"})
+              response = conn.getresponse()
+              status_code = response.status
+              content_range = response.getheader("Content-Range")
+              content_length = response.getheader("Content-Length")
+              if status_code == 200:
+                  conn.close()
+                  raise Hold(f"HOLD_UNEXPECTED_HTTP_200_{purpose}")
+              if status_code != 206:
+                  conn.close()
+                  raise Hold(f"HOLD_RANGE_HTTP_{status_code}_{purpose}")
+              expected_cr = f"bytes {start}-{end}/{ARCHIVE_SIZE}"
+              if content_range != expected_cr:
+                  conn.close()
+                  raise Hold(f"HOLD_INVALID_CONTENT_RANGE_{purpose}")
+              if content_length is None or int(content_length) != expected:
+                  conn.close()
+                  raise Hold(f"HOLD_INVALID_CONTENT_LENGTH_{purpose}")
+              payload = response.read(expected + 1)
+              conn.close()
+              elapsed = time.monotonic() - started
+              if len(payload) != expected:
+                  raise Hold(f"HOLD_RANGE_BODY_SIZE_{purpose}")
+              total_body += len(payload)
+              records.append({
+                  "purpose": purpose,
+                  "start": start,
+                  "end": end,
+                  "response_body_bytes": len(payload),
+                  "elapsed_seconds": round(elapsed, 6),
+              })
+              return payload
+
+          def fetch_span(start, length, purpose):
+              if length < 0 or start + length > ARCHIVE_SIZE:
+                  raise Hold(f"HOLD_INVALID_SPAN_{purpose}")
+              chunks = []
+              offset = 0
+              while offset < length:
+                  size = min(MAX_RANGE, length - offset)
+                  chunks.append(fetch_range(start + offset, start + offset + size - 1, f"{purpose}_{len(chunks) + 1}"))
+                  offset += size
+              return b"".join(chunks)
+
+          retrieval_started = time.monotonic()
+          tail_size = min(128 * 1024, ARCHIVE_SIZE)
+          tail_start = ARCHIVE_SIZE - tail_size
+          tail = fetch_range(tail_start, ARCHIVE_SIZE - 1, "zip_tail")
+          eocd_rel = tail.rfind(b"PK\x05\x06")
+          if eocd_rel < 0 or eocd_rel + 22 > len(tail):
+              raise Hold("HOLD_ZIP_EOCD_NOT_FOUND")
+          eocd = struct.unpack_from("<4s4H2IH", tail, eocd_rel)
+          disk, cd_disk, disk_entries, total_entries, cd_size, cd_offset, comment_len = eocd[1:]
+          if eocd_rel + 22 + comment_len != len(tail):
+              raise Hold("HOLD_ZIP_EOCD_BOUNDARY")
+          if disk != 0 or cd_disk != 0 or disk_entries != total_entries:
+              raise Hold("HOLD_UNSUPPORTED_MULTIDISK_ZIP")
+
+          if total_entries == 0xFFFF or cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF:
+              eocd_abs = tail_start + eocd_rel
+              locator_abs = eocd_abs - 20
+              if locator_abs < tail_start:
+                  locator = fetch_span(locator_abs, 20, "zip64_locator")
+              else:
+                  locator = tail[locator_abs - tail_start:locator_abs - tail_start + 20]
+              if len(locator) != 20 or locator[:4] != b"PK\x06\x07":
+                  raise Hold("HOLD_ZIP64_LOCATOR_MISSING")
+              _, zip64_disk, zip64_offset, total_disks = struct.unpack("<4sIQI", locator)
+              if zip64_disk != 0 or total_disks != 1:
+                  raise Hold("HOLD_UNSUPPORTED_ZIP64_MULTIDISK")
+              if tail_start <= zip64_offset and zip64_offset + 56 <= ARCHIVE_SIZE:
+                  zip64 = tail[zip64_offset - tail_start:zip64_offset - tail_start + 56]
+              else:
+                  zip64 = fetch_span(zip64_offset, 56, "zip64_eocd")
+              if len(zip64) != 56 or zip64[:4] != b"PK\x06\x06":
+                  raise Hold("HOLD_ZIP64_EOCD_MISSING")
+              fields = struct.unpack("<4sQ2H2I4Q", zip64)
+              if fields[4] != 0 or fields[5] != 0 or fields[6] != fields[7]:
+                  raise Hold("HOLD_UNSUPPORTED_ZIP64_LAYOUT")
+              total_entries, cd_size, cd_offset = fields[7], fields[8], fields[9]
+
+          if total_entries <= 0 or cd_size <= 0 or cd_offset + cd_size > ARCHIVE_SIZE:
+              raise Hold("HOLD_INVALID_CENTRAL_DIRECTORY")
+          if cd_size > MAX_TOTAL - total_body:
+              raise Hold("HOLD_CENTRAL_DIRECTORY_EXCEEDS_TRANSFER_LIMIT")
+          if tail_start <= cd_offset and cd_offset + cd_size <= ARCHIVE_SIZE:
+              central = tail[cd_offset - tail_start:cd_offset - tail_start + cd_size]
+          else:
+              central = fetch_span(cd_offset, cd_size, "central_directory")
+
+          def decode_name(raw, flags):
+              return raw.decode("utf-8" if flags & 0x800 else "cp437")
+
+          def zip64_values(extra, need_uncomp, need_comp, need_offset):
+              pos = 0
+              payload = None
+              while pos + 4 <= len(extra):
+                  kind, size = struct.unpack_from("<HH", extra, pos)
+                  pos += 4
+                  if pos + size > len(extra):
+                      raise Hold("HOLD_MALFORMED_ZIP_EXTRA")
+                  if kind == 0x0001:
+                      payload = extra[pos:pos + size]
+                  pos += size
+              if not (need_uncomp or need_comp or need_offset):
+                  return None, None, None
+              if payload is None:
+                  raise Hold("HOLD_ZIP64_EXTRA_MISSING")
+              cursor = 0
+              values = []
+              for needed in (need_uncomp, need_comp, need_offset):
+                  if needed:
+                      if cursor + 8 > len(payload):
+                          raise Hold("HOLD_ZIP64_EXTRA_TRUNCATED")
+                      values.append(struct.unpack_from("<Q", payload, cursor)[0])
+                      cursor += 8
+                  else:
+                      values.append(None)
+              return tuple(values)
+
+          pos = 0
+          matches = []
+          parsed_entries = 0
+          while pos < len(central):
+              if pos + 46 > len(central) or central[pos:pos + 4] != b"PK\x01\x02":
+                  raise Hold("HOLD_MALFORMED_CENTRAL_DIRECTORY")
+              h = struct.unpack_from("<4s6H3I5H2I", central, pos)
+              flags, method, crc, comp, uncomp = h[3], h[4], h[7], h[8], h[9]
+              name_len, extra_len, comment_len, disk_start, local_offset = h[10], h[11], h[12], h[13], h[16]
+              end = pos + 46 + name_len + extra_len + comment_len
+              if end > len(central):
+                  raise Hold("HOLD_TRUNCATED_CENTRAL_ENTRY")
+              raw_name = central[pos + 46:pos + 46 + name_len]
+              extra = central[pos + 46 + name_len:pos + 46 + name_len + extra_len]
+              name = decode_name(raw_name, flags)
+              zu, zc, zo = zip64_values(extra, uncomp == 0xFFFFFFFF, comp == 0xFFFFFFFF, local_offset == 0xFFFFFFFF)
+              uncomp = zu if zu is not None else uncomp
+              comp = zc if zc is not None else comp
+              local_offset = zo if zo is not None else local_offset
+              if disk_start != 0:
+                  raise Hold("HOLD_UNSUPPORTED_ENTRY_DISK")
+              if name == TARGET or name.endswith("/" + TARGET):
+                  matches.append({
+                      "name": name,
+                      "flags": flags,
+                      "method": method,
+                      "crc32": crc,
+                      "compressed_size": comp,
+                      "uncompressed_size": uncomp,
+                      "local_offset": local_offset,
+                  })
+              parsed_entries += 1
+              pos = end
+          if pos != len(central) or parsed_entries != total_entries:
+              raise Hold("HOLD_CENTRAL_DIRECTORY_COUNT_MISMATCH")
+          if len(matches) != 1:
+              raise Hold("HOLD_TARGET_MEMBER_ABSENT" if not matches else "HOLD_TARGET_MEMBER_AMBIGUOUS")
+          member = matches[0]
+          name = member["name"]
+          if not name.endswith(TARGET):
+              raise Hold("HOLD_TARGET_IDENTITY_MISMATCH")
+          prefix = name[:-len(TARGET)].rstrip("/")
+          if name.startswith("/") or "\\" in name or "\x00" in name or ".." in PurePosixPath(name).parts:
+              raise Hold("HOLD_UNSAFE_MEMBER_PATH")
+          if prefix and (prefix.startswith("/") or ".." in PurePosixPath(prefix).parts):
+              raise Hold("HOLD_UNSAFE_ARCHIVE_PREFIX")
+          if member["flags"] & 0x1:
+              raise Hold("HOLD_ENCRYPTED_MEMBER_UNSUPPORTED")
+          if member["method"] not in (0, 8):
+              raise Hold("HOLD_UNSUPPORTED_COMPRESSION_METHOD")
+          if member["uncompressed_size"] <= 0 or member["uncompressed_size"] > MAX_UNCOMPRESSED:
+              raise Hold("HOLD_DECOMPRESSED_MEMBER_LIMIT")
+          if member["compressed_size"] <= 0:
+              raise Hold("HOLD_EMPTY_COMPRESSED_MEMBER")
+
+          local = fetch_span(member["local_offset"], 30, "local_header")
+          lh = struct.unpack("<4s5H3I2H", local)
+          if lh[0] != b"PK\x03\x04" or lh[2] != member["flags"] or lh[3] != member["method"]:
+              raise Hold("HOLD_LOCAL_HEADER_MISMATCH")
+          local_name_len, local_extra_len = lh[9], lh[10]
+          local_meta = fetch_span(member["local_offset"] + 30, local_name_len + local_extra_len, "local_name_extra")
+          local_name = decode_name(local_meta[:local_name_len], member["flags"])
+          if local_name != name:
+              raise Hold("HOLD_LOCAL_MEMBER_NAME_MISMATCH")
+          data_offset = member["local_offset"] + 30 + local_name_len + local_extra_len
+          compressed = fetch_span(data_offset, member["compressed_size"], "member_data")
+          retrieval_seconds = time.monotonic() - retrieval_started
+
+          decompression_started = time.monotonic()
+          if member["method"] == 0:
+              payload = compressed
+          else:
+              decoder = zlib.decompressobj(-15)
+              payload = decoder.decompress(compressed, MAX_UNCOMPRESSED + 1)
+              payload += decoder.flush()
+              if not decoder.eof or decoder.unused_data or decoder.unconsumed_tail:
+                  raise Hold("HOLD_DEFLATE_STREAM_INVALID")
+          decompression_seconds = time.monotonic() - decompression_started
+          if len(payload) != member["uncompressed_size"]:
+              raise Hold("HOLD_UNCOMPRESSED_SIZE_MISMATCH")
+          crc = binascii.crc32(payload) & 0xFFFFFFFF
+          if crc != member["crc32"]:
+              raise Hold("HOLD_MEMBER_CRC32_MISMATCH")
+          member_sha256 = hashlib.sha256(payload).hexdigest()
+
+          validation_started = time.monotonic()
+          if len(payload) < 8 or payload[:4] != b"PAR1" or payload[-4:] != b"PAR1":
+              raise Hold("HOLD_PARQUET_MAGIC_MISMATCH")
+          output = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "bounded-target.parquet"
+          output.write_bytes(payload)
+          parquet = pq.ParquetFile(output)
+          row_count = parquet.metadata.num_rows
+          columns = parquet.schema_arrow.names
+          required = {"session_key", "driver_number"}
+          if row_count <= 0 or not required.issubset(columns):
+              raise Hold("HOLD_PARQUET_IDENTITY_SCHEMA_MISSING")
+          identity = pq.read_table(output, columns=["session_key", "driver_number"])
+          session_values = set(identity.column("session_key").to_pylist())
+          driver_values = set(identity.column("driver_number").to_pylist())
+          if session_values != {11227} or driver_values != {10}:
+              raise Hold("HOLD_PARQUET_IDENTITY_VALUE_MISMATCH")
+          output.unlink()
+          validation_seconds = time.monotonic() - validation_started
+
+          independent_digest = None
+          outcome = "PASS_RANGE_MEMBER_RETRIEVAL_LIMITED_PROVENANCE"
+          result = {
+              "outcome": outcome,
+              "run_id": os.environ.get("GITHUB_RUN_ID"),
+              "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
+              "head_sha": os.environ.get("GITHUB_SHA"),
+              "artifact_id": ARTIFACT_ID,
+              "artifact_size_bytes": ARCHIVE_SIZE,
+              "artifact_digest": ARCHIVE_DIGEST,
+              "member": name,
+              "archive_root_prefix": prefix,
+              "zip64": bool(total_entries > 0xFFFF or cd_offset > 0xFFFFFFFF or cd_size > 0xFFFFFFFF),
+              "central_directory_entries": parsed_entries,
+              "compression_method": member["method"],
+              "member_compressed_bytes": member["compressed_size"],
+              "member_uncompressed_bytes": member["uncompressed_size"],
+              "member_crc32": f"{crc:08x}",
+              "member_sha256": member_sha256,
+              "independent_original_file_digest": independent_digest,
+              "parquet_rows": row_count,
+              "parquet_columns": columns,
+              "identity_session_key": 11227,
+              "identity_driver_number": 10,
+              "range_request_count": len(records),
+              "archive_response_body_bytes": total_body,
+              "archive_body_to_compressed_member_ratio": round(total_body / member["compressed_size"], 6),
+              "archive_body_to_uncompressed_member_ratio": round(total_body / member["uncompressed_size"], 6),
+              "retrieval_seconds": round(retrieval_seconds, 6),
+              "decompression_seconds": round(decompression_seconds, 6),
+              "validation_seconds": round(validation_seconds, 6),
+              "limits": {
+                  "aggregate_archive_bytes": MAX_TOTAL,
+                  "per_range_bytes": MAX_RANGE,
+                  "range_requests": MAX_REQUESTS,
+                  "decompressed_member_bytes": MAX_UNCOMPRESSED,
+              },
+              "ranges": records,
+              "total_network_traffic": "not measured; archive response-body bytes are measured separately",
+          }
+          rendered = json.dumps(result, indent=2, sort_keys=True)
+          print("WORK_RESULT_BEGIN")
+          print(rendered)
+          print("WORK_RESULT_END")
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a", encoding="utf-8") as handle:
+                  handle.write("## Real historical ZIP-member retrieval proof\n\n")
+                  handle.write(f"**{outcome}**\n\n```json\n{rendered}\n```\n")
+          PY
