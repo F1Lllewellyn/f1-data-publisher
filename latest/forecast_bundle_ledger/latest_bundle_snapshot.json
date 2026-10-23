@@ -12,7 +12,7 @@
     "session_key": null,
     "session_name": "unknown_session"
   },
-  "generated_at_utc": "2026-10-23T04:56:49Z",
+  "generated_at_utc": "2026-10-23T09:49:27Z",
   "handoffs": {
     "fantasy_predictions": {
       "allowed_effect": "value/risk/readiness context only; no automatic transfer execution",
@@ -50,7 +50,7 @@
     "dashboard_candidates": [
       {
         "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-23T04:40:21Z",
+        "run_id": "2026-10-23T09:35:49Z",
         "score": 50,
         "source_backed": false,
         "source_status": "needs_manual_review"
@@ -60,7 +60,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-23T04:40:21Z",
+          "run_id": "2026-10-23T09:35:49Z",
           "score": 50,
           "source_backed": false,
           "source_status": "needs_manual_review"
@@ -352,7 +352,7 @@
       "dashboard_candidates": [
         {
           "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-          "run_id": "2026-10-23T04:40:21Z",
+          "run_id": "2026-10-23T09:35:49Z",
           "score": 50,
           "source_backed": false,
           "source_status": "needs_manual_review"
@@ -364,13 +364,13 @@
       "workbook_candidates": [
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261023T044021Z",
+          "run_id": "20261023T093549Z",
           "score": -50,
           "status": "needs_manual_review"
         },
         {
           "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-          "run_id": "20261023T044021Z",
+          "run_id": "20261023T093549Z",
           "score": -50,
           "status": "needs_manual_review"
         }
@@ -378,7 +378,7 @@
     }
   },
   "promotion_allowed": false,
-  "run_id": "20261023T045649Z",
+  "run_id": "20261023T094927Z",
   "schema_version": "f1_1b_output_contract_v20",
   "signature": "0af1c7f832ff272f112ff9f2418a9a3de86b1df0128ec94d17ebf2bc15ceada4",
   "source": {
