@@ -5,12 +5,12 @@
     "session_key": 11390,
     "session_name": "Practice 2"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1297_united_states_austin_austin/20261024T005738Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1297_united_states_austin_austin/20261024T171840Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20261024T005738Z",
+  "run_id": "20261024T171840Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "ff8dd4353fc789754fa58c17113f07a6a1cd0a8ed17d12a84ccad3b5b1b1e0b6",
+  "signature": "99df19c278c87e8ba9bec3c33ab060418a57f53f161b45d70cf53b232f98f0c2",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-10-24T00:57:38Z"
+  "updated_at_utc": "2026-10-24T17:18:40Z"
 }
