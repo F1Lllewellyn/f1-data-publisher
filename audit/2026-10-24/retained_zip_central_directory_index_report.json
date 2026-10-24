@@ -1,0 +1,5 @@
+{
+  "outcome": "PENDING_SINGLE_ISOLATED_PROOF",
+  "work_order_id": "F1-WO-HF-ZIP-INDEX-20261024-001",
+  "note": "This placeholder contains no inventory claim. The exact report is produced by the one authorized isolated branch run and then retained in the unmerged PR without retriggering the path-filtered workflow."
+}
