@@ -6,8 +6,8 @@ Pass
 
 ## Run
 
-- Run ID: `20261024T090647Z`
-- Created UTC: `2026-10-24T09:06:47.586561+00:00`
+- Run ID: `20261024T092855Z`
+- Created UTC: `2026-10-24T09:28:55.990005+00:00`
 - Source status: `clean`
 - Material change: `True`
 
@@ -17,12 +17,12 @@ Pass
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/sandbox_workbook_update_plan_applied.json` (94a341d92dcb...)
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/refreshed_workbook_kpi_readiness.csv` (85593c8ede35...)
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261024T090647Z.xlsx` (7175010ed1c3...)
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/upstream_latest_manifest_snapshot.json` (2e7e7ab0161b...)
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/upstream_data_readiness_snapshot.json` (70feceb15a61...)
-- `history/workbook_kpi_refresh_applier/20261024T090647Z/upstream_combined_source_manifest_snapshot.json` (d0be9350190a...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/sandbox_workbook_update_plan_applied.json` (12eddecd5e8b...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/refreshed_workbook_kpi_readiness.csv` (85593c8ede35...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261024T092855Z.xlsx` (c1e41d317299...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/upstream_latest_manifest_snapshot.json` (a1cf7f5766b5...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/upstream_data_readiness_snapshot.json` (3228dec8dd77...)
+- `history/workbook_kpi_refresh_applier/20261024T092855Z/upstream_combined_source_manifest_snapshot.json` (2165e98e648d...)
 
 ## Governance
 
