@@ -1,0 +1,68 @@
+name: F1 retained ZIP central-directory index isolated proof
+
+on:
+  push:
+    branches:
+      - test/2026-10-24-retained-zip-central-directory-index-01
+    paths:
+      - scripts/maintenance/f1_retained_zip_central_directory_index_v1.py
+      - tests/test_f1_retained_zip_central_directory_index_v1.py
+      - .github/workflows/f1-retained-zip-central-directory-index-isolated-proof.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  bounded-central-directory-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      COVERAGE_HEAD: 317201cd7bca8914861c9beee4af13a1aba008f7
+      COVERAGE_BLOB: ea6a24d20a708e6e10f157af44c5e628c6703100
+      COVERAGE_PATH: audit/2026-10-17/high_frequency_telemetry_repair/F1_2026_HIGH_FREQUENCY_TELEMETRY_COVERAGE.csv
+      REPORT_PATH: audit/2026-10-24/retained_zip_central_directory_index_report.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run deterministic offline tests
+        run: python -m unittest -v tests/test_f1_retained_zip_central_directory_index_v1.py
+
+      - name: Materialize and verify fixed PR 312 comparison CSV
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$COVERAGE_HEAD"
+          git show "$COVERAGE_HEAD:$COVERAGE_PATH" > "$RUNNER_TEMP/coverage.csv"
+          test "$(git hash-object "$RUNNER_TEMP/coverage.csv")" = "$COVERAGE_BLOB"
+
+      - name: Run one bounded metadata-only inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/maintenance/f1_retained_zip_central_directory_index_v1.py \
+            --coverage-csv "$RUNNER_TEMP/coverage.csv" \
+            --coverage-blob "$COVERAGE_BLOB" \
+            --output "$REPORT_PATH"
+          report_sha="$(sha256sum "$REPORT_PATH" | awk '{print $1}')"
+          test -n "$report_sha"
+          {
+            echo "## Retained ZIP central-directory index"
+            echo
+            echo "Report SHA-256: \`$report_sha\`"
+            echo
+            echo "Metadata-only. No member payload was retrieved or decompressed."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Retain metadata-only report
+        uses: actions/upload-artifact@v4
+        with:
+          name: retained-zip-central-directory-index-report
+          path: audit/2026-10-24/retained_zip_central_directory_index_report.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+
