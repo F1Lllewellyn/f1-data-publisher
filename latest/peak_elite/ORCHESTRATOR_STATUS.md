@@ -1,14 +1,14 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-10-23T22:04:56.599814Z`
+Created UTC: `2026-10-24T00:36:38.540638Z`
 Operation: `full_run_chain`
 Status: **pass**
 
 ## Latest source state
 - Race/event: `United States - Austin - Austin`
-- Session: `Practice 1`
+- Session: `Practice 2`
 - Source status: `clean`
-- Workbook source status: `needs_manual_review`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps
