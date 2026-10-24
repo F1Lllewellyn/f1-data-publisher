@@ -1,11 +1,11 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-23T23:58:44.000761Z",
+  "created_utc": "2026-10-24T00:06:59.523922Z",
   "event_id": "2026_1297_united_states_austin_austin",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-23T23:58:44.001958Z",
+    "created_utc": "2026-10-24T00:06:59.525288Z",
     "event_id": "2026_1297_united_states_austin_austin",
-    "forecast_state_changed": true,
+    "forecast_state_changed": false,
     "overall_status": "clean",
     "promotion_allowed": false,
     "race_name": "United States - Austin - Austin",
@@ -20,37 +20,37 @@
       "session_name": "Practice 2",
       "session_type": "Practice"
     },
-    "source_readiness_materially_improved": true,
+    "source_readiness_materially_improved": false,
     "stable_order_overwrite_allowed": false
   },
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 294.36,
+      "age_minutes": 8.26,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "1fad734fe97f45646e40245b856fcf87a4467d11b908112014a0f7a2a526ed65",
+      "sha256": "5f3ccb7dab57e935bca3a3f9617f744346cab3b4798693755bc34b42e0f83cc6",
       "size_bytes": 695,
-      "timestamp_utc": "2026-10-23T19:04:22.344056Z"
+      "timestamp_utc": "2026-10-23T23:58:44.003942Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 294.36,
+      "age_minutes": 8.26,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "42e1ef65723b22ba5e23fed186805fdf2dc1c8296161761478716a354def96f4",
+      "sha256": "162b83cc2af7938376f7f1242a9dccc4a6b82d85dedbc77ce427a921025273d8",
       "size_bytes": 1563,
-      "timestamp_utc": "2026-10-23T19:04:22.343784Z"
+      "timestamp_utc": "2026-10-23T23:58:44.003661Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 294.36,
+      "age_minutes": 8.26,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "cebc91341adf99eb02f6b6648d5ce1d8467d45d26403ae0b5621bc8df6124578",
+      "sha256": "78d54218df67b092d7f7fbad7c26f15fe700d7c50522d68c0fb771906e1c538a",
       "size_bytes": 566,
-      "timestamp_utc": "2026-10-23T19:04:22.343532Z"
+      "timestamp_utc": "2026-10-23T23:58:44.003368Z"
     }
   },
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "United States - Austin - Austin",
@@ -258,12 +258,12 @@
   "readiness_delta": {
     "current_score": 1.0,
     "current_status": "clean",
-    "delta": 1.0,
-    "previous_score": 0.0,
-    "previous_status": null
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261023T235830Z",
+  "run_id": "20261024T000646Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-23T22:00:00+00:00",

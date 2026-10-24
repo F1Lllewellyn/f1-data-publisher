@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 9,
+    "circuit_short_name": "Austin",
+    "country_code": "USA",
+    "country_key": 19,
+    "country_name": "United States",
+    "date_end": "2026-10-23T22:00:00+00:00",
+    "date_start": "2026-10-23T21:00:00+00:00",
+    "gmt_offset": "-05:00:00",
+    "is_cancelled": false,
+    "location": "Austin",
+    "meeting_key": 1297,
+    "session_key": 11390,
+    "session_name": "Practice 2",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]

@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1297_united_states_austin_austin",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "United States - Austin - Austin",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-23T23:58:44.003661Z"
+  "updated_utc": "2026-10-24T00:06:59.526977Z"
 }
