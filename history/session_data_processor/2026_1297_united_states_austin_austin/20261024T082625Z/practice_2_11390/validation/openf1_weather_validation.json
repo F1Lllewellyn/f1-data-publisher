@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 18275,
+    "ok": true,
+    "sha256": "899726c8df8f28e18b8acd9f397b194662328f72a62f6bd341e39d476d8d623f",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_weather.json",
+  "json_sha256": "49eb3de2daec939bfc966d63d1015d03cc1ccf6db5c785133cf5e74005dc2edf",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 85,
+  "status": "clean",
+  "timestamp_rows": 85
+}
