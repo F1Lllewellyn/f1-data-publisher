@@ -2,19 +2,18 @@
   "canonical_workbook_overwrite": false,
   "decision_mode": "decision_only_no_external_send",
   "event": {
-    "event_id": "unknown_event",
-    "race_name": "unknown event",
-    "session_key": null,
-    "session_name": "unknown_session"
+    "event_id": "2026_1297_united_states_austin_austin",
+    "race_name": "United States - Austin - Austin",
+    "session_key": 11390,
+    "session_name": "Practice 2"
   },
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-23T14:46:12Z",
-  "notification_recommended": false,
+  "generated_at_utc": "2026-10-24T00:57:39Z",
+  "notification_recommended": true,
   "promotion_allowed": false,
   "reasons": [
-    "race_predictions_blocked",
-    "fantasy_predictions_blocked",
-    "race_reports_blocked"
+    "material_change_detected",
+    "consumer_trigger_recommends_notification"
   ],
   "routes": {
     "fantasy_predictions_context": "latest/chat_context/fantasy_predictions_context.md",

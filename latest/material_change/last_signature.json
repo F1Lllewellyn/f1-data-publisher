@@ -1,10 +1,10 @@
 {
   "event": {
-    "event_id": "unknown_event",
-    "race_name": "unknown event",
-    "session_key": null,
-    "session_name": "unknown_session"
+    "event_id": "2026_1297_united_states_austin_austin",
+    "race_name": "United States - Austin - Austin",
+    "session_key": 11390,
+    "session_name": "Practice 2"
   },
-  "signature": "0af1c7f832ff272f112ff9f2418a9a3de86b1df0128ec94d17ebf2bc15ceada4",
-  "updated_at_utc": "2026-10-23T14:46:11Z"
+  "signature": "ff8dd4353fc789754fa58c17113f07a6a1cd0a8ed17d12a84ccad3b5b1b1e0b6",
+  "updated_at_utc": "2026-10-24T00:57:38Z"
 }

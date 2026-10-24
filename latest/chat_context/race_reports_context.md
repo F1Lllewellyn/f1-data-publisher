@@ -1,15 +1,15 @@
 # F1 1B Race Reports Context v25
 
 ## Confirmed Data
-- Event: unknown event
-- Session: unknown_session / key unknown
-- Run ID: 20261023T144611Z
-- Consumer readiness: blocked
-- Source status: blocked
-- Workbook source status: needs_manual_review
-- Readiness quality: blocked_session_identity_mismatch
-- Material change detected: False
-- Notification recommended: False
+- Event: United States - Austin - Austin
+- Session: Practice 2 / key 11390
+- Run ID: 20261024T005738Z
+- Consumer readiness: context_ready
+- Source status: clean
+- Workbook source status: clean
+- Readiness quality: usable_with_optional_context_gaps
+- Material change detected: True
+- Notification recommended: True
 - Forecast gate: off
 - Promotion allowed: false
 - Stable engine modified: false
@@ -17,8 +17,8 @@
 
 ## How This Context May Be Used
 - Race Reports source context; Full Report only when post-race/result state supports it.
-- Trigger action: blocked
-- Trigger reason: consumer not ready or source/workbook state is not clean/usable
+- Trigger action: notify_and_update_context
+- Trigger reason: material readiness or forecast-relevant state changed
 
 ## Boundaries
 - Do not promote experimental logic from this context alone.
