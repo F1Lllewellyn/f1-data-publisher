@@ -1,10 +1,10 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-10-24T20:10:14Z
+Generated UTC: 2026-10-24T21:52:22Z
 Event: United States - Austin - Austin
 Session: Practice 3
 Source status: clean
-Dashboard readiness: READY
+Dashboard readiness: NOT READY
 Diagnostic publishing allowed: true
 
 ## Governance
