@@ -1,13 +1,13 @@
 # F1 OpenF1 Lightweight Source Closure Report
 
-Generated UTC: 2026-10-23T20:30:41.599612Z
+Generated UTC: 2026-10-24T16:23:56.758734Z
 Season: 2026
-Target sessions: 0
+Target sessions: 103
 
 ## Result
 
-Pass lanes: 0
-Pass with warnings lanes: 9
+Pass lanes: 9
+Pass with warnings lanes: 0
 Fail lanes: 0
 
 ## Important

@@ -1,85 +1,85 @@
 {
   "artifact_profile": "openf1-lightweight-source-closure",
-  "generated_utc": "2026-10-23T20:30:41.598657Z",
+  "generated_utc": "2026-10-24T16:23:56.757578Z",
   "season": 2026,
   "completed_only": true,
-  "target_session_count": 0,
+  "target_session_count": 103,
   "lanes": [
     {
       "lane": "weather",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 6998,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "race_control",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 3790,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "intervals",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 237980,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "position",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 25023,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "stints",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 3840,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "pit",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 512,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "starting_grid",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 132,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "drivers",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "not_applicable_for_current_completed_sessions",
+      "rows": 938,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "required_lightweight",
       "heavy_endpoint": false
     },
     {
       "lane": "team_radio",
-      "rows": 0,
-      "result": "pass_with_warnings",
-      "reason": "opportunistic_source_limited_zero_rows",
+      "rows": 417,
+      "result": "pass",
+      "reason": "evidence_bearing",
       "required_status": "opportunistic",
       "heavy_endpoint": false
     }
   ],
-  "pass_count": 0,
-  "pass_with_warnings_count": 9,
+  "pass_count": 9,
+  "pass_with_warnings_count": 0,
   "fail_count": 0,
   "heavy_endpoints_excluded_by_default": [
     "car_data",
@@ -87,7 +87,7 @@
   ],
   "timestamp_policy": "dt.datetime.now(dt.UTC)",
   "no_drs_2026_assumption": true,
-  "previous_manifest_generated_utc": "2026-10-23T17:09:47.358314Z",
+  "previous_manifest_generated_utc": "2026-10-23T20:30:41.598657Z",
   "latest_zip": "openf1_lightweight_source_closure.zip",
-  "history_path": "history/openf1_lightweight_source_closure/20261023_203040"
+  "history_path": "history/openf1_lightweight_source_closure/20261024_160150"
 }
