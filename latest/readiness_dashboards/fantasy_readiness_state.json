@@ -1,9 +1,9 @@
 {
-  "ready_for_use": true,
-  "blocked": false,
+  "ready_for_use": false,
+  "blocked": true,
   "latest_session_state": "clean",
   "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution",
-  "generated_at_utc": "2026-10-24T00:36:30Z",
+  "generated_at_utc": "2026-10-24T01:30:26Z",
   "source_status": "clean",
   "event_name": "United States - Austin - Austin",
   "session_name": "Practice 2"
