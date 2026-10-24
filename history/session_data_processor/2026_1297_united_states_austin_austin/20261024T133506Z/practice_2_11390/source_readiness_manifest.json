@@ -1,0 +1,633 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-10-24T13:35:20.234603Z",
+  "event_id": "2026_1297_united_states_austin_austin",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-10-24T13:35:20.236254Z",
+    "event_id": "2026_1297_united_states_austin_austin",
+    "forecast_state_changed": false,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "United States - Austin - Austin",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-10-23T22:00:00+00:00",
+      "date_start": "2026-10-23T21:00:00+00:00",
+      "gate": "post_fp2",
+      "meeting_key": 1297,
+      "session_key": 11390,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    "source_readiness_materially_improved": false,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 16.66,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "5db4ff24983ffee88bf77dab88d719a6595d86793a1a79f35c35b1ca837183c7",
+      "size_bytes": 695,
+      "timestamp_utc": "2026-10-24T13:18:40.794366Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 16.66,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "487b69cf5cd876ff738eebefaf77516a14dbf874e14d4a0e5a8f1e57e1db2eb6",
+      "size_bytes": 1565,
+      "timestamp_utc": "2026-10-24T13:18:40.794163Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 16.66,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "edf2a0444628d3c0c5f41f9c14d24e1f29fc6c80ded2c3ab7bfa8cc2c88650c5",
+      "size_bytes": 566,
+      "timestamp_utc": "2026-10-24T13:18:40.794020Z"
+    }
+  },
+  "material_readiness_improved": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "United States - Austin - Austin",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "expected_empty_sources": [
+      {
+        "endpoint": "starting_grid",
+        "reason": "expected_empty_for_session_type",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 589
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 84
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 701
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 138
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "expected_empty",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "expected_empty_for_session_type",
+        "role": "expected_empty",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 84
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 85
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "practice",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261024T133506Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-10-23T22:00:00+00:00",
+    "date_start": "2026-10-23T21:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1297,
+    "session_key": 11390,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9166,
+        "ok": true,
+        "sha256": "46ea529ac7500b17613962895a7fff6ba6a50a05c77ec25c97ad94f356838a5d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_drivers.json",
+      "json_sha256": "73369ea8e3d0a72f7a8913cced83f1c532c0ff25f4ff83f8c47d380afdc6eff6",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 276856,
+        "ok": true,
+        "sha256": "f2081c853d74392f8cc7936d2c45abbbbe7c38ad48d69595d5935c0fdd6b98f4",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_laps.json",
+      "json_sha256": "7ad9f34bd1b3dbcec1cb1adfbaaba592ec5cc88b9953a835bb700488af81ae0f",
+      "max_lap_number": 32.0,
+      "missing_required_columns": [],
+      "rows": 589,
+      "status": "clean",
+      "timestamp_rows": 588
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 15149,
+        "ok": true,
+        "sha256": "4d261e91f552107ba6e4cbd40a01ed8148a638a4189eb4f8dc20e013008c954f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_pit.json",
+      "json_sha256": "f03d567cf805609c4808574f86ac13f369346c1f45745ddc8d74621ceae9099a",
+      "max_lap_number": 24.0,
+      "missing_required_columns": [],
+      "rows": 84,
+      "status": "clean",
+      "timestamp_rows": 84
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 80915,
+        "ok": true,
+        "sha256": "1019ec14952f9aa1a570f96a225106541e27a5a785e031d3a329df24e246a76a",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_position.json",
+      "json_sha256": "0181d0fc26e28de7dc6e3ee9ad40895007315e8ff46ebfdf1ea60034f0a27d68",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 701,
+      "status": "clean",
+      "timestamp_rows": 701
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_race_control.csv",
+      "driver_count": 1,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 39023,
+        "ok": true,
+        "sha256": "b8753536fe8a12358936c8f0552d2382be9bb023bbff5b6e2b47d2b7044dd246",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_race_control.json",
+      "json_sha256": "36e7148a5a2bb6238f41b3af49e24ae2330b204bb51afab4a7145740b0ee05c2",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 138,
+      "status": "clean",
+      "timestamp_rows": 138
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 3718,
+        "ok": true,
+        "sha256": "f23aec58f98a7ebf9b5b384b0e530ee7749e2b6237d0cbcbbf6d2701b6263ab7",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_session_result.json",
+      "json_sha256": "5e64dca4df4dca21e755b922710640526ad7430afda44a8322b4cd2a0e93b838",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 398,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_sessions.json",
+      "json_sha256": "e2812580f72f67b9137b2a8d01eb388933edd6f3bb52f448e63ea1a83b10c141",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 12149,
+        "ok": true,
+        "sha256": "e6cf0a6e9e450c52b4f6c9381a5f801753b05e2a0b21262d0e151334a92d3d64",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_stints.json",
+      "json_sha256": "0cedad14c5d75c01b5b6d3476683d3be9844cf8498c29eeb89d33124e87f969f",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 84,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 18275,
+        "ok": true,
+        "sha256": "899726c8df8f28e18b8acd9f397b194662328f72a62f6bd341e39d476d8d623f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/raw/openf1_weather.json",
+      "json_sha256": "49eb3de2daec939bfc966d63d1015d03cc1ccf6db5c785133cf5e74005dc2edf",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 85,
+      "status": "clean",
+      "timestamp_rows": 85
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 9,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 2,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/workbook_kpi_readiness.json"
+  }
+}
