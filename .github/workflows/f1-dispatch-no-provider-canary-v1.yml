@@ -1,0 +1,67 @@
+name: F1 Dispatch Canary — No Provider
+
+# CANARY ONLY, NOT A SOURCE RECEIPT OR FORECAST.
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'F1 season year'
+        required: true
+        default: '2026'
+      completed_only:
+        description: 'Only retrieve completed sessions'
+        required: true
+        default: 'true'
+      provenance_shadow_session_key:
+        description: 'Optional exact historical session key for manual provenance shadow only'
+        required: false
+        default: ''
+      provenance_shadow_endpoint:
+        description: 'Historical provenance shadow endpoint'
+        required: false
+        type: choice
+        options:
+          - weather
+          - drivers
+          - starting_grid
+        default: weather
+
+permissions:
+  contents: read
+
+jobs:
+  no-provider-dispatch-canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Enforce main-only canary
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "Canary is restricted to refs/heads/main."
+            exit 1
+          fi
+
+      - name: Record run identity and innocuous inputs
+        shell: bash
+        env:
+          INPUT_SEASON: ${{ github.event.inputs.season }}
+          INPUT_COMPLETED_ONLY: ${{ github.event.inputs.completed_only }}
+          INPUT_PROVENANCE_SHADOW_SESSION_KEY: ${{ github.event.inputs.provenance_shadow_session_key }}
+          INPUT_PROVENANCE_SHADOW_ENDPOINT: ${{ github.event.inputs.provenance_shadow_endpoint }}
+        run: |
+          observed_utc="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          {
+            printf 'run_id=%s\n' "${GITHUB_RUN_ID}"
+            printf 'run_attempt=%s\n' "${GITHUB_RUN_ATTEMPT}"
+            printf 'event=%s\n' "${GITHUB_EVENT_NAME}"
+            printf 'branch=%s\n' "${GITHUB_REF_NAME}"
+            printf 'ref=%s\n' "${GITHUB_REF}"
+            printf 'head_sha=%s\n' "${GITHUB_SHA}"
+            printf 'actor=%s\n' "${GITHUB_ACTOR}"
+            printf 'created_utc_observation=%s\n' "${observed_utc}"
+            printf 'season=%s\n' "${INPUT_SEASON}"
+            printf 'completed_only=%s\n' "${INPUT_COMPLETED_ONLY}"
+            printf 'provenance_shadow_session_key=%s\n' "${INPUT_PROVENANCE_SHADOW_SESSION_KEY}"
+            printf 'provenance_shadow_endpoint=%s\n' "${INPUT_PROVENANCE_SHADOW_ENDPOINT}"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
