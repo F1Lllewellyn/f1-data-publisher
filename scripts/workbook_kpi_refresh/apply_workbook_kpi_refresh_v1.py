@@ -123,6 +123,10 @@ def normalize_status(value: Any) -> str:
     return status
 
 
+def nonblank_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def parse_utc(value: Any) -> Optional[dt.datetime]:
     if not isinstance(value, str) or not value.strip():
         return None
@@ -323,6 +327,9 @@ def build_authority_state(repo: Path, reference_time: Optional[dt.datetime] = No
     source_session = canonical_session(source_readiness.get("session"))
     workbook_session = canonical_session(workbook_readiness.get("session"))
     ledger_session = canonical_session(ledger.get("session"))
+    for field in ("session_name", "session_type"):
+        if not nonblank_string(readiness_session.get(field)):
+            add_reason(reasons, f"invalid_authoritative_{field}")
     identity_objects = (
         ("data_readiness", data_readiness.get("event_id"), readiness_session),
         ("source_readiness", source_readiness.get("event_id"), source_session),
@@ -340,7 +347,9 @@ def build_authority_state(repo: Path, reference_time: Optional[dt.datetime] = No
             if candidate_session.get(field) != readiness_session.get(field):
                 add_reason(reasons, f"{label}_session_identity_mismatch")
 
-    if selector.get("session_name") != readiness_session.get("session_name"):
+    if not nonblank_string(selector.get("session_name")):
+        add_reason(reasons, "invalid_selector_session_name")
+    elif selector.get("session_name") != readiness_session.get("session_name"):
         add_reason(reasons, "selector_session_name_mismatch")
     if combined.get("event_id") != event_id:
         add_reason(reasons, "combined_source_event_mismatch")
@@ -382,6 +391,33 @@ def build_authority_state(repo: Path, reference_time: Optional[dt.datetime] = No
     readiness_quality = next(iter(quality_values)) if len(quality_values) == 1 else "unverified"
     if normalize_status(aggregation.get("overall_status")) != source_status:
         add_reason(reasons, "readiness_aggregation_status_mismatch")
+
+    manual_review_flags = {
+        "data_readiness.needs_manual_review": data_readiness.get("needs_manual_review"),
+        "data_readiness.source_needs_manual_review": data_readiness.get("source_needs_manual_review"),
+        "combined_source.source_needs_manual_review": combined.get("source_needs_manual_review"),
+        "source_readiness.source_needs_manual_review": source_readiness.get("source_needs_manual_review"),
+        "readiness_aggregation.needs_manual_review": aggregation.get("needs_manual_review"),
+    }
+    malformed_manual_flags = [
+        label for label, value in manual_review_flags.items() if not isinstance(value, bool)
+    ]
+    manual_review_required = any(value is True for value in manual_review_flags.values())
+    if malformed_manual_flags:
+        for label in malformed_manual_flags:
+            add_reason(reasons, f"missing_or_invalid_manual_review_flag:{label}")
+        add_reason(eligibility_reasons, "manual_review_authority_unverified")
+    elif len(set(manual_review_flags.values())) != 1:
+        add_reason(reasons, "manual_review_flag_mismatch")
+        add_reason(eligibility_reasons, "manual_review_authority_conflicting")
+    elif manual_review_required:
+        add_reason(eligibility_reasons, "readiness_requires_manual_review")
+
+    if source_status in DOWNSTREAM_SOURCE_STATUSES and manual_review_required:
+        add_reason(reasons, "downstream_source_status_conflicts_with_manual_review")
+    if source_status == "needs_manual_review" and not manual_review_required:
+        add_reason(reasons, "manual_review_status_without_authority_flag")
+
     embedded_ledger = source_readiness.get("forecast_bundle_ledger_snapshot")
     if not isinstance(embedded_ledger, dict) or embedded_ledger != ledger:
         add_reason(reasons, "embedded_forecast_ledger_mismatch")
@@ -406,9 +442,6 @@ def build_authority_state(repo: Path, reference_time: Optional[dt.datetime] = No
         add_reason(eligibility_reasons, "readiness_critical_late")
     if aggregation.get("missing_required_endpoints"):
         add_reason(eligibility_reasons, "readiness_missing_required_endpoints")
-    if aggregation.get("needs_manual_review") is not False:
-        add_reason(eligibility_reasons, "readiness_requires_manual_review")
-
     per_source = aggregation.get("per_source") if isinstance(aggregation.get("per_source"), dict) else {}
     critical = aggregation.get("critical_endpoints") if isinstance(aggregation.get("critical_endpoints"), list) else []
     observed_required = {
@@ -526,6 +559,8 @@ def build_authority_state(repo: Path, reference_time: Optional[dt.datetime] = No
         "session": readiness_session,
         "source_status": source_status,
         "readiness_quality": readiness_quality,
+        "manual_review_flags": manual_review_flags,
+        "manual_review_required": manual_review_required,
         "diagnostic_publish_allowed": diagnostic_publish_allowed,
         "downstream_eligible": downstream_eligible,
         "session_root": session_root,
@@ -569,6 +604,8 @@ def serializable_authority(state: Dict[str, Any], repo: Path) -> Dict[str, Any]:
         "session_type": canonical_session(state.get("session")).get("session_type"),
         "source_status": state.get("source_status"),
         "readiness_quality": state.get("readiness_quality"),
+        "manual_review_flags": state.get("manual_review_flags", {}),
+        "manual_review_required": bool(state.get("manual_review_required")),
         "source_manifest_pointer": state.get("source_manifest_pointer"),
         "selected_session_processor_root": repo_relative(session_root, repo),
         "authority_fingerprints": state.get("authority_fingerprints", {}),
@@ -836,8 +873,46 @@ This is a sandbox workbook/KPI refresh artifact. It may support readiness, forec
 """
 
 def safe_output_target(path: Path, repo: Path, expected_prefix: str) -> bool:
-    relative = repo_relative(path, repo)
-    return bool(relative and (relative == expected_prefix or relative.startswith(expected_prefix + "/")))
+    try:
+        lexical_relative = path.relative_to(repo).as_posix()
+    except ValueError:
+        return False
+    if not (
+        lexical_relative == expected_prefix
+        or lexical_relative.startswith(expected_prefix + "/")
+    ):
+        return False
+
+    current = repo
+    parts = Path(lexical_relative).parts
+    for index, part in enumerate(parts):
+        current = current / part
+        if current.is_symlink():
+            return False
+        if index < len(parts) - 1 and current.exists() and not current.is_dir():
+            return False
+
+    resolved_relative = repo_relative(path, repo)
+    return bool(
+        resolved_relative
+        and (
+            resolved_relative == expected_prefix
+            or resolved_relative.startswith(expected_prefix + "/")
+        )
+    )
+
+
+def safe_existing_publication_file(path: Path, repo: Path, expected_prefix: str) -> bool:
+    if not safe_output_target(path, repo, expected_prefix):
+        return False
+    if not path.exists():
+        return True
+    if not path.is_file():
+        return False
+    try:
+        return path.stat().st_nlink == 1
+    except OSError:
+        return False
 
 
 def safe_label(value: Any) -> str:
@@ -1027,22 +1102,36 @@ def main() -> int:
             )
             return 0
 
-        if (
-            not safe_output_target(latest_out, repo, "latest/workbook_kpi_refresh_applier")
-            or not safe_output_target(history_out, repo, "history/workbook_kpi_refresh_applier")
-            or history_out.exists()
-        ):
-            write_hold_status(repo, run_id, "unsafe_or_existing_output_target", authority)
-            return 0
         publish_names = [path.name for path in stage.iterdir() if path.is_file()]
         if len(publish_names) != len(list(stage.iterdir())):
             write_hold_status(repo, run_id, "unexpected_staging_content", authority)
             return 0
+        unsafe_publication_target = (
+            not safe_output_target(latest_out, repo, "latest/workbook_kpi_refresh_applier")
+            or (latest_out.exists() and not latest_out.is_dir())
+            or not safe_output_target(history_out, repo, "history/workbook_kpi_refresh_applier")
+            or history_out.exists()
+            or history_out.is_symlink()
+        )
         for name in publish_names:
-            destination = latest_out / name
-            if destination.exists() and not safe_output_target(destination, repo, "latest/workbook_kpi_refresh_applier"):
-                write_hold_status(repo, run_id, "unsafe_latest_output_target", authority)
-                return 0
+            latest_destination = latest_out / name
+            history_destination = history_out / name
+            if (
+                not safe_existing_publication_file(
+                    latest_destination,
+                    repo,
+                    "latest/workbook_kpi_refresh_applier",
+                )
+                or not safe_existing_publication_file(
+                    history_destination,
+                    repo,
+                    "history/workbook_kpi_refresh_applier",
+                )
+            ):
+                unsafe_publication_target = True
+        if unsafe_publication_target:
+            write_hold_status(repo, run_id, "unsafe_or_existing_output_target", authority)
+            return 0
 
         history_out.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(stage, history_out)

@@ -27,6 +27,13 @@ AUSTIN = "2026_1297_united_states_austin_austin"
 BAHRAIN = "2026_1308_bahrain_kuala_lumpur_kuala_lumpur"
 FP1_KEY = 11389
 FP2_KEY = 11390
+MANUAL_REVIEW_FLAGS = (
+    "data_readiness.needs_manual_review",
+    "data_readiness.source_needs_manual_review",
+    "combined_source.source_needs_manual_review",
+    "source_readiness.source_needs_manual_review",
+    "readiness_aggregation.needs_manual_review",
+)
 
 
 def write_json(root: Path, relative: str, value: object) -> Path:
@@ -130,6 +137,7 @@ def fixture_payloads(
         "event_id": event_id,
         "overall_status": status,
         "readiness_quality": quality,
+        "source_needs_manual_review": False,
         "race_name": "United States - Austin - Austin",
         "session": copy.deepcopy(session),
         "readiness_aggregation": aggregation,
@@ -157,6 +165,8 @@ def fixture_payloads(
         "session": copy.deepcopy(session),
         "overall_status": status,
         "readiness_quality": quality,
+        "needs_manual_review": False,
+        "source_needs_manual_review": False,
         "sources": {
             name: {"rows": value["rows"], "status": value["status"]}
             for name, value in source_summaries.items()
@@ -169,6 +179,7 @@ def fixture_payloads(
         "session_key": session_key,
         "overall_status": status,
         "readiness_quality": quality,
+        "source_needs_manual_review": False,
         "source_layers": {"session_data_processor": f"{processor}/source_readiness_manifest.json"},
         "updated_utc": generated,
     }
@@ -207,6 +218,28 @@ def set_status(payloads: dict[str, object], status: str, quality: str) -> None:
     aggregation = payloads["source"]["readiness_aggregation"]  # type: ignore[index]
     aggregation["overall_status"] = status
     aggregation["readiness_quality"] = quality
+
+
+def set_manual_review_flags(payloads: dict[str, object], value: bool) -> None:
+    payloads["readiness"]["needs_manual_review"] = value  # type: ignore[index]
+    payloads["readiness"]["source_needs_manual_review"] = value  # type: ignore[index]
+    payloads["combined"]["source_needs_manual_review"] = value  # type: ignore[index]
+    payloads["source"]["source_needs_manual_review"] = value  # type: ignore[index]
+    payloads["source"]["readiness_aggregation"]["needs_manual_review"] = value  # type: ignore[index]
+
+
+def manual_flag_target(payloads: dict[str, object], label: str) -> tuple[dict, str]:
+    if label == "data_readiness.needs_manual_review":
+        return payloads["readiness"], "needs_manual_review"  # type: ignore[return-value]
+    if label == "data_readiness.source_needs_manual_review":
+        return payloads["readiness"], "source_needs_manual_review"  # type: ignore[return-value]
+    if label == "combined_source.source_needs_manual_review":
+        return payloads["combined"], "source_needs_manual_review"  # type: ignore[return-value]
+    if label == "source_readiness.source_needs_manual_review":
+        return payloads["source"], "source_needs_manual_review"  # type: ignore[return-value]
+    if label == "readiness_aggregation.needs_manual_review":
+        return payloads["source"]["readiness_aggregation"], "needs_manual_review"  # type: ignore[return-value,index]
+    raise AssertionError(f"unknown manual-review flag: {label}")
 
 
 def install_session_artifacts(root: Path, payloads: dict[str, object]) -> list[Path]:
@@ -344,6 +377,47 @@ class WorkbookKpiEventSelectionTests(unittest.TestCase):
                 self.assertFalse(result["commit_allowed"])
                 assert_no_publication(self, root)
 
+    def test_symlinked_publication_targets_hold_before_any_publish_or_outside_write(self):
+        cases = ("dangling_latest_file", "symlinked_latest_directory", "symlinked_history_parent")
+        for case in cases:
+            with self.subTest(case=case), TemporaryDirectory() as td:
+                base = Path(td)
+                root = base / "repo"
+                outside = base / "outside"
+                install_fixture(root)
+                latest_out = root / "latest/workbook_kpi_refresh_applier"
+                history_parent = root / "history/workbook_kpi_refresh_applier"
+
+                if case == "dangling_latest_file":
+                    latest_out.mkdir(parents=True)
+                    outside_file = outside / "escaped.json"
+                    (latest_out / "upstream_latest_manifest_snapshot.json").symlink_to(outside_file)
+                elif case == "symlinked_latest_directory":
+                    outside.mkdir()
+                    latest_out.parent.mkdir(parents=True, exist_ok=True)
+                    latest_out.symlink_to(outside, target_is_directory=True)
+                else:
+                    outside.mkdir()
+                    history_parent.parent.mkdir(parents=True)
+                    history_parent.symlink_to(outside, target_is_directory=True)
+
+                result = run_main(root)
+
+                self.assertEqual(result["status"], "no_action")
+                self.assertEqual(result["reason"], "unsafe_or_existing_output_target")
+                self.assertFalse(result["commit_allowed"])
+                self.assertFalse((outside / "escaped.json").exists())
+                if outside.exists():
+                    self.assertEqual(list(outside.iterdir()), [])
+                if case == "dangling_latest_file":
+                    self.assertEqual(
+                        [path.name for path in latest_out.iterdir()],
+                        ["upstream_latest_manifest_snapshot.json"],
+                    )
+                elif case == "symlinked_history_parent":
+                    self.assertFalse(latest_out.exists())
+                self.assertFalse((history_parent / NOW.strftime("%Y%m%dT%H%M%SZ")).exists())
+
     def test_event_meeting_session_and_status_disagreements_fail_closed(self):
         cases = ("event", "meeting", "session", "session_type", "status")
         for case in cases:
@@ -370,6 +444,67 @@ class WorkbookKpiEventSelectionTests(unittest.TestCase):
 
                 self.assertEqual(result["status"], "no_action")
                 self.assertFalse(result["commit_allowed"])
+                assert_no_publication(self, root)
+
+    def test_each_contradictory_manual_review_flag_fails_closed(self):
+        for label in MANUAL_REVIEW_FLAGS:
+            with self.subTest(label=label), TemporaryDirectory() as td:
+                root = Path(td)
+                payloads = fixture_payloads()
+                target, key = manual_flag_target(payloads, label)
+                target[key] = True
+                install_fixture(root, payloads)
+
+                result = run_main(root)
+
+                self.assertEqual(result["status"], "no_action")
+                self.assertFalse(result["commit_allowed"])
+                self.assertIn("manual_review_flag_mismatch", result["hold_reasons"])
+                self.assertFalse(result["downstream_eligible"])
+                assert_no_publication(self, root)
+
+    def test_missing_or_malformed_manual_review_authority_fails_closed(self):
+        for label in MANUAL_REVIEW_FLAGS:
+            for mode in ("missing", "malformed"):
+                with self.subTest(label=label, mode=mode), TemporaryDirectory() as td:
+                    root = Path(td)
+                    payloads = fixture_payloads()
+                    target, key = manual_flag_target(payloads, label)
+                    if mode == "missing":
+                        target.pop(key)
+                    else:
+                        target[key] = "false"
+                    install_fixture(root, payloads)
+
+                    result = run_main(root)
+
+                    self.assertEqual(result["status"], "no_action")
+                    self.assertFalse(result["commit_allowed"])
+                    self.assertIn(
+                        f"missing_or_invalid_manual_review_flag:{label}",
+                        result["hold_reasons"],
+                    )
+                    self.assertFalse(result["downstream_eligible"])
+                    assert_no_publication(self, root)
+
+    def test_missing_session_name_or_type_across_authority_fails_closed(self):
+        for field in ("session_name", "session_type"):
+            with self.subTest(field=field), TemporaryDirectory() as td:
+                root = Path(td)
+                payloads = fixture_payloads()
+                for name in ("readiness", "source", "workbook", "ledger"):
+                    payloads[name]["session"].pop(field)  # type: ignore[index]
+                if field == "session_name":
+                    payloads["selector"].pop("session_name")  # type: ignore[union-attr]
+                payloads["source"]["forecast_bundle_ledger_snapshot"] = copy.deepcopy(payloads["ledger"])  # type: ignore[index]
+                install_fixture(root, payloads)
+
+                result = run_main(root)
+
+                self.assertEqual(result["status"], "no_action")
+                self.assertFalse(result["commit_allowed"])
+                self.assertIn(f"invalid_authoritative_{field}", result["hold_reasons"])
+                self.assertFalse(result["downstream_eligible"])
                 assert_no_publication(self, root)
 
     def test_stale_future_and_invalid_chronology_fail_closed(self):
@@ -481,8 +616,8 @@ class WorkbookKpiEventSelectionTests(unittest.TestCase):
             manual_root = Path(manual_td)
             manual = fixture_payloads()
             set_status(manual, "needs_manual_review", "blocked_manual_review_required_source")
+            set_manual_review_flags(manual, True)
             aggregation = manual["source"]["readiness_aggregation"]  # type: ignore[index]
-            aggregation["needs_manual_review"] = True
             aggregation["blocking_issues"] = [{"endpoint": "weather"}]
             weather = aggregation["per_source"]["openf1_weather"]
             weather.update({
@@ -498,6 +633,7 @@ class WorkbookKpiEventSelectionTests(unittest.TestCase):
             self.assertTrue(manual_result["commit_allowed"])
             self.assertTrue(manual_result["diagnostic_publish_allowed"])
             self.assertFalse(manual_result["downstream_eligible"])
+            self.assertTrue(manual_result["manual_review_required"])
 
 
 if __name__ == "__main__":
