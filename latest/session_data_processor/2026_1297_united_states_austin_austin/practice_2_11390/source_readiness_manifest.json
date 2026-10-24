@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-24T00:36:30.296077Z",
+  "created_utc": "2026-10-24T03:49:51.296763Z",
   "event_id": "2026_1297_united_states_austin_austin",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-24T00:36:30.297431Z",
+    "created_utc": "2026-10-24T03:49:51.298024Z",
     "event_id": "2026_1297_united_states_austin_austin",
     "forecast_state_changed": false,
     "overall_status": "clean",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 29.51,
+      "age_minutes": 193.35,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "b14684e0ec0e2eca6f2f3145fe5159e899c567dc002a7d312b72d0282050c2dc",
+      "sha256": "5bd278a804b0401d0a459c471c94362801cd0734dfd07cf023cf258e3a1643a8",
       "size_bytes": 695,
-      "timestamp_utc": "2026-10-24T00:06:59.527264Z"
+      "timestamp_utc": "2026-10-24T00:36:30.299382Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 29.51,
+      "age_minutes": 193.35,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "272fe9b816359b73e9ed102ef6c5de1b127fdd45eb73bccb5ff6be38930a295b",
+      "sha256": "beff6904921bb286c2b5b48e72aecc9c2894c8eef52cf23a5fa74a6d3e878141",
       "size_bytes": 1565,
-      "timestamp_utc": "2026-10-24T00:06:59.526977Z"
+      "timestamp_utc": "2026-10-24T00:36:30.299111Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 29.51,
+      "age_minutes": 193.35,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "13dd6d1f69b2110ad4081f32062df31ed2d8fc06a67658f0a48ec6ff1d5f243a",
+      "sha256": "a7591035c685cd96db2ef4475df80eb2decd1744ddaa656e9716c387d2dd7ace",
       "size_bytes": 566,
-      "timestamp_utc": "2026-10-24T00:06:59.526726Z"
+      "timestamp_utc": "2026-10-24T00:36:30.298862Z"
     }
   },
   "material_readiness_improved": false,
@@ -263,7 +263,7 @@
     "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261024T003615Z",
+  "run_id": "20261024T034940Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-23T22:00:00+00:00",
