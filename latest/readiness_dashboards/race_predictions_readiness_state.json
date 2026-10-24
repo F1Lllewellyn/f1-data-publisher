@@ -1,10 +1,10 @@
 {
-  "ready_for_use": false,
-  "blocked": true,
+  "ready_for_use": true,
+  "blocked": false,
   "latest_session_state": "clean",
   "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
-  "generated_at_utc": "2026-10-24T17:40:06Z",
+  "generated_at_utc": "2026-10-24T19:28:33Z",
   "source_status": "clean",
   "event_name": "United States - Austin - Austin",
-  "session_name": "Practice 2"
+  "session_name": "Practice 3"
 }

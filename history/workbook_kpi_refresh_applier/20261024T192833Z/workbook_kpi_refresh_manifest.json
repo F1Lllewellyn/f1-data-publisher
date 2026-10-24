@@ -1,0 +1,54 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-10-24T19:28:33.453751+00:00",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "outputs": [
+    {
+      "bytes": 753,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "8b93be689a66f10f6c79044bad00322335b389a28998e78f52f38db0c76acf21"
+    },
+    {
+      "bytes": 413,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "97818273ea10ac680d7056d17fe4cb20bb05cdbac8fd2e53466bc9ad074fd6ff"
+    },
+    {
+      "bytes": 10289,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261024T192833Z.xlsx",
+      "sha256": "766b67db8d525cb5921121baa5cae9dfa1e96985fb67c8eb7e97130f6d8f5101"
+    },
+    {
+      "bytes": 567,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "b7f114beb7e316b7d7443c99ac52627f548f7d828893c26fa1fe0d625e09260f"
+    },
+    {
+      "bytes": 1565,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/upstream_data_readiness_snapshot.json",
+      "sha256": "fa6561f9de94ac21215f4cf4269d8f098b564704be961584a5993ae41103c40d"
+    },
+    {
+      "bytes": 696,
+      "path": "history/workbook_kpi_refresh_applier/20261024T192833Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "834097e9437af822c8487b14f83f704e24a7622367769661d58f2afa70d71330"
+    }
+  ],
+  "run_id": "20261024T192833Z",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_processor_root": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391",
+  "source_status": "clean",
+  "warnings": []
+}

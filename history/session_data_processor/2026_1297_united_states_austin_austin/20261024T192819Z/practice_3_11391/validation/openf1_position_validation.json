@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 71529,
+    "ok": true,
+    "sha256": "999c19aea769c517a19ed304e9ca24dbb9de627395b64ce055f8cb6afb5334f3",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/raw/openf1_position.json",
+  "json_sha256": "aee51ac59ec4124486f84f181d6ef203a1ddfcef082cf40a4dc72efb62b49886",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 620,
+  "status": "clean",
+  "timestamp_rows": 620
+}
