@@ -1,0 +1,39 @@
+{
+  "schema_version": "historical_fp2_offline_reassessment_v1",
+  "scope": "Barcelona 2026 Practice 2 session 11301",
+  "source_manifest_path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
+  "source_blob_sha": "808e9a4dbfb96041bf240460a223565d7a152ace",
+  "observed_overall_status": "needs_manual_review",
+  "required_source_checks": [
+    {
+      "endpoint": "drivers",
+      "status": "clean",
+      "rows": 22,
+      "anomalies": []
+    },
+    {
+      "endpoint": "laps",
+      "status": "clean",
+      "rows": 586,
+      "anomalies": []
+    },
+    {
+      "endpoint": "position",
+      "status": "clean",
+      "rows": 424,
+      "anomalies": []
+    },
+    {
+      "endpoint": "weather",
+      "status": "clean",
+      "rows": 85,
+      "anomalies": []
+    }
+  ],
+  "expected_empty_starting_grid": "needs_manual_review",
+  "optional_empty_intervals": "needs_manual_review",
+  "proposed_updated_aggregate": "clean_usable_with_optional_context_gaps",
+  "qualification": "candidate only; use accepted aggregate_source_readiness v2 and downstream runtime consumer test before any official status change",
+  "changes_to_original_manifest": false,
+  "forecast_promotion_allowed": false
+}
