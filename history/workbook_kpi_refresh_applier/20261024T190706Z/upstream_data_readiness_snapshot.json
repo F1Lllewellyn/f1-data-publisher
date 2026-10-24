@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1297_united_states_austin_austin",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "United States - Austin - Austin",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-10-24T18:30:00+00:00",
+    "date_start": "2026-10-24T17:30:00+00:00",
+    "gate": "post_fp3",
+    "meeting_key": 1297,
+    "session_key": 11391,
+    "session_name": "Practice 3",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 423,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 92,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 620,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 55,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 92,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 82,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-10-24T19:07:06.212943Z"
+}
