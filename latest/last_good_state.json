@@ -5,12 +5,12 @@
     "session_key": 11392,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1297_united_states_austin_austin/20261025T144542Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1297_united_states_austin_austin/20261025T181155Z/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20261025T144542Z",
+  "run_id": "20261025T181155Z",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "5092f80a1547c11acac3723cbba701fa6bcbf1d679e9dfb6bc1e01b69bd21663",
+  "signature": "08750cf98b9be726f9cbe9071f2cf78df5ba800c2d5dcb450dbbe7bfee400b67",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-10-25T14:45:42Z"
+  "updated_at_utc": "2026-10-25T18:11:55Z"
 }
