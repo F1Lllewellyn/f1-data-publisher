@@ -1,6 +1,6 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-10-25T17:51:16.287826Z`
+Created UTC: `2026-10-25T20:46:45.247592Z`
 Status: **pass**
 
 ## Confirmed Data
@@ -8,7 +8,7 @@ Status: **pass**
 - Latest session: `Qualifying`
 - Source status: `clean`
 - Workbook/KPI commit allowed: `True`
-- Workbook source status: `clean`
+- Workbook source status: `needs_manual_review`
 
 ## System checks
 - `core_files`: **pass**

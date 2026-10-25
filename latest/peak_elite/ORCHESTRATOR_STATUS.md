@@ -1,6 +1,6 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-10-25T17:51:22.051990Z`
+Created UTC: `2026-10-25T20:46:50.978346Z`
 Operation: `full_run_chain`
 Status: **pass**
 
@@ -8,7 +8,7 @@ Status: **pass**
 - Race/event: `United States - Austin - Austin`
 - Session: `Qualifying`
 - Source status: `clean`
-- Workbook source status: `clean`
+- Workbook source status: `needs_manual_review`
 - Workbook commit allowed: `True`
 
 ## Steps
