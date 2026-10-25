@@ -2,27 +2,27 @@
 
 ## Verdict
 
-Pass
+Pass with warnings
 
 ## Run
 
-- Run ID: `20261025T164857Z`
-- Created UTC: `2026-10-25T16:48:57.055234+00:00`
-- Source status: `clean`
+- Run ID: `20261025T165038Z`
+- Created UTC: `2026-10-25T16:50:38.078880+00:00`
+- Source status: `needs_manual_review`
 - Material change: `True`
 
 ## Warnings
 
-- None
+- source_classification=needs_manual_review
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/sandbox_workbook_update_plan_applied.json` (6af39a57b786...)
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/refreshed_workbook_kpi_readiness.csv` (373d3f092f1e...)
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261025T164857Z.xlsx` (7a52e19a8318...)
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/upstream_latest_manifest_snapshot.json` (4d98db74fae2...)
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/upstream_data_readiness_snapshot.json` (69dbb843353a...)
-- `history/workbook_kpi_refresh_applier/20261025T164857Z/upstream_combined_source_manifest_snapshot.json` (0ebe061ae7ae...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/sandbox_workbook_update_plan_applied.json` (3263dcfdf66f...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/refreshed_workbook_kpi_readiness.csv` (f979f88db36c...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261025T165038Z.xlsx` (ad1e7da65456...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/upstream_latest_manifest_snapshot.json` (4d98db74fae2...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/upstream_data_readiness_snapshot.json` (69dbb843353a...)
+- `history/workbook_kpi_refresh_applier/20261025T165038Z/upstream_combined_source_manifest_snapshot.json` (0ebe061ae7ae...)
 
 ## Governance
 
