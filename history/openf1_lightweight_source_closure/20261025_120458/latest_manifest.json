@@ -1,0 +1,93 @@
+{
+  "artifact_profile": "openf1-lightweight-source-closure",
+  "generated_utc": "2026-10-25T12:28:39.166508Z",
+  "season": 2026,
+  "completed_only": true,
+  "target_session_count": 105,
+  "lanes": [
+    {
+      "lane": "weather",
+      "rows": 6193,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "race_control",
+      "rows": 4013,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "intervals",
+      "rows": 181223,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "position",
+      "rows": 28273,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "stints",
+      "rows": 4225,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "pit",
+      "rows": 511,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "starting_grid",
+      "rows": 132,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "drivers",
+      "rows": 1123,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "required_lightweight",
+      "heavy_endpoint": false
+    },
+    {
+      "lane": "team_radio",
+      "rows": 514,
+      "result": "pass",
+      "reason": "evidence_bearing",
+      "required_status": "opportunistic",
+      "heavy_endpoint": false
+    }
+  ],
+  "pass_count": 9,
+  "pass_with_warnings_count": 0,
+  "fail_count": 0,
+  "heavy_endpoints_excluded_by_default": [
+    "car_data",
+    "location"
+  ],
+  "timestamp_policy": "dt.datetime.now(dt.UTC)",
+  "no_drs_2026_assumption": true,
+  "previous_manifest_generated_utc": "2026-10-25T07:04:08.829704Z",
+  "latest_zip": "openf1_lightweight_source_closure.zip",
+  "history_path": "history/openf1_lightweight_source_closure/20261025_120458"
+}
