@@ -1,16 +1,16 @@
 {
   "change_reason": "signature_changed",
-  "current_signature": "99df19c278c87e8ba9bec3c33ab060418a57f53f161b45d70cf53b232f98f0c2",
+  "current_signature": "d7459799cfce270b2f450a12da2a702df1a546e57d64ab63b4cdcd49cfc3a879",
   "event": {
     "event_id": "2026_1297_united_states_austin_austin",
     "race_name": "United States - Austin - Austin",
-    "session_key": 11390,
-    "session_name": "Practice 2"
+    "session_key": 11392,
+    "session_name": "Qualifying"
   },
-  "generated_at_utc": "2026-10-24T17:18:40Z",
+  "generated_at_utc": "2026-10-25T00:37:49Z",
   "material_change_detected": true,
   "notification_recommended": true,
-  "previous_signature": "ff8dd4353fc789754fa58c17113f07a6a1cd0a8ed17d12a84ccad3b5b1b1e0b6",
+  "previous_signature": "99df19c278c87e8ba9bec3c33ab060418a57f53f161b45d70cf53b232f98f0c2",
   "promotion_allowed": false,
   "schema_version": "f1_1b_material_change_v20",
   "status": "usable_with_optional_context_gaps"

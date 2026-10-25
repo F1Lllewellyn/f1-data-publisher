@@ -7,7 +7,7 @@
 
 ## Event
 - Event: United States - Austin - Austin
-- Session: Practice 2
+- Session: Qualifying
 
 ## Consumer Actions
 - race_predictions: notify_and_update_context — material readiness or forecast-relevant state changed

@@ -2,9 +2,9 @@
 
 ## Confirmed Data
 - Event: United States - Austin - Austin
-- Session: Practice 2 / key 11390
-- Run ID: 20261024T171840Z
-- Consumer readiness: context_ready
+- Session: Qualifying / key 11392
+- Run ID: 20261025T003749Z
+- Consumer readiness: full_report_ready
 - Source status: clean
 - Workbook source status: clean
 - Readiness quality: usable_with_optional_context_gaps
