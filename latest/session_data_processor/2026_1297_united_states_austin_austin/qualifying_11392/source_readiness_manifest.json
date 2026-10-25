@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-25T00:18:41.844959Z",
+  "created_utc": "2026-10-25T01:32:17.312543Z",
   "event_id": "2026_1297_united_states_austin_austin",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-25T00:18:41.846388Z",
+    "created_utc": "2026-10-25T01:32:17.314085Z",
     "event_id": "2026_1297_united_states_austin_austin",
     "forecast_state_changed": false,
     "overall_status": "clean",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 35.6,
+      "age_minutes": 73.59,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "d4341349d539009bbdb5f910f67aba06976a22eea5445d6f23f6f44f19e63442",
+      "sha256": "d603cae21e64f09358d3c3719331df71b2f0aff0a4c5f4b88ba7d2d369aef0a8",
       "size_bytes": 695,
-      "timestamp_utc": "2026-10-24T23:43:05.708494Z"
+      "timestamp_utc": "2026-10-25T00:18:41.848378Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 35.6,
+      "age_minutes": 73.59,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "c1d647fc6c4851d01af14721fc318fa7f218bb4ef81b2432d4d3107c3e37a99d",
+      "sha256": "ebb22264cbf671a4f530e108501ac50066a280aa9a7f1cc44c6a594d70e06e4e",
       "size_bytes": 1573,
-      "timestamp_utc": "2026-10-24T23:43:05.708214Z"
+      "timestamp_utc": "2026-10-25T00:18:41.848075Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 35.6,
+      "age_minutes": 73.59,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "d332aca1a197db88c88520c206432ecde171cbd138a1ce743e9ec793b190009a",
+      "sha256": "d7d6ff3c9dcfcff969371734e9462c70e5b4938bf97c7265bad7533611274a66",
       "size_bytes": 566,
-      "timestamp_utc": "2026-10-24T23:43:05.707974Z"
+      "timestamp_utc": "2026-10-25T00:18:41.847839Z"
     }
   },
   "material_readiness_improved": false,
@@ -82,13 +82,6 @@
         "reason": "optional_source_warning_non_blocking",
         "rows": 0,
         "source": "openf1_intervals",
-        "status": "needs_manual_review"
-      },
-      {
-        "endpoint": "starting_grid",
-        "reason": "optional_source_warning_non_blocking",
-        "rows": 0,
-        "source": "openf1_starting_grid",
         "status": "needs_manual_review"
       }
     ],
@@ -198,17 +191,14 @@
       "openf1_starting_grid": {
         "anomalies": [],
         "blocking": false,
-        "classification": "optional_context_warning",
-        "effective_status": "partial",
+        "classification": "optional_observed",
+        "effective_status": "clean",
         "endpoint": "starting_grid",
-        "missing_required_columns": [
-          "session_key",
-          "meeting_key"
-        ],
-        "raw_status": "needs_manual_review",
-        "reason": "optional_source_warning_non_blocking",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
         "role": "optional_context",
-        "rows": 0
+        "rows": 22
       },
       "openf1_stints": {
         "anomalies": [],
@@ -248,7 +238,7 @@
       "openf1_race_control": "clean",
       "openf1_session_result": "clean",
       "openf1_sessions": "clean",
-      "openf1_starting_grid": "partial",
+      "openf1_starting_grid": "clean",
       "openf1_stints": "clean",
       "openf1_weather": "clean"
     }
@@ -261,7 +251,7 @@
     "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261025T001830Z",
+  "run_id": "20261025T013205Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-24T22:00:00+00:00",
@@ -531,25 +521,29 @@
     },
     "openf1_starting_grid": {
       "anomalies": [],
-      "columns": [],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
       "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_starting_grid.csv",
-      "driver_count": 0,
+      "driver_count": 22,
       "duplicate_rows": 0,
       "endpoint": "starting_grid",
       "fetch": {
-        "bytes": 0,
-        "error": "<HTTPError 404: 'Not Found'>",
-        "ok": false
+        "bytes": 2095,
+        "ok": true,
+        "sha256": "0f943ff3befc8713346c4ef1891f459158748c5dbf8149d9404701c8a92452f4",
+        "status_code": 200
       },
       "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_starting_grid.json",
-      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "json_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
       "max_lap_number": null,
-      "missing_required_columns": [
-        "session_key",
-        "meeting_key"
-      ],
-      "rows": 0,
-      "status": "needs_manual_review",
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
       "timestamp_rows": 0
     },
     "openf1_stints": {
@@ -617,10 +611,10 @@
   },
   "stable_engine_modified": false,
   "validation_summary": {
-    "clean_sources": 9,
+    "clean_sources": 10,
     "conflicting_sources": 0,
     "late_sources": 0,
-    "manual_review_sources": 2,
+    "manual_review_sources": 1,
     "partial_sources": 0
   },
   "workbook_kpi_update": {

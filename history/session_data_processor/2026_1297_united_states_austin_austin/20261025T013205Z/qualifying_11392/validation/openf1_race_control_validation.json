@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_race_control.csv",
+  "driver_count": 3,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 10664,
+    "ok": true,
+    "sha256": "d6b3da005e08ea1fe4c397716262539baff179e8a90d913b9b8abc7ba54835be",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_race_control.json",
+  "json_sha256": "5fa0421d250d0f9c8d2ba90a3aadf9dd4b2d39908d45afe27a2c5108e96a06e1",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 39,
+  "status": "clean",
+  "timestamp_rows": 39
+}

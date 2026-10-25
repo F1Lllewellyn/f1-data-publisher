@@ -1,23 +1,27 @@
 {
   "anomalies": [],
-  "columns": [],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
   "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_starting_grid.csv",
-  "driver_count": 0,
+  "driver_count": 22,
   "duplicate_rows": 0,
   "endpoint": "starting_grid",
   "fetch": {
-    "bytes": 0,
-    "error": "<HTTPError 404: 'Not Found'>",
-    "ok": false
+    "bytes": 2095,
+    "ok": true,
+    "sha256": "0f943ff3befc8713346c4ef1891f459158748c5dbf8149d9404701c8a92452f4",
+    "status_code": 200
   },
   "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/raw/openf1_starting_grid.json",
-  "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "json_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
   "max_lap_number": null,
-  "missing_required_columns": [
-    "session_key",
-    "meeting_key"
-  ],
-  "rows": 0,
-  "status": "needs_manual_review",
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
   "timestamp_rows": 0
 }
