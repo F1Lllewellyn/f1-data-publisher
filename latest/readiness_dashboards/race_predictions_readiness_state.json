@@ -1,9 +1,9 @@
 {
-  "ready_for_use": true,
-  "blocked": false,
+  "ready_for_use": false,
+  "blocked": true,
   "latest_session_state": "clean",
   "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
-  "generated_at_utc": "2026-10-25T17:51:14Z",
+  "generated_at_utc": "2026-10-25T19:56:15Z",
   "source_status": "clean",
   "event_name": "United States - Austin - Austin",
   "session_name": "Qualifying"
