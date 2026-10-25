@@ -1,13 +1,13 @@
 {
   "artifact_profile": "openf1-lightweight-source-closure",
-  "generated_utc": "2026-10-24T19:29:13.422962Z",
+  "generated_utc": "2026-10-25T00:01:15.783431Z",
   "season": 2026,
   "completed_only": true,
-  "target_session_count": 104,
+  "target_session_count": 105,
   "lanes": [
     {
       "lane": "weather",
-      "rows": 8004,
+      "rows": 8406,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -15,7 +15,7 @@
     },
     {
       "lane": "race_control",
-      "rows": 5077,
+      "rows": 6135,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -23,7 +23,7 @@
     },
     {
       "lane": "intervals",
-      "rows": 246390,
+      "rows": 288134,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -31,7 +31,7 @@
     },
     {
       "lane": "position",
-      "rows": 31068,
+      "rows": 36495,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -39,7 +39,7 @@
     },
     {
       "lane": "stints",
-      "rows": 4204,
+      "rows": 4797,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -55,7 +55,7 @@
     },
     {
       "lane": "starting_grid",
-      "rows": 220,
+      "rows": 242,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -63,7 +63,7 @@
     },
     {
       "lane": "drivers",
-      "rows": 1151,
+      "rows": 1306,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "required_lightweight",
@@ -71,7 +71,7 @@
     },
     {
       "lane": "team_radio",
-      "rows": 658,
+      "rows": 739,
       "result": "pass",
       "reason": "evidence_bearing",
       "required_status": "opportunistic",
@@ -87,7 +87,7 @@
   ],
   "timestamp_policy": "dt.datetime.now(dt.UTC)",
   "no_drs_2026_assumption": true,
-  "previous_manifest_generated_utc": "2026-10-24T16:23:56.757578Z",
+  "previous_manifest_generated_utc": "2026-10-24T19:29:13.422962Z",
   "latest_zip": "openf1_lightweight_source_closure.zip",
-  "history_path": "history/openf1_lightweight_source_closure/20261024_190441"
+  "history_path": "history/openf1_lightweight_source_closure/20261024_233605"
 }
