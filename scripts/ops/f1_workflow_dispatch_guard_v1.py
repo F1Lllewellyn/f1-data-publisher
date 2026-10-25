@@ -247,6 +247,7 @@ def _base_audit(now: dt.datetime) -> Dict[str, Any]:
         "http_response_classification": "not_attempted",
         "dispatch_response_accepted": False,
         "dispatch_identity_verified": False,
+        "unverified_candidate_run": None,
         "source_job_succeeded": None,
         "source_content_valid": None,
         "same_run_custody_attested": None,
@@ -266,6 +267,11 @@ def _base_audit(now: dt.datetime) -> Dict[str, Any]:
         "activation_requirement": (
             "A separate future work order must approve one exact source identity, time window, authority "
             "document, credential context, arm digest, and live execution."
+        ),
+        "authority_control_limitation": (
+            "Approval, history review, and cross-operator exclusion are self-declared local JSON "
+            "assertions. The arm digest is not cryptographic independent authorization, and the "
+            "cross-operator lock identifier is not a shared distributed lock."
         ),
     }
 
@@ -777,31 +783,67 @@ def run_guard(
     except Exception as exc:  # an ambiguous request is terminal; never retry
         audit["http_response_classification"] = "ambiguous_request_exception"
         return _result("HOLD", [f"dispatch_request_exception_{type(exc).__name__}"], audit)
+    if not isinstance(response, HttpResponse):
+        audit["http_response_classification"] = "invalid_transport_response"
+        return _result("HOLD", ["dispatch_response_invalid"], audit)
     audit["http_response_classification"] = f"http_{response.status}"
     if response.status != 200:
         reason = "dispatch_204_no_run_identity" if response.status == 204 else f"dispatch_http_{response.status}"
         return _result("HOLD", [reason], audit)
-    run_id, response_reasons = _valid_dispatch_response(response.json_body, authority)
+    try:
+        run_id, response_reasons = _valid_dispatch_response(response.json_body, authority)
+    except Exception as exc:
+        return _result(
+            "HOLD", [f"dispatch_response_validation_exception_{type(exc).__name__}"], audit
+        )
     if response_reasons or run_id is None:
         return _result("HOLD", response_reasons or ["dispatch_identity_missing"], audit)
     audit["dispatch_response_accepted"] = True
+    audit["unverified_candidate_run"] = {
+        "verification_state": "UNVERIFIED_CANDIDATE",
+        "id": run_id,
+        "run_url": response.json_body["run_url"],
+        "html_url": response.json_body["html_url"],
+        "post_started_utc": format_utc(post_started),
+    }
 
     audit["run_get_calls"] = 1
     try:
         run_response = transport.request("GET", _run_url(authority, run_id))
     except Exception as exc:
         return _result("HOLD", [f"run_verification_exception_{type(exc).__name__}"], audit)
+    if not isinstance(run_response, HttpResponse):
+        return _result("HOLD", ["run_verification_response_invalid"], audit)
     if run_response.status != 200:
         return _result("HOLD", [f"run_verification_http_{run_response.status}"], audit)
-    observed_after = clock().astimezone(dt.timezone.utc)
-    run_reasons = validate_exact_run(
-        run_response.json_body, authority, run_id, post_started, observed_after
-    )
+    try:
+        observed_after_raw = clock()
+    except Exception as exc:
+        return _result("HOLD", [f"post_dispatch_clock_error_{type(exc).__name__}"], audit)
+    if not isinstance(observed_after_raw, dt.datetime):
+        return _result("HOLD", ["post_dispatch_clock_not_datetime"], audit)
+    if observed_after_raw.tzinfo is None:
+        return _result("HOLD", ["post_dispatch_clock_not_timezone_aware"], audit)
+    try:
+        if observed_after_raw.utcoffset() is None:
+            return _result("HOLD", ["post_dispatch_clock_timezone_invalid"], audit)
+        observed_after = observed_after_raw.astimezone(dt.timezone.utc)
+    except Exception as exc:
+        return _result(
+            "HOLD", [f"post_dispatch_clock_timezone_error_{type(exc).__name__}"], audit
+        )
+    try:
+        run_reasons = validate_exact_run(
+            run_response.json_body, authority, run_id, post_started, observed_after
+        )
+    except Exception as exc:
+        return _result("HOLD", [f"run_validation_exception_{type(exc).__name__}"], audit)
     if run_reasons:
         return _result("HOLD", run_reasons, audit)
     run = run_response.json_body
     audit["dispatch_identity_verified"] = True
     audit["original_run"] = {
+        "verification_state": "VERIFIED_ORIGINAL_RUN",
         "id": run_id,
         "url": run["html_url"],
         "attempt": run["run_attempt"],

@@ -71,8 +71,24 @@ class SequenceClock:
 
     def __call__(self):
         if len(self.values) > 1:
-            return self.values.pop(0)
-        return self.values[0]
+            value = self.values.pop(0)
+        else:
+            value = self.values[0]
+        if isinstance(value, BaseException):
+            raise value
+        return value
+
+
+class BrokenTimezone(dt.tzinfo):
+    def utcoffset(self, value):
+        raise RuntimeError("broken timezone")
+
+
+class RaisingRunMapping(dict):
+    def get(self, key, default=None):
+        if key == "id":
+            raise RuntimeError("run validation failed")
+        return super().get(key, default)
 
 
 def fixed_clock():
@@ -165,6 +181,18 @@ def exact_run(run_id=RUN_ID):
         "repository": {"full_name": guard.EXPECTED_REPOSITORY},
         "head_repository": {"full_name": guard.EXPECTED_REPOSITORY},
         "head_commit": {"id": HEAD_SHA},
+    }
+
+
+def expected_candidate(run_id=RUN_ID):
+    return {
+        "verification_state": "UNVERIFIED_CANDIDATE",
+        "id": run_id,
+        "run_url": (
+            f"https://api.github.com/repos/{guard.EXPECTED_REPOSITORY}/actions/runs/{run_id}"
+        ),
+        "html_url": f"https://github.com/{guard.EXPECTED_REPOSITORY}/actions/runs/{run_id}",
+        "post_started_utc": "2026-10-30T12:00:00Z",
     }
 
 
@@ -717,6 +745,11 @@ class DispatchResponseTests(unittest.TestCase):
         self.assertEqual(result.disposition, "DISPATCH_IDENTITY_VERIFIED")
         self.assertTrue(result.audit["dispatch_response_accepted"])
         self.assertTrue(result.audit["dispatch_identity_verified"])
+        self.assertEqual(result.audit["unverified_candidate_run"], expected_candidate())
+        self.assertEqual(
+            result.audit["original_run"]["verification_state"], "VERIFIED_ORIGINAL_RUN"
+        )
+        self.assertEqual(result.audit["original_run"]["id"], RUN_ID)
         self.assertIsNone(result.audit["source_job_succeeded"])
         self.assertIsNone(result.audit["source_content_valid"])
         self.assertIsNone(result.audit["same_run_custody_attested"])
@@ -742,6 +775,7 @@ class DispatchResponseTests(unittest.TestCase):
         )
         self.assertEqual(result.disposition, "HOLD")
         self.assertIn("dispatch_204_no_run_identity", result.reasons)
+        self.assertIsNone(result.audit["unverified_candidate_run"])
         self.assertEqual(len(post_records(transport)), 1)
         self.assertEqual(len(transport.records), 6)
 
@@ -775,6 +809,23 @@ class DispatchResponseTests(unittest.TestCase):
                 self.assertEqual(result.disposition, "HOLD")
                 self.assertEqual(len(post_records(transport)), 1)
                 self.assertEqual(result.audit["run_get_calls"], 0)
+                self.assertIsNone(result.audit["unverified_candidate_run"])
+
+    def test_invalid_transport_response_after_post_is_structured_hold(self):
+        result, transport, _ = execute(
+            steps=[
+                history_response(),
+                history_response(),
+                *protected_preflight_steps(),
+                object(),
+            ]
+        )
+        self.assertEqual(result.disposition, "HOLD")
+        self.assertIn("dispatch_response_invalid", result.reasons)
+        self.assertEqual(result.audit["post_calls"], 1)
+        self.assertEqual(len(post_records(transport)), 1)
+        self.assertFalse(result.audit["dispatch_response_accepted"])
+        self.assertIsNone(result.audit["unverified_candidate_run"])
 
     def test_hostile_or_mismatched_links_are_rejected(self):
         cases = [
@@ -798,6 +849,7 @@ class DispatchResponseTests(unittest.TestCase):
                 self.assertEqual(result.disposition, "HOLD")
                 self.assertEqual(len(post_records(transport)), 1)
                 self.assertFalse(result.audit["dispatch_response_accepted"])
+                self.assertIsNone(result.audit["unverified_candidate_run"])
 
     def test_redirect_4xx_rate_limit_and_5xx_never_retry(self):
         for status in (301, 302, 401, 403, 422, 429, 500, 502, 503):
@@ -867,12 +919,40 @@ class ExactRunIdentityTests(unittest.TestCase):
                 self.assertEqual(result.disposition, "HOLD")
                 self.assertEqual(len(post_records(transport)), 1)
                 self.assertFalse(result.audit["dispatch_identity_verified"])
+                self.assertEqual(result.audit["unverified_candidate_run"], expected_candidate())
+                self.assertIsNone(result.audit["original_run"])
+                assessment = guard.assess_follow_on_evidence(
+                    result, guard.FollowOnEvidence(True, True, True, True)
+                )
+                self.assertFalse(assessment["weather_source_eligible"])
+                self.assertFalse(assessment["scientific_ex_ante_eligible"])
+                self.assertFalse(assessment["forecast_ready"])
+
+    def test_unexpected_run_validation_exception_preserves_candidate_and_holds(self):
+        result, transport, _ = execute(
+            steps=[
+                history_response(),
+                history_response(),
+                *protected_preflight_steps(),
+                dispatch_response(),
+                response(200, RaisingRunMapping(exact_run())),
+            ]
+        )
+        self.assertEqual(result.disposition, "HOLD")
+        self.assertIn("run_validation_exception_RuntimeError", result.reasons)
+        self.assertEqual(result.audit["post_calls"], 1)
+        self.assertEqual(len(post_records(transport)), 1)
+        self.assertTrue(result.audit["dispatch_response_accepted"])
+        self.assertEqual(result.audit["unverified_candidate_run"], expected_candidate())
+        self.assertFalse(result.audit["dispatch_identity_verified"])
+        self.assertIsNone(result.audit["original_run"])
 
     def test_run_get_failure_is_hold_without_second_post(self):
         for step, reason in [
             (response(404), "run_verification_http_404"),
             (TimeoutError(), "run_verification_exception_TimeoutError"),
             (ConnectionResetError(), "run_verification_exception_ConnectionResetError"),
+            (object(), "run_verification_response_invalid"),
         ]:
             with self.subTest(reason=reason):
                 result, transport, _ = execute(
@@ -888,6 +968,43 @@ class ExactRunIdentityTests(unittest.TestCase):
                 self.assertTrue(result.audit["dispatch_response_accepted"])
                 self.assertFalse(result.audit["dispatch_identity_verified"])
                 self.assertEqual(len(post_records(transport)), 1)
+                self.assertEqual(result.audit["post_calls"], 1)
+                self.assertEqual(result.audit["unverified_candidate_run"], expected_candidate())
+                self.assertIsNone(result.audit["original_run"])
+                assessment = guard.assess_follow_on_evidence(
+                    result, guard.FollowOnEvidence(True, True, True, True)
+                )
+                self.assertFalse(assessment["weather_source_eligible"])
+                self.assertFalse(assessment["scientific_ex_ante_eligible"])
+                self.assertFalse(assessment["forecast_ready"])
+
+    def test_post_dispatch_clock_failures_preserve_candidate_and_hold(self):
+        naive = dt.datetime(2026, 10, 30, 12, 0)
+        broken_timezone = dt.datetime(2026, 10, 30, 12, 0, tzinfo=BrokenTimezone())
+        cases = [
+            (RuntimeError("clock failed"), "post_dispatch_clock_error_RuntimeError"),
+            (naive, "post_dispatch_clock_not_timezone_aware"),
+            ("not-a-datetime", "post_dispatch_clock_not_datetime"),
+            (broken_timezone, "post_dispatch_clock_timezone_error_RuntimeError"),
+        ]
+        for clock_value, reason in cases:
+            with self.subTest(reason=reason):
+                clock = SequenceClock(NOW, NOW, clock_value)
+                result, transport, _ = execute(clock=clock)
+                self.assertEqual(result.disposition, "HOLD")
+                self.assertIn(reason, result.reasons)
+                self.assertEqual(result.audit["post_calls"], 1)
+                self.assertEqual(len(post_records(transport)), 1)
+                self.assertTrue(result.audit["dispatch_response_accepted"])
+                self.assertEqual(result.audit["unverified_candidate_run"], expected_candidate())
+                self.assertFalse(result.audit["dispatch_identity_verified"])
+                self.assertIsNone(result.audit["original_run"])
+                assessment = guard.assess_follow_on_evidence(
+                    result, guard.FollowOnEvidence(True, True, True, True)
+                )
+                self.assertFalse(assessment["weather_source_eligible"])
+                self.assertFalse(assessment["scientific_ex_ante_eligible"])
+                self.assertFalse(assessment["forecast_ready"])
 
 
 class ScientificBoundaryAndAuditTests(unittest.TestCase):
@@ -921,6 +1038,12 @@ class ScientificBoundaryAndAuditTests(unittest.TestCase):
         self.assertIn("cannot provide a global exactly-once guarantee", result.audit["toctou_residual"])
         self.assertIn("Actions write", result.audit["credential_permissions_required"])
         self.assertIn("separate future work order", result.audit["activation_requirement"])
+        self.assertIn("self-declared local JSON", result.audit["authority_control_limitation"])
+        self.assertIn(
+            "not cryptographic independent authorization",
+            result.audit["authority_control_limitation"],
+        )
+        self.assertIn("not a shared distributed lock", result.audit["authority_control_limitation"])
 
     def test_authority_digest_is_stable_and_changes_with_scope(self):
         authority = valid_authority()
