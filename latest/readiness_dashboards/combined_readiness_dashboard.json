@@ -1,20 +1,21 @@
 {
-  "generated_at_utc": "2026-10-25T10:07:57Z",
+  "generated_at_utc": "2026-10-25T13:58:23Z",
   "status": "dashboard_refreshed",
   "source_status": "clean",
   "source_backed": true,
   "commit_allowed": true,
   "diagnostic_publish_allowed": true,
-  "downstream_eligible": true,
+  "downstream_eligible": false,
   "readiness_reasons": [
-    "verified_current_session_evidence"
+    "workbook_event_session_mismatch",
+    "workbook_source_status_mismatch"
   ],
   "event_id": "2026_1297_united_states_austin_austin",
   "meeting_key": 1297,
   "session_key": 11392,
   "event_name": "United States - Austin - Austin",
   "session_name": "Qualifying",
-  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261025T100757Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261025T100757Z.xlsx",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261025T123431Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261025T123431Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/source_readiness_manifest.json",
   "autorepair_report": null,
@@ -22,14 +23,14 @@
   "canonical_workbook_overwrite": false,
   "promotion_allowed": false,
   "race_predictions": {
-    "ready_for_use": true,
-    "blocked": false,
+    "ready_for_use": false,
+    "blocked": true,
     "latest_session_state": "clean",
     "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
   },
   "fantasy_predictions": {
-    "ready_for_use": true,
-    "blocked": false,
+    "ready_for_use": false,
+    "blocked": true,
     "latest_session_state": "clean",
     "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
   }

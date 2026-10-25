@@ -1,10 +1,10 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-10-25T10:07:57Z
+Generated UTC: 2026-10-25T13:58:23Z
 Event: United States - Austin - Austin
 Session: Qualifying
 Source status: clean
-Dashboard readiness: READY
+Dashboard readiness: NOT READY
 Diagnostic publishing allowed: true
 
 ## Governance
