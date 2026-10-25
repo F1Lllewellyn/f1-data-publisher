@@ -107,6 +107,24 @@ def zip_tree(root: Path) -> None:
     )
 
 
+def refresh_history_from_latest(repo: Path) -> None:
+    latest = repo.joinpath(*guard.LATEST_REL.parts)
+    manifest = json.loads((latest / "latest_manifest.json").read_text(encoding="utf-8"))
+    history = repo / manifest["history_path"]
+    for name in (guard.ZIP_NAME, guard.ZIP_SHA_NAME):
+        path = latest / name
+        if path.exists():
+            path.unlink()
+    zip_tree(latest)
+    shutil.rmtree(history)
+    history.mkdir(parents=True)
+    for name in guard.TRACKED_FILES - {guard.ZIP_SHA_NAME}:
+        target = history / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(latest / name, target)
+    zip_tree(history)
+
+
 def write_snapshot(
     repo: Path,
     *,
@@ -114,45 +132,56 @@ def write_snapshot(
     history_stamp: str,
     marker: str,
     previous: dt.datetime | None,
+    session_count: int = 1,
 ) -> Path:
+    if session_count < 1:
+        raise AssertionError("fixture requires at least one completed session")
     latest = repo.joinpath(*guard.LATEST_REL.parts)
     history = repo / "history/openf1_lightweight_source_closure" / history_stamp
     latest.mkdir(parents=True, exist_ok=True)
     history.mkdir(parents=True, exist_ok=False)
     observed = generated - dt.timedelta(minutes=1)
-    session = {
-        "session_key": "11392",
-        "session_type": "Qualifying",
-        "session_name": "Qualifying",
-        "date_start": (generated - dt.timedelta(hours=2)).isoformat(),
-        "date_end": (generated - dt.timedelta(hours=1)).isoformat(),
-        "meeting_key": "1297",
-        "circuit_key": "9",
-        "circuit_short_name": "Austin",
-        "country_key": "19",
-        "country_code": "USA",
-        "country_name": "United States",
-        "location": "Austin",
-        "gmt_offset": "-05:00:00",
-        "year": "2026",
-        "is_cancelled": "False",
-        "_completed_session": "True",
-    }
-    target_fields = list(session)
+    sessions = []
+    for index in range(session_count):
+        session_start = dt.datetime(2026, 10, 24, 6, tzinfo=dt.timezone.utc) + dt.timedelta(minutes=index)
+        sessions.append(
+            {
+                "session_key": str(11392 + index),
+                "session_type": "Qualifying" if index == 0 else "Practice",
+                "session_name": "Qualifying" if index == 0 else f"Practice {index}",
+                "date_start": iso(session_start),
+                "date_end": iso(session_start + dt.timedelta(minutes=1)),
+                "meeting_key": str(1297 + index),
+                "circuit_key": "9",
+                "circuit_short_name": "Austin",
+                "country_key": "19",
+                "country_code": "USA",
+                "country_name": "United States",
+                "location": "Austin",
+                "gmt_offset": "-05:00:00",
+                "year": "2026",
+                "is_cancelled": "False",
+                "_completed_session": "True",
+            }
+        )
+    target_fields = list(sessions[0])
     readiness = []
     source_manifest = []
     for lane in guard.LANES:
         relative = f"data/openf1_{lane}.csv"
-        row = {
-            "session_key": "11392",
-            "meeting_key": "1297",
-            "source_closure_retrieved_utc": iso(observed),
-            "fixture_value": f"{marker}-{lane}",
-        }
-        write_csv(latest / relative, list(row), [row])
+        rows = [
+            {
+                "session_key": session["session_key"],
+                "meeting_key": session["meeting_key"],
+                "source_closure_retrieved_utc": iso(observed),
+                "fixture_value": f"{marker}-{lane}-{index}",
+            }
+            for index, session in enumerate(sessions)
+        ]
+        write_csv(latest / relative, list(rows[0]), rows)
         result = {
             "lane": lane,
-            "rows": 1,
+            "rows": session_count,
             "result": "pass",
             "reason": "evidence_bearing",
             "required_status": "opportunistic" if lane == "team_radio" else "required_lightweight",
@@ -163,13 +192,13 @@ def write_snapshot(
             {
                 "path": relative,
                 "lane": lane,
-                "rows": 1,
+                "rows": session_count,
                 "sha256": hashlib.sha256((latest / relative).read_bytes()).hexdigest(),
                 "result": "pass",
                 "reason": "evidence_bearing",
             }
         )
-    write_csv(latest / "data/target_sessions.csv", target_fields, [session])
+    write_csv(latest / "data/target_sessions.csv", target_fields, sessions)
     write_csv(
         latest / "combined_source_manifest.csv",
         ["path", "lane", "rows", "sha256", "result", "reason"],
@@ -188,14 +217,23 @@ def write_snapshot(
     write_csv(
         latest / "zero_lane_diagnostics.csv",
         ["lane", "session_key", "meeting_key", "rows"],
-        [{"lane": lane, "session_key": "11392", "meeting_key": "1297", "rows": 1} for lane in guard.LANES],
+        [
+            {
+                "lane": lane,
+                "session_key": session["session_key"],
+                "meeting_key": session["meeting_key"],
+                "rows": session_count,
+            }
+            for lane in guard.LANES
+            for session in sessions
+        ],
     )
     manifest = {
         "artifact_profile": guard.PROFILE,
         "generated_utc": iso(generated),
         "season": 2026,
         "completed_only": True,
-        "target_session_count": 1,
+        "target_session_count": session_count,
         "lanes": readiness,
         "pass_count": len(guard.LANES),
         "pass_with_warnings_count": 0,
@@ -219,6 +257,174 @@ def write_snapshot(
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(latest / name, target)
     zip_tree(latest)
+    zip_tree(history)
+    return history
+
+
+def write_zero_session_401_snapshot(
+    repo: Path,
+    *,
+    generated: dt.datetime,
+    history_stamp: str,
+    previous: dt.datetime,
+    preserve_csv_headers: bool,
+) -> Path:
+    """Model the audited Austin HTTP-401 / 105-to-zero publisher output."""
+    latest = repo.joinpath(*guard.LATEST_REL.parts)
+    history = repo / "history/openf1_lightweight_source_closure" / history_stamp
+    latest.mkdir(parents=True, exist_ok=True)
+    history.mkdir(parents=True, exist_ok=False)
+    target_fields = [
+        "session_key",
+        "session_type",
+        "session_name",
+        "date_start",
+        "date_end",
+        "meeting_key",
+        "circuit_key",
+        "circuit_short_name",
+        "country_key",
+        "country_code",
+        "country_name",
+        "location",
+        "gmt_offset",
+        "year",
+        "is_cancelled",
+        "_completed_session",
+    ]
+    if preserve_csv_headers:
+        write_csv(latest / "data/target_sessions.csv", target_fields, [])
+    else:
+        (latest / "data/target_sessions.csv").write_bytes(b"\n")
+
+    readiness = []
+    source_manifest = []
+    lane_fields = [
+        "session_key",
+        "meeting_key",
+        "source_closure_retrieved_utc",
+        "fixture_value",
+    ]
+    for lane in guard.LANES:
+        relative = f"data/openf1_{lane}.csv"
+        if preserve_csv_headers:
+            write_csv(latest / relative, lane_fields, [])
+        else:
+            (latest / relative).parent.mkdir(parents=True, exist_ok=True)
+            (latest / relative).write_bytes(b"\n")
+        reason = (
+            "opportunistic_source_limited_zero_rows"
+            if lane == "team_radio"
+            else "not_applicable_for_current_completed_sessions"
+        )
+        lane_state = {
+            "lane": lane,
+            "rows": 0,
+            "result": "pass_with_warnings",
+            "reason": reason,
+            "required_status": "opportunistic" if lane == "team_radio" else "required_lightweight",
+            "heavy_endpoint": False,
+        }
+        readiness.append(lane_state)
+        source_manifest.append(
+            {
+                "path": relative,
+                "lane": lane,
+                "rows": 0,
+                "sha256": hashlib.sha256((latest / relative).read_bytes()).hexdigest(),
+                "result": "pass_with_warnings",
+                "reason": reason,
+            }
+        )
+    write_csv(
+        latest / "combined_source_manifest.csv",
+        ["path", "lane", "rows", "sha256", "result", "reason"],
+        source_manifest,
+    )
+    write_csv(
+        latest / "source_readiness_summary.csv",
+        ["lane", "rows", "result", "reason", "required_status", "heavy_endpoint"],
+        readiness,
+    )
+    write_csv(
+        latest / "request_log.csv",
+        [
+            "timestamp_utc",
+            "endpoint",
+            "strategy",
+            "params_json",
+            "rows",
+            "status",
+            "error",
+            "elapsed_seconds",
+        ],
+        [
+            {
+                "timestamp_utc": "2026-10-25T21:07:29.706628Z",
+                "endpoint": "sessions",
+                "strategy": "sessions_by_year",
+                "params_json": '{"year": 2026}',
+                "rows": 0,
+                "status": "http_401",
+                "error": "Live F1 session in progress; global API access restricted",
+                "elapsed_seconds": "0.34",
+            }
+        ],
+    )
+    write_csv(
+        latest / "zero_lane_diagnostics.csv",
+        ["lane", "session_key", "meeting_key", "rows"],
+        [
+            {"lane": lane, "session_key": "", "meeting_key": "", "rows": 0}
+            for lane in guard.LANES
+        ],
+    )
+    manifest = {
+        "artifact_profile": guard.PROFILE,
+        "generated_utc": iso(generated),
+        "season": 2026,
+        "completed_only": True,
+        "target_session_count": 0,
+        "lanes": readiness,
+        "pass_count": 0,
+        "pass_with_warnings_count": len(guard.LANES),
+        "fail_count": 0,
+        "heavy_endpoints_excluded_by_default": ["car_data", "location"],
+        "timestamp_policy": "dt.datetime.now(dt.UTC)",
+        "no_drs_2026_assumption": True,
+        "previous_manifest_generated_utc": iso(previous),
+        "latest_zip": guard.ZIP_NAME,
+        "history_path": f"history/openf1_lightweight_source_closure/{history_stamp}",
+    }
+    (latest / "latest_manifest.json").write_text(
+        json.dumps(manifest, indent=2), encoding="utf-8"
+    )
+    (latest / "data_readiness.json").write_text(
+        json.dumps(
+            {
+                "generated_utc": iso(generated + dt.timedelta(seconds=1)),
+                "lanes": readiness,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    (latest / "source_closure_report.md").write_text(
+        "# Fixture\n\nAustin audited HTTP 401; zero target sessions.\n",
+        encoding="utf-8",
+    )
+    (latest / "F1_OpenF1_Lightweight_Source_Closure_Summary.xlsx").write_bytes(
+        b"PK\x03\x04austin-http-401-zero-session"
+    )
+    for name in (guard.ZIP_NAME, guard.ZIP_SHA_NAME):
+        path = latest / name
+        if path.exists():
+            path.unlink()
+    zip_tree(latest)
+    for name in guard.TRACKED_FILES - {guard.ZIP_SHA_NAME}:
+        target = history / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(latest / name, target)
     zip_tree(history)
     return history
 
@@ -272,7 +478,15 @@ class PublicationGitTests(unittest.TestCase):
         self.fixture = GitFixture(self.temp.name)
         self.now = dt.datetime(2026, 10, 25, tzinfo=dt.timezone.utc)
 
-    def candidate(self, name: str, hour: int, stamp: str, marker: str) -> Path:
+    def candidate(
+        self,
+        name: str,
+        hour: int,
+        stamp: str,
+        marker: str,
+        *,
+        session_count: int = 1,
+    ) -> Path:
         repo = self.fixture.clone(name)
         write_snapshot(
             repo,
@@ -280,6 +494,7 @@ class PublicationGitTests(unittest.TestCase):
             history_stamp=stamp,
             marker=marker,
             previous=self.fixture.baseline,
+            session_count=session_count,
         )
         return repo
 
@@ -296,7 +511,14 @@ class PublicationGitTests(unittest.TestCase):
             **kwargs,
         )
 
-    def push_competing_snapshot(self, hour: int, stamp: str, marker: str) -> Path:
+    def push_competing_snapshot(
+        self,
+        hour: int,
+        stamp: str,
+        marker: str,
+        *,
+        session_count: int = 1,
+    ) -> Path:
         competing = self.fixture.clone(f"competing-{marker}")
         write_snapshot(
             competing,
@@ -304,11 +526,35 @@ class PublicationGitTests(unittest.TestCase):
             history_stamp=stamp,
             marker=marker,
             previous=self.fixture.baseline,
+            session_count=session_count,
         )
         git(competing, "add", ".")
         git(competing, "commit", "-m", f"competing {marker}")
         git(competing, "push", "origin", "main")
         return competing
+
+    def remote_head(self) -> str:
+        return git(
+            self.fixture.root,
+            "--git-dir",
+            str(self.fixture.remote),
+            "rev-parse",
+            "main",
+        ).stdout.strip()
+
+    def push_remote_mutation(self, repo: Path, message: str, *paths: Path) -> None:
+        git(repo, "add", *(path.relative_to(repo).as_posix() for path in paths))
+        git(repo, "commit", "-m", message)
+        git(repo, "push", "origin", "main")
+
+    def candidate_evidence(self, candidate: Path) -> tuple[bytes, bytes]:
+        latest = candidate.joinpath(*guard.LATEST_REL.parts)
+        manifest = json.loads((latest / "latest_manifest.json").read_text(encoding="utf-8"))
+        history = candidate / manifest["history_path"]
+        return (
+            (latest / guard.ZIP_NAME).read_bytes(),
+            (history / "latest_manifest.json").read_bytes(),
+        )
 
     def test_unrelated_remote_movement_is_retained(self):
         candidate = self.candidate("candidate", 12, "20261024_115000", "candidate")
@@ -341,12 +587,269 @@ class PublicationGitTests(unittest.TestCase):
         result = self.run_guard(candidate)
         self.assertEqual(result["status"], "PUBLISHED_HISTORY_ONLY", result)
         self.assertEqual(result["publication"]["latest_decision"], "PRESERVE_NEWER_REMOTE_LATEST")
+        self.assertTrue(result["remote"]["tracked_data_integrity_validated"])
+        self.assertFalse(result["remote"]["zip_integrity_validated"])
         latest = self.fixture.remote_text("latest/openf1_lightweight_source_closure/latest_manifest.json")
         self.assertIn("2026-10-24T12:00:00Z", latest)
         history = self.fixture.remote_text(
             "history/openf1_lightweight_source_closure/20261024_105000/latest_manifest.json"
         )
         self.assertIn("2026-10-24T11:00:00Z", history)
+
+    def test_newer_remote_with_invalid_source_hash_holds_without_push(self):
+        candidate = self.candidate("candidate", 11, "20261024_105000", "candidate")
+        evidence_before = self.candidate_evidence(candidate)
+        remote = self.push_competing_snapshot(12, "20261024_115000", "remote")
+        source_manifest = remote.joinpath(*guard.LATEST_REL.parts) / "combined_source_manifest.csv"
+        fields, rows = read_csv(source_manifest)
+        next(row for row in rows if row["lane"] == "weather")["sha256"] = "0" * 64
+        write_csv(source_manifest, fields, rows)
+        self.push_remote_mutation(remote, "invalidate remote source hash", source_manifest)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "remote_latest_invalid:source_manifest_sha_mismatch")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+        self.assertEqual(self.candidate_evidence(candidate), evidence_before)
+
+    def test_newer_remote_with_truncated_lane_holds_without_push(self):
+        candidate = self.candidate("candidate", 11, "20261024_105000", "candidate")
+        remote = self.push_competing_snapshot(12, "20261024_115000", "remote")
+        latest = remote.joinpath(*guard.LATEST_REL.parts)
+        weather = latest / "data/openf1_weather.csv"
+        fields, _rows = read_csv(weather)
+        write_csv(weather, fields, [])
+        source_manifest = latest / "combined_source_manifest.csv"
+        manifest_fields, manifest_rows = read_csv(source_manifest)
+        next(row for row in manifest_rows if row["lane"] == "weather")["sha256"] = hashlib.sha256(
+            weather.read_bytes()
+        ).hexdigest()
+        write_csv(source_manifest, manifest_fields, manifest_rows)
+        self.push_remote_mutation(remote, "truncate remote lane with matching hash", weather, source_manifest)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "remote_latest_invalid:lane_csv_row_count_mismatch")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+
+    def test_newer_remote_with_cross_session_lane_holds_without_push(self):
+        candidate = self.candidate("candidate", 11, "20261024_105000", "candidate")
+        remote = self.push_competing_snapshot(12, "20261024_115000", "remote")
+        latest = remote.joinpath(*guard.LATEST_REL.parts)
+        weather = latest / "data/openf1_weather.csv"
+        fields, rows = read_csv(weather)
+        rows[0]["session_key"] = "99999"
+        write_csv(weather, fields, rows)
+        source_manifest = latest / "combined_source_manifest.csv"
+        manifest_fields, manifest_rows = read_csv(source_manifest)
+        next(row for row in manifest_rows if row["lane"] == "weather")["sha256"] = hashlib.sha256(
+            weather.read_bytes()
+        ).hexdigest()
+        write_csv(source_manifest, manifest_fields, manifest_rows)
+        self.push_remote_mutation(remote, "cross-bind remote lane session", weather, source_manifest)
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "remote_latest_invalid:lane_session_identity_mismatch")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+
+    def test_newer_remote_with_missing_target_identity_holds_without_push(self):
+        candidate = self.candidate("candidate", 11, "20261024_105000", "candidate")
+        remote = self.push_competing_snapshot(12, "20261024_115000", "remote")
+        targets = remote.joinpath(*guard.LATEST_REL.parts) / "data/target_sessions.csv"
+        fields, rows = read_csv(targets)
+        rows[0]["session_name"] = ""
+        write_csv(targets, fields, rows)
+        self.push_remote_mutation(remote, "remove remote session identity", targets)
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "remote_latest_invalid:target_session_identity_missing")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+
+    def test_newer_candidate_cannot_remove_completed_session_coverage(self):
+        self.push_competing_snapshot(11, "20261024_105000", "remote-105", session_count=105)
+        candidate = self.candidate(
+            "candidate", 12, "20261024_115000", "candidate-104", session_count=104
+        )
+        evidence_before = self.candidate_evidence(candidate)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "candidate_completed_session_coverage_regression:11496")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+        self.assertEqual(self.candidate_evidence(candidate), evidence_before)
+        remote_manifest = json.loads(self.fixture.remote_text(
+            "latest/openf1_lightweight_source_closure/latest_manifest.json"
+        ))
+        self.assertEqual(remote_manifest["target_session_count"], 105)
+
+    def test_exact_austin_http401_blank_csv_snapshot_holds_before_publication(self):
+        remote_generated = dt.datetime(2026, 10, 25, 19, 13, 4, tzinfo=dt.timezone.utc)
+        remote = self.fixture.clone("remote-austin-105")
+        write_snapshot(
+            remote,
+            generated=remote_generated,
+            history_stamp="20261025_185347",
+            marker="austin-authoritative-105",
+            previous=self.fixture.baseline,
+            session_count=105,
+        )
+        git(remote, "add", ".")
+        git(remote, "commit", "-m", "authoritative Austin 105-session snapshot")
+        git(remote, "push", "origin", "main")
+
+        candidate = self.fixture.clone("candidate-austin-http401-exact")
+        write_zero_session_401_snapshot(
+            candidate,
+            generated=dt.datetime(2026, 10, 25, 21, 7, 29, 967737, tzinfo=dt.timezone.utc),
+            history_stamp="20261025_210729",
+            previous=remote_generated,
+            preserve_csv_headers=False,
+        )
+        self.now = dt.datetime(2026, 10, 25, 22, tzinfo=dt.timezone.utc)
+        evidence_before = self.candidate_evidence(candidate)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "target_sessions_identity_columns_missing")
+        self.assertIsNone(result["candidate"])
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+        self.assertEqual(self.candidate_evidence(candidate), evidence_before)
+        request_log = (candidate.joinpath(*guard.LATEST_REL.parts) / "request_log.csv").read_text()
+        self.assertIn("2026-10-25T21:07:29.706628Z", request_log)
+        self.assertIn("http_401", request_log)
+        remote_manifest = json.loads(self.fixture.remote_text(
+            "latest/openf1_lightweight_source_closure/latest_manifest.json"
+        ))
+        self.assertEqual(remote_manifest["target_session_count"], 105)
+
+    def test_structurally_complete_http401_zero_candidate_still_cannot_replace_105_sessions(self):
+        remote_generated = dt.datetime(2026, 10, 25, 19, 13, 4, tzinfo=dt.timezone.utc)
+        remote = self.fixture.clone("remote-austin-105")
+        write_snapshot(
+            remote,
+            generated=remote_generated,
+            history_stamp="20261025_185347",
+            marker="austin-authoritative-105",
+            previous=self.fixture.baseline,
+            session_count=105,
+        )
+        git(remote, "add", ".")
+        git(remote, "commit", "-m", "authoritative Austin 105-session snapshot")
+        git(remote, "push", "origin", "main")
+
+        candidate = self.fixture.clone("candidate-austin-http401-zero")
+        write_zero_session_401_snapshot(
+            candidate,
+            generated=dt.datetime(2026, 10, 25, 21, 7, 29, 967737, tzinfo=dt.timezone.utc),
+            history_stamp="20261025_210729",
+            previous=remote_generated,
+            preserve_csv_headers=True,
+        )
+        self.now = dt.datetime(2026, 10, 25, 22, tzinfo=dt.timezone.utc)
+        evidence_before = self.candidate_evidence(candidate)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "candidate_completed_session_coverage_regression:11392")
+        self.assertEqual(result["candidate"]["target_session_count"], 0)
+        self.assertEqual(result["remote"]["target_session_count"], 105)
+        self.assertIsNone(result["publication"]["latest_decision"])
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+        self.assertEqual(self.candidate_evidence(candidate), evidence_before)
+        request_log = (candidate.joinpath(*guard.LATEST_REL.parts) / "request_log.csv").read_text()
+        self.assertIn("sessions_by_year", request_log)
+        self.assertIn("http_401", request_log)
+        remote_manifest = json.loads(self.fixture.remote_text(
+            "latest/openf1_lightweight_source_closure/latest_manifest.json"
+        ))
+        self.assertEqual(remote_manifest["target_session_count"], 105)
+
+    def test_newer_candidate_cannot_change_existing_meeting_identity(self):
+        self.push_competing_snapshot(11, "20261024_105000", "remote")
+        candidate = self.candidate("candidate", 12, "20261024_115000", "candidate")
+        latest = candidate.joinpath(*guard.LATEST_REL.parts)
+        targets = latest / "data/target_sessions.csv"
+        target_fields, target_rows = read_csv(targets)
+        target_rows[0]["meeting_key"] = "7777"
+        write_csv(targets, target_fields, target_rows)
+        source_manifest = latest / "combined_source_manifest.csv"
+        manifest_fields, manifest_rows = read_csv(source_manifest)
+        for lane in guard.LANES:
+            lane_path = latest / f"data/openf1_{lane}.csv"
+            lane_fields, lane_rows = read_csv(lane_path)
+            lane_rows[0]["meeting_key"] = "7777"
+            write_csv(lane_path, lane_fields, lane_rows)
+            next(row for row in manifest_rows if row["lane"] == lane)["sha256"] = hashlib.sha256(
+                lane_path.read_bytes()
+            ).hexdigest()
+        write_csv(source_manifest, manifest_fields, manifest_rows)
+        refresh_history_from_latest(candidate)
+        remote_before = self.remote_head()
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "HOLD", result)
+        self.assertEqual(result["reason"], "candidate_existing_session_identity_changed:11392")
+        self.assertEqual(result["publication"]["push_attempts"], 0)
+        self.assertEqual(self.remote_head(), remote_before)
+
+    def test_newer_candidate_with_additional_completed_session_publishes(self):
+        self.push_competing_snapshot(11, "20261024_105000", "remote-104", session_count=104)
+        candidate = self.candidate(
+            "candidate", 12, "20261024_115000", "candidate-105", session_count=105
+        )
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "PUBLISHED_LATEST_AND_HISTORY", result)
+        self.assertEqual(result["publication"]["latest_decision"], "PUBLISH_CANDIDATE_LATEST")
+        self.assertEqual(result["publication"]["push_attempts"], 1)
+        remote_manifest = json.loads(self.fixture.remote_text(
+            "latest/openf1_lightweight_source_closure/latest_manifest.json"
+        ))
+        self.assertEqual(remote_manifest["target_session_count"], 105)
+
+    def test_newer_candidate_can_legitimately_reduce_lane_rows_without_losing_sessions(self):
+        remote = self.candidate("remote", 11, "20261024_105000", "remote")
+        latest = remote.joinpath(*guard.LATEST_REL.parts)
+        weather = latest / "data/openf1_weather.csv"
+        weather_fields, weather_rows = read_csv(weather)
+        second = dict(weather_rows[0])
+        second["fixture_value"] = "remote-correctable-second-row"
+        write_csv(weather, weather_fields, [*weather_rows, second])
+        source_manifest = latest / "combined_source_manifest.csv"
+        source_fields, source_rows = read_csv(source_manifest)
+        weather_source = next(row for row in source_rows if row["lane"] == "weather")
+        weather_source["rows"] = "2"
+        weather_source["sha256"] = hashlib.sha256(weather.read_bytes()).hexdigest()
+        write_csv(source_manifest, source_fields, source_rows)
+        manifest_path = latest / "latest_manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        next(row for row in manifest["lanes"] if row["lane"] == "weather")["rows"] = 2
+        manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        readiness_path = latest / "data_readiness.json"
+        readiness = json.loads(readiness_path.read_text(encoding="utf-8"))
+        next(row for row in readiness["lanes"] if row["lane"] == "weather")["rows"] = 2
+        readiness_path.write_text(json.dumps(readiness, indent=2), encoding="utf-8")
+        summary_path = latest / "source_readiness_summary.csv"
+        summary_fields, summary_rows = read_csv(summary_path)
+        next(row for row in summary_rows if row["lane"] == "weather")["rows"] = "2"
+        write_csv(summary_path, summary_fields, summary_rows)
+        refresh_history_from_latest(remote)
+        git(remote, "add", ".")
+        git(remote, "commit", "-m", "valid remote with two weather rows")
+        git(remote, "push", "origin", "main")
+        candidate = self.candidate("candidate", 12, "20261024_115000", "candidate")
+        result = self.run_guard(candidate)
+        self.assertEqual(result["status"], "PUBLISHED_LATEST_AND_HISTORY", result)
+        self.assertEqual(result["publication"]["push_attempts"], 1)
+        weather_after = self.fixture.remote_text(
+            "latest/openf1_lightweight_source_closure/data/openf1_weather.csv"
+        )
+        self.assertNotIn("remote-correctable-second-row", weather_after)
 
     def test_equal_clock_different_bytes_holds_without_push(self):
         candidate = self.candidate("candidate", 12, "20261024_115001", "candidate")
@@ -426,7 +929,7 @@ class PublicationGitTests(unittest.TestCase):
         git(other, "push", "origin", "main")
         result = self.run_guard(candidate)
         self.assertEqual(result["status"], "HOLD", result)
-        self.assertEqual(result["reason"], "remote_latest_file_set_invalid")
+        self.assertEqual(result["reason"], "remote_latest_invalid:remote_latest_file_set_invalid")
         self.assertEqual(result["publication"]["push_attempts"], 0)
         self.assertEqual(self.fixture.remote_text(extra.relative_to(other).as_posix()), "must not be deleted\n")
 
@@ -441,7 +944,7 @@ class PublicationGitTests(unittest.TestCase):
         git(other, "push", "origin", "main")
         result = self.run_guard(candidate)
         self.assertEqual(result["status"], "HOLD", result)
-        self.assertEqual(result["reason"], "remote_tree_mode_invalid")
+        self.assertEqual(result["reason"], "remote_latest_invalid:remote_tree_mode_invalid")
         self.assertEqual(result["publication"]["push_attempts"], 0)
 
 

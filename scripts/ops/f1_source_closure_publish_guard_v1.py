@@ -75,6 +75,19 @@ class PublicationHold(RuntimeError):
 
 
 @dataclass(frozen=True)
+class SessionIdentity:
+    meeting_key: str
+    session_name: str
+    session_type: str
+    date_start: str
+    date_end: str
+    circuit_short_name: str
+    country_name: str
+    location: str
+    year: str
+
+
+@dataclass(frozen=True)
 class Candidate:
     latest_root: Path
     history_root: Path
@@ -82,6 +95,15 @@ class Candidate:
     manifest: Mapping[str, Any]
     generated_utc: dt.datetime
     tree_sha256: str
+    sessions: Mapping[str, SessionIdentity]
+
+
+@dataclass(frozen=True)
+class RemoteLatest:
+    manifest: Mapping[str, Any]
+    generated_utc: dt.datetime
+    tracked_tree_sha256: str
+    sessions: Mapping[str, SessionIdentity]
 
 
 def _require(condition: bool, reason: str) -> None:
@@ -327,7 +349,7 @@ def _validate_target_sessions(
     manifest: Mapping[str, Any],
     generated: dt.datetime,
     completed_only: bool,
-) -> dict[str, str]:
+) -> dict[str, SessionIdentity]:
     fields, rows = _csv_rows(path, "target_sessions_csv_invalid")
     required = {
         "session_key", "meeting_key", "session_name", "session_type", "date_start",
@@ -336,7 +358,7 @@ def _validate_target_sessions(
     }
     _require(required.issubset(fields), "target_sessions_identity_columns_missing")
     _require(len(rows) == manifest["target_session_count"], "target_session_count_mismatch")
-    sessions: dict[str, str] = {}
+    sessions: dict[str, SessionIdentity] = {}
     for row in rows:
         session = row["session_key"]
         meeting = row["meeting_key"]
@@ -353,7 +375,17 @@ def _validate_target_sessions(
         if completed_only:
             _require(row["_completed_session"] == "True", "target_session_not_completed")
             _require(end <= generated, "completed_target_session_after_generation")
-        sessions[session] = meeting
+        sessions[session] = SessionIdentity(
+            meeting_key=meeting,
+            session_name=row["session_name"],
+            session_type=row["session_type"],
+            date_start=_utc_text(start),
+            date_end=_utc_text(end),
+            circuit_short_name=row["circuit_short_name"],
+            country_name=row["country_name"],
+            location=row["location"],
+            year=row["year"],
+        )
     return sessions
 
 
@@ -362,7 +394,7 @@ def _validate_lane_files(
     *,
     manifest: Mapping[str, Any],
     lanes: Mapping[str, Mapping[str, Any]],
-    sessions: Mapping[str, str],
+    sessions: Mapping[str, SessionIdentity],
     generated: dt.datetime,
 ) -> None:
     fields, source_rows = _csv_rows(root / "combined_source_manifest.csv", "source_manifest_csv_invalid")
@@ -397,7 +429,7 @@ def _validate_lane_files(
         for row in lane_rows:
             _require(
                 row["session_key"] in sessions
-                and sessions[row["session_key"]] == row["meeting_key"],
+                and sessions[row["session_key"]].meeting_key == row["meeting_key"],
                 "lane_session_identity_mismatch",
             )
             observed = _parse_utc(row["source_closure_retrieved_utc"], "lane_source_clock_invalid")
@@ -481,6 +513,7 @@ def _snapshot_candidate(candidate: Candidate, destination: Path) -> Candidate:
         manifest=candidate.manifest,
         generated_utc=candidate.generated_utc,
         tree_sha256=candidate.tree_sha256,
+        sessions=candidate.sessions,
     )
 
 
@@ -540,6 +573,7 @@ def validate_candidate(
         manifest=manifest,
         generated_utc=generated,
         tree_sha256=_tree_digest(latest, EXPECTED_FILES),
+        sessions=sessions,
     )
 
 
@@ -661,33 +695,81 @@ def _git_blob(root: Path, revision: str, path: PurePosixPath) -> bytes:
     return result.stdout
 
 
-def _remote_manifest(
+def _remote_latest(
     root: Path,
     revision: str,
     *,
     expected_season: int,
     expected_completed_only: bool,
     now: dt.datetime,
-) -> tuple[Mapping[str, Any] | None, dt.datetime | None]:
+) -> RemoteLatest | None:
     path = LATEST_REL / "latest_manifest.json"
     probe = _git(root, "cat-file", "-e", f"{revision}:{path.as_posix()}", check=False)
     if probe.returncode:
         names = _git_tree_names(root, revision, LATEST_REL)
         _require(not names, "remote_latest_manifest_missing_from_nonempty_tree")
-        return None, None
-    _require(
-        _git_tree_names(root, revision, LATEST_REL) == TRACKED_FILES,
-        "remote_latest_file_set_invalid",
-    )
-    manifest = _strict_json_bytes(_git_blob(root, revision, path), "remote_manifest_invalid")
-    generated, _history, _lanes = _validate_manifest(
-        manifest,
-        expected_season=expected_season,
-        expected_completed_only=expected_completed_only,
-        now=now,
-        candidate=False,
-    )
-    return manifest, generated
+        return None
+    try:
+        _require(
+            _git_tree_names(root, revision, LATEST_REL) == TRACKED_FILES,
+            "remote_latest_file_set_invalid",
+        )
+        with tempfile.TemporaryDirectory(prefix="f1-source-closure-remote-") as directory:
+            remote_root = Path(directory)
+            for name in TRACKED_FILES:
+                target = remote_root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(_git_blob(root, revision, LATEST_REL / name))
+
+            manifest = _read_json(
+                remote_root / "latest_manifest.json",
+                "remote_manifest_invalid",
+            )
+            generated, _history, lanes = _validate_manifest(
+                manifest,
+                expected_season=expected_season,
+                expected_completed_only=expected_completed_only,
+                now=now,
+                candidate=False,
+            )
+            sessions = _validate_target_sessions(
+                remote_root / "data/target_sessions.csv",
+                manifest=manifest,
+                generated=generated,
+                completed_only=expected_completed_only,
+            )
+            _validate_lane_files(
+                remote_root,
+                manifest=manifest,
+                lanes=lanes,
+                sessions=sessions,
+                generated=generated,
+            )
+            return RemoteLatest(
+                manifest=manifest,
+                generated_utc=generated,
+                tracked_tree_sha256=_tree_digest(remote_root, TRACKED_FILES),
+                sessions=sessions,
+            )
+    except PublicationHold as exc:
+        raise PublicationHold(f"remote_latest_invalid:{exc}") from exc
+    except (OSError, UnicodeDecodeError) as exc:
+        raise PublicationHold("remote_latest_invalid:materialization_failed") from exc
+
+
+def _validate_completed_session_coverage(
+    remote_sessions: Mapping[str, SessionIdentity],
+    candidate_sessions: Mapping[str, SessionIdentity],
+) -> None:
+    for session_key, remote_identity in remote_sessions.items():
+        _require(
+            session_key in candidate_sessions,
+            f"candidate_completed_session_coverage_regression:{session_key}",
+        )
+        _require(
+            candidate_sessions[session_key] == remote_identity,
+            f"candidate_existing_session_identity_changed:{session_key}",
+        )
 
 
 def _tree_matches_candidate(
@@ -782,6 +864,7 @@ def run_guard(
             "tree_sha256": candidate.tree_sha256,
             "season": expected_season,
             "completed_only": expected_completed_only,
+            "target_session_count": len(candidate.sessions),
             "source_artifact_or_custody_success_claimed": False,
         }
         _validate_candidate_only_dirt(root, candidate)
@@ -803,7 +886,7 @@ def run_guard(
         _require(fetch.returncode == 0, "remote_fetch_failed")
         remote_sha = _git(root, "rev-parse", "--verify", remote_ref).stdout.strip()
         _require(SHA_PATTERN.fullmatch(remote_sha or "") is not None, "remote_head_invalid")
-        _remote_manifest_value, remote_generated = _remote_manifest(
+        remote_latest = _remote_latest(
             root,
             remote_sha,
             expected_season=expected_season,
@@ -812,18 +895,33 @@ def run_guard(
         )
         audit["remote"] = {
             "head_sha": remote_sha,
-            "latest_generated_utc": _utc_text(remote_generated) if remote_generated else None,
+            "latest_generated_utc": (
+                _utc_text(remote_latest.generated_utc) if remote_latest else None
+            ),
             "latest_history_path": (
-                _remote_manifest_value.get("history_path")
-                if _remote_manifest_value is not None
+                remote_latest.manifest.get("history_path")
+                if remote_latest is not None
                 else None
             ),
+            "target_session_count": (
+                len(remote_latest.sessions) if remote_latest is not None else None
+            ),
+            "tracked_tree_sha256": (
+                remote_latest.tracked_tree_sha256 if remote_latest is not None else None
+            ),
+            "tracked_data_integrity_validated": remote_latest is not None,
+            "zip_integrity_validated": False,
         }
 
-        if remote_generated is None or candidate.generated_utc > remote_generated:
+        if remote_latest is None or candidate.generated_utc > remote_latest.generated_utc:
+            if remote_latest is not None:
+                _validate_completed_session_coverage(
+                    remote_latest.sessions,
+                    candidate.sessions,
+                )
             latest_decision = "PUBLISH_CANDIDATE_LATEST"
             publish_latest = True
-        elif candidate.generated_utc < remote_generated:
+        elif candidate.generated_utc < remote_latest.generated_utc:
             latest_decision = "PRESERVE_NEWER_REMOTE_LATEST"
             publish_latest = False
         else:
