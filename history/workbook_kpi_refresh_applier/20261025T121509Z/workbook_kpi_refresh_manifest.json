@@ -1,0 +1,56 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-10-25T12:15:09.164029+00:00",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "outputs": [
+    {
+      "bytes": 767,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "3263dcfdf66fad5b1ecb7009c51904229d124c9febafd30c3c83d4e784ff8a65"
+    },
+    {
+      "bytes": 413,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "f979f88db36c1d00f55ad7b5b5b7092ebf84b273b8fb3381bc2d5d90f403f35f"
+    },
+    {
+      "bytes": 10342,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261025T121509Z.xlsx",
+      "sha256": "9e461ebec3fa65768ddaa82b61df82768cc54a7895452fc885a3acb61030e39d"
+    },
+    {
+      "bytes": 567,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "0f072a733434f5a0d45400338a159dae44f5b2679dc0704144788c616d4bae41"
+    },
+    {
+      "bytes": 1561,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/upstream_data_readiness_snapshot.json",
+      "sha256": "611033e2228eb3d72de6ecf8b1ba3a8d0702bed42d2c153877663adbe284b7bd"
+    },
+    {
+      "bytes": 696,
+      "path": "history/workbook_kpi_refresh_applier/20261025T121509Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "0116982f97824028322f066e45d9faffc3077d518feac39ab12ac245e02533bf"
+    }
+  ],
+  "run_id": "20261025T121509Z",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_processor_root": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ]
+}
