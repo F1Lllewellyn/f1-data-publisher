@@ -1,0 +1,86 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-10-25T12:03:40.291390Z",
+  "event_id": "2026_1297_united_states_austin_austin",
+  "overall_status": "clean",
+  "race_name": "United States - Austin - Austin",
+  "sandbox_workbook_created": false,
+  "schema_version": "workbook_kpi_readiness_v1_session_processor",
+  "session": {
+    "date_end": "2026-10-24T22:00:00+00:00",
+    "date_start": "2026-10-24T21:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1297,
+    "session_key": 11392,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "sources": {
+    "openf1_drivers": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "driver_count": 22,
+      "max_lap_number": 20.0,
+      "rows": 280,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "driver_count": 22,
+      "max_lap_number": 18.0,
+      "rows": 90,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 966,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "driver_count": 3,
+      "max_lap_number": null,
+      "rows": 39,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "driver_count": 22,
+      "max_lap_number": null,
+      "rows": 90,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "driver_count": 0,
+      "max_lap_number": null,
+      "rows": 77,
+      "status": "clean"
+    }
+  }
+}
