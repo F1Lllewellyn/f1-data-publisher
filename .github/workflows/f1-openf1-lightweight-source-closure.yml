@@ -125,17 +125,17 @@ jobs:
       - name: Commit source closure outputs
         if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add latest/openf1_lightweight_source_closure history/openf1_lightweight_source_closure || true
-          if git diff --cached --quiet; then
-            echo "No source-closure changes to commit."
-          else
-            git commit -m "Update OpenF1 lightweight source closure artifacts"
-            bash scripts/ops/safe_git_push_rebase_retry.sh
-
-
-          fi
+          python scripts/ops/f1_source_closure_publish_guard_v1.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --remote origin \
+            --branch "$GITHUB_REF_NAME" \
+            --expected-season "${{ github.event.inputs.season || '2026' }}" \
+            --expected-completed-only "${{ github.event.inputs.completed_only || 'true' }}" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --artifact-uploaded-for-run "$GITHUB_RUN_ID"
 # K4R28 manual-shadow custody follow-on job; original workflow above is unchanged.
   openf1-manual-shadow-custody-attestation:
     needs: openf1-lightweight-source-closure
