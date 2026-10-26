@@ -1,5 +1,6 @@
 import hashlib
 import importlib.util
+import io
 import json
 from pathlib import Path
 import sys
@@ -39,6 +40,33 @@ orchestrator_spec.loader.exec_module(orchestrator)
 
 
 FIXED_NOW = m.dt.datetime(2026, 10, 26, 12, 0, 0, tzinfo=m.dt.UTC)
+HISTORICAL_AUSTIN_REQUEST_LOG = Path(
+    "history/openf1_lightweight_source_closure/20261026_013754/request_log.csv"
+)
+HISTORICAL_AUSTIN_REQUEST_LOG_GIT_BLOB = (
+    "310fd9ba531e1985b0a1f6ff282072f1bc14d1f3"
+)
+HISTORICAL_AUSTIN_REQUEST_LOG_SHA256 = (
+    "bb7608335b3bb3e430aff902d9238c429aba94c2f8bb25c25dfa540b84d98158"
+)
+
+
+def load_verified_historical_austin_request_log(root=ROOT):
+    path = root / HISTORICAL_AUSTIN_REQUEST_LOG
+    payload = path.read_bytes()
+    sha256 = hashlib.sha256(payload).hexdigest()
+    git_blob = hashlib.sha1(
+        b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
+    ).hexdigest()
+    if sha256 != HISTORICAL_AUSTIN_REQUEST_LOG_SHA256:
+        raise AssertionError(
+            f"historical Austin request-log SHA-256 mismatch: {sha256}"
+        )
+    if git_blob != HISTORICAL_AUSTIN_REQUEST_LOG_GIT_BLOB:
+        raise AssertionError(
+            f"historical Austin request-log Git blob mismatch: {git_blob}"
+        )
+    return pd.read_csv(io.BytesIO(payload))
 
 
 class Response:
@@ -592,9 +620,7 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
         )
 
     def test_saved_106_session_rate_limit_shape_cannot_aggregate_pass(self):
-        saved = pd.read_csv(
-            ROOT / "latest/openf1_lightweight_source_closure/request_log.csv"
-        )
+        saved = load_verified_historical_austin_request_log()
         self.assertEqual(len(saved), 2612)
         self.assertEqual(int((saved["status"] == "http_429").sum()), 1869)
         self.assertEqual(int((saved["status"] == "http_404").sum()), 201)
@@ -609,6 +635,38 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
             m.classify_lane("weather", 7029, 106, 106, rows),
             ("fail", "session_coverage_incomplete:1"),
         )
+
+        historical_payload = (
+            ROOT / HISTORICAL_AUSTIN_REQUEST_LOG
+        ).read_bytes()
+        with tempfile.TemporaryDirectory() as td:
+            simulated_root = Path(td)
+            historical = simulated_root / HISTORICAL_AUSTIN_REQUEST_LOG
+            historical.parent.mkdir(parents=True)
+            historical.write_bytes(historical_payload)
+            future_latest = (
+                simulated_root
+                / "latest/openf1_lightweight_source_closure/request_log.csv"
+            )
+            future_latest.parent.mkdir(parents=True)
+            future_latest.write_text(
+                "status,params_json\nhttp_200,{future:true}\n"
+            )
+
+            simulated = load_verified_historical_austin_request_log(
+                simulated_root
+            )
+            self.assertEqual(len(simulated), 2612)
+            self.assertEqual(
+                int((simulated["status"] == "http_429").sum()), 1869
+            )
+
+            historical.write_bytes(historical_payload + b"\ncorrupted")
+            with self.assertRaisesRegex(
+                AssertionError,
+                "historical Austin request-log SHA-256 mismatch",
+            ):
+                load_verified_historical_austin_request_log(simulated_root)
 
     def test_scheduled_and_orchestrator_callers_block_nonzero_collector(self):
         workflow = (
