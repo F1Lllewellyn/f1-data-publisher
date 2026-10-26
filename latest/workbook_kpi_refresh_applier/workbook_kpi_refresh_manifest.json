@@ -1,6 +1,6 @@
 {
   "commit_allowed": true,
-  "created_utc": "2026-10-26T20:08:53.359587+00:00",
+  "created_utc": "2026-10-26T21:42:45.741763+00:00",
   "governance": {
     "canonical_workbook_overwrite": false,
     "delete_authority": false,
@@ -12,43 +12,43 @@
   "outputs": [
     {
       "bytes": 767,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "057887485ab10c4b4e321e2a24bd83bab885fbe0b2371fb0bd05203134bf76ff"
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "3263dcfdf66fad5b1ecb7009c51904229d124c9febafd30c3c83d4e784ff8a65"
     },
     {
-      "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/refreshed_workbook_kpi_readiness.csv",
-      "sha256": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b"
+      "bytes": 413,
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "f979f88db36c1d00f55ad7b5b5b7092ebf84b273b8fb3381bc2d5d90f403f35f"
     },
     {
-      "bytes": 10325,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261026T200853Z.xlsx",
-      "sha256": "649d9a87cb8de0dc92e580a45e64c03acc3b371b0dbf66f2dc7a8e4435340b19"
+      "bytes": 10342,
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/F1_Workbook_KPI_SANDBOX_Refresh_Bahrain_-_Kuala_Lumpur_-_Kuala_Lumpur_session_20261026T214245Z.xlsx",
+      "sha256": "9c6022b40e9efb88f117801d231e35527bf8230610d5d586b1eb0a9a48514f6a"
     },
     {
       "bytes": 569,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/upstream_latest_manifest_snapshot.json",
       "sha256": "bedbdec2f345d8495f9440cecbed824e6aba496aecc769783ae5660cd449856a"
     },
     {
       "bytes": 1568,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/upstream_data_readiness_snapshot.json",
       "sha256": "be615594c02be8711f892f5f73199e050f817cf6fb4ee640cd93164c6fbfa5f9"
     },
     {
       "bytes": 707,
-      "path": "history/workbook_kpi_refresh_applier/20261026T200853Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261026T214245Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "a2e16c0e9c7cd42c5871a69c7f6942355e91878bbaf48c1f72891da4f3af9cae"
     }
   ],
-  "run_id": "20261026T200853Z",
+  "run_id": "20261026T214245Z",
   "source_artifacts": [
-    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/sandbox_workbook_update_plan.json",
-    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json",
-    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.csv",
-    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/forecast_bundle_ledger_snapshot.json"
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/forecast_bundle_ledger_snapshot.json"
   ],
-  "source_processor_root": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396",
+  "source_processor_root": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731",
   "source_status": "needs_manual_review",
   "warnings": [
     "source_classification=needs_manual_review"
