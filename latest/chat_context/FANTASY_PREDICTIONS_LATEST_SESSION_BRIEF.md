@@ -1,9 +1,9 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-25T22:28:20Z
+Generated UTC: 2026-10-26T00:39:52Z
 Event: United States - Austin - Austin
-Session: Qualifying
-Source status: clean
+Session: Race
+Source status: needs_manual_review
 Dashboard readiness: NOT READY
 Diagnostic publishing allowed: true
 
