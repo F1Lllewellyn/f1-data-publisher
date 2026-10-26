@@ -1,0 +1,50 @@
+{
+  "anomalies": [
+    "fia_final_grid_unverified"
+  ],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2095,
+    "ok": true,
+    "sha256": "0f943ff3befc8713346c4ef1891f459158748c5dbf8149d9404701c8a92452f4",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/raw/openf1_starting_grid.json",
+  "json_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "provenance": {
+    "changed_since_prior_target_snapshot": false,
+    "changed_since_qualifying_snapshot": false,
+    "direct_target_fetch": {
+      "bytes": 0,
+      "error": "<HTTPError 404: 'Not Found'>",
+      "ok": false
+    },
+    "forecast_as_of_eligible": false,
+    "meeting_key": 1297,
+    "observed_at_utc": "2026-10-26T06:59:33.322844Z",
+    "observed_before_target_start": false,
+    "official_final_grid_verified": false,
+    "openf1_row_status": "clean",
+    "prior_qualifying_snapshot_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
+    "prior_target_snapshot_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
+    "resolution": "unique_same_meeting_qualifying_before_target",
+    "source_session_key": 11392,
+    "source_session_name": "Qualifying",
+    "target_session_key": 11396
+  },
+  "rows": 22,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}

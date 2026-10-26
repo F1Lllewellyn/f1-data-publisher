@@ -1,0 +1,56 @@
+{
+  "commit_allowed": true,
+  "created_utc": "2026-10-26T06:59:33.611126+00:00",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "outputs": [
+    {
+      "bytes": 767,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "d757d31e0fae9cee52a6cf259a5fdb1abcc84c8316a69d5f7d399e654b2dcd33"
+    },
+    {
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b"
+    },
+    {
+      "bytes": 10334,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261026T065933Z.xlsx",
+      "sha256": "7c5e194e190e54d870efbefec5b554267945d9033cb0f947413fb559e808782b"
+    },
+    {
+      "bytes": 569,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "beee248f435517184862efdfdae9bae48a0a1b410d8281a75ebef44f822f17db"
+    },
+    {
+      "bytes": 1568,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/upstream_data_readiness_snapshot.json",
+      "sha256": "1a4c301904b17e5abd373d5af9352c9297999a2681501e15463bf52787fbba29"
+    },
+    {
+      "bytes": 707,
+      "path": "history/workbook_kpi_refresh_applier/20261026T065933Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "4de988073d20e824b9b47a99c0abb16d9edf495628a7e1c0b02e5509692de1bc"
+    }
+  ],
+  "run_id": "20261026T065933Z",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_processor_root": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "source_classification=needs_manual_review"
+  ]
+}
