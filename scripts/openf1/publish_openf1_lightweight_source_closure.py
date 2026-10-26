@@ -54,6 +54,14 @@ RACE_LIKE_HINTS = ("race", "sprint")
 TEAM_RADIO_IS_OPPORTUNISTIC = True
 REQUEST_TIMEOUT = 30
 SLEEP_SECONDS = 0.10
+MATERIAL_REQUEST_STATUSES = {
+    "exception",
+    "invalid_http_status",
+    "invalid_json",
+    "invalid_response_schema",
+    "invalid_sessions_schema",
+}
+ROW_REQUIRED_LANES = {"weather", "position", "drivers"}
 
 SHADOW_SCHEMA_VERSION = "dr002-pre2b7k4r2-openf1-source-closure-shadow-v1"
 SHADOW_RUNTIME_DIR = "dr002_pre2b7k4r2_openf1_historical_rest_shadow"
@@ -71,6 +79,23 @@ STARTING_GRID_SHADOW_SCHEMA_VERSION = (
 
 class ProvenanceShadowHold(RuntimeError):
     """Fail-closed K4R2 shadow result."""
+
+
+def _http_status_from_request_status(status: Any) -> Optional[int]:
+    match = re.fullmatch(r"http_([1-5][0-9]{2})", str(status or ""))
+    return int(match.group(1)) if match else None
+
+
+def _material_request_failure(status: Any) -> bool:
+    text = str(status or "")
+    code = _http_status_from_request_status(text)
+    return text in MATERIAL_REQUEST_STATUSES or (
+        code is not None and code != 404
+    )
+
+
+def _request_statuses(entries: List[Dict[str, Any]]) -> List[str]:
+    return [str(entry.get("status") or "unknown") for entry in entries]
 
 
 def utc_now() -> dt.datetime:
@@ -1183,13 +1208,23 @@ def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str
     rows = 0
     try:
         r = requests.get(url, params=clean_params, timeout=REQUEST_TIMEOUT)
-        status_code = r.status_code
+        status_code = getattr(r, "status_code", None)
+        if type(status_code) is not int or not 100 <= status_code <= 599:
+            status = "invalid_http_status"
+            error = repr(status_code)
+            return pd.DataFrame()
         if status_code == 200:
-            data = r.json()
-            if isinstance(data, list):
-                df = pd.DataFrame(data)
-            else:
-                df = pd.DataFrame([data]) if data else pd.DataFrame()
+            try:
+                data = r.json()
+            except Exception as exc:  # noqa: BLE001 - preserve response failure as evidence
+                status = "invalid_json"
+                error = repr(exc)
+                return pd.DataFrame()
+            if type(data) is not list or any(type(row) is not dict for row in data):
+                status = "invalid_response_schema"
+                error = f"expected_list_of_objects:{type(data).__name__}"
+                return pd.DataFrame()
+            df = pd.DataFrame(data)
             rows = len(df)
             status = "pass" if rows > 0 else "zero_rows"
             return df
@@ -1269,25 +1304,82 @@ def write_df(df: pd.DataFrame, path: Path) -> None:
     df.to_csv(path, index=False)
 
 
+def _invalidate_last_request(
+    request_log: List[Dict[str, Any]], status: str, error: str,
+) -> None:
+    if request_log:
+        request_log[-1]["status"] = status
+        request_log[-1]["error"] = error
+        request_log[-1]["rows"] = 0
+
+
 def get_sessions(season: int, completed_only: bool, request_log: List[Dict[str, Any]]) -> pd.DataFrame:
     sessions = openf1_get("sessions", {"year": season}, request_log, "sessions_by_year")
     if sessions.empty:
         return sessions
+    required = {
+        "session_key", "meeting_key", "year", "country_name", "location",
+        "circuit_short_name", "session_name", "session_type", "date_start",
+        "date_end",
+    }
+    missing = sorted(required - set(sessions.columns))
+    if missing:
+        _invalidate_last_request(
+            request_log,
+            "invalid_sessions_schema",
+            "missing_columns:" + ",".join(missing),
+        )
+        return pd.DataFrame()
+    keys = pd.to_numeric(sessions["session_key"], errors="coerce")
+    meetings = pd.to_numeric(sessions["meeting_key"], errors="coerce")
+    invalid_identity = (
+        keys.isna().any()
+        or meetings.isna().any()
+        or (keys <= 0).any()
+        or (meetings <= 0).any()
+        or keys.astype("Int64").duplicated().any()
+    )
+    text_fields = (
+        "country_name", "location", "circuit_short_name", "session_name",
+        "session_type", "date_start", "date_end",
+    )
+    invalid_identity = invalid_identity or any(
+        sessions[field].isna().any()
+        or (sessions[field].astype(str).str.strip() == "").any()
+        for field in text_fields
+    )
+    if invalid_identity:
+        _invalidate_last_request(
+            request_log,
+            "invalid_sessions_schema",
+            "invalid_or_duplicate_session_identity",
+        )
+        return pd.DataFrame()
     sessions["_completed_session"] = sessions.apply(is_completed_session, axis=1)
     if completed_only:
         sessions = sessions[sessions["_completed_session"]].copy()
     return sessions.sort_values([c for c in ["date_start", "meeting_key", "session_key"] if c in sessions.columns])
 
 
-def collect_observed_driver_numbers(outputs_by_lane: Dict[str, List[pd.DataFrame]]) -> List[int]:
+def collect_observed_driver_numbers(
+    outputs_by_lane: Dict[str, List[pd.DataFrame]],
+    session_key: Any = None,
+) -> List[int]:
     nums: set[int] = set()
     for lane, frames in outputs_by_lane.items():
         for df in frames:
             if df is None or df.empty:
                 continue
+            scoped = df
+            if session_key is not None:
+                if "session_key" not in df.columns:
+                    continue
+                scoped = df[df["session_key"].astype(str) == str(session_key)]
             for col in ["driver_number", "driverNumber"]:
-                if col in df.columns:
-                    vals = pd.to_numeric(df[col], errors="coerce").dropna().astype(int).tolist()
+                if col in scoped.columns:
+                    vals = pd.to_numeric(
+                        scoped[col], errors="coerce"
+                    ).dropna().astype(int).tolist()
                     nums.update(vals)
     return sorted(nums)
 
@@ -1323,7 +1415,7 @@ def retrieve_lane_for_session(lane: str, sess: pd.Series, request_log: List[Dict
         if not df.empty:
             return df
         # Fallback: use already observed driver numbers from successful lanes.
-        nums = collect_observed_driver_numbers(outputs_by_lane)
+        nums = collect_observed_driver_numbers(outputs_by_lane, session_key)
         frames = []
         for n in nums:
             part = openf1_get("drivers", {"session_key": session_key, "driver_number": n}, request_log, "drivers_by_observed_driver_number")
@@ -1337,7 +1429,145 @@ def retrieve_lane_for_session(lane: str, sess: pd.Series, request_log: List[Dict
     return openf1_get(lane, {"session_key": session_key}, request_log, f"{lane}_by_session_key")
 
 
-def classify_lane(lane: str, rows: int, attempted_sessions: int, applicable_sessions: int) -> Tuple[str, str]:
+def _frame_matches_session(df: pd.DataFrame, sess: pd.Series) -> bool:
+    if df.empty or "session_key" not in df.columns:
+        return False
+    expected_session = str(sess.get("session_key"))
+    if set(df["session_key"].dropna().astype(str)) != {expected_session}:
+        return False
+    if "meeting_key" in df.columns:
+        expected_meeting = str(sess.get("meeting_key"))
+        if set(df["meeting_key"].dropna().astype(str)) != {expected_meeting}:
+            return False
+    return True
+
+
+def _fallback_proves_coverage(
+    lane: str,
+    df: pd.DataFrame,
+    sess: pd.Series,
+    request_entries: List[Dict[str, Any]],
+) -> bool:
+    if not _frame_matches_session(df, sess):
+        return False
+    if lane == "position":
+        fallback = [
+            entry for entry in request_entries
+            if entry.get("strategy") == "position_by_meeting_key_fallback"
+        ]
+        return len(fallback) == 1 and fallback[0].get("status") == "pass"
+    if lane == "drivers":
+        fallback = [
+            entry for entry in request_entries
+            if entry.get("strategy") == "drivers_by_observed_driver_number"
+        ]
+        if not fallback or any(entry.get("status") != "pass" for entry in fallback):
+            return False
+        expected: set[int] = set()
+        for entry in fallback:
+            try:
+                params = json.loads(str(entry.get("params_json") or "{}"))
+                expected.add(int(params["driver_number"]))
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                return False
+        if "driver_number" not in df.columns:
+            return False
+        observed = set(
+            pd.to_numeric(df["driver_number"], errors="coerce")
+            .dropna().astype(int).tolist()
+        )
+        return bool(expected) and observed == expected
+    return False
+
+
+def _lane_requires_rows(lane: str, sess: pd.Series) -> bool:
+    if lane in ROW_REQUIRED_LANES:
+        return True
+    if lane in {"pit", "starting_grid", "stints"}:
+        return is_race_like_session(sess)
+    return False
+
+
+def assess_session_lane(
+    lane: str,
+    sess: pd.Series,
+    df: pd.DataFrame,
+    request_entries: List[Dict[str, Any]],
+    applicable: bool,
+) -> Tuple[str, str, bool]:
+    """Return a per-session verdict without inferring completeness from lane totals."""
+    statuses = _request_statuses(request_entries)
+    if not applicable:
+        return "skipped_not_applicable", "endpoint_not_applicable", False
+
+    identity_complete = _frame_matches_session(df, sess) if not df.empty else False
+    fallback_recovered = _fallback_proves_coverage(
+        lane, df, sess, request_entries
+    )
+    unresolved_material = any(
+        _material_request_failure(status) for status in statuses
+    ) and not fallback_recovered
+
+    if lane == "team_radio":
+        if unresolved_material:
+            return (
+                "pass_with_warnings",
+                "opportunistic_provider_failure:" + ",".join(statuses),
+                fallback_recovered,
+            )
+        if df.empty:
+            return (
+                "pass_with_warnings",
+                "opportunistic_source_limited_zero_rows",
+                fallback_recovered,
+            )
+        if not identity_complete:
+            return "pass_with_warnings", "opportunistic_identity_unproven", False
+        return "pass", "evidence_bearing", fallback_recovered
+
+    if unresolved_material:
+        return (
+            "fail",
+            "unresolved_provider_failure:" + ",".join(statuses),
+            fallback_recovered,
+        )
+    if not df.empty and not identity_complete:
+        return "fail", "session_identity_unproven", fallback_recovered
+    if fallback_recovered:
+        return "pass", "endpoint_fallback_recovered_complete", True
+    if df.empty and _lane_requires_rows(lane, sess):
+        if "http_404" in statuses:
+            return "fail", "required_session_http_404", False
+        return "fail", "required_session_zero_rows", False
+    if df.empty:
+        return (
+            "pass_with_warnings",
+            "endpoint_semantic_absence_or_zero_rows",
+            False,
+        )
+    return "pass", "evidence_bearing", False
+
+
+def classify_lane(
+    lane: str,
+    rows: int,
+    attempted_sessions: int,
+    applicable_sessions: int,
+    session_rows: Optional[List[Dict[str, Any]]] = None,
+) -> Tuple[str, str]:
+    if session_rows is not None:
+        failures = [row for row in session_rows if row.get("status") == "fail"]
+        warnings = [
+            row for row in session_rows
+            if row.get("status") == "pass_with_warnings"
+        ]
+        if failures:
+            return "fail", f"session_coverage_incomplete:{len(failures)}"
+        if warnings:
+            return (
+                "pass_with_warnings",
+                f"session_coverage_warnings:{len(warnings)}",
+            )
     if rows > 0:
         return "pass", "evidence_bearing"
     if lane == "team_radio":
@@ -1427,8 +1657,46 @@ def main() -> int:
 
     request_log: List[Dict[str, Any]] = []
     previous_manifest = read_existing_latest(latest_root)
+    previous_target_keys: set[str] = set()
+    previous_target_path = data_latest / "target_sessions.csv"
+    if previous_target_path.exists():
+        try:
+            previous_targets = pd.read_csv(previous_target_path)
+            if "session_key" in previous_targets.columns:
+                previous_target_keys = set(
+                    previous_targets["session_key"].dropna().astype(str)
+                )
+        except Exception:
+            previous_target_keys = set()
 
     sessions = get_sessions(season, completed_only, request_log)
+    discovery_status = (
+        str(request_log[0].get("status") or "unknown")
+        if request_log else "not_observed"
+    )
+    source_quality_reasons: List[str] = []
+    if discovery_status not in {"pass", "zero_rows", "not_observed"}:
+        source_quality_reasons.append(
+            "session_discovery_unavailable:" + discovery_status
+        )
+    current_target_keys = (
+        set(sessions["session_key"].dropna().astype(str))
+        if "session_key" in sessions.columns else set()
+    )
+    missing_previous = sorted(previous_target_keys - current_target_keys)
+    if missing_previous:
+        source_quality_reasons.append(
+            "completed_session_coverage_regression:"
+            + ",".join(missing_previous[:20])
+        )
+    try:
+        previous_count = int(previous_manifest.get("target_session_count") or 0)
+    except (TypeError, ValueError):
+        previous_count = 0
+    if previous_count > 0 and len(sessions) < previous_count:
+        source_quality_reasons.append(
+            f"completed_session_count_regression:{previous_count}->{len(sessions)}"
+        )
     write_df(sessions, data_latest / "target_sessions.csv")
     write_df(sessions, data_history / "target_sessions.csv")
 
@@ -1438,7 +1706,12 @@ def main() -> int:
     for _, sess in sessions.iterrows():
         for lane in LANES:
             applicable = not (lane == "pit" and not is_race_like_session(sess))
+            request_start = len(request_log)
             df = retrieve_lane_for_session(lane, sess, request_log, outputs_by_lane)
+            request_entries = request_log[request_start:]
+            session_result, session_reason, fallback_recovered = assess_session_lane(
+                lane, sess, df, request_entries, applicable
+            )
             if not df.empty:
                 df = df.copy()
                 if "session_key" not in df.columns and sess.get("session_key") is not None:
@@ -1455,7 +1728,11 @@ def main() -> int:
                 "session_type": sess.get("session_type"),
                 "applicable": applicable,
                 "rows": int(len(df)),
-                "status": "pass" if len(df) > 0 else ("skipped_not_applicable" if not applicable else "zero_rows"),
+                "status": session_result,
+                "reason": session_reason,
+                "request_count": len(request_entries),
+                "request_statuses": ",".join(_request_statuses(request_entries)),
+                "fallback_recovered": fallback_recovered,
             })
 
     source_manifest_rows = []
@@ -1470,9 +1747,12 @@ def main() -> int:
         write_df(combined, data_latest / lane_file)
         write_df(combined, data_history / lane_file)
         rows = int(len(combined))
-        attempted_sessions = int((pd.DataFrame(lane_session_rows).query("lane == @lane").shape[0]) if lane_session_rows else 0)
-        applicable_sessions = int(pd.DataFrame(lane_session_rows).query("lane == @lane and applicable == True").shape[0]) if lane_session_rows else 0
-        result, reason = classify_lane(lane, rows, attempted_sessions, applicable_sessions)
+        lane_rows = [row for row in lane_session_rows if row["lane"] == lane]
+        attempted_sessions = len(lane_rows)
+        applicable_sessions = sum(bool(row["applicable"]) for row in lane_rows)
+        result, reason = classify_lane(
+            lane, rows, attempted_sessions, applicable_sessions, lane_rows
+        )
         readiness_rows.append({
             "lane": lane,
             "rows": rows,
@@ -1519,6 +1799,17 @@ def main() -> int:
     pass_count = int((readiness_df["result"] == "pass").sum()) if not readiness_df.empty else 0
     warning_count = int((readiness_df["result"] == "pass_with_warnings").sum()) if not readiness_df.empty else 0
     fail_count = int((readiness_df["result"] == "fail").sum()) if not readiness_df.empty else 0
+    if fail_count:
+        source_quality_reasons.append(
+            f"required_lane_session_failures:{fail_count}"
+        )
+    source_quality_reasons = list(dict.fromkeys(source_quality_reasons))
+    publication_eligible = not source_quality_reasons
+    source_quality_status = (
+        "complete_empty"
+        if publication_eligible and len(sessions) == 0
+        else ("complete" if publication_eligible else "hold")
+    )
     run_id = utc_now().strftime("%Y%m%d_%H%M%S")
     manifest = {
         "artifact_profile": "openf1-lightweight-source-closure",
@@ -1530,6 +1821,10 @@ def main() -> int:
         "pass_count": pass_count,
         "pass_with_warnings_count": warning_count,
         "fail_count": fail_count,
+        "publication_eligible": publication_eligible,
+        "source_quality_status": source_quality_status,
+        "source_quality_reasons": source_quality_reasons,
+        "session_discovery_status": discovery_status,
         "heavy_endpoints_excluded_by_default": ["car_data", "location"],
         "timestamp_policy": "dt.datetime.now(dt.UTC)",
         "no_drs_2026_assumption": True,
@@ -1554,6 +1849,10 @@ def main() -> int:
         f"Pass lanes: {pass_count}",
         f"Pass with warnings lanes: {warning_count}",
         f"Fail lanes: {fail_count}",
+        f"Publication eligible: {str(publication_eligible).lower()}",
+        f"Source quality status: {source_quality_status}",
+        "Source quality reasons: "
+        + (", ".join(source_quality_reasons) if source_quality_reasons else "none"),
         "",
         "## Important",
         "",
@@ -1567,12 +1866,16 @@ def main() -> int:
     zip_digest = create_zip(latest_root, latest_root / "openf1_lightweight_source_closure.zip")
     create_zip(history_root, history_root / "openf1_lightweight_source_closure.zip")
 
-    print("OpenF1 lightweight source closure complete.")
+    print(
+        "OpenF1 lightweight source closure complete."
+        if publication_eligible
+        else "OpenF1 lightweight source closure HOLD: nonpublishable source quality."
+    )
     print(f"Latest output: {latest_root}")
     print(f"History output: {history_root}")
     print(f"Latest ZIP SHA256: {zip_digest}")
     print(f"Pass lanes: {pass_count}; Pass with warnings lanes: {warning_count}; Fail lanes: {fail_count}")
-    return 0
+    return 0 if publication_eligible else 1
 
 
 if __name__ == "__main__":
