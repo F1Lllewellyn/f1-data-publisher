@@ -1,7 +1,7 @@
 {
-  "run_timestamp_utc": "2026-10-25T23:58:35Z",
+  "run_timestamp_utc": "2026-10-26T02:01:13Z",
   "event_id": "2026_1297_united_states_austin_austin",
-  "gate_request": "race_result",
+  "gate_request": "post_event",
   "lane_request": "all",
   "validation_basis": "actual_forecast_rows_only",
   "required_combinations": 3,

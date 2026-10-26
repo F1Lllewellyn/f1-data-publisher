@@ -1,0 +1,24 @@
+{
+  "blind_validity": "not_blind_until_locked_before_outcome",
+  "engine_lane": "experimental_challenger",
+  "event_id": "2026_1297_united_states_austin_austin",
+  "gate": "post_event",
+  "generated_utc": "2026-10-26T02:01:13Z",
+  "promotion_allowed": false,
+  "race_name": "United States - Austin - Austin",
+  "row_count": 33,
+  "run_id": "20261026T020113Z",
+  "source_counts": {
+    "drivers": 1266,
+    "intervals": 190099,
+    "pit": 616,
+    "position": 37519,
+    "race_control": 5180,
+    "source_readiness": 9,
+    "starting_grid": 330,
+    "stints": 5345,
+    "weather": 7696
+  },
+  "stable_output_overwrite_allowed": false,
+  "validation_classification": "actual_forecast_rows_generated_from_available_prelock_sources"
+}
