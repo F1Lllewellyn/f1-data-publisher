@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-25T23:18:44.431532Z",
+  "created_utc": "2026-10-26T00:18:07.645477Z",
   "event_id": "2026_1297_united_states_austin_austin",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-25T23:18:44.432363Z",
+    "created_utc": "2026-10-26T00:18:07.646893Z",
     "event_id": "2026_1297_united_states_austin_austin",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -20,37 +20,37 @@
       "session_name": "Race",
       "session_type": "Race"
     },
-    "source_readiness_materially_improved": true,
+    "source_readiness_materially_improved": false,
     "stable_order_overwrite_allowed": false
   },
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 269.99,
+      "age_minutes": 59.39,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "ef7c0950be657548cf27efbca37d4d66e67157b1f67e89bf8e15adc0f98e4a7a",
-      "size_bytes": 695,
-      "timestamp_utc": "2026-10-25T18:48:44.922767Z"
+      "sha256": "e7671f9c1f0614186bb51f7745ba110583df845706e93b8de94218d0fd2ff41b",
+      "size_bytes": 706,
+      "timestamp_utc": "2026-10-25T23:18:44.434001Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 269.99,
+      "age_minutes": 59.39,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "39342c094d1eb728a9d22cda2ed3d8d95d918a1c0ca119e1494b7df0780b974c",
-      "size_bytes": 1560,
-      "timestamp_utc": "2026-10-25T18:48:44.922474Z"
+      "sha256": "578c98f813dfe88fa900da4237ab343069bd834853a54a44cfa58dd49c39786d",
+      "size_bytes": 1566,
+      "timestamp_utc": "2026-10-25T23:18:44.433722Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 269.99,
+      "age_minutes": 59.39,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "aeed8d7ad10a8552d80ff39478360ca94ec912f30f0f6cf1493c0d1e3772b9ec",
-      "size_bytes": 566,
-      "timestamp_utc": "2026-10-25T18:48:44.922235Z"
+      "sha256": "7c7f38acb8473ed770de5e24dda24f1caf4be5e4979bd3d2385d4e2704b7b04f",
+      "size_bytes": 568,
+      "timestamp_utc": "2026-10-25T23:18:44.433409Z"
     }
   },
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "overall_status": "needs_manual_review",
   "promotion_allowed": false,
   "race_name": "United States - Austin - Austin",
@@ -246,12 +246,12 @@
   "readiness_delta": {
     "current_score": 0.2,
     "current_status": "needs_manual_review",
-    "delta": 0.2,
-    "previous_score": 0.0,
-    "previous_status": null
+    "delta": 0.0,
+    "previous_score": 0.2,
+    "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261025T231827Z",
+  "run_id": "20261026T001751Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-25T22:00:00+00:00",
@@ -549,7 +549,7 @@
       "max_lap_number": null,
       "missing_required_columns": [],
       "provenance": {
-        "changed_since_prior_target_snapshot": null,
+        "changed_since_prior_target_snapshot": false,
         "changed_since_qualifying_snapshot": false,
         "direct_target_fetch": {
           "bytes": 0,
@@ -558,12 +558,12 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1297,
-        "observed_at_utc": "2026-10-25T23:18:44.427695Z",
+        "observed_at_utc": "2026-10-26T00:18:07.640626Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",
         "prior_qualifying_snapshot_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
-        "prior_target_snapshot_sha256": null,
+        "prior_target_snapshot_sha256": "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38",
         "resolution": "unique_same_meeting_qualifying_before_target",
         "source_session_key": 11392,
         "source_session_name": "Qualifying",
