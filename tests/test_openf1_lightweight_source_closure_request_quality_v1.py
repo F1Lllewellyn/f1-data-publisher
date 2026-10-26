@@ -106,30 +106,56 @@ class Router:
 class SourceClosureRequestQualityTests(unittest.TestCase):
     maxDiff = None
 
-    def run_collection(self, sessions, handler=None, *, seed_previous=None):
+    def run_collection(
+        self,
+        sessions,
+        handler=None,
+        *,
+        seed_previous=None,
+        season=2026,
+        completed_only=True,
+        now=FIXED_NOW,
+        previous_season=None,
+        previous_completed_only=None,
+    ):
         router = Router(sessions, handler)
         with tempfile.TemporaryDirectory() as td:
             output = Path(td)
             latest = output / "latest/openf1_lightweight_source_closure"
             if seed_previous is not None:
                 (latest / "data").mkdir(parents=True)
+                seeded_season = previous_season
+                if seeded_season is None:
+                    seeded_season = (
+                        seed_previous[0].get("year", season)
+                        if seed_previous else season
+                    )
+                seeded_completed_only = previous_completed_only
+                if seeded_completed_only is None:
+                    seeded_completed_only = completed_only
                 (latest / "latest_manifest.json").write_text(json.dumps({
                     "generated_utc": "2026-10-25T18:53:47Z",
+                    "season": seeded_season,
+                    "completed_only": seeded_completed_only,
                     "target_session_count": len(seed_previous),
                 }))
                 pd.DataFrame(seed_previous).to_csv(
                     latest / "data/target_sessions.csv", index=False
                 )
             argv = [
-                "collector", "--season", "2026", "--completed-only", "true",
+                "collector", "--season", str(season), "--completed-only",
+                str(completed_only).lower(),
                 "--output-root", td,
             ]
             with mock.patch.object(m.requests, "get", side_effect=router), \
                     mock.patch.object(m.time, "sleep"), \
-                    mock.patch.object(m, "utc_now", return_value=FIXED_NOW), \
+                    mock.patch.object(m, "utc_now", return_value=now), \
                     mock.patch.object(sys, "argv", argv):
                 rc = m.main()
-            history = output / "history/openf1_lightweight_source_closure/20261026_120000"
+            history = (
+                output / "history/openf1_lightweight_source_closure"
+                / now.strftime("%Y%m%d_%H%M%S")
+            )
             manifest = json.loads((latest / "latest_manifest.json").read_text())
             request_log = pd.read_csv(latest / "request_log.csv").fillna("")
 
@@ -177,7 +203,7 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
         return next(row for row in result["readiness"] if row["lane"] == lane)
 
     def test_sessions_http_401_and_429_hold_after_one_request(self):
-        for status in (401, 429):
+        for status in (401, 403, 429):
             with self.subTest(status=status):
                 result = self.run_collection(
                     [],
@@ -225,6 +251,75 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
             "invalid_sessions_schema",
         )
 
+    def test_discovery_identity_and_chronology_fail_closed(self):
+        wrong_year = session()
+        wrong_year["year"] = 2025
+        fractional_session = session(11396.5)
+        fractional_meeting = session(meeting_key=1297.5)
+        fractional_year = session()
+        fractional_year["year"] = 2026.5
+        zero_session = session(0)
+        malformed_session = session("11396x")
+        malformed_meeting = session(meeting_key=" 1297")
+        invalid_start = session()
+        invalid_start["date_start"] = "not-a-date"
+        invalid_end = session()
+        invalid_end["date_end"] = "not-a-date"
+        reversed_clock = session()
+        reversed_clock["date_start"] = "2026-10-25T22:00:00Z"
+        reversed_clock["date_end"] = "2026-10-25T21:00:00Z"
+        duplicate = [session(11396), session(11396)]
+        cases = {
+            "wrong_year": ([wrong_year], "wrong_season:"),
+            "duplicate": (duplicate, "duplicate_session_key:"),
+            "fractional_session": (
+                [fractional_session], "invalid_session_key:"
+            ),
+            "fractional_meeting": (
+                [fractional_meeting], "invalid_meeting_key:"
+            ),
+            "fractional_year": ([fractional_year], "wrong_season:"),
+            "zero_session": ([zero_session], "invalid_session_key:"),
+            "malformed_session": (
+                [malformed_session], "invalid_session_key:"
+            ),
+            "malformed_meeting": (
+                [malformed_meeting], "invalid_meeting_key:"
+            ),
+            "invalid_start": ([invalid_start], "invalid_session_start:"),
+            "invalid_end": ([invalid_end], "invalid_session_end:"),
+            "reversed_clock": (
+                [reversed_clock], "invalid_session_chronology:"
+            ),
+        }
+        for label, (payload, reason) in cases.items():
+            with self.subTest(label=label):
+                result = self.run_collection(payload)
+                self.assertEqual(result["rc"], 1)
+                self.assertEqual(len(result["calls"]), 1)
+                self.assertFalse(result["manifest"]["publication_eligible"])
+                self.assertEqual(
+                    result["manifest"]["session_discovery_status"],
+                    "invalid_sessions_schema",
+                )
+                self.assertTrue(
+                    str(result["request_log"][0]["error"]).startswith(reason)
+                )
+
+    def test_future_or_unknown_end_sessions_remain_unselected_not_invalid(self):
+        future = session()
+        future["date_start"] = "2026-12-01T10:00:00Z"
+        future["date_end"] = "2026-12-01T12:00:00Z"
+        unknown_end = session(11397)
+        unknown_end["date_start"] = "2026-12-02T10:00:00Z"
+        unknown_end.pop("date_end")
+        result = self.run_collection([future, unknown_end])
+        self.assertEqual(result["rc"], 0)
+        self.assertEqual(len(result["calls"]), 1)
+        self.assertEqual(result["manifest"]["target_session_count"], 0)
+        self.assertEqual(result["manifest"]["session_discovery_status"], "pass")
+        self.assertEqual(result["manifest"]["source_quality_status"], "complete_empty")
+
     def test_legitimate_http_200_empty_completed_set_is_explicit(self):
         result = self.run_collection([])
         self.assertEqual(result["rc"], 0)
@@ -253,6 +348,124 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
         self.assertEqual(result["zip_digest"], result["declared_digest"])
         self.assertIn("latest_manifest.json", result["zip_members"])
         self.assertTrue(result["history_exists"])
+
+    def test_session_rows_require_rowwise_exact_non_null_identity(self):
+        def mixed_or_wrong(endpoint, _params):
+            if endpoint == "weather":
+                return Response(data=[
+                    {
+                        "session_key": "11396",
+                        "meeting_key": "1297",
+                        "date": "2026-10-25T20:00:00Z",
+                    },
+                    {
+                        "session_key": None,
+                        "meeting_key": None,
+                        "date": "2026-10-25T20:01:00Z",
+                    },
+                ])
+            return None
+
+        mixed = self.run_collection([session()], mixed_or_wrong)
+        self.assertEqual(mixed["rc"], 1)
+        row = self.lane_row(mixed, "weather")
+        self.assertEqual(row["status"], "fail")
+        self.assertEqual(row["reason"], "session_identity_unproven")
+        self.assertEqual(row["rows"], 2)
+
+        identity_cases = {
+            "wrong_session": {"session_key": "99999", "meeting_key": "1297"},
+            "wrong_meeting": {"session_key": "11396", "meeting_key": "9999"},
+            "missing_session_column": {"meeting_key": "1297"},
+            "blank_meeting": {"session_key": "11396", "meeting_key": ""},
+        }
+        for label, identity in identity_cases.items():
+            def handler(endpoint, _params, values=identity):
+                if endpoint == "weather":
+                    return Response(data=[{
+                        **values,
+                        "date": "2026-10-25T20:00:00Z",
+                    }])
+                return None
+
+            with self.subTest(label=label):
+                result = self.run_collection([session()], handler)
+                self.assertEqual(result["rc"], 1)
+                self.assertEqual(
+                    self.lane_row(result, "weather")["reason"],
+                    "session_identity_unproven",
+                )
+
+    def test_exact_canonical_string_identity_is_accepted(self):
+        def handler(endpoint, _params):
+            if endpoint == "weather":
+                return Response(data=[{
+                    "session_key": "11396",
+                    "meeting_key": "1297",
+                    "date": "2026-10-25T20:00:00Z",
+                }])
+            return None
+
+        result = self.run_collection([session()], handler)
+        self.assertEqual(result["rc"], 0)
+        self.assertEqual(self.lane_row(result, "weather")["status"], "pass")
+
+    def test_new_season_ignores_prior_season_count_but_same_season_regresses(self):
+        previous_2026 = [session(10000 + index) for index in range(106)]
+        first_2027 = session(12001)
+        first_2027.update({
+            "year": 2027,
+            "country_name": "Australia",
+            "location": "Melbourne",
+            "circuit_short_name": "Melbourne",
+            "date_start": "2027-03-07T04:00:00Z",
+            "date_end": "2027-03-07T06:00:00Z",
+        })
+        next_season = self.run_collection(
+            [first_2027],
+            seed_previous=previous_2026,
+            season=2027,
+            now=m.dt.datetime(2027, 3, 8, 12, 0, 0, tzinfo=m.dt.UTC),
+            previous_season=2026,
+        )
+        self.assertEqual(next_season["rc"], 0)
+        self.assertTrue(next_season["manifest"]["publication_eligible"])
+        self.assertFalse(
+            next_season["manifest"]["previous_coverage_compatible"]
+        )
+        self.assertFalse(any(
+            "coverage_regression" in reason or "count_regression" in reason
+            for reason in next_season["manifest"]["source_quality_reasons"]
+        ))
+
+        same_season = self.run_collection(
+            previous_2026[:105],
+            seed_previous=previous_2026,
+            season=2026,
+            previous_season=2026,
+        )
+        self.assertEqual(same_season["rc"], 1)
+        self.assertFalse(same_season["manifest"]["publication_eligible"])
+        self.assertTrue(
+            same_season["manifest"]["previous_coverage_compatible"]
+        )
+        self.assertIn(
+            "completed_session_count_regression:106->105",
+            same_season["manifest"]["source_quality_reasons"],
+        )
+
+        incompatible_policy = self.run_collection(
+            [session(13001)],
+            seed_previous=previous_2026,
+            season=2026,
+            completed_only=False,
+            previous_season=2026,
+            previous_completed_only=True,
+        )
+        self.assertEqual(incompatible_policy["rc"], 0)
+        self.assertFalse(
+            incompatible_policy["manifest"]["previous_coverage_compatible"]
+        )
 
     def test_required_weather_failure_holds_despite_other_session_rows(self):
         sessions = [session(11395), session(11396)]

@@ -15,6 +15,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import numbers
 import os
 import re
 import sys
@@ -1256,27 +1257,48 @@ def load_policy() -> Dict[str, Any]:
     return {}
 
 
-def is_completed_session(row: pd.Series) -> bool:
-    now = utc_now()
-    for col in ("date_end", "session_end", "gmt_offset"):
-        # gmt_offset is intentionally ignored; included only to document known OpenF1 columns.
-        pass
-    date_end = row.get("date_end")
-    if not date_end or pd.isna(date_end):
-        # If end is missing, use date_start as weak fallback; do not call future sessions completed.
-        date_start = row.get("date_start")
-        if not date_start or pd.isna(date_start):
-            return False
-        try:
-            start_ts = pd.to_datetime(date_start, utc=True).to_pydatetime()
-            return start_ts < now - dt.timedelta(hours=2)
-        except Exception:
-            return False
+def _canonical_positive_integer(value: Any) -> Optional[str]:
+    """Return one canonical positive integer spelling or fail closed."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, numbers.Integral):
+        text = str(int(value))
+    elif type(value) is str:
+        text = value
+    else:
+        return None
+    return text if re.fullmatch(r"[1-9][0-9]*", text) else None
+
+
+def _normal_utc(value: Any) -> Optional[dt.datetime]:
+    if type(value) is not str or not value or value.strip() != value:
+        return None
     try:
-        end_ts = pd.to_datetime(date_end, utc=True).to_pydatetime()
-        return end_ts < now
-    except Exception:
+        parsed = dt.datetime.fromisoformat(
+            value[:-1] + "+00:00" if value.endswith("Z") else value
+        )
+    except ValueError:
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    return parsed.astimezone(dt.UTC)
+
+
+def _missing_optional_value(value: Any) -> bool:
+    if value is None:
+        return True
+    if type(value) is str:
+        return value == ""
+    try:
+        return bool(pd.isna(value))
+    except (TypeError, ValueError):
         return False
+
+
+def is_completed_session(row: pd.Series) -> bool:
+    # Unknown end time is an incomplete schedule record, never proof of completion.
+    end_ts = _normal_utc(row.get("date_end"))
+    return end_ts is not None and end_ts < utc_now()
 
 
 def session_kind(row: pd.Series) -> str:
@@ -1320,7 +1342,6 @@ def get_sessions(season: int, completed_only: bool, request_log: List[Dict[str, 
     required = {
         "session_key", "meeting_key", "year", "country_name", "location",
         "circuit_short_name", "session_name", "session_type", "date_start",
-        "date_end",
     }
     missing = sorted(required - set(sessions.columns))
     if missing:
@@ -1330,31 +1351,74 @@ def get_sessions(season: int, completed_only: bool, request_log: List[Dict[str, 
             "missing_columns:" + ",".join(missing),
         )
         return pd.DataFrame()
-    keys = pd.to_numeric(sessions["session_key"], errors="coerce")
-    meetings = pd.to_numeric(sessions["meeting_key"], errors="coerce")
-    invalid_identity = (
-        keys.isna().any()
-        or meetings.isna().any()
-        or (keys <= 0).any()
-        or (meetings <= 0).any()
-        or keys.astype("Int64").duplicated().any()
-    )
-    text_fields = (
+    seen_session_keys: set[str] = set()
+    canonical_session_keys: List[int] = []
+    canonical_meeting_keys: List[int] = []
+    canonical_years: List[int] = []
+    invalid_reason = ""
+    required_text_fields = (
         "country_name", "location", "circuit_short_name", "session_name",
-        "session_type", "date_start", "date_end",
+        "session_type",
     )
-    invalid_identity = invalid_identity or any(
-        sessions[field].isna().any()
-        or (sessions[field].astype(str).str.strip() == "").any()
-        for field in text_fields
-    )
-    if invalid_identity:
+    for position, (_, row) in enumerate(sessions.iterrows()):
+        session_key = _canonical_positive_integer(row.get("session_key"))
+        meeting_key = _canonical_positive_integer(row.get("meeting_key"))
+        row_year = _canonical_positive_integer(row.get("year"))
+        if session_key is None:
+            invalid_reason = f"invalid_session_key:row={position}"
+            break
+        if session_key in seen_session_keys:
+            invalid_reason = (
+                f"duplicate_session_key:row={position}:session_key={session_key}"
+            )
+            break
+        if meeting_key is None:
+            invalid_reason = f"invalid_meeting_key:row={position}"
+            break
+        if row_year != str(season):
+            invalid_reason = (
+                f"wrong_season:row={position}:expected={season}:observed="
+                f"{row_year or 'invalid'}"
+            )
+            break
+        if any(
+            type(row.get(field)) is not str
+            or not row.get(field)
+            or row.get(field).strip() != row.get(field)
+            for field in required_text_fields
+        ):
+            invalid_reason = f"invalid_session_text_identity:row={position}"
+            break
+        start = _normal_utc(row.get("date_start"))
+        if start is None:
+            invalid_reason = f"invalid_session_start:row={position}"
+            break
+        end_value = row.get("date_end")
+        if _missing_optional_value(end_value):
+            end = None
+        else:
+            end = _normal_utc(end_value)
+            if end is None:
+                invalid_reason = f"invalid_session_end:row={position}"
+                break
+        if end is not None and end <= start:
+            invalid_reason = f"invalid_session_chronology:row={position}"
+            break
+        seen_session_keys.add(session_key)
+        canonical_session_keys.append(int(session_key))
+        canonical_meeting_keys.append(int(meeting_key))
+        canonical_years.append(int(row_year))
+    if invalid_reason:
         _invalidate_last_request(
             request_log,
             "invalid_sessions_schema",
-            "invalid_or_duplicate_session_identity",
+            invalid_reason,
         )
         return pd.DataFrame()
+    sessions = sessions.copy()
+    sessions["session_key"] = canonical_session_keys
+    sessions["meeting_key"] = canonical_meeting_keys
+    sessions["year"] = canonical_years
     sessions["_completed_session"] = sessions.apply(is_completed_session, axis=1)
     if completed_only:
         sessions = sessions[sessions["_completed_session"]].copy()
@@ -1430,16 +1494,20 @@ def retrieve_lane_for_session(lane: str, sess: pd.Series, request_log: List[Dict
 
 
 def _frame_matches_session(df: pd.DataFrame, sess: pd.Series) -> bool:
-    if df.empty or "session_key" not in df.columns:
+    if df.empty or not {"session_key", "meeting_key"}.issubset(df.columns):
         return False
-    expected_session = str(sess.get("session_key"))
-    if set(df["session_key"].dropna().astype(str)) != {expected_session}:
+    expected_session = _canonical_positive_integer(sess.get("session_key"))
+    expected_meeting = _canonical_positive_integer(sess.get("meeting_key"))
+    if expected_session is None or expected_meeting is None:
         return False
-    if "meeting_key" in df.columns:
-        expected_meeting = str(sess.get("meeting_key"))
-        if set(df["meeting_key"].dropna().astype(str)) != {expected_meeting}:
-            return False
-    return True
+    return all(
+        _canonical_positive_integer(session_key) == expected_session
+        and _canonical_positive_integer(meeting_key) == expected_meeting
+        for session_key, meeting_key in zip(
+            df["session_key"].tolist(),
+            df["meeting_key"].tolist(),
+        )
+    )
 
 
 def _fallback_proves_coverage(
@@ -1657,14 +1725,24 @@ def main() -> int:
 
     request_log: List[Dict[str, Any]] = []
     previous_manifest = read_existing_latest(latest_root)
+    previous_manifest_season = _canonical_positive_integer(
+        previous_manifest.get("season")
+    )
+    previous_manifest_completed_only = previous_manifest.get("completed_only")
+    previous_coverage_compatible = (
+        previous_manifest_season == str(season)
+        and type(previous_manifest_completed_only) is bool
+        and previous_manifest_completed_only is completed_only
+    )
     previous_target_keys: set[str] = set()
     previous_target_path = data_latest / "target_sessions.csv"
-    if previous_target_path.exists():
+    if previous_coverage_compatible and previous_target_path.exists():
         try:
             previous_targets = pd.read_csv(previous_target_path)
             if "session_key" in previous_targets.columns:
                 previous_target_keys = set(
-                    previous_targets["session_key"].dropna().astype(str)
+                    key for value in previous_targets["session_key"].tolist()
+                    if (key := _canonical_positive_integer(value)) is not None
                 )
         except Exception:
             previous_target_keys = set()
@@ -1680,20 +1758,28 @@ def main() -> int:
             "session_discovery_unavailable:" + discovery_status
         )
     current_target_keys = (
-        set(sessions["session_key"].dropna().astype(str))
+        set(
+            key for value in sessions["session_key"].tolist()
+            if (key := _canonical_positive_integer(value)) is not None
+        )
         if "session_key" in sessions.columns else set()
     )
-    missing_previous = sorted(previous_target_keys - current_target_keys)
-    if missing_previous:
-        source_quality_reasons.append(
-            "completed_session_coverage_regression:"
-            + ",".join(missing_previous[:20])
-        )
+    if previous_coverage_compatible:
+        missing_previous = sorted(previous_target_keys - current_target_keys)
+        if missing_previous:
+            source_quality_reasons.append(
+                "completed_session_coverage_regression:"
+                + ",".join(missing_previous[:20])
+            )
     try:
         previous_count = int(previous_manifest.get("target_session_count") or 0)
     except (TypeError, ValueError):
         previous_count = 0
-    if previous_count > 0 and len(sessions) < previous_count:
+    if (
+        previous_coverage_compatible
+        and previous_count > 0
+        and len(sessions) < previous_count
+    ):
         source_quality_reasons.append(
             f"completed_session_count_regression:{previous_count}->{len(sessions)}"
         )
@@ -1714,10 +1800,6 @@ def main() -> int:
             )
             if not df.empty:
                 df = df.copy()
-                if "session_key" not in df.columns and sess.get("session_key") is not None:
-                    df["session_key"] = sess.get("session_key")
-                if "meeting_key" not in df.columns and sess.get("meeting_key") is not None:
-                    df["meeting_key"] = sess.get("meeting_key")
                 df["source_closure_retrieved_utc"] = iso_now()
                 outputs_by_lane[lane].append(df)
             lane_session_rows.append({
@@ -1825,6 +1907,9 @@ def main() -> int:
         "source_quality_status": source_quality_status,
         "source_quality_reasons": source_quality_reasons,
         "session_discovery_status": discovery_status,
+        "previous_manifest_season": previous_manifest.get("season"),
+        "previous_manifest_completed_only": previous_manifest_completed_only,
+        "previous_coverage_compatible": previous_coverage_compatible,
         "heavy_endpoints_excluded_by_default": ["car_data", "location"],
         "timestamp_policy": "dt.datetime.now(dt.UTC)",
         "no_drs_2026_assumption": True,
