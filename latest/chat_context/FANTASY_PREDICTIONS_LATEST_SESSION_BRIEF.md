@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-26T00:39:52Z
+Generated UTC: 2026-10-26T01:40:24Z
 Event: United States - Austin - Austin
 Session: Race
 Source status: needs_manual_review

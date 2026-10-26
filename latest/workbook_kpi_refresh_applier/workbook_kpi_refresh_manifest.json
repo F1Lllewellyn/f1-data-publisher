@@ -1,6 +1,6 @@
 {
   "commit_allowed": true,
-  "created_utc": "2026-10-26T00:18:07.843952+00:00",
+  "created_utc": "2026-10-26T01:40:24.792147+00:00",
   "governance": {
     "canonical_workbook_overwrite": false,
     "delete_authority": false,
@@ -12,36 +12,36 @@
   "outputs": [
     {
       "bytes": 767,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "00c8e7c3df36d8900907fe8a2c7b78f1386390a47dd0d50a52d76f57300c3ad4"
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "f19e15b8b9f8a93ce824565178e45ade36951f6a0d5dd9699379e9a01c9160da"
     },
     {
       "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b"
     },
     {
-      "bytes": 10330,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261026T001807Z.xlsx",
-      "sha256": "97bdc8323c034590c644f9df252d3af1bb70cf6298243e19a338b94d899e1fa4"
+      "bytes": 10331,
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261026T014024Z.xlsx",
+      "sha256": "019c32c724584a075e0e736414f80201635a43f3a958d356f82387ee7d2d846d"
     },
     {
       "bytes": 569,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "e94b6e9b603ba6b01f907629917fe3433b10f67a6df05c0f7cdeb25ff622de6e"
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "92e61c03bb4d8bfda14c408bb26fb8b31c14e35e67827a0ff51d27cd50fdb5ea"
     },
     {
       "bytes": 1568,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/upstream_data_readiness_snapshot.json",
-      "sha256": "43cd6488c75514a1735fd9b3aaeb83c8eb3f5bac145e10a8f03b7442f04a2a75"
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/upstream_data_readiness_snapshot.json",
+      "sha256": "8e2cdd908eacfcc40cfd5ace0dd6e6c4acd27b825039ba61ba2f326204f91709"
     },
     {
       "bytes": 707,
-      "path": "history/workbook_kpi_refresh_applier/20261026T001807Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "f8788d11bd6d4dd98aa8b4251acc31337e9876c40d49db38a2c6d0bc4daae0c3"
+      "path": "history/workbook_kpi_refresh_applier/20261026T014024Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "b0fbf14f5b38d2f16a37c4955070a5979f9864a62159621c3cc9d06f1a03b392"
     }
   ],
-  "run_id": "20261026T001807Z",
+  "run_id": "20261026T014024Z",
   "source_artifacts": [
     "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/sandbox_workbook_update_plan.json",
     "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json",
