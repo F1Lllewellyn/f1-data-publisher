@@ -1,6 +1,6 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-10-27T16:01:12Z
+Generated UTC: 2026-10-27T18:13:33Z
 Event: United States - Austin - Austin
 Session: Race
 Source status: needs_manual_review
