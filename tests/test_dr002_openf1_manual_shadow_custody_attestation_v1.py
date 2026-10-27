@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -29,6 +30,168 @@ fixture_spec = importlib.util.spec_from_file_location(
 )
 _fixture_module = importlib.util.module_from_spec(fixture_spec)
 fixture_spec.loader.exec_module(_fixture_module)
+
+
+HISTORICAL_WORKFLOW_BLOB = "d277ceaaffbb148dbde4b0c32bfbbcd8664e4329"
+PREDECESSOR_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
+SUCCESSOR_WORKFLOW_BLOB = "bf56b47b3325458384bbb60148e3bb65030c41e6"
+HISTORICAL_WORKFLOW_SHA256 = (
+    "b7fb291274f5c1f31cceb54cc43bfca5fef88e0d1fd76a6288f219a3be18d35a"
+)
+PREDECESSOR_PREFIX_SHA256 = (
+    "4371e64fda6fad45f123ecd615c79fa372267c982c7c6387ccbd55817c8d3887"
+)
+SUCCESSOR_PREFIX_SHA256 = (
+    "e009a62e6f8df4aab62d84ecb6b4bae6ca959e30b31091470fd710aace48b0ae"
+)
+CUSTODY_MARKER = (
+    b"# K4R28 manual-shadow custody follow-on job; original workflow above is unchanged.\n"
+)
+PREDECESSOR_PUBLICATION_BLOCK = b'''      - name: Commit source closure outputs
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/openf1_lightweight_source_closure history/openf1_lightweight_source_closure || true
+          if git diff --cached --quiet; then
+            echo "No source-closure changes to commit."
+          else
+            git commit -m "Update OpenF1 lightweight source closure artifacts"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+
+          fi
+'''
+SUCCESSOR_PUBLICATION_BLOCK = b'''      - name: Commit source closure outputs
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python scripts/ops/f1_source_closure_publish_guard_v1.py \\
+            --repo-root "$GITHUB_WORKSPACE" \\
+            --remote origin \\
+            --branch "$GITHUB_REF_NAME" \\
+            --expected-season "${{ github.event.inputs.season || '2026' }}" \\
+            --expected-completed-only "${{ github.event.inputs.completed_only || 'true' }}" \\
+            --github-run-id "$GITHUB_RUN_ID" \\
+            --artifact-uploaded-for-run "$GITHUB_RUN_ID"
+'''
+
+
+def git_blob_bytes(blob_sha):
+    return subprocess.run(
+        ["git", "cat-file", "blob", blob_sha], cwd=ROOT, check=True,
+        capture_output=True,
+    ).stdout
+
+
+def git_blob_sha(data):
+    return subprocess.run(
+        ["git", "hash-object", "--stdin"], cwd=ROOT, check=True,
+        input=data, capture_output=True,
+    ).stdout.decode().strip()
+
+
+def assert_workflow_compatibility(testcase, workflow):
+    historical = git_blob_bytes(HISTORICAL_WORKFLOW_BLOB)
+    predecessor = git_blob_bytes(PREDECESSOR_WORKFLOW_BLOB)
+    successor = git_blob_bytes(SUCCESSOR_WORKFLOW_BLOB)
+    testcase.assertEqual(hashlib.sha256(historical).hexdigest(),
+                         HISTORICAL_WORKFLOW_SHA256)
+    testcase.assertEqual(git_blob_sha(historical), HISTORICAL_WORKFLOW_BLOB)
+    testcase.assertEqual(git_blob_sha(predecessor), PREDECESSOR_WORKFLOW_BLOB)
+    testcase.assertEqual(git_blob_sha(successor), SUCCESSOR_WORKFLOW_BLOB)
+
+    testcase.assertEqual(predecessor.count(CUSTODY_MARKER), 1)
+    testcase.assertEqual(successor.count(CUSTODY_MARKER), 1)
+    predecessor_prefix, predecessor_suffix = predecessor.split(CUSTODY_MARKER)
+    successor_prefix, successor_suffix = successor.split(CUSTODY_MARKER)
+    testcase.assertEqual(hashlib.sha256(predecessor_prefix).hexdigest(),
+                         PREDECESSOR_PREFIX_SHA256)
+    testcase.assertEqual(hashlib.sha256(successor_prefix).hexdigest(),
+                         SUCCESSOR_PREFIX_SHA256)
+    testcase.assertEqual(successor_suffix, predecessor_suffix)
+    testcase.assertEqual(
+        successor.replace(SUCCESSOR_PUBLICATION_BLOCK,
+                          PREDECESSOR_PUBLICATION_BLOCK, 1),
+        predecessor,
+    )
+    testcase.assertEqual(predecessor.count(PREDECESSOR_PUBLICATION_BLOCK), 1)
+    testcase.assertEqual(successor.count(SUCCESSOR_PUBLICATION_BLOCK), 1)
+    testcase.assertEqual(
+        predecessor_prefix.replace(
+            b"historical Qualifying session key.",
+            b"historical Race session key.", 1,
+        ),
+        historical,
+    )
+
+    active_blob = git_blob_sha(workflow)
+    testcase.assertIn(active_blob, {
+        PREDECESSOR_WORKFLOW_BLOB, SUCCESSOR_WORKFLOW_BLOB,
+    })
+    testcase.assertEqual(
+        workflow,
+        predecessor if active_blob == PREDECESSOR_WORKFLOW_BLOB else successor,
+    )
+    testcase.assertEqual(workflow.count(CUSTODY_MARKER), 1)
+    active_prefix, active_suffix = workflow.split(CUSTODY_MARKER)
+    testcase.assertEqual(active_suffix, predecessor_suffix)
+    testcase.assertEqual(
+        hashlib.sha256(active_prefix).hexdigest(),
+        PREDECESSOR_PREFIX_SHA256
+        if active_blob == PREDECESSOR_WORKFLOW_BLOB
+        else SUCCESSOR_PREFIX_SHA256,
+    )
+
+    parsed = yaml.safe_load(workflow.decode("utf-8"))
+    triggers = parsed.get("on", parsed.get(True))
+    inputs = triggers["workflow_dispatch"]["inputs"]
+    testcase.assertEqual(set(inputs), {
+        "season", "completed_only", "provenance_shadow_session_key",
+        "provenance_shadow_endpoint",
+    })
+    testcase.assertEqual(inputs["season"], {
+        "description": "F1 season year", "required": True, "default": "2026",
+    })
+    testcase.assertEqual(inputs["completed_only"], {
+        "description": "Only retrieve completed sessions", "required": True,
+        "default": "true",
+    })
+    testcase.assertEqual(inputs["provenance_shadow_session_key"], {
+        "description": (
+            "Optional exact historical session key for manual provenance shadow only"
+        ),
+        "required": False, "default": "",
+    })
+    testcase.assertEqual(inputs["provenance_shadow_endpoint"], {
+        "description": "Historical provenance shadow endpoint",
+        "required": False, "type": "choice",
+        "options": ["weather", "drivers", "starting_grid"],
+        "default": "weather",
+    })
+    testcase.assertEqual(parsed["permissions"], {
+        "contents": "write", "actions": "read",
+    })
+    custody = parsed["jobs"]["openf1-manual-shadow-custody-attestation"]
+    testcase.assertEqual(custody["permissions"], {
+        "contents": "read", "actions": "read", "id-token": "write",
+        "attestations": "write",
+    })
+    for value in (
+        "workflow_dispatch", "provenance_shadow_session_key",
+        "refs/heads/main", "weather", "drivers", "starting_grid",
+        ".result == 'success'",
+    ):
+        testcase.assertIn(value, custody["if"])
+    testcase.assertEqual(predecessor_suffix.count(
+        b"actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093"
+    ), 1)
+    testcase.assertEqual(predecessor_suffix.count(
+        b"actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6"
+    ), 1)
+    return active_blob
 
 
 class ManualShadowCustodyAttestationTests(unittest.TestCase):
@@ -563,16 +726,33 @@ class ManualShadowCustodyAttestationTests(unittest.TestCase):
 
     # 34
     def test_original_workflow_bytes_are_exactly_unchanged_before_new_job(self):
-        marker = (
-            b"# K4R28 manual-shadow custody follow-on job; original workflow above is unchanged.\n"
-        )
-        workflow = WORKFLOW.read_bytes()
-        self.assertEqual(workflow.count(marker), 1)
-        original = workflow.split(marker)[0]
-        self.assertEqual(
-            hashlib.sha256(original).hexdigest(),
-            "b7fb291274f5c1f31cceb54cc43bfca5fef88e0d1fd76a6288f219a3be18d35a",
-        )
+        assert_workflow_compatibility(self, WORKFLOW.read_bytes())
+
+    def test_workflow_compatibility_rejects_protected_mutations(self):
+        predecessor = git_blob_bytes(PREDECESSOR_WORKFLOW_BLOB)
+        successor = git_blob_bytes(SUCCESSOR_WORKFLOW_BLOB)
+        cases = {
+            "manual_weather_driver_grid_inputs": predecessor.replace(
+                b"          - drivers\n", b"          - drivers_changed\n", 1
+            ),
+            "publication_block": successor.replace(
+                b"--expected-completed-only", b"--completed-only-unbound", 1
+            ),
+            "top_level_permissions": predecessor.replace(
+                b"permissions:\n  contents: write",
+                b"permissions:\n  contents: read", 1,
+            ),
+            "custody_permissions": successor.replace(
+                b"      id-token: write", b"      id-token: read", 1
+            ),
+            "custody_suffix": predecessor.replace(
+                b"actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6",
+                b"actions/attest@unauthorized", 1,
+            ),
+        }
+        for label, changed in cases.items():
+            with self.subTest(label=label), self.assertRaises(AssertionError):
+                assert_workflow_compatibility(self, changed)
 
     # 35
     def test_workflow_has_exactly_one_added_follow_on_job(self):

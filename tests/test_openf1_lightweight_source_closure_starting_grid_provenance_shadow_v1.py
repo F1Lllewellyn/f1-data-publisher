@@ -55,6 +55,85 @@ MODIFIED = {
     "tests/test_openf1_lightweight_source_closure_starting_grid_provenance_shadow_v1.py",
 }
 
+HISTORICAL_WORKFLOW_BLOB = "d277ceaaffbb148dbde4b0c32bfbbcd8664e4329"
+PREDECESSOR_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
+SUCCESSOR_WORKFLOW_BLOB = "bf56b47b3325458384bbb60148e3bb65030c41e6"
+PREDECESSOR_PUBLICATION_BLOCK = b'''      - name: Commit source closure outputs
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest/openf1_lightweight_source_closure history/openf1_lightweight_source_closure || true
+          if git diff --cached --quiet; then
+            echo "No source-closure changes to commit."
+          else
+            git commit -m "Update OpenF1 lightweight source closure artifacts"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+
+
+          fi
+'''
+SUCCESSOR_PUBLICATION_BLOCK = b'''      - name: Commit source closure outputs
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python scripts/ops/f1_source_closure_publish_guard_v1.py \\
+            --repo-root "$GITHUB_WORKSPACE" \\
+            --remote origin \\
+            --branch "$GITHUB_REF_NAME" \\
+            --expected-season "${{ github.event.inputs.season || '2026' }}" \\
+            --expected-completed-only "${{ github.event.inputs.completed_only || 'true' }}" \\
+            --github-run-id "$GITHUB_RUN_ID" \\
+            --artifact-uploaded-for-run "$GITHUB_RUN_ID"
+'''
+
+
+def git_blob_bytes(blob_sha):
+    return subprocess.run(
+        ["git", "cat-file", "blob", blob_sha], cwd=ROOT, check=True,
+        capture_output=True,
+    ).stdout
+
+
+def git_blob_sha(data):
+    return subprocess.run(
+        ["git", "hash-object", "--stdin"], cwd=ROOT, check=True,
+        input=data, capture_output=True,
+    ).stdout.decode().strip()
+
+
+def assert_authorized_workflow_compatibility(testcase, workflow):
+    historical = git_blob_bytes(HISTORICAL_WORKFLOW_BLOB)
+    predecessor = git_blob_bytes(PREDECESSOR_WORKFLOW_BLOB)
+    successor = git_blob_bytes(SUCCESSOR_WORKFLOW_BLOB)
+
+    testcase.assertEqual(git_blob_sha(historical), HISTORICAL_WORKFLOW_BLOB)
+    testcase.assertEqual(git_blob_sha(predecessor), PREDECESSOR_WORKFLOW_BLOB)
+    testcase.assertEqual(git_blob_sha(successor), SUCCESSOR_WORKFLOW_BLOB)
+    testcase.assertEqual(DEPENDENCY_BLOBS[str(WORKFLOW.relative_to(ROOT))],
+                         HISTORICAL_WORKFLOW_BLOB)
+    testcase.assertEqual(predecessor.count(PREDECESSOR_PUBLICATION_BLOCK), 1)
+    testcase.assertEqual(predecessor.count(SUCCESSOR_PUBLICATION_BLOCK), 0)
+    testcase.assertEqual(successor.count(PREDECESSOR_PUBLICATION_BLOCK), 0)
+    testcase.assertEqual(successor.count(SUCCESSOR_PUBLICATION_BLOCK), 1)
+    testcase.assertEqual(
+        successor.replace(SUCCESSOR_PUBLICATION_BLOCK,
+                          PREDECESSOR_PUBLICATION_BLOCK, 1),
+        predecessor,
+    )
+
+    active_blob = git_blob_sha(workflow)
+    testcase.assertIn(active_blob, {
+        PREDECESSOR_WORKFLOW_BLOB, SUCCESSOR_WORKFLOW_BLOB,
+    })
+    testcase.assertEqual(
+        workflow,
+        predecessor if active_blob == PREDECESSOR_WORKFLOW_BLOB else successor,
+    )
+    return active_blob
+
 
 class Response:
     def __init__(self, status_code, content, url, *, history=None, headers=None):
@@ -928,7 +1007,16 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
     def test_all_exact_dependency_pins_are_preserved(self):
         for path, expected in DEPENDENCY_BLOBS.items():
             with self.subTest(path=path):
-                if path in MODIFIED:
+                if path == str(WORKFLOW.relative_to(ROOT)):
+                    result = subprocess.run(
+                        ["git", "cat-file", "-e", f"{expected}^{{blob}}"],
+                        cwd=ROOT, check=False, capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    assert_authorized_workflow_compatibility(
+                        self, WORKFLOW.read_bytes()
+                    )
+                elif path in MODIFIED:
                     result = subprocess.run(
                         ["git", "cat-file", "-e", f"{expected}^{{blob}}"],
                         cwd=ROOT, check=False, capture_output=True, text=True,
@@ -940,6 +1028,33 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
                         capture_output=True, text=True,
                     )
                     self.assertEqual(result.stdout.strip(), expected)
+
+    # 35
+    def test_workflow_compatibility_rejects_unauthorized_mutations(self):
+        predecessor = git_blob_bytes(PREDECESSOR_WORKFLOW_BLOB)
+        successor = git_blob_bytes(SUCCESSOR_WORKFLOW_BLOB)
+        cases = {
+            "manual_input": predecessor.replace(
+                b"          - weather\n", b"          - weather_changed\n", 1
+            ),
+            "predecessor_publication": predecessor.replace(
+                b"safe_git_push_rebase_retry.sh",
+                b"safe_git_push_rebase_retry_changed.sh", 1,
+            ),
+            "successor_publication": successor.replace(
+                b"--artifact-uploaded-for-run", b"--artifact-not-bound", 1
+            ),
+            "custody_suffix": predecessor.replace(
+                b"actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+                b"actions/download-artifact@unauthorized", 1,
+            ),
+            "custody_permission": successor.replace(
+                b"      attestations: write", b"      attestations: read", 1
+            ),
+        }
+        for label, changed in cases.items():
+            with self.subTest(label=label), self.assertRaises(AssertionError):
+                assert_authorized_workflow_compatibility(self, changed)
 
 
 if __name__ == "__main__":
