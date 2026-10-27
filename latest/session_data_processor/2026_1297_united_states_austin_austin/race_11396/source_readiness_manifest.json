@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-26T20:08:53.071631Z",
+  "created_utc": "2026-10-26T23:51:41.197268Z",
   "event_id": "2026_1297_united_states_austin_austin",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-26T20:08:53.073111Z",
+    "created_utc": "2026-10-26T23:51:41.199608Z",
     "event_id": "2026_1297_united_states_austin_austin",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 357.63,
+      "age_minutes": 222.8,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "3df0d3b62c0f446ed8b46aa069c026ef52ec70731bb2a1e95a2b0711c3199abc",
+      "sha256": "8de3d1e283640f7dfa74f3fadebf3b91a3867fcf7f468984352f2bd658e1f81e",
       "size_bytes": 706,
-      "timestamp_utc": "2026-10-26T14:11:15.449611Z"
+      "timestamp_utc": "2026-10-26T20:08:53.075307Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 357.63,
+      "age_minutes": 222.8,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "9dc101849b3b814ce8f85ecc99a91dfb4598af1f09032408507feab0deb0d388",
+      "sha256": "3b6b54c59f15bb0dbf76b9cfc32558b968e60748e2fa704cde5dd39085870597",
       "size_bytes": 1567,
-      "timestamp_utc": "2026-10-26T14:11:15.449335Z"
+      "timestamp_utc": "2026-10-26T20:08:53.075051Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 357.63,
+      "age_minutes": 222.8,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "1f99b4e1b20efce825ff251cafd83257e30f2d6b80c47f4d88d02293c33067c5",
+      "sha256": "3c18217378b33535978009a217cee46f99444caf828573740928332baa4087e2",
       "size_bytes": 568,
-      "timestamp_utc": "2026-10-26T14:11:15.449116Z"
+      "timestamp_utc": "2026-10-26T20:08:53.074836Z"
     }
   },
   "material_readiness_improved": false,
@@ -251,7 +251,7 @@
     "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261026T200840Z",
+  "run_id": "20261026T235127Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-25T22:00:00+00:00",
@@ -558,7 +558,7 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1297,
-        "observed_at_utc": "2026-10-26T20:08:53.063742Z",
+        "observed_at_utc": "2026-10-26T23:51:41.191439Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",
