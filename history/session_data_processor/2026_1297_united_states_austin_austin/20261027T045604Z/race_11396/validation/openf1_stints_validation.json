@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 7819,
+    "ok": true,
+    "sha256": "ecd0216f756f930fd9b2380c7827519dc5595b6b835307d7c3f2b05c4025e943",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/raw/openf1_stints.json",
+  "json_sha256": "6f7edb768e7ff83d0d85f86fe2112eb03b9a000532d830129c634bc488235dc2",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 54,
+  "status": "clean",
+  "timestamp_rows": 0
+}
