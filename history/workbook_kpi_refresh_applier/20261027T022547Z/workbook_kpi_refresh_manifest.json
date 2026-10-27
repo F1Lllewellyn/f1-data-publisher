@@ -1,0 +1,80 @@
+{
+  "authority_fingerprints": {
+    "latest/combined_source_manifest.json": "e76157dd0583d8531abc9a8d7eff469105033268c3602d06f5366ad7162a1e7c",
+    "latest/data_readiness.json": "3c9c1febd8486a97a9ea30faf0a895895d6064f1bbda4d5f640bc8d94a48aaa9",
+    "latest/latest_manifest.json": "0faeb0ee842a9e2b8f392eca3a5b5dc62685953a016afb9c43c6835d0cdd8858",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/forecast_bundle_ledger_snapshot.json": "28dd0e359c44ce205e9306181b8a3bbbfe05054ec9b3b9ca58beec31be34b931",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/sandbox_workbook_update_plan.json": "26be9e10b72f0103a564690da5bfce6ce4e763f8bbdb82ec2b611a04df55f45e",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/source_readiness_manifest.json": "91d9dbe5078dc48e0cbbe2d41c45276429f428f90d167872c43627d9a3ce44b8",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.csv": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json": "195f6de9e13d2285eb6c9799c31750ebb54852b35e24ea1dd09111acc6499bd6"
+  },
+  "commit_allowed": true,
+  "created_utc": "2026-10-27T02:25:47.746619+00:00",
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": false,
+  "event_id": "2026_1297_united_states_austin_austin",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "meeting_key": 1297,
+  "outputs": [
+    {
+      "bytes": 1003,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "fb12182c54dad49a1ad2bb4f2426ba151b46884a29d240d550191cd083bfe790"
+    },
+    {
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b"
+    },
+    {
+      "bytes": 11141,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261027T022547Z.xlsx",
+      "sha256": "1e8d90f08c9bb360c711add3d6e2fbbeefd3938afe2ff550299e21d7b030d159"
+    },
+    {
+      "bytes": 569,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "2438cfd55c309c3ad2a69c40bdb3c61b85a2f09a05514014fc05efd01a414b40"
+    },
+    {
+      "bytes": 1568,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/upstream_data_readiness_snapshot.json",
+      "sha256": "033a9f3b1269abdd1f5655e9dcec45af36441757d848726da05822d3b4492712"
+    },
+    {
+      "bytes": 707,
+      "path": "history/workbook_kpi_refresh_applier/20261027T022547Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "b196897a32d331856eb0dcaf67bc98841823faff444cd2914e14d2f0230b611c"
+    }
+  ],
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261027T022547Z",
+  "session_key": 11396,
+  "session_name": "Race",
+  "session_type": "Race",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_manifest_pointer": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "diagnostic_only_source_status=needs_manual_review",
+    "readiness_requires_manual_review",
+    "readiness_blocking_issues",
+    "required_source_evidence_unverified",
+    "required_source_status_needs_manual_review",
+    "readiness_quality_blocked_manual_review_required_source"
+  ]
+}
