@@ -1,0 +1,17 @@
+{
+  "change_reason": "no_material_change",
+  "current_signature": "db423d15a8e66aa8c5c97eb4b658a25c67c7268c26a88d75ce3305c1d7e202d3",
+  "event": {
+    "event_id": "2026_1297_united_states_austin_austin",
+    "race_name": "United States - Austin - Austin",
+    "session_key": 11396,
+    "session_name": "Race"
+  },
+  "generated_at_utc": "2026-10-27T10:53:53Z",
+  "material_change_detected": false,
+  "notification_recommended": false,
+  "previous_signature": "db423d15a8e66aa8c5c97eb4b658a25c67c7268c26a88d75ce3305c1d7e202d3",
+  "promotion_allowed": false,
+  "schema_version": "f1_1b_material_change_v20",
+  "status": "blocked"
+}

@@ -3,12 +3,12 @@
 ## Confirmed Data
 - Event: United States - Austin - Austin
 - Session: Race / key 11396
-- Run ID: 20261027T001600Z
+- Run ID: 20261027T105352Z
 - Consumer readiness: blocked
 - Source status: needs_manual_review
 - Workbook source status: needs_manual_review
 - Readiness quality: blocked_manual_review_required_source
-- Material change detected: True
+- Material change detected: False
 - Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false
