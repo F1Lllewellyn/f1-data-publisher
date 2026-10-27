@@ -27,6 +27,11 @@ spec.loader.exec_module(guard)
 
 
 BASELINE_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
+COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
+APPROVED_COLLECTOR_BLOBS = (
+    "dbbc36dc01737084f2b1ff332e26c6c270be0049",
+    "851625a5c333afc65f330e823d943c80b7b77121",
+)
 OLD_PUBLICATION = '''        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -67,6 +72,40 @@ def git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProce
     if check and completed.returncode:
         raise AssertionError(f"git failed ({completed.returncode}): {args}\n{completed.stdout}")
     return completed
+
+
+def git_blob_sha(payload: bytes) -> str:
+    return hashlib.sha1(
+        b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
+    ).hexdigest()
+
+
+def immutable_git_blob(root: Path, blob_sha: str) -> bytes:
+    completed = subprocess.run(
+        ["git", "cat-file", "blob", blob_sha],
+        cwd=root,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if completed.returncode:
+        raise AssertionError(
+            "HOLD_MISSING_HISTORICAL_OBJECT: "
+            f"required collector blob {blob_sha} is unavailable"
+        )
+    actual = git_blob_sha(completed.stdout)
+    if actual != blob_sha:
+        raise AssertionError(
+            f"immutable collector object identity mismatch: {actual} != {blob_sha}"
+        )
+    return completed.stdout
+
+
+def require_approved_collector(payload: bytes) -> str:
+    actual = git_blob_sha(payload)
+    if actual not in APPROVED_COLLECTOR_BLOBS:
+        raise AssertionError(f"unrecognized collector blob: {actual}")
+    return actual
 
 
 def configure(root: Path) -> None:
@@ -1086,7 +1125,6 @@ class StaticScopeTests(unittest.TestCase):
         expected = {
             "docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md": "85ce44807ef159b5ba5d3bfd543ea1f945097f77",
             "scripts/ops/safe_git_push_rebase_retry.sh": "85f85bb540cf8442827a1586d5ccf0c5602d7a75",
-            "scripts/openf1/publish_openf1_lightweight_source_closure.py": "dbbc36dc01737084f2b1ff332e26c6c270be0049",
             ".github/workflows/f1-session-data-processor-loop-v1.yml": "cfbed6cbedac9c7e601802c38c6eb5770d09004d",
             ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "32a1210a2f43065e9d65a9bd858c059b6166700f",
             ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "c2f8ddc46c52a2be06fcf7f53d03edc2df40f787",
@@ -1098,6 +1136,23 @@ class StaticScopeTests(unittest.TestCase):
                     b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
                 ).hexdigest()
                 self.assertEqual(actual, expected_blob)
+
+        immutable_collectors = {
+            blob_sha: immutable_git_blob(ROOT, blob_sha)
+            for blob_sha in APPROVED_COLLECTOR_BLOBS
+        }
+        self.assertNotEqual(
+            immutable_collectors[APPROVED_COLLECTOR_BLOBS[0]],
+            immutable_collectors[APPROVED_COLLECTOR_BLOBS[1]],
+        )
+
+        active = (ROOT / COLLECTOR_PATH).read_bytes()
+        active_blob = require_approved_collector(active)
+        self.assertEqual(active, immutable_collectors[active_blob])
+
+        tampered = active + b"\n# unauthorized collector change\n"
+        with self.assertRaisesRegex(AssertionError, "unrecognized collector blob"):
+            require_approved_collector(tampered)
 
 
 if __name__ == "__main__":
