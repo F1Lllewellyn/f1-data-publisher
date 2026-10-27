@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.json": "f3b7c378b7cb064f333ca7a2d806a51a303ed5d622623668ef78fac2d1be9bda"
   },
   "commit_allowed": true,
-  "created_utc": "2026-10-27T20:40:10.573754+00:00",
+  "created_utc": "2026-10-27T22:26:52.871475+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": false,
   "event_id": "2026_1297_united_states_austin_austin",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 1003,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "e7da2642671461ddc3cc3e92086cf357a6fd07c3ed9cfea268706b75ac0a3bfa"
     },
     {
       "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "0cec7d64ff1f79abe3daf8247358cc7b823cba63eb52b8d15aefc987e2ec243b"
     },
     {
-      "bytes": 11137,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261027T204010Z.xlsx",
-      "sha256": "c9d53b7610ee10fe6733182ea440aa6067e3106faf2db35efb6c931b99417471"
+      "bytes": 11138,
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261027T222652Z.xlsx",
+      "sha256": "ec7e14ebf3cfc2a60c7ea38ee35ecece754bc24ae36628e72ba3e559faa7cac8"
     },
     {
       "bytes": 569,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/upstream_latest_manifest_snapshot.json",
       "sha256": "d6e46e8a298c4141061803c199fb2428470208a621cac843b7d4b56b8ba0f37b"
     },
     {
       "bytes": 1568,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/upstream_data_readiness_snapshot.json",
       "sha256": "37454f258ba3a88baba0bfbcdb7a68add0d4e7101d3bcc4fa8a523ca5416ba03"
     },
     {
       "bytes": 707,
-      "path": "history/workbook_kpi_refresh_applier/20261027T204010Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261027T222652Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "343884c77486debee02a73ee1e9eb6df36759d14439dea88b9a94aad135a2f91"
     }
   ],
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261027T204010Z",
+  "run_id": "20261027T222652Z",
   "session_key": 11396,
   "session_name": "Race",
   "session_type": "Race",
