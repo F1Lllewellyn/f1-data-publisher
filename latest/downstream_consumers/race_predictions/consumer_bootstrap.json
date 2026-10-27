@@ -1,5 +1,5 @@
 {
-  "action": "notify_and_update_context",
+  "action": "blocked",
   "allowed_effect": "readiness, confidence, risk flags, and source-backed context",
   "allowed_input_paths": {
     "combined_readiness_handoff": "latest/readiness_handoff/combined_readiness_handoff.json",
@@ -10,16 +10,16 @@
   },
   "canonical_workbook_overwrite": false,
   "consumer": "race_predictions",
-  "consumer_readiness": "ready",
+  "consumer_readiness": "blocked",
   "context_path": "latest/chat_context/race_predictions_context.md",
   "disallowed_effect": "automatic promotion, stable logic change, or hidden model overwrite",
   "forecast_gate_activated": false,
-  "generated_at_utc": "2026-10-25T18:11:56Z",
+  "generated_at_utc": "2026-10-27T00:16:00Z",
   "input_manifest_path": "latest/downstream_consumers/race_predictions/consumer_input.json",
   "promotion_allowed": false,
   "read_only": true,
-  "ready": true,
-  "reason": "material readiness or forecast-relevant state changed",
+  "ready": false,
+  "reason": "consumer not ready or source/workbook state is not clean/usable",
   "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
   "stable_engine_modified": false
 }

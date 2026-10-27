@@ -2,14 +2,14 @@
 
 ## Confirmed Data
 - Event: United States - Austin - Austin
-- Session: Qualifying / key 11392
-- Run ID: 20261025T181155Z
-- Consumer readiness: full_report_ready
-- Source status: clean
-- Workbook source status: clean
-- Readiness quality: usable_with_optional_context_gaps
+- Session: Race / key 11396
+- Run ID: 20261027T001600Z
+- Consumer readiness: blocked
+- Source status: needs_manual_review
+- Workbook source status: needs_manual_review
+- Readiness quality: blocked_manual_review_required_source
 - Material change detected: True
-- Notification recommended: True
+- Notification recommended: False
 - Forecast gate: off
 - Promotion allowed: false
 - Stable engine modified: false
@@ -17,8 +17,8 @@
 
 ## How This Context May Be Used
 - Race Reports source context; Full Report only when post-race/result state supports it.
-- Trigger action: notify_and_update_context
-- Trigger reason: material readiness or forecast-relevant state changed
+- Trigger action: blocked
+- Trigger reason: consumer not ready or source/workbook state is not clean/usable
 
 ## Boundaries
 - Do not promote experimental logic from this context alone.
