@@ -1,9 +1,11 @@
 """Pure offline FIA final-starting-grid custody and comparison verifier.
 
 This experimental verifier composes the accepted FIA document-candidate and
-verified-source-consumer contracts.  It recognizes exactly one reviewed source
-profile: Austin 2026 FIA Document 50.  It never fetches, parses, corrects, or
-publishes a grid and never upgrades historical evidence to forecast eligibility.
+verified-source-consumer contracts.  Its reusable boundary accepts one exact,
+caller-pinned canonical reference profile; the Austin 2026 Document 50 wrapper
+remains the reviewed regression profile.  It never fetches, parses, corrects,
+or publishes a grid and never upgrades historical evidence to forecast
+eligibility.
 """
 import math
 
@@ -12,8 +14,12 @@ from . import dr002_verified_source_consumer_v1 as consumer
 
 
 SCHEMA_VERSION = "dr002-fia-final-grid-provenance-verifier-v1"
+PROFILE_SCHEMA_VERSION = "dr002-fia-final-grid-reference-profile-v1"
 VERIFIED_MATCH = "FIA_FINAL_GRID_MATCH_VERIFIED_RETROSPECTIVE_ONLY"
 DISCREPANCY_HOLD = "HOLD_FIA_FINAL_GRID_DISCREPANCY"
+MAX_GRID_DRIVERS = 30
+MAX_REFERENCE_PROFILE_BYTES = 64 * 1024
+MAX_OBSERVED_GRID_BYTES = 256 * 1024
 
 AUSTIN_PROFILE_ID = "fia:2026-united-states-grand-prix:document-50"
 AUSTIN_EVENT_ID = "2026_1297_united_states_austin_austin"
@@ -34,6 +40,9 @@ AUSTIN_DOCUMENT_SIZE_BYTES = 510017
 AUSTIN_OBSERVED_GRID_SHA256 = "06ce29fdf7afd9a731012aa4de60a80945f8fa0c735103afedfe903b16aa1e38"
 AUSTIN_PUBLISHED_UTC = "2026-10-25T19:00:00Z"
 AUSTIN_RACE_START_UTC = "2026-10-25T20:00:00Z"
+AUSTIN_REFERENCE_PROFILE_SHA256 = (
+    "6b4d292cb2a4290e3cadf216235e24be8ac8ffd19a4eadc75ca101ba2c1d0b03"
+)
 
 # Position, car number.  Document 50 has 21 conventional slots and one
 # separately classified pit-lane starter, car 18.
@@ -46,7 +55,7 @@ AUSTIN_CONVENTIONAL_GRID = (
 AUSTIN_PIT_LANE_DRIVERS = (18,)
 
 _PROFILE_FIELDS = {
-    "profile_id", "event_id", "meeting_id", "race_session_id",
+    "profile_schema_version", "profile_id", "event_id", "meeting_id", "race_session_id",
     "observed_source_session_id", "document_uri", "official_index_uri",
     "document_number", "document_title", "document_type",
     "raw_document_sha256", "raw_document_size_bytes",
@@ -61,6 +70,8 @@ _ALWAYS_FALSE = {
     "first_observed_clock_authenticated": False,
     "publisher_authenticated": False,
     "publication_time_authenticated": False,
+    "fia_publisher_authenticated": False,
+    "prospective_forecast_cutoff_eligible": False,
     "race_predictions_unlocked": False,
     "fantasy_predictions_unlocked": False,
     "corrected_grid_published": False,
@@ -74,6 +85,7 @@ _ALWAYS_FALSE = {
 
 def _austin_profile():
     return {
+        "profile_schema_version": PROFILE_SCHEMA_VERSION,
         "profile_id": AUSTIN_PROFILE_ID,
         "event_id": AUSTIN_EVENT_ID,
         "meeting_id": AUSTIN_MEETING_ID,
@@ -92,8 +104,8 @@ def _austin_profile():
         "index_publication_text": "25.10.26 20:00 CET",
         "document_header_date": "25 October 2026",
         "document_header_time": "14:00",
-        "conventional_grid": AUSTIN_CONVENTIONAL_GRID,
-        "pit_lane_drivers": AUSTIN_PIT_LANE_DRIVERS,
+        "conventional_grid": [list(item) for item in AUSTIN_CONVENTIONAL_GRID],
+        "pit_lane_drivers": list(AUSTIN_PIT_LANE_DRIVERS),
     }
 
 
@@ -112,6 +124,8 @@ def _hold(reason):
         "status": "HOLD",
         "reason_codes": [reason],
         "document_custody_verified": False,
+        "github_execution_provenance_verified": False,
+        "reference_profile_identity_pinned": False,
         "official_final_grid_reference_verified": False,
         "observed_grid_matches_official": False,
         "differences": [],
@@ -119,44 +133,100 @@ def _hold(reason):
     }
 
 
+def _reference_profile(reference_profile_bytes, expected_reference_profile_sha256):
+    _require(type(reference_profile_bytes) is bytes, "reference_profile_exact_bytes_required")
+    _require(0 < len(reference_profile_bytes) <= MAX_REFERENCE_PROFILE_BYTES,
+             "reference_profile_size_out_of_bounds")
+    _require(type(expected_reference_profile_sha256) is str
+             and len(expected_reference_profile_sha256) == 64
+             and all(character in "0123456789abcdef"
+                     for character in expected_reference_profile_sha256),
+             "invalid_reference_profile_identity")
+    actual_sha256 = consumer.receipts.sha256(reference_profile_bytes)
+    _require(actual_sha256 == expected_reference_profile_sha256,
+             "unrecognized_reference_profile")
+    try:
+        profile = consumer.frozen.strict_json(reference_profile_bytes)
+    except (ValueError, TypeError, UnicodeError) as exc:
+        raise VerificationHold("malformed_reference_profile") from exc
+    _require(reference_profile_bytes == consumer.receipts.canonical_json_bytes(profile),
+             "noncanonical_reference_profile")
+    return profile, actual_sha256
+
+
 def _validate_profile(profile):
     _require(type(profile) is dict and set(profile) == _PROFILE_FIELDS,
              "malformed_reference_profile")
-    _require(profile["document_number"] == 50
+    _require(profile["profile_schema_version"] == PROFILE_SCHEMA_VERSION,
+             "unsupported_reference_profile")
+    _require(type(profile["profile_id"]) is str and bool(profile["profile_id"].strip()),
+             "malformed_profile_id")
+    _require(type(profile["document_number"]) is int
+             and not isinstance(profile["document_number"], bool)
+             and profile["document_number"] > 0
              and profile["document_title"] == "Final Starting Grid"
              and profile["document_type"] == "final_starting_grid",
              "document_identity_mismatch")
-    _require(profile["published_utc"] == profile["race_start_utc"][:11] + "19:00:00Z",
-             "publication_time_evidence_mismatch")
-    _require(profile["index_publication_text"] == "25.10.26 20:00 CET"
-             and profile["document_header_date"] == "25 October 2026"
-             and profile["document_header_time"] == "14:00",
-             "publication_time_evidence_mismatch")
+    for field in ("event_id", "meeting_id", "race_session_id", "document_uri",
+                  "official_index_uri", "index_publication_text",
+                  "document_header_date", "document_header_time"):
+        _require(type(profile[field]) is str and profile[field] == profile[field].strip()
+                 and bool(profile[field]), "malformed_reference_profile")
+    _require(profile["meeting_id"].isdigit() and int(profile["meeting_id"]) > 0,
+             "invalid_meeting_id")
+    _require(type(profile["observed_source_session_id"]) is int
+             and not isinstance(profile["observed_source_session_id"], bool)
+             and profile["observed_source_session_id"] > 0,
+             "invalid_observed_source_session_id")
+    _require(type(profile["raw_document_size_bytes"]) is int
+             and not isinstance(profile["raw_document_size_bytes"], bool)
+             and 0 < profile["raw_document_size_bytes"] <= candidate.MAX_PDF_BYTES,
+             "invalid_document_size")
+    for field in ("raw_document_sha256", "observed_grid_sha256"):
+        value = profile[field]
+        _require(type(value) is str and len(value) == 64
+                 and all(character in "0123456789abcdef" for character in value),
+                 "invalid_evidence_digest")
+    try:
+        published = consumer.receipts._time(profile["published_utc"])
+        race_start = consumer.receipts._time(profile["race_start_utc"])
+    except (ValueError, TypeError) as exc:
+        raise VerificationHold("publication_time_evidence_mismatch") from exc
+    _require(published <= race_start, "publication_time_evidence_mismatch")
     conventional = profile["conventional_grid"]
     pit_lane = profile["pit_lane_drivers"]
-    _require(type(conventional) is tuple and type(pit_lane) is tuple,
+    _require(type(conventional) is list and type(pit_lane) is list,
              "malformed_official_grid")
-    _require(len(conventional) == 21 and len(pit_lane) == 1,
+    _require(0 < len(conventional) <= MAX_GRID_DRIVERS
+             and len(conventional) + len(pit_lane) <= MAX_GRID_DRIVERS,
              "official_grid_count_mismatch")
-    _require(tuple(position for position, _ in conventional) == tuple(range(1, 22)),
+    _require(all(type(item) is list and len(item) == 2 for item in conventional),
+             "malformed_official_grid")
+    _require(tuple(item[0] for item in conventional) == tuple(range(1, len(conventional) + 1)),
              "official_grid_positions_not_contiguous")
-    conventional_drivers = [driver for _, driver in conventional]
-    _require(all(type(driver) is int and driver > 0 for driver in conventional_drivers + list(pit_lane)),
+    conventional_drivers = [item[1] for item in conventional]
+    _require(all(type(driver) is int and driver > 0
+                 for driver in conventional_drivers + list(pit_lane)),
              "invalid_official_driver_number")
-    _require(len(set(conventional_drivers + list(pit_lane))) == 22,
+    _require(len(set(conventional_drivers + list(pit_lane)))
+             == len(conventional_drivers) + len(pit_lane),
              "duplicate_official_driver")
     return conventional, pit_lane
 
 
 def _strict_observed_grid(raw, profile):
     _require(type(raw) is bytes, "observed_grid_exact_bytes_required")
+    _require(0 < len(raw) <= MAX_OBSERVED_GRID_BYTES,
+             "observed_grid_size_out_of_bounds")
     _require(consumer.receipts.sha256(raw) == profile["observed_grid_sha256"],
              "unrecognized_observed_grid_revision")
     try:
         rows = consumer.frozen.strict_json(raw)
     except (ValueError, TypeError, UnicodeError) as exc:
         raise VerificationHold("malformed_observed_grid") from exc
-    _require(type(rows) is list and len(rows) == 22, "observed_grid_row_count_mismatch")
+    expected_driver_count = len(profile["conventional_grid"]) + len(profile["pit_lane_drivers"])
+    _require(type(rows) is list and len(rows) == expected_driver_count,
+             "observed_grid_row_count_mismatch")
     legacy_fields = {"position", "driver_number", "lap_duration", "meeting_key", "session_key"}
     classified_fields = {"position", "driver_number", "start_classification",
                          "meeting_key", "session_key"}
@@ -203,12 +273,12 @@ def _strict_observed_grid(raw, profile):
         _require(driver not in drivers, "duplicate_observed_driver")
         observed[driver] = (classification, position)
         drivers.add(driver)
-    expected_grid_count = 22 if row_schema == "legacy" else 21
-    _require(grid_positions == set(range(1, expected_grid_count + 1)),
+    expected_grid_count = len(rows) if row_schema == "legacy" else sum(
+        value[0] == "grid" for value in observed.values()
+    )
+    _require(expected_grid_count > 0
+             and grid_positions == set(range(1, expected_grid_count + 1)),
              "observed_grid_positions_not_contiguous")
-    if row_schema == "classified":
-        _require(sum(value[0] == "pit_lane" for value in observed.values()) == 1,
-                 "observed_pit_lane_count_mismatch")
     return observed, drivers
 
 
@@ -231,7 +301,7 @@ def _comparison(observed, official_conventional, official_pit_lane):
 
 
 def _verify(*, raw_document_bytes, source_capture_receipt_bytes, bridge_result,
-            observed_grid_bytes, profile):
+            observed_grid_bytes, profile, reference_profile_sha256):
     official_conventional, official_pit_lane = _validate_profile(profile)
     _require(type(raw_document_bytes) is bytes, "raw_document_exact_bytes_required")
     _require(len(raw_document_bytes) == profile["raw_document_size_bytes"],
@@ -307,7 +377,10 @@ def _verify(*, raw_document_bytes, source_capture_receipt_bytes, bridge_result,
         "document_uri": profile["document_uri"],
         "document_sha256": profile["raw_document_sha256"],
         "document_size_bytes": profile["raw_document_size_bytes"],
+        "reference_profile_sha256": reference_profile_sha256,
+        "reference_profile_identity_pinned": True,
         "document_custody_verified": True,
+        "github_execution_provenance_verified": True,
         "custody_trust_scope": custody["binding_trust_scope"],
         "official_final_grid_reference_verified": True,
         "publication_time_evidence": {
@@ -320,9 +393,9 @@ def _verify(*, raw_document_bytes, source_capture_receipt_bytes, bridge_result,
             "retrospective_only": True,
         },
         "official_grid_sha256": official_grid_sha256,
-        "official_driver_count": 22,
-        "official_conventional_position_count": 21,
-        "official_pit_lane_driver_count": 1,
+        "official_driver_count": len(official_conventional) + len(official_pit_lane),
+        "official_conventional_position_count": len(official_conventional),
+        "official_pit_lane_driver_count": len(official_pit_lane),
         "observed_driver_count": len(observed_drivers),
         "observed_grid_matches_official": not differences,
         "differences": differences,
@@ -330,18 +403,43 @@ def _verify(*, raw_document_bytes, source_capture_receipt_bytes, bridge_result,
     }
 
 
-def verify_austin_final_starting_grid(*, raw_document_bytes,
-                                      source_capture_receipt_bytes,
-                                      bridge_result, observed_grid_bytes):
-    """Verify exact Austin Doc 50 custody and compare retained grid evidence."""
+def verify_final_starting_grid(*, reference_profile_bytes,
+                               expected_reference_profile_sha256,
+                               raw_document_bytes, source_capture_receipt_bytes,
+                               bridge_result, observed_grid_bytes):
+    """Verify one exact caller-pinned final-grid profile and custody package.
+
+    The expected profile digest protects this input boundary only.  It does not
+    authorize the profile, authenticate FIA, or establish forecast-time source
+    availability.
+    """
     try:
+        profile, profile_sha256 = _reference_profile(
+            reference_profile_bytes, expected_reference_profile_sha256
+        )
         return _verify(
             raw_document_bytes=raw_document_bytes,
             source_capture_receipt_bytes=source_capture_receipt_bytes,
             bridge_result=bridge_result,
             observed_grid_bytes=observed_grid_bytes,
-            profile=_austin_profile(),
+            profile=profile,
+            reference_profile_sha256=profile_sha256,
         )
     except (VerificationHold, ValueError, TypeError, KeyError, IndexError,
             AttributeError, OverflowError, RecursionError, UnicodeError) as exc:
         return _hold(str(exc) or "malformed_verification_input")
+
+
+def verify_austin_final_starting_grid(*, raw_document_bytes,
+                                      source_capture_receipt_bytes,
+                                      bridge_result, observed_grid_bytes):
+    """Verify exact Austin Doc 50 custody and compare retained grid evidence."""
+    profile_bytes = consumer.receipts.canonical_json_bytes(_austin_profile())
+    return verify_final_starting_grid(
+        reference_profile_bytes=profile_bytes,
+        expected_reference_profile_sha256=AUSTIN_REFERENCE_PROFILE_SHA256,
+        raw_document_bytes=raw_document_bytes,
+        source_capture_receipt_bytes=source_capture_receipt_bytes,
+        bridge_result=bridge_result,
+        observed_grid_bytes=observed_grid_bytes,
+    )
