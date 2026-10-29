@@ -574,7 +574,7 @@ class AustinDocument50VerificationTests(unittest.TestCase):
         expected = {
             "docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md": "85ce44807ef159b5ba5d3bfd543ea1f945097f77",
             "scripts/forecast_bundles/dr002_fia_grid_document_candidate_v1.py": "15867e3d1af56a5c00b2bd35c1220541e7e4f619",
-            "scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py": "b8e017e247954e0955285e8910a145fe4ee89d52",
+            "scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py": "3554b7176b2cbac7c4262da56e70c2228243c219",
             "scripts/forecast_bundles/dr002_verified_source_consumer_v1.py": "e402939202ed579c368499f3baefb3641de27de7",
             "scripts/forecast_bundles/dr002_github_attestation_binding_v1.py": "215f012b79aa9e6f33aff6ad62ca7efba53a9627",
             "scripts/forecast_bundles/verify_forecast_integrity_receipts_v1.py": "ccd17a28744f0e7c6706c3be9562d57b7dcea0ae",
