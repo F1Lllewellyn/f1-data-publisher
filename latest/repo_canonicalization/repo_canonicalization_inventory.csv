@@ -4839,6 +4839,9 @@ history/autorepair/session_workbook_recovery/20261028T142934Z/autorepair_status.
 history/autorepair/session_workbook_recovery/20261028T195202Z/autorepair_manifest.json,994,active_architecture,keep,Inside active architecture root.,140
 history/autorepair/session_workbook_recovery/20261028T195202Z/autorepair_report.md,1039,active_architecture,keep,Inside active architecture root.,136
 history/autorepair/session_workbook_recovery/20261028T195202Z/autorepair_status.json,12489,active_architecture,keep,Inside active architecture root.,138
+history/autorepair/session_workbook_recovery/20261028T234722Z/autorepair_manifest.json,994,active_architecture,keep,Inside active architecture root.,140
+history/autorepair/session_workbook_recovery/20261028T234722Z/autorepair_report.md,1039,active_architecture,keep,Inside active architecture root.,136
+history/autorepair/session_workbook_recovery/20261028T234722Z/autorepair_status.json,12489,active_architecture,keep,Inside active architecture root.,138
 history/chat_context/20260612T232248Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,719,active_architecture,keep,Inside active architecture root.,135
 history/chat_context/20260612T232248Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,717,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/20260613T100954Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,719,active_architecture,keep,Inside active architecture root.,135
@@ -9949,6 +9952,10 @@ history/chat_context/20261028T172312Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.m
 history/chat_context/20261028T172312Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,558,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/20261028T194001Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,560,active_architecture,keep,Inside active architecture root.,135
 history/chat_context/20261028T194001Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,558,active_architecture,keep,Inside active architecture root.,132
+history/chat_context/20261028T215418Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,560,active_architecture,keep,Inside active architecture root.,135
+history/chat_context/20261028T215418Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,558,active_architecture,keep,Inside active architecture root.,132
+history/chat_context/20261028T233909Z/FANTASY_PREDICTIONS_LATEST_SESSION_BRIEF.md,560,active_architecture,keep,Inside active architecture root.,135
+history/chat_context/20261028T233909Z/RACE_PREDICTIONS_LATEST_SESSION_BRIEF.md,558,active_architecture,keep,Inside active architecture root.,132
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/combined_context_index.json,895,active_architecture,keep,Inside active architecture root.,155
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/fantasy_predictions_context.md,1694,active_architecture,keep,Inside active architecture root.,158
 history/chat_context/2026_1287_spain_barcelona_catalunya/20260613T123639Z/race_predictions_context.md,1687,active_architecture,keep,Inside active architecture root.,155
@@ -53055,6 +53062,12 @@ history/readiness_dashboards/20261028T172312Z/race_predictions_readiness_state.j
 history/readiness_dashboards/20261028T194001Z/combined_readiness_dashboard.json,1613,active_architecture,keep,Inside active architecture root.,133
 history/readiness_dashboards/20261028T194001Z/fantasy_readiness_state.json,359,active_architecture,keep,Inside active architecture root.,128
 history/readiness_dashboards/20261028T194001Z/race_predictions_readiness_state.json,354,active_architecture,keep,Inside active architecture root.,137
+history/readiness_dashboards/20261028T215418Z/combined_readiness_dashboard.json,1613,active_architecture,keep,Inside active architecture root.,133
+history/readiness_dashboards/20261028T215418Z/fantasy_readiness_state.json,359,active_architecture,keep,Inside active architecture root.,128
+history/readiness_dashboards/20261028T215418Z/race_predictions_readiness_state.json,354,active_architecture,keep,Inside active architecture root.,137
+history/readiness_dashboards/20261028T233909Z/combined_readiness_dashboard.json,1613,active_architecture,keep,Inside active architecture root.,133
+history/readiness_dashboards/20261028T233909Z/fantasy_readiness_state.json,359,active_architecture,keep,Inside active architecture root.,128
+history/readiness_dashboards/20261028T233909Z/race_predictions_readiness_state.json,354,active_architecture,keep,Inside active architecture root.,137
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/forecast_bundle_ledger_snapshot.json,740,active_architecture,keep,Inside active architecture root.,191
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,177
 history/session_data_processor/2026_1287_spain_barcelona_catalunya/20260612T182940Z/practice_2_11301/raw/openf1_drivers.json,10883,active_architecture,keep,Inside active architecture root.,178
@@ -79068,6 +79081,7 @@ history/session_gate_watch_v27/20261028T053053Z/gate_decision.json,3011,active_a
 history/session_gate_watch_v27/20261028T113638Z/gate_decision.json,3010,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20261028T172257Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
 history/session_gate_watch_v27/20261028T215403Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
+history/session_gate_watch_v27/20261029T014739Z/gate_decision.json,3011,active_architecture,keep,Inside active architecture root.,120
 history/workbook_kpi_refresh_applier/20260612T184142Z/F1_Workbook_KPI_SANDBOX_Refresh_unknown_event_session_20260612T184142Z.xlsx,9011,active_architecture,keep,Inside active architecture root.,183
 history/workbook_kpi_refresh_applier/20260612T184142Z/refreshed_workbook_kpi_readiness.csv,143,active_architecture,keep,Inside active architecture root.,144
 history/workbook_kpi_refresh_applier/20260612T184142Z/sandbox_workbook_update_plan_applied.json,315,active_architecture,keep,Inside active architecture root.,149
@@ -107132,6 +107146,30 @@ history/workbook_kpi_refresh_applier/20261028T202506Z/upstream_data_readiness_sn
 history/workbook_kpi_refresh_applier/20261028T202506Z/upstream_latest_manifest_snapshot.json,569,active_architecture,keep,Inside active architecture root.,146
 history/workbook_kpi_refresh_applier/20261028T202506Z/workbook_kpi_refresh_manifest.json,4458,active_architecture,keep,Inside active architecture root.,142
 history/workbook_kpi_refresh_applier/20261028T202506Z/workbook_kpi_refresh_report.md,1765,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261028T215418Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T215418Z.xlsx,11139,active_architecture,keep,Inside active architecture root.,198
+history/workbook_kpi_refresh_applier/20261028T215418Z/refreshed_workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261028T215418Z/sandbox_workbook_update_plan_applied.json,1003,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261028T215418Z/upstream_combined_source_manifest_snapshot.json,707,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261028T215418Z/upstream_data_readiness_snapshot.json,1568,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261028T215418Z/upstream_latest_manifest_snapshot.json,569,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261028T215418Z/workbook_kpi_refresh_manifest.json,4458,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261028T215418Z/workbook_kpi_refresh_report.md,1765,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261028T234722Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T234722Z.xlsx,11137,active_architecture,keep,Inside active architecture root.,198
+history/workbook_kpi_refresh_applier/20261028T234722Z/refreshed_workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261028T234722Z/sandbox_workbook_update_plan_applied.json,1003,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261028T234722Z/upstream_combined_source_manifest_snapshot.json,707,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261028T234722Z/upstream_data_readiness_snapshot.json,1568,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261028T234722Z/upstream_latest_manifest_snapshot.json,569,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261028T234722Z/workbook_kpi_refresh_manifest.json,4458,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261028T234722Z/workbook_kpi_refresh_report.md,1765,active_architecture,keep,Inside active architecture root.,138
+history/workbook_kpi_refresh_applier/20261029T000647Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261029T000647Z.xlsx,11135,active_architecture,keep,Inside active architecture root.,198
+history/workbook_kpi_refresh_applier/20261029T000647Z/refreshed_workbook_kpi_readiness.csv,414,active_architecture,keep,Inside active architecture root.,144
+history/workbook_kpi_refresh_applier/20261029T000647Z/sandbox_workbook_update_plan_applied.json,1003,active_architecture,keep,Inside active architecture root.,149
+history/workbook_kpi_refresh_applier/20261029T000647Z/upstream_combined_source_manifest_snapshot.json,707,active_architecture,keep,Inside active architecture root.,155
+history/workbook_kpi_refresh_applier/20261029T000647Z/upstream_data_readiness_snapshot.json,1568,active_architecture,keep,Inside active architecture root.,145
+history/workbook_kpi_refresh_applier/20261029T000647Z/upstream_latest_manifest_snapshot.json,569,active_architecture,keep,Inside active architecture root.,146
+history/workbook_kpi_refresh_applier/20261029T000647Z/workbook_kpi_refresh_manifest.json,4458,active_architecture,keep,Inside active architecture root.,142
+history/workbook_kpi_refresh_applier/20261029T000647Z/workbook_kpi_refresh_report.md,1765,active_architecture,keep,Inside active architecture root.,138
 install_f1_github_automation_clean.py,8528,active_or_unknown,keep,Not classified as generated junk or obvious legacy installer artifact.,91
 install_reports/F1_1A_CUMULATIVE_GITHUB_PRODUCTION_V2_1_2026-06-11_install_report.md,2491,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,138
 installer/Install-F1-1A-GitHub-LongPath-Backup-Cleanup-Fix.ps1,5460,legacy_installer_or_patch_artifact,recommend_archive_only,Likely legacy installer/patch artifact; do not delete automatically.,116
@@ -108096,7 +108134,7 @@ latest/readiness_handoff/fantasy_predictions_readiness.json,359,active_architect
 latest/readiness_handoff/race_predictions_readiness.json,362,active_architecture,keep,Inside active architecture root.,110
 latest/readiness_handoff/race_reports_readiness.json,414,active_architecture,keep,Inside active architecture root.,106
 latest/repo_canonicalization/REPO_CANONICALIZATION_REPORT.md,810,active_architecture,keep,Inside active architecture root.,114
-latest/repo_canonicalization/repo_canonicalization_inventory.csv,20321358,active_architecture,keep,Inside active architecture root.,118
+latest/repo_canonicalization/repo_canonicalization_inventory.csv,20328017,active_architecture,keep,Inside active architecture root.,118
 latest/repo_canonicalization/repo_canonicalization_report.json,41878,active_architecture,keep,Inside active architecture root.,116
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/forecast_bundle_ledger_snapshot.json,741,active_architecture,keep,Inside active architecture root.,173
 latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/raw/openf1_drivers.csv,5131,active_architecture,keep,Inside active architecture root.,159
@@ -113517,6 +113555,9 @@ latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_State
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T172312Z.xlsx,11137,active_architecture,keep,Inside active architecture root.,180
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T195202Z.xlsx,11137,active_architecture,keep,Inside active architecture root.,180
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T202506Z.xlsx,11137,active_architecture,keep,Inside active architecture root.,180
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T215418Z.xlsx,11139,active_architecture,keep,Inside active architecture root.,180
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261028T234722Z.xlsx,11137,active_architecture,keep,Inside active architecture root.,180
+latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261029T000647Z.xlsx,11135,active_architecture,keep,Inside active architecture root.,180
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261023T190422Z.xlsx,10294,active_architecture,keep,Inside active architecture root.,183
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261024T000659Z.xlsx,10294,active_architecture,keep,Inside active architecture root.,183
 latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_session_20261024T003630Z.xlsx,10290,active_architecture,keep,Inside active architecture root.,183
@@ -113744,6 +113785,7 @@ scripts/forecast/build_forecast_use_dry_review.py,6995,active_architecture,keep,
 scripts/forecast_bundles/create_forecast_bundles_v1.py,17437,active_architecture,keep,Inside active architecture root.,108
 scripts/forecast_bundles/dr002_contained_producer_shadow_v1.py,8355,active_architecture,keep,Inside active architecture root.,116
 scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py,20257,active_architecture,keep,Inside active architecture root.,119
+scripts/forecast_bundles/dr002_fia_final_grid_provenance_verifier_v1.py,21388,active_architecture,keep,Inside active architecture root.,125
 scripts/forecast_bundles/dr002_fia_grid_document_candidate_v1.py,11915,active_architecture,keep,Inside active architecture root.,118
 scripts/forecast_bundles/dr002_forecast_lock_shadow_pilot_v1.py,20362,active_architecture,keep,Inside active architecture root.,117
 scripts/forecast_bundles/dr002_frozen_evidence_manifest_v1.py,9190,active_architecture,keep,Inside active architecture root.,115
@@ -113834,6 +113876,7 @@ tests/test_dr002_capture_attestation_v1.py,16911,active_architecture,keep,Inside
 tests/test_dr002_capture_provenance_pilot_v1.py,11349,active_architecture,keep,Inside active architecture root.,101
 tests/test_dr002_contained_producer_shadow_v1.py,12532,active_architecture,keep,Inside active architecture root.,102
 tests/test_dr002_fia_final_grid_capture_pilot_v1.py,17747,active_architecture,keep,Inside active architecture root.,105
+tests/test_dr002_fia_final_grid_provenance_verifier_v1.py,27356,active_architecture,keep,Inside active architecture root.,111
 tests/test_dr002_fia_grid_document_candidate_v1.py,16036,active_architecture,keep,Inside active architecture root.,104
 tests/test_dr002_forecast_lock_shadow_pilot_v1.py,25244,active_architecture,keep,Inside active architecture root.,103
 tests/test_dr002_frozen_evidence_manifest_v1.py,8236,active_architecture,keep,Inside active architecture root.,101
