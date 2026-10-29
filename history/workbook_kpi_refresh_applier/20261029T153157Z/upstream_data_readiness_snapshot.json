@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1297_united_states_austin_austin",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
+  "race_name": "United States - Austin - Austin",
+  "readiness_quality": "blocked_manual_review_required_source",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-10-25T22:00:00+00:00",
+    "date_start": "2026-10-25T20:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1297,
+    "session_key": 11396,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 24227,
+      "status": "clean"
+    },
+    "openf1_laps": {
+      "rows": 1166,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 32,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 455,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 173,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 54,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 159,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-10-27T04:56:19.265617Z"
+}
