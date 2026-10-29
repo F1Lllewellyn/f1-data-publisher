@@ -225,12 +225,13 @@ def _capture_profile(raw, expected_sha256):
             and not isinstance(profile["document_number"], bool)
             and profile["document_number"] > 0,
             "invalid_document_number")
-    for field in ("event_id", "meeting_id", "session_id"):
-        require(_scope_valid(profile[field]), "invalid_" + field)
-    require(profile["meeting_id"].startswith(profile["event_id"] + ":"),
-            "meeting_event_identity_mismatch")
-    require(profile["session_id"].startswith(profile["event_id"] + ":"),
-            "session_event_identity_mismatch")
+    require(_scope_valid(profile["event_id"]), "invalid_event_id")
+    for field in ("meeting_id", "session_id"):
+        value = profile[field]
+        require(
+            _scope_valid(value) and re.fullmatch(r"[1-9][0-9]*", value) is not None,
+            "invalid_" + field,
+        )
     require(profile["profile_id"].startswith(profile["event_id"] + ":"),
             "profile_event_identity_mismatch")
 
