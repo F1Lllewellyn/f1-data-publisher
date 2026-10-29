@@ -756,6 +756,9 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
             {path: git_blob(path) for path in m.INTAKE_DEPENDENCY_PINS},
             m.INTAKE_DEPENDENCY_PINS,
         )
+        verifier_test = "tests/test_dr002_fia_final_grid_provenance_verifier_v1.py"
+        self.assertNotIn(verifier_test, m.INTAKE_DEPENDENCY_PINS)
+        self.assertEqual(git_blob(verifier_test), "14faac0512e5365d27fdbbb8cc3091fe86757e7d")
 
 
 if __name__ == "__main__":

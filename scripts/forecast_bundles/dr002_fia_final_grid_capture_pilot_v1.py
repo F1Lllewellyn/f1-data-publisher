@@ -111,8 +111,6 @@ INTAKE_DEPENDENCY_PINS = {
         "ccd17a28744f0e7c6706c3be9562d57b7dcea0ae",
     "scripts/forecast_bundles/dr002_fia_final_grid_provenance_verifier_v1.py":
         "2f9f2266a87f8a2a743bc64a55fd0bd7f8fba204",
-    "tests/test_dr002_fia_final_grid_provenance_verifier_v1.py":
-        "95cc138ec79a012ec899a16350db4a0cd61aa1db",
     "scripts/session_data_processor/session_data_processor_loop_v1.py":
         "6a9af69e13a937230788cfb08f889bdc36e95018",
     "docs/F1_PROJECT_ROADMAP_AND_CONTINUITY.md":
