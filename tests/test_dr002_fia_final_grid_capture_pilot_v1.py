@@ -1,4 +1,5 @@
 import ast
+import base64
 import copy
 import hashlib
 import importlib.util
@@ -17,7 +18,12 @@ SPEC = importlib.util.spec_from_file_location("fia_capture", MODULE_PATH)
 m = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(m)
 sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT / "tests"))
+import test_dr002_github_attestation_binding_v1 as bridge_fixture  # noqa: E402
 from scripts.forecast_bundles import dr002_verified_source_consumer_v1 as consumer  # noqa: E402
+from scripts.forecast_bundles import (  # noqa: E402
+    dr002_fia_final_grid_provenance_verifier_v1 as verifier,
+)
 
 MOCK_PDF = (
     b"%PDF-1.7\n% MOCK SYNTHETIC FIA-CAPTURE TEST BYTES - NOT LIVE EVIDENCE\n"
@@ -403,7 +409,7 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
         self.temp.cleanup()
 
     def profile(self, **changes):
-        event_id = "fia:2026:example-grand-prix"
+        event_id = "2026_1300_example_grand_prix_example"
         index_uri = (
             "https://www.fia.com/documents/championships/"
             "fia-formula-one-world-championship-14/event/Example%20Grand%20Prix"
@@ -420,8 +426,8 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
             ),
             "official_index_uri": index_uri,
             "event_id": event_id,
-            "meeting_id": event_id + ":meeting",
-            "session_id": event_id + ":race",
+            "meeting_id": "1300",
+            "session_id": "11400",
             "claimed_published_utc": "2026-11-01T15:00:00Z",
             "publication_evidence": {
                 "official_index_uri": index_uri,
@@ -497,6 +503,36 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
         self.assertTrue(all(result[name] is False for name in m.INTAKE_FALSE_CLAIMS))
         return result
 
+    def simulated_verified_github_bridge(self, receipt_bytes):
+        """Build synthetic bridge output; this is not independent attestation evidence."""
+        _, _, _, verified, identity, verification_ref = bridge_fixture.fixture()
+        verified = copy.deepcopy(verified)
+        receipt_digest = verifier.consumer.receipts.sha256(receipt_bytes)
+        statement = verified["result"]["statement"]
+        statement["subject"][0]["digest"]["sha256"] = receipt_digest
+        bundle = verified["result"]["bundle"]
+        bundle["dsseEnvelope"]["payload"] = base64.b64encode(
+            verifier.consumer.receipts.canonical_json_bytes(statement)
+        ).decode()
+        verified["result"]["bundle"] = copy.deepcopy(bundle)
+        verified["result"]["statement"] = statement
+        verified["result"]["verifiedTimestamps"] = [{
+            "type": "Tlog",
+            "uri": "https://rekor.sigstore.dev",
+            "timestamp": "2026-11-01T16:00:04Z",
+        }]
+        bridge_result = consumer.bridge.build_verified_github_receipt_binding(
+            receipt_bytes,
+            verifier.consumer.receipts.canonical_json_bytes(bundle),
+            verified,
+            identity,
+            verification_ref,
+        )
+        self.assertEqual(bridge_result["status"], "VERIFIED_GITHUB_PROVENANCE_BINDING")
+        self.assertEqual(bridge_result["trust_scope"], "GITHUB_EXECUTION_PROVENANCE_ONLY")
+        self.assertTrue(all(bridge_result[name] is False for name in consumer.bridge.HOLD_TRUST))
+        return bridge_result
+
     def test_event_independent_success_preserves_exact_profile_document_and_trust_ceiling(self):
         profile = self.profile()
         profile_bytes = m.canonical_json_bytes(profile)
@@ -550,13 +586,25 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
             ("document_uri", "https://www.fia.com/%2e%2e/final.pdf", "invalid_document_uri"),
             ("official_index_uri", "https://example.com/documents/event/x",
              "invalid_official_index_uri"),
-            ("meeting_id", "fia:2026:different:meeting", "meeting_event_identity_mismatch"),
-            ("session_id", "fia:2026:different:race", "session_event_identity_mismatch"),
+            ("event_id", "", "invalid_event_id"),
             ("profile_id", "fia:2026:different:document-51", "profile_event_identity_mismatch"),
         )
         for field, value, code in cases:
             with self.subTest(field=field, value=value):
                 self.assert_intake_hold(code, profile=self.profile(**{field: value}))
+
+    def test_meeting_and_race_session_ids_require_canonical_positive_decimal_strings(self):
+        invalid_values = (
+            None, True, 1300, "", " ", "0", "00", "01300", "+1300", "-1300",
+            "1300.0", "1300 ", "event:1300", "１２９７",
+        )
+        for field in ("meeting_id", "session_id"):
+            for value in invalid_values:
+                with self.subTest(field=field, value=value):
+                    self.assert_intake_hold(
+                        "invalid_" + field,
+                        profile=self.profile(**{field: value}),
+                    )
 
     def test_redirect_changed_url_and_transport_incompleteness_fail_closed(self):
         profile = self.profile()
@@ -670,6 +718,10 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
         mutations = (
             ("prior_evidence_scope_mismatch",
              lambda value: value["scope"].update(event_id="fia:2026:other"), 0),
+            ("prior_evidence_scope_mismatch",
+             lambda value: value["scope"].update(meeting_id="9999"), 0),
+            ("prior_evidence_scope_mismatch",
+             lambda value: value["scope"].update(session_id="99999"), 0),
             ("prior_evidence_document_uri_mismatch",
              lambda value: value["payload"].update(source_uri="https://www.fia.com/other.pdf"), 0),
             ("prior_evidence_source_identity_mismatch",
@@ -747,6 +799,110 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
         self.assertFalse(result["first_observed_clock_authenticated"])
         self.assertFalse(result["prospective_forecast_cutoff_eligible"])
 
+    def test_actual_capture_output_composes_with_simulated_bridge_and_native_verifier(self):
+        capture_profile = self.profile()
+        capture_result, root = self.run_intake(profile=capture_profile)
+        self.assertEqual(capture_result["validation_status"], "CAPTURED_UNBOUND_CANDIDATE")
+        receipt_bytes = (root / "source_capture_receipt.json").read_bytes()
+        source_bytes = (root / "raw/fia_final_starting_grid_doc_51.pdf").read_bytes()
+        receipt = json.loads(receipt_bytes)
+        self.assertEqual(receipt["scope"], {
+            "event_id": capture_profile["event_id"],
+            "meeting_id": capture_profile["meeting_id"],
+            "session_id": capture_profile["session_id"],
+        })
+        bridge_result = self.simulated_verified_github_bridge(receipt_bytes)
+
+        conventional_grid = [[1, 1], [2, 2], [3, 3], [4, 4]]
+        pit_lane_drivers = [5]
+        observed_source_session_id = 11399
+        observed_rows = [
+            {
+                "driver_number": driver,
+                "meeting_key": int(capture_profile["meeting_id"]),
+                "position": position,
+                "session_key": observed_source_session_id,
+                "start_classification": "grid",
+            }
+            for position, driver in conventional_grid
+        ]
+        observed_rows.append({
+            "driver_number": pit_lane_drivers[0],
+            "meeting_key": int(capture_profile["meeting_id"]),
+            "position": None,
+            "session_key": observed_source_session_id,
+            "start_classification": "pit_lane",
+        })
+        observed_grid_bytes = verifier.consumer.receipts.canonical_json_bytes(observed_rows)
+        reference_profile = {
+            "profile_schema_version": verifier.PROFILE_SCHEMA_VERSION,
+            "profile_id": capture_profile["profile_id"],
+            "event_id": capture_profile["event_id"],
+            "meeting_id": capture_profile["meeting_id"],
+            "race_session_id": capture_profile["session_id"],
+            "observed_source_session_id": observed_source_session_id,
+            "document_uri": capture_profile["document_uri"],
+            "official_index_uri": capture_profile["official_index_uri"],
+            "document_number": capture_profile["document_number"],
+            "document_title": capture_profile["document_title"],
+            "document_type": capture_profile["document_type"],
+            "raw_document_sha256": verifier.consumer.receipts.sha256(source_bytes),
+            "raw_document_size_bytes": len(source_bytes),
+            "observed_grid_sha256": verifier.consumer.receipts.sha256(observed_grid_bytes),
+            "published_utc": capture_profile["claimed_published_utc"],
+            "race_start_utc": "2026-11-01T15:30:00Z",
+            "index_publication_text": capture_profile["publication_evidence"][
+                "index_publication_text"
+            ],
+            "document_header_date": capture_profile["publication_evidence"][
+                "document_header_date"
+            ],
+            "document_header_time": capture_profile["publication_evidence"][
+                "document_header_time"
+            ],
+            "conventional_grid": conventional_grid,
+            "pit_lane_drivers": pit_lane_drivers,
+        }
+
+        def verify(profile):
+            profile_bytes = verifier.consumer.receipts.canonical_json_bytes(profile)
+            return verifier.verify_final_starting_grid(
+                reference_profile_bytes=profile_bytes,
+                expected_reference_profile_sha256=verifier.consumer.receipts.sha256(
+                    profile_bytes
+                ),
+                raw_document_bytes=source_bytes,
+                source_capture_receipt_bytes=receipt_bytes,
+                bridge_result=bridge_result,
+                observed_grid_bytes=observed_grid_bytes,
+            )
+
+        verified = verify(reference_profile)
+        self.assertEqual(verified["status"], verifier.VERIFIED_MATCH)
+        self.assertTrue(verified["document_custody_verified"])
+        self.assertTrue(verified["github_execution_provenance_verified"])
+        self.assertTrue(verified["observed_grid_matches_official"])
+        self.assertTrue(verified["publication_time_evidence"]["retrospective_only"])
+        self.assertEqual(verified["event_id"], receipt["scope"]["event_id"])
+        self.assertEqual(verified["meeting_id"], receipt["scope"]["meeting_id"])
+        self.assertEqual(verified["race_session_id"], receipt["scope"]["session_id"])
+        self.assertTrue(all(verified[name] is False for name in verifier._ALWAYS_FALSE))
+        self.assertTrue(all(capture_result[name] is False for name in m.INTAKE_FALSE_CLAIMS))
+
+        substitutions = (
+            ("event_id", "2026_9999_other_event"),
+            ("meeting_id", "9999"),
+            ("race_session_id", "99999"),
+        )
+        for field, value in substitutions:
+            with self.subTest(field=field):
+                changed = copy.deepcopy(reference_profile)
+                changed[field] = value
+                held = verify(changed)
+                self.assertEqual(held["status"], "HOLD")
+                self.assertEqual(held["reason_codes"], ["document_custody_not_verified"])
+                self.assertTrue(all(held[name] is False for name in verifier._ALWAYS_FALSE))
+
     def test_accepted_dependency_blobs_are_unchanged(self):
         def git_blob(path):
             data = (REPO_ROOT / path).read_bytes()
@@ -758,7 +914,11 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
         )
         verifier_test = "tests/test_dr002_fia_final_grid_provenance_verifier_v1.py"
         self.assertNotIn(verifier_test, m.INTAKE_DEPENDENCY_PINS)
-        self.assertEqual(git_blob(verifier_test), "14faac0512e5365d27fdbbb8cc3091fe86757e7d")
+        self.assertEqual(git_blob(verifier_test), "0b1fbc684cfd91f00b1cd940add995af3c441ede")
+        self.assertEqual(
+            git_blob("tests/test_dr002_github_attestation_binding_v1.py"),
+            "1d764c840202463e091110132521f23f34853ad0",
+        )
 
 
 if __name__ == "__main__":
