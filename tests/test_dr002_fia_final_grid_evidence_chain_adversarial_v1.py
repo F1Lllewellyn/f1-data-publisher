@@ -25,7 +25,6 @@ CAPTURE_SPEC.loader.exec_module(capture)
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 
-import test_dr002_github_attestation_binding_v1 as bridge_fixture  # noqa: E402
 from scripts.forecast_bundles import (  # noqa: E402
     dr002_fia_final_grid_provenance_verifier_v1 as verifier,
 )
@@ -74,13 +73,18 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
         self.calls = 0
         self.capture_profile = self._capture_profile()
         self.capture_result, output_root = self._run_actual_capture()
+        self.capture_manifest_bytes = (output_root / "capture_manifest.json").read_bytes()
+        self.capture_manifest = json.loads(self.capture_manifest_bytes)
         self.receipt_bytes = (output_root / "source_capture_receipt.json").read_bytes()
         self.source_bytes = (
             output_root / "raw/fia_final_starting_grid_doc_51.pdf"
         ).read_bytes()
         self.receipt = json.loads(self.receipt_bytes)
-        self.bridge_parts = self._attestation_parts(self.receipt_bytes)
-        self.bridge_result = self._call_bridge(self.bridge_parts)
+        self._assert_capture_manifest_execution()
+        self.bridge_parts = self._attestation_parts(
+            self.receipt_bytes, self.capture_manifest
+        )
+        self.bridge_result = self._capture_bound_bridge(self.bridge_parts)
         self.observed_rows = self._matching_rows()
         self.observed_grid_bytes = consumer.receipts.canonical_json_bytes(self.observed_rows)
         self.reference_profile = self._reference_profile()
@@ -178,31 +182,137 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
         )
         return result, self.runtime_root / "gha-86420-1"
 
-    def _attestation_parts(self, receipt_bytes):
-        """Rebind a synthetic fixture; this is not independent attestation."""
-        _, _, _, verified, identity, verification_ref = bridge_fixture.fixture()
-        verified = copy.deepcopy(verified)
-        statement = copy.deepcopy(verified["result"]["statement"])
-        statement["subject"][0]["digest"]["sha256"] = consumer.receipts.sha256(
-            receipt_bytes
+    def _assert_capture_manifest_execution(self):
+        expected_workflow = (
+            capture.REPOSITORY + "/" + capture.WORKFLOW_PATH + "@refs/heads/main"
         )
-        bundle = copy.deepcopy(verified["result"]["bundle"])
-        bundle["dsseEnvelope"]["payload"] = base64.b64encode(
-            consumer.receipts.canonical_json_bytes(statement)
-        ).decode()
-        verified["result"]["statement"] = copy.deepcopy(statement)
-        verified["result"]["bundle"] = copy.deepcopy(bundle)
-        verified["result"]["verifiedTimestamps"] = [{
-            "type": "Tlog",
-            "uri": "https://rekor.sigstore.dev",
-            "timestamp": "2026-11-01T16:00:04Z",
-        }]
+        self.assertEqual(self.capture_manifest_bytes, capture.canonical_json_bytes(
+            self.capture_manifest
+        ))
+        self.assertEqual(self.capture_manifest["repository"], capture.REPOSITORY)
+        self.assertEqual(self.capture_manifest["implementation_git_sha"], "c" * 40)
+        self.assertEqual(self.capture_manifest["workflow_ref"], expected_workflow)
+        self.assertEqual(self.capture_manifest["github_run_id"], "86420")
+        self.assertEqual(self.capture_manifest["github_run_attempt"], "1")
+        self.assertEqual(self.capture_manifest["run_id"], "gha-86420-1")
+        self.assertEqual(
+            self.capture_manifest["source_capture_receipt_sha256"],
+            consumer.receipts.sha256(self.receipt_bytes),
+        )
+
+    def _identity_from_capture_manifest(self, manifest):
+        repository = manifest["repository"]
+        signer_workflow, separator, source_ref = manifest["workflow_ref"].rpartition("@")
+        self.assertEqual(separator, "@")
+        self.assertTrue(signer_workflow.startswith(repository + "/"))
+        run_uri = (
+            "https://github.com/" + repository + "/actions/runs/"
+            + manifest["github_run_id"] + "/attempts/"
+            + manifest["github_run_attempt"]
+        )
+        return {
+            "repository": repository,
+            "signer_workflow": signer_workflow,
+            "source_ref": source_ref,
+            "source_digest": manifest["implementation_git_sha"],
+            "signer_digest": manifest["implementation_git_sha"],
+            "runner_environment": "github-hosted",
+            "workflow_trigger": "workflow_dispatch",
+            "run_invocation_uri": run_uri,
+            "oidc_issuer": "https://token.actions.githubusercontent.com",
+        }
+
+    def _attestation_parts(self, receipt_bytes, manifest=None):
+        """Build coherent simulated proof; no cryptographic verification occurs."""
+        manifest = self.capture_manifest if manifest is None else manifest
+        identity = self._identity_from_capture_manifest(manifest)
+        repository = identity["repository"]
+        repo_url = "https://github.com/" + repository
+        workflow_path = identity["signer_workflow"][len(repository) + 1:]
+        signer_uri = repo_url + "/" + workflow_path + "@" + identity["source_ref"]
+        statement = {
+            "_type": consumer.bridge.STATEMENT_TYPE,
+            "subject": [{
+                "name": "source_capture_receipt.json",
+                "digest": {"sha256": consumer.receipts.sha256(receipt_bytes)},
+            }],
+            "predicateType": consumer.bridge.PREDICATE_TYPE,
+            "predicate": {
+                "buildDefinition": {
+                    "buildType": consumer.bridge.BUILD_TYPE,
+                    "externalParameters": {"workflow": {
+                        "path": workflow_path,
+                        "ref": identity["source_ref"],
+                        "repository": repo_url,
+                    }},
+                    "internalParameters": {"github": {
+                        "event_name": identity["workflow_trigger"],
+                        "runner_environment": identity["runner_environment"],
+                    }},
+                    "resolvedDependencies": [{
+                        "digest": {"gitCommit": identity["source_digest"]},
+                        "uri": "git+" + repo_url + "@" + identity["source_ref"],
+                    }],
+                },
+                "runDetails": {
+                    "builder": {"id": signer_uri},
+                    "metadata": {"invocationId": identity["run_invocation_uri"]},
+                },
+            },
+        }
+        certificate = {
+            "subjectAlternativeName": signer_uri,
+            "issuer": identity["oidc_issuer"],
+            "githubWorkflowTrigger": identity["workflow_trigger"],
+            "githubWorkflowSHA": identity["signer_digest"],
+            "githubWorkflowRepository": repository,
+            "githubWorkflowRef": identity["source_ref"],
+            "buildSignerURI": signer_uri,
+            "buildSignerDigest": identity["signer_digest"],
+            "runnerEnvironment": identity["runner_environment"],
+            "sourceRepositoryURI": repo_url,
+            "sourceRepositoryDigest": identity["source_digest"],
+            "sourceRepositoryRef": identity["source_ref"],
+            "buildConfigURI": signer_uri,
+            "buildConfigDigest": identity["signer_digest"],
+            "buildTrigger": identity["workflow_trigger"],
+            "runInvocationURI": identity["run_invocation_uri"],
+        }
+        bundle = {
+            "mediaType": consumer.bridge.BUNDLE_MEDIA_TYPE,
+            "verificationMaterial": {
+                "certificate": {"rawBytes": "synthetic-fixture"},
+                "tlogEntries": [],
+            },
+            "dsseEnvelope": {
+                "payload": base64.b64encode(
+                    consumer.receipts.canonical_json_bytes(statement)
+                ).decode(),
+                "payloadType": consumer.bridge.DSSE_PAYLOAD_TYPE,
+                "signatures": [{"sig": "synthetic-fixture-signature"}],
+            },
+        }
+        verified = {
+            "verification_status": "VERIFIED",
+            "verifier": consumer.bridge.APPROVED_VERIFIER,
+            "result": {
+                "mediaType": consumer.bridge.VERIFICATION_MEDIA_TYPE,
+                "signature": {"certificate": certificate},
+                "verifiedTimestamps": [{
+                    "type": "Tlog",
+                    "uri": "https://rekor.sigstore.dev",
+                    "timestamp": "2026-11-01T16:00:04Z",
+                }],
+                "statement": copy.deepcopy(statement),
+                "bundle": copy.deepcopy(bundle),
+            },
+        }
         return {
             "receipt_bytes": receipt_bytes,
             "bundle_bytes": consumer.receipts.canonical_json_bytes(bundle),
             "verified": verified,
-            "identity": copy.deepcopy(identity),
-            "verification_ref": verification_ref,
+            "identity": identity,
+            "verification_ref": repo_url + "/attestations/456",
         }
 
     def _rebind_statement(self, parts, mutate):
@@ -226,6 +336,54 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
             parts["identity"],
             parts["verification_ref"],
         )
+
+    def _run_identity(self, identity):
+        prefix = (
+            "https://github.com/" + identity["repository"] + "/actions/runs/"
+        )
+        self.assertTrue(identity["run_invocation_uri"].startswith(prefix))
+        run_id, separator, attempt = identity["run_invocation_uri"][len(prefix):].partition(
+            "/attempts/"
+        )
+        self.assertEqual(separator, "/attempts/")
+        return run_id, attempt
+
+    def _capture_bound_bridge(self, parts, manifest=None):
+        """Test-only binding of coherent simulated proof to one capture manifest."""
+        manifest = self.capture_manifest if manifest is None else manifest
+        expected = self._identity_from_capture_manifest(manifest)
+        actual = parts["identity"]
+        if actual["repository"] != expected["repository"]:
+            return consumer.bridge._hold("capture_attestation_repository_mismatch")
+        if (
+            actual["source_digest"] != expected["source_digest"]
+            or actual["signer_digest"] != expected["signer_digest"]
+        ):
+            return consumer.bridge._hold("capture_attestation_commit_mismatch")
+        if (
+            actual["signer_workflow"] != expected["signer_workflow"]
+            or actual["source_ref"] != expected["source_ref"]
+        ):
+            return consumer.bridge._hold("capture_attestation_workflow_mismatch")
+        actual_run, actual_attempt = self._run_identity(actual)
+        expected_run, expected_attempt = self._run_identity(expected)
+        if actual_run != expected_run:
+            return consumer.bridge._hold("capture_attestation_run_id_mismatch")
+        if actual_attempt != expected_attempt:
+            return consumer.bridge._hold("capture_attestation_run_attempt_mismatch")
+        return self._call_bridge(parts)
+
+    def _coherent_alternate_execution(self, **changes):
+        manifest = copy.deepcopy(self.capture_manifest)
+        original_repository = manifest["repository"]
+        manifest.update(changes)
+        if "repository" in changes and "workflow_ref" not in changes:
+            suffix = manifest["workflow_ref"][len(original_repository):]
+            manifest["workflow_ref"] = manifest["repository"] + suffix
+        manifest["run_id"] = (
+            "gha-" + manifest["github_run_id"] + "-" + manifest["github_run_attempt"]
+        )
+        return self._attestation_parts(self.receipt_bytes, manifest)
 
     def _matching_rows(self):
         rows = [
@@ -316,6 +474,116 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
             "source_readiness", "forecast_eligibility",
         ):
             self.assertNotIn(forbidden, result)
+
+    def test_capture_manifest_builds_one_coherent_synthetic_attestation(self):
+        identity = self.bridge_parts["identity"]
+        expected_identity = self._identity_from_capture_manifest(self.capture_manifest)
+        self.assertEqual(identity, expected_identity)
+
+        verified_result = self.bridge_parts["verified"]["result"]
+        statement = verified_result["statement"]
+        saved_bundle = json.loads(self.bridge_parts["bundle_bytes"])
+        decoded_statement = json.loads(base64.b64decode(
+            saved_bundle["dsseEnvelope"]["payload"], validate=True
+        ))
+        certificate = verified_result["signature"]["certificate"]
+        workflow_path = identity["signer_workflow"][len(identity["repository"]) + 1:]
+
+        self.assertEqual(decoded_statement, statement)
+        self.assertEqual(saved_bundle, verified_result["bundle"])
+        self.assertEqual(
+            statement["subject"][0]["digest"]["sha256"],
+            consumer.receipts.sha256(self.receipt_bytes),
+        )
+        self.assertEqual(
+            statement["predicate"]["buildDefinition"]["externalParameters"][
+                "workflow"
+            ],
+            {
+                "path": workflow_path,
+                "ref": identity["source_ref"],
+                "repository": "https://github.com/" + identity["repository"],
+            },
+        )
+        self.assertEqual(
+            statement["predicate"]["buildDefinition"]["resolvedDependencies"][0][
+                "digest"
+            ]["gitCommit"],
+            self.capture_manifest["implementation_git_sha"],
+        )
+        self.assertEqual(
+            statement["predicate"]["runDetails"]["metadata"]["invocationId"],
+            identity["run_invocation_uri"],
+        )
+        self.assertEqual(
+            certificate["githubWorkflowRepository"],
+            self.capture_manifest["repository"],
+        )
+        self.assertEqual(
+            certificate["sourceRepositoryDigest"],
+            self.capture_manifest["implementation_git_sha"],
+        )
+        self.assertEqual(
+            certificate["buildConfigURI"],
+            "https://github.com/" + identity["signer_workflow"]
+            + "@" + identity["source_ref"],
+        )
+        self.assertEqual(
+            certificate["runInvocationURI"], identity["run_invocation_uri"]
+        )
+        self.assertEqual(
+            self._call_bridge(self.bridge_parts)["status"],
+            "VERIFIED_GITHUB_PROVENANCE_BINDING",
+        )
+        self.assertEqual(
+            self._capture_bound_bridge(self.bridge_parts)["status"],
+            "VERIFIED_GITHUB_PROVENANCE_BINDING",
+        )
+
+    def test_capture_vs_attestation_execution_identity_mismatches_fail_closed(self):
+        cases = (
+            (
+                "repository",
+                self._coherent_alternate_execution(repository="other/repository"),
+                "capture_attestation_repository_mismatch",
+            ),
+            (
+                "checkout_commit",
+                self._coherent_alternate_execution(implementation_git_sha="d" * 40),
+                "capture_attestation_commit_mismatch",
+            ),
+            (
+                "workflow",
+                self._coherent_alternate_execution(workflow_ref=(
+                    capture.REPOSITORY
+                    + "/.github/workflows/other.yml@refs/heads/main"
+                )),
+                "capture_attestation_workflow_mismatch",
+            ),
+            (
+                "run_id",
+                self._coherent_alternate_execution(github_run_id="99999"),
+                "capture_attestation_run_id_mismatch",
+            ),
+            (
+                "run_attempt",
+                self._coherent_alternate_execution(github_run_attempt="2"),
+                "capture_attestation_run_attempt_mismatch",
+            ),
+        )
+        for label, coherent_wrong_execution, reason in cases:
+            with self.subTest(label=label):
+                self.assertEqual(
+                    self._call_bridge(coherent_wrong_execution)["status"],
+                    "VERIFIED_GITHUB_PROVENANCE_BINDING",
+                )
+                held = self._capture_bound_bridge(coherent_wrong_execution)
+                self._assert_bridge_hold(held, reason)
+                self._assert_verifier_fail_closed(
+                    self._verify(bridge_result=held),
+                    "HOLD",
+                    "document_custody_not_verified",
+                )
 
     def test_valid_control_is_actual_capture_to_retrospective_match_only(self):
         result = self._verify()
