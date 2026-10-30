@@ -2,7 +2,7 @@
   "status": "no_action",
   "reason": "no_driver_session_summary_csv_with_required_schema",
   "searched_root": ".",
-  "candidate_count": 4241,
+  "candidate_count": 4246,
   "candidate_examples": [
     "latest/workbook_kpi_refresh_applier/refreshed_workbook_kpi_readiness.csv",
     "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/workbook_kpi_readiness.csv",
@@ -28,5 +28,5 @@
   "stable_engine_modified": false,
   "canonical_workbook_overwrite": false,
   "promotion_allowed": false,
-  "created_utc": "2026-10-30T18:09:49.812078+00:00"
+  "created_utc": "2026-10-30T21:37:54.557244+00:00"
 }
