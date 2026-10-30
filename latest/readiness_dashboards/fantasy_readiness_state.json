@@ -1,10 +1,10 @@
 {
-  "ready_for_use": false,
-  "blocked": true,
-  "latest_session_state": "needs_manual_review",
+  "ready_for_use": true,
+  "blocked": false,
+  "latest_session_state": "clean",
   "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution",
-  "generated_at_utc": "2026-10-30T19:29:43Z",
-  "source_status": "needs_manual_review",
-  "event_name": "United States - Austin - Austin",
-  "session_name": "Race"
+  "generated_at_utc": "2026-10-30T22:57:37Z",
+  "source_status": "clean",
+  "event_name": "Mexico - Mexico City - Mexico City",
+  "session_name": "Practice 1"
 }

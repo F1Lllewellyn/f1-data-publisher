@@ -1,10 +1,10 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-30T19:29:43Z
-Event: United States - Austin - Austin
-Session: Race
-Source status: needs_manual_review
-Dashboard readiness: NOT READY
+Generated UTC: 2026-10-30T22:57:37Z
+Event: Mexico - Mexico City - Mexico City
+Session: Practice 1
+Source status: clean
+Dashboard readiness: READY
 Diagnostic publishing allowed: true
 
 ## Governance
