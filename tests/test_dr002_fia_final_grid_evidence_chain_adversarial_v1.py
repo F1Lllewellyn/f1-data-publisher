@@ -62,7 +62,7 @@ DEPENDENCY_BLOBS = {
     "scripts/forecast_bundles/dr002_fia_final_grid_provenance_verifier_v1.py":
         "2f9f2266a87f8a2a743bc64a55fd0bd7f8fba204",
     "scripts/forecast_bundles/dr002_fia_capture_attestation_execution_binding_v1.py":
-        "024b4f9cb3eb5b165b1c8a1322ab6b6f0cd95240",
+        "8224c9d0efc9790533ba5e5279d59cbc44286f80",
     "tests/test_dr002_github_attestation_binding_v1.py":
         "1d764c840202463e091110132521f23f34853ad0",
     "tests/test_dr002_fia_grid_document_candidate_v1.py":
@@ -657,6 +657,18 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
                     "HOLD",
                     "document_custody_not_verified",
                 )
+
+    def test_excessively_nested_capture_manifest_fails_closed(self):
+        nested_manifest = b'{"nested":' + b"[" * 10000 + b"0" + b"]" * 10000 + b"}"
+        held = self._call_execution_boundary(
+            self.bridge_parts, manifest_bytes=nested_manifest
+        )
+        self._assert_bridge_hold(held, "malformed_capture_manifest")
+        self._assert_verifier_fail_closed(
+            self._verify(bridge_result=held),
+            "HOLD",
+            "document_custody_not_verified",
+        )
 
     def test_valid_control_is_actual_capture_to_retrospective_match_only(self):
         result = self._verify()

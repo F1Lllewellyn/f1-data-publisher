@@ -56,13 +56,14 @@ def _strict_manifest(raw):
                 ExecutionBindingError("nonfinite_json")
             ),
         )
+        _require(isinstance(manifest, dict), "malformed_capture_manifest")
+        canonical = receipts.canonical_json_bytes(manifest)
     except ExecutionBindingError:
         raise
-    except (UnicodeDecodeError, json.JSONDecodeError):
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
         raise ExecutionBindingError("malformed_capture_manifest")
-    _require(isinstance(manifest, dict), "malformed_capture_manifest")
     _require(
-        raw == receipts.canonical_json_bytes(manifest),
+        raw == canonical,
         "noncanonical_capture_manifest_bytes",
     )
     return manifest
