@@ -2,35 +2,30 @@
 
 ## Verdict
 
-Pass with warnings
+Pass
 
 ## Run
 
-- Run ID: `20261030T194609Z`
-- Created UTC: `2026-10-30T19:46:09.134066+00:00`
-- Source status: `needs_manual_review`
-- Readiness quality: `blocked_manual_review_required_source`
+- Run ID: `20261030T213939Z`
+- Created UTC: `2026-10-30T21:39:39.315885+00:00`
+- Source status: `clean`
+- Readiness quality: `usable_with_optional_context_gaps`
 - Material change: `True`
 - Diagnostic publish allowed: `True`
-- Downstream eligible: `False`
+- Downstream eligible: `True`
 
 ## Warnings
 
-- diagnostic_only_source_status=needs_manual_review
-- readiness_requires_manual_review
-- readiness_blocking_issues
-- required_source_evidence_unverified
-- required_source_status_needs_manual_review
-- readiness_quality_blocked_manual_review_required_source
+- None
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/sandbox_workbook_update_plan_applied.json` (e7da26426714...)
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/refreshed_workbook_kpi_readiness.csv` (0cec7d64ff1f...)
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261030T194609Z.xlsx` (ce6efca146b0...)
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/upstream_latest_manifest_snapshot.json` (d6e46e8a298c...)
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/upstream_data_readiness_snapshot.json` (37454f258ba3...)
-- `history/workbook_kpi_refresh_applier/20261030T194609Z/upstream_combined_source_manifest_snapshot.json` (343884c77486...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/sandbox_workbook_update_plan_applied.json` (3dc2b6b87365...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/refreshed_workbook_kpi_readiness.csv` (3f44af78eca5...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Practice_1_20261030T213939Z.xlsx` (c903dbb41884...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/upstream_latest_manifest_snapshot.json` (b8d879570dd4...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/upstream_data_readiness_snapshot.json` (2246938b409e...)
+- `history/workbook_kpi_refresh_applier/20261030T213939Z/upstream_combined_source_manifest_snapshot.json` (5d064fbe7041...)
 
 ## Governance
 

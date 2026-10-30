@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Mexico - Mexico City - Mexico City",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-10-30T19:30:00+00:00",
+    "date_start": "2026-10-30T18:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1298,
+    "session_key": 11397,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 589,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 92,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1012,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 69,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 92,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 79,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-10-30T21:26:01.693087Z"
+}
