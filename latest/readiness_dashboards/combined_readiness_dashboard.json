@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-30T14:18:49Z",
+  "generated_at_utc": "2026-10-30T18:50:35Z",
   "status": "dashboard_refreshed",
   "source_status": "needs_manual_review",
   "source_backed": false,
@@ -17,7 +17,7 @@
   "session_key": 11396,
   "event_name": "United States - Austin - Austin",
   "session_name": "Race",
-  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261030T133052Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261030T133052Z.xlsx",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261030T185035Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Austin_-_Austin_Race_20261030T185035Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/source_readiness_manifest.json",
   "autorepair_report": null,
