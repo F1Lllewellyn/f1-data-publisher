@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_pit.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 16628,
+    "ok": true,
+    "sha256": "84f94abfe11c36f57b96e3d14a20c85151bcdda869046aee2b7921e09e821339",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_pit.json",
+  "json_sha256": "8fadb3ea636707b6f377187b95f73b716cecfd9e125047bc3cf5f1db87059a4d",
+  "max_lap_number": 28.0,
+  "missing_required_columns": [],
+  "rows": 92,
+  "status": "clean",
+  "timestamp_rows": 92
+}

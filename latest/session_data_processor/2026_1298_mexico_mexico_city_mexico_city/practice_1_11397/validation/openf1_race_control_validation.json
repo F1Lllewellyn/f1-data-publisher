@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 17987,
+    "ok": true,
+    "sha256": "cb5572bbecbc6275b667784ad38902b958ca89c037fc242ed69584a4900c0fa5",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_race_control.json",
+  "json_sha256": "82988632093abbd95b255c84acb123789900ecac467d99c507703ff206afe199",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 69,
+  "status": "clean",
+  "timestamp_rows": 69
+}

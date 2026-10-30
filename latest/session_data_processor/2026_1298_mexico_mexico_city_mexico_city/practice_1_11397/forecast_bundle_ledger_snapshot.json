@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-30T21:26:01.692171Z",
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "forecast_state_changed": true,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Mexico - Mexico City - Mexico City",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-10-30T19:30:00+00:00",
+    "date_start": "2026-10-30T18:30:00+00:00",
+    "gate": "post_fp1",
+    "meeting_key": 1298,
+    "session_key": 11397,
+    "session_name": "Practice 1",
+    "session_type": "Practice"
+  },
+  "source_readiness_materially_improved": true,
+  "stable_order_overwrite_allowed": false
+}

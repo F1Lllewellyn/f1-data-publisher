@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 16977,
+    "ok": true,
+    "sha256": "879dc126eb6a552eb26ced0e70e7858d523e7e8253d1b4450575d439165b5f6b",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/practice_1_11397/raw/openf1_weather.json",
+  "json_sha256": "43624fa3329a184712d95eb39115a20c940b121c710d8b5824895942e390d260",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 79,
+  "status": "clean",
+  "timestamp_rows": 79
+}
