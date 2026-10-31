@@ -23,7 +23,27 @@ def main():
         action="store_true",
         help="Allow race/post-race jobs to pass with warnings when extraction succeeds but no feature rows are produced."
     )
+    p.add_argument("--target-spec")
+    p.add_argument("--target-metadata")
+    p.add_argument("--target-metadata-sha256")
+    p.add_argument("--target-roster")
+    p.add_argument("--target-roster-sha256")
     args = p.parse_args()
+    if any(value is not None for key, value in vars(args).items() if key.startswith("target_")):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from scripts.openf1.openf1_high_frequency_auto_ingest import (
+            load_target_plan, verify_targeted_packet, TargetHold, TARGET_TRUST,
+        )
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc).isoformat()
+        try:
+            plan = load_target_plan(args.target_spec, args.target_metadata, args.target_metadata_sha256,
+                                    args.target_roster, args.target_roster_sha256, now=now)
+            result = verify_targeted_packet(Path(args.output_dir), plan, now=now)
+        except (TargetHold, OSError, TypeError, ValueError) as exc:
+            result = {"status": "HOLD", "hold": True, **TARGET_TRUST, "reason": str(exc)}
+        print(json.dumps(result, indent=2))
+        sys.exit(1 if result["hold"] else 0)
 
     root = Path(args.output_dir)
 
