@@ -1,46 +1,46 @@
 {
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-  "forecast_state_changed": false,
+  "forecast_state_changed": true,
   "material_readiness_improved": true,
-  "needs_manual_review": true,
-  "overall_status": "needs_manual_review",
+  "needs_manual_review": false,
+  "overall_status": "clean",
   "race_name": "Mexico - Mexico City - Mexico City",
-  "readiness_quality": "blocked_manual_review_required_source",
+  "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-10-31T18:30:00+00:00",
-    "date_start": "2026-10-31T17:30:00+00:00",
-    "gate": "post_fp3",
+    "date_end": "2026-10-31T22:00:00+00:00",
+    "date_start": "2026-10-31T21:00:00+00:00",
+    "gate": "post_qualifying",
     "meeting_key": 1298,
-    "session_key": 11399,
-    "session_name": "Practice 3",
-    "session_type": "Practice"
+    "session_key": 11400,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
   },
-  "source_needs_manual_review": true,
+  "source_needs_manual_review": false,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
       "status": "clean"
     },
     "openf1_intervals": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 21,
+      "status": "clean"
     },
     "openf1_laps": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 366,
+      "status": "clean"
     },
     "openf1_pit": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 173,
+      "status": "clean"
     },
     "openf1_position": {
-      "rows": 22,
+      "rows": 1133,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 79,
+      "status": "clean"
     },
     "openf1_session_result": {
       "rows": 22,
@@ -55,13 +55,13 @@
       "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 21,
+      "rows": 111,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 1,
+      "rows": 83,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-31T19:33:00.122300Z"
+  "updated_utc": "2026-10-31T22:48:58.444220Z"
 }

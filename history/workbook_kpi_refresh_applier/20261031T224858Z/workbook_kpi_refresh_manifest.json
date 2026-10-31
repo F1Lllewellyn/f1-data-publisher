@@ -1,0 +1,73 @@
+{
+  "authority_fingerprints": {
+    "latest/combined_source_manifest.json": "63ffa7346ff41a3f9a9e1822f77688ea59d61807463ed48de35d57c821649ca9",
+    "latest/data_readiness.json": "fe82e24348689bd4afd84fc9377abb936b7145800b068458871874df1ae8de57",
+    "latest/latest_manifest.json": "56214dd8775290bf9de364d21c5bd3cf8ce2c60f01295a6647a692e8b60b3a9b",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/forecast_bundle_ledger_snapshot.json": "156c2d7fd8290e80e1e28c3d12b8b05ae67ebcc6496df990df20fe09b087ad00",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/sandbox_workbook_update_plan.json": "c3e6c497238673ead929cf49a46c758e56c9b95b0c27c982cf930e741fae5974",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/source_readiness_manifest.json": "5c63c97e3197e753a5adf4051fa109751447af639c0cd0fc5652a82ec4495a4b",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.csv": "20267e61219d36df7c1dd4c13e7b1d81496f796e021d8995a3c33816738474dd",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.json": "bc2bf71c9afbdfaea62125a2ca84ae92f457d4804f990068facbff1d01106cc0"
+  },
+  "commit_allowed": true,
+  "created_utc": "2026-10-31T22:48:58.580779+00:00",
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": true,
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "meeting_key": 1298,
+  "outputs": [
+    {
+      "bytes": 987,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "2f7f007f2f73c2e4c3a72f91b75d9edf7d3feaa37f8af94ecb87ff3d3873ca7f"
+    },
+    {
+      "bytes": 404,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "20267e61219d36df7c1dd4c13e7b1d81496f796e021d8995a3c33816738474dd"
+    },
+    {
+      "bytes": 11068,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Qualifying_20261031T224858Z.xlsx",
+      "sha256": "d2011ebf8826ef1027d1e99a072b93bc8b224d02611e69bde3bc37fe6572cad1"
+    },
+    {
+      "bytes": 573,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "e4edf3720d0f8f140477434a2780ab58fdf26d5a55e0ebdc90cb9989c5e16154"
+    },
+    {
+      "bytes": 1568,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/upstream_data_readiness_snapshot.json",
+      "sha256": "199db64d4d5e9ecb4efd3f584773963abfb7918319f642b1d64672f1cb239e0c"
+    },
+    {
+      "bytes": 702,
+      "path": "history/workbook_kpi_refresh_applier/20261031T224858Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "6470ff23aa151d43e6c5616596e39f253478485835ea2230c3e46ba2ddfdfe27"
+    }
+  ],
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261031T224858Z",
+  "session_key": 11400,
+  "session_name": "Qualifying",
+  "session_type": "Qualifying",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_manifest_pointer": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400",
+  "source_status": "clean",
+  "warnings": []
+}
