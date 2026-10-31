@@ -1,22 +1,22 @@
 {
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_state_changed": false,
-  "material_readiness_improved": false,
-  "needs_manual_review": false,
-  "overall_status": "clean",
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
   "race_name": "Mexico - Mexico City - Mexico City",
-  "readiness_quality": "usable_with_optional_context_gaps",
+  "readiness_quality": "blocked_manual_review_required_source",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-10-30T23:00:00+00:00",
-    "date_start": "2026-10-30T22:00:00+00:00",
-    "gate": "post_fp2",
+    "date_end": "2026-10-31T18:30:00+00:00",
+    "date_start": "2026-10-31T17:30:00+00:00",
+    "gate": "post_fp3",
     "meeting_key": 1298,
-    "session_key": 11398,
-    "session_name": "Practice 2",
+    "session_key": 11399,
+    "session_name": "Practice 3",
     "session_type": "Practice"
   },
-  "source_needs_manual_review": false,
+  "source_needs_manual_review": true,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
@@ -27,20 +27,20 @@
       "status": "needs_manual_review"
     },
     "openf1_laps": {
-      "rows": 656,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_pit": {
-      "rows": 105,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_position": {
-      "rows": 717,
+      "rows": 22,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 67,
-      "status": "clean"
+      "rows": 0,
+      "status": "needs_manual_review"
     },
     "openf1_session_result": {
       "rows": 22,
@@ -55,13 +55,13 @@
       "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 105,
+      "rows": 21,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 82,
+      "rows": 1,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-31T15:18:01.253256Z"
+  "updated_utc": "2026-10-31T19:33:00.122300Z"
 }

@@ -1,10 +1,10 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-10-31T18:52:46Z
+Generated UTC: 2026-10-31T19:33:00Z
 Event: Mexico - Mexico City - Mexico City
-Session: Practice 2
-Source status: clean
-Dashboard readiness: READY
+Session: Practice 3
+Source status: needs_manual_review
+Dashboard readiness: NOT READY
 Diagnostic publishing allowed: true
 
 ## Governance
