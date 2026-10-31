@@ -1,0 +1,39 @@
+# F1 Workbook/KPI Refresh Applier Report
+
+## Verdict
+
+Pass
+
+## Run
+
+- Run ID: `20261031T085123Z`
+- Created UTC: `2026-10-31T08:51:23.123419+00:00`
+- Source status: `clean`
+- Readiness quality: `usable_with_optional_context_gaps`
+- Material change: `True`
+- Diagnostic publish allowed: `True`
+- Downstream eligible: `True`
+
+## Warnings
+
+- None
+
+## Outputs
+
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/sandbox_workbook_update_plan_applied.json` (ea5977286858...)
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/refreshed_workbook_kpi_readiness.csv` (ffd2119238cc...)
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Practice_2_20261031T085123Z.xlsx` (8e0677b23171...)
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/upstream_latest_manifest_snapshot.json` (737ade69c8ac...)
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/upstream_data_readiness_snapshot.json` (94e4be629d42...)
+- `history/workbook_kpi_refresh_applier/20261031T085123Z/upstream_combined_source_manifest_snapshot.json` (be12ad2d646a...)
+
+## Governance
+
+- Canonical workbook overwrite: **blocked**
+- Stable engine modification: **blocked**
+- Model promotion: **blocked**
+- Delete/cleanup authority: **blocked**
+
+## Classification
+
+This is a sandbox workbook/KPI refresh artifact. It may support readiness, forecast bundle discipline, and fantasy/race prediction state refresh, but it does not promote model logic.
