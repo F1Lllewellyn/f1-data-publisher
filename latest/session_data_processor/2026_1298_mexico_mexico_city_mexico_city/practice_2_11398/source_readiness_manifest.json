@@ -1,11 +1,11 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-10-31T00:59:02.245697Z",
+  "created_utc": "2026-10-31T01:04:04.027881Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-10-31T00:59:02.246906Z",
+    "created_utc": "2026-10-31T01:04:04.029533Z",
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-    "forecast_state_changed": true,
+    "forecast_state_changed": false,
     "overall_status": "clean",
     "promotion_allowed": false,
     "race_name": "Mexico - Mexico City - Mexico City",
@@ -20,37 +20,37 @@
       "session_name": "Practice 2",
       "session_type": "Practice"
     },
-    "source_readiness_materially_improved": true,
+    "source_readiness_materially_improved": false,
     "stable_order_overwrite_allowed": false
   },
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 213.01,
+      "age_minutes": 5.03,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "5fc24deff0e0365e32ec59c90fe18a2fca88573d249535da57eec482f8cd4af1",
+      "sha256": "83aa77f1541f54ec02f2fce1de8d1eacbbb984af47688c67cfa3739bd79d2429",
       "size_bytes": 701,
-      "timestamp_utc": "2026-10-30T21:26:01.693178Z"
+      "timestamp_utc": "2026-10-31T00:59:02.248825Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 213.01,
+      "age_minutes": 5.03,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "2619241f6a50ef323334982a60a55417037ceb8354479536d4bf461c817d0b8b",
-      "size_bytes": 1569,
-      "timestamp_utc": "2026-10-30T21:26:01.693087Z"
+      "sha256": "f6206be372236a6710e55194fbd93862add21fc64acd3d5e35a40d75234baa37",
+      "size_bytes": 1570,
+      "timestamp_utc": "2026-10-31T00:59:02.248547Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 213.01,
+      "age_minutes": 5.03,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "522588b3070ac80036a1a30bd3da9cf2a660b08d2158e1787cfe7d890d946c22",
+      "sha256": "104afd3ad10c56d2ab56449f19e35ead7f6e937d8a48ff352a6bdac4af9c8692",
       "size_bytes": 572,
-      "timestamp_utc": "2026-10-30T21:26:01.692982Z"
+      "timestamp_utc": "2026-10-31T00:59:02.248279Z"
     }
   },
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Mexico - Mexico City - Mexico City",
@@ -258,12 +258,12 @@
   "readiness_delta": {
     "current_score": 1.0,
     "current_status": "clean",
-    "delta": 1.0,
-    "previous_score": 0.0,
-    "previous_status": null
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261031T005849Z",
+  "run_id": "20261031T010350Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-30T23:00:00+00:00",
