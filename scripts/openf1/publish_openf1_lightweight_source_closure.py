@@ -64,6 +64,48 @@ MATERIAL_REQUEST_STATUSES = {
 }
 ROW_REQUIRED_LANES = {"weather", "position", "drivers"}
 
+# NORMAL-mode public historical collection is intentionally bounded below the
+# workflow timeout.  OpenF1 documents a 30 request/minute public historical
+# limit; this sliding-window budget includes discovery, primary requests and
+# fallbacks.  It is not used by the explicit manual provenance-shadow path.
+NORMAL_REQUESTS_PER_MINUTE = 30
+NORMAL_RATE_WINDOW_SECONDS = 60.0
+NORMAL_MAX_COLLECTION_SECONDS = 24 * 60.0
+NORMAL_MAX_RUN_REQUESTS = 720
+NORMAL_CACHE_SCHEMA_VERSION = "openf1-normal-session-evidence-v1"
+NORMAL_LEGACY_HISTORY_REL = Path(
+    "history/openf1_lightweight_source_closure/20261026_013754"
+)
+NORMAL_LEGACY_REQUEST_LOG_SHA256 = (
+    "bb7608335b3bb3e430aff902d9238c429aba94c2f8bb25c25dfa540b84d98158"
+)
+NORMAL_LEGACY_REQUEST_LOG_GIT_BLOB = (
+    "310fd9ba531e1985b0a1f6ff282072f1bc14d1f3"
+)
+NORMAL_LEGACY_SNAPSHOT_SHA256 = (
+    "5b4ce0fae0660b8519b6481e70c46289edda822651b936e7efe3d56da0f894c7"
+)
+NORMAL_LEGACY_SNAPSHOT_FILES = (
+    "latest_manifest.json",
+    "data/target_sessions.csv",
+    "zero_lane_diagnostics.csv",
+    "request_log.csv",
+    "combined_source_manifest.csv",
+    *(f"data/openf1_{lane}.csv" for lane in LANES),
+)
+NORMAL_SESSION_IDENTITY_FIELDS = (
+    "session_key",
+    "meeting_key",
+    "year",
+    "country_name",
+    "location",
+    "circuit_short_name",
+    "session_name",
+    "session_type",
+    "date_start",
+    "date_end",
+)
+
 SHADOW_SCHEMA_VERSION = "dr002-pre2b7k4r2-openf1-source-closure-shadow-v1"
 SHADOW_RUNTIME_DIR = "dr002_pre2b7k4r2_openf1_historical_rest_shadow"
 SHADOW_WORKFLOW_NAME = "F1 OpenF1 Lightweight Source Closure"
@@ -82,6 +124,135 @@ class ProvenanceShadowHold(RuntimeError):
     """Fail-closed K4R2 shadow result."""
 
 
+class NormalCollectionDeferred(RuntimeError):
+    """A bounded NORMAL-mode request was deliberately not sent."""
+
+
+class NormalRequestBudget:
+    """Deterministic sliding-window and whole-run request budget."""
+
+    def __init__(
+        self,
+        *,
+        requests_per_window: int = NORMAL_REQUESTS_PER_MINUTE,
+        window_seconds: float = NORMAL_RATE_WINDOW_SECONDS,
+        max_requests: int = NORMAL_MAX_RUN_REQUESTS,
+        max_elapsed_seconds: float = NORMAL_MAX_COLLECTION_SECONDS,
+        clock: Any = time.monotonic,
+        sleeper: Any = time.sleep,
+    ) -> None:
+        if (
+            type(requests_per_window) is not int
+            or requests_per_window <= 0
+            or type(max_requests) is not int
+            or max_requests <= 0
+            or window_seconds <= 0
+            or max_elapsed_seconds <= 0
+        ):
+            raise ValueError("invalid_normal_request_budget")
+        self.requests_per_window = requests_per_window
+        self.window_seconds = float(window_seconds)
+        self.max_requests = max_requests
+        self.max_elapsed_seconds = float(max_elapsed_seconds)
+        self.clock = clock
+        self.sleeper = sleeper
+        self.started = float(clock())
+        self.logical_now = self.started
+        self.request_times: List[float] = []
+        self.total_requests = 0
+        self.total_wait_seconds = 0.0
+        self.block_reason: Optional[str] = None
+        self.restriction_events: List[str] = []
+        self._rate_limit_fallback_pending = False
+        self._rate_limit_fallback_consumed = False
+
+    def block(self, reason: str) -> None:
+        if reason not in self.restriction_events:
+            self.restriction_events.append(reason)
+        if self.block_reason is None:
+            self.block_reason = reason
+            if reason == "provider_rate_limited_http_429":
+                self._rate_limit_fallback_consumed = False
+
+    def permit_endpoint_fallback(self) -> bool:
+        """Authorize one bounded recovery group without clearing its 429 block."""
+        if (
+            self.block_reason != "provider_rate_limited_http_429"
+            or self._rate_limit_fallback_pending
+            or self._rate_limit_fallback_consumed
+        ):
+            return False
+        self._rate_limit_fallback_pending = True
+        self._rate_limit_fallback_consumed = True
+        return True
+
+    def resolve_endpoint_fallback(self, recovered: bool) -> None:
+        """Clear the original 429 only after complete, identity-valid recovery."""
+        if not self._rate_limit_fallback_pending:
+            raise ValueError("normal_rate_limit_fallback_not_pending")
+        self._rate_limit_fallback_pending = False
+        if recovered and self.block_reason == "provider_rate_limited_http_429":
+            self.block_reason = None
+            self._rate_limit_fallback_consumed = False
+        elif self.block_reason is None:
+            self.block_reason = "provider_rate_limited_http_429"
+
+    def acquire(self, *, rate_limit_fallback: bool = False) -> None:
+        fallback_authorized = (
+            rate_limit_fallback
+            and self._rate_limit_fallback_pending
+            and self.block_reason == "provider_rate_limited_http_429"
+        )
+        if rate_limit_fallback and not fallback_authorized:
+            raise NormalCollectionDeferred("rate_limit_fallback_not_authorized")
+        if self.block_reason is not None and not fallback_authorized:
+            raise NormalCollectionDeferred(self.block_reason)
+        if self.total_requests >= self.max_requests:
+            self.block("run_request_budget_exhausted")
+            raise NormalCollectionDeferred(self.block_reason)
+
+        now = max(float(self.clock()), self.logical_now)
+        self.request_times = [
+            stamp for stamp in self.request_times
+            if now - stamp < self.window_seconds
+        ]
+        if len(self.request_times) >= self.requests_per_window:
+            wait_seconds = self.window_seconds - (now - self.request_times[0])
+            wait_seconds = max(0.0, wait_seconds)
+            if now + wait_seconds - self.started > self.max_elapsed_seconds:
+                self.block("run_time_budget_exhausted")
+                raise NormalCollectionDeferred(self.block_reason)
+            self.sleeper(wait_seconds)
+            self.total_wait_seconds += wait_seconds
+            now = max(float(self.clock()), now + wait_seconds)
+            self.logical_now = now
+            self.request_times = [
+                stamp for stamp in self.request_times
+                if now - stamp < self.window_seconds
+            ]
+
+        if now - self.started > self.max_elapsed_seconds:
+            self.block("run_time_budget_exhausted")
+            raise NormalCollectionDeferred(self.block_reason)
+        self.request_times.append(now)
+        self.logical_now = now
+        self.total_requests += 1
+
+    def evidence(self) -> Dict[str, Any]:
+        return {
+            "policy": "public_historical_sliding_window",
+            "requests_per_minute": self.requests_per_window,
+            "window_seconds": self.window_seconds,
+            "max_run_requests": self.max_requests,
+            "max_collection_seconds": self.max_elapsed_seconds,
+            "provider_requests_performed": self.total_requests,
+            "rate_wait_seconds": round(self.total_wait_seconds, 3),
+            "deferred_reason": self.block_reason,
+            "restriction_events": list(self.restriction_events),
+            "credentials_or_paid_live_access_used": False,
+        }
+
+
 def _http_status_from_request_status(status: Any) -> Optional[int]:
     match = re.fullmatch(r"http_([1-5][0-9]{2})", str(status or ""))
     return int(match.group(1)) if match else None
@@ -90,13 +261,34 @@ def _http_status_from_request_status(status: Any) -> Optional[int]:
 def _material_request_failure(status: Any) -> bool:
     text = str(status or "")
     code = _http_status_from_request_status(text)
-    return text in MATERIAL_REQUEST_STATUSES or (
+    return text.startswith("deferred_") or text in MATERIAL_REQUEST_STATUSES or (
         code is not None and code != 404
     )
 
 
 def _request_statuses(entries: List[Dict[str, Any]]) -> List[str]:
     return [str(entry.get("status") or "unknown") for entry in entries]
+
+
+def _availability_reason(scope: str, status: str) -> str:
+    code = _http_status_from_request_status(status)
+    if code in {401, 403}:
+        return f"{scope}_access_restricted:http_{code}"
+    if code == 429:
+        return f"{scope}_rate_limited:http_429"
+    if code is not None and code >= 500:
+        return f"{scope}_provider_unavailable:http_{code}"
+    if code == 404:
+        return f"{scope}_not_found:http_404"
+    if status == "zero_rows":
+        return f"{scope}_available_zero_rows"
+    if status.startswith("deferred_"):
+        return f"{scope}_deferred:{status.removeprefix('deferred_')}"
+    if status in {"invalid_json", "invalid_response_schema", "invalid_sessions_schema"}:
+        return f"{scope}_response_invalid:{status}"
+    if status in {"exception", "invalid_http_status"}:
+        return f"{scope}_transport_unavailable:{status}"
+    return f"{scope}_unavailable:{status}"
 
 
 def utc_now() -> dt.datetime:
@@ -1200,7 +1392,15 @@ def run_provenance_shadow(
         raise ProvenanceShadowHold(reason) from exc
 
 
-def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str, Any]], strategy: str) -> pd.DataFrame:
+def openf1_get(
+    endpoint: str,
+    params: Dict[str, Any],
+    request_log: List[Dict[str, Any]],
+    strategy: str,
+    budget: Optional[NormalRequestBudget] = None,
+    *,
+    rate_limit_fallback: bool = False,
+) -> pd.DataFrame:
     url = f"{API_BASE}/{endpoint}"
     clean_params = {k: v for k, v in params.items() if v is not None and v != ""}
     start = time.time()
@@ -1208,11 +1408,15 @@ def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str
     error = ""
     rows = 0
     try:
+        if budget is not None:
+            budget.acquire(rate_limit_fallback=rate_limit_fallback)
         r = requests.get(url, params=clean_params, timeout=REQUEST_TIMEOUT)
         status_code = getattr(r, "status_code", None)
         if type(status_code) is not int or not 100 <= status_code <= 599:
             status = "invalid_http_status"
             error = repr(status_code)
+            if budget is not None:
+                budget.block("invalid_http_status")
             return pd.DataFrame()
         if status_code == 200:
             try:
@@ -1220,10 +1424,14 @@ def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str
             except Exception as exc:  # noqa: BLE001 - preserve response failure as evidence
                 status = "invalid_json"
                 error = repr(exc)
+                if budget is not None:
+                    budget.block("invalid_json_response")
                 return pd.DataFrame()
             if type(data) is not list or any(type(row) is not dict for row in data):
                 status = "invalid_response_schema"
                 error = f"expected_list_of_objects:{type(data).__name__}"
+                if budget is not None:
+                    budget.block("invalid_response_schema")
                 return pd.DataFrame()
             df = pd.DataFrame(data)
             rows = len(df)
@@ -1232,10 +1440,23 @@ def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str
         else:
             status = f"http_{status_code}"
             error = r.text[:500]
+            if budget is not None:
+                if status_code in {401, 403}:
+                    budget.block(f"access_restricted_http_{status_code}")
+                elif status_code == 429:
+                    budget.block("provider_rate_limited_http_429")
+                elif status_code >= 500:
+                    budget.block(f"provider_unavailable_http_{status_code}")
             return pd.DataFrame()
+    except NormalCollectionDeferred as exc:
+        status = f"deferred_{exc}"
+        error = "provider request not sent by bounded NORMAL collection policy"
+        return pd.DataFrame()
     except Exception as exc:  # noqa: BLE001 - diagnostic script should never crash a full run for one lane
         status = "exception"
         error = repr(exc)
+        if budget is not None:
+            budget.block("transport_exception")
         return pd.DataFrame()
     finally:
         request_log.append({
@@ -1248,7 +1469,8 @@ def openf1_get(endpoint: str, params: Dict[str, Any], request_log: List[Dict[str
             "error": error,
             "elapsed_seconds": round(time.time() - start, 3),
         })
-        time.sleep(SLEEP_SECONDS)
+        if budget is None:
+            time.sleep(SLEEP_SECONDS)
 
 
 def load_policy() -> Dict[str, Any]:
@@ -1335,8 +1557,15 @@ def _invalidate_last_request(
         request_log[-1]["rows"] = 0
 
 
-def get_sessions(season: int, completed_only: bool, request_log: List[Dict[str, Any]]) -> pd.DataFrame:
-    sessions = openf1_get("sessions", {"year": season}, request_log, "sessions_by_year")
+def get_sessions(
+    season: int,
+    completed_only: bool,
+    request_log: List[Dict[str, Any]],
+    budget: Optional[NormalRequestBudget] = None,
+) -> pd.DataFrame:
+    sessions = openf1_get(
+        "sessions", {"year": season}, request_log, "sessions_by_year", budget
+    )
     if sessions.empty:
         return sessions
     required = {
@@ -1448,7 +1677,13 @@ def collect_observed_driver_numbers(
     return sorted(nums)
 
 
-def retrieve_lane_for_session(lane: str, sess: pd.Series, request_log: List[Dict[str, Any]], outputs_by_lane: Dict[str, List[pd.DataFrame]]) -> pd.DataFrame:
+def retrieve_lane_for_session(
+    lane: str,
+    sess: pd.Series,
+    request_log: List[Dict[str, Any]],
+    outputs_by_lane: Dict[str, List[pd.DataFrame]],
+    budget: Optional[NormalRequestBudget] = None,
+) -> pd.DataFrame:
     session_key = sess.get("session_key")
     meeting_key = sess.get("meeting_key")
 
@@ -1467,30 +1702,86 @@ def retrieve_lane_for_session(lane: str, sess: pd.Series, request_log: List[Dict
 
     if lane == "position":
         # First try session_key. If zero, retry by meeting_key because OpenF1 position examples commonly use meeting_key.
-        df = openf1_get("position", {"session_key": session_key}, request_log, "position_by_session_key")
-        if df.empty and meeting_key is not None:
-            df = openf1_get("position", {"meeting_key": meeting_key}, request_log, "position_by_meeting_key_fallback")
+        request_start = len(request_log)
+        df = openf1_get(
+            "position", {"session_key": session_key}, request_log,
+            "position_by_session_key", budget,
+        )
+        rate_limit_fallback = False
+        fallback_allowed = budget is None or budget.block_reason is None
+        if budget is not None and budget.block_reason is not None:
+            rate_limit_fallback = budget.permit_endpoint_fallback()
+            fallback_allowed = rate_limit_fallback
+        if (
+            df.empty
+            and meeting_key is not None
+            and fallback_allowed
+        ):
+            df = openf1_get(
+                "position", {"meeting_key": meeting_key}, request_log,
+                "position_by_meeting_key_fallback", budget,
+                rate_limit_fallback=rate_limit_fallback,
+            )
             if not df.empty and "session_key" in df.columns:
                 df = df[df["session_key"].astype(str) == str(session_key)].copy()
+            if rate_limit_fallback and budget is not None:
+                budget.resolve_endpoint_fallback(_fallback_proves_coverage(
+                    "position", df, sess, request_log[request_start:]
+                ))
         return df
 
     if lane == "drivers":
-        df = openf1_get("drivers", {"session_key": session_key}, request_log, "drivers_by_session_key")
+        request_start = len(request_log)
+        df = openf1_get(
+            "drivers", {"session_key": session_key}, request_log,
+            "drivers_by_session_key", budget,
+        )
         if not df.empty:
             return df
+        rate_limit_fallback = False
+        if budget is not None and budget.block_reason is not None:
+            rate_limit_fallback = budget.permit_endpoint_fallback()
+            if not rate_limit_fallback:
+                return pd.DataFrame()
         # Fallback: use already observed driver numbers from successful lanes.
         nums = collect_observed_driver_numbers(outputs_by_lane, session_key)
         frames = []
         for n in nums:
-            part = openf1_get("drivers", {"session_key": session_key, "driver_number": n}, request_log, "drivers_by_observed_driver_number")
+            part = openf1_get(
+                "drivers", {"session_key": session_key, "driver_number": n},
+                request_log, "drivers_by_observed_driver_number", budget,
+                rate_limit_fallback=rate_limit_fallback,
+            )
             if not part.empty:
                 frames.append(part)
-        return pd.concat(frames, ignore_index=True).drop_duplicates() if frames else pd.DataFrame()
+            if rate_limit_fallback:
+                if (
+                    request_log[-1].get("status") != "pass"
+                    or not _frame_matches_session(part, sess)
+                ):
+                    break
+            elif budget is not None and budget.block_reason is not None:
+                break
+        recovered = (
+            pd.concat(frames, ignore_index=True).drop_duplicates()
+            if frames else pd.DataFrame()
+        )
+        if rate_limit_fallback and budget is not None:
+            budget.resolve_endpoint_fallback(_fallback_proves_coverage(
+                "drivers", recovered, sess, request_log[request_start:]
+            ))
+        return recovered
 
     if lane == "team_radio":
-        return openf1_get("team_radio", {"session_key": session_key}, request_log, "team_radio_by_session_key_opportunistic")
+        return openf1_get(
+            "team_radio", {"session_key": session_key}, request_log,
+            "team_radio_by_session_key_opportunistic", budget,
+        )
 
-    return openf1_get(lane, {"session_key": session_key}, request_log, f"{lane}_by_session_key")
+    return openf1_get(
+        lane, {"session_key": session_key}, request_log,
+        f"{lane}_by_session_key", budget,
+    )
 
 
 def _frame_matches_session(df: pd.DataFrame, sess: pd.Series) -> bool:
@@ -1645,6 +1936,498 @@ def classify_lane(
     return "pass_with_warnings", "zero_rows_after_endpoint_specific_retry_needs_review"
 
 
+def _sha256_path(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _git_blob_sha(payload: bytes) -> str:
+    return hashlib.sha1(  # noqa: S324 - Git object identity, not security use
+        b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
+    ).hexdigest()
+
+
+def _read_csv_frame(path: Path) -> pd.DataFrame:
+    try:
+        return pd.read_csv(path, keep_default_na=False)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
+
+
+def _frame_for_session(frame: pd.DataFrame, session_key: Any) -> pd.DataFrame:
+    expected = _canonical_positive_integer(session_key)
+    if expected is None or frame.empty or "session_key" not in frame.columns:
+        return frame.iloc[0:0].copy()
+    selected = [
+        _canonical_positive_integer(value) == expected
+        for value in frame["session_key"].tolist()
+    ]
+    return frame.loc[selected].copy()
+
+
+def _index_frames_by_session(
+    frames: Dict[str, pd.DataFrame],
+) -> Dict[str, Dict[str, pd.DataFrame]]:
+    indexed: Dict[str, Dict[str, pd.DataFrame]] = {}
+    for lane, frame in frames.items():
+        lane_index: Dict[str, pd.DataFrame] = {}
+        if not frame.empty and "session_key" in frame.columns:
+            keys = [
+                _canonical_positive_integer(value)
+                for value in frame["session_key"].tolist()
+            ]
+            working = frame.copy()
+            working["_normal_cache_session_key"] = keys
+            for key, group in working.groupby(
+                "_normal_cache_session_key", sort=False, dropna=True
+            ):
+                lane_index[str(key)] = group.drop(
+                    columns=["_normal_cache_session_key"]
+                ).copy()
+        indexed[lane] = lane_index
+    return indexed
+
+
+def _frame_evidence_sha256(frame: pd.DataFrame) -> str:
+    payload = frame.to_csv(index=False, lineterminator="\n").encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _request_evidence_sha256(entries: List[Dict[str, Any]]) -> str:
+    normalized = [
+        {str(key): "" if value is None else str(value) for key, value in row.items()}
+        for row in entries
+    ]
+    return hashlib.sha256(
+        json.dumps(
+            normalized, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def _session_identity_payload(
+    sess: pd.Series, *, completed_only: bool,
+) -> Optional[Dict[str, Any]]:
+    session_key = _canonical_positive_integer(sess.get("session_key"))
+    meeting_key = _canonical_positive_integer(sess.get("meeting_key"))
+    year = _canonical_positive_integer(sess.get("year"))
+    start = _normal_utc(sess.get("date_start"))
+    end = _normal_utc(sess.get("date_end"))
+    if None in {session_key, meeting_key, year, start, end}:
+        return None
+    payload: Dict[str, Any] = {
+        "completed_only": completed_only,
+        "session_key": session_key,
+        "meeting_key": meeting_key,
+        "year": year,
+        "date_start": _format_utc(start),
+        "date_end": _format_utc(end),
+    }
+    for field in NORMAL_SESSION_IDENTITY_FIELDS:
+        if field in payload:
+            continue
+        value = sess.get(field)
+        if type(value) is not str or not value or value.strip() != value:
+            return None
+        payload[field] = value
+    return payload
+
+
+def _session_identity_sha256(
+    sess: pd.Series, *, completed_only: bool,
+) -> Optional[str]:
+    payload = _session_identity_payload(sess, completed_only=completed_only)
+    if payload is None:
+        return None
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def _first_observed_utc(
+    entries: List[Dict[str, Any]], frame: pd.DataFrame,
+) -> Optional[str]:
+    observed: List[dt.datetime] = []
+    for row in entries:
+        value = _normal_utc(row.get("timestamp_utc"))
+        if value is not None:
+            observed.append(value)
+    if "source_closure_retrieved_utc" in frame.columns:
+        for raw in frame["source_closure_retrieved_utc"].tolist():
+            value = _normal_utc(raw)
+            if value is not None:
+                observed.append(value)
+    return _format_utc(min(observed)) if observed else None
+
+
+def _snapshot_identity(root: Path, names: Iterable[str]) -> str:
+    digest = hashlib.sha256()
+    for name in names:
+        path = root / name
+        payload = path.read_bytes()
+        digest.update(name.encode("utf-8") + b"\0")
+        digest.update(str(len(payload)).encode("ascii") + b"\0")
+        digest.update(hashlib.sha256(payload).digest())
+    return digest.hexdigest()
+
+
+def _normal_snapshot_evidence_files() -> Tuple[str, ...]:
+    return (
+        "data/target_sessions.csv",
+        "zero_lane_diagnostics.csv",
+        "request_log.csv",
+        "combined_source_manifest.csv",
+        *(f"data/openf1_{lane}.csv" for lane in LANES),
+    )
+
+
+def _validated_snapshot_frames(
+    root: Path, *, season: int, completed_only: bool,
+) -> Tuple[Dict[str, Any], pd.DataFrame, Dict[str, pd.DataFrame]]:
+    manifest = json.loads((root / "latest_manifest.json").read_text(encoding="utf-8"))
+    if (
+        type(manifest) is not dict
+        or _canonical_positive_integer(manifest.get("season")) != str(season)
+        or manifest.get("completed_only") is not completed_only
+    ):
+        raise ValueError("cache_policy_mismatch")
+    sessions = _read_csv_frame(root / "data/target_sessions.csv")
+    if int(manifest.get("target_session_count", -1)) != len(sessions):
+        raise ValueError("cache_target_count_mismatch")
+    if "session_key" not in sessions.columns:
+        raise ValueError("cache_target_identity_missing")
+    target_keys = {
+        key for value in sessions["session_key"].tolist()
+        if (key := _canonical_positive_integer(value)) is not None
+    }
+    if len(target_keys) != len(sessions):
+        raise ValueError("cache_target_identity_invalid")
+
+    source_manifest = _read_csv_frame(root / "combined_source_manifest.csv")
+    if len(source_manifest) != len(LANES) or "lane" not in source_manifest.columns:
+        raise ValueError("cache_source_manifest_invalid")
+    frames: Dict[str, pd.DataFrame] = {}
+    for lane in LANES:
+        matches = source_manifest[source_manifest["lane"].astype(str) == lane]
+        if len(matches) != 1:
+            raise ValueError(f"cache_source_manifest_lane_invalid:{lane}")
+        row = matches.iloc[0]
+        expected_path = f"data/openf1_{lane}.csv"
+        path = root / expected_path
+        if str(row.get("path")) != expected_path or str(row.get("sha256")) != _sha256_path(path):
+            raise ValueError(f"cache_source_hash_mismatch:{lane}")
+        frame = _read_csv_frame(path)
+        try:
+            declared_rows = int(row.get("rows"))
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"cache_source_rows_invalid:{lane}") from exc
+        if declared_rows != len(frame):
+            raise ValueError(f"cache_source_rows_mismatch:{lane}")
+        if not frame.empty:
+            if not {"session_key", "meeting_key", "source_closure_retrieved_utc"}.issubset(frame.columns):
+                raise ValueError(f"cache_source_identity_missing:{lane}")
+            row_keys = {
+                key for value in frame["session_key"].tolist()
+                if (key := _canonical_positive_integer(value)) is not None
+            }
+            if len(row_keys) == 0 or not row_keys.issubset(target_keys):
+                raise ValueError(f"cache_source_identity_invalid:{lane}")
+        frames[lane] = frame
+    return manifest, sessions, frames
+
+
+def _entry_params(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    try:
+        value = json.loads(str(entry.get("params_json") or "{}"))
+    except json.JSONDecodeError:
+        return None
+    return value if type(value) is dict else None
+
+
+def _entry_matches_session(
+    entry: Dict[str, Any], sess: pd.Series, *, allow_meeting_only: bool = False,
+) -> bool:
+    params = _entry_params(entry)
+    if params is None:
+        return False
+    expected_session = _canonical_positive_integer(sess.get("session_key"))
+    expected_meeting = _canonical_positive_integer(sess.get("meeting_key"))
+    observed_session = _canonical_positive_integer(params.get("session_key"))
+    observed_meeting = _canonical_positive_integer(params.get("meeting_key"))
+    if observed_session is not None:
+        return observed_session == expected_session
+    return allow_meeting_only and observed_meeting == expected_meeting
+
+
+def _legacy_request_slice(
+    records: List[Dict[str, Any]],
+    start: int,
+    lane: str,
+    sess: pd.Series,
+) -> Tuple[List[Dict[str, Any]], int]:
+    if start >= len(records):
+        raise ValueError("legacy_request_log_truncated")
+    first = records[start]
+    if str(first.get("endpoint")) != lane:
+        raise ValueError(f"legacy_request_endpoint_mismatch:{lane}")
+    index = start + 1
+    strategy = str(first.get("strategy"))
+    if strategy == "skip_non_race_like_session":
+        if lane != "pit" or not _entry_matches_session(first, sess):
+            raise ValueError("legacy_skip_identity_mismatch")
+        return records[start:index], index
+    if not _entry_matches_session(first, sess):
+        raise ValueError(f"legacy_request_identity_mismatch:{lane}")
+    if lane == "position" and index < len(records):
+        candidate = records[index]
+        if str(candidate.get("strategy")) == "position_by_meeting_key_fallback":
+            if str(candidate.get("endpoint")) != lane or not _entry_matches_session(
+                candidate, sess, allow_meeting_only=True
+            ):
+                raise ValueError("legacy_position_fallback_identity_mismatch")
+            index += 1
+    elif lane == "drivers":
+        while index < len(records):
+            candidate = records[index]
+            if str(candidate.get("strategy")) != "drivers_by_observed_driver_number":
+                break
+            if str(candidate.get("endpoint")) != lane or not _entry_matches_session(candidate, sess):
+                raise ValueError("legacy_drivers_fallback_identity_mismatch")
+            index += 1
+    return records[start:index], index
+
+
+def _load_verified_legacy_cache(
+    output_root: Path, *, season: int, completed_only: bool,
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
+    root = output_root / NORMAL_LEGACY_HISTORY_REL
+    evidence: Dict[str, Any] = {
+        "mode": "legacy_verified_history",
+        "path": NORMAL_LEGACY_HISTORY_REL.as_posix(),
+        "aggregate_pass_accepted": False,
+        "verified_sessions": 0,
+        "rejected_sessions": 0,
+        "reason": None,
+    }
+    try:
+        if season != 2026 or completed_only is not True:
+            raise ValueError("legacy_policy_incompatible")
+        if _snapshot_identity(root, NORMAL_LEGACY_SNAPSHOT_FILES) != NORMAL_LEGACY_SNAPSHOT_SHA256:
+            raise ValueError("legacy_snapshot_identity_mismatch")
+        request_payload = (root / "request_log.csv").read_bytes()
+        if hashlib.sha256(request_payload).hexdigest() != NORMAL_LEGACY_REQUEST_LOG_SHA256:
+            raise ValueError("legacy_request_log_sha256_mismatch")
+        if _git_blob_sha(request_payload) != NORMAL_LEGACY_REQUEST_LOG_GIT_BLOB:
+            raise ValueError("legacy_request_log_git_blob_mismatch")
+        _, sessions, frames = _validated_snapshot_frames(
+            root, season=season, completed_only=completed_only
+        )
+        indexed_frames = _index_frames_by_session(frames)
+        diagnostics = _read_csv_frame(root / "zero_lane_diagnostics.csv")
+        requests_frame = _read_csv_frame(root / "request_log.csv")
+        records = requests_frame.to_dict("records")
+        if len(records) < 1 or str(records[0].get("strategy")) != "sessions_by_year":
+            raise ValueError("legacy_discovery_evidence_missing")
+        if str(records[0].get("status")) != "pass":
+            raise ValueError("legacy_discovery_not_available")
+        if len(diagnostics) != len(sessions) * len(LANES):
+            raise ValueError("legacy_diagnostics_incomplete")
+
+        session_by_key = {
+            _canonical_positive_integer(row.get("session_key")): row
+            for _, row in sessions.iterrows()
+        }
+        cache: Dict[str, Dict[str, Any]] = {}
+        working: Dict[str, Dict[str, Any]] = {}
+        index = 1
+        for position, (_, diagnostic) in enumerate(diagnostics.iterrows()):
+            lane = str(diagnostic.get("lane"))
+            expected_lane = LANES[position % len(LANES)]
+            if lane != expected_lane:
+                raise ValueError("legacy_diagnostic_lane_order_invalid")
+            session_key = _canonical_positive_integer(diagnostic.get("session_key"))
+            sess = session_by_key.get(session_key)
+            if session_key is None or sess is None:
+                raise ValueError("legacy_diagnostic_session_invalid")
+            entries, index = _legacy_request_slice(records, index, lane, sess)
+            frame = indexed_frames[lane].get(
+                session_key, frames[lane].iloc[0:0].copy()
+            )
+            applicable = not (lane == "pit" and not is_race_like_session(sess))
+            status, reason, fallback = assess_session_lane(
+                lane, sess, frame, entries, applicable
+            )
+            first_observed = _first_observed_utc(entries, frame)
+            if first_observed is None:
+                raise ValueError("legacy_first_observation_missing")
+            item = working.setdefault(session_key, {
+                "session_identity_sha256": _session_identity_sha256(
+                    sess, completed_only=completed_only
+                ),
+                "lanes": {},
+                "source": "legacy_verified_history",
+            })
+            item["lanes"][lane] = {
+                "frame": frame,
+                "request_entries": [dict(row) for row in entries],
+                "status": status,
+                "reason": reason,
+                "fallback_recovered": fallback,
+                "first_observed_utc": first_observed,
+            }
+        if index != len(records):
+            raise ValueError("legacy_request_log_unmapped")
+        for key, item in working.items():
+            lanes = item["lanes"]
+            complete = (
+                item["session_identity_sha256"] is not None
+                and set(lanes) == set(LANES)
+                and all(lane["status"] != "fail" for lane in lanes.values())
+            )
+            if complete:
+                cache[key] = item
+            else:
+                evidence["rejected_sessions"] += 1
+        evidence["verified_sessions"] = len(cache)
+        evidence["known_target_session_keys"] = sorted(
+            _canonical_positive_integer(value)
+            for value in sessions["session_key"].tolist()
+        )
+        return cache, evidence
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as exc:
+        evidence["reason"] = str(exc) or type(exc).__name__
+        return {}, evidence
+
+
+def _load_hardened_cache(
+    latest_root: Path, *, season: int, completed_only: bool,
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
+    evidence: Dict[str, Any] = {
+        "mode": "hardened_latest",
+        "verified_sessions": 0,
+        "reason": None,
+    }
+    try:
+        manifest, sessions, frames = _validated_snapshot_frames(
+            latest_root, season=season, completed_only=completed_only
+        )
+        indexed_frames = _index_frames_by_session(frames)
+        normal = manifest.get("normal_collection")
+        if (
+            type(normal) is not dict
+            or normal.get("schema_version") != NORMAL_CACHE_SCHEMA_VERSION
+            or manifest.get("publication_eligible") is not True
+            or manifest.get("source_quality_status") != "complete"
+            or normal.get("historical_reuse_only") is not True
+            or normal.get("prospective_forecast_eligibility_established") is not False
+        ):
+            raise ValueError("hardened_cache_contract_missing")
+        expected_hashes = {
+            "target_sessions_sha256": latest_root / "data/target_sessions.csv",
+            "request_log_sha256": latest_root / "request_log.csv",
+            "zero_lane_diagnostics_sha256": latest_root / "zero_lane_diagnostics.csv",
+            "combined_source_manifest_sha256": latest_root / "combined_source_manifest.csv",
+        }
+        for field, path in expected_hashes.items():
+            if normal.get(field) != _sha256_path(path):
+                raise ValueError(f"hardened_cache_hash_mismatch:{field}")
+        if normal.get("snapshot_evidence_sha256") != _snapshot_identity(
+            latest_root, _normal_snapshot_evidence_files()
+        ):
+            raise ValueError("hardened_cache_snapshot_identity_mismatch")
+
+        diagnostics = _read_csv_frame(latest_root / "zero_lane_diagnostics.csv")
+        requests_frame = _read_csv_frame(latest_root / "request_log.csv")
+        request_records = requests_frame.to_dict("records")
+        required = {
+            "lane", "session_key", "applicable", "status", "reason", "rows",
+            "request_start_index", "request_count", "request_evidence_sha256",
+            "frame_evidence_sha256", "session_identity_sha256",
+            "first_observed_utc", "fallback_recovered",
+        }
+        if not required.issubset(diagnostics.columns):
+            raise ValueError("hardened_cache_diagnostics_contract_missing")
+        if len(diagnostics) != len(sessions) * len(LANES):
+            raise ValueError("hardened_cache_diagnostics_incomplete")
+        generated = _normal_utc(manifest.get("generated_utc"))
+        if generated is None:
+            raise ValueError("hardened_cache_generated_utc_invalid")
+        session_by_key = {
+            _canonical_positive_integer(row.get("session_key")): row
+            for _, row in sessions.iterrows()
+        }
+        cache: Dict[str, Dict[str, Any]] = {}
+        seen: set[Tuple[str, str]] = set()
+        for _, diagnostic in diagnostics.iterrows():
+            session_key = _canonical_positive_integer(diagnostic.get("session_key"))
+            lane = str(diagnostic.get("lane"))
+            sess = session_by_key.get(session_key)
+            if session_key is None or sess is None or lane not in LANES:
+                raise ValueError("hardened_cache_diagnostic_identity_invalid")
+            pair = (session_key, lane)
+            if pair in seen:
+                raise ValueError("hardened_cache_diagnostic_duplicate")
+            seen.add(pair)
+            try:
+                start = int(diagnostic.get("request_start_index"))
+                count = int(diagnostic.get("request_count"))
+            except (TypeError, ValueError) as exc:
+                raise ValueError("hardened_cache_request_pointer_invalid") from exc
+            if start < 0 or count < 1 or start + count > len(request_records):
+                raise ValueError("hardened_cache_request_pointer_invalid")
+            entries = request_records[start:start + count]
+            if _request_evidence_sha256(entries) != str(diagnostic.get("request_evidence_sha256")):
+                raise ValueError("hardened_cache_request_evidence_mismatch")
+            frame = indexed_frames[lane].get(
+                session_key, frames[lane].iloc[0:0].copy()
+            )
+            if _frame_evidence_sha256(frame) != str(diagnostic.get("frame_evidence_sha256")):
+                raise ValueError("hardened_cache_frame_evidence_mismatch")
+            identity_sha = _session_identity_sha256(
+                sess, completed_only=completed_only
+            )
+            if identity_sha != str(diagnostic.get("session_identity_sha256")):
+                raise ValueError("hardened_cache_session_identity_mismatch")
+            applicable = str(diagnostic.get("applicable")) == "True"
+            status, reason, fallback = assess_session_lane(
+                lane, sess, frame, entries, applicable
+            )
+            if (
+                status != str(diagnostic.get("status"))
+                or reason != str(diagnostic.get("reason"))
+                or fallback != (str(diagnostic.get("fallback_recovered")) == "True")
+                or len(frame) != int(diagnostic.get("rows"))
+            ):
+                raise ValueError("hardened_cache_quality_replay_mismatch")
+            first_observed = _normal_utc(diagnostic.get("first_observed_utc"))
+            if first_observed is None or first_observed > generated:
+                raise ValueError("hardened_cache_observation_time_invalid")
+            item = cache.setdefault(session_key, {
+                "session_identity_sha256": identity_sha,
+                "lanes": {},
+                "source": "hardened_latest",
+            })
+            item["lanes"][lane] = {
+                "frame": frame,
+                "request_entries": [dict(row) for row in entries],
+                "status": status,
+                "reason": reason,
+                "fallback_recovered": fallback,
+                "first_observed_utc": _format_utc(first_observed),
+            }
+        if any(
+            set(item["lanes"]) != set(LANES)
+            or any(lane["status"] == "fail" for lane in item["lanes"].values())
+            for item in cache.values()
+        ):
+            raise ValueError("hardened_cache_session_incomplete")
+        evidence["verified_sessions"] = len(cache)
+        evidence["known_target_session_keys"] = sorted(cache)
+        return cache, evidence
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as exc:
+        evidence["reason"] = str(exc) or type(exc).__name__
+        return {}, evidence
+
+
 def create_zip(folder: Path, zip_path: Path) -> str:
     if zip_path.exists():
         zip_path.unlink()
@@ -1717,14 +2500,41 @@ def main() -> int:
 
     policy = load_policy()
     latest_root = output_root / "latest" / "openf1_lightweight_source_closure"
-    history_root = output_root / "history" / "openf1_lightweight_source_closure" / utc_now().strftime("%Y%m%d_%H%M%S")
+    history_root = (
+        output_root / "history" / "openf1_lightweight_source_closure"
+        / utc_now().strftime("%Y%m%d_%H%M%S")
+    )
     data_latest = latest_root / "data"
     data_history = history_root / "data"
+    previous_manifest = read_existing_latest(latest_root)
+    hardened_cache, hardened_cache_evidence = _load_hardened_cache(
+        latest_root, season=season, completed_only=completed_only
+    )
+    if hardened_cache:
+        session_cache = hardened_cache
+        cache_evidence = hardened_cache_evidence
+    else:
+        legacy_cache, legacy_cache_evidence = _load_verified_legacy_cache(
+            output_root, season=season, completed_only=completed_only
+        )
+        session_cache = legacy_cache
+        cache_evidence = legacy_cache_evidence
+        cache_evidence["hardened_cache_rejection_reason"] = (
+            hardened_cache_evidence.get("reason")
+        )
+
     latest_root.mkdir(parents=True, exist_ok=True)
     history_root.mkdir(parents=True, exist_ok=True)
 
     request_log: List[Dict[str, Any]] = []
-    previous_manifest = read_existing_latest(latest_root)
+    budget = NormalRequestBudget(
+        requests_per_window=NORMAL_REQUESTS_PER_MINUTE,
+        window_seconds=NORMAL_RATE_WINDOW_SECONDS,
+        max_requests=NORMAL_MAX_RUN_REQUESTS,
+        max_elapsed_seconds=NORMAL_MAX_COLLECTION_SECONDS,
+        clock=time.monotonic,
+        sleeper=time.sleep,
+    )
     previous_manifest_season = _canonical_positive_integer(
         previous_manifest.get("season")
     )
@@ -1747,16 +2557,16 @@ def main() -> int:
         except Exception:
             previous_target_keys = set()
 
-    sessions = get_sessions(season, completed_only, request_log)
+    sessions = get_sessions(season, completed_only, request_log, budget)
     discovery_status = (
         str(request_log[0].get("status") or "unknown")
         if request_log else "not_observed"
     )
     source_quality_reasons: List[str] = []
     if discovery_status not in {"pass", "zero_rows", "not_observed"}:
-        source_quality_reasons.append(
-            "session_discovery_unavailable:" + discovery_status
-        )
+        source_quality_reasons.append(_availability_reason(
+            "session_discovery", discovery_status
+        ))
     current_target_keys = (
         set(
             key for value in sessions["session_key"].tolist()
@@ -1764,6 +2574,15 @@ def main() -> int:
         )
         if "session_key" in sessions.columns else set()
     )
+    known_cache_target_keys = set(
+        cache_evidence.get("known_target_session_keys") or []
+    )
+    missing_cache_targets = sorted(known_cache_target_keys - current_target_keys)
+    if missing_cache_targets:
+        source_quality_reasons.append(
+            "verified_cache_session_coverage_regression:"
+            + ",".join(missing_cache_targets[:20])
+        )
     if previous_coverage_compatible:
         missing_previous = sorted(previous_target_keys - current_target_keys)
         if missing_previous:
@@ -1788,20 +2607,60 @@ def main() -> int:
 
     outputs_by_lane: Dict[str, List[pd.DataFrame]] = {lane: [] for lane in LANES}
     lane_session_rows: List[Dict[str, Any]] = []
+    reused_session_keys: set[str] = set()
+    fresh_session_keys: set[str] = set()
+    avoided_request_count = 0
 
     for _, sess in sessions.iterrows():
+        session_key = _canonical_positive_integer(sess.get("session_key"))
+        current_identity = _session_identity_sha256(
+            sess, completed_only=completed_only
+        )
+        cached = session_cache.get(session_key or "")
+        reuse_session = bool(
+            cached
+            and current_identity is not None
+            and cached.get("session_identity_sha256") == current_identity
+            and set(cached.get("lanes", {})) == set(LANES)
+        )
+        if reuse_session:
+            reused_session_keys.add(session_key or "")
+        else:
+            fresh_session_keys.add(session_key or "invalid")
         for lane in LANES:
             applicable = not (lane == "pit" and not is_race_like_session(sess))
             request_start = len(request_log)
-            df = retrieve_lane_for_session(lane, sess, request_log, outputs_by_lane)
+            cache_source = "fresh_provider"
+            cached_lane = cached.get("lanes", {}).get(lane) if reuse_session else None
+            if cached_lane is not None:
+                df = cached_lane["frame"].copy()
+                copied_entries = [
+                    dict(entry) for entry in cached_lane["request_entries"]
+                ]
+                request_log.extend(copied_entries)
+                if any(
+                    str(entry.get("strategy")) != "skip_non_race_like_session"
+                    for entry in copied_entries
+                ):
+                    avoided_request_count += 1
+                cache_source = str(cached.get("source") or "verified_cache")
+                first_observed = cached_lane.get("first_observed_utc")
+            else:
+                df = retrieve_lane_for_session(
+                    lane, sess, request_log, outputs_by_lane, budget
+                )
+                first_observed = None
             request_entries = request_log[request_start:]
             session_result, session_reason, fallback_recovered = assess_session_lane(
                 lane, sess, df, request_entries, applicable
             )
             if not df.empty:
                 df = df.copy()
-                df["source_closure_retrieved_utc"] = iso_now()
+                if cache_source == "fresh_provider":
+                    df["source_closure_retrieved_utc"] = iso_now()
                 outputs_by_lane[lane].append(df)
+            if first_observed is None:
+                first_observed = _first_observed_utc(request_entries, df)
             lane_session_rows.append({
                 "lane": lane,
                 "meeting_key": sess.get("meeting_key"),
@@ -1815,10 +2674,17 @@ def main() -> int:
                 "request_count": len(request_entries),
                 "request_statuses": ",".join(_request_statuses(request_entries)),
                 "fallback_recovered": fallback_recovered,
+                "request_start_index": request_start,
+                "session_identity_sha256": current_identity or "",
+                "first_observed_utc": first_observed or "",
+                "cache_source": cache_source,
+                "request_evidence_sha256": "",
+                "frame_evidence_sha256": "",
             })
 
     source_manifest_rows = []
     readiness_rows = []
+    combined_frames: Dict[str, pd.DataFrame] = {}
     for lane, frames in outputs_by_lane.items():
         if frames:
             combined = pd.concat(frames, ignore_index=True).drop_duplicates()
@@ -1828,6 +2694,7 @@ def main() -> int:
         lane_file = f"openf1_{lane}.csv"
         write_df(combined, data_latest / lane_file)
         write_df(combined, data_history / lane_file)
+        combined_frames[lane] = _read_csv_frame(data_latest / lane_file)
         rows = int(len(combined))
         lane_rows = [row for row in lane_session_rows if row["lane"] == lane]
         attempted_sessions = len(lane_rows)
@@ -1853,12 +2720,26 @@ def main() -> int:
         })
 
     request_df = pd.DataFrame(request_log)
-    lane_session_df = pd.DataFrame(lane_session_rows)
     readiness_df = pd.DataFrame(readiness_rows)
     source_manifest_df = pd.DataFrame(source_manifest_rows)
 
     write_df(request_df, latest_root / "request_log.csv")
     write_df(request_df, history_root / "request_log.csv")
+    persisted_requests = _read_csv_frame(
+        latest_root / "request_log.csv"
+    ).to_dict("records")
+    combined_frame_index = _index_frames_by_session(combined_frames)
+    for row in lane_session_rows:
+        start = int(row["request_start_index"])
+        count = int(row["request_count"])
+        entries = persisted_requests[start:start + count]
+        frame = combined_frame_index[row["lane"]].get(
+            _canonical_positive_integer(row["session_key"]) or "",
+            combined_frames[row["lane"]].iloc[0:0].copy(),
+        )
+        row["request_evidence_sha256"] = _request_evidence_sha256(entries)
+        row["frame_evidence_sha256"] = _frame_evidence_sha256(frame)
+    lane_session_df = pd.DataFrame(lane_session_rows)
     write_df(lane_session_df, latest_root / "zero_lane_diagnostics.csv")
     write_df(lane_session_df, history_root / "zero_lane_diagnostics.csv")
     write_df(readiness_df, latest_root / "source_readiness_summary.csv")
@@ -1892,10 +2773,38 @@ def main() -> int:
         if publication_eligible and len(sessions) == 0
         else ("complete" if publication_eligible else "hold")
     )
-    run_id = utc_now().strftime("%Y%m%d_%H%M%S")
+    generated_utc = iso_now()
+    snapshot_files = _normal_snapshot_evidence_files()
+    normal_collection = {
+        "schema_version": NORMAL_CACHE_SCHEMA_VERSION,
+        "historical_reuse_only": True,
+        "prospective_forecast_eligibility_established": False,
+        "source_readiness_promoted": False,
+        "dr002_activated": False,
+        "stable_engine_modified": False,
+        "cache_evidence": cache_evidence,
+        "verified_cache_candidate_sessions": len(session_cache),
+        "reused_session_count": len(reused_session_keys),
+        "fresh_session_count": len(fresh_session_keys),
+        "provider_requests_avoided": avoided_request_count,
+        "request_budget": budget.evidence(),
+        "target_sessions_sha256": _sha256_path(
+            data_latest / "target_sessions.csv"
+        ),
+        "request_log_sha256": _sha256_path(latest_root / "request_log.csv"),
+        "zero_lane_diagnostics_sha256": _sha256_path(
+            latest_root / "zero_lane_diagnostics.csv"
+        ),
+        "combined_source_manifest_sha256": _sha256_path(
+            latest_root / "combined_source_manifest.csv"
+        ),
+        "snapshot_evidence_sha256": _snapshot_identity(
+            latest_root, snapshot_files
+        ),
+    }
     manifest = {
         "artifact_profile": "openf1-lightweight-source-closure",
-        "generated_utc": iso_now(),
+        "generated_utc": generated_utc,
         "season": season,
         "completed_only": completed_only,
         "target_session_count": int(len(sessions)),
@@ -1907,6 +2816,11 @@ def main() -> int:
         "source_quality_status": source_quality_status,
         "source_quality_reasons": source_quality_reasons,
         "session_discovery_status": discovery_status,
+        "session_discovery_availability": (
+            "available"
+            if discovery_status in {"pass", "zero_rows"}
+            else _availability_reason("session_discovery", discovery_status)
+        ),
         "previous_manifest_season": previous_manifest.get("season"),
         "previous_manifest_completed_only": previous_manifest_completed_only,
         "previous_coverage_compatible": previous_coverage_compatible,
@@ -1916,16 +2830,22 @@ def main() -> int:
         "previous_manifest_generated_utc": previous_manifest.get("generated_utc"),
         "latest_zip": "openf1_lightweight_source_closure.zip",
         "history_path": str(history_root.relative_to(output_root)),
+        "normal_collection": normal_collection,
     }
     (latest_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (history_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    (latest_root / "data_readiness.json").write_text(json.dumps({"generated_utc": iso_now(), "lanes": readiness_rows}, indent=2), encoding="utf-8")
-    (history_root / "data_readiness.json").write_text(json.dumps({"generated_utc": iso_now(), "lanes": readiness_rows}, indent=2), encoding="utf-8")
+    readiness_payload = {"generated_utc": generated_utc, "lanes": readiness_rows}
+    (latest_root / "data_readiness.json").write_text(
+        json.dumps(readiness_payload, indent=2), encoding="utf-8"
+    )
+    (history_root / "data_readiness.json").write_text(
+        json.dumps(readiness_payload, indent=2), encoding="utf-8"
+    )
 
     report_lines = [
         "# F1 OpenF1 Lightweight Source Closure Report",
         "",
-        f"Generated UTC: {iso_now()}",
+        f"Generated UTC: {generated_utc}",
         f"Season: {season}",
         f"Target sessions: {len(sessions)}",
         "",
@@ -1938,6 +2858,11 @@ def main() -> int:
         f"Source quality status: {source_quality_status}",
         "Source quality reasons: "
         + (", ".join(source_quality_reasons) if source_quality_reasons else "none"),
+        f"Provider requests performed: {budget.total_requests}",
+        f"Provider requests avoided: {avoided_request_count}",
+        f"Verified sessions reused: {len(reused_session_keys)}",
+        f"Fresh sessions collected: {len(fresh_session_keys)}",
+        "Prospective forecast eligibility established: false",
         "",
         "## Important",
         "",

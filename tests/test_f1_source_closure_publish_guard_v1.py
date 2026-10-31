@@ -31,6 +31,7 @@ COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
+    "e23f016ef4d40e69a39d33cc0efe43572fdd16f8",
 )
 OLD_PUBLICATION = '''        run: |
           git config user.name "github-actions[bot]"
@@ -1141,10 +1142,12 @@ class StaticScopeTests(unittest.TestCase):
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertNotEqual(
-            immutable_collectors[APPROVED_COLLECTOR_BLOBS[0]],
-            immutable_collectors[APPROVED_COLLECTOR_BLOBS[1]],
-        )
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 3)
+        for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
+            for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
+                self.assertNotEqual(
+                    immutable_collectors[left], immutable_collectors[right]
+                )
 
         active = (ROOT / COLLECTOR_PATH).read_bytes()
         active_blob = require_approved_collector(active)
