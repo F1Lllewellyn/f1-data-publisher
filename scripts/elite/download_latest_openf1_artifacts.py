@@ -17,7 +17,7 @@ import stat
 import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
@@ -27,6 +27,18 @@ PROFILES = {
     "full_historical": ["openf1-full-historical-auto-final", "openf1-high-frequency-2026-all"],
     "post_race": ["openf1-post-race-auto-final"],
 }
+APPROVED_WORKFLOWS = {
+    "pre_race": {
+        "openf1-prerace-auto-final": ".github/workflows/openf1-prerace-auto-ingest.yml",
+    },
+    "full_historical": {
+        "openf1-full-historical-auto-final": ".github/workflows/openf1-full-historical-auto-ingest.yml",
+    },
+    "post_race": {
+        "openf1-post-race-auto-final": ".github/workflows/openf1-post-race-auto-reliability.yml",
+    },
+}
+EVENT_SESSION_PROVENANCE_STATUS = "HOLD_ARCHITECTURE_SCOPE"
 MAX_ARTIFACT_BYTES = 2 * 1024 * 1024 * 1024
 MAX_EXTRACTED_BYTES = 8 * 1024 * 1024 * 1024
 MAX_ZIP_MEMBERS = 100_000
@@ -98,17 +110,83 @@ def validate_artifact(artifact: dict, repo: str, prefixes: list[str]) -> dict:
     ):
         raise ArtifactHold("artifact archive identity mismatch; HOLD")
     workflow_run = artifact.get("workflow_run")
-    if workflow_run is not None:
-        if not isinstance(workflow_run, dict):
-            raise ArtifactHold("invalid artifact workflow identity; HOLD")
-        run_id = workflow_run.get("id")
-        head_sha = workflow_run.get("head_sha")
-        if (
-            isinstance(run_id, bool) or not isinstance(run_id, int) or run_id <= 0
-            or not isinstance(head_sha, str) or not SHA_RE.fullmatch(head_sha)
-        ):
-            raise ArtifactHold("invalid artifact workflow identity; HOLD")
+    if not isinstance(workflow_run, dict):
+        raise ArtifactHold("missing or invalid originating workflow-run identity; HOLD")
+    run_id = workflow_run.get("id")
+    head_sha = workflow_run.get("head_sha")
+    if (
+        isinstance(run_id, bool) or not isinstance(run_id, int) or run_id <= 0
+        or not isinstance(head_sha, str) or not SHA_RE.fullmatch(head_sha)
+    ):
+        raise ArtifactHold("missing or invalid originating workflow-run identity; HOLD")
     return artifact
+
+
+def _expected_workflow_path(artifact: dict, profile: str) -> str:
+    profile_workflows = APPROVED_WORKFLOWS.get(profile)
+    if profile_workflows is None:
+        raise ArtifactHold("unknown artifact profile; HOLD")
+    name = artifact["name"]
+    for prefix, workflow_path in profile_workflows.items():
+        if name == prefix or name.startswith(prefix + "-"):
+            return workflow_path
+    raise ArtifactHold(
+        "HOLD_ARCHITECTURE_SCOPE: artifact prefix has no approved originating workflow identity"
+    )
+
+
+def verify_originating_workflow_run(artifact: dict, profile: str, repo: str, token: str) -> dict:
+    """Independently bind listing identity to one completed approved workflow run."""
+    validate_artifact(artifact, repo, PROFILES.get(profile, []))
+    expected_path = _expected_workflow_path(artifact, profile)
+    listed = artifact["workflow_run"]
+    run_url = f"https://api.github.com/repos/{repo}/actions/runs/{listed['id']}"
+    try:
+        run = gh_get_json(run_url, token)
+    except HTTPError as exc:
+        raise ArtifactHold(f"originating workflow-run lookup returned HTTP {exc.code}; HOLD") from exc
+    except (URLError, TimeoutError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ArtifactHold("originating workflow-run lookup failed; HOLD") from exc
+    if not isinstance(run, dict):
+        raise ArtifactHold("originating workflow-run response is malformed; HOLD")
+
+    repository = run.get("repository")
+    head_repository = run.get("head_repository")
+    run_id = run.get("id")
+    run_attempt = run.get("run_attempt")
+    if (
+        isinstance(run_id, bool) or run_id != listed["id"]
+        or run.get("head_sha") != listed["head_sha"]
+        or run.get("path") != expected_path
+        or run.get("head_branch") != "main"
+        or run.get("event") not in {"schedule", "workflow_dispatch"}
+        or run.get("status") != "completed"
+        or run.get("conclusion") != "success"
+        or not isinstance(repository, dict) or repository.get("full_name") != repo
+        or not isinstance(head_repository, dict) or head_repository.get("full_name") != repo
+        or isinstance(run_attempt, bool) or not isinstance(run_attempt, int) or run_attempt <= 0
+        or run.get("artifacts_url") != f"https://api.github.com/repos/{repo}/actions/runs/{listed['id']}/artifacts"
+    ):
+        raise ArtifactHold("originating workflow-run identity mismatch; HOLD")
+
+    run_created = _parse_utc(run.get("created_at"), "workflow-run created_at")
+    run_started = _parse_utc(run.get("run_started_at"), "workflow-run run_started_at")
+    run_updated = _parse_utc(run.get("updated_at"), "workflow-run updated_at")
+    artifact_created = _parse_utc(artifact["created_at"], "created_at")
+    artifact_updated = _parse_utc(artifact["updated_at"], "updated_at")
+    if not run_created <= run_started <= artifact_created <= artifact_updated <= run_updated:
+        raise ArtifactHold("originating workflow-run chronology mismatch; HOLD")
+    return {
+        "id": run_id,
+        "head_sha": run["head_sha"],
+        "path": run["path"],
+        "head_branch": run["head_branch"],
+        "event": run["event"],
+        "run_attempt": run_attempt,
+        "repository": repo,
+        "status": run["status"],
+        "conclusion": run["conclusion"],
+    }
 
 
 def get_artifact_redirect_url(url: str, token: str) -> str:
@@ -231,7 +309,9 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def reuse_verified_cache(artifact: dict, repo: str, dest: Path) -> dict | None:
+def reuse_verified_cache(
+    artifact: dict, repo: str, verified_workflow_run: dict, dest: Path
+) -> dict | None:
     identity_path = _cache_identity_path(dest)
     if not dest.exists() and not identity_path.exists():
         return None
@@ -250,6 +330,7 @@ def reuse_verified_cache(artifact: dict, repo: str, dest: Path) -> dict | None:
         "created_at": artifact["created_at"],
         "updated_at": artifact["updated_at"],
         "workflow_run": artifact.get("workflow_run"),
+        "verified_workflow_run": verified_workflow_run,
     }
     if not isinstance(identity, dict) or any(identity.get(key) != value for key, value in expected.items()):
         raise ArtifactHold("artifact cache identity mismatch; HOLD")
@@ -265,7 +346,9 @@ def reuse_verified_cache(artifact: dict, repo: str, dest: Path) -> dict | None:
     }
 
 
-def write_cache_identity(artifact: dict, repo: str, dest: Path, transfer: dict) -> None:
+def write_cache_identity(
+    artifact: dict, repo: str, verified_workflow_run: dict, dest: Path, transfer: dict
+) -> None:
     identity = {
         "repository": repo,
         "artifact_id": artifact["id"],
@@ -275,6 +358,7 @@ def write_cache_identity(artifact: dict, repo: str, dest: Path, transfer: dict) 
         "created_at": artifact["created_at"],
         "updated_at": artifact["updated_at"],
         "workflow_run": artifact.get("workflow_run"),
+        "verified_workflow_run": verified_workflow_run,
         "archive_sha256": transfer["archive_sha256"],
     }
     path = _cache_identity_path(dest)
@@ -283,13 +367,19 @@ def write_cache_identity(artifact: dict, repo: str, dest: Path, transfer: dict) 
     os.replace(temporary, path)
 
 
-def gh_download_artifact(artifact: dict, repo: str, token: str, dest: Path) -> dict:
-    cached = reuse_verified_cache(artifact, repo, dest)
+def gh_download_artifact(
+    artifact: dict, profile: str, repo: str, token: str, dest: Path
+) -> dict:
+    verified_workflow_run = verify_originating_workflow_run(artifact, profile, repo, token)
+    cached = reuse_verified_cache(artifact, repo, verified_workflow_run, dest)
     if cached is not None:
+        cached["verified_workflow_run"] = verified_workflow_run
         return cached
     archive_url = artifact["archive_download_url"]
     signed_url = get_artifact_redirect_url(archive_url, token)
-    return download_signed_url(signed_url, dest, artifact["size_in_bytes"])
+    transfer = download_signed_url(signed_url, dest, artifact["size_in_bytes"])
+    transfer["verified_workflow_run"] = verified_workflow_run
+    return transfer
 
 
 def list_artifacts(repo: str, token: str):
@@ -375,14 +465,20 @@ def write_manifest(manifest_path: Path, rows: list[dict], repo: str, error: str 
     manifest = {
         "generated_utc": datetime.now(timezone.utc).isoformat(), "repository": repo,
         "error": error, "hold": bool(error), "source_ready": False,
-        "forecast_eligible": False, "profiles": rows,
+        "forecast_eligible": False,
+        "event_session_provenance_verified": False,
+        "event_session_provenance_status": EVENT_SESSION_PROVENANCE_STATUS,
+        "profiles": rows,
     }
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     csv_path = manifest_path.with_suffix(".csv")
     headers = [
         "profile", "found", "artifact_id", "artifact_name", "created_at", "updated_at",
-        "size_in_bytes", "downloaded_bytes", "archive_sha256", "status", "extracted_to",
+        "size_in_bytes", "workflow_run_id", "workflow_run_head_sha", "workflow_path",
+        "workflow_run_attempt", "originating_workflow_run_verified",
+        "event_session_provenance_status", "downloaded_bytes", "archive_sha256",
+        "status", "extracted_to",
     ]
     lines = [",".join(headers)]
     for row in rows:
@@ -416,9 +512,13 @@ def main():
             "profile": profile, "prefixes": ";".join(prefixes), "found": False,
             "artifact_id": "", "artifact_name": "", "created_at": "", "updated_at": "",
             "size_in_bytes": "", "downloaded_bytes": "", "archive_sha256": "",
+            "workflow_run_id": "", "workflow_run_head_sha": "", "workflow_path": "",
+            "workflow_run_attempt": "",
             "downloaded_to": "", "extracted_to": str(out / "inputs" / profile),
             "status": "MISSING", "verified": False, "source_ready": False,
-            "forecast_eligible": False,
+            "forecast_eligible": False, "originating_workflow_run_verified": False,
+            "event_session_provenance_verified": False,
+            "event_session_provenance_status": EVENT_SESSION_PROVENANCE_STATUS,
         }
         try:
             target = pick_latest(artifacts, prefixes, repo=repo)
@@ -431,12 +531,24 @@ def main():
                 "size_in_bytes": str(target["size_in_bytes"]),
             })
             zip_path = downloads / f"{profile}_{target['id']}.zip"
-            transfer = gh_download_artifact(target, repo, token, zip_path)
+            transfer = gh_download_artifact(target, profile, repo, token, zip_path)
             extract_validated_zip(zip_path, out / "inputs" / profile)
             if not transfer.get("cache_reused"):
-                write_cache_identity(target, repo, zip_path, transfer)
+                write_cache_identity(
+                    target, repo, transfer["verified_workflow_run"], zip_path, transfer
+                )
             row.update(transfer)
-            row.update({"downloaded_to": str(zip_path), "status": "DOWNLOADED", "verified": True})
+            verified_run = transfer["verified_workflow_run"]
+            row.update({
+                "downloaded_to": str(zip_path),
+                "status": "DOWNLOADED",
+                "verified": False,
+                "originating_workflow_run_verified": True,
+                "workflow_run_id": str(verified_run["id"]),
+                "workflow_run_head_sha": verified_run["head_sha"],
+                "workflow_path": verified_run["path"],
+                "workflow_run_attempt": str(verified_run["run_attempt"]),
+            })
         except Exception as exc:
             row["status"] = f"HOLD: {type(exc).__name__}: {exc}"
             rows.append(row)
