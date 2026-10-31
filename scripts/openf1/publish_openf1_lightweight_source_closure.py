@@ -15,6 +15,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import math
 import numbers
 import os
 import re
@@ -65,9 +66,10 @@ MATERIAL_REQUEST_STATUSES = {
 ROW_REQUIRED_LANES = {"weather", "position", "drivers"}
 
 # NORMAL-mode public historical collection is intentionally bounded below the
-# workflow timeout.  OpenF1 documents a 30 request/minute public historical
-# limit; this sliding-window budget includes discovery, primary requests and
+# workflow timeout. OpenF1 documents 3 requests/second AND 30/minute public
+# historical limits; the shared budget includes discovery, primary requests and
 # fallbacks.  It is not used by the explicit manual provenance-shadow path.
+NORMAL_REQUESTS_PER_SECOND = 3
 NORMAL_REQUESTS_PER_MINUTE = 30
 NORMAL_RATE_WINDOW_SECONDS = 60.0
 NORMAL_MAX_COLLECTION_SECONDS = 24 * 60.0
@@ -146,7 +148,9 @@ class NormalRequestBudget:
             or requests_per_window <= 0
             or type(max_requests) is not int
             or max_requests <= 0
+            or not math.isfinite(window_seconds)
             or window_seconds <= 0
+            or not math.isfinite(max_elapsed_seconds)
             or max_elapsed_seconds <= 0
         ):
             raise ValueError("invalid_normal_request_budget")
@@ -212,24 +216,37 @@ class NormalRequestBudget:
             raise NormalCollectionDeferred(self.block_reason)
 
         now = max(float(self.clock()), self.logical_now)
-        self.request_times = [
-            stamp for stamp in self.request_times
-            if now - stamp < self.window_seconds
-        ]
-        if len(self.request_times) >= self.requests_per_window:
-            wait_seconds = self.window_seconds - (now - self.request_times[0])
-            wait_seconds = max(0.0, wait_seconds)
+        # Retain the longest window. Custom stricter budgets cannot relax either
+        # provider ceiling. Fallbacks pass through these same windows.
+        windows = ((NORMAL_REQUESTS_PER_SECOND, 1.0),
+                   (NORMAL_REQUESTS_PER_MINUTE, 60.0),
+                   (self.requests_per_window, self.window_seconds))
+        self.request_times = [stamp for stamp in self.request_times
+                              if stamp > now - max(60.0, self.window_seconds)]
+        while True:
+            deadline = now
+            for limit, seconds in windows:
+                recent = [stamp for stamp in self.request_times if stamp > now - seconds]
+                if len(recent) >= limit:
+                    boundary = recent[-limit] + seconds
+                    # Floating-point subtraction must not release a boundary
+                    # a fraction early; recheck every window after sleeping.
+                    if boundary - seconds < recent[-limit]:
+                        boundary = math.nextafter(boundary, math.inf)
+                    deadline = max(deadline, boundary)
+            if deadline <= now:
+                break
+            wait_seconds = deadline - now
+            if now + wait_seconds < deadline:
+                wait_seconds = math.nextafter(wait_seconds, math.inf)
             if now + wait_seconds - self.started > self.max_elapsed_seconds:
                 self.block("run_time_budget_exhausted")
                 raise NormalCollectionDeferred(self.block_reason)
             self.sleeper(wait_seconds)
             self.total_wait_seconds += wait_seconds
+            # Preserve the existing injectable-sleeper contract and logical
+            # time accounting (the production sleeper is time.sleep).
             now = max(float(self.clock()), now + wait_seconds)
-            self.logical_now = now
-            self.request_times = [
-                stamp for stamp in self.request_times
-                if now - stamp < self.window_seconds
-            ]
 
         if now - self.started > self.max_elapsed_seconds:
             self.block("run_time_budget_exhausted")
@@ -241,7 +258,8 @@ class NormalRequestBudget:
     def evidence(self) -> Dict[str, Any]:
         return {
             "policy": "public_historical_sliding_window",
-            "requests_per_minute": self.requests_per_window,
+            "requests_per_second": NORMAL_REQUESTS_PER_SECOND,
+            "requests_per_minute": min(self.requests_per_window, NORMAL_REQUESTS_PER_MINUTE),
             "window_seconds": self.window_seconds,
             "max_run_requests": self.max_requests,
             "max_collection_seconds": self.max_elapsed_seconds,

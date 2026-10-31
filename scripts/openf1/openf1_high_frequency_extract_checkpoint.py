@@ -25,6 +25,8 @@ from openf1_high_frequency_auto_ingest import (  # noqa: E402
     extract_raw,
     build_feature_mart,
     build_metrics,
+    add_target_arguments,
+    run_target_cli,
 )
 
 from openf1_feature_fallback import build_feature_mart_fallback  # noqa: E402
@@ -74,7 +76,10 @@ def main():
     p.add_argument("--strict-threshold", type=float, default=0.90)
     p.add_argument("--recent-days", type=int, default=0)
     p.add_argument("--latest-meeting-only", action="store_true")
+    add_target_arguments(p)
     args = p.parse_args()
+    if any(value is not None for key, value in vars(args).items() if key.startswith("target_")):
+        return run_target_cli(args)
 
     output_dir = Path(args.output_dir)
     for sub in ["raw", "features", "metrics", "manifests", "reports"]:
@@ -174,4 +179,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

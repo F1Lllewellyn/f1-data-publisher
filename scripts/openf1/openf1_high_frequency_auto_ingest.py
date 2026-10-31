@@ -23,6 +23,10 @@ import os
 import sys
 import time
 import json
+import hashlib
+import math
+import re
+from urllib.parse import urlencode
 import zipfile
 import argparse
 from pathlib import Path
@@ -526,6 +530,467 @@ def write_report(output_dir, year, mode):
     (report_dir / "openf1_high_frequency_auto_ingest_report.md").write_text("\n".join(lines), encoding="utf-8")
 
 
+# Opt-in experimental capture. Legacy discovery/feature interfaces above remain
+# unchanged. Input hashes must come from separately reviewed retained evidence;
+# this boundary verifies bytes/identity, not independent publisher attestation.
+TARGET_SCHEMA = "openf1-targeted-high-frequency-v1"
+TARGET_ENDPOINTS = ("car_data", "location")
+TARGET_TRUST = {
+    "source_readiness_promoted": False,
+    "prospective_forecast_eligibility_established": False,
+    "independent_publisher_authentication_established": False,
+    "dr002_activated": False,
+    "stable_engine_modified": False,
+}
+TARGET_MAX_FILE_BYTES = 32 * 1024 * 1024
+TARGET_MAX_TOTAL_BYTES = 512 * 1024 * 1024
+TARGET_MAX_INPUT_BYTES = 8 * 1024 * 1024
+
+
+class TargetHold(ValueError):
+    """Deterministic experimental HOLD, never a production readiness verdict."""
+
+
+def target_require(condition, reason):
+    if not condition:
+        raise TargetHold(reason)
+
+
+def target_sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def target_json(raw):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            target_require(key not in result, "duplicate_json_key")
+            result[key] = value
+        return result
+    def constant(_):
+        raise TargetHold("nonfinite_json")
+    try:
+        return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)
+    except (ValueError, TypeError, UnicodeError, RecursionError) as exc:
+        if isinstance(exc, TargetHold):
+            raise
+        raise TargetHold("invalid_json") from exc
+
+
+def target_time(value):
+    target_require(type(value) is str, "invalid_utc_time")
+    try:
+        result = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise TargetHold("invalid_utc_time") from exc
+    target_require(result.tzinfo is not None and result.utcoffset() == timedelta(0),
+                   "invalid_utc_time")
+    return result
+
+
+def target_integer(value):
+    target_require(type(value) is int and value > 0, "invalid_integer_identity")
+    return value
+
+
+def target_read(path, limit):
+    path = Path(path).absolute()
+    target_require(not any(p.is_symlink() for p in (path, *path.parents)), "unsafe_input_path")
+    target_require(path.is_file() and 0 < path.stat().st_size <= limit, "input_size_or_missing")
+    with path.open("rb") as handle:
+        raw = handle.read(limit + 1)
+    target_require(0 < len(raw) <= limit, "input_size_or_missing")
+    return raw
+
+
+def target_pinned(path, sha):
+    target_require(type(sha) is str and re.fullmatch(r"[0-9a-f]{64}", sha), "input_pin_missing")
+    raw = target_read(path, TARGET_MAX_INPUT_BYTES)
+    target_require(target_sha(raw) == sha, "input_hash_mismatch")
+    return target_json(raw)
+
+
+def target_historical_after(session):
+    # A scheduled end alone cannot prove completion (red flags/delays). The
+    # separately pinned metadata must explicitly attest an observed completion.
+    target_require(session.get("completion_confirmed") is True, "session_completion_unverified")
+    completed = target_time(session.get("completion_observed_at_utc"))
+    target_require(completed >= target_time(session["date_end"]), "completion_chronology_invalid")
+    return completed + timedelta(minutes=30)
+
+
+def load_target_plan(spec_path, metadata_path, metadata_sha256, roster_path, roster_sha256, *, now):
+    """Cross-check explicit targets with independently pinned offline snapshots.
+
+    Spec: year, meeting_key, targets [{session_key, driver_numbers}]. Metadata:
+    observed_at_utc, sessions [OpenF1 identity/date fields plus explicit
+    completion_confirmed and completion_observed_at_utc]. Roster:
+    observed_at_utc, drivers [{meeting_key, session_key, driver_number}]. A stale
+    pre-session snapshot cannot establish a completed-session roster. No live
+    window bypass is provided, including when a token exists in the environment.
+    """
+    observed_now = target_time(now)
+    spec_raw = target_read(spec_path, TARGET_MAX_INPUT_BYTES)
+    spec = target_json(spec_raw)
+    metadata = target_pinned(metadata_path, metadata_sha256)
+    roster = target_pinned(roster_path, roster_sha256)
+    target_require(all(type(item) is dict for item in (spec, metadata, roster)), "input_schema")
+    year = target_integer(spec.get("year"))
+    meeting = target_integer(spec.get("meeting_key"))
+    targets = spec.get("targets")
+    target_require(type(targets) is list and 0 < len(targets) <= 10, "target_sessions_invalid")
+    sessions = metadata.get("sessions")
+    drivers = roster.get("drivers")
+    target_require(type(sessions) is list and type(drivers) is list, "metadata_schema")
+    meta_time = target_time(metadata.get("observed_at_utc"))
+    roster_time = target_time(roster.get("observed_at_utc"))
+    target_require(max(meta_time, roster_time) <= observed_now, "future_metadata_observation")
+    selected = []
+    seen = set()
+    for target in targets:
+        target_require(type(target) is dict, "target_sessions_invalid")
+        sk = target_integer(target.get("session_key"))
+        target_require(sk not in seen, "duplicate_target_session")
+        seen.add(sk)
+        matches = [s for s in sessions if type(s) is dict and s.get("session_key") == sk]
+        target_require(len(matches) == 1, "session_metadata_missing_or_duplicate")
+        session = matches[0]
+        target_require(target_integer(session.get("session_key")) == sk and
+                       target_integer(session.get("meeting_key")) == meeting and
+                       target_integer(session.get("year")) == year, "session_identity_mismatch")
+        for field in ("country_name", "location", "circuit_short_name", "session_name", "session_type"):
+            value = session.get(field)
+            target_require(type(value) is str and bool(value.strip()) and value.strip() == value,
+                           "session_text_identity_missing")
+        target_require(session["session_type"] in SESSION_TYPES["all"], "session_type_invalid")
+        start, end = target_time(session.get("date_start")), target_time(session.get("date_end"))
+        target_require(start.year == year and start < end, "session_chronology_invalid")
+        eligible_after = target_historical_after(session)
+        target_require(eligible_after < observed_now, "session_incomplete_or_live_window")
+        target_require(eligible_after - timedelta(minutes=30) <= min(meta_time, roster_time),
+                       "stale_precompletion_metadata")
+        target_require(session.get("is_cancelled", False) is False, "cancelled_session")
+        numbers = target.get("driver_numbers")
+        target_require(type(numbers) is list and 0 < len(numbers) <= 30, "target_roster_invalid")
+        numbers = [target_integer(n) for n in numbers]
+        target_require(len(numbers) == len(set(numbers)), "duplicate_target_driver")
+        roster_rows = [r for r in drivers if type(r) is dict and r.get("session_key") == sk]
+        roster_numbers = []
+        for row in roster_rows:
+            target_require(target_integer(row.get("session_key")) == sk and
+                           target_integer(row.get("meeting_key")) == meeting, "roster_identity_mismatch")
+            roster_numbers.append(target_integer(row.get("driver_number")))
+        target_require(len(roster_numbers) == len(set(roster_numbers)), "duplicate_roster_evidence")
+        target_require(set(numbers) == set(roster_numbers), "roster_coverage_mismatch")
+        selected.append({"session": session, "driver_numbers": sorted(numbers)})
+    return {"year": year, "meeting_key": meeting, "targets": selected,
+            "spec_sha256": target_sha(spec_raw), "metadata_sha256": metadata_sha256,
+            "roster_sha256": roster_sha256,
+            "metadata_observed_at_utc": metadata["observed_at_utc"],
+            "roster_observed_at_utc": roster["observed_at_utc"]}
+
+
+def target_expected(plan):
+    target_require(type(plan) is dict and type(plan.get("targets")) is list and bool(plan["targets"]),
+                   "target_sessions_invalid")
+    return [(item["session"], dn, endpoint) for item in plan["targets"]
+            for endpoint in TARGET_ENDPOINTS for dn in item["driver_numbers"]]
+
+
+def validate_target_rows(raw, session, driver_number, endpoint):
+    rows = target_json(raw)
+    target_require(type(rows) is list and bool(rows), "empty_or_invalid_endpoint")
+    fields = ("rpm", "speed", "n_gear", "throttle", "brake") if endpoint == "car_data" else ("x", "y", "z")
+    start, end = target_time(session["date_start"]), target_time(session["date_end"])
+    seen = set()
+    for row in rows:
+        target_require(type(row) is dict, "row_schema")
+        target_require(all(type(row.get(k)) is int and row[k] == value for k, value in (
+            ("session_key", session["session_key"]), ("meeting_key", session["meeting_key"]),
+            ("driver_number", driver_number))), "row_identity_mismatch")
+        stamp = target_time(row.get("date"))
+        target_require(start <= stamp <= end, "row_time_outside_session")
+        target_require(stamp not in seen, "duplicate_sample_time")
+        seen.add(stamp)
+        target_require(all(type(row.get(k)) in (int, float) and -1e100 < row[k] < 1e100 for k in fields),
+                       "endpoint_measurement_invalid")
+    # Complete response and every matrix cell are verified. Provider sampling
+    # density/completeness is UNKNOWN: a small nonempty response is not proof of
+    # all telemetry the provider ever observed.
+    return rows
+
+
+def target_budget(**kwargs):
+    # Reuse the collector's single budget for all requests in this process.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from scripts.openf1.publish_openf1_lightweight_source_closure import NormalRequestBudget
+    return NormalRequestBudget(**kwargs)
+
+
+class TargetClient:
+    """Bounded no-retry transport using the existing driver/session extraction API."""
+    def __init__(self, *, budget, http_get, utc_clock, max_file_bytes, max_total_bytes):
+        self.budget, self.http_get, self.utc_clock = budget, http_get, utc_clock
+        self.max_file_bytes, self.max_total_bytes = max_file_bytes, max_total_bytes
+        self.transferred = 0
+        self.requests_sent = 0
+        self.last_raw = b""
+        self.last_meta = {}
+
+    def get(self, endpoint, params=None, timeout=120):
+        self.last_raw = b""
+        self.last_meta = {"attempted": False}
+        target_require(endpoint in TARGET_ENDPOINTS and set(params) == {"session_key", "driver_number"},
+                       "target_request_scope_invalid")
+        remaining = self.max_total_bytes - self.transferred
+        target_require(remaining > 0, "total_transfer_budget_exhausted")
+        try:
+            self.budget.acquire()
+        except RuntimeError as exc:
+            raise TargetHold(str(exc)) from exc
+        cap = min(self.max_file_bytes, remaining)
+        self.last_meta = {"attempted": False, "request_started_at_utc": self.utc_clock(),
+                          "url": f"{BASE_URL}/{endpoint}", "params": dict(params)}
+        response = None
+        try:
+            remaining_time = self.budget.max_elapsed_seconds - (self.budget.clock() - self.budget.started)
+            target_require(remaining_time > 0, "run_time_budget_exhausted")
+            self.last_meta["attempted"] = True
+            self.requests_sent += 1
+            response = self.http_get(self.last_meta["url"], params=params, stream=True,
+                                     allow_redirects=False, headers={"Accept-Encoding": "identity"},
+                                     timeout=min(timeout, remaining_time))
+            code = response.status_code
+            self.last_meta["status_code"] = code
+            target_require(type(code) is int and code == 200, f"provider_http_{code}")
+            target_require(response.url == self.last_meta["url"] + "?" + urlencode(params),
+                           "response_url_mismatch")
+            target_require(response.headers.get("Content-Encoding", "identity").lower() == "identity",
+                           "encoded_response_rejected")
+            length = response.headers.get("Content-Length")
+            if length is not None:
+                target_require(type(length) is str and length.isdecimal() and 0 < int(length) <= cap,
+                               "response_length_invalid_or_excessive")
+            chunks = []
+            size = 0
+            for chunk in response.iter_content(chunk_size=65536):
+                target_require(type(chunk) is bytes, "response_chunk_invalid")
+                size += len(chunk)
+                self.transferred += len(chunk)
+                target_require(size <= cap, "response_transfer_limit")
+                target_require(self.budget.clock() - self.budget.started <= self.budget.max_elapsed_seconds,
+                               "run_time_budget_exhausted")
+                chunks.append(chunk)
+            self.last_raw = b"".join(chunks)
+            self.last_meta["observed_at_utc"] = self.utc_clock()
+            target_require(length is None or size == int(length), "response_length_mismatch")
+            target_require(size > 0, "empty_response")
+            return target_json(self.last_raw), dict(self.last_meta)
+        except TargetHold:
+            raise
+        except Exception as exc:
+            raise TargetHold("transport_failure") from exc
+        finally:
+            if response is not None:
+                response.close()
+
+
+def target_output_path(path):
+    path = Path(path).absolute()
+    target_require(".." not in path.parts and "experimental" in path.parts and not any(
+        p.lower() in {"latest", "history", "engine_2026-06-07_stable"} for p in path.parts),
+        "unsafe_experimental_output")
+    target_require(not any(p.is_symlink() for p in (path, *path.parents)), "unsafe_experimental_output")
+    target_require(not path.exists(), "output_already_exists")
+    return path
+
+
+def capture_targeted(plan, output_dir, *, http_get=None, utc_clock=None, budget=None,
+                     max_file_bytes=TARGET_MAX_FILE_BYTES, max_total_bytes=TARGET_MAX_TOTAL_BYTES,
+                     cache_dir=None, cache_manifest_sha256=None):
+    """Stage a distinct evidence packet; never publish or promote its contents.
+
+    Cache reuse is deliberately whole-packet only and requires an externally
+    pinned manifest plus independent matrix replay. Partial packets remain HOLD.
+    """
+    utc_clock = utc_clock or (lambda: datetime.now(timezone.utc).isoformat())
+    budget = budget or target_budget()
+    result = {"schema_version": TARGET_SCHEMA, "status": "HOLD", "hold": True,
+              "reason": None, **TARGET_TRUST, "plan": plan, "entries": [],
+              "provider_sampling_completeness_established": False}
+    output = None
+    created = False
+    client = None
+    try:
+        target_require(type(max_file_bytes) is int and 0 < max_file_bytes <= TARGET_MAX_FILE_BYTES and
+                       type(max_total_bytes) is int and 0 < max_total_bytes <= TARGET_MAX_TOTAL_BYTES,
+                       "invalid_transfer_limits")
+        output = target_output_path(output_dir)
+        now = target_time(utc_clock())
+        target_require(max(target_time(plan["metadata_observed_at_utc"]),
+                           target_time(plan["roster_observed_at_utc"])) < now, "metadata_observation_invalid")
+        expected = target_expected(plan)
+        for session, _, _ in expected:
+            target_require(target_historical_after(session) < now,
+                           "session_incomplete_or_live_window")
+        cached = None
+        if cache_dir is not None:
+            target_require(type(cache_manifest_sha256) is str, "cache_pin_missing")
+            raw = target_read(Path(cache_dir) / "targeted_manifest.json", TARGET_MAX_INPUT_BYTES)
+            target_require(target_sha(raw) == cache_manifest_sha256, "cache_manifest_hash_mismatch")
+            cached = verify_targeted_packet(cache_dir, plan, now=utc_clock())
+            target_require(cached["status"] == "PASS", "cache_coverage_or_provenance_invalid")
+            target_require(sum(e["size_bytes"] for e in cached["entries"]) <= max_total_bytes and
+                           all(e["size_bytes"] <= max_file_bytes for e in cached["entries"]),
+                           "cache_transfer_limit")
+        # Create only after all preflight and cache checks; never reuse an
+        # existing destination, including a previous interrupted capture.
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.mkdir(exist_ok=False)
+        created = True
+        client = TargetClient(budget=budget, http_get=http_get or requests.get, utc_clock=utc_clock,
+                              max_file_bytes=max_file_bytes, max_total_bytes=max_total_bytes)
+        stop = None
+        for index, (session, dn, endpoint) in enumerate(expected):
+            sk = session["session_key"]
+            relative = f"raw/{endpoint}/session_key={sk}/driver_number={dn}/response.json"
+            entry = {"session_key": sk, "meeting_key": session["meeting_key"],
+                     "driver_number": dn, "endpoint": endpoint, "status": "deferred",
+                     "attempted": False, "reason": stop}
+            result["entries"].append(entry)
+            if stop:
+                continue
+            try:
+                if cached is not None:
+                    original = cached["entries"][index]
+                    raw = target_read(Path(cache_dir) / relative, max_file_bytes)
+                    target_require(target_sha(raw) == original["sha256"], "cache_changed_during_copy")
+                    entry.update(original)
+                    entry.update(attempted=False, reused_from_manifest_sha256=cache_manifest_sha256)
+                else:
+                    _, meta, _, _ = fetch_endpoint_driver(client, endpoint, sk, dn, "driver_full_session")
+                    raw = client.last_raw
+                    entry.update(meta)
+                rows = validate_target_rows(raw, session, dn, endpoint)
+                observed = target_time(entry["observed_at_utc"])
+                started = target_time(entry["request_started_at_utc"])
+                target_require(max(target_time(plan["metadata_observed_at_utc"]),
+                                   target_time(plan["roster_observed_at_utc"]),
+                                   target_historical_after(session)) < started <= observed <= target_time(utc_clock()),
+                               "capture_observation_invalid")
+                path = output / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                with path.open("xb") as handle:
+                    handle.write(raw)
+                entry.update(status="complete", reason=None, file_path=relative, rows=len(rows),
+                             sha256=target_sha(raw), size_bytes=len(raw))
+            except (TargetHold, OSError) as exc:
+                stop = str(exc) if isinstance(exc, TargetHold) else "output_io_failure"
+                if cached is None:
+                    entry.update(client.last_meta)
+                budget.block(stop)
+                entry.update(status="hold", reason=stop)
+                # Retain bounded malformed/identity-mixed response evidence in
+                # quarantine; it is not a complete raw matrix cell.
+                if cached is None and client.last_raw:
+                    evidence = f"rejected_response_{index}.bin"
+                    (output / evidence).write_bytes(client.last_raw)
+                    entry.update(rejected_path=evidence, rejected_sha256=target_sha(client.last_raw))
+        result.update(status="HOLD" if stop else "PASS", hold=bool(stop), reason=stop)
+    except (TargetHold, OSError, KeyError, TypeError, ValueError) as exc:
+        result["reason"] = str(exc) if isinstance(exc, TargetHold) else "target_input_or_io_invalid"
+    result["generated_at_utc"] = utc_clock()
+    result["request_budget"] = budget.evidence()
+    result["request_budget"]["request_permits_acquired"] = budget.total_requests
+    result["request_budget"]["provider_requests_performed"] = client.requests_sent if client else 0
+    result["transferred_bytes"] = client.transferred if client else 0
+    if created:
+        with (output / "targeted_manifest.json").open("x", encoding="utf-8") as handle:
+            json.dump(result, handle, indent=2, allow_nan=False)
+    return result
+
+
+def verify_targeted_packet(root, plan, *, now):
+    """Re-enumerate expected cells from independent inputs, not manifest totals."""
+    failure = {"status": "HOLD", "hold": True, **TARGET_TRUST}
+    try:
+        root = Path(root)
+        manifest = target_json(target_read(root / "targeted_manifest.json", TARGET_MAX_INPUT_BYTES))
+        target_require(type(manifest) is dict and manifest.get("schema_version") == TARGET_SCHEMA,
+                       "packet_schema_invalid")
+        target_require(manifest.get("plan") == plan, "packet_target_identity_mismatch")
+        target_require(all(manifest.get(k) is False for k in TARGET_TRUST) and
+                       manifest.get("provider_sampling_completeness_established") is False,
+                       "packet_trust_ceiling_invalid")
+        target_require(manifest.get("status") == "PASS" and manifest.get("hold") is False and
+                       manifest.get("reason") is None, "packet_held")
+        generated = target_time(manifest.get("generated_at_utc"))
+        target_require(generated <= target_time(now), "packet_future_observation")
+        expected = target_expected(plan)
+        entries = manifest.get("entries")
+        target_require(type(entries) is list and len(entries) == len(expected), "matrix_coverage_incomplete")
+        total = 0
+        for entry, (session, dn, endpoint) in zip(entries, expected):
+            target_require(type(entry) is dict and entry.get("status") == "complete" and entry.get("reason") is None,
+                           "matrix_cell_incomplete")
+            target_require(entry.get("attempted") is True or
+                           (entry.get("attempted") is False and
+                            type(entry.get("reused_from_manifest_sha256")) is str and
+                            re.fullmatch(r"[0-9a-f]{64}", entry["reused_from_manifest_sha256"])),
+                           "packet_request_provenance_invalid")
+            sk = session["session_key"]
+            target_require(all(type(entry.get(k)) is int and entry[k] == value for k, value in (
+                ("session_key", sk), ("meeting_key", session["meeting_key"]), ("driver_number", dn))) and
+                entry.get("endpoint") == endpoint, "matrix_cell_identity_mismatch")
+            relative = f"raw/{endpoint}/session_key={sk}/driver_number={dn}/response.json"
+            target_require(entry.get("file_path") == relative, "packet_path_mismatch")
+            raw = target_read(root / relative, TARGET_MAX_FILE_BYTES)
+            total += len(raw)
+            target_require(total <= TARGET_MAX_TOTAL_BYTES, "packet_transfer_limit")
+            target_require(type(entry.get("size_bytes")) is int and entry["size_bytes"] == len(raw) and
+                           entry.get("sha256") == target_sha(raw), "packet_bytes_mismatch")
+            rows = validate_target_rows(raw, session, dn, endpoint)
+            target_require(type(entry.get("rows")) is int and entry["rows"] == len(rows), "packet_row_count_mismatch")
+            observed = target_time(entry.get("observed_at_utc"))
+            started = target_time(entry.get("request_started_at_utc"))
+            target_require(max(target_time(plan["metadata_observed_at_utc"]),
+                               target_time(plan["roster_observed_at_utc"]),
+                               target_historical_after(session)) < started <= observed <= generated,
+                           "packet_observation_chronology_invalid")
+            target_require(entry.get("url") == f"{BASE_URL}/{endpoint}" and
+                           entry.get("params") == {"session_key": sk, "driver_number": dn} and
+                           type(entry.get("status_code")) is int and entry["status_code"] == 200,
+                           "packet_request_provenance_invalid")
+        return manifest
+    except (TargetHold, OSError, ValueError, TypeError, KeyError, RecursionError) as exc:
+        failure["reason"] = str(exc) if isinstance(exc, TargetHold) else "packet_invalid"
+        return failure
+
+
+def add_target_arguments(parser):
+    parser.add_argument("--target-spec", help="Opt-in offline-pinned event/session/roster specification")
+    parser.add_argument("--target-metadata")
+    parser.add_argument("--target-metadata-sha256")
+    parser.add_argument("--target-roster")
+    parser.add_argument("--target-roster-sha256")
+    parser.add_argument("--target-cache-dir")
+    parser.add_argument("--target-cache-manifest-sha256")
+
+
+def run_target_cli(args):
+    try:
+        plan = load_target_plan(args.target_spec, args.target_metadata, args.target_metadata_sha256,
+                                args.target_roster, args.target_roster_sha256,
+                                now=datetime.now(timezone.utc).isoformat())
+        result = capture_targeted(plan, args.output_dir, cache_dir=args.target_cache_dir,
+                                  cache_manifest_sha256=args.target_cache_manifest_sha256)
+    except (TargetHold, OSError, TypeError, ValueError) as exc:
+        result = {"status": "HOLD", "hold": True, **TARGET_TRUST,
+                  "reason": str(exc) if isinstance(exc, TargetHold) else "target_input_invalid"}
+    print(json.dumps(result, indent=2))
+    return 1 if result["hold"] else 0
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--year", type=int, default=2026)
@@ -536,7 +1001,10 @@ def main():
     p.add_argument("--request-sleep", type=float, default=0.35)
     p.add_argument("--warning-threshold", type=float, default=0.80)
     p.add_argument("--strict-threshold", type=float, default=0.90)
+    add_target_arguments(p)
     args = p.parse_args()
+    if any(value is not None for key, value in vars(args).items() if key.startswith("target_")):
+        return run_target_cli(args)
 
     output_dir = Path(args.output_dir)
     for sub in ["raw", "features", "metrics", "manifests", "reports"]:
@@ -568,4 +1036,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

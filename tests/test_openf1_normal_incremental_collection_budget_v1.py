@@ -222,9 +222,9 @@ class OpenF1NormalIncrementalBudgetTests(unittest.TestCase):
         for _ in range(31):
             budget.acquire()
             observed.append(clock.value)
-        self.assertEqual(observed[:30], [0.0] * 30)
+        self.assertEqual(observed[:30], [float(i // 3) for i in range(30)])
         self.assertEqual(observed[30], 60.0)
-        self.assertEqual(clock.sleeps, [60.0])
+        self.assertEqual(clock.sleeps, [1.0] * 9 + [51.0])
         self.assertEqual(budget.total_requests, 31)
         self.assertEqual(budget.evidence()["requests_per_minute"], 30)
 
@@ -609,6 +609,108 @@ class OpenF1NormalIncrementalBudgetTests(unittest.TestCase):
         normal = source.index("hardened_cache, hardened_cache_evidence")
         self.assertLess(shadow, normal)
         self.assertEqual(m.SHADOW_ENDPOINTS, ("weather", "drivers", "starting_grid"))
+
+
+class DualWindowBudgetTests(unittest.TestCase):
+    def budget(self, clock, **kwargs):
+        return m.NormalRequestBudget(clock=clock.monotonic, sleeper=clock.sleep, **kwargs)
+
+    def test_fourth_request_waits_for_second_window(self):
+        clock = FakeClock()
+        budget = self.budget(clock)
+        for _ in range(4):
+            budget.acquire()
+        self.assertEqual(clock.sleeps, [1.0])
+        self.assertEqual(budget.request_times, [0.0, 0.0, 0.0, 1.0])
+        self.assertEqual(budget.evidence()["requests_per_second"], 3)
+
+    def test_minute_window_independent_of_second_window(self):
+        clock = FakeClock()
+        budget = self.budget(clock)
+        for index in range(30):
+            clock.value = float(index)
+            budget.acquire()
+        self.assertEqual(clock.sleeps, [])
+        budget.acquire()
+        self.assertEqual(clock.value, 60.0)
+        self.assertEqual(clock.sleeps, [31.0])
+
+    def test_exact_fractional_clock_boundary(self):
+        clock = FakeClock()
+        budget = self.budget(clock)
+        for _ in range(3):
+            budget.acquire()
+        clock.value = 0.999
+        budget.acquire()
+        self.assertEqual(clock.value, 1.0)
+        self.assertAlmostEqual(clock.sleeps[0], 0.001)
+        budget.acquire()
+        budget.acquire()
+        self.assertEqual(len(clock.sleeps), 1)
+        budget.acquire()
+        self.assertEqual(clock.value, 2.0)
+
+    def test_fallback_http_calls_share_both_windows(self):
+        for count in (3, 30):
+            with self.subTest(count=count):
+                clock = FakeClock()
+                budget = self.budget(clock)
+                calls = []
+                def get(*args, **kwargs):
+                    calls.append(clock.value)
+                    return Response(data=[{"session_key": 1}])
+                with mock.patch.object(m.requests, "get", side_effect=get):
+                    for _ in range(count):
+                        m.openf1_get("position", {"session_key": 1}, [], "primary", budget)
+                    budget.block("provider_rate_limited_http_429")
+                    self.assertTrue(budget.permit_endpoint_fallback())
+                    m.openf1_get("position", {"meeting_key": 1}, [], "fallback", budget,
+                                 rate_limit_fallback=True)
+                    self.assertEqual(calls[-1], 1.0 if count == 3 else 60.0)
+                    # A pending/unresolved recovery never permits an unrelated call.
+                    m.openf1_get("weather", {"session_key": 2}, [], "unrelated", budget)
+                    self.assertEqual(len(calls), count + 1)
+                    budget.resolve_endpoint_fallback(False)
+                    m.openf1_get("weather", {"session_key": 2}, [], "unrelated", budget)
+                    self.assertEqual(len(calls), count + 1)
+
+    def test_custom_budget_cannot_relax_provider_limits(self):
+        clock = FakeClock()
+        budget = self.budget(clock, requests_per_window=1000, window_seconds=0.01)
+        for _ in range(31):
+            budget.acquire()
+        self.assertEqual(clock.value, 60.0)
+
+    def test_time_cap_before_required_second_wait(self):
+        clock = FakeClock()
+        budget = self.budget(clock, max_elapsed_seconds=0.5)
+        for _ in range(3):
+            budget.acquire()
+        with self.assertRaisesRegex(m.NormalCollectionDeferred, "run_time_budget_exhausted"):
+            budget.acquire()
+        self.assertEqual(budget.total_requests, 3)
+        self.assertEqual(clock.sleeps, [])
+
+    def test_existing_injected_sleeper_logical_clock_contract_is_preserved(self):
+        waits = []
+        budget = m.NormalRequestBudget(clock=lambda: 0.0, sleeper=waits.append)
+        for _ in range(31):
+            budget.acquire()
+        self.assertEqual(waits, [1.0] * 9 + [51.0])
+        self.assertEqual(budget.logical_now, 60.0)
+        self.assertEqual(budget.total_requests, 31)
+
+    def test_many_calls_satisfy_both_rolling_windows(self):
+        clock = FakeClock()
+        budget = self.budget(clock)
+        times = []
+        for index in range(150):
+            clock.value += [0.0, 0.13, 0.77, 0.01][index % 4]
+            budget.acquire()
+            times.append(clock.value)
+        for now in times:
+            self.assertLessEqual(sum(now - 1 < t <= now for t in times), 3)
+            self.assertLessEqual(sum(now - 60 < t <= now for t in times), 30)
 
 
 if __name__ == "__main__":
