@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-31T23:47:56.402569Z",
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "forecast_state_changed": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Mexico - Mexico City - Mexico City",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-10-31T22:00:00+00:00",
+    "date_start": "2026-10-31T21:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1298,
+    "session_key": 11400,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}

@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-10-31T22:48:58.443189Z",
+  "created_utc": "2026-10-31T23:47:56.402343Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Mexico - Mexico City - Mexico City",
@@ -16,6 +16,6 @@
     "session_name": "Qualifying",
     "session_type": "Qualifying"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }
