@@ -17,6 +17,10 @@ MODULE_PATH = ROOT / "scripts/elite/download_latest_openf1_artifacts.py"
 SPEC = importlib.util.spec_from_file_location("elite_artifact_ingest", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+CONSUMER_PATH = ROOT / "scripts/elite/elite_weekend_engine_v2.py"
+CONSUMER_SPEC = importlib.util.spec_from_file_location("elite_artifact_consumer", CONSUMER_PATH)
+CONSUMER = importlib.util.module_from_spec(CONSUMER_SPEC)
+CONSUMER_SPEC.loader.exec_module(CONSUMER)
 REPO = "owner/repository"
 TOKEN = "test-token"
 
@@ -475,6 +479,90 @@ class EliteArtifactIngestEgressTests(unittest.TestCase):
         self.assertFalse(manifest["source_ready"])
         self.assertFalse(manifest["forecast_eligible"])
         self.assertFalse(manifest["profiles"][0]["verified"])
+
+    def test_valid_run_and_intact_zip_hold_before_inputs_are_visible_to_consumer(self):
+        stream = io.BytesIO()
+        with zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr(
+                "evidence/extraction_checkpoint_summary.json",
+                json.dumps(
+                    {
+                        "status": "complete",
+                        "selected_session_count": 1,
+                        "normal_feature_rows": 3,
+                        "feature_rows": 3,
+                    }
+                ),
+            )
+            archive.writestr("evidence/high_frequency_extraction_manifest.csv", "rows\n5\n")
+        body = stream.getvalue()
+        target = artifact(size=len(body))
+        api_requests = []
+        storage_requests = []
+
+        def storage_open(request, timeout):
+            storage_requests.append(request)
+            return FakeResponse(body, {"Content-Length": str(len(body))}, request.full_url)
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            with patch.object(MODULE, "list_artifacts", return_value=[target]), patch.object(
+                MODULE, "gh_get_json", return_value=workflow_run_response()
+            ), patch(
+                "urllib.request.build_opener",
+                return_value=RedirectOpener(signed_url(), api_requests),
+            ), patch.object(MODULE, "urlopen", side_effect=storage_open), patch.dict(
+                os.environ, {"GITHUB_REPOSITORY": REPO, "GITHUB_TOKEN": TOKEN}, clear=False
+            ), patch("sys.argv", [str(MODULE_PATH), "--output-dir", temp]):
+                with self.assertRaisesRegex(MODULE.ArtifactHold, "HOLD_ARCHITECTURE_SCOPE"):
+                    MODULE.main()
+
+            self.assertEqual(len(api_requests), 1)
+            self.assertEqual(len(storage_requests), 1)
+            self.assertFalse((root / "inputs").exists())
+            self.assertEqual(
+                json.loads(
+                    (
+                        root
+                        / "quarantine/pre_race/evidence/extraction_checkpoint_summary.json"
+                    ).read_text()
+                )["feature_rows"],
+                3,
+            )
+            manifest = json.loads(
+                (root / "manifests/elite_artifact_source_manifest.json").read_text()
+            )
+            self.assertTrue(manifest["hold"])
+            self.assertFalse(manifest["source_ready"])
+            self.assertFalse(manifest["forecast_eligible"])
+            self.assertFalse(manifest["event_session_provenance_verified"])
+            row = manifest["profiles"][0]
+            self.assertFalse(row["found"])
+            self.assertFalse(row["verified"])
+            self.assertTrue(row["originating_workflow_run_verified"])
+            self.assertEqual(row["event_session_provenance_status"], "HOLD_ARCHITECTURE_SCOPE")
+            self.assertEqual(row["extracted_to"], "")
+            self.assertEqual(row["quarantined_to"], str(root / "quarantine/pre_race"))
+
+            consumer_out = root / "consumer"
+            with patch(
+                "sys.argv",
+                [
+                    str(CONSUMER_PATH),
+                    "--input-dir",
+                    temp,
+                    "--output-dir",
+                    str(consumer_out),
+                ],
+            ):
+                with self.assertRaisesRegex(SystemExit, "could not find enough validated"):
+                    CONSUMER.main()
+            validation = json.loads(
+                (consumer_out / "validation/elite_validation_summary.json").read_text()
+            )
+            self.assertEqual(validation["validation_status"], "FAIL")
+            self.assertEqual(validation["elite_status"], "NOT_READY")
+            self.assertTrue(all(item["status"] == "MISSING" for item in validation["profiles"]))
 
 
 if __name__ == "__main__":

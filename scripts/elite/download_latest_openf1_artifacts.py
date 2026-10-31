@@ -39,6 +39,9 @@ APPROVED_WORKFLOWS = {
     },
 }
 EVENT_SESSION_PROVENANCE_STATUS = "HOLD_ARCHITECTURE_SCOPE"
+EVENT_SESSION_PROVENANCE_HOLD = (
+    "HOLD_ARCHITECTURE_SCOPE: exact event/session provenance is not independently verified"
+)
 MAX_ARTIFACT_BYTES = 2 * 1024 * 1024 * 1024
 MAX_EXTRACTED_BYTES = 8 * 1024 * 1024 * 1024
 MAX_ZIP_MEMBERS = 100_000
@@ -478,7 +481,7 @@ def write_manifest(manifest_path: Path, rows: list[dict], repo: str, error: str 
         "size_in_bytes", "workflow_run_id", "workflow_run_head_sha", "workflow_path",
         "workflow_run_attempt", "originating_workflow_run_verified",
         "event_session_provenance_status", "downloaded_bytes", "archive_sha256",
-        "status", "extracted_to",
+        "status", "extracted_to", "quarantined_to",
     ]
     lines = [",".join(headers)]
     for row in rows:
@@ -514,7 +517,7 @@ def main():
             "size_in_bytes": "", "downloaded_bytes": "", "archive_sha256": "",
             "workflow_run_id": "", "workflow_run_head_sha": "", "workflow_path": "",
             "workflow_run_attempt": "",
-            "downloaded_to": "", "extracted_to": str(out / "inputs" / profile),
+            "downloaded_to": "", "extracted_to": "", "quarantined_to": "",
             "status": "MISSING", "verified": False, "source_ready": False,
             "forecast_eligible": False, "originating_workflow_run_verified": False,
             "event_session_provenance_verified": False,
@@ -532,7 +535,8 @@ def main():
             })
             zip_path = downloads / f"{profile}_{target['id']}.zip"
             transfer = gh_download_artifact(target, profile, repo, token, zip_path)
-            extract_validated_zip(zip_path, out / "inputs" / profile)
+            quarantine_path = out / "quarantine" / profile
+            extract_validated_zip(zip_path, quarantine_path)
             if not transfer.get("cache_reused"):
                 write_cache_identity(
                     target, repo, transfer["verified_workflow_run"], zip_path, transfer
@@ -540,8 +544,10 @@ def main():
             row.update(transfer)
             verified_run = transfer["verified_workflow_run"]
             row.update({
+                "found": False,
                 "downloaded_to": str(zip_path),
-                "status": "DOWNLOADED",
+                "quarantined_to": str(quarantine_path),
+                "status": EVENT_SESSION_PROVENANCE_STATUS,
                 "verified": False,
                 "originating_workflow_run_verified": True,
                 "workflow_run_id": str(verified_run["id"]),
@@ -549,6 +555,7 @@ def main():
                 "workflow_path": verified_run["path"],
                 "workflow_run_attempt": str(verified_run["run_attempt"]),
             })
+            raise ArtifactHold(EVENT_SESSION_PROVENANCE_HOLD)
         except Exception as exc:
             row["status"] = f"HOLD: {type(exc).__name__}: {exc}"
             rows.append(row)
