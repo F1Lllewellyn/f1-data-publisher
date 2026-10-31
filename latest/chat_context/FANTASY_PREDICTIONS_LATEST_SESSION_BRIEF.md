@@ -1,8 +1,8 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-10-30T22:57:37Z
+Generated UTC: 2026-10-31T02:17:46Z
 Event: Mexico - Mexico City - Mexico City
-Session: Practice 1
+Session: Practice 2
 Source status: clean
 Dashboard readiness: READY
 Diagnostic publishing allowed: true
