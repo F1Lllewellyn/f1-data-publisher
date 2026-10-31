@@ -8,12 +8,12 @@
   "readiness_quality": "usable_with_optional_context_gaps",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-10-30T19:30:00+00:00",
-    "date_start": "2026-10-30T18:30:00+00:00",
-    "gate": "post_fp1",
+    "date_end": "2026-10-30T23:00:00+00:00",
+    "date_start": "2026-10-30T22:00:00+00:00",
+    "gate": "post_fp2",
     "meeting_key": 1298,
-    "session_key": 11397,
-    "session_name": "Practice 1",
+    "session_key": 11398,
+    "session_name": "Practice 2",
     "session_type": "Practice"
   },
   "source_needs_manual_review": false,
@@ -27,19 +27,19 @@
       "status": "needs_manual_review"
     },
     "openf1_laps": {
-      "rows": 589,
+      "rows": 656,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 92,
+      "rows": 105,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 1012,
+      "rows": 717,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 69,
+      "rows": 67,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -55,13 +55,13 @@
       "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 92,
+      "rows": 105,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 79,
+      "rows": 82,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-10-30T21:26:01.693087Z"
+  "updated_utc": "2026-10-31T00:59:02.248547Z"
 }
