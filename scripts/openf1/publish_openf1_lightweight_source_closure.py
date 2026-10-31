@@ -163,22 +163,49 @@ class NormalRequestBudget:
         self.total_wait_seconds = 0.0
         self.block_reason: Optional[str] = None
         self.restriction_events: List[str] = []
+        self._rate_limit_fallback_pending = False
+        self._rate_limit_fallback_consumed = False
 
     def block(self, reason: str) -> None:
         if reason not in self.restriction_events:
             self.restriction_events.append(reason)
         if self.block_reason is None:
             self.block_reason = reason
+            if reason == "provider_rate_limited_http_429":
+                self._rate_limit_fallback_consumed = False
 
     def permit_endpoint_fallback(self) -> bool:
-        """Allow one existing endpoint-specific recovery after a primary 429."""
-        if self.block_reason != "provider_rate_limited_http_429":
+        """Authorize one bounded recovery group without clearing its 429 block."""
+        if (
+            self.block_reason != "provider_rate_limited_http_429"
+            or self._rate_limit_fallback_pending
+            or self._rate_limit_fallback_consumed
+        ):
             return False
-        self.block_reason = None
+        self._rate_limit_fallback_pending = True
+        self._rate_limit_fallback_consumed = True
         return True
 
-    def acquire(self) -> None:
-        if self.block_reason is not None:
+    def resolve_endpoint_fallback(self, recovered: bool) -> None:
+        """Clear the original 429 only after complete, identity-valid recovery."""
+        if not self._rate_limit_fallback_pending:
+            raise ValueError("normal_rate_limit_fallback_not_pending")
+        self._rate_limit_fallback_pending = False
+        if recovered and self.block_reason == "provider_rate_limited_http_429":
+            self.block_reason = None
+            self._rate_limit_fallback_consumed = False
+        elif self.block_reason is None:
+            self.block_reason = "provider_rate_limited_http_429"
+
+    def acquire(self, *, rate_limit_fallback: bool = False) -> None:
+        fallback_authorized = (
+            rate_limit_fallback
+            and self._rate_limit_fallback_pending
+            and self.block_reason == "provider_rate_limited_http_429"
+        )
+        if rate_limit_fallback and not fallback_authorized:
+            raise NormalCollectionDeferred("rate_limit_fallback_not_authorized")
+        if self.block_reason is not None and not fallback_authorized:
             raise NormalCollectionDeferred(self.block_reason)
         if self.total_requests >= self.max_requests:
             self.block("run_request_budget_exhausted")
@@ -1371,6 +1398,8 @@ def openf1_get(
     request_log: List[Dict[str, Any]],
     strategy: str,
     budget: Optional[NormalRequestBudget] = None,
+    *,
+    rate_limit_fallback: bool = False,
 ) -> pd.DataFrame:
     url = f"{API_BASE}/{endpoint}"
     clean_params = {k: v for k, v in params.items() if v is not None and v != ""}
@@ -1380,7 +1409,7 @@ def openf1_get(
     rows = 0
     try:
         if budget is not None:
-            budget.acquire()
+            budget.acquire(rate_limit_fallback=rate_limit_fallback)
         r = requests.get(url, params=clean_params, timeout=REQUEST_TIMEOUT)
         status_code = getattr(r, "status_code", None)
         if type(status_code) is not int or not 100 <= status_code <= 599:
@@ -1673,36 +1702,46 @@ def retrieve_lane_for_session(
 
     if lane == "position":
         # First try session_key. If zero, retry by meeting_key because OpenF1 position examples commonly use meeting_key.
+        request_start = len(request_log)
         df = openf1_get(
             "position", {"session_key": session_key}, request_log,
             "position_by_session_key", budget,
         )
+        rate_limit_fallback = False
+        fallback_allowed = budget is None or budget.block_reason is None
+        if budget is not None and budget.block_reason is not None:
+            rate_limit_fallback = budget.permit_endpoint_fallback()
+            fallback_allowed = rate_limit_fallback
         if (
             df.empty
             and meeting_key is not None
-            and (
-                budget is None
-                or budget.block_reason is None
-                or budget.permit_endpoint_fallback()
-            )
+            and fallback_allowed
         ):
             df = openf1_get(
                 "position", {"meeting_key": meeting_key}, request_log,
                 "position_by_meeting_key_fallback", budget,
+                rate_limit_fallback=rate_limit_fallback,
             )
             if not df.empty and "session_key" in df.columns:
                 df = df[df["session_key"].astype(str) == str(session_key)].copy()
+            if rate_limit_fallback and budget is not None:
+                budget.resolve_endpoint_fallback(_fallback_proves_coverage(
+                    "position", df, sess, request_log[request_start:]
+                ))
         return df
 
     if lane == "drivers":
+        request_start = len(request_log)
         df = openf1_get(
             "drivers", {"session_key": session_key}, request_log,
             "drivers_by_session_key", budget,
         )
         if not df.empty:
             return df
+        rate_limit_fallback = False
         if budget is not None and budget.block_reason is not None:
-            if not budget.permit_endpoint_fallback():
+            rate_limit_fallback = budget.permit_endpoint_fallback()
+            if not rate_limit_fallback:
                 return pd.DataFrame()
         # Fallback: use already observed driver numbers from successful lanes.
         nums = collect_observed_driver_numbers(outputs_by_lane, session_key)
@@ -1711,12 +1750,27 @@ def retrieve_lane_for_session(
             part = openf1_get(
                 "drivers", {"session_key": session_key, "driver_number": n},
                 request_log, "drivers_by_observed_driver_number", budget,
+                rate_limit_fallback=rate_limit_fallback,
             )
             if not part.empty:
                 frames.append(part)
-            if budget is not None and budget.block_reason is not None:
+            if rate_limit_fallback:
+                if (
+                    request_log[-1].get("status") != "pass"
+                    or not _frame_matches_session(part, sess)
+                ):
+                    break
+            elif budget is not None and budget.block_reason is not None:
                 break
-        return pd.concat(frames, ignore_index=True).drop_duplicates() if frames else pd.DataFrame()
+        recovered = (
+            pd.concat(frames, ignore_index=True).drop_duplicates()
+            if frames else pd.DataFrame()
+        )
+        if rate_limit_fallback and budget is not None:
+            budget.resolve_endpoint_fallback(_fallback_proves_coverage(
+                "drivers", recovered, sess, request_log[request_start:]
+            ))
+        return recovered
 
     if lane == "team_radio":
         return openf1_get(

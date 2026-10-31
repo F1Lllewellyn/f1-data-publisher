@@ -196,6 +196,18 @@ class OpenF1NormalIncrementalBudgetTests(unittest.TestCase):
         self.first_now = dt.datetime(2026, 10, 26, 12, tzinfo=dt.UTC)
         self.second_now = dt.datetime(2026, 10, 26, 13, tzinfo=dt.UTC)
 
+    def assert_hold_and_false_trust(self, result):
+        self.assertEqual(result["rc"], 1)
+        self.assertFalse(result["manifest"]["publication_eligible"])
+        self.assertEqual(result["manifest"]["source_quality_status"], "hold")
+        for field in (
+            "prospective_forecast_eligibility_established",
+            "source_readiness_promoted",
+            "dr002_activated",
+            "stable_engine_modified",
+        ):
+            self.assertIs(result["normal"][field], False)
+
     def test_sliding_window_accounts_for_burst_and_minute_limit(self):
         clock = FakeClock()
         budget = m.NormalRequestBudget(
@@ -423,10 +435,144 @@ class OpenF1NormalIncrementalBudgetTests(unittest.TestCase):
         row = result["diagnostics"].query("lane == 'position'").iloc[0]
         self.assertEqual(row["request_statuses"], "http_429,pass")
         self.assertEqual(row["reason"], "endpoint_fallback_recovered_complete")
+        self.assertEqual(
+            [call[0] for call in result["router"].calls],
+            [
+                "sessions", "weather", "race_control", "intervals", "position",
+                "position", "stints", "pit", "starting_grid", "drivers",
+                "team_radio",
+            ],
+        )
+        self.assertIsNone(result["normal"]["request_budget"]["deferred_reason"])
         self.assertIn(
             "provider_rate_limited_http_429",
             result["normal"]["request_budget"]["restriction_events"],
         )
+
+    def test_unresolved_position_429_fallback_stops_all_provider_calls(self):
+        fallback_cases = {
+            "empty": Response(data=[]),
+            "wrong_identity": Response(data=[{
+                "session_key": 99999,
+                "meeting_key": 1297,
+                "driver_number": 44,
+            }]),
+        }
+        expected_calls = [
+            ("sessions", {"year": 2026}),
+            ("weather", {"session_key": 11396}),
+            ("race_control", {"session_key": 11396}),
+            ("intervals", {"session_key": 11396}),
+            ("position", {"session_key": 11396}),
+            ("position", {"meeting_key": 1297}),
+        ]
+        for label, fallback_response in fallback_cases.items():
+            with self.subTest(label=label):
+                harness = Harness(self)
+
+                def handler(endpoint, params, response=fallback_response):
+                    if endpoint == "position" and "session_key" in params:
+                        return Response(429, text="rate limited")
+                    if endpoint == "position" and "meeting_key" in params:
+                        return response
+                    return None
+
+                result = harness.run(
+                    [session(), session(11397, meeting_key=1298)],
+                    now=self.first_now,
+                    handler=handler,
+                )
+                self.assertEqual(
+                    [(endpoint, params) for endpoint, params, _ in result["router"].calls],
+                    expected_calls,
+                )
+                self.assertEqual(
+                    result["normal"]["request_budget"]["provider_requests_performed"],
+                    len(expected_calls),
+                )
+                self.assertEqual(
+                    result["normal"]["request_budget"]["deferred_reason"],
+                    "provider_rate_limited_http_429",
+                )
+                row = result["diagnostics"].query(
+                    "session_key == 11396 and lane == 'position'"
+                ).iloc[0]
+                self.assertEqual(row["status"], "fail")
+                self.assertTrue(str(row["reason"]).startswith(
+                    "unresolved_provider_failure:http_429"
+                ))
+                self.assert_hold_and_false_trust(result)
+
+    def test_unresolved_drivers_429_fallback_stops_all_provider_calls(self):
+        base_calls = [
+            ("sessions", {"year": 2026}),
+            ("weather", {"session_key": 11396}),
+            ("race_control", {"session_key": 11396}),
+            ("intervals", {"session_key": 11396}),
+            ("position", {"session_key": 11396}),
+            ("stints", {"session_key": 11396}),
+            ("pit", {"session_key": 11396}),
+            ("starting_grid", {"session_key": 11396}),
+            ("drivers", {"session_key": 11396}),
+        ]
+
+        def no_observed_driver_numbers(endpoint, params):
+            if endpoint == "drivers":
+                return Response(429, text="rate limited")
+            if endpoint != "sessions":
+                return Response(data=[{
+                    "session_key": 11396,
+                    "meeting_key": 1297,
+                    "date": "2026-10-25T20:00:00Z",
+                }])
+            return None
+
+        def incomplete_driver_recovery(endpoint, params):
+            if endpoint == "drivers" and "driver_number" not in params:
+                return Response(429, text="rate limited")
+            if endpoint == "drivers":
+                return Response(data=[])
+            return None
+
+        cases = (
+            ("no_observed_driver_numbers", no_observed_driver_numbers, base_calls),
+            (
+                "incomplete_driver_recovery",
+                incomplete_driver_recovery,
+                base_calls + [("drivers", {
+                    "session_key": 11396,
+                    "driver_number": 44,
+                })],
+            ),
+        )
+        for label, handler, expected_calls in cases:
+            with self.subTest(label=label):
+                harness = Harness(self)
+                result = harness.run(
+                    [session(), session(11397, meeting_key=1298)],
+                    now=self.first_now,
+                    handler=handler,
+                )
+                self.assertEqual(
+                    [(endpoint, params) for endpoint, params, _ in result["router"].calls],
+                    expected_calls,
+                )
+                self.assertEqual(
+                    result["normal"]["request_budget"]["provider_requests_performed"],
+                    len(expected_calls),
+                )
+                self.assertEqual(
+                    result["normal"]["request_budget"]["deferred_reason"],
+                    "provider_rate_limited_http_429",
+                )
+                row = result["diagnostics"].query(
+                    "session_key == 11396 and lane == 'drivers'"
+                ).iloc[0]
+                self.assertEqual(row["status"], "fail")
+                self.assertTrue(str(row["reason"]).startswith(
+                    "unresolved_provider_failure:http_429"
+                ))
+                self.assert_hold_and_false_trust(result)
 
     def test_fail_closed_outputs_never_raise_trust_ceilings(self):
         result = self.harness.run(
