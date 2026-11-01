@@ -4,6 +4,7 @@ All source, receipt, and attestation material in this test is synthetic.  The
 GitHub verification result is caller-supplied fixture data, not independent
 attestation evidence.  A successful control proves internal composition only.
 """
+import ast
 import base64
 import copy
 import hashlib
@@ -19,12 +20,19 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CAPTURE_PATH = (
     REPO_ROOT / "scripts/forecast_bundles/dr002_fia_final_grid_capture_pilot_v1.py"
 )
+EXECUTION_BOUNDARY_PATH = (
+    REPO_ROOT
+    / "scripts/forecast_bundles/dr002_fia_capture_attestation_execution_binding_v1.py"
+)
 CAPTURE_SPEC = importlib.util.spec_from_file_location("adversarial_fia_capture", CAPTURE_PATH)
 capture = importlib.util.module_from_spec(CAPTURE_SPEC)
 CAPTURE_SPEC.loader.exec_module(capture)
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 
+from scripts.forecast_bundles import (  # noqa: E402
+    dr002_fia_capture_attestation_execution_binding_v1 as execution_binding,
+)
 from scripts.forecast_bundles import (  # noqa: E402
     dr002_fia_final_grid_provenance_verifier_v1 as verifier,
 )
@@ -53,6 +61,8 @@ DEPENDENCY_BLOBS = {
         "e402939202ed579c368499f3baefb3641de27de7",
     "scripts/forecast_bundles/dr002_fia_final_grid_provenance_verifier_v1.py":
         "2f9f2266a87f8a2a743bc64a55fd0bd7f8fba204",
+    "scripts/forecast_bundles/dr002_fia_capture_attestation_execution_binding_v1.py":
+        "8224c9d0efc9790533ba5e5279d59cbc44286f80",
     "tests/test_dr002_github_attestation_binding_v1.py":
         "1d764c840202463e091110132521f23f34853ad0",
     "tests/test_dr002_fia_grid_document_candidate_v1.py":
@@ -84,7 +94,7 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
         self.bridge_parts = self._attestation_parts(
             self.receipt_bytes, self.capture_manifest
         )
-        self.bridge_result = self._capture_bound_bridge(self.bridge_parts)
+        self.bridge_result = self._call_execution_boundary(self.bridge_parts)
         self.observed_rows = self._matching_rows()
         self.observed_grid_bytes = consumer.receipts.canonical_json_bytes(self.observed_rows)
         self.reference_profile = self._reference_profile()
@@ -337,41 +347,17 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
             parts["verification_ref"],
         )
 
-    def _run_identity(self, identity):
-        prefix = (
-            "https://github.com/" + identity["repository"] + "/actions/runs/"
+    def _call_execution_boundary(self, parts, manifest_bytes=None):
+        return execution_binding.build_capture_bound_verified_github_receipt_binding(
+            capture_manifest_bytes=(
+                self.capture_manifest_bytes if manifest_bytes is None else manifest_bytes
+            ),
+            receipt_bytes=parts["receipt_bytes"],
+            attestation_bundle_bytes=parts["bundle_bytes"],
+            verified_attestation_result=parts["verified"],
+            attested_identity=parts["identity"],
+            verification_ref=parts["verification_ref"],
         )
-        self.assertTrue(identity["run_invocation_uri"].startswith(prefix))
-        run_id, separator, attempt = identity["run_invocation_uri"][len(prefix):].partition(
-            "/attempts/"
-        )
-        self.assertEqual(separator, "/attempts/")
-        return run_id, attempt
-
-    def _capture_bound_bridge(self, parts, manifest=None):
-        """Test-only binding of coherent simulated proof to one capture manifest."""
-        manifest = self.capture_manifest if manifest is None else manifest
-        expected = self._identity_from_capture_manifest(manifest)
-        actual = parts["identity"]
-        if actual["repository"] != expected["repository"]:
-            return consumer.bridge._hold("capture_attestation_repository_mismatch")
-        if (
-            actual["source_digest"] != expected["source_digest"]
-            or actual["signer_digest"] != expected["signer_digest"]
-        ):
-            return consumer.bridge._hold("capture_attestation_commit_mismatch")
-        if (
-            actual["signer_workflow"] != expected["signer_workflow"]
-            or actual["source_ref"] != expected["source_ref"]
-        ):
-            return consumer.bridge._hold("capture_attestation_workflow_mismatch")
-        actual_run, actual_attempt = self._run_identity(actual)
-        expected_run, expected_attempt = self._run_identity(expected)
-        if actual_run != expected_run:
-            return consumer.bridge._hold("capture_attestation_run_id_mismatch")
-        if actual_attempt != expected_attempt:
-            return consumer.bridge._hold("capture_attestation_run_attempt_mismatch")
-        return self._call_bridge(parts)
 
     def _coherent_alternate_execution(self, **changes):
         manifest = copy.deepcopy(self.capture_manifest)
@@ -536,7 +522,7 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
             "VERIFIED_GITHUB_PROVENANCE_BINDING",
         )
         self.assertEqual(
-            self._capture_bound_bridge(self.bridge_parts)["status"],
+            self._call_execution_boundary(self.bridge_parts)["status"],
             "VERIFIED_GITHUB_PROVENANCE_BINDING",
         )
 
@@ -577,13 +563,112 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
                     self._call_bridge(coherent_wrong_execution)["status"],
                     "VERIFIED_GITHUB_PROVENANCE_BINDING",
                 )
-                held = self._capture_bound_bridge(coherent_wrong_execution)
+                held = self._call_execution_boundary(coherent_wrong_execution)
                 self._assert_bridge_hold(held, reason)
                 self._assert_verifier_fail_closed(
                     self._verify(bridge_result=held),
                     "HOLD",
                     "document_custody_not_verified",
                 )
+
+    def test_capture_manifest_receipt_identity_mismatch_fails_closed(self):
+        changed_receipt = copy.deepcopy(self.receipt)
+        changed_receipt["payload"]["source_id"] = "claimed_fia_pdf_uri:rebound"
+        changed_bytes = consumer.receipts.canonical_json_bytes(changed_receipt)
+        coherently_rebound = self._attestation_parts(changed_bytes)
+        self.assertEqual(
+            self._call_bridge(coherently_rebound)["status"],
+            "VERIFIED_GITHUB_PROVENANCE_BINDING",
+        )
+        held = self._call_execution_boundary(coherently_rebound)
+        self._assert_bridge_hold(held, "capture_manifest_receipt_digest_mismatch")
+        self._assert_verifier_fail_closed(
+            self._verify(receipt_bytes=changed_bytes, bridge_result=held),
+            "HOLD",
+            "document_custody_not_verified",
+        )
+
+    def test_capture_manifest_malformed_states_fail_with_exact_reasons(self):
+        def changed(**values):
+            manifest = copy.deepcopy(self.capture_manifest)
+            manifest.update(values)
+            return consumer.receipts.canonical_json_bytes(manifest)
+
+        missing = copy.deepcopy(self.capture_manifest)
+        del missing["repository"]
+        cases = (
+            ("malformed_json", b"{", "malformed_capture_manifest"),
+            (
+                "noncanonical",
+                json.dumps(self.capture_manifest, indent=2).encode(),
+                "noncanonical_capture_manifest_bytes",
+            ),
+            ("duplicate_key", b'{"a":1,"a":2}', "duplicate_json_key"),
+            ("nonfinite", b'{"a":NaN}', "nonfinite_json"),
+            (
+                "missing_identity",
+                consumer.receipts.canonical_json_bytes(missing),
+                "missing_capture_manifest_identity_field",
+            ),
+            (
+                "unsupported_schema",
+                changed(schema_version="unknown"),
+                "unsupported_capture_manifest_schema",
+            ),
+            (
+                "held_capture",
+                changed(validation_status="HOLD"),
+                "capture_manifest_not_successful_unbound_candidate",
+            ),
+            (
+                "malformed_repository",
+                changed(repository=[]),
+                "malformed_capture_manifest_identity",
+            ),
+            (
+                "malformed_workflow",
+                changed(workflow_ref="not-a-workflow"),
+                "malformed_capture_manifest_workflow_identity",
+            ),
+            (
+                "invalid_run_id",
+                changed(github_run_id="0"),
+                "malformed_capture_manifest_run_identity",
+            ),
+            (
+                "invalid_attempt",
+                changed(github_run_attempt="0"),
+                "malformed_capture_manifest_run_identity",
+            ),
+            (
+                "inconsistent_run_identity",
+                changed(run_id="gha-86420-9"),
+                "capture_manifest_run_identity_mismatch",
+            ),
+        )
+        for label, manifest_bytes, reason in cases:
+            with self.subTest(label=label):
+                held = self._call_execution_boundary(
+                    self.bridge_parts, manifest_bytes=manifest_bytes
+                )
+                self._assert_bridge_hold(held, reason)
+                self._assert_verifier_fail_closed(
+                    self._verify(bridge_result=held),
+                    "HOLD",
+                    "document_custody_not_verified",
+                )
+
+    def test_excessively_nested_capture_manifest_fails_closed(self):
+        nested_manifest = b'{"nested":' + b"[" * 10000 + b"0" + b"]" * 10000 + b"}"
+        held = self._call_execution_boundary(
+            self.bridge_parts, manifest_bytes=nested_manifest
+        )
+        self._assert_bridge_hold(held, "malformed_capture_manifest")
+        self._assert_verifier_fail_closed(
+            self._verify(bridge_result=held),
+            "HOLD",
+            "document_custody_not_verified",
+        )
 
     def test_valid_control_is_actual_capture_to_retrospective_match_only(self):
         result = self._verify()
@@ -642,6 +727,9 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
             ),
         )
         self._assert_bridge_hold(self._call_bridge(parts), "subject_digest_mismatch")
+        self._assert_bridge_hold(
+            self._call_execution_boundary(parts), "subject_digest_mismatch"
+        )
 
     def test_attestation_workflow_commit_and_run_identity_fail_exactly(self):
         cases = (
@@ -787,6 +875,29 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
                 self.assertTrue(result["differences"])
                 self.assertTrue(result["document_custody_verified"])
                 self.assertTrue(result["github_execution_provenance_verified"])
+
+    def test_execution_boundary_is_pure_offline_and_dependency_acyclic(self):
+        raw = EXECUTION_BOUNDARY_PATH.read_bytes()
+        tree = ast.parse(raw)
+        imported = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported.update(alias.name.split(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                imported.update(alias.name.split(".")[0] for alias in node.names)
+        self.assertEqual(
+            imported,
+            {
+                "json",
+                "re",
+                "dr002_github_attestation_binding_v1",
+                "verify_forecast_integrity_receipts_v1",
+            },
+        )
+        text = raw.decode("utf-8")
+        self.assertNotIn("tests/", text)
+        self.assertNotIn("test_dr002_fia_final_grid_evidence_chain", text)
+        self.assertNotIn("dr002_fia_final_grid_capture_pilot_v1", text)
 
     def test_all_protected_dependency_blobs_are_exact(self):
         def git_blob(path):
