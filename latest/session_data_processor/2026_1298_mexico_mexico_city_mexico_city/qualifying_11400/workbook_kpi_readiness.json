@@ -1,6 +1,6 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-01T00:25:53.676192Z",
+  "created_utc": "2026-11-01T02:09:21.594091Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "overall_status": "clean",
   "race_name": "Mexico - Mexico City - Mexico City",
@@ -65,10 +65,10 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "driver_count": 0,
+      "driver_count": 22,
       "max_lap_number": null,
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "driver_count": 22,

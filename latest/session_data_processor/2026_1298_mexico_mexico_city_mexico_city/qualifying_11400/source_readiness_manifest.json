@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-01T00:25:53.675943Z",
+  "created_utc": "2026-11-01T02:09:21.593789Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-01T00:25:53.676901Z",
+    "created_utc": "2026-11-01T02:09:21.595725Z",
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
     "forecast_state_changed": false,
     "overall_status": "clean",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 37.95,
+      "age_minutes": 103.47,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "3ecbb5cf651affd69d58d94b92d33b865968fa18b5c03751148d5ed822afee8b",
+      "sha256": "2e3133e2233cfdb87431381721ed1f6ef905a6fc01cc05077db08b94e43c406a",
       "size_bytes": 701,
-      "timestamp_utc": "2026-10-31T23:47:56.404570Z"
+      "timestamp_utc": "2026-11-01T00:25:53.678830Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 37.95,
+      "age_minutes": 103.47,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "a2da5fe03e3eb03a1c569f50d3bbc5009e156d2a13aedb3a2ad772910b52e445",
+      "sha256": "9c6b4c113ecd8442dd03c5600119b83fe247c0995312d49f7449ce0bf5f83719",
       "size_bytes": 1569,
-      "timestamp_utc": "2026-10-31T23:47:56.404248Z"
+      "timestamp_utc": "2026-11-01T00:25:53.678312Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 37.95,
+      "age_minutes": 103.47,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "049b92818ab5077157a8282ff140977858cfc0be0fd1e6a651005ff341adf4a8",
+      "sha256": "e24ae20b99f28a5d3ebcbe6d5264e10546754079d222234e8f9e032ba26a8fd2",
       "size_bytes": 572,
-      "timestamp_utc": "2026-10-31T23:47:56.404026Z"
+      "timestamp_utc": "2026-11-01T00:25:53.678045Z"
     }
   },
   "material_readiness_improved": false,
@@ -76,15 +76,7 @@
       "starting_grid",
       "stints"
     ],
-    "optional_context_gaps": [
-      {
-        "endpoint": "starting_grid",
-        "reason": "optional_source_warning_non_blocking",
-        "rows": 0,
-        "source": "openf1_starting_grid",
-        "status": "needs_manual_review"
-      }
-    ],
+    "optional_context_gaps": [],
     "overall_status": "clean",
     "per_source": {
       "openf1_drivers": {
@@ -186,17 +178,14 @@
       "openf1_starting_grid": {
         "anomalies": [],
         "blocking": false,
-        "classification": "optional_context_warning",
-        "effective_status": "partial",
+        "classification": "optional_observed",
+        "effective_status": "clean",
         "endpoint": "starting_grid",
-        "missing_required_columns": [
-          "session_key",
-          "meeting_key"
-        ],
-        "raw_status": "needs_manual_review",
-        "reason": "optional_source_warning_non_blocking",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
         "role": "optional_context",
-        "rows": 0
+        "rows": 22
       },
       "openf1_stints": {
         "anomalies": [],
@@ -224,7 +213,7 @@
       }
     },
     "promotion_allowed": false,
-    "readiness_quality": "usable_with_optional_context_gaps",
+    "readiness_quality": "usable_clean",
     "schema_version": "source_readiness_aggregation_v2",
     "session_family": "qualifying",
     "source_effective_statuses": {
@@ -236,7 +225,7 @@
       "openf1_race_control": "clean",
       "openf1_session_result": "clean",
       "openf1_sessions": "clean",
-      "openf1_starting_grid": "partial",
+      "openf1_starting_grid": "clean",
       "openf1_stints": "clean",
       "openf1_weather": "clean"
     }
@@ -248,8 +237,8 @@
     "previous_score": 1.0,
     "previous_status": "clean"
   },
-  "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261101T002545Z",
+  "readiness_quality": "usable_clean",
+  "run_id": "20261101T020912Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-10-31T22:00:00+00:00",
@@ -471,13 +460,13 @@
       "duplicate_rows": 0,
       "endpoint": "session_result",
       "fetch": {
-        "bytes": 4316,
+        "bytes": 4314,
         "ok": true,
-        "sha256": "caec059f78dae09960c7ac77e8da9afaa12864d3b218b288cdfd42954a5e7bb1",
+        "sha256": "2554d62c1596185013a986558cde917b517275600948eceab8b2b0eae54980d6",
         "status_code": 200
       },
       "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_session_result.json",
-      "json_sha256": "519842e93c93ab86426b903e59ad484c7ff352baa0fb96b93ab1c79158358aad",
+      "json_sha256": "77d5ccb395361a311bebda06ff064214a13a53732b1b50fa1e355a5b8d475493",
       "max_lap_number": null,
       "missing_required_columns": [],
       "rows": 22,
@@ -522,25 +511,29 @@
     },
     "openf1_starting_grid": {
       "anomalies": [],
-      "columns": [],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
       "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_starting_grid.csv",
-      "driver_count": 0,
+      "driver_count": 22,
       "duplicate_rows": 0,
       "endpoint": "starting_grid",
       "fetch": {
-        "bytes": 0,
-        "error": "<HTTPError 404: 'Not Found'>",
-        "ok": false
+        "bytes": 2093,
+        "ok": true,
+        "sha256": "cb80a8b695fbd827df3482f2ba41f80fd17374e59071d510326d5eb324493982",
+        "status_code": 200
       },
       "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_starting_grid.json",
-      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "json_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
       "max_lap_number": null,
-      "missing_required_columns": [
-        "session_key",
-        "meeting_key"
-      ],
-      "rows": 0,
-      "status": "needs_manual_review",
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
       "timestamp_rows": 0
     },
     "openf1_stints": {
@@ -608,10 +601,10 @@
   },
   "stable_engine_modified": false,
   "validation_summary": {
-    "clean_sources": 10,
+    "clean_sources": 11,
     "conflicting_sources": 0,
     "late_sources": 0,
-    "manual_review_sources": 1,
+    "manual_review_sources": 0,
     "partial_sources": 0
   },
   "workbook_kpi_update": {

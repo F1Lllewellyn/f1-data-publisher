@@ -12,7 +12,7 @@
   },
   "material_change": true,
   "meeting_key": 1298,
-  "readiness_quality": "usable_with_optional_context_gaps",
+  "readiness_quality": "usable_clean",
   "session_key": 11400,
   "source_plan": {
     "blocked_actions": [
@@ -21,7 +21,7 @@
       "promote model layer"
     ],
     "canonical_workbook_modified": false,
-    "created_utc": "2026-11-01T00:25:53.676464Z",
+    "created_utc": "2026-11-01T02:09:21.595088Z",
     "recommended_action": "consume workbook_kpi_readiness.json/csv into the workbook-control-room or create an explicitly named sandbox workbook copy",
     "schema_version": "sandbox_workbook_update_plan_v1"
   },

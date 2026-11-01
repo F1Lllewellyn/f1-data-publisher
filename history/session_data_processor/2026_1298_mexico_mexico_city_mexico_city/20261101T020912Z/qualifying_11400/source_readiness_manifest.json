@@ -1,0 +1,615 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-11-01T02:09:21.593789Z",
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-11-01T02:09:21.595725Z",
+    "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+    "forecast_state_changed": false,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "Mexico - Mexico City - Mexico City",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-10-31T22:00:00+00:00",
+      "date_start": "2026-10-31T21:00:00+00:00",
+      "gate": "post_qualifying",
+      "meeting_key": 1298,
+      "session_key": 11400,
+      "session_name": "Qualifying",
+      "session_type": "Qualifying"
+    },
+    "source_readiness_materially_improved": false,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 103.47,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "2e3133e2233cfdb87431381721ed1f6ef905a6fc01cc05077db08b94e43c406a",
+      "size_bytes": 701,
+      "timestamp_utc": "2026-11-01T00:25:53.678830Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 103.47,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "9c6b4c113ecd8442dd03c5600119b83fe247c0995312d49f7449ce0bf5f83719",
+      "size_bytes": 1569,
+      "timestamp_utc": "2026-11-01T00:25:53.678312Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 103.47,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "e24ae20b99f28a5d3ebcbe6d5264e10546754079d222234e8f9e032ba26a8fd2",
+      "size_bytes": 572,
+      "timestamp_utc": "2026-11-01T00:25:53.678045Z"
+    }
+  },
+  "material_readiness_improved": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "Mexico - Mexico City - Mexico City",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "session_result",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "starting_grid",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 21
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 366
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 173
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1133
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 79
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 111
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 83
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_clean",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "qualifying",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
+  },
+  "readiness_quality": "usable_clean",
+  "run_id": "20261101T020912Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-10-31T22:00:00+00:00",
+    "date_start": "2026-10-31T21:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1298,
+    "session_key": 11400,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9024,
+        "ok": true,
+        "sha256": "71102a78c03c367531aa72b4b2ec2a75d66283152f839b31d18f57dcd2f6421d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_drivers.json",
+      "json_sha256": "64e0088b896f0111e5d5f441c3c30bd3bc45444d6233707ca730d18a6c51364e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_intervals.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 2963,
+        "ok": true,
+        "sha256": "c461ff8f0973ab74b9c16043be03d512a4fd467c576b162545d029e9fb996013",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_intervals.json",
+      "json_sha256": "b34a7e5faa8116860c63015dd7ca680d71a24febe0f4964fa50a4f3af992f3ea",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 21,
+      "status": "clean",
+      "timestamp_rows": 21
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 170773,
+        "ok": true,
+        "sha256": "6a02db80b21790046290fbbdc7dea2a74967a32c5a9a44cbb97934dbb3d0312c",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_laps.json",
+      "json_sha256": "fedf9407497f6fda9f42285e39b468dcdbf555cd328dc6170f8c75cea2f353db",
+      "max_lap_number": 24.0,
+      "missing_required_columns": [],
+      "rows": 366,
+      "status": "clean",
+      "timestamp_rows": 365
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_pit.csv",
+      "driver_count": 23,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 31232,
+        "ok": true,
+        "sha256": "ef03495e2f356fcfa843f3aab72b79c855e3f945439c4eac08362a29a005214d",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_pit.json",
+      "json_sha256": "13af7d31d280f2d605041f55849a49743e2c48590e54040fcba147cbfc584b80",
+      "max_lap_number": 30.0,
+      "missing_required_columns": [],
+      "rows": 173,
+      "status": "clean",
+      "timestamp_rows": 173
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 130508,
+        "ok": true,
+        "sha256": "de510c3c50e56691b03690c2bdd691e5d699575b88fc94ba36403da46831d73a",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_position.json",
+      "json_sha256": "ee79858bbc29e8729f4c1e1154e7f97f3d8cd5f9aebc6a057086531b68be7340",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1133,
+      "status": "clean",
+      "timestamp_rows": 1133
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 20727,
+        "ok": true,
+        "sha256": "98327eb439baacdfe0afb5bf4c2cabcc5fced45073f34310fa6ef6cb2076fb3f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_race_control.json",
+      "json_sha256": "262a461fde99201140e6ce664f328b6dbf9749491a2146afd4cfad97a16d4ba1",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 79,
+      "status": "clean",
+      "timestamp_rows": 79
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4314,
+        "ok": true,
+        "sha256": "2554d62c1596185013a986558cde917b517275600948eceab8b2b0eae54980d6",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_session_result.json",
+      "json_sha256": "77d5ccb395361a311bebda06ff064214a13a53732b1b50fa1e355a5b8d475493",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 403,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_sessions.json",
+      "json_sha256": "07dbf8d68fff964f6b29c774da0bf8392b8b76cb84dbc6f0ff2eb7daf559784c",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2093,
+        "ok": true,
+        "sha256": "cb80a8b695fbd827df3482f2ba41f80fd17374e59071d510326d5eb324493982",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_starting_grid.json",
+      "json_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 15954,
+        "ok": true,
+        "sha256": "24a844e115c2a2e1dc4460518cddd34b0c04cfcfef7a43364da382a11eb81053",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_stints.json",
+      "json_sha256": "05b9871fd129c6c180925baf2c26ef0f4475d197f46ee36cf328251fcf27d531",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 111,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 17844,
+        "ok": true,
+        "sha256": "96aa3fc9264a2549b99a45e2618851bf50551b34c254caffb16bfe30c7b6c308",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_weather.json",
+      "json_sha256": "04d27d6c76fa2e976f65ed5e26a33c84c8203b3969b66c444b700f2a4d7e0842",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 83,
+      "status": "clean",
+      "timestamp_rows": 83
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 11,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 0,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.json"
+  }
+}
