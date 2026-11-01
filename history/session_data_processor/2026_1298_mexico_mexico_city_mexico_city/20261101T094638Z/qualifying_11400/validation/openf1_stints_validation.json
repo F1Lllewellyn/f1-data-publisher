@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 15954,
+    "ok": true,
+    "sha256": "24a844e115c2a2e1dc4460518cddd34b0c04cfcfef7a43364da382a11eb81053",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_stints.json",
+  "json_sha256": "05b9871fd129c6c180925baf2c26ef0f4475d197f46ee36cf328251fcf27d531",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 111,
+  "status": "clean",
+  "timestamp_rows": 0
+}
