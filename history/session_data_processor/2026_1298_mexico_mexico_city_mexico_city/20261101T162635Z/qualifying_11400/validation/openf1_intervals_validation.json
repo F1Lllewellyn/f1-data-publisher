@@ -1,0 +1,28 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "gap_to_leader",
+    "interval",
+    "meeting_key",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_intervals.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "intervals",
+  "fetch": {
+    "bytes": 2963,
+    "ok": true,
+    "sha256": "c461ff8f0973ab74b9c16043be03d512a4fd467c576b162545d029e9fb996013",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/raw/openf1_intervals.json",
+  "json_sha256": "b34a7e5faa8116860c63015dd7ca680d71a24febe0f4964fa50a4f3af992f3ea",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 21,
+  "status": "clean",
+  "timestamp_rows": 21
+}
