@@ -1,45 +1,45 @@
 {
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_state_changed": false,
-  "material_readiness_improved": false,
-  "needs_manual_review": false,
-  "overall_status": "clean",
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
   "race_name": "Mexico - Mexico City - Mexico City",
-  "readiness_quality": "usable_clean",
+  "readiness_quality": "blocked_manual_review_required_source",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-10-31T22:00:00+00:00",
-    "date_start": "2026-10-31T21:00:00+00:00",
-    "gate": "post_qualifying",
+    "date_end": "2026-11-01T23:00:00+00:00",
+    "date_start": "2026-11-01T20:00:00+00:00",
+    "gate": "race_result",
     "meeting_key": 1298,
-    "session_key": 11400,
-    "session_name": "Qualifying",
-    "session_type": "Qualifying"
+    "session_key": 11404,
+    "session_name": "Race",
+    "session_type": "Race"
   },
-  "source_needs_manual_review": false,
+  "source_needs_manual_review": true,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
       "status": "clean"
     },
     "openf1_intervals": {
-      "rows": 21,
+      "rows": 28176,
       "status": "clean"
     },
     "openf1_laps": {
-      "rows": 366,
+      "rows": 1360,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 173,
+      "rows": 67,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 1133,
+      "rows": 557,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 79,
+      "rows": 169,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -52,16 +52,16 @@
     },
     "openf1_starting_grid": {
       "rows": 22,
-      "status": "clean"
+      "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 111,
+      "rows": 80,
       "status": "clean"
     },
     "openf1_weather": {
-      "rows": 83,
+      "rows": 205,
       "status": "clean"
     }
   },
-  "updated_utc": "2026-11-01T18:43:48.966238Z"
+  "updated_utc": "2026-11-01T23:56:19.393098Z"
 }

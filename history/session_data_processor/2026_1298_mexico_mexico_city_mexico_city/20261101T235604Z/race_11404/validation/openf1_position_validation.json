@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 64339,
+    "ok": true,
+    "sha256": "1976773a6be12368fc160bbf0ee54bf63e343a58d314e63a95c160707064df2d",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_position.json",
+  "json_sha256": "55b7dc388d5f0f9a3c17e4f57015f711e9efa5a4bf88545bbc85126cf9aad395",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 557,
+  "status": "clean",
+  "timestamp_rows": 557
+}

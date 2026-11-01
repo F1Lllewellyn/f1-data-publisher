@@ -1,15 +1,15 @@
 {
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-  "overall_status": "clean",
+  "overall_status": "needs_manual_review",
   "promotion_allowed": false,
-  "readiness_quality": "usable_clean",
+  "readiness_quality": "blocked_manual_review_required_source",
   "schema_version": "combined_source_manifest_v2_session_processor",
-  "session_key": 11400,
+  "session_key": 11404,
   "source_layers": {
     "forecast_bundles": "latest/forecast_bundles",
     "openf1_lightweight_source_closure": "latest/openf1_lightweight_source_closure/source_readiness_summary.csv",
-    "session_data_processor": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/source_readiness_manifest.json"
+    "session_data_processor": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json"
   },
-  "source_needs_manual_review": false,
-  "updated_utc": "2026-11-01T18:43:48.966513Z"
+  "source_needs_manual_review": true,
+  "updated_utc": "2026-11-01T23:56:19.393535Z"
 }
