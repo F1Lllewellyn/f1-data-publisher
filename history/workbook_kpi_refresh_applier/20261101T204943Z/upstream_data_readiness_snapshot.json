@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1298_mexico_mexico_city_mexico_city",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Mexico - Mexico City - Mexico City",
+  "readiness_quality": "usable_clean",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-10-31T22:00:00+00:00",
+    "date_start": "2026-10-31T21:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1298,
+    "session_key": 11400,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 21,
+      "status": "clean"
+    },
+    "openf1_laps": {
+      "rows": 366,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 173,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1133,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 79,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_stints": {
+      "rows": 111,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 83,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-11-01T18:43:48.966238Z"
+}
