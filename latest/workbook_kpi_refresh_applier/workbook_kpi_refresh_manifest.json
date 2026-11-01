@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/qualifying_11400/workbook_kpi_readiness.json": "adf0364586ad5e9330b7ccddfc7c1271487adc83bb4075021b473004a9807e2d"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-01T14:30:29.674862+00:00",
+  "created_utc": "2026-11-01T15:04:35.443536+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 966,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "a3c0fbf6c0427935a74429375ae9663e2d8db4d9f0ba4182da1aa8356b47cc08"
     },
     {
       "bytes": 392,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "3aa669a07cf120cd147d6c4e8e304bd5f6043e910d1d011e76bf4783b194e498"
     },
     {
-      "bytes": 11007,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Qualifying_20261101T143029Z.xlsx",
-      "sha256": "400c0f71de26d15bb65a6aebe4d6c69251f029e312af4f5fb43a7ea57c8e05b0"
+      "bytes": 11005,
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Qualifying_20261101T150435Z.xlsx",
+      "sha256": "33fad35cbacffa7b68b0f8d333efc7dc0d4a8cd827b830ed82bafc6f0fea7265"
     },
     {
       "bytes": 573,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/upstream_latest_manifest_snapshot.json",
       "sha256": "7f7ec6cf1d690b95cdb3f44857ef9d13cffbe9f0ef8eff9d4c11a0f86f490f37"
     },
     {
       "bytes": 1536,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/upstream_data_readiness_snapshot.json",
       "sha256": "8fd625da79f1675e45c558bbf8e3cbd657b3542d0a9c2cad839703649004e432"
     },
     {
       "bytes": 681,
-      "path": "history/workbook_kpi_refresh_applier/20261101T143029Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261101T150435Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "2a5e84c4a1ca44ac87499fe72a09cbaafafbcaefc0641fcbedc2a1010f1bc1d7"
     }
   ],
   "readiness_quality": "usable_clean",
-  "run_id": "20261101T143029Z",
+  "run_id": "20261101T150435Z",
   "session_key": 11400,
   "session_name": "Qualifying",
   "session_type": "Qualifying",
