@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "Mexico - Mexico City - Mexico City",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-11-01T23:56:19.393098Z"
+  "updated_utc": "2026-11-02T00:38:18.033335Z"
 }

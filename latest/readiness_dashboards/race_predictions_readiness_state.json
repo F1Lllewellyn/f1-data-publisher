@@ -1,10 +1,10 @@
 {
-  "ready_for_use": true,
-  "blocked": false,
-  "latest_session_state": "clean",
+  "ready_for_use": false,
+  "blocked": true,
+  "latest_session_state": "needs_manual_review",
   "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
-  "generated_at_utc": "2026-11-01T22:55:00Z",
-  "source_status": "clean",
+  "generated_at_utc": "2026-11-02T00:38:18Z",
+  "source_status": "needs_manual_review",
   "event_name": "Mexico - Mexico City - Mexico City",
-  "session_name": "Qualifying"
+  "session_name": "Race"
 }

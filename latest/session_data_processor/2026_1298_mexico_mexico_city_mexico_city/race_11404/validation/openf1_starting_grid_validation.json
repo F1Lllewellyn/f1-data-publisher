@@ -24,7 +24,7 @@
   "max_lap_number": null,
   "missing_required_columns": [],
   "provenance": {
-    "changed_since_prior_target_snapshot": null,
+    "changed_since_prior_target_snapshot": false,
     "changed_since_qualifying_snapshot": false,
     "direct_target_fetch": {
       "bytes": 0,
@@ -33,12 +33,12 @@
     },
     "forecast_as_of_eligible": false,
     "meeting_key": 1298,
-    "observed_at_utc": "2026-11-01T23:56:19.385355Z",
+    "observed_at_utc": "2026-11-02T00:38:18.024971Z",
     "observed_before_target_start": false,
     "official_final_grid_verified": false,
     "openf1_row_status": "clean",
     "prior_qualifying_snapshot_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
-    "prior_target_snapshot_sha256": null,
+    "prior_target_snapshot_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
     "resolution": "unique_same_meeting_qualifying_before_target",
     "source_session_key": 11400,
     "source_session_name": "Qualifying",
