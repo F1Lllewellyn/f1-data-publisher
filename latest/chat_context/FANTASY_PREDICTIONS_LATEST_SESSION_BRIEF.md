@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-02T17:01:10Z
+Generated UTC: 2026-11-02T19:51:23Z
 Event: Mexico - Mexico City - Mexico City
 Session: Race
 Source status: needs_manual_review
