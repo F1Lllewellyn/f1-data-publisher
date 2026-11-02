@@ -8,33 +8,33 @@
           "--repo-root",
           "/home/runner/work/f1-data-publisher/f1-data-publisher"
         ],
-        "finished_utc": "2026-11-02T09:56:36.653615+00:00",
+        "finished_utc": "2026-11-02T20:19:02.282494+00:00",
         "ok": true,
         "returncode": 0,
-        "started_utc": "2026-11-02T09:56:36.331670+00:00",
+        "started_utc": "2026-11-02T20:19:01.964699+00:00",
         "stderr_tail": "",
-        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1298_mexico_mexico_city_mexico_city\",\n  \"meeting_key\": 1298,\n  \"session_key\": 11404,\n  \"session_name\": \"Race\",\n  \"session_type\": \"Race\",\n  \"source_status\": \"needs_manual_review\",\n  \"readiness_quality\": \"blocked_manual_review_required_source\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": true,\n    \"data_readiness.source_needs_manual_review\": true,\n    \"combined_source.source_needs_manual_review\": true,\n    \"source_readiness.source_needs_manual_review\": true,\n    \"readiness_aggregation.needs_manual_review\": true\n  },\n  \"manual_review_required\": true,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"bac84cd9a210b13b422dd9491ca542e9411f51c52320dad822dfa06ca64d02d6\",\n    \"latest/data_readiness.json\": \"da0e9d41936a7a19592024fd44faae73a2f66e65924377fb0bd99e1dfd0a80c5\",\n    \"latest/latest_manifest.json\": \"18a6d5c3fba247fbc975fe47c7a95a98a9fe5f69d5137334e0e009bdd3758575\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json\": \"57f3e67b9d6b8ed01340252688015ac3022bb43ed8e75f1d01b2b80dfd2937ef\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json\": \"c24e776a1622c98c12807bdebf2216b60bb87c31b548b90459a75e6a45d4c2e0\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json\": \"4f93e088a84cfa03ba8c8cab2632d2286f05a7f33236da2973bfe44e564c8a07\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.csv\": \"47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json\": \"6e5767628f31c3a4ba45ef7ed3de3d89f116225e13def1c7acf6d9faf84c01c3\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [\n    \"readiness_requires_manual_review\",\n    \"readiness_blocking_issues\",\n    \"required_source_evidence_unverified\",\n    \"required_source_status_needs_manual_review\",\n    \"readiness_quality_blocked_manual_review_required_source\"\n  ],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": false,\n  \"material_change\": true,\n  \"warnings\": [\n    \"diagnostic_only_source_status=needs_manual_review\",\n    \"readiness_requires_manual_review\",\n    \"readiness_blocking_issues\",\n    \"required_source_evidence_unverified\",\n    \"required_source_status_needs_manual_review\",\n    \"readiness_quality_blocked_manual_review_required_source\"\n  ],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261102T095636Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T095636Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
+        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1298_mexico_mexico_city_mexico_city\",\n  \"meeting_key\": 1298,\n  \"session_key\": 11404,\n  \"session_name\": \"Race\",\n  \"session_type\": \"Race\",\n  \"source_status\": \"needs_manual_review\",\n  \"readiness_quality\": \"blocked_manual_review_required_source\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": true,\n    \"data_readiness.source_needs_manual_review\": true,\n    \"combined_source.source_needs_manual_review\": true,\n    \"source_readiness.source_needs_manual_review\": true,\n    \"readiness_aggregation.needs_manual_review\": true\n  },\n  \"manual_review_required\": true,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"f2ff7e880e54420c3956e6687a60485fd629b62f3156f1774a33319e73a2363c\",\n    \"latest/data_readiness.json\": \"39ca67d250f1693bebe32cede8e30dda974ecb4e8532a1c35e25c69eb51656b0\",\n    \"latest/latest_manifest.json\": \"9367ff532ee3193d544582f482a8a89aca9ce0fcad646957591ef1592f8e15a4\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json\": \"bb9b7c4350aa7e0077b948842c62fa3358a58187c600f8588b5698ceea4e70af\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json\": \"8ee36453f697a6547fac81fe1347a3c5a5ecb5867ad27e7e13b6b0447a0b4554\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json\": \"85ea9744a897b470a7e63563919cf01a7be30db9f2df0f488f7b87d98c13c915\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.csv\": \"47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa\",\n    \"latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json\": \"48e4b5413b5f8296418b3eca82a4a3808003b1840995ffef55452429f9dcc1db\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [\n    \"readiness_requires_manual_review\",\n    \"readiness_blocking_issues\",\n    \"required_source_evidence_unverified\",\n    \"required_source_status_needs_manual_review\",\n    \"readiness_quality_blocked_manual_review_required_source\"\n  ],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": false,\n  \"material_change\": true,\n  \"warnings\": [\n    \"diagnostic_only_source_status=needs_manual_review\",\n    \"readiness_requires_manual_review\",\n    \"readiness_blocking_issues\",\n    \"required_source_evidence_unverified\",\n    \"required_source_status_needs_manual_review\",\n    \"readiness_quality_blocked_manual_review_required_source\"\n  ],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261102T201902Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T201902Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
       },
       "name": "initial_workbook_kpi_refresh_attempt",
       "status": "passed"
     }
   ],
   "commit_allowed": true,
-  "created_utc": "2026-11-02T09:56:37.317830+00:00",
+  "created_utc": "2026-11-02T20:19:02.932851+00:00",
   "discovered_scripts": {
     "session_processor": "scripts/session_data_processor/session_data_processor_loop_v1.py",
     "workbook_kpi_refresh_applier": "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py"
   },
   "final_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "bac84cd9a210b13b422dd9491ca542e9411f51c52320dad822dfa06ca64d02d6",
-      "latest/data_readiness.json": "da0e9d41936a7a19592024fd44faae73a2f66e65924377fb0bd99e1dfd0a80c5",
-      "latest/latest_manifest.json": "18a6d5c3fba247fbc975fe47c7a95a98a9fe5f69d5137334e0e009bdd3758575",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "57f3e67b9d6b8ed01340252688015ac3022bb43ed8e75f1d01b2b80dfd2937ef",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "c24e776a1622c98c12807bdebf2216b60bb87c31b548b90459a75e6a45d4c2e0",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "4f93e088a84cfa03ba8c8cab2632d2286f05a7f33236da2973bfe44e564c8a07",
+      "latest/combined_source_manifest.json": "f2ff7e880e54420c3956e6687a60485fd629b62f3156f1774a33319e73a2363c",
+      "latest/data_readiness.json": "39ca67d250f1693bebe32cede8e30dda974ecb4e8532a1c35e25c69eb51656b0",
+      "latest/latest_manifest.json": "9367ff532ee3193d544582f482a8a89aca9ce0fcad646957591ef1592f8e15a4",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "bb9b7c4350aa7e0077b948842c62fa3358a58187c600f8588b5698ceea4e70af",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "8ee36453f697a6547fac81fe1347a3c5a5ecb5867ad27e7e13b6b0447a0b4554",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "85ea9744a897b470a7e63563919cf01a7be30db9f2df0f488f7b87d98c13c915",
       "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.csv": "47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "6e5767628f31c3a4ba45ef7ed3de3d89f116225e13def1c7acf6d9faf84c01c3"
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "48e4b5413b5f8296418b3eca82a4a3808003b1840995ffef55452429f9dcc1db"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -49,7 +49,7 @@
       "readiness_quality_blocked_manual_review_required_source"
     ],
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261102T095636Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261102T201902Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -64,7 +64,7 @@
     "meeting_key": 1298,
     "promotion_allowed": false,
     "readiness_quality": "blocked_manual_review_required_source",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T095636Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T201902Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404",
     "session_key": 11404,
     "session_name": "Race",
@@ -91,14 +91,14 @@
   },
   "initial_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "bac84cd9a210b13b422dd9491ca542e9411f51c52320dad822dfa06ca64d02d6",
-      "latest/data_readiness.json": "da0e9d41936a7a19592024fd44faae73a2f66e65924377fb0bd99e1dfd0a80c5",
-      "latest/latest_manifest.json": "18a6d5c3fba247fbc975fe47c7a95a98a9fe5f69d5137334e0e009bdd3758575",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "57f3e67b9d6b8ed01340252688015ac3022bb43ed8e75f1d01b2b80dfd2937ef",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "c24e776a1622c98c12807bdebf2216b60bb87c31b548b90459a75e6a45d4c2e0",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "4f93e088a84cfa03ba8c8cab2632d2286f05a7f33236da2973bfe44e564c8a07",
+      "latest/combined_source_manifest.json": "f2ff7e880e54420c3956e6687a60485fd629b62f3156f1774a33319e73a2363c",
+      "latest/data_readiness.json": "39ca67d250f1693bebe32cede8e30dda974ecb4e8532a1c35e25c69eb51656b0",
+      "latest/latest_manifest.json": "9367ff532ee3193d544582f482a8a89aca9ce0fcad646957591ef1592f8e15a4",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "bb9b7c4350aa7e0077b948842c62fa3358a58187c600f8588b5698ceea4e70af",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "8ee36453f697a6547fac81fe1347a3c5a5ecb5867ad27e7e13b6b0447a0b4554",
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "85ea9744a897b470a7e63563919cf01a7be30db9f2df0f488f7b87d98c13c915",
       "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.csv": "47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa",
-      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "6e5767628f31c3a4ba45ef7ed3de3d89f116225e13def1c7acf6d9faf84c01c3"
+      "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "48e4b5413b5f8296418b3eca82a4a3808003b1840995ffef55452429f9dcc1db"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -113,7 +113,7 @@
       "readiness_quality_blocked_manual_review_required_source"
     ],
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261102T095636Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261102T201902Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -128,7 +128,7 @@
     "meeting_key": 1298,
     "promotion_allowed": false,
     "readiness_quality": "blocked_manual_review_required_source",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T095636Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T201902Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404",
     "session_key": 11404,
     "session_name": "Race",
@@ -151,7 +151,7 @@
   "repair_attempted": false,
   "repair_domain": "session_workbook_recovery",
   "repair_succeeded": false,
-  "run_id": "20261102T095636Z",
+  "run_id": "20261102T201901Z",
   "session_processor_status": {
     "classification": null,
     "data_readiness_present": true,
