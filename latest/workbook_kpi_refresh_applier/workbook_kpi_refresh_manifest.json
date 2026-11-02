@@ -1,16 +1,16 @@
 {
   "authority_fingerprints": {
-    "latest/combined_source_manifest.json": "a57d09007587fc7fd0bc040cd0db8da29ca6d237bcd5f1f663a6e27ac6b8a2ff",
-    "latest/data_readiness.json": "67cb900562a66fc57741d60e67ff275eaa4b24923bcc25bc198bf743f632ec4f",
-    "latest/latest_manifest.json": "00ed939a9582cfc072579270d254f555cdd746c023b51ce60d4d3ce4e27d078a",
-    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "9b2ea6ae66d98f6b0de899ac25e8ca6b4b7d17d0bbc6cd05a9f52da16a108e8f",
-    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "9a162ed913129c5def547163af32d7229c395cbf5e2059440a83f8055ab295c3",
-    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "a499e5add2b48dc43addcd215338f449e4115ace22f66bb61c89a3526a124f03",
+    "latest/combined_source_manifest.json": "bac84cd9a210b13b422dd9491ca542e9411f51c52320dad822dfa06ca64d02d6",
+    "latest/data_readiness.json": "da0e9d41936a7a19592024fd44faae73a2f66e65924377fb0bd99e1dfd0a80c5",
+    "latest/latest_manifest.json": "18a6d5c3fba247fbc975fe47c7a95a98a9fe5f69d5137334e0e009bdd3758575",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/forecast_bundle_ledger_snapshot.json": "57f3e67b9d6b8ed01340252688015ac3022bb43ed8e75f1d01b2b80dfd2937ef",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/sandbox_workbook_update_plan.json": "c24e776a1622c98c12807bdebf2216b60bb87c31b548b90459a75e6a45d4c2e0",
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/source_readiness_manifest.json": "4f93e088a84cfa03ba8c8cab2632d2286f05a7f33236da2973bfe44e564c8a07",
     "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.csv": "47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa",
-    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "be7ea92f1bf535f21c201aec9f9f4ee48ff20631ed8ab2a594cb9099bfbe5b99"
+    "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/workbook_kpi_readiness.json": "6e5767628f31c3a4ba45ef7ed3de3d89f116225e13def1c7acf6d9faf84c01c3"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-02T02:28:32.899020+00:00",
+  "created_utc": "2026-11-02T06:49:27.808717+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": false,
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 1006,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "a95c71469828b582d79d1c83d55eea693c5a96fbaf5e01724b09e615dce93e23"
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "f19424d7f163ca9b1feb682a1e32385b321b2aaaf33b003cc118f244ae5d6d36"
     },
     {
       "bytes": 413,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "47ae243ce0f73f35a3f259583d4bf84b74410b1c8b835623cf576ac6fbc850fa"
     },
     {
-      "bytes": 11130,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T022832Z.xlsx",
-      "sha256": "a3c5ac34091361f97cb81af7777048ace7bbd1d4f6d09da49bed52a8fb3324b7"
+      "bytes": 11134,
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/F1_Workbook_KPI_SANDBOX_Refresh_Mexico_-_Mexico_City_-_Mexico_City_Race_20261102T064927Z.xlsx",
+      "sha256": "991865355391381543d8b007a46e904ef554c3403b2b3fbc46804f3d3cc625fd"
     },
     {
       "bytes": 575,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "a6f6099cf62541a57864160e86450b04ec6636097721d5aefdffc5b70b3308b2"
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "614b69bee0a844aee85a19b01842024792a6c7690ee1687778551d116d0f0c68"
     },
     {
       "bytes": 1574,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/upstream_data_readiness_snapshot.json",
-      "sha256": "b509141d38332861f8ece05ae71ddd59f77abdae7b2b3e1c82f6875ff39c4773"
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/upstream_data_readiness_snapshot.json",
+      "sha256": "71f8a38bb8219324a0c8d7b4974f0c63a37ffb1c34fa823d58ba7424d3677a4f"
     },
     {
       "bytes": 713,
-      "path": "history/workbook_kpi_refresh_applier/20261102T022832Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "1468effc287e978670aad28e1c0e5967fb0c02feabb8121a3a2f2720fd1fffda"
+      "path": "history/workbook_kpi_refresh_applier/20261102T064927Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "a559963d3d0f80116c5626d9359ab868b0cce1fdc9a4e9acc2ea04f4b7ada343"
     }
   ],
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261102T022832Z",
+  "run_id": "20261102T064927Z",
   "session_key": 11404,
   "session_name": "Race",
   "session_type": "Race",

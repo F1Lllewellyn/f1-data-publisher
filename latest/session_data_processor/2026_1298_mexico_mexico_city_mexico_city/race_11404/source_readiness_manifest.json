@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-02T01:48:27.135334Z",
+  "created_utc": "2026-11-02T06:49:27.601746Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-02T01:48:27.136850Z",
+    "created_utc": "2026-11-02T06:49:27.603559Z",
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 70.15,
+      "age_minutes": 301.01,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "b6a7bb26fb0f9fd57f3119da47e617fa5f22dcab69602c350d20c593ef71bfe6",
+      "sha256": "a57d09007587fc7fd0bc040cd0db8da29ca6d237bcd5f1f663a6e27ac6b8a2ff",
       "size_bytes": 712,
-      "timestamp_utc": "2026-11-02T00:38:18.033710Z"
+      "timestamp_utc": "2026-11-02T01:48:27.139296Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 70.15,
+      "age_minutes": 301.01,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "3ba272f061f350cd3348de1b33ecb92665b54d0ec7f62cdee95ece9f1fd6632a",
+      "sha256": "67cb900562a66fc57741d60e67ff275eaa4b24923bcc25bc198bf743f632ec4f",
       "size_bytes": 1573,
-      "timestamp_utc": "2026-11-02T00:38:18.033335Z"
+      "timestamp_utc": "2026-11-02T01:48:27.139029Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 70.15,
+      "age_minutes": 301.01,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "d4c339d00a7c07779556619932c4743ed6c18a00c0569e0b4ab63bb27973f2f7",
+      "sha256": "00ed939a9582cfc072579270d254f555cdd746c023b51ce60d4d3ce4e27d078a",
       "size_bytes": 574,
-      "timestamp_utc": "2026-11-02T00:38:18.032962Z"
+      "timestamp_utc": "2026-11-02T01:48:27.138790Z"
     }
   },
   "material_readiness_improved": false,
@@ -251,7 +251,7 @@
     "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261102T014815Z",
+  "run_id": "20261102T064914Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-11-01T23:00:00+00:00",
@@ -476,11 +476,11 @@
       "fetch": {
         "bytes": 4049,
         "ok": true,
-        "sha256": "57b0dea60812fc7afe3e8a5d1d34f015f76f9d63f389ef55b9adcf7f48762a45",
+        "sha256": "066aa2997b6fad1c8fb0b41ebbc8673388a077a52390c499be07300eaf8d9aab",
         "status_code": 200
       },
       "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_session_result.json",
-      "json_sha256": "e9bc08e4ed5f01271ded2c30648ffdc7a5705e18c4eaad979bb3558ace7b8f6f",
+      "json_sha256": "ed4583b492a7e0d7371873665d2e315dd5d584129c486e1a830a436c6278a782",
       "max_lap_number": null,
       "missing_required_columns": [],
       "rows": 22,
@@ -558,7 +558,7 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1298,
-        "observed_at_utc": "2026-11-02T01:48:27.129600Z",
+        "observed_at_utc": "2026-11-02T06:49:27.596369Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",

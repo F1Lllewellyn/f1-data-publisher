@@ -1,0 +1,50 @@
+{
+  "anomalies": [
+    "fia_final_grid_unverified"
+  ],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2093,
+    "ok": true,
+    "sha256": "cb80a8b695fbd827df3482f2ba41f80fd17374e59071d510326d5eb324493982",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_starting_grid.json",
+  "json_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "provenance": {
+    "changed_since_prior_target_snapshot": false,
+    "changed_since_qualifying_snapshot": false,
+    "direct_target_fetch": {
+      "bytes": 0,
+      "error": "<HTTPError 404: 'Not Found'>",
+      "ok": false
+    },
+    "forecast_as_of_eligible": false,
+    "meeting_key": 1298,
+    "observed_at_utc": "2026-11-02T06:49:27.596369Z",
+    "observed_before_target_start": false,
+    "official_final_grid_verified": false,
+    "openf1_row_status": "clean",
+    "prior_qualifying_snapshot_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
+    "prior_target_snapshot_sha256": "1c28c0309e03cad87324a4a8e84fb96b1038eaef2f109124698576b64cf26824",
+    "resolution": "unique_same_meeting_qualifying_before_target",
+    "source_session_key": 11400,
+    "source_session_name": "Qualifying",
+    "target_session_key": 11404
+  },
+  "rows": 22,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}

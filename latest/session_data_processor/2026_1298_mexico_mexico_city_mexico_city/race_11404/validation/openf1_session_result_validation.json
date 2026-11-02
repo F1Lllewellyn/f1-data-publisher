@@ -20,11 +20,11 @@
   "fetch": {
     "bytes": 4049,
     "ok": true,
-    "sha256": "57b0dea60812fc7afe3e8a5d1d34f015f76f9d63f389ef55b9adcf7f48762a45",
+    "sha256": "066aa2997b6fad1c8fb0b41ebbc8673388a077a52390c499be07300eaf8d9aab",
     "status_code": 200
   },
   "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_session_result.json",
-  "json_sha256": "e9bc08e4ed5f01271ded2c30648ffdc7a5705e18c4eaad979bb3558ace7b8f6f",
+  "json_sha256": "ed4583b492a7e0d7371873665d2e315dd5d584129c486e1a830a436c6278a782",
   "max_lap_number": null,
   "missing_required_columns": [],
   "rows": 22,
