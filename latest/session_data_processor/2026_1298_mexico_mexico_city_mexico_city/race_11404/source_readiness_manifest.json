@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-02T06:49:27.601746Z",
+  "created_utc": "2026-11-02T17:01:09.970694Z",
   "event_id": "2026_1298_mexico_mexico_city_mexico_city",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-02T06:49:27.603559Z",
+    "created_utc": "2026-11-02T17:01:09.972193Z",
     "event_id": "2026_1298_mexico_mexico_city_mexico_city",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -12,7 +12,7 @@
     "recommended_forecast_action": "hold forecast state / manual review",
     "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
     "session": {
-      "date_end": "2026-11-01T23:00:00+00:00",
+      "date_end": "2026-11-01T22:00:00+00:00",
       "date_start": "2026-11-01T20:00:00+00:00",
       "gate": "race_result",
       "meeting_key": 1298,
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 301.01,
+      "age_minutes": 611.71,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "a57d09007587fc7fd0bc040cd0db8da29ca6d237bcd5f1f663a6e27ac6b8a2ff",
+      "sha256": "bac84cd9a210b13b422dd9491ca542e9411f51c52320dad822dfa06ca64d02d6",
       "size_bytes": 712,
-      "timestamp_utc": "2026-11-02T01:48:27.139296Z"
+      "timestamp_utc": "2026-11-02T06:49:27.605889Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 301.01,
+      "age_minutes": 611.71,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "67cb900562a66fc57741d60e67ff275eaa4b24923bcc25bc198bf743f632ec4f",
+      "sha256": "da0e9d41936a7a19592024fd44faae73a2f66e65924377fb0bd99e1dfd0a80c5",
       "size_bytes": 1573,
-      "timestamp_utc": "2026-11-02T01:48:27.139029Z"
+      "timestamp_utc": "2026-11-02T06:49:27.605601Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 301.01,
+      "age_minutes": 611.71,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "00ed939a9582cfc072579270d254f555cdd746c023b51ce60d4d3ce4e27d078a",
+      "sha256": "18a6d5c3fba247fbc975fe47c7a95a98a9fe5f69d5137334e0e009bdd3758575",
       "size_bytes": 574,
-      "timestamp_utc": "2026-11-02T01:48:27.138790Z"
+      "timestamp_utc": "2026-11-02T06:49:27.605313Z"
     }
   },
   "material_readiness_improved": false,
@@ -251,10 +251,10 @@
     "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261102T064914Z",
+  "run_id": "20261102T170053Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
-    "date_end": "2026-11-01T23:00:00+00:00",
+    "date_end": "2026-11-01T22:00:00+00:00",
     "date_start": "2026-11-01T20:00:00+00:00",
     "gate": "race_result",
     "meeting_key": 1298,
@@ -285,13 +285,13 @@
       "duplicate_rows": 0,
       "endpoint": "drivers",
       "fetch": {
-        "bytes": 9003,
+        "bytes": 9024,
         "ok": true,
-        "sha256": "d8a2c578fec57f01baae4bcef02fc11751c06eec79690364ad48330f28ea8a20",
+        "sha256": "4febe7c7e4436006451b2f3f7f55333fd0620d85aca4c8fdf03dfd92aa6d0c01",
         "status_code": 200
       },
       "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_drivers.json",
-      "json_sha256": "4139dd3f005e80b30ef609ab1aeed0d04a549303cf67edf5e4008e7d8837376a",
+      "json_sha256": "f6fe72edc393740a5ea1371ccb683a08b9f0d492fd2c499fb2595103bdbd4998",
       "max_lap_number": null,
       "missing_required_columns": [],
       "rows": 22,
@@ -516,7 +516,7 @@
         "source": "sessions_prefetch"
       },
       "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_sessions.json",
-      "json_sha256": "57c61be69b6017cdc94cc09be65bd0d73df346c84c959900dd8933aa906ef524",
+      "json_sha256": "6157bc10ff4c38f1c7649612558745300c05c45df095cd222cfe43efc0819cab",
       "max_lap_number": null,
       "missing_required_columns": [],
       "rows": 1,
@@ -558,7 +558,7 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1298,
-        "observed_at_utc": "2026-11-02T06:49:27.596369Z",
+        "observed_at_utc": "2026-11-02T17:01:09.965380Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",

@@ -19,13 +19,13 @@
   "duplicate_rows": 0,
   "endpoint": "drivers",
   "fetch": {
-    "bytes": 9003,
+    "bytes": 9024,
     "ok": true,
-    "sha256": "d8a2c578fec57f01baae4bcef02fc11751c06eec79690364ad48330f28ea8a20",
+    "sha256": "4febe7c7e4436006451b2f3f7f55333fd0620d85aca4c8fdf03dfd92aa6d0c01",
     "status_code": 200
   },
   "json_path": "latest/session_data_processor/2026_1298_mexico_mexico_city_mexico_city/race_11404/raw/openf1_drivers.json",
-  "json_sha256": "4139dd3f005e80b30ef609ab1aeed0d04a549303cf67edf5e4008e7d8837376a",
+  "json_sha256": "f6fe72edc393740a5ea1371ccb683a08b9f0d492fd2c499fb2595103bdbd4998",
   "max_lap_number": null,
   "missing_required_columns": [],
   "rows": 22,
