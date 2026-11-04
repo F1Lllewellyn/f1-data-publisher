@@ -1,6 +1,6 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-04T02:28:54Z
+Generated UTC: 2026-11-04T07:28:30Z
 Event: Mexico - Mexico City - Mexico City
 Session: Race
 Source status: needs_manual_review
