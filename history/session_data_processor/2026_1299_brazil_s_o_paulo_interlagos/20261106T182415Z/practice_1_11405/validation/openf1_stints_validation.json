@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 14177,
+    "ok": true,
+    "sha256": "f8d3ddd03fe028d80e43962982bda3aec7583104ebea1b35524c5df4a588f82a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_stints.json",
+  "json_sha256": "65894a2bb16ef5b8534506c43ed462a1fa0f09c9ec440751208c6abe61de3e78",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 98,
+  "status": "clean",
+  "timestamp_rows": 0
+}

@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 20849,
+    "ok": true,
+    "sha256": "36360bc70777f9f72cf2c613d39ca20386be9dd40e2e68414bb7d02f30beee70",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_race_control.json",
+  "json_sha256": "5e420d56eb92add88872cc19aa4f670aada7b5800d9d321d45b05247bfce2b3c",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 82,
+  "status": "clean",
+  "timestamp_rows": 82
+}

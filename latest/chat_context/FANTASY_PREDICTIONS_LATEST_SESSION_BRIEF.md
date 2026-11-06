@@ -1,10 +1,10 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-06T11:53:57Z
-Event: Mexico - Mexico City - Mexico City
-Session: Race
-Source status: needs_manual_review
-Dashboard readiness: NOT READY
+Generated UTC: 2026-11-06T18:24:27Z
+Event: Brazil - São Paulo - Interlagos
+Session: Practice 1
+Source status: clean
+Dashboard readiness: READY
 Diagnostic publishing allowed: true
 
 ## Governance

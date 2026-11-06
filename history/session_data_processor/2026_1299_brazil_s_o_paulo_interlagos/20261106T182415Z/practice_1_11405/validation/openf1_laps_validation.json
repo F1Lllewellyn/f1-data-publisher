@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 267085,
+    "ok": true,
+    "sha256": "e709f1461efd4d477df6404691ce493be831d1bb0a81be5b651d63309174d49a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/raw/openf1_laps.json",
+  "json_sha256": "987e3683a6058907f2f7e90a69d9ee19ec23af86c284a4ef68d4a85b6fc661b7",
+  "max_lap_number": 34.0,
+  "missing_required_columns": [],
+  "rows": 570,
+  "status": "clean",
+  "timestamp_rows": 569
+}
