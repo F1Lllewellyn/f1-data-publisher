@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "bc0b67b0591b8894fcfbe6dcc72e840d92db13f2b670541de7a4809f5839f2ad"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-06T20:51:47.462144+00:00",
+  "created_utc": "2026-11-06T22:23:39.081121+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 984,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "fb4ff2e52cff90b809740a0165e85dc76de0299da6b4052788552c5bd5b33bbc"
     },
     {
       "bytes": 413,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528"
     },
     {
       "bytes": 11093,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261106T205147Z.xlsx",
-      "sha256": "2f6111b3c69a7c443fcb1d89aa447f0d98255728130bcd4b71f7ce096f4c727d"
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261106T222339Z.xlsx",
+      "sha256": "9a78c8c756df013e3c160ca4f9bbd2d963780bd7ad17b1ab1abb634b0bd70936"
     },
     {
       "bytes": 567,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/upstream_latest_manifest_snapshot.json",
       "sha256": "148b62593b53ac44a420163f6d9b1ddd6cd7bc8a39132d574c1f2cc565f87d05"
     },
     {
       "bytes": 1568,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/upstream_data_readiness_snapshot.json",
       "sha256": "0e6d01280c139f75aa42fb1fa614e68f4abd1a22966e075a87591eba0d0ffd7b"
     },
     {
       "bytes": 696,
-      "path": "history/workbook_kpi_refresh_applier/20261106T205147Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261106T222339Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "8998abac0e426b6f17ffa75819db1a6e9ce0c7dd306fecb032b313142ab3feb4"
     }
   ],
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261106T205147Z",
+  "run_id": "20261106T222339Z",
   "session_key": 11406,
   "session_name": "Practice 2",
   "session_type": "Practice",
