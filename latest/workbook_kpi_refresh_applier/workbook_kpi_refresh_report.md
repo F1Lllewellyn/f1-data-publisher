@@ -6,8 +6,8 @@ Pass
 
 ## Run
 
-- Run ID: `20261107T104051Z`
-- Created UTC: `2026-11-07T10:40:51.131747+00:00`
+- Run ID: `20261107T132041Z`
+- Created UTC: `2026-11-07T13:20:41.244793+00:00`
 - Source status: `clean`
 - Readiness quality: `usable_with_optional_context_gaps`
 - Material change: `True`
@@ -20,12 +20,12 @@ Pass
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/sandbox_workbook_update_plan_applied.json` (e335ab26bd34...)
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/refreshed_workbook_kpi_readiness.csv` (090aa7fef4ff...)
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T104051Z.xlsx` (fde11662b709...)
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/upstream_latest_manifest_snapshot.json` (7675cfde864e...)
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/upstream_data_readiness_snapshot.json` (1841969a80de...)
-- `history/workbook_kpi_refresh_applier/20261107T104051Z/upstream_combined_source_manifest_snapshot.json` (da0154a7fd38...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/sandbox_workbook_update_plan_applied.json` (772fde605b30...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/refreshed_workbook_kpi_readiness.csv` (090aa7fef4ff...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T132041Z.xlsx` (b979de0aa7cb...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/upstream_latest_manifest_snapshot.json` (7cbfdeb7e89f...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/upstream_data_readiness_snapshot.json` (da7a2ce9019a...)
+- `history/workbook_kpi_refresh_applier/20261107T132041Z/upstream_combined_source_manifest_snapshot.json` (1d8b0fa58d80...)
 
 ## Governance
 
