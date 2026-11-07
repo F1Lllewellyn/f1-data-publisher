@@ -1,0 +1,42 @@
+name: F1 session readiness recovery PR tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-session-readiness-recovery-pr-tests.yml'
+      - '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml'
+      - 'scripts/session_data_processor/session_data_processor_loop_v1.py'
+      - 'scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py'
+      - 'scripts/ops/f1_peak_elite_orchestrator_v1.py'
+      - 'tests/test_sp2026_integrated_recovery_guard_v1.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sp2026-readiness-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  source-readiness-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR merge tree
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Compile changed Python files
+        run: |
+          python -m py_compile \
+            scripts/session_data_processor/session_data_processor_loop_v1.py \
+            scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py \
+            scripts/ops/f1_peak_elite_orchestrator_v1.py \
+            tests/test_sp2026_integrated_recovery_guard_v1.py
+      - name: Run source identity and freshness regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_sp2026_integrated_recovery_guard_v1.py' -v
