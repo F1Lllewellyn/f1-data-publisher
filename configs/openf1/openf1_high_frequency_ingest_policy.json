@@ -1,10 +1,7 @@
 {
   "year": 2026,
-  "cancelled_events_expected_zero": [
-    "Bahrain",
-    "Saudi Arabia",
-    "Saudi Arabian"
-  ],
+  "cancelled_meeting_keys_expected_zero": [1282, 1283],
+  "preseason_test_meeting_keys_excluded": [1304, 1305],
   "modes": {
     "race": {
       "session_types": [

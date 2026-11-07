@@ -43,7 +43,18 @@ SESSION_TYPES = {
     "all": ["Practice", "Qualifying", "Sprint Qualifying", "Race", "Sprint"],
 }
 
-EXPECTED_ZERO_CANCELLED = ["Bahrain", "Saudi"]
+CANCELLED_MEETING_KEYS = frozenset({1282, 1283})
+PRESEASON_TEST_MEETING_KEYS = frozenset({1304, 1305})
+EXCLUDED_MEETING_KEYS = CANCELLED_MEETING_KEYS | PRESEASON_TEST_MEETING_KEYS
+
+
+def parse_session_keys(value):
+    if not value:
+        return frozenset()
+    try:
+        return frozenset(int(item.strip()) for item in value.split(",") if item.strip())
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("session keys must be comma-separated integers") from exc
 
 
 def parse_dt(x):
@@ -115,7 +126,7 @@ def write_frame(df, path):
         raise ValueError(path)
 
 
-def discover_sessions(client, year, mode, event_filter=""):
+def discover_sessions(client, year, mode, event_filter="", session_keys=frozenset()):
     data, meta = client.get("sessions", {"year": year})
     if data is None:
         raise RuntimeError(f"Could not fetch sessions: {meta}")
@@ -139,10 +150,22 @@ def discover_sessions(client, year, mode, event_filter=""):
         )
         completed = completed[mask].copy()
 
-    # Treat Bahrain/Saudi 2026 as expected-zero cancellations/non-events in this project.
-    if "country_name" in completed.columns:
-        cancelled_mask = completed["country_name"].astype(str).str.contains("Bahrain|Saudi", case=False, na=False)
-        completed = completed[~cancelled_mask].copy()
+    if year == 2026:
+        if "meeting_key" not in completed.columns:
+            raise RuntimeError("Missing meeting_key in 2026 session inventory")
+        meeting_keys = pd.to_numeric(completed["meeting_key"], errors="coerce")
+        if meeting_keys.isna().any() or (meeting_keys % 1 != 0).any():
+            raise RuntimeError("Invalid meeting_key in 2026 session inventory")
+        completed = completed.loc[~meeting_keys.isin(EXCLUDED_MEETING_KEYS)].copy()
+
+    if session_keys:
+        selected_keys = set(pd.to_numeric(completed["session_key"], errors="coerce").dropna().astype(int))
+        missing = sorted(session_keys - selected_keys)
+        if missing:
+            raise RuntimeError(f"Requested completed session keys not found: {missing}")
+        completed = completed.loc[
+            pd.to_numeric(completed["session_key"], errors="coerce").isin(session_keys)
+        ].copy()
 
     sort_cols = [c for c in ["date_start_dt", "meeting_key", "session_key"] if c in completed.columns]
     return completed.sort_values(sort_cols).reset_index(drop=True)
@@ -289,42 +312,100 @@ def build_driver_features(output_dir, session_key, driver_number, tolerance_ms=7
         merged["y"] = pd.NA
         merged["z"] = pd.NA
 
-    merged["rpm_safe"] = merged["rpm"].replace(0, pd.NA)
+    # OpenF1 defines throttle as 0..100 percent, brake as 0/100, and n_gear as
+    # an integer from 0..8. Preserve the source columns exactly as retained,
+    # but mask values outside those contracts in the analytical layer. A
+    # missing/invalid control reading is unknown, not a normal reading.
+    merged["throttle_valid"] = merged["throttle"].where(
+        merged["throttle"].between(0, 100)
+    )
+    merged["brake_valid"] = merged["brake"].where(merged["brake"].isin([0, 100]))
+    gear_is_integer = merged["n_gear"].eq(merged["n_gear"].round())
+    merged["n_gear_valid"] = merged["n_gear"].where(
+        merged["n_gear"].between(0, 8) & gear_is_integer
+    )
+    merged["rpm_valid"] = merged["rpm"].where(merged["rpm"].ge(0))
+
+    # Zero RPM has no defined speed/RPM efficiency ratio. Keep the source
+    # observation, but represent the derived ratio as missing rather than as
+    # measured zero performance.
+    merged["rpm_safe"] = merged["rpm_valid"].astype(float).replace(0, np.nan)
     merged["efficiency_ratio_speed_per_rpm"] = merged["speed"] / merged["rpm_safe"]
     baseline = (
-        merged.dropna(subset=["efficiency_ratio_speed_per_rpm", "n_gear"])
-        .groupby("n_gear")["efficiency_ratio_speed_per_rpm"].median().to_dict()
+        merged.dropna(subset=["efficiency_ratio_speed_per_rpm", "n_gear_valid"])
+        .groupby("n_gear_valid")["efficiency_ratio_speed_per_rpm"].median().to_dict()
     )
-    merged["efficiency_ratio_norm"] = merged["efficiency_ratio_speed_per_rpm"] / merged["n_gear"].map(baseline)
+    efficiency_baseline = pd.to_numeric(
+        merged["n_gear_valid"].map(baseline), errors="coerce"
+    )
+    efficiency_baseline = efficiency_baseline.where(
+        np.isfinite(efficiency_baseline) & efficiency_baseline.ne(0)
+    )
+    merged["efficiency_ratio_norm"] = (
+        merged["efficiency_ratio_speed_per_rpm"] / efficiency_baseline
+    )
 
     merged["speed_delta"] = merged["speed"].diff()
-    merged["throttle_speed_mismatch"] = (
-        (merged["throttle"] >= 95) & (merged["rpm"] >= 9000) &
-        (merged["brake"].fillna(0) < 1) & (merged["speed_delta"].fillna(0) < 0.5)
+    mismatch_known = (
+        merged["throttle_valid"].notna()
+        & merged["rpm_valid"].notna()
+        & merged["brake_valid"].notna()
+        & merged["speed_delta"].notna()
     )
+    mismatch = (
+        (merged["throttle_valid"] >= 95)
+        & (merged["rpm_valid"] >= 9000)
+        & (merged["brake_valid"] < 1)
+        & (merged["speed_delta"] < 0.5)
+    )
+    merged["throttle_speed_mismatch"] = mismatch.astype(float).where(mismatch_known)
 
-    merged["prev_gear"] = merged["n_gear"].shift(1)
-    merged["prev_rpm"] = merged["rpm"].shift(1)
-    merged["upshift_event"] = merged["n_gear"] > merged["prev_gear"]
-    upshift_rpms = merged.loc[merged["upshift_event"], "prev_rpm"].dropna()
+    merged["prev_gear_valid"] = merged["n_gear_valid"].shift(1)
+    merged["prev_rpm_valid"] = merged["rpm_valid"].shift(1)
+    upshift_known = merged["n_gear_valid"].notna() & merged["prev_gear_valid"].notna()
+    upshift = merged["n_gear_valid"] > merged["prev_gear_valid"]
+    merged["upshift_event"] = upshift.astype(float).where(upshift_known)
+    upshift_rpms = merged.loc[merged["upshift_event"].eq(1), "prev_rpm_valid"].dropna()
     threshold = upshift_rpms.quantile(0.20) if len(upshift_rpms) >= 8 else 9200
-    merged["upshift_rpm"] = merged["prev_rpm"].where(merged["upshift_event"])
-    merged["short_shift_flag"] = merged["upshift_event"] & (merged["upshift_rpm"] < threshold) & (merged["throttle"] >= 85)
-
-    merged["efficiency_loss_flag"] = (
-        (merged["efficiency_ratio_norm"] < 0.965) &
-        (merged["throttle"] >= 85) & (merged["brake"].fillna(0) < 1)
+    merged["upshift_rpm"] = merged["prev_rpm_valid"].where(
+        merged["upshift_event"].eq(1)
     )
+    short_shift_known = upshift_known & (
+        ~upshift | (merged["upshift_rpm"].notna() & merged["throttle_valid"].notna())
+    )
+    short_shift = (
+        upshift
+        & (merged["upshift_rpm"] < threshold)
+        & (merged["throttle_valid"] >= 85)
+    )
+    merged["short_shift_flag"] = short_shift.astype(float).where(short_shift_known)
 
-    rpm_max = max(1, merged["rpm"].max(skipna=True))
-    merged["load_proxy"] = (merged["throttle"].fillna(0) / 100.0) * (merged["rpm"].fillna(0) / rpm_max)
+    efficiency_known = (
+        merged["efficiency_ratio_norm"].notna()
+        & merged["throttle_valid"].notna()
+        & merged["brake_valid"].notna()
+    )
+    efficiency_loss = (
+        (merged["efficiency_ratio_norm"] < 0.965) &
+        (merged["throttle_valid"] >= 85) & (merged["brake_valid"] < 1)
+    )
+    merged["efficiency_loss_flag"] = efficiency_loss.astype(float).where(efficiency_known)
+
+    rpm_max = merged["rpm_valid"].max(skipna=True)
+    if not np.isfinite(rpm_max) or rpm_max <= 0:
+        rpm_max = np.nan
+    merged["load_proxy"] = (
+        (merged["throttle_valid"] / 100.0) * (merged["rpm_valid"] / rpm_max)
+    )
     merged["low_efficiency_proxy"] = (1 - merged["efficiency_ratio_norm"].clip(lower=0.0, upper=1.2)).clip(lower=0.0)
-    merged["thermal_stress_proxy"] = (merged["load_proxy"] * 0.7 + merged["low_efficiency_proxy"] * 0.3).fillna(0)
+    merged["thermal_stress_proxy"] = (
+        merged["load_proxy"] * 0.7 + merged["low_efficiency_proxy"] * 0.3
+    )
 
     merged["reliability_proxy_score"] = (
-        merged["throttle_speed_mismatch"].astype(int) * 0.35 +
-        merged["short_shift_flag"].astype(int) * 0.20 +
-        merged["efficiency_loss_flag"].astype(int) * 0.25 +
+        merged["throttle_speed_mismatch"] * 0.35 +
+        merged["short_shift_flag"] * 0.20 +
+        merged["efficiency_loss_flag"] * 0.25 +
         merged["thermal_stress_proxy"].clip(0, 1) * 0.20
     ).clip(0, 1)
 
@@ -332,13 +413,21 @@ def build_driver_features(output_dir, session_key, driver_number, tolerance_ms=7
     grouped = merged.groupby(["session_key", "driver_number", "bucket_start"], dropna=False)
     out = grouped.agg(
         samples=("date", "count"),
+        valid_throttle_samples=("throttle_valid", "count"),
+        valid_brake_samples=("brake_valid", "count"),
+        valid_gear_samples=("n_gear_valid", "count"),
+        valid_reliability_samples=("reliability_proxy_score", "count"),
         reliability_proxy_mean=("reliability_proxy_score", "mean"),
         reliability_proxy_max=("reliability_proxy_score", "max"),
         efficiency_ratio_norm_mean=("efficiency_ratio_norm", "mean"),
         efficiency_ratio_norm_min=("efficiency_ratio_norm", "min"),
-        throttle_speed_mismatch_count=("throttle_speed_mismatch", "sum"),
-        short_shift_count=("short_shift_flag", "sum"),
-        efficiency_loss_count=("efficiency_loss_flag", "sum"),
+        throttle_speed_mismatch_count=(
+            "throttle_speed_mismatch", lambda values: values.sum(min_count=1)
+        ),
+        short_shift_count=("short_shift_flag", lambda values: values.sum(min_count=1)),
+        efficiency_loss_count=(
+            "efficiency_loss_flag", lambda values: values.sum(min_count=1)
+        ),
         thermal_stress_mean=("thermal_stress_proxy", "mean"),
         thermal_stress_max=("thermal_stress_proxy", "max"),
     ).reset_index()
@@ -387,8 +476,8 @@ def compute_driver_session_risk(fm):
         "thermal_stress_mean",
         "throttle_speed_mismatch_count",
     ]:
-        f[col] = pd.to_numeric(f[col], errors="coerce").fillna(0)
-        f[col + "_pct"] = f.groupby(["meeting_key", "session_key"])[col].rank(pct=True).fillna(0)
+        f[col] = pd.to_numeric(f[col], errors="coerce")
+        f[col + "_pct"] = f.groupby(["meeting_key", "session_key"])[col].rank(pct=True)
 
     f["risk_score"] = (
         0.30 * f["reliability_proxy_max_pct"] +
@@ -398,8 +487,16 @@ def compute_driver_session_risk(fm):
         0.10 * f["throttle_speed_mismatch_count_pct"]
     )
 
-    idx = f.groupby(["meeting_key", "session_key", "driver_number"])["risk_score"].idxmax()
-    ds = f.loc[idx, [
+    eligible = f.dropna(subset=["risk_score"])
+    if eligible.empty:
+        return pd.DataFrame(columns=[
+            "meeting_key", "session_key", "session_name", "session_type",
+            "country_name", "driver_number", "max_risk_time", "driver_session_risk"
+        ])
+    idx = eligible.groupby(
+        ["meeting_key", "session_key", "driver_number"]
+    )["risk_score"].idxmax()
+    ds = eligible.loc[idx, [
         "meeting_key", "session_key", "session_name", "session_type", "country_name",
         "driver_number", "bucket_start", "risk_score"
     ]].copy()
@@ -425,11 +522,14 @@ def fetch_race_ground_truth(client, year):
     return pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()
 
 
-def build_metrics(output_dir, mode, fm, client, year):
+def build_metrics(output_dir, mode, fm, client, year, skip_race_ground_truth=False):
     metrics_dir = output_dir / "metrics"
     metrics_dir.mkdir(exist_ok=True)
     ds = compute_driver_session_risk(fm)
     ds.to_csv(metrics_dir / "driver_session_risk_scores.csv", index=False)
+
+    if skip_race_ground_truth:
+        return
 
     if mode not in ["prerace", "all"]:
         return
@@ -534,6 +634,9 @@ def main():
     p.add_argument("--fetch-mode", choices=["driver_full_session", "chunked_then_fallback"], default="driver_full_session")
     p.add_argument("--output-dir", default="output/openf1_high_frequency")
     p.add_argument("--request-sleep", type=float, default=0.35)
+    p.add_argument("--session-keys", type=parse_session_keys, default=frozenset())
+    p.add_argument("--max-retries", type=int, default=5)
+    p.add_argument("--skip-race-ground-truth", action="store_true")
     p.add_argument("--warning-threshold", type=float, default=0.80)
     p.add_argument("--strict-threshold", type=float, default=0.90)
     args = p.parse_args()
@@ -543,14 +646,27 @@ def main():
         (output_dir / sub).mkdir(parents=True, exist_ok=True)
 
     token = os.environ.get("OPENF1_TOKEN", "").strip()
-    client = OpenF1Client(token=token, sleep_seconds=args.request_sleep)
+    client = OpenF1Client(token=token, sleep_seconds=args.request_sleep, max_retries=args.max_retries)
 
-    sessions = discover_sessions(client, args.year, args.mode, event_filter=args.event_filter)
+    sessions = discover_sessions(
+        client,
+        args.year,
+        args.mode,
+        event_filter=args.event_filter,
+        session_keys=args.session_keys,
+    )
     sessions.to_csv(output_dir / "manifests" / "completed_sessions_selected.csv", index=False)
 
     session_drivers, manifest = extract_raw(client, sessions, output_dir, args.fetch_mode)
     fm = build_feature_mart(output_dir, sessions, session_drivers)
-    build_metrics(output_dir, args.mode, fm, client, args.year)
+    build_metrics(
+        output_dir,
+        args.mode,
+        fm,
+        client,
+        args.year,
+        skip_race_ground_truth=args.skip_race_ground_truth,
+    )
     write_report(output_dir, args.year, args.mode)
 
     policy = {
