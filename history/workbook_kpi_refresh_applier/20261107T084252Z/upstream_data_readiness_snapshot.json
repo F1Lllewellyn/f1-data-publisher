@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-11-06T20:00:00+00:00",
+    "date_start": "2026-11-06T19:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1299,
+    "session_key": 11406,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 702,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 91,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 557,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 17,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 21,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 91,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 80,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-11-07T06:16:44.174613Z"
+}
