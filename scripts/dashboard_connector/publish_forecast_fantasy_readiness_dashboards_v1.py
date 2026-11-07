@@ -247,6 +247,7 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
         if (
             schedule.get("schema_version") != "meeting_schedule_snapshot_v1"
             or schedule.get("source") != "OpenF1 sessions catalog"
+            or schedule.get("catalog_entries_valid") is not True
             or schedule.get("event_id") != event_id
             or catalog_meeting != event_meeting
             or not isinstance(schedule.get("source_fetch"), dict)
