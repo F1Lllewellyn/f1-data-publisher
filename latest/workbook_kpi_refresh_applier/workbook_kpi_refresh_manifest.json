@@ -1,16 +1,16 @@
 {
   "authority_fingerprints": {
-    "latest/combined_source_manifest.json": "842f82461f5021a6f87683f7a14120a7cabfbc204e6a67316b1ac7c596605a17",
-    "latest/data_readiness.json": "f8468ce28da51339d1456321413ea7790a36e16f58ce0f6e771ea4de65f774e2",
-    "latest/latest_manifest.json": "f43c90bdb7854ee2bd1a385be9b27ef6618d8fbeb99246c644cc4216d9092187",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json": "61736956a935268da3744f2aa4a3b29fdd39894064084d11bbf553b273f5cb4f",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json": "9304afa24307d87208596c2601dde27806435b4cb7227e1e0c635b10cfa12b3f",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json": "a8ecd0085c0404ea8cb76645fcf5c99ac71b8d3ada18e9a33f62388919614338",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv": "090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "82934766b9e0397db8f84138f65655ae7cf149668cb7a4432b2c14c6857e7a97"
+    "latest/combined_source_manifest.json": "8dd5691a385f5f7886af4eed5ea64b43ebb04afea845e461d881f522af5fdc70",
+    "latest/data_readiness.json": "2ea14ac4c92c079b9cb7f9c3c4f044c191df9c0c9808c55fa0aa4a139c272cb5",
+    "latest/latest_manifest.json": "539dcedbe97ae9a806c7c41689ca5d005aabdd12d3d01ec9b69ba3ac74268f2c",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/forecast_bundle_ledger_snapshot.json": "4dd55b523e3ff2a0eb33ad56d7822fca52e968c282f094d84bf5be2052251ad9",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/sandbox_workbook_update_plan.json": "8bd86e20e943d03d3835ad099a95dd8bf15dfbed75c647d6738deafbd6fba520",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/source_readiness_manifest.json": "0423c6ded2ba21b08dd5f2be6f610d3a427b86a917943e4710ece6abaed3307f",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/workbook_kpi_readiness.csv": "322ad825f6ce9f7cbcc25b5a27974fd19c2907b1418a718ed452115e8cee041b",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/workbook_kpi_readiness.json": "0553bef3d876456bb50326c81cd30ff732e4b2b514fb7f85961bfab7f96aad8b"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-07T15:10:36.010123+00:00",
+  "created_utc": "2026-11-07T18:08:20.082902+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
@@ -26,48 +26,48 @@
   "outputs": [
     {
       "bytes": 984,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "772fde605b30c7b7e75c8a9e3a570aa4ee8211616b2b4b72e8502b26564c682c"
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "d427461c349b49e76219a924019d3e9e75b9e572efa47a7d0493dba44da7ae84"
     },
     {
-      "bytes": 413,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/refreshed_workbook_kpi_readiness.csv",
-      "sha256": "090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528"
+      "bytes": 415,
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "322ad825f6ce9f7cbcc25b5a27974fd19c2907b1418a718ed452115e8cee041b"
     },
     {
       "bytes": 11095,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T151036Z.xlsx",
-      "sha256": "f2017def2b825c446d160b91937cb1b834abdd092cd83b63edaae4a4146c8555"
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_3_20261107T180820Z.xlsx",
+      "sha256": "abe78d3d7527d5208c197f9d6a8725e83f585040c5f8f6583237d807dc734fab"
     },
     {
       "bytes": 567,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "7cbfdeb7e89fd82e5015efd138f79084a4ac64e9eca53212bdbc5b79490056d9"
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "51b096c70df5291546586619403b50fd500472d9649d8b3f287edcb3824bb4ee"
     },
     {
       "bytes": 1570,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/upstream_data_readiness_snapshot.json",
-      "sha256": "da7a2ce9019ac6807d62def025870d0636aada0e02f510a4c9ff16a735ebdc55"
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/upstream_data_readiness_snapshot.json",
+      "sha256": "508590bbd80978190772b2c2e9b0fb0826334b18e1f14e9f01a2ec4c3594103c"
     },
     {
       "bytes": 696,
-      "path": "history/workbook_kpi_refresh_applier/20261107T151036Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "1d8b0fa58d80a8be60186a2a3056c90bcc30e7505a2776309c025a0146c0e04a"
+      "path": "history/workbook_kpi_refresh_applier/20261107T180820Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "b1e783cf29041de6116b36d7da24146f84d4bf12013c790f4c98a5dd469ca0e4"
     }
   ],
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261107T151036Z",
-  "session_key": 11406,
-  "session_name": "Practice 2",
+  "run_id": "20261107T180820Z",
+  "session_key": 11407,
+  "session_name": "Practice 3",
   "session_type": "Practice",
   "source_artifacts": [
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json"
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/forecast_bundle_ledger_snapshot.json"
   ],
-  "source_manifest_pointer": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json",
-  "source_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406",
+  "source_manifest_pointer": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407",
   "source_status": "clean",
   "warnings": []
 }
