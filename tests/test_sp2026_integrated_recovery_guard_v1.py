@@ -113,6 +113,7 @@ class CurrentSessionReadinessTests(unittest.TestCase):
             "event_id": EVENT, "meeting_key": 1299,
             "observed_at_utc": "2026-11-07T17:00:48Z",
             "source_fetch": {"ok": True, "status_code": 200},
+            "catalog_entries_valid": True,
             "sessions": [FP3, QUALI],
         })
         selector = json.loads((self.root / "latest/latest_manifest.json").read_text(encoding="utf-8"))
@@ -186,6 +187,19 @@ class SnapshotAndOrchestratorTests(unittest.TestCase):
                 self.assertEqual([s["session_key"] for s in snapshot["sessions"]], [11407, 11408])
                 self.assertFalse(snapshot["promotion_allowed"])
                 self.assertFalse(snapshot["official_final_grid_verified"])
+
+    def test_malformed_future_entry_keeps_capture_but_cannot_turn_ready(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(processor_mod, "ROOT", Path(tmp)):
+                bad_future = {**QUALI, "date_end": "invalid"}
+                rel = processor_mod.write_session_schedule_snapshot(
+                    [FP3, bad_future], FP3, EVENT, "test",
+                    sessions_fetch={"ok": True, "status_code": 200},
+                )
+                j = json.loads((Path(tmp) / rel).read_text(encoding="utf-8"))
+                self.assertFalse(j["catalog_entries_valid"])
+                self.assertEqual(j["skipped_invalid_same_meeting_entries"], 1)
+                self.assertEqual([x["session_key"] for x in j["sessions"]], [11407])
 
     def test_processor_rejects_invalid_schedule_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
