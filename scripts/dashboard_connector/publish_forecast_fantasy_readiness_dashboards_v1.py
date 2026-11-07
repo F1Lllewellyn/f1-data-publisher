@@ -220,6 +220,67 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
         if session_start and selector_updated < session_start:
             add_reason(reasons, "selector_predates_session")
 
+
+    # The last successfully published session is not necessarily the latest
+    # completed session. Use the immutable-at-collection OpenF1 meeting schedule,
+    # never an old dashboard's own READY flag, to enforce freshness.
+    expected_session_key = None
+    schedule_pointer = selector.get("session_schedule_snapshot")
+    schedule_path = root / schedule_pointer if isinstance(schedule_pointer, str) else None
+    schedule_rel = relpath(schedule_path, root) if schedule_path else None
+    if (
+        schedule_rel is None
+        or not schedule_rel.startswith(f"latest/session_data_processor/{event_id}/")
+        or not schedule_rel.endswith("/session_schedule_snapshot.json")
+    ):
+        add_reason(reasons, "missing_or_invalid_session_schedule_snapshot")
+    else:
+        schedule = load_object(schedule_path)
+        catalog_meeting = positive_int(schedule.get("meeting_key"))
+        if (
+            schedule.get("schema_version") != "meeting_schedule_snapshot_v1"
+            or schedule.get("source") != "OpenF1 sessions catalog"
+            or schedule.get("event_id") != event_id
+            or catalog_meeting != event_meeting
+            or parse_utc(schedule.get("observed_at_utc")) is None
+        ):
+            add_reason(reasons, "invalid_session_schedule_provenance")
+        else:
+            catalog_time = parse_utc(schedule["observed_at_utc"])
+            if catalog_time > reference_time + FUTURE_CLOCK_SKEW:
+                add_reason(reasons, "future_session_schedule_observation")
+            catalog = schedule.get("sessions")
+            if not isinstance(catalog, list) or not catalog:
+                add_reason(reasons, "missing_session_schedule_entries")
+            else:
+                completed = []
+                selected_present = False
+                for entry in catalog:
+                    if not isinstance(entry, dict):
+                        add_reason(reasons, "invalid_session_schedule_entry")
+                        continue
+                    key = positive_int(entry.get("session_key"))
+                    start = parse_utc(entry.get("date_start"))
+                    end = parse_utc(entry.get("date_end"))
+                    if (
+                        key is None or start is None or end is None or end < start
+                        or positive_int(entry.get("meeting_key")) != event_meeting
+                    ):
+                        add_reason(reasons, "invalid_session_schedule_entry")
+                        continue
+                    if key == session_key:
+                        selected_present = True
+                    if end <= reference_time:
+                        completed.append((end, key))
+                if not selected_present:
+                    add_reason(reasons, "selector_absent_from_session_schedule")
+                if completed:
+                    expected_session_key = max(completed)[1]
+                    if expected_session_key != session_key:
+                        add_reason(reasons, "hold_stale_session_newer_completed")
+                else:
+                    add_reason(reasons, "no_completed_session_in_schedule")
+
     statuses = {
         norm_status(selector.get("overall_status")),
         norm_status(readiness.get("overall_status")),
@@ -324,6 +385,8 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
         "event_id": event_id if verified_identity else None,
         "meeting_key": event_meeting if verified_identity else None,
         "session_key": session_key if verified_identity else None,
+        "expected_session_key": expected_session_key,
+        "session_schedule_verified": not any("schedule" in r for r in reasons),
         "event_name": event_name or "unknown event",
         "session_name": session_name or "unknown session",
         "workbook_artifact": relpath(workbook_path, root),
@@ -359,6 +422,7 @@ def brief(title: str, dashboard: Dict[str, Any], audience: str) -> str:
         f"Session: {dashboard.get('session_name')}",
         f"Source status: {dashboard.get('source_status')}",
         f"Dashboard readiness: {ready}",
+        f"Readiness reasons: {dashboard.get('readiness_reasons')}",
         f"Diagnostic publishing allowed: {str(bool(dashboard.get('diagnostic_publish_allowed'))).lower()}",
         "",
         "## Governance",
