@@ -111,6 +111,7 @@ class CurrentSessionReadinessTests(unittest.TestCase):
             "source": "OpenF1 sessions catalog",
             "event_id": EVENT, "meeting_key": 1299,
             "observed_at_utc": "2026-11-07T17:00:48Z",
+            "source_fetch": {"ok": True, "status_code": 200},
             "sessions": [FP3, QUALI],
         })
 
@@ -169,7 +170,9 @@ class SnapshotAndOrchestratorTests(unittest.TestCase):
             with patch.object(processor_mod, "ROOT", Path(tmp)):
                 other = {**FP3, "meeting_key": 9999, "session_key": 99999}
                 relative = processor_mod.write_session_schedule_snapshot(
-                    [FP3, QUALI, other], FP3, EVENT, "20261107T170049Z"
+                    [FP3, QUALI, other], FP3, EVENT, "20261107T170049Z",
+                    catalog_observed_at_utc="2026-11-07T17:00:48Z",
+                    sessions_fetch={"ok": True, "status_code": 200}
                 )
                 self.assertEqual(relative, SCHEDULE_REL)
                 snapshot = json.loads((Path(tmp) / relative).read_text(encoding="utf-8"))
