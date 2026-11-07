@@ -345,13 +345,17 @@ def combined_status(source_reports: Dict[str, Dict[str, Any]]) -> str:
 
 
 def write_session_schedule_snapshot(
-    sessions: List[Dict[str, Any]], session: Dict[str, Any], event_id: str, run_id: str
+    sessions: List[Dict[str, Any]], session: Dict[str, Any], event_id: str, run_id: str,
+    catalog_observed_at_utc: Optional[str] = None,
+    sessions_fetch: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Keep the observed meeting calendar so consumers can detect skipped sessions.
 
     This is OpenF1 schedule evidence, not FIA grid authority or a forecast lock.
     Persist alongside *successful* session data, not as independently green state.
     """
+    if sessions_fetch is not None and sessions_fetch.get("ok") is not True:
+        raise ValueError("session schedule source fetch was not verified successful")
     meeting_key = str(session.get("meeting_key"))
     rows: List[Dict[str, Any]] = []
     for entry in sessions:
@@ -380,7 +384,8 @@ def write_session_schedule_snapshot(
         "source": "OpenF1 sessions catalog",
         "event_id": event_id,
         "meeting_key": session.get("meeting_key"),
-        "observed_at_utc": iso_now(),
+        "observed_at_utc": catalog_observed_at_utc or iso_now(),
+        "source_fetch": {"ok": sessions_fetch.get("ok"), "status_code": sessions_fetch.get("status_code")} if sessions_fetch is not None else None,
         "sessions": rows,
         "promotion_allowed": False,
         "official_final_grid_verified": False,
@@ -593,6 +598,7 @@ def main() -> int:
         return 0
 
     sessions, sessions_meta = fetch_sessions(args.season)
+    catalog_observed_at_utc = iso_now()  # Response observed now, not at later publication.
     result["sessions_fetch"] = sessions_meta
     if not sessions:
         result.update({"status": "late", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
@@ -775,7 +781,10 @@ def main() -> int:
         "promotion_allowed": False,
     }
 
-    schedule_snapshot_path = write_session_schedule_snapshot(sessions, session, event_id, run_id)
+    schedule_snapshot_path = write_session_schedule_snapshot(
+        sessions, session, event_id, run_id,
+        catalog_observed_at_utc=catalog_observed_at_utc, sessions_fetch=sessions_meta,
+    )
     manifest["session_schedule_snapshot"] = schedule_snapshot_path
     maybe_write_workbook_kpi_artifacts(latest_root, manifest)
     maybe_write_workbook_kpi_artifacts(history_root, manifest)
