@@ -161,6 +161,17 @@ class CurrentSessionReadinessTests(unittest.TestCase):
         self.assertIn("invalid_session_schedule_entry", d["readiness_reasons"])
         self.assertIn("session_schedule_digest_mismatch", d["readiness_reasons"])
 
+    def test_incomplete_but_digest_valid_calendar_cannot_turn_green(self):
+        schedule = json.loads((self.root / SCHEDULE_REL).read_text(encoding="utf-8"))
+        schedule["catalog_entries_valid"] = False
+        self.put(SCHEDULE_REL, schedule)
+        selector = json.loads((self.root / "latest/latest_manifest.json").read_text(encoding="utf-8"))
+        selector["session_schedule_sha256"] = hashlib.sha256((self.root / SCHEDULE_REL).read_bytes()).hexdigest()
+        self.put("latest/latest_manifest.json", selector)
+        d = self.observe("2026-11-07T18:30:00Z")
+        self.assertFalse(d["downstream_eligible"])
+        self.assertIn("invalid_session_schedule_provenance", d["readiness_reasons"])
+
     def test_future_observation_cannot_prove_past_readiness(self):
         schedule = json.loads((self.root / SCHEDULE_REL).read_text(encoding="utf-8"))
         schedule["observed_at_utc"] = "2026-11-08T05:00:00Z"
