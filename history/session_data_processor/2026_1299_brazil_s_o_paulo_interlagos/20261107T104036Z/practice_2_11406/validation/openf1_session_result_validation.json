@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "dnf",
+    "dns",
+    "driver_number",
+    "dsq",
+    "duration",
+    "gap_to_leader",
+    "meeting_key",
+    "number_of_laps",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/raw/openf1_session_result.csv",
+  "driver_count": 21,
+  "duplicate_rows": 0,
+  "endpoint": "session_result",
+  "fetch": {
+    "bytes": 3549,
+    "ok": true,
+    "sha256": "9dae5acc068b6fca406c136704029e221ba9524e0441fa512d5a1ce840bc267c",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/raw/openf1_session_result.json",
+  "json_sha256": "3c838742ba6611dd1f3ce42df9d853dc01c0aafcecacb91e78e4093a98db3533",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 21,
+  "status": "clean",
+  "timestamp_rows": 0
+}

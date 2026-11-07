@@ -1,0 +1,36 @@
+{
+  "generated_at_utc": "2026-11-07T10:40:51Z",
+  "status": "dashboard_refreshed",
+  "source_status": "clean",
+  "source_backed": true,
+  "commit_allowed": true,
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": true,
+  "readiness_reasons": [
+    "verified_current_session_evidence"
+  ],
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "meeting_key": 1299,
+  "session_key": 11406,
+  "event_name": "Brazil - S\u00e3o Paulo - Interlagos",
+  "session_name": "Practice 2",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261107T104051Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T104051Z.xlsx",
+  "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+  "session_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json",
+  "autorepair_report": null,
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "race_predictions": {
+    "ready_for_use": true,
+    "blocked": false,
+    "latest_session_state": "clean",
+    "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
+  },
+  "fantasy_predictions": {
+    "ready_for_use": true,
+    "blocked": false,
+    "latest_session_state": "clean",
+    "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
+  }
+}
