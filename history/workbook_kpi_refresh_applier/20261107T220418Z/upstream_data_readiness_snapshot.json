@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "forecast_state_changed": true,
+  "material_readiness_improved": true,
+  "needs_manual_review": false,
+  "overall_status": "clean",
+  "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-11-07T19:00:00+00:00",
+    "date_start": "2026-11-07T18:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1299,
+    "session_key": 11408,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_laps": {
+      "rows": 391,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 82,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 1885,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 96,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 0,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 82,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 160,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-11-07T21:48:16.922811Z"
+}
