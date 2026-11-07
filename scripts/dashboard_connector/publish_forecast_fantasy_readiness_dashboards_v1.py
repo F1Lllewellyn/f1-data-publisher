@@ -242,6 +242,9 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
             or schedule.get("source") != "OpenF1 sessions catalog"
             or schedule.get("event_id") != event_id
             or catalog_meeting != event_meeting
+            or not isinstance(schedule.get("source_fetch"), dict)
+            or schedule["source_fetch"].get("ok") is not True
+            or schedule["source_fetch"].get("status_code") != 200
             or parse_utc(schedule.get("observed_at_utc")) is None
         ):
             add_reason(reasons, "invalid_session_schedule_provenance")
