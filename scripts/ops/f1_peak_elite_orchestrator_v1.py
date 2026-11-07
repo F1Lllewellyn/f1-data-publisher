@@ -59,7 +59,7 @@ def run(repo: Path, label: str, cmd: List[str], timeout: int = 1200, allow_fail:
             "started_utc": started,
             "finished_utc": iso_now(),
             "returncode": proc.returncode,
-            "ok": proc.returncode == 0 or allow_fail,
+            "ok": proc.returncode == 0,
             "allow_fail": allow_fail,
             "output_tail": proc.stdout[-8000:],
         }
@@ -125,6 +125,7 @@ def latest_state(repo: Path) -> Dict[str, Any]:
         "race_name": readiness.get("race_name"),
         "event_id": readiness.get("event_id"),
         "session_name": session.get("session_name"),
+        "session_key": session.get("session_key"),
         "source_status": readiness.get("overall_status") or readiness.get("overall_classification"),
         "source_needs_manual_review": bool(readiness.get("needs_manual_review", False)),
         "workbook_source_status": workbook.get("source_status"),
@@ -184,8 +185,16 @@ def main() -> int:
         steps.append(run(repo, "cleanup_inventory_report_only", [py, "scripts/ops/f1_peak_elite_cleanup_report_v1.py", "--repo-root", str(repo)], timeout=600, allow_fail=True))
 
     protected = protected_touched(repo)
-    hard_failed = [s for s in steps if not s.get("ok")]
+    hard_failed = [s for s in steps if not s.get("ok") and not s.get("allow_fail")]
+    soft_failed = [s for s in steps if not s.get("ok") and s.get("allow_fail")]
     state = latest_state(repo)
+    dashboard = read_json(repo / "latest" / "readiness_dashboards" / "combined_readiness_dashboard.json", {})
+    downstream_current = (
+        dashboard.get("downstream_eligible") is True
+        and dashboard.get("event_id") == state.get("event_id")
+        and str(dashboard.get("session_key")) == str(state.get("session_key"))
+        and dashboard.get("source_backed") is True
+    )
     source_status = str(state.get("source_status") or "missing")
     workbook_status = str(state.get("workbook_source_status") or "missing")
     if protected:
@@ -194,6 +203,9 @@ def main() -> int:
     elif hard_failed:
         status = "fail"
         plain = "The orchestration layer failed before reaching production-ready state. Review the failed step tails in the runtime artifact."
+    elif operation == "full_run_chain" and (soft_failed or not downstream_current):
+        status = "hold_downstream_not_verified"
+        plain = "The capture-to-dashboard chain did not complete and verify the current source session. Do not treat earlier green readiness as current."
     elif operation == "syntax_repair_only":
         status = "pass"
         plain = "Workflow syntax repair and validation completed. This fixes the blocker before data-processing work resumes."
@@ -214,7 +226,9 @@ def main() -> int:
         "plain_english": plain,
         "latest_state": state,
         "steps": steps,
-        "failed_steps": [s.get("label") for s in hard_failed],
+        "failed_steps": [s.get("label") for s in hard_failed + soft_failed],
+        "downstream_current": downstream_current,
+        "dashboard_readiness_reasons": dashboard.get("readiness_reasons"),
         "protected_modified": protected,
         "stable_engine_modified": False,
         "canonical_workbook_overwrite": False,
