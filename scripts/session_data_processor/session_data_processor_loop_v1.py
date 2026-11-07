@@ -358,6 +358,7 @@ def write_session_schedule_snapshot(
         raise ValueError("session schedule source fetch was not verified successful")
     meeting_key = str(session.get("meeting_key"))
     rows: List[Dict[str, Any]] = []
+    invalid_same_meeting_entries = 0
     for entry in sessions:
         if str(entry.get("meeting_key")) != meeting_key:
             continue
@@ -365,9 +366,11 @@ def write_session_schedule_snapshot(
         end = parse_time(entry.get("date_end"))
         key = entry.get("session_key")
         if not start or not end or end < start or type(key) not in (int, str):
-            raise ValueError("invalid same-meeting OpenF1 session catalog entry")
+            invalid_same_meeting_entries += 1
+            continue
         if not str(key).isdigit() or int(key) <= 0:
-            raise ValueError("invalid same-meeting OpenF1 session key")
+            invalid_same_meeting_entries += 1
+            continue
         rows.append({
             "meeting_key": entry.get("meeting_key"),
             "session_key": int(key),
@@ -387,6 +390,8 @@ def write_session_schedule_snapshot(
         "observed_at_utc": catalog_observed_at_utc or iso_now(),
         "source_fetch": {"ok": sessions_fetch.get("ok"), "status_code": sessions_fetch.get("status_code")} if sessions_fetch is not None else None,
         "sessions": rows,
+        "catalog_entries_valid": invalid_same_meeting_entries == 0,
+        "skipped_invalid_same_meeting_entries": invalid_same_meeting_entries,
         "promotion_allowed": False,
         "official_final_grid_verified": False,
     }
