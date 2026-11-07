@@ -6,6 +6,7 @@ temporary synthetic source chain and the unchanged modules' public functions.
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -114,6 +115,9 @@ class CurrentSessionReadinessTests(unittest.TestCase):
             "source_fetch": {"ok": True, "status_code": 200},
             "sessions": [FP3, QUALI],
         })
+        selector = json.loads((self.root / "latest/latest_manifest.json").read_text(encoding="utf-8"))
+        selector["session_schedule_sha256"] = hashlib.sha256((self.root / SCHEDULE_REL).read_bytes()).hexdigest()
+        self.put("latest/latest_manifest.json", selector)
 
     def observe(self, iso_time):
         t = datetime.fromisoformat(iso_time.replace("Z", "+00:00"))
@@ -154,6 +158,7 @@ class CurrentSessionReadinessTests(unittest.TestCase):
         d = self.observe("2026-11-07T20:30:00Z")
         self.assertFalse(d["downstream_eligible"])
         self.assertIn("invalid_session_schedule_entry", d["readiness_reasons"])
+        self.assertIn("session_schedule_digest_mismatch", d["readiness_reasons"])
 
     def test_future_observation_cannot_prove_past_readiness(self):
         schedule = json.loads((self.root / SCHEDULE_REL).read_text(encoding="utf-8"))
