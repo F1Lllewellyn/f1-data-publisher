@@ -5,7 +5,7 @@ This connector is intentionally conservative: it reads existing latest/history a
 creates dashboard state files, and never modifies stable predictions or the canonical workbook.
 """
 from __future__ import annotations
-import argparse, json, re, sys
+import argparse, hashlib, json, re, sys
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
@@ -235,6 +235,13 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
     ):
         add_reason(reasons, "missing_or_invalid_session_schedule_snapshot")
     else:
+        try:
+            observed_schedule_sha256 = hashlib.sha256(schedule_path.read_bytes()).hexdigest()
+        except (OSError, ValueError):
+            observed_schedule_sha256 = None
+        if (not isinstance(selector.get("session_schedule_sha256"), str)
+                or selector["session_schedule_sha256"] != observed_schedule_sha256):
+            add_reason(reasons, "session_schedule_digest_mismatch")
         schedule = load_object(schedule_path)
         catalog_meeting = positive_int(schedule.get("meeting_key"))
         if (
