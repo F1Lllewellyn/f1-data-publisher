@@ -1,8 +1,8 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-07T16:37:02Z
+Generated UTC: 2026-11-07T20:29:09Z
 Event: Brazil - São Paulo - Interlagos
-Session: Practice 2
+Session: Practice 3
 Source status: clean
 Dashboard readiness: READY
 Diagnostic publishing allowed: true
