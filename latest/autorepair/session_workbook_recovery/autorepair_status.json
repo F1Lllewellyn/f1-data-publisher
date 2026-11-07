@@ -8,33 +8,33 @@
           "--repo-root",
           "/home/runner/work/f1-data-publisher/f1-data-publisher"
         ],
-        "finished_utc": "2026-11-06T20:51:47.547226+00:00",
+        "finished_utc": "2026-11-07T00:18:50.576071+00:00",
         "ok": true,
         "returncode": 0,
-        "started_utc": "2026-11-06T20:51:47.266327+00:00",
+        "started_utc": "2026-11-07T00:18:50.342581+00:00",
         "stderr_tail": "",
-        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1299_brazil_s_o_paulo_interlagos\",\n  \"meeting_key\": 1299,\n  \"session_key\": 11406,\n  \"session_name\": \"Practice 2\",\n  \"session_type\": \"Practice\",\n  \"source_status\": \"clean\",\n  \"readiness_quality\": \"usable_with_optional_context_gaps\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": false,\n    \"data_readiness.source_needs_manual_review\": false,\n    \"combined_source.source_needs_manual_review\": false,\n    \"source_readiness.source_needs_manual_review\": false,\n    \"readiness_aggregation.needs_manual_review\": false\n  },\n  \"manual_review_required\": false,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"c22f526da36cc2f24704fdc9ed1ac81caeb46d566c9bce05619ed701500d3859\",\n    \"latest/data_readiness.json\": \"3876a57503fb72af04cef9fda472d3b6c0db5a55753fb267717d84383ed2c47e\",\n    \"latest/latest_manifest.json\": \"bc467508cd4ed8f69e04aed966e677b602af59fd5de31bcfc623ce9918eec4e8\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json\": \"80cf9c6edb6a8c6672423096917ca80dc7d3ddfa421d51813963d0dc11e862db\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json\": \"ce535e5fdbb9b22e8712ae882b3cc538ab0e350971d3740d849927a8ad653311\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json\": \"41486a65e92986b9f2e2afe5536b45265a3ea60d378a7fa9b4ed5d62c6cba504\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv\": \"090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json\": \"bc0b67b0591b8894fcfbe6dcc72e840d92db13f2b670541de7a4809f5839f2ad\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": true,\n  \"material_change\": true,\n  \"warnings\": [],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261106T205147Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261106T205147Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
+        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1299_brazil_s_o_paulo_interlagos\",\n  \"meeting_key\": 1299,\n  \"session_key\": 11406,\n  \"session_name\": \"Practice 2\",\n  \"session_type\": \"Practice\",\n  \"source_status\": \"clean\",\n  \"readiness_quality\": \"usable_with_optional_context_gaps\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": false,\n    \"data_readiness.source_needs_manual_review\": false,\n    \"combined_source.source_needs_manual_review\": false,\n    \"source_readiness.source_needs_manual_review\": false,\n    \"readiness_aggregation.needs_manual_review\": false\n  },\n  \"manual_review_required\": false,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"52444a4f051aba7c07c92684c8bfb0b5adccfe3d1c323687fb42e0a59b063bca\",\n    \"latest/data_readiness.json\": \"db17ceb83da6d5da82511366f5f6ab0a05ddb9eb2f1707daa0224d7b096e9797\",\n    \"latest/latest_manifest.json\": \"3df19c59b568d0dba7a4c663ae81e34b44cf54fac92a3f04bb98f7f75069f628\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json\": \"40245071b2efa42b2dc88c166f843fe284f5d9b63c0b8f0bbd1e36da1b76224c\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json\": \"7b8124b9de8b617b80574d02f8d6cd717b86267331fc1cde87ecaf745695b821\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json\": \"8714e12ecd4bd1fae6b8d322b0cc3ae902421a30b5f70d9523896bc03892e1a8\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv\": \"090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528\",\n    \"latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json\": \"f80969bd8bf1147a8a3fe9bab4773c0fc7b22b6595e7f162e783c70bbcf97d64\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": true,\n  \"material_change\": true,\n  \"warnings\": [],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261107T001850Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T001850Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
       },
       "name": "initial_workbook_kpi_refresh_attempt",
       "status": "passed"
     }
   ],
   "commit_allowed": true,
-  "created_utc": "2026-11-06T20:51:49.385917+00:00",
+  "created_utc": "2026-11-07T00:18:51.608653+00:00",
   "discovered_scripts": {
     "session_processor": "scripts/session_data_processor/session_data_processor_loop_v1.py",
     "workbook_kpi_refresh_applier": "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py"
   },
   "final_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "c22f526da36cc2f24704fdc9ed1ac81caeb46d566c9bce05619ed701500d3859",
-      "latest/data_readiness.json": "3876a57503fb72af04cef9fda472d3b6c0db5a55753fb267717d84383ed2c47e",
-      "latest/latest_manifest.json": "bc467508cd4ed8f69e04aed966e677b602af59fd5de31bcfc623ce9918eec4e8",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json": "80cf9c6edb6a8c6672423096917ca80dc7d3ddfa421d51813963d0dc11e862db",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json": "ce535e5fdbb9b22e8712ae882b3cc538ab0e350971d3740d849927a8ad653311",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json": "41486a65e92986b9f2e2afe5536b45265a3ea60d378a7fa9b4ed5d62c6cba504",
+      "latest/combined_source_manifest.json": "52444a4f051aba7c07c92684c8bfb0b5adccfe3d1c323687fb42e0a59b063bca",
+      "latest/data_readiness.json": "db17ceb83da6d5da82511366f5f6ab0a05ddb9eb2f1707daa0224d7b096e9797",
+      "latest/latest_manifest.json": "3df19c59b568d0dba7a4c663ae81e34b44cf54fac92a3f04bb98f7f75069f628",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json": "40245071b2efa42b2dc88c166f843fe284f5d9b63c0b8f0bbd1e36da1b76224c",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json": "7b8124b9de8b617b80574d02f8d6cd717b86267331fc1cde87ecaf745695b821",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json": "8714e12ecd4bd1fae6b8d322b0cc3ae902421a30b5f70d9523896bc03892e1a8",
       "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv": "090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "bc0b67b0591b8894fcfbe6dcc72e840d92db13f2b670541de7a4809f5839f2ad"
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "f80969bd8bf1147a8a3fe9bab4773c0fc7b22b6595e7f162e783c70bbcf97d64"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -43,7 +43,7 @@
     "downstream_eligible": true,
     "eligibility_reasons": [],
     "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261106T205147Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261107T001850Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -58,7 +58,7 @@
     "meeting_key": 1299,
     "promotion_allowed": false,
     "readiness_quality": "usable_with_optional_context_gaps",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261106T205147Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T001850Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406",
     "session_key": 11406,
     "session_name": "Practice 2",
@@ -78,14 +78,14 @@
   },
   "initial_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "c22f526da36cc2f24704fdc9ed1ac81caeb46d566c9bce05619ed701500d3859",
-      "latest/data_readiness.json": "3876a57503fb72af04cef9fda472d3b6c0db5a55753fb267717d84383ed2c47e",
-      "latest/latest_manifest.json": "bc467508cd4ed8f69e04aed966e677b602af59fd5de31bcfc623ce9918eec4e8",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json": "80cf9c6edb6a8c6672423096917ca80dc7d3ddfa421d51813963d0dc11e862db",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json": "ce535e5fdbb9b22e8712ae882b3cc538ab0e350971d3740d849927a8ad653311",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json": "41486a65e92986b9f2e2afe5536b45265a3ea60d378a7fa9b4ed5d62c6cba504",
+      "latest/combined_source_manifest.json": "52444a4f051aba7c07c92684c8bfb0b5adccfe3d1c323687fb42e0a59b063bca",
+      "latest/data_readiness.json": "db17ceb83da6d5da82511366f5f6ab0a05ddb9eb2f1707daa0224d7b096e9797",
+      "latest/latest_manifest.json": "3df19c59b568d0dba7a4c663ae81e34b44cf54fac92a3f04bb98f7f75069f628",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/forecast_bundle_ledger_snapshot.json": "40245071b2efa42b2dc88c166f843fe284f5d9b63c0b8f0bbd1e36da1b76224c",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/sandbox_workbook_update_plan.json": "7b8124b9de8b617b80574d02f8d6cd717b86267331fc1cde87ecaf745695b821",
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/source_readiness_manifest.json": "8714e12ecd4bd1fae6b8d322b0cc3ae902421a30b5f70d9523896bc03892e1a8",
       "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv": "090aa7fef4ff54fc174ab6a70d8e93b6f3217207168073633afbe6e68676e528",
-      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "bc0b67b0591b8894fcfbe6dcc72e840d92db13f2b670541de7a4809f5839f2ad"
+      "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.json": "f80969bd8bf1147a8a3fe9bab4773c0fc7b22b6595e7f162e783c70bbcf97d64"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -94,7 +94,7 @@
     "downstream_eligible": true,
     "eligibility_reasons": [],
     "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261106T205147Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261107T001850Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -109,7 +109,7 @@
     "meeting_key": 1299,
     "promotion_allowed": false,
     "readiness_quality": "usable_with_optional_context_gaps",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261106T205147Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Practice_2_20261107T001850Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406",
     "session_key": 11406,
     "session_name": "Practice 2",
@@ -125,7 +125,7 @@
   "repair_attempted": false,
   "repair_domain": "session_workbook_recovery",
   "repair_succeeded": false,
-  "run_id": "20261106T205147Z",
+  "run_id": "20261107T001850Z",
   "session_processor_status": {
     "classification": null,
     "data_readiness_present": true,
