@@ -1,0 +1,32 @@
+{
+  "allowed_session_ids": [
+    "session-race"
+  ],
+  "event_id": "event-synthetic",
+  "forecast_cutoff_utc": "2026-10-22T20:00:00Z",
+  "forecast_deadline_utc": "2026-10-22T21:00:00Z",
+  "forecast_generation_utc": "2026-10-22T20:05:00Z",
+  "forecast_lock_utc": "2026-10-22T20:06:00Z",
+  "gate": "pre_weekend",
+  "execution_mode": "manual_validation",
+  "contract_approved": false,
+  "inputs": {
+    "drivers": "event_id,meeting_id,session_id,driver_number,broadcast_name,team_name\nevent-synthetic,meeting-synthetic,session-race,1,DRIVER ONE,Team One\nevent-synthetic,meeting-synthetic,session-race,2,DRIVER TWO,Team Two\n",
+    "position": "event_id,meeting_id,session_id,driver_number,position,date\nevent-synthetic,meeting-synthetic,session-race,1,1,2026-10-22T19:00:00Z\nevent-synthetic,meeting-synthetic,session-race,1,2,2026-10-22T19:01:00Z\nevent-synthetic,meeting-synthetic,session-race,2,2,2026-10-22T19:00:00Z\nevent-synthetic,meeting-synthetic,session-race,2,1,2026-10-22T19:01:00Z\n",
+    "starting_grid": "event_id,meeting_id,session_id,driver_number,position\nevent-synthetic,meeting-synthetic,session-race,1,1\nevent-synthetic,meeting-synthetic,session-race,2,2\n",
+    "weather": "event_id,meeting_id,session_id,date,air_temperature\nevent-synthetic,meeting-synthetic,session-race,2026-10-22T19:00:00Z,25.0\n"
+  },
+  "lane_name": "experimental_challenger",
+  "meeting_id": "meeting-synthetic",
+  "participants": [
+    1,
+    2
+  ],
+  "producer_git_commit": "a986c0560b8b4fbc1ce01ad3299d349f74970713",
+  "product_contract_id": "synthetic-unapproved-event-contract",
+  "race_name": "Synthetic Grand Prix",
+  "receipt_created_utc": "2026-10-22T19:02:00Z",
+  "source_first_observed_utc": "2026-10-22T19:00:00Z",
+  "source_ingested_utc": "2026-10-22T19:01:00Z",
+  "target_session_id": "session-race"
+}
