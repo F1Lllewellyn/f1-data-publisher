@@ -397,7 +397,7 @@ def write_session_schedule_snapshot(
     return latest_path.relative_to(ROOT).as_posix()
 
 
-def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], previous: Dict[str, Any], schedule_snapshot_path: Optional[str] = None) -> None:
+def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], previous: Dict[str, Any], schedule_snapshot_path: Optional[str] = None, schedule_snapshot_sha256: Optional[str] = None) -> None:
     # Processor-owned manifest outputs; names intentionally match downstream readiness expectations.
     write_json(ROOT / "latest" / "latest_manifest.json", {
         "schema_version": "latest_manifest_v2_session_processor",
@@ -405,6 +405,7 @@ def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], p
         "producer": "session_data_processor_loop_v1",
         "latest_session_data_processor_manifest": str((latest_root / "source_readiness_manifest.json").relative_to(ROOT)),
         "session_schedule_snapshot": schedule_snapshot_path,
+        "session_schedule_sha256": schedule_snapshot_sha256,
         "event_id": manifest.get("event_id"),
         "session_key": manifest.get("session", {}).get("session_key"),
         "session_name": manifest.get("session", {}).get("session_name"),
@@ -785,7 +786,9 @@ def main() -> int:
         sessions, session, event_id, run_id,
         catalog_observed_at_utc=catalog_observed_at_utc, sessions_fetch=sessions_meta,
     )
+    schedule_snapshot_sha256 = sha256_file(ROOT / schedule_snapshot_path)
     manifest["session_schedule_snapshot"] = schedule_snapshot_path
+    manifest["session_schedule_sha256"] = schedule_snapshot_sha256
     maybe_write_workbook_kpi_artifacts(latest_root, manifest)
     maybe_write_workbook_kpi_artifacts(history_root, manifest)
     ledger = write_ledger_snapshot(latest_root, manifest)
@@ -796,7 +799,7 @@ def main() -> int:
     write_json(history_root / "source_readiness_manifest.json", manifest)
 
     if str(args.write_public_latest).lower() in {"true", "1", "yes"}:
-        write_latest_public_manifests(latest_root, manifest, prev, schedule_snapshot_path)
+        write_latest_public_manifests(latest_root, manifest, prev, schedule_snapshot_path, schedule_snapshot_sha256)
 
     result.update({
         "status": "pass" if overall in {"clean", "partial"} else overall,
