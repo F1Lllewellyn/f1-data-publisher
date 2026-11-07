@@ -1,0 +1,626 @@
+{
+  "schema_version": "F1_2026_missing_snapshot_cache_reuse_map_v2",
+  "supersedes": "F1_2026_MISSING_SESSION_REUSE_MAP.json (invalid incorrect lane labels; incorrectly implied zero position records)",
+  "audit_date": "2026-10-17",
+  "missing_snapshot_count": 39,
+  "source_quality": "postevent_observations_not_prospective_or_engine_verified",
+  "lane_totals": {
+    "drivers": {
+      "sessions": 22,
+      "rows": 436
+    },
+    "pit": {
+      "sessions": 6,
+      "rows": 166
+    },
+    "race_control": {
+      "sessions": 20,
+      "rows": 1665
+    },
+    "starting_grid": {
+      "sessions": 4,
+      "rows": 88
+    },
+    "stints": {
+      "sessions": 18,
+      "rows": 1294
+    },
+    "weather": {
+      "sessions": 21,
+      "rows": 1975
+    }
+  },
+  "position_and_intervals": "NOT INSPECTED PER SESSION: position file content returned empty for nonempty blob; intervals file too large for bounded connector read. Do not interpret as zero observations.",
+  "lanes": {
+    "drivers": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "b3b4bfd87a2fe70ea607f96524a52cccd3aa0660",
+      "reason": "",
+      "sessions_with_rows": 22
+    },
+    "pit": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "c8dea25377a2f3204903ee7e78f73319f4d3d844",
+      "reason": "",
+      "sessions_with_rows": 6
+    },
+    "position": {
+      "visibility": "UNINSPECTED_FILE_PAYLOAD",
+      "blob_sha": "1a35c7978ffff93b08e3d07b52775fde859b6602",
+      "reason": "Connector returned empty content for a nonempty source blob",
+      "sessions_with_rows": null
+    },
+    "race_control": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "e7391dd3be70f45ee25f300faaf550cb8f525b8e",
+      "reason": "",
+      "sessions_with_rows": 20
+    },
+    "starting_grid": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "f987ae489d537b0e7204a058571aae5d978d30b5",
+      "reason": "",
+      "sessions_with_rows": 4
+    },
+    "stints": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "961c00b547c02d9d6e59a1a07ffb4860d43ad81f",
+      "reason": "",
+      "sessions_with_rows": 18
+    },
+    "weather": {
+      "visibility": "VERIFIED_ROW_COUNTS",
+      "blob_sha": "4eeed1c9e5daf85e4e7c9bae917af37844f103f2",
+      "reason": "",
+      "sessions_with_rows": 21
+    }
+  },
+  "sessions": [
+    {
+      "round": 1,
+      "session_key": 11227,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 45,
+        "starting_grid": 0,
+        "stints": 83,
+        "weather": 82
+      }
+    },
+    {
+      "round": 1,
+      "session_key": 11228,
+      "name": "Practice 2",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 45,
+        "starting_grid": 0,
+        "stints": 86,
+        "weather": 79
+      }
+    },
+    {
+      "round": 1,
+      "session_key": 11229,
+      "name": "Practice 3",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 1,
+      "session_key": 11230,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 1,
+      "session_key": 11234,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 15,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "session_key": 11235,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 49,
+        "starting_grid": 0,
+        "stints": 37,
+        "weather": 84
+      }
+    },
+    {
+      "round": 2,
+      "session_key": 11236,
+      "name": "Sprint Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 43,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 60
+      }
+    },
+    {
+      "round": 2,
+      "session_key": 11240,
+      "name": "Sprint",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "session_key": 11241,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 11,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 2,
+      "session_key": 11245,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 19,
+        "position": null,
+        "race_control": 88,
+        "starting_grid": 0,
+        "stints": 41,
+        "weather": 152
+      }
+    },
+    {
+      "round": 3,
+      "session_key": 11246,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 68,
+        "starting_grid": 0,
+        "stints": 94,
+        "weather": 83
+      }
+    },
+    {
+      "round": 3,
+      "session_key": 11247,
+      "name": "Practice 2",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 3,
+      "session_key": 11248,
+      "name": "Practice 3",
+      "observed_lightweight_rows": {
+        "drivers": 9,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 3,
+      "session_key": 11249,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 26,
+        "starting_grid": 22,
+        "stints": 98,
+        "weather": 75
+      }
+    },
+    {
+      "round": 3,
+      "session_key": 11253,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 29,
+        "position": null,
+        "race_control": 49,
+        "starting_grid": 0,
+        "stints": 51,
+        "weather": 156
+      }
+    },
+    {
+      "round": 4,
+      "session_key": 11270,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "session_key": 11271,
+      "name": "Sprint Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "session_key": 11275,
+      "name": "Sprint",
+      "observed_lightweight_rows": {
+        "drivers": 19,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 4,
+      "session_key": 11276,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 66,
+        "starting_grid": 22,
+        "stints": 104,
+        "weather": 81
+      }
+    },
+    {
+      "round": 4,
+      "session_key": 11280,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "session_key": 11281,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 8,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "session_key": 11282,
+      "name": "Sprint Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 56,
+        "position": null,
+        "race_control": 65,
+        "starting_grid": 22,
+        "stints": 56,
+        "weather": 77
+      }
+    },
+    {
+      "round": 5,
+      "session_key": 11286,
+      "name": "Sprint",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 6,
+        "position": null,
+        "race_control": 71,
+        "starting_grid": 0,
+        "stints": 28,
+        "weather": 76
+      }
+    },
+    {
+      "round": 5,
+      "session_key": 11287,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 5,
+      "session_key": 11291,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 6,
+      "session_key": 11292,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 6,
+      "session_key": 11293,
+      "name": "Practice 2",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 110,
+        "starting_grid": 0,
+        "stints": 91,
+        "weather": 80
+      }
+    },
+    {
+      "round": 6,
+      "session_key": 11294,
+      "name": "Practice 3",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 73,
+        "starting_grid": 0,
+        "stints": 82,
+        "weather": 79
+      }
+    },
+    {
+      "round": 6,
+      "session_key": 11295,
+      "name": "Qualifying",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 73,
+        "starting_grid": 22,
+        "stints": 100,
+        "weather": 84
+      }
+    },
+    {
+      "round": 6,
+      "session_key": 11299,
+      "name": "Race",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 269,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 208
+      }
+    },
+    {
+      "round": 7,
+      "session_key": 11300,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 8,
+      "session_key": 11308,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 55,
+        "starting_grid": 0,
+        "stints": 99,
+        "weather": 77
+      }
+    },
+    {
+      "round": 9,
+      "session_key": 11316,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 9,
+      "session_key": 11321,
+      "name": "Sprint",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 2,
+        "position": null,
+        "race_control": 95,
+        "starting_grid": 0,
+        "stints": 22,
+        "weather": 79
+      }
+    },
+    {
+      "round": 11,
+      "session_key": 11337,
+      "name": "Practice 3",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 67,
+        "starting_grid": 0,
+        "stints": 89,
+        "weather": 80
+      }
+    },
+    {
+      "round": 15,
+      "session_key": 11370,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 75
+      }
+    },
+    {
+      "round": 15,
+      "session_key": 11372,
+      "name": "Practice 3",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 0,
+        "position": null,
+        "race_control": 149,
+        "starting_grid": 0,
+        "stints": 57,
+        "weather": 81
+      }
+    },
+    {
+      "round": 16,
+      "session_key": 11727,
+      "name": "Practice 1",
+      "observed_lightweight_rows": {
+        "drivers": 0,
+        "pit": 0,
+        "position": null,
+        "race_control": 0,
+        "starting_grid": 0,
+        "stints": 0,
+        "weather": 0
+      }
+    },
+    {
+      "round": 17,
+      "session_key": 11383,
+      "name": "Sprint",
+      "observed_lightweight_rows": {
+        "drivers": 22,
+        "pit": 54,
+        "position": null,
+        "race_control": 159,
+        "starting_grid": 0,
+        "stints": 76,
+        "weather": 127
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "artifacts": {
+    "audit/2026-10-17/F1_2026_DATA_COMPLETION_REPORT.md": {
+      "git_blob": "6ff2d582a2e19dfb3389a9c654cbdd4ecb333f69",
+      "sha256": "41f364baf1071b0a9cde83c2b596b95a5513892ac792fa191b7c18b88498ea7f"
+    },
+    "audit/2026-10-17/F1_2026_DATA_GAPS.csv": {
+      "git_blob": "feff6962b2eca9c5af70a908f9662bb6e1a67714",
+      "sha256": "71ca3eab98d5ade6ac2fc293bf3f62590b3862e574b06491af7cd2879d5deb6c"
+    },
+    "audit/2026-10-17/F1_2026_SESSION_COVERAGE.csv": {
+      "git_blob": "6f433ff3cf478f6ba384d3ff1f6090633f5c43e6",
+      "sha256": "ea9e34df8631de49eebde380eacfa724970cc32a2b396b93961bc7ea0a7a3813"
+    },
+    "audit/2026-10-17/recovery/F1_2026_HISTORICAL_RECOVERY_EVIDENCE_2026-10-17.tar.gz": {
+      "extract_at": "repository_root",
+      "git_blob": "c0aac6d9cc89cc66bdd75c69603803069ad83e35",
+      "sha256": "ed72021596ed3968c78dfd6690580af3a8c9a292a74df6eadd6ca24f6afec303",
+      "size_bytes": 11835766
+    },
+    "audit/2026-10-17/recovery/processor_outputs/historical_recovery_checkpoint.json": {
+      "git_blob": "bd43e15631fcd241c2459f354d25e3d5e0a0726f",
+      "sha256": "5f215be947cc296cc04cc9232fc0f774993abfc355152ff37b3a7b3b5fd20a7a"
+    }
+  },
+  "as_of_date": "2026-10-17",
+  "classification": {
+    "barcelona_fp2_reassessed_clean": true,
+    "missing_required_data_sessions": 0,
+    "review_hold_sessions": 24,
+    "status_counts": {
+      "clean": 61,
+      "needs_manual_review": 24
+    },
+    "verified_complete_sessions": 61
+  },
+  "engine_reader": {
+    "accessible_sessions": 85,
+    "failures": [],
+    "implementation": "scripts/session_data_processor/f1_1b_output_contract_v16.py",
+    "source_files_parsed": 935,
+    "source_rows_parsed": 538111
+  },
+  "negative_claims": {
+    "canonical_workbook_modified": false,
+    "dr002_activated": false,
+    "forecast_produced": false,
+    "historical_pre_race_availability_proven": false,
+    "issue_309_modified": false,
+    "stable_engine_executed_or_modified": false,
+    "workflow_dispatched": false
+  },
+  "recovery": {
+    "attempted_sessions": 39,
+    "audited_missing_sessions": 39,
+    "batch_receipts": 24,
+    "endpoint_request_counts": {
+      "drivers": 17,
+      "laps": 39,
+      "position": 21,
+      "race_control": 5,
+      "session_result": 20,
+      "starting_grid": 5,
+      "weather": 18
+    },
+    "failed_sessions": 0,
+    "no_automatic_retries": true,
+    "processed_sessions": 39,
+    "provider_http_200": 125,
+    "provider_requests": 125,
+    "provider_rows": 40034,
+    "source_policy": "direct_api.openf1.org_v1_only"
+  },
+  "schema_version": "f1_2026_historical_recovery_validation_v1",
+  "scientific_hold_closure": {
+    "fia_documents": 23,
+    "fully_source_verified_sessions": 85,
+    "miami_exact_duplicate_extras_removed_in_derived_overlay": 50,
+    "status": "VERIFIED_COMPLETE_UNMERGED_CANDIDATE",
+    "structured_result": "audit/2026-10-17/F1_2026_HISTORICAL_SCIENTIFIC_VALIDATION.json",
+    "unresolved_holds": 0
+  },
+  "scope": {
+    "completed_events": 17,
+    "expected_sessions": 85,
+    "expected_source_rows": 935
+  }
+}
