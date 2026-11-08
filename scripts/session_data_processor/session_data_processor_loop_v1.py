@@ -344,13 +344,73 @@ def combined_status(source_reports: Dict[str, Dict[str, Any]]) -> str:
     return "needs_manual_review"
 
 
-def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], previous: Dict[str, Any]) -> None:
+def write_session_schedule_snapshot(
+    sessions: List[Dict[str, Any]], session: Dict[str, Any], event_id: str, run_id: str,
+    catalog_observed_at_utc: Optional[str] = None,
+    sessions_fetch: Optional[Dict[str, Any]] = None,
+) -> str:
+    """Keep the observed meeting calendar so consumers can detect skipped sessions.
+
+    This is OpenF1 schedule evidence, not FIA grid authority or a forecast lock.
+    Persist alongside *successful* session data, not as independently green state.
+    """
+    if sessions_fetch is not None and sessions_fetch.get("ok") is not True:
+        raise ValueError("session schedule source fetch was not verified successful")
+    meeting_key = str(session.get("meeting_key"))
+    rows: List[Dict[str, Any]] = []
+    invalid_same_meeting_entries = 0
+    for entry in sessions:
+        if str(entry.get("meeting_key")) != meeting_key:
+            continue
+        start = parse_time(entry.get("date_start"))
+        end = parse_time(entry.get("date_end"))
+        key = entry.get("session_key")
+        if not start or not end or end < start or type(key) not in (int, str):
+            invalid_same_meeting_entries += 1
+            continue
+        if not str(key).isdigit() or int(key) <= 0:
+            invalid_same_meeting_entries += 1
+            continue
+        rows.append({
+            "meeting_key": entry.get("meeting_key"),
+            "session_key": int(key),
+            "session_name": entry.get("session_name"),
+            "session_type": entry.get("session_type"),
+            "date_start": start.isoformat().replace("+00:00", "Z"),
+            "date_end": end.isoformat().replace("+00:00", "Z"),
+        })
+    if not rows or str(session.get("session_key")) not in {str(r["session_key"]) for r in rows}:
+        raise ValueError("selected session missing from same-meeting schedule")
+    rows.sort(key=lambda r: (r["date_end"], r["session_key"]))
+    snapshot = {
+        "schema_version": "meeting_schedule_snapshot_v1",
+        "source": "OpenF1 sessions catalog",
+        "event_id": event_id,
+        "meeting_key": session.get("meeting_key"),
+        "observed_at_utc": catalog_observed_at_utc or iso_now(),
+        "source_fetch": {"ok": sessions_fetch.get("ok"), "status_code": sessions_fetch.get("status_code")} if sessions_fetch is not None else None,
+        "sessions": rows,
+        "catalog_entries_valid": invalid_same_meeting_entries == 0,
+        "skipped_invalid_same_meeting_entries": invalid_same_meeting_entries,
+        "promotion_allowed": False,
+        "official_final_grid_verified": False,
+    }
+    latest_path = ROOT / "latest" / "session_data_processor" / event_id / "session_schedule_snapshot.json"
+    history_path = ROOT / "history" / "session_data_processor" / event_id / run_id / "session_schedule_snapshot.json"
+    write_json(latest_path, snapshot)
+    write_json(history_path, snapshot)
+    return latest_path.relative_to(ROOT).as_posix()
+
+
+def write_latest_public_manifests(latest_root: Path, manifest: Dict[str, Any], previous: Dict[str, Any], schedule_snapshot_path: Optional[str] = None, schedule_snapshot_sha256: Optional[str] = None) -> None:
     # Processor-owned manifest outputs; names intentionally match downstream readiness expectations.
     write_json(ROOT / "latest" / "latest_manifest.json", {
         "schema_version": "latest_manifest_v2_session_processor",
         "updated_utc": iso_now(),
         "producer": "session_data_processor_loop_v1",
         "latest_session_data_processor_manifest": str((latest_root / "source_readiness_manifest.json").relative_to(ROOT)),
+        "session_schedule_snapshot": schedule_snapshot_path,
+        "session_schedule_sha256": schedule_snapshot_sha256,
         "event_id": manifest.get("event_id"),
         "session_key": manifest.get("session", {}).get("session_key"),
         "session_name": manifest.get("session", {}).get("session_name"),
@@ -544,6 +604,7 @@ def main() -> int:
         return 0
 
     sessions, sessions_meta = fetch_sessions(args.season)
+    catalog_observed_at_utc = iso_now()  # Response observed now, not at later publication.
     result["sessions_fetch"] = sessions_meta
     if not sessions:
         result.update({"status": "late", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
@@ -726,6 +787,13 @@ def main() -> int:
         "promotion_allowed": False,
     }
 
+    schedule_snapshot_path = write_session_schedule_snapshot(
+        sessions, session, event_id, run_id,
+        catalog_observed_at_utc=catalog_observed_at_utc, sessions_fetch=sessions_meta,
+    )
+    schedule_snapshot_sha256 = sha256_file(ROOT / schedule_snapshot_path)
+    manifest["session_schedule_snapshot"] = schedule_snapshot_path
+    manifest["session_schedule_sha256"] = schedule_snapshot_sha256
     maybe_write_workbook_kpi_artifacts(latest_root, manifest)
     maybe_write_workbook_kpi_artifacts(history_root, manifest)
     ledger = write_ledger_snapshot(latest_root, manifest)
@@ -736,7 +804,7 @@ def main() -> int:
     write_json(history_root / "source_readiness_manifest.json", manifest)
 
     if str(args.write_public_latest).lower() in {"true", "1", "yes"}:
-        write_latest_public_manifests(latest_root, manifest, prev)
+        write_latest_public_manifests(latest_root, manifest, prev, schedule_snapshot_path, schedule_snapshot_sha256)
 
     result.update({
         "status": "pass" if overall in {"clean", "partial"} else overall,

@@ -97,6 +97,13 @@ jobs:
           echo "Step 2: run Auto-Repair session to workbook/KPI recovery"
           python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode run_now --repo-root "$GITHUB_WORKSPACE" --timeout 1200
 
+      - name: Refresh downstream session readiness even after a partial ingest
+        if: ${{ always() && steps.canonical_guard.outputs.should_yield != 'true' && env.MODE != 'safe_test' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode run_now
+
       - name: Print Auto-Repair plain-English report
         if: always()
         shell: bash
@@ -128,10 +135,12 @@ jobs:
             latest/workbook_kpi_refresh_applier/**
             latest/autorepair/**
             latest/legacy_workflow_hardening/**
+            latest/readiness_dashboards/**
+            latest/chat_context/**
           if-no-files-found: ignore
 
-      - name: Commit source-backed integrated outputs only
-        if: ${{ steps.canonical_guard.outputs.should_yield != 'true' && env.MODE != 'safe_test' }}
+      - name: Commit source-backed integrated outputs or explicit diagnostic HOLD
+        if: ${{ always() && steps.canonical_guard.outputs.should_yield != 'true' && env.MODE != 'safe_test' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -140,12 +149,21 @@ jobs:
             COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
           fi
           echo "commit_allowed=$COMMIT_ALLOWED"
-          if [ "$COMMIT_ALLOWED" != "true" ]; then
-            echo "Integrated Auto-Repair did not allow commit; no source-backed workbook/KPI recovery outputs to commit."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            echo "Source output commit held; publishing only diagnostic readiness/HOLD state."
+            for p in latest/readiness_dashboards history/readiness_dashboards latest/chat_context history/chat_context; do
+              if [ -e "$p" ] && ! git check-ignore -q "$p"; then
+                git add "$p"
+              fi
+            done
+            if ! git diff --cached --quiet; then
+              git commit -m "chore: publish diagnostic readiness hold without stale source promotion"
+              bash scripts/ops/safe_git_push_rebase_retry.sh
+            fi
+            exit 0
+          fi
           candidates=(
             "latest/session_data_processor"
             "history/session_data_processor"
@@ -159,6 +177,10 @@ jobs:
             "latest/autorepair"
             "history/autorepair"
             "latest/legacy_workflow_hardening"
+            "latest/readiness_dashboards"
+            "history/readiness_dashboards"
+            "latest/chat_context"
+            "history/chat_context"
           )
           for p in "${candidates[@]}"; do
             if [ -e "$p" ]; then
