@@ -218,6 +218,18 @@ class SnapshotAndOrchestratorTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     processor_mod.write_session_schedule_snapshot([QUALI], FP3, EVENT, "test")
 
+    def test_output_bridge_commits_only_its_own_new_artifacts(self):
+        workflow = (REPO / ".github/workflows/f1-1b-output-contract-after-control-room-v22.yml").read_text(encoding="utf-8")
+        self.assertIn("group: f1-main-write-serialization", workflow)
+        self.assertIn("touch _runtime/1b_output_contract/start.marker", workflow)
+        commit = workflow.split("- name: Commit v25 output-contract bridge", 1)[1]
+        self.assertNotIn('git add latest/session_data_processor', commit)
+        self.assertNotIn('"history/session_data_processor"', commit)
+        self.assertNotIn('git add -f "$f"', commit)
+        self.assertIn('find "$root" -type f -newer "$MARKER" -print0', commit)
+        self.assertIn("bash scripts/ops/safe_git_push_rebase_retry.sh", commit)
+        self.assertIn("PROTECTED_PATTERN=", commit)
+
     def test_optional_peak_failure_not_falsely_green(self):
         with patch.object(
             peak_mod.subprocess, "run",
