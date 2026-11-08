@@ -20,11 +20,11 @@
   "fetch": {
     "bytes": 4047,
     "ok": true,
-    "sha256": "4ea4c0ae1257e86a0025083a5c08a50bc45f3f45bfb4cb53a6691cb2d39e7592",
+    "sha256": "84a03f0d8a784d65ef139210c102d2ae209a5a8069131f6bea5fa46c6bd21a94",
     "status_code": 200
   },
   "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_session_result.json",
-  "json_sha256": "16b4b1e43241ddde91c25166f352362c7bba53dab63d5b9fcf4262b2c5c9172f",
+  "json_sha256": "6af92dce73645a53f819a7fa903adb57dddac2556755bffd5b053c4348147758",
   "max_lap_number": null,
   "missing_required_columns": [],
   "rows": 22,

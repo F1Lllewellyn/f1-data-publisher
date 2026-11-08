@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-11-08T21:24:05.477523Z",
+  "created_utc": "2026-11-08T23:03:36.730723Z",
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
   "forecast_state_changed": false,
   "overall_status": "needs_manual_review",
@@ -16,6 +16,6 @@
     "session_name": "Race",
     "session_type": "Race"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }

@@ -1,13 +1,15 @@
 {
   "canonical_workbook_modified": false,
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/source_readiness_manifest.json",
-  "overall_status": "clean",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json",
+  "overall_status": "needs_manual_review",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11408,
-  "session_name": "Qualifying",
+  "session_key": 11412,
+  "session_name": "Race",
+  "session_schedule_sha256": "e49ce90ff34dfd5bfbebe98a5b884d750d1020f4fd3c90c9bd9c14ee55638211",
+  "session_schedule_snapshot": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/session_schedule_snapshot.json",
   "stable_engine_modified": false,
-  "updated_utc": "2026-11-08T14:24:14.933265Z"
+  "updated_utc": "2026-11-08T23:03:36.731801Z"
 }

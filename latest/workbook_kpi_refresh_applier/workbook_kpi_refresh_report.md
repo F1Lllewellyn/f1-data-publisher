@@ -2,30 +2,35 @@
 
 ## Verdict
 
-Pass
+Pass with warnings
 
 ## Run
 
-- Run ID: `20261108T195745Z`
-- Created UTC: `2026-11-08T19:57:45.578968+00:00`
-- Source status: `clean`
-- Readiness quality: `usable_with_optional_context_gaps`
+- Run ID: `20261108T230336Z`
+- Created UTC: `2026-11-08T23:03:36.880120+00:00`
+- Source status: `needs_manual_review`
+- Readiness quality: `blocked_manual_review_required_source`
 - Material change: `True`
 - Diagnostic publish allowed: `True`
-- Downstream eligible: `True`
+- Downstream eligible: `False`
 
 ## Warnings
 
-- None
+- diagnostic_only_source_status=needs_manual_review
+- readiness_requires_manual_review
+- readiness_blocking_issues
+- required_source_evidence_unverified
+- required_source_status_needs_manual_review
+- readiness_quality_blocked_manual_review_required_source
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/sandbox_workbook_update_plan_applied.json` (60cb77a89689...)
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/refreshed_workbook_kpi_readiness.csv` (96df17cb3d0d...)
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Qualifying_20261108T195745Z.xlsx` (7cef90c9d19f...)
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/upstream_latest_manifest_snapshot.json` (960d7b5389ad...)
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/upstream_data_readiness_snapshot.json` (ed079bcf8ad8...)
-- `history/workbook_kpi_refresh_applier/20261108T195745Z/upstream_combined_source_manifest_snapshot.json` (c8110a740272...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/sandbox_workbook_update_plan_applied.json` (98a559c5efd3...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/refreshed_workbook_kpi_readiness.csv` (5df76e8f7bf5...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261108T230336Z.xlsx` (7cc873b5d027...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_latest_manifest_snapshot.json` (b801ae3299df...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_data_readiness_snapshot.json` (fe7aaa63426a...)
+- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_combined_source_manifest_snapshot.json` (c108c0d70674...)
 
 ## Governance
 

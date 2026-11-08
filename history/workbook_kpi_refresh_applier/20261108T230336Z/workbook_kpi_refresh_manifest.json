@@ -1,0 +1,80 @@
+{
+  "authority_fingerprints": {
+    "latest/combined_source_manifest.json": "a2a9c8bfccdb957debb794ff28caa271b8ba1578e2fe58058b643a7f62ce13e0",
+    "latest/data_readiness.json": "c9bf6ef314ccfcd6768d9221728bc38da2281371e3f038fe2fb3168d4ee30488",
+    "latest/latest_manifest.json": "327012ddfb882e9d75d57ec80f89fc4ca4176a6a384c38b228446b8e5a938510",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/forecast_bundle_ledger_snapshot.json": "467d22e612efb5a3d4560592781a777ada840c27fecf77d46ef3bf802ee3fb2c",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/sandbox_workbook_update_plan.json": "44602c97160ed2f376c80a3151580e4669b1676488d594eab56e4411ac25f4f0",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json": "27f36bd347fc924ee7be58c0438db12e3431d1f1dd8af1831cf40eb5f55cc271",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.csv": "5df76e8f7bf565cbc1d984d641ef1ffe29532060d8a148ced1dbb69a2f6e9794",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.json": "8b4be9d467e3637c56b261ebf9a27b1e8f5ed66047f44b76b46497031c518bc3"
+  },
+  "commit_allowed": true,
+  "created_utc": "2026-11-08T23:03:36.880120+00:00",
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": false,
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "meeting_key": 1299,
+  "outputs": [
+    {
+      "bytes": 1003,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "98a559c5efd3e64b08a742086b0ef5f48d080392a3ebd15f79b5dcc5a6682f7e"
+    },
+    {
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "5df76e8f7bf565cbc1d984d641ef1ffe29532060d8a148ced1dbb69a2f6e9794"
+    },
+    {
+      "bytes": 11158,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261108T230336Z.xlsx",
+      "sha256": "7cc873b5d027c281ef891f11f2ef4e247abb6493643855aded74ae6d1eb0ae49"
+    },
+    {
+      "bytes": 799,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "b801ae3299df8e5d699032e387554763ca5bda8dbaae9e1a15957ea60bc94ccf"
+    },
+    {
+      "bytes": 1573,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_data_readiness_snapshot.json",
+      "sha256": "fe7aaa63426a3e6234d5bdc9d7411cf774cd1ce4c70760594fec8ba90eb87cac"
+    },
+    {
+      "bytes": 707,
+      "path": "history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "c108c0d70674dfe80cf552a652e88ea678a400657549aa6de00266c8e6119b93"
+    }
+  ],
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261108T230336Z",
+  "session_key": 11412,
+  "session_name": "Race",
+  "session_type": "Race",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_manifest_pointer": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412",
+  "source_status": "needs_manual_review",
+  "warnings": [
+    "diagnostic_only_source_status=needs_manual_review",
+    "readiness_requires_manual_review",
+    "readiness_blocking_issues",
+    "required_source_evidence_unverified",
+    "required_source_status_needs_manual_review",
+    "readiness_quality_blocked_manual_review_required_source"
+  ]
+}
