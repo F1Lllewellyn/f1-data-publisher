@@ -1,0 +1,73 @@
+{
+  "authority_fingerprints": {
+    "latest/combined_source_manifest.json": "adb64d42cab92fa4209aea43e05990f6c88df09ee706f83c291f46209b3e4539",
+    "latest/data_readiness.json": "d0260b1d3db485f3ba666ec3921463956dc4e4e82c4799aa9b4249b7f4e629be",
+    "latest/latest_manifest.json": "4bb790f71161751e63dc5418c17d9441e68d662b1d8e94244b0896293f2acc18",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/forecast_bundle_ledger_snapshot.json": "41a07c4a46446864f21698f9ca78ba6a6a3b75d868909f892dd3c3b4b65a4da6",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/sandbox_workbook_update_plan.json": "ecb8c6bbd77c9c66621c51e74906970f32b4b2a030475fcbd11d81f5995b4ea8",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/source_readiness_manifest.json": "6dd79a07bfb731e406fa5cdf5c77c08fcd23a45df0839ccf39c94bd370a9be20",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.csv": "96df17cb3d0d6bc8de8e22b4629b9a893704a9999007410b26ae4593759caa06",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.json": "5acb535432be2c5aa45542194df489798f7f4749164e7f86d73c0e286302b6d8"
+  },
+  "commit_allowed": true,
+  "created_utc": "2026-11-08T07:15:55.406041+00:00",
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": true,
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "meeting_key": 1299,
+  "outputs": [
+    {
+      "bytes": 984,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "b2ca154a4aebe1289bc179edd0981890cc34ed09255a02c6a2ba102030c5a6bb"
+    },
+    {
+      "bytes": 403,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "96df17cb3d0d6bc8de8e22b4629b9a893704a9999007410b26ae4593759caa06"
+    },
+    {
+      "bytes": 11086,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Qualifying_20261108T071555Z.xlsx",
+      "sha256": "427f15efaf26f9a84cd384bffdb22c33b0a2740b14f8ceee8d33d88223a988df"
+    },
+    {
+      "bytes": 567,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "5a61f440f38701bb8843a9f953b573863140faabda4ce893ffb752336322adf1"
+    },
+    {
+      "bytes": 1568,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/upstream_data_readiness_snapshot.json",
+      "sha256": "ca17ba3137c0c2ab1bad701d185d8f7fb59d0c07a5b05eb3cf767473cf867501"
+    },
+    {
+      "bytes": 696,
+      "path": "history/workbook_kpi_refresh_applier/20261108T071555Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "c89f52ffe6d58edb1f40f75775f7f4d72f5f42ce5e0c8600fc249ac6da77148d"
+    }
+  ],
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261108T071555Z",
+  "session_key": 11408,
+  "session_name": "Qualifying",
+  "session_type": "Qualifying",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_manifest_pointer": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408",
+  "source_status": "clean",
+  "warnings": []
+}

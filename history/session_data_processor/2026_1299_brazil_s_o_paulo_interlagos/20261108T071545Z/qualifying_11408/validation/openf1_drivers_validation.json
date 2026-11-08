@@ -1,0 +1,34 @@
+{
+  "anomalies": [],
+  "columns": [
+    "broadcast_name",
+    "country_code",
+    "driver_number",
+    "first_name",
+    "full_name",
+    "headshot_url",
+    "last_name",
+    "meeting_key",
+    "name_acronym",
+    "session_key",
+    "team_colour",
+    "team_name"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/raw/openf1_drivers.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "drivers",
+  "fetch": {
+    "bytes": 9025,
+    "ok": true,
+    "sha256": "57af2baa7b115acd556a51ac46b95ab793421c57d9e9374efa08bc51b10698bd",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/raw/openf1_drivers.json",
+  "json_sha256": "bda486edf26808dc61ba79399a1b6d4d5770b22d2d011f7629f23a67cd0906ca",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
