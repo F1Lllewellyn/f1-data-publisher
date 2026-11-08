@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-  "forecast_state_changed": true,
-  "material_readiness_improved": true,
+  "forecast_state_changed": false,
+  "material_readiness_improved": false,
   "needs_manual_review": false,
   "overall_status": "clean",
   "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
@@ -51,8 +51,8 @@
       "status": "clean"
     },
     "openf1_starting_grid": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 22,
+      "status": "clean"
     },
     "openf1_stints": {
       "rows": 82,
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-11-07T21:48:16.922811Z"
+  "updated_utc": "2026-11-08T00:57:25.898486Z"
 }
