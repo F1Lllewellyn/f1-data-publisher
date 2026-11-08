@@ -1,16 +1,16 @@
 {
   "authority_fingerprints": {
-    "latest/combined_source_manifest.json": "adb64d42cab92fa4209aea43e05990f6c88df09ee706f83c291f46209b3e4539",
-    "latest/data_readiness.json": "d0260b1d3db485f3ba666ec3921463956dc4e4e82c4799aa9b4249b7f4e629be",
-    "latest/latest_manifest.json": "4bb790f71161751e63dc5418c17d9441e68d662b1d8e94244b0896293f2acc18",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/forecast_bundle_ledger_snapshot.json": "41a07c4a46446864f21698f9ca78ba6a6a3b75d868909f892dd3c3b4b65a4da6",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/sandbox_workbook_update_plan.json": "ecb8c6bbd77c9c66621c51e74906970f32b4b2a030475fcbd11d81f5995b4ea8",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/source_readiness_manifest.json": "6dd79a07bfb731e406fa5cdf5c77c08fcd23a45df0839ccf39c94bd370a9be20",
+    "latest/combined_source_manifest.json": "d6328b6f5af7c68df8fb8cd05fb66d0f87b61e4d16b19c8da2680e2754921d0c",
+    "latest/data_readiness.json": "8495c2a8bad145c268a285dd04810f241b88c11fc641b2b29aae5f0e61ffafae",
+    "latest/latest_manifest.json": "b7b85004fe3f1921a78ead0a190437bf08400179c810f7d3226230bc0c865c6a",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/forecast_bundle_ledger_snapshot.json": "9d43b570cd87fddc18f52f94ebdc4d6aa57bdb3dfa91828b998e5edb01479f5a",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/sandbox_workbook_update_plan.json": "44935e23a6b16e31a60c285f5ae465b008af58f8bb672981f9085780c041f28d",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/source_readiness_manifest.json": "b255ab6bfbe0a15308919ff2700b7f899232e4bffd9151d1cbd70848c75ec350",
     "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.csv": "96df17cb3d0d6bc8de8e22b4629b9a893704a9999007410b26ae4593759caa06",
-    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.json": "5acb535432be2c5aa45542194df489798f7f4749164e7f86d73c0e286302b6d8"
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.json": "842d6919785edc0a3ee075827fe73a79234a668f6eec2c5518ce21c9427ce587"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-08T08:27:07.213389+00:00",
+  "created_utc": "2026-11-08T13:16:25.112066+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 984,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "b2ca154a4aebe1289bc179edd0981890cc34ed09255a02c6a2ba102030c5a6bb"
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "e1826aab40187feba2a7132b33ab5e12ddf6593e0700f432d3ec077440a29d94"
     },
     {
       "bytes": 403,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "96df17cb3d0d6bc8de8e22b4629b9a893704a9999007410b26ae4593759caa06"
     },
     {
-      "bytes": 11086,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Qualifying_20261108T082707Z.xlsx",
-      "sha256": "ad492254afed463fe29499edd324b836fd1c8f305e5d3745aacb7a91b47b0efc"
+      "bytes": 11082,
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Qualifying_20261108T131625Z.xlsx",
+      "sha256": "2d004e513eee241de303d2976077c68f83e546cce69c7f72eb8ac887ace92a45"
     },
     {
       "bytes": 567,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "5a61f440f38701bb8843a9f953b573863140faabda4ce893ffb752336322adf1"
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "6b05a97024621a4251c09ff5aba53ec4ee1ce633bad0696784675f0054382f3f"
     },
     {
       "bytes": 1568,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/upstream_data_readiness_snapshot.json",
-      "sha256": "ca17ba3137c0c2ab1bad701d185d8f7fb59d0c07a5b05eb3cf767473cf867501"
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/upstream_data_readiness_snapshot.json",
+      "sha256": "4a72a9dbb57e232ebeb2e8d90e8f5ccb3396d3e38b5168e9aa0cc9d1cce27bd9"
     },
     {
       "bytes": 696,
-      "path": "history/workbook_kpi_refresh_applier/20261108T082707Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "c89f52ffe6d58edb1f40f75775f7f4d72f5f42ce5e0c8600fc249ac6da77148d"
+      "path": "history/workbook_kpi_refresh_applier/20261108T131625Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "f6152759ac1caecc2bf2ac2d8acb3be81a71555495c42861da6bc599569a9179"
     }
   ],
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261108T082707Z",
+  "run_id": "20261108T131625Z",
   "session_key": 11408,
   "session_name": "Qualifying",
   "session_type": "Qualifying",
