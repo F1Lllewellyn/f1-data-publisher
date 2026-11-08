@@ -1,0 +1,161 @@
+name: F1 Sao Paulo Nov 8 one-shot sandbox live source preflight
+
+on:
+  push:
+    branches:
+      - sandbox/2026-11-08-sp-live-preflight
+    paths:
+      - '.github/workflows/f1-sp2026-live-preflight-one-shot.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: f1-sp2026-live-preflight-one-shot
+  cancel-in-progress: false
+
+jobs:
+  source-and-session-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - name: Checkout bounded source/custody subset
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            .github/workflows/f1-sp2026-live-preflight-one-shot.yml
+            scripts/session_data_processor
+            scripts/dashboard_connector
+            scripts/openf1
+            scripts/forecast_bundles
+            configs/session_data_processor
+            configs/openf1
+            latest/latest_manifest.json
+            latest/data_readiness.json
+            latest/combined_source_manifest.json
+            latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos
+            latest/workbook_kpi_refresh_applier
+            latest/readiness_dashboards
+            latest/openf1_lightweight_source_closure
+            history/openf1_lightweight_source_closure/20261026_013754
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install bounded dependencies
+        run: |
+          python -m pip install --disable-pip-version-check pandas requests openpyxl
+      - name: Snapshot actual job time and approved source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _runtime/sp2026_preflight
+          date -u +%Y-%m-%dT%H:%M:%SZ | tee _runtime/sp2026_preflight/started_utc.txt
+          git rev-parse HEAD | tee _runtime/sp2026_preflight/head_sha.txt
+          git hash-object scripts/openf1/publish_openf1_lightweight_source_closure.py | tee _runtime/sp2026_preflight/collector_blob.txt
+          test "$(git hash-object scripts/openf1/publish_openf1_lightweight_source_closure.py)" = 902aef436b59ca1145f449cc535a580e833e8d22
+          test -f history/openf1_lightweight_source_closure/20261026_013754/request_log.csv
+      - name: Verify live qualifying session source in disposable checkout
+        shell: bash
+        run: |
+          set -uo pipefail
+          python scripts/session_data_processor/session_data_processor_loop_v1.py \
+            --mode run_now --season 2026 --session-filter qualifying \
+            --write-public-latest true \
+            > _runtime/sp2026_preflight/session_processor_stdout.txt 2>&1
+          result=$?
+          echo "$result" > _runtime/sp2026_preflight/session_exit_code.txt
+          python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py \
+            --mode run_now > _runtime/sp2026_preflight/dashboard_stdout.txt 2>&1
+          dash_result=$?
+          echo "$dash_result" > _runtime/sp2026_preflight/dashboard_exit_code.txt
+          echo "session_processor_exit=$result; dashboard_exit=$dash_result"
+          exit 0
+      - name: Test actual 2026 OpenF1 incremental source closure (offline custody preserved)
+        shell: bash
+        run: |
+          set -uo pipefail
+          python scripts/openf1/publish_openf1_lightweight_source_closure.py \
+            --season 2026 --completed-only true --output-root . \
+            > _runtime/sp2026_preflight/source_closure_stdout.txt 2>&1
+          result=$?
+          echo "$result" > _runtime/sp2026_preflight/source_exit_code.txt
+          date -u +%Y-%m-%dT%H:%M:%SZ > _runtime/sp2026_preflight/completed_utc.txt
+          tail -n 30 _runtime/sp2026_preflight/source_closure_stdout.txt || true
+          echo "source_closure_exit=$result"
+          exit 0
+      - name: Produce fail-closed source readiness and custody summary
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("_runtime/sp2026_preflight")
+          root.mkdir(parents=True,exist_ok=True)
+          def j(path):
+              try: return json.loads(Path(path).read_text(encoding="utf-8"))
+              except Exception: return {}
+          def v(path):
+              try: return Path(path).read_text(encoding="utf-8").strip()
+              except Exception: return "NOT_RUN"
+          closure=j("latest/openf1_lightweight_source_closure/latest_manifest.json")
+          dash=j("latest/readiness_dashboards/combined_readiness_dashboard.json")
+          latest=j("latest/latest_manifest.json")
+          started=v(root/"started_utc.txt")
+          completed=v(root/"completed_utc.txt")
+          summary={
+              "schema":"sp2026_one_shot_source_preflight_v1",
+              "run_utc":started, "completed_utc":completed,
+              "source_collector_git_blob":v(root/"collector_blob.txt"),
+              "session_exit":v(root/"session_exit_code.txt"),
+              "dashboard_exit":v(root/"dashboard_exit_code.txt"),
+              "source_closure_exit":v(root/"source_exit_code.txt"),
+              "source_generated_utc":closure.get("generated_utc"),
+              "source_quality_status":closure.get("source_quality_status"),
+              "source_quality_reasons":closure.get("source_quality_reasons"),
+              "source_session_count":closure.get("target_session_count"),
+              "source_pass":closure.get("pass_count"),
+              "source_warn":closure.get("pass_with_warnings_count"),
+              "source_fail":closure.get("fail_count"),
+              "source_normal_collection":closure.get("normal_collection",{}),
+              "current_session":latest.get("session_key"),
+              "current_event":latest.get("event_id"),
+              "dashboard_expected_session":dash.get("expected_session_key"),
+              "dashboard_current_session":dash.get("session_key"),
+              "dashboard_downstream_eligible":dash.get("downstream_eligible"),
+              "dashboard_reasons":dash.get("readiness_reasons"),
+              "production_commit":False,
+              "forecast_generated":False,
+              "scientific_promotion":False,
+              "stable_engine_modified":False,
+          }
+          valid_source=(summary["source_closure_exit"]=="0" and summary["source_quality_status"]=="complete"
+                      and summary["source_fail"]==0)
+          valid_current=(summary["session_exit"]=="0" and summary["dashboard_exit"]=="0"
+                       and summary["current_session"]==11408 and summary["dashboard_expected_session"]==11408
+                       and summary["dashboard_downstream_eligible"] is True)
+          summary["live_source_verified"]=valid_source
+          summary["live_session_verified"]=valid_current
+          summary["overall"]="PASS_SANDBOX_SOURCE_AND_CURRENT_SESSION" if valid_source and valid_current else "HOLD_SANDBOX_SOURCE_OR_CURRENT_SESSION"
+          (root/"source_readiness_summary.json").write_text(json.dumps(summary,indent=2),encoding="utf-8")
+          print(json.dumps(summary,indent=2)[:9000])
+          PY
+      - name: Retain sandbox diagnostics (never commit to production)
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: sp2026-one-shot-live-source-preflight
+          path: |
+            _runtime/sp2026_preflight/**
+            latest/openf1_lightweight_source_closure/latest_manifest.json
+            latest/openf1_lightweight_source_closure/source_readiness_summary.csv
+            latest/openf1_lightweight_source_closure/request_log.csv
+            latest/openf1_lightweight_source_closure/zero_lane_diagnostics.csv
+            latest/readiness_dashboards/combined_readiness_dashboard.json
+            latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/session_schedule_snapshot.json
+          if-no-files-found: ignore
