@@ -1,10 +1,10 @@
 {
-  "ready_for_use": true,
-  "blocked": false,
+  "ready_for_use": false,
+  "blocked": true,
   "latest_session_state": "clean",
   "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten",
-  "generated_at_utc": "2026-11-08T13:16:25Z",
+  "generated_at_utc": "2026-11-08T17:59:14Z",
   "source_status": "clean",
-  "event_name": "Brazil - S\u00e3o Paulo - Interlagos",
-  "session_name": "Qualifying"
+  "event_name": "unknown event",
+  "session_name": "unknown session"
 }

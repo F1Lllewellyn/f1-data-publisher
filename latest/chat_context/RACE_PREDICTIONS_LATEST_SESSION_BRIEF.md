@@ -1,10 +1,11 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-08T13:16:25Z
-Event: Brazil - São Paulo - Interlagos
-Session: Qualifying
+Generated UTC: 2026-11-08T17:59:14Z
+Event: unknown event
+Session: unknown session
 Source status: clean
-Dashboard readiness: READY
+Dashboard readiness: NOT READY
+Readiness reasons: ['missing_or_invalid_session_schedule_snapshot']
 Diagnostic publishing allowed: true
 
 ## Governance
