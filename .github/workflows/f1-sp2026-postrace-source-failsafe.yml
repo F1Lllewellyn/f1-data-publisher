@@ -2,6 +2,11 @@ name: F1 São Paulo 2026 post-race evidence failsafe (one day)
 
 # One-day, read-only event-scoped capture; NO model or canonical publication.
 on:
+  push:
+    branches:
+      - fix/2026-11-08-sp-postrace-custody-failsafe
+    paths:
+      - '.github/workflows/f1-sp2026-postrace-source-failsafe.yml'
   schedule:
     - cron: '50 19 8 11 *'
     - cron: '20 20 8 11 *'
