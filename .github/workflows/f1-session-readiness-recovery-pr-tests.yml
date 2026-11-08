@@ -38,6 +38,7 @@ jobs:
             scripts/ops
             scripts/openf1
             scripts/forecast_bundles
+            docs/control
             .github/workflows
             history/openf1_lightweight_source_closure/20261026_013754
             tests/test_sp2026_integrated_recovery_guard_v1.py
