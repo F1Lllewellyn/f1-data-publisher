@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-11-07T21:48:16.921449Z",
+  "created_utc": "2026-11-08T00:00:24.346099Z",
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
@@ -16,6 +16,6 @@
     "session_name": "Qualifying",
     "session_type": "Qualifying"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }

@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2098,
+    "ok": true,
+    "sha256": "17cb4216099abe251823a84d9d4129dba41f4994c2f59810313bfbcc853a46f3",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/raw/openf1_starting_grid.json",
+  "json_sha256": "d76c5c9f1afb359826338f296d4e6601e75c60f17de4d6e003bddd9ce015f4ae",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 22,
+  "status": "clean",
+  "timestamp_rows": 0
+}
