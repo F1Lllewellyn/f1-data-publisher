@@ -9,6 +9,9 @@ on:
       - 'scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py'
       - 'scripts/ops/f1_peak_elite_orchestrator_v1.py'
       - 'tests/test_sp2026_integrated_recovery_guard_v1.py'
+      - 'scripts/openf1/publish_openf1_lightweight_source_closure.py'
+      - 'tests/test_openf1_normal_incremental_collection_budget_v1.py'
+      - 'tests/test_f1_source_closure_publish_guard_v1.py'
 
 permissions:
   contents: read
@@ -20,31 +23,47 @@ concurrency:
 jobs:
   source-readiness-regressions:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout exact PR merge tree
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 0
           filter: blob:none
           sparse-checkout: |
             scripts/session_data_processor
             scripts/dashboard_connector
             scripts/ops
+            scripts/openf1
+            scripts/forecast_bundles
+            .github/workflows
+            history/openf1_lightweight_source_closure/20261026_013754
             tests/test_sp2026_integrated_recovery_guard_v1.py
+            tests/test_openf1_normal_incremental_collection_budget_v1.py
+            tests/test_f1_source_closure_publish_guard_v1.py
           sparse-checkout-cone-mode: false
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
+      - name: Install test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check pandas requests openpyxl
       - name: Compile changed Python files
         run: |
           python -m py_compile \
             scripts/session_data_processor/session_data_processor_loop_v1.py \
             scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py \
             scripts/ops/f1_peak_elite_orchestrator_v1.py \
-            tests/test_sp2026_integrated_recovery_guard_v1.py
+            tests/test_sp2026_integrated_recovery_guard_v1.py \
+            scripts/openf1/publish_openf1_lightweight_source_closure.py \
+            tests/test_openf1_normal_incremental_collection_budget_v1.py \
+            tests/test_f1_source_closure_publish_guard_v1.py
       - name: Run source identity and freshness regressions
         run: |
           python -m unittest discover -s tests -p 'test_sp2026_integrated_recovery_guard_v1.py' -v
+      - name: Run accepted incremental collector and publication regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_openf1_normal_incremental_collection_budget_v1.py' -v
+          python -m unittest discover -s tests -p 'test_f1_source_closure_publish_guard_v1.py' -v
