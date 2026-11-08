@@ -1,0 +1,657 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-11-08T21:24:05.476356Z",
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-11-08T21:24:05.477523Z",
+    "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+    "forecast_state_changed": false,
+    "overall_status": "needs_manual_review",
+    "promotion_allowed": false,
+    "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
+    "recommended_forecast_action": "hold forecast state / manual review",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-11-08T19:00:00+00:00",
+      "date_start": "2026-11-08T17:00:00+00:00",
+      "gate": "race_result",
+      "meeting_key": 1299,
+      "session_key": 11412,
+      "session_name": "Race",
+      "session_type": "Race"
+    },
+    "source_readiness_materially_improved": true,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 419.84,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "94c4e61a2a1b4a6f0eb4c8e23220f0fc5e33ca83b2c58adb4f1a3efb11a98caa",
+      "size_bytes": 695,
+      "timestamp_utc": "2026-11-08T14:24:14.933627Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 419.84,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "c8431ec2bf27b69c476d58c82cff1ada335ca831db1911f4b6317c52b1d25226",
+      "size_bytes": 1567,
+      "timestamp_utc": "2026-11-08T14:24:14.933439Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 419.84,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "361eacf2cdbb72cc2f07329b985d1bc91dd730976e389e5b86dea8e1004b0f9a",
+      "size_bytes": 566,
+      "timestamp_utc": "2026-11-08T14:24:14.933265Z"
+    }
+  },
+  "material_readiness_improved": true,
+  "overall_status": "needs_manual_review",
+  "promotion_allowed": false,
+  "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
+  "readiness_aggregation": {
+    "blocking_issues": [
+      {
+        "anomalies": [
+          "fia_final_grid_unverified",
+          "grid_revision_time_unestablished_after_start"
+        ],
+        "endpoint": "starting_grid",
+        "reason": "required_source_needs_manual_review",
+        "rows": 22,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "race_control",
+      "session_result",
+      "starting_grid",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": true,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "stints"
+    ],
+    "optional_context_gaps": [],
+    "overall_status": "needs_manual_review",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "intervals",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 29368
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1438
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 58
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 576
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 212
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [
+          "fia_final_grid_unverified",
+          "grid_revision_time_unestablished_after_start"
+        ],
+        "blocking": true,
+        "classification": "needs_manual_review",
+        "effective_status": "needs_manual_review",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "needs_manual_review",
+        "reason": "required_source_needs_manual_review",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 80
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 160
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "blocked_manual_review_required_source",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "race",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "clean",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "needs_manual_review",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 0.2,
+    "current_status": "needs_manual_review",
+    "delta": 0.2,
+    "previous_score": 0.0,
+    "previous_status": null
+  },
+  "readiness_quality": "blocked_manual_review_required_source",
+  "run_id": "20261108T212350Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-11-08T19:00:00+00:00",
+    "date_start": "2026-11-08T17:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1299,
+    "session_key": 11412,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "session_schedule_sha256": "8872c26e8fd9dbcc793d5e8d704f0e9d67bd02222292dc3222259d4fcc456304",
+  "session_schedule_snapshot": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/session_schedule_snapshot.json",
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9025,
+        "ok": true,
+        "sha256": "f754bbae17f26557568e80eac534e2ad35807658a5eac9bd26577bd33df6742e",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_drivers.json",
+      "json_sha256": "737d1c1e4e4a9a4e0dac7b361bb91110ee1573b3be12549d8ce129b217aed84f",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval",
+        "meeting_key",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_intervals.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 4178210,
+        "ok": true,
+        "sha256": "87f0544d171bc9a32f4426ffccdd6202bdc3b876458cf4bf2de365c47ba16844",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_intervals.json",
+      "json_sha256": "c1051a90d17ee1d2601202cdb43364c3330b362347434c49d53d8fe757b30084",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 29368,
+      "status": "clean",
+      "timestamp_rows": 29368
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 675981,
+        "ok": true,
+        "sha256": "3b3cebbf9b11eb9ab4f632637158693b3f4774f3993e5d142b990378a0c5f311",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_laps.json",
+      "json_sha256": "3af30a14703c068b618de65d573398896c96601fea82e83c998e3a900d0311f2",
+      "max_lap_number": 72.0,
+      "missing_required_columns": [],
+      "rows": 1438,
+      "status": "clean",
+      "timestamp_rows": 1438
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_pit.csv",
+      "driver_count": 21,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 10429,
+        "ok": true,
+        "sha256": "5a54d742d76c012cafe564cd6fb6adfd58b5732789b8a35564e6d3a30380e3fb",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_pit.json",
+      "json_sha256": "424b5d496403376ef419e1dc948571121ea312aa4a20b95deb48343c75b703e5",
+      "max_lap_number": 62.0,
+      "missing_required_columns": [],
+      "rows": 58,
+      "status": "clean",
+      "timestamp_rows": 58
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 66532,
+        "ok": true,
+        "sha256": "101c46c0c995e03c691a8364ae415bbf6a7321b69933ebd4c146a63a36cc9e26",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_position.json",
+      "json_sha256": "d4ca9ef123685d26a90df68d8c8e3e8c73b303b4214733bf554398e3c868d245",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 576,
+      "status": "clean",
+      "timestamp_rows": 576
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_race_control.csv",
+      "driver_count": 13,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 56652,
+        "ok": true,
+        "sha256": "2b9ef1acbd2127e045078307baa0ecde7078eb41e9075bc64b8dc916892b82c7",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_race_control.json",
+      "json_sha256": "6d7d50cbc4bfa43b58b9c9d6e0e388230133f917d12f2dd9e9333418799cd949",
+      "max_lap_number": 71.0,
+      "missing_required_columns": [],
+      "rows": 212,
+      "status": "clean",
+      "timestamp_rows": 212
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "points",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4047,
+        "ok": true,
+        "sha256": "4ea4c0ae1257e86a0025083a5c08a50bc45f3f45bfb4cb53a6691cb2d39e7592",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_session_result.json",
+      "json_sha256": "16b4b1e43241ddde91c25166f352362c7bba53dab63d5b9fcf4262b2c5c9172f",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 394,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_sessions.json",
+      "json_sha256": "e3892c9c7c206cccce937ae435c89ae3a72ac9dccd1b29d12ceb315bbeb7e73e",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [
+        "fia_final_grid_unverified",
+        "grid_revision_time_unestablished_after_start"
+      ],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2098,
+        "ok": true,
+        "sha256": "17f028a556ef3887211f67c6daf1fcdcb622907e1fd6c04cd8c9ae240676998a",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_starting_grid.json",
+      "json_sha256": "7a215690dd2e8adb5b2aff90f4c17cd17e7d838c25e255a0c6a7a68be1443089",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "provenance": {
+        "changed_since_prior_target_snapshot": null,
+        "changed_since_qualifying_snapshot": true,
+        "direct_target_fetch": {
+          "bytes": 0,
+          "error": "<HTTPError 404: 'Not Found'>",
+          "ok": false
+        },
+        "forecast_as_of_eligible": false,
+        "meeting_key": 1299,
+        "observed_at_utc": "2026-11-08T21:24:05.472283Z",
+        "observed_before_target_start": false,
+        "official_final_grid_verified": false,
+        "openf1_row_status": "clean",
+        "prior_qualifying_snapshot_sha256": "d76c5c9f1afb359826338f296d4e6601e75c60f17de4d6e003bddd9ce015f4ae",
+        "prior_target_snapshot_sha256": null,
+        "resolution": "unique_same_meeting_qualifying_before_target",
+        "source_session_key": 11408,
+        "source_session_name": "Qualifying",
+        "target_session_key": 11412
+      },
+      "rows": 22,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 11897,
+        "ok": true,
+        "sha256": "45859230aede424ab44fbb3969a59821ee7e5bec69a345c939da65a7e6fc8520",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_stints.json",
+      "json_sha256": "092de7a05b7ce55dca517d8201fa9d7df489600ea92d63df388ac2ef3fae249a",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 80,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 34395,
+        "ok": true,
+        "sha256": "df1ef310919eba12a32512309978200d0168c06cf68b071f3ee190c22e998eac",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_weather.json",
+      "json_sha256": "76226333631b6676e33f8587a306837c4a8928611c8abe88e6e65866addbbffe",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 160,
+      "status": "clean",
+      "timestamp_rows": 160
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.json"
+  }
+}

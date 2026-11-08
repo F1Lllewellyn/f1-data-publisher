@@ -1,45 +1,45 @@
 {
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
   "forecast_state_changed": false,
-  "material_readiness_improved": false,
-  "needs_manual_review": false,
-  "overall_status": "clean",
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
   "race_name": "Brazil - S\u00e3o Paulo - Interlagos",
-  "readiness_quality": "usable_with_optional_context_gaps",
+  "readiness_quality": "blocked_manual_review_required_source",
   "schema_version": "data_readiness_v2_session_processor",
   "session": {
-    "date_end": "2026-11-07T19:00:00+00:00",
-    "date_start": "2026-11-07T18:00:00+00:00",
-    "gate": "post_qualifying",
+    "date_end": "2026-11-08T19:00:00+00:00",
+    "date_start": "2026-11-08T17:00:00+00:00",
+    "gate": "race_result",
     "meeting_key": 1299,
-    "session_key": 11408,
-    "session_name": "Qualifying",
-    "session_type": "Qualifying"
+    "session_key": 11412,
+    "session_name": "Race",
+    "session_type": "Race"
   },
-  "source_needs_manual_review": false,
+  "source_needs_manual_review": true,
   "sources": {
     "openf1_drivers": {
       "rows": 22,
       "status": "clean"
     },
     "openf1_intervals": {
-      "rows": 0,
-      "status": "needs_manual_review"
+      "rows": 29368,
+      "status": "clean"
     },
     "openf1_laps": {
-      "rows": 391,
+      "rows": 1438,
       "status": "clean"
     },
     "openf1_pit": {
-      "rows": 82,
+      "rows": 58,
       "status": "clean"
     },
     "openf1_position": {
-      "rows": 1885,
+      "rows": 576,
       "status": "clean"
     },
     "openf1_race_control": {
-      "rows": 96,
+      "rows": 212,
       "status": "clean"
     },
     "openf1_session_result": {
@@ -52,10 +52,10 @@
     },
     "openf1_starting_grid": {
       "rows": 22,
-      "status": "clean"
+      "status": "needs_manual_review"
     },
     "openf1_stints": {
-      "rows": 82,
+      "rows": 80,
       "status": "clean"
     },
     "openf1_weather": {
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-11-08T14:24:14.933439Z"
+  "updated_utc": "2026-11-08T21:24:05.478983Z"
 }

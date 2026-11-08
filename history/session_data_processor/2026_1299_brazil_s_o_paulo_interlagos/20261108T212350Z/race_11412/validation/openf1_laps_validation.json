@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 675981,
+    "ok": true,
+    "sha256": "3b3cebbf9b11eb9ab4f632637158693b3f4774f3993e5d142b990378a0c5f311",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_laps.json",
+  "json_sha256": "3af30a14703c068b618de65d573398896c96601fea82e83c998e3a900d0311f2",
+  "max_lap_number": 72.0,
+  "missing_required_columns": [],
+  "rows": 1438,
+  "status": "clean",
+  "timestamp_rows": 1438
+}
