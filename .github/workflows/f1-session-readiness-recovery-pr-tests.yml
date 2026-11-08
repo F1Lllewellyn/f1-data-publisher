@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/f1-session-readiness-recovery-pr-tests.yml'
       - '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml'
+      - '.github/workflows/f1-1b-output-contract-after-control-room-v22.yml'
       - 'scripts/session_data_processor/session_data_processor_loop_v1.py'
       - 'scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py'
       - 'scripts/ops/f1_peak_elite_orchestrator_v1.py'
