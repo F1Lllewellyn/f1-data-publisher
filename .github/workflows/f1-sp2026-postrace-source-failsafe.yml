@@ -1,0 +1,142 @@
+name: F1 São Paulo 2026 post-race evidence failsafe (one day)
+
+# One-day, read-only event-scoped capture; NO model or canonical publication.
+on:
+  push:
+    branches:
+      - fix/2026-11-08-sp-postrace-custody-failsafe
+    paths:
+      - '.github/workflows/f1-sp2026-postrace-source-failsafe.yml'
+  schedule:
+    - cron: '50 19 8 11 *'
+    - cron: '20 20 8 11 *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: f1-sp2026-postrace-readonly-custody
+  cancel-in-progress: false
+
+jobs:
+  capture-verified-event-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Enforce one-day UTC clock boundary
+        id: clock
+        shell: bash
+        run: |
+          set -euo pipefail
+          stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "observed_utc=$stamp" >> "$GITHUB_OUTPUT"
+          case "$stamp" in
+            2026-11-08T19:*|2026-11-08T20:*)
+              echo "authorized_window=true" >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo "authorized_window=false" >> "$GITHUB_OUTPUT"
+              echo "Not the November 8 post-race window; no provider fetch." ;;
+          esac
+      - name: Checkout bounded processor and policy
+        if: steps.clock.outputs.authorized_window == 'true'
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/session_data_processor
+            configs/session_data_processor
+      - name: Set up Python
+        if: steps.clock.outputs.authorized_window == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Capture selected race using existing session processor only
+        if: steps.clock.outputs.authorized_window == 'true'
+        shell: bash
+        run: |
+          mkdir -p _runtime/sp2026_postrace
+          set +e
+          python scripts/session_data_processor/session_data_processor_loop_v1.py \
+            --mode run_now --season 2026 --session-filter race \
+            --write-public-latest true \
+            > _runtime/sp2026_postrace/processor_stdout.txt 2>&1
+          status=$?
+          set -e
+          printf '%s\n' "$status" > _runtime/sp2026_postrace/processor_exit.txt
+          tail -n 35 _runtime/sp2026_postrace/processor_stdout.txt || true
+          echo "Processor exit $status. No Git push, forecast or workbook modification."
+      - name: Audit exact event identity and fail-closed quality
+        if: steps.clock.outputs.authorized_window == 'true'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys, datetime
+          root=pathlib.Path('.')
+          out=root/'_runtime/sp2026_postrace'
+          out.mkdir(parents=True,exist_ok=True)
+          def read(p):
+              try:return json.loads(p.read_text(encoding='utf-8'))
+              except Exception:return {}
+          manifest=read(root/'latest/latest_manifest.json')
+          event='2026_1299_brazil_s_o_paulo_interlagos'
+          rel=manifest.get('latest_session_data_processor_manifest')
+          match=(
+              isinstance(rel,str)
+              and rel.startswith('latest/session_data_processor/'+event+'/race_')
+              and rel.endswith('/source_readiness_manifest.json')
+          )
+          source=read(root/rel) if match else {}
+          session=source.get('session') if isinstance(source.get('session'),dict) else {}
+          identity=(
+              manifest.get('event_id')==event
+              and session.get('meeting_key')==1299
+              and str(session.get('session_name','')).strip().lower()=='race'
+              and str(manifest.get('session_key'))==str(session.get('session_key'))
+          )
+          endpoints=source.get('sources') if isinstance(source.get('sources'),dict) else {}
+          required=('drivers','laps','session_result','position','weather')
+          coverage={
+              k:{"rows":endpoints.get(k,{}).get('rows',0),"status":endpoints.get(k,{}).get('status','missing')}
+              for k in required
+          }
+          has_rows=all(isinstance(v.get('rows'),int) and v['rows']>0 for v in coverage.values())
+          valid=identity and has_rows and source.get('overall_status') in ('clean','partial')
+          try: exit_code=(out/'processor_exit.txt').read_text().strip()
+          except Exception: exit_code='NOT_RUN'
+          if exit_code!='0':valid=False
+          result={
+              'schema':'sp2026_readonly_postrace_capture_v1',
+              'observed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'event_id_expected':event,'event_id_observed':manifest.get('event_id'),
+              'session_key':session.get('session_key'),
+              'session_name':session.get('session_name'),
+              'source_manifest':rel if match else None,
+              'status':'CAPTURED_UNDER_REVIEW' if valid else 'HOLD_INVALID_OR_INCOMPLETE',
+              'processor_exit':exit_code,'endpoint_coverage':coverage,
+              'retrospective_source_custody_only':True,
+              'official_fia_classification_verified':False,
+              'stable_engine_executed':False,
+              'forecast_generated':False,
+              'promotion_allowed':False,
+              'production_commit':False
+          }
+          (out/'readiness_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+          print(json.dumps(result,indent=2))
+          if not valid:sys.exit(1)
+          PY
+      - name: Retain exact source manifest and endpoint payloads
+        if: always() && steps.clock.outputs.authorized_window == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: sp2026-postrace-source-${{ github.run_id }}
+          retention-days: 21
+          path: |
+            _runtime/sp2026_postrace/**
+            latest/latest_manifest.json
+            latest/data_readiness.json
+            latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_*/**
+          if-no-files-found: ignore
