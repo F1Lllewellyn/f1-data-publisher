@@ -6,8 +6,8 @@ Pass with warnings
 
 ## Run
 
-- Run ID: `20261108T230336Z`
-- Created UTC: `2026-11-08T23:03:36.880120+00:00`
+- Run ID: `20261108T231413Z`
+- Created UTC: `2026-11-08T23:14:13.776538+00:00`
 - Source status: `needs_manual_review`
 - Readiness quality: `blocked_manual_review_required_source`
 - Material change: `True`
@@ -25,12 +25,12 @@ Pass with warnings
 
 ## Outputs
 
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/sandbox_workbook_update_plan_applied.json` (98a559c5efd3...)
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/refreshed_workbook_kpi_readiness.csv` (5df76e8f7bf5...)
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261108T230336Z.xlsx` (7cc873b5d027...)
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_latest_manifest_snapshot.json` (b801ae3299df...)
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_data_readiness_snapshot.json` (fe7aaa63426a...)
-- `history/workbook_kpi_refresh_applier/20261108T230336Z/upstream_combined_source_manifest_snapshot.json` (c108c0d70674...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/sandbox_workbook_update_plan_applied.json` (98a559c5efd3...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/refreshed_workbook_kpi_readiness.csv` (5df76e8f7bf5...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261108T231413Z.xlsx` (cd62feb7c83c...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/upstream_latest_manifest_snapshot.json` (b801ae3299df...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/upstream_data_readiness_snapshot.json` (fe7aaa63426a...)
+- `history/workbook_kpi_refresh_applier/20261108T231413Z/upstream_combined_source_manifest_snapshot.json` (c108c0d70674...)
 
 ## Governance
 
