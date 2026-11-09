@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-09T01:09:37.321890Z",
+  "created_utc": "2026-11-09T02:20:56.162036Z",
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-09T01:09:37.323499Z",
+    "created_utc": "2026-11-09T02:20:56.163587Z",
     "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
     "forecast_state_changed": false,
     "overall_status": "needs_manual_review",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 126.01,
+      "age_minutes": 71.31,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "a2a9c8bfccdb957debb794ff28caa271b8ba1578e2fe58058b643a7f62ce13e0",
+      "sha256": "c1575c46d4f18834e7ac748e1b9e7087814f8a76d750c5a1e6fc9ce8ef8a5a32",
       "size_bytes": 706,
-      "timestamp_utc": "2026-11-08T23:03:36.732207Z"
+      "timestamp_utc": "2026-11-09T01:09:37.325164Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 126.01,
+      "age_minutes": 71.31,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "c9bf6ef314ccfcd6768d9221728bc38da2281371e3f038fe2fb3168d4ee30488",
+      "sha256": "b6e592127e3d7341e4fa13bff581691c0c5372f2ae2624b31da9bc5fb5e2b161",
       "size_bytes": 1572,
-      "timestamp_utc": "2026-11-08T23:03:36.731994Z"
+      "timestamp_utc": "2026-11-09T01:09:37.324926Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 126.01,
+      "age_minutes": 71.31,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "327012ddfb882e9d75d57ec80f89fc4ca4176a6a384c38b228446b8e5a938510",
+      "sha256": "d1f5aa9e19cdf34891818e2ed3bd8922115cbbe267975406f85080466719e526",
       "size_bytes": 798,
-      "timestamp_utc": "2026-11-08T23:03:36.731801Z"
+      "timestamp_utc": "2026-11-09T01:09:37.324718Z"
     }
   },
   "material_readiness_improved": false,
@@ -253,7 +253,7 @@
     "previous_status": "needs_manual_review"
   },
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261109T010921Z",
+  "run_id": "20261109T022044Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-11-08T19:00:00+00:00",
@@ -264,7 +264,7 @@
     "session_name": "Race",
     "session_type": "Race"
   },
-  "session_schedule_sha256": "06f18d8fca1c55847a201465c958cae048f1a368447f075eca7b9dbac315a981",
+  "session_schedule_sha256": "4b3ef6d1d7117cfad14021794f167245565203bce6be36764cba2867dbbee4ff",
   "session_schedule_snapshot": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/session_schedule_snapshot.json",
   "source_needs_manual_review": true,
   "sources": {
@@ -563,7 +563,7 @@
         },
         "forecast_as_of_eligible": false,
         "meeting_key": 1299,
-        "observed_at_utc": "2026-11-09T01:09:37.317628Z",
+        "observed_at_utc": "2026-11-09T02:20:56.158015Z",
         "observed_before_target_start": false,
         "official_final_grid_verified": false,
         "openf1_row_status": "clean",
