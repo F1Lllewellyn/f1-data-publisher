@@ -1,0 +1,32 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 34395,
+    "ok": true,
+    "sha256": "df1ef310919eba12a32512309978200d0168c06cf68b071f3ee190c22e998eac",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_weather.json",
+  "json_sha256": "76226333631b6676e33f8587a306837c4a8928611c8abe88e6e65866addbbffe",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 160,
+  "status": "clean",
+  "timestamp_rows": 160
+}

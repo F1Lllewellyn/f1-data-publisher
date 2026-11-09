@@ -1,0 +1,57 @@
+{
+  "catalog_entries_valid": true,
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "meeting_key": 1299,
+  "observed_at_utc": "2026-11-09T01:09:22.724089Z",
+  "official_final_grid_verified": false,
+  "promotion_allowed": false,
+  "schema_version": "meeting_schedule_snapshot_v1",
+  "sessions": [
+    {
+      "date_end": "2026-11-06T16:30:00Z",
+      "date_start": "2026-11-06T15:30:00Z",
+      "meeting_key": 1299,
+      "session_key": 11405,
+      "session_name": "Practice 1",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-06T20:00:00Z",
+      "date_start": "2026-11-06T19:00:00Z",
+      "meeting_key": 1299,
+      "session_key": 11406,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-07T15:30:00Z",
+      "date_start": "2026-11-07T14:30:00Z",
+      "meeting_key": 1299,
+      "session_key": 11407,
+      "session_name": "Practice 3",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-07T19:00:00Z",
+      "date_start": "2026-11-07T18:00:00Z",
+      "meeting_key": 1299,
+      "session_key": 11408,
+      "session_name": "Qualifying",
+      "session_type": "Qualifying"
+    },
+    {
+      "date_end": "2026-11-08T19:00:00Z",
+      "date_start": "2026-11-08T17:00:00Z",
+      "meeting_key": 1299,
+      "session_key": 11412,
+      "session_name": "Race",
+      "session_type": "Race"
+    }
+  ],
+  "skipped_invalid_same_meeting_entries": 0,
+  "source": "OpenF1 sessions catalog",
+  "source_fetch": {
+    "ok": true,
+    "status_code": 200
+  }
+}

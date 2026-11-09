@@ -1,0 +1,51 @@
+{
+  "anomalies": [
+    "fia_final_grid_unverified",
+    "grid_revision_time_unestablished_after_start"
+  ],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2098,
+    "ok": true,
+    "sha256": "17f028a556ef3887211f67c6daf1fcdcb622907e1fd6c04cd8c9ae240676998a",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/raw/openf1_starting_grid.json",
+  "json_sha256": "7a215690dd2e8adb5b2aff90f4c17cd17e7d838c25e255a0c6a7a68be1443089",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "provenance": {
+    "changed_since_prior_target_snapshot": false,
+    "changed_since_qualifying_snapshot": true,
+    "direct_target_fetch": {
+      "bytes": 0,
+      "error": "<HTTPError 404: 'Not Found'>",
+      "ok": false
+    },
+    "forecast_as_of_eligible": false,
+    "meeting_key": 1299,
+    "observed_at_utc": "2026-11-09T01:09:37.317628Z",
+    "observed_before_target_start": false,
+    "official_final_grid_verified": false,
+    "openf1_row_status": "clean",
+    "prior_qualifying_snapshot_sha256": "d76c5c9f1afb359826338f296d4e6601e75c60f17de4d6e003bddd9ce015f4ae",
+    "prior_target_snapshot_sha256": "7a215690dd2e8adb5b2aff90f4c17cd17e7d838c25e255a0c6a7a68be1443089",
+    "resolution": "unique_same_meeting_qualifying_before_target",
+    "source_session_key": 11408,
+    "source_session_name": "Qualifying",
+    "target_session_key": 11412
+  },
+  "rows": 22,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}
