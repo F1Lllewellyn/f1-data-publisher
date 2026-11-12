@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-11T23:40:48Z",
+  "generated_at_utc": "2026-11-12T04:23:22Z",
   "status": "dashboard_refreshed",
   "source_status": "needs_manual_review",
   "source_backed": false,
@@ -19,7 +19,7 @@
   "session_schedule_verified": true,
   "event_name": "Brazil - S\u00e3o Paulo - Interlagos",
   "session_name": "Race",
-  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261111T212857Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261111T212857Z.xlsx",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261112T023013Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261112T023013Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json",
   "autorepair_report": null,
