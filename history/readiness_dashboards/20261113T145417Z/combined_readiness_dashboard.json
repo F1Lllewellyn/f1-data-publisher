@@ -1,0 +1,41 @@
+{
+  "generated_at_utc": "2026-11-13T14:54:17Z",
+  "status": "dashboard_refreshed",
+  "source_status": "needs_manual_review",
+  "source_backed": false,
+  "commit_allowed": true,
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": false,
+  "readiness_reasons": [
+    "required_source_status_needs_manual_review",
+    "readiness_blocking_issues",
+    "readiness_requires_manual_review",
+    "required_source_evidence_unverified"
+  ],
+  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
+  "meeting_key": 1299,
+  "session_key": 11412,
+  "expected_session_key": 11412,
+  "session_schedule_verified": true,
+  "event_name": "Brazil - S\u00e3o Paulo - Interlagos",
+  "session_name": "Race",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261113T145416Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261113T145416Z.xlsx",
+  "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+  "session_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json",
+  "autorepair_report": null,
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "race_predictions": {
+    "ready_for_use": false,
+    "blocked": true,
+    "latest_session_state": "needs_manual_review",
+    "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
+  },
+  "fantasy_predictions": {
+    "ready_for_use": false,
+    "blocked": true,
+    "latest_session_state": "needs_manual_review",
+    "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
+  }
+}
