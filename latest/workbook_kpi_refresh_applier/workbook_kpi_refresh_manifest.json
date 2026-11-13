@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.json": "45df340360be78b8e889caeabde7928b8b7e64b89fb2fbd32aaccd679eebcddb"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-13T20:08:55.173973+00:00",
+  "created_utc": "2026-11-13T21:11:10.811968+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": false,
   "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 1003,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "03c65ee8d417c3f9045b46d9ae96db02ff4343bbe504beb4a7f988991d51333a"
     },
     {
       "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "5df76e8f7bf565cbc1d984d641ef1ffe29532060d8a148ced1dbb69a2f6e9794"
     },
     {
-      "bytes": 11153,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261113T200855Z.xlsx",
-      "sha256": "25eb4d4a5a778ad0198bf892d37dad16896af9449de29241b671adc362116a7d"
+      "bytes": 11148,
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/F1_Workbook_KPI_SANDBOX_Refresh_Brazil_-_S_o_Paulo_-_Interlagos_Race_20261113T211110Z.xlsx",
+      "sha256": "cb6bdd2bb564f5d54c3cc38a98d2b19a3b39ec57a1747bd50397ad1c02283b8c"
     },
     {
       "bytes": 799,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/upstream_latest_manifest_snapshot.json",
       "sha256": "7ab7d88990e1f1c4f0362fa5e447af4b2df4f8862a04cdd0e390daee6a547fc2"
     },
     {
       "bytes": 1573,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/upstream_data_readiness_snapshot.json",
       "sha256": "22d6a9c191a392aee6c665327de7916c8a104c45398818623eab6208e9acdb1f"
     },
     {
       "bytes": 707,
-      "path": "history/workbook_kpi_refresh_applier/20261113T200855Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261113T211110Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "67ec2734f400f5c0004068f97926b449751c7c78820b56d1266dc7a5365a0da0"
     }
   ],
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261113T200855Z",
+  "run_id": "20261113T211110Z",
   "session_key": 11412,
   "session_name": "Race",
   "session_type": "Race",
