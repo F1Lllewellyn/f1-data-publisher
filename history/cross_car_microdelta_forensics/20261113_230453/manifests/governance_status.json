@@ -1,0 +1,32 @@
+{
+  "status": "no_action",
+  "reason": "no_driver_session_summary_csv_with_required_schema",
+  "searched_root": ".",
+  "candidate_count": 4475,
+  "candidate_examples": [
+    "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_11348/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/race_11353/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_2_11406/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_1_11405/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/qualifying_11408/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/practice_3_11407/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/workbook_kpi_readiness.csv"
+  ],
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "created_utc": "2026-11-13T23:05:02.074410+00:00"
+}
