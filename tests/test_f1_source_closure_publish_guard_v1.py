@@ -1178,13 +1178,20 @@ class StaticScopeTests(unittest.TestCase):
             ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "32a1210a2f43065e9d65a9bd858c059b6166700f",
             ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "c2f8ddc46c52a2be06fcf7f53d03edc2df40f787",
         }
+        # #367 makes the gate diagnostics-only while stable execution is absent.
+        recovery_blobs = {".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "0618519ee3fc6c341de48dd1cff94e28960b76ce"}
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT / path).read_bytes()
                 actual = hashlib.sha1(
                     b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
                 ).hexdigest()
-                self.assertEqual(actual, expected_blob)
+                if path in recovery_blobs:
+                    self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
+                    self.assertEqual(actual, recovery_blobs[path])
+                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"), (expected_blob, recovery_blobs[path]))
+                else:
+                    self.assertEqual(actual, expected_blob)
 
         immutable_collectors = {
             blob_sha: immutable_git_blob(ROOT, blob_sha)
