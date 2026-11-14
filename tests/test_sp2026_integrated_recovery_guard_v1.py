@@ -119,6 +119,8 @@ class CurrentSessionReadinessTests(unittest.TestCase):
         selector = json.loads((self.root / "latest/latest_manifest.json").read_text(encoding="utf-8"))
         selector["session_schedule_sha256"] = hashlib.sha256((self.root / SCHEDULE_REL).read_bytes()).hexdigest()
         self.put("latest/latest_manifest.json", selector)
+        from test_f1_1b_integrated_recovery_byte_custody import bind_synthetic_fixture
+        bind_synthetic_fixture(self.root)
 
     def observe(self, iso_time):
         t = datetime.fromisoformat(iso_time.replace("Z", "+00:00"))

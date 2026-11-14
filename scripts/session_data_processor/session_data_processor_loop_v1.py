@@ -21,12 +21,14 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 ROOT = Path.cwd()
 POLICY_PATH = ROOT / "configs" / "session_data_processor" / "session_data_processor_policy_v1.json"
 RUNTIME = ROOT / "_runtime" / "session_data_processor"
+REQUEST_BUDGET = None
 DEFAULT_ENDPOINTS = ["drivers", "laps", "intervals", "position", "pit", "stints", "race_control", "weather", "session_result", "starting_grid"]
 GATE_BY_SESSION_NAME = {
     "practice 1": "post_fp1",
@@ -87,7 +89,7 @@ def parse_time(value: Any) -> Optional[dt.datetime]:
         text = str(value).replace("Z", "+00:00")
         d = dt.datetime.fromisoformat(text)
         if d.tzinfo is None:
-            d = d.replace(tzinfo=dt.timezone.utc)
+            return None
         return d.astimezone(dt.timezone.utc)
     except Exception:
         return None
@@ -106,24 +108,31 @@ def sha256_file(path: Path) -> str:
 
 
 def http_json(url: str, timeout: int = 30, retries: int = 2, sleep_seconds: float = 1.0) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    last_error = None
-    for attempt in range(retries + 1):
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "F1-Prediction-Engine-SessionProcessor/1.0"})
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                raw = resp.read()
-                status = getattr(resp, "status", 200)
-            data = json.loads(raw.decode("utf-8"))
-            if isinstance(data, list):
-                return data, {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw)}
-            if isinstance(data, dict):
-                return [data], {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "wrapped_dict": True}
-            return [], {"ok": False, "status_code": status, "error": "unexpected_json_type", "bytes": len(raw)}
-        except Exception as exc:
-            last_error = repr(exc)
-            if attempt < retries:
-                time.sleep(sleep_seconds)
-    return [], {"ok": False, "error": last_error or "unknown_error", "bytes": 0}
+    # Reuse the accepted dual-window limiter. Do not retry authentication,
+    # throttling or outages once per endpoint across an entire meeting.
+    global REQUEST_BUDGET
+    if REQUEST_BUDGET is None:
+        helper = str(Path(__file__).resolve().parents[1] / "openf1")
+        if helper not in sys.path:
+            sys.path.insert(0, helper)
+        from publish_openf1_lightweight_source_closure import NormalRequestBudget
+        REQUEST_BUDGET = NormalRequestBudget(max_requests=64, max_elapsed_seconds=300)
+    try:
+        REQUEST_BUDGET.acquire()
+        req = urllib.request.Request(url, headers={"User-Agent": "F1-Prediction-Engine-SessionProcessor/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read()
+            status = getattr(resp, "status", 200)
+        data = json.loads(raw.decode("utf-8"))
+        if status != 200 or not isinstance(data, list) or any(not isinstance(row, dict) for row in data):
+            return [], {"ok": False, "status_code": status, "error": "invalid_endpoint_response", "bytes": len(raw)}
+        return data, {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now()}
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403, 429) or exc.code >= 500:
+            REQUEST_BUDGET.block(f"provider_http_{exc.code}")
+        return [], {"ok": False, "status_code": exc.code, "error": f"HOLD_PROVIDER_HTTP_{exc.code}", "bytes": 0}
+    except Exception as exc:
+        return [], {"ok": False, "error": f"HOLD_PROVIDER:{type(exc).__name__}:{exc}", "bytes": 0}
 
 
 def openf1_url(endpoint: str, params: Dict[str, Any]) -> str:
@@ -184,18 +193,28 @@ def grid_integrity_anomalies(rows: List[Dict[str, Any]], drivers: List[Dict[str,
 def select_recent_completed_session(sessions: List[Dict[str, Any]], now: dt.datetime, lookback_hours: int, forced_session: str = "auto") -> Optional[Dict[str, Any]]:
     forced = (forced_session or "auto").lower().strip()
     candidates: List[Tuple[dt.datetime, Dict[str, Any]]] = []
+    seen = set()
     for s in sessions:
+        if not isinstance(s, dict):
+            return None
+        key = str(s.get("session_key", ""))
+        if (key in seen or not re.fullmatch(r"[1-9][0-9]*", key)
+                or not re.fullmatch(r"[1-9][0-9]*", str(s.get("meeting_key", "")))):
+            return None
+        seen.add(key)
         start = parse_time(s.get("date_start"))
-        end = parse_time(s.get("date_end")) or start
-        if not end:
+        end = parse_time(s.get("date_end"))
+        if not start or not end or end <= start:
             continue
         name = str(s.get("session_name") or "").lower()
         if forced not in {"", "auto", "latest"} and forced not in name:
             continue
-        # Completed or near-completed sessions in recent lookback.
+        # Only an explicitly ended session is a completed-session candidate.
         if end <= now and now - end <= dt.timedelta(hours=lookback_hours):
             candidates.append((end, s))
     candidates.sort(key=lambda x: x[0], reverse=True)
+    if len(candidates) > 1 and candidates[0][0] == candidates[1][0]:
+        return None
     return candidates[0][1] if candidates else None
 
 
@@ -269,9 +288,9 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
     future_timestamps = 0
     now = utc_now()
     for r in rows:
-        if "session_key" in r and session_key is not None and str(r.get("session_key")) != str(session_key):
+        if session_key is None or str(r.get("session_key")) != str(session_key):
             wrong_session += 1
-        if "meeting_key" in r and meeting_key is not None and str(r.get("meeting_key")) != str(meeting_key):
+        if meeting_key is None or str(r.get("meeting_key")) != str(meeting_key):
             wrong_meeting += 1
         if r.get("driver_number") not in (None, ""):
             driver_numbers.add(str(r.get("driver_number")))
@@ -284,7 +303,7 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
                 t = parse_time(r.get(tk))
                 if not t:
                     bad_timestamps += 1
-                elif t > now + dt.timedelta(minutes=5):
+                elif t > now:
                     future_timestamps += 1
                 break
 
@@ -548,6 +567,8 @@ def write_ledger_snapshot(out_root: Path, manifest: Dict[str, Any]) -> Dict[str,
 
 
 def main() -> int:
+    global REQUEST_BUDGET
+    REQUEST_BUDGET = None
     ap = argparse.ArgumentParser(description="Sandbox Session Data Processor Loop v1")
     ap.add_argument("--mode", default="run_now", choices=["safe_test", "run_now", "manual_session", "manifest_audit"])
     ap.add_argument("--season", type=int, default=2026)
@@ -561,7 +582,7 @@ def main() -> int:
     args = ap.parse_args()
 
     RUNTIME.mkdir(parents=True, exist_ok=True)
-    run_id = utc_now().strftime("%Y%m%dT%H%M%SZ")
+    run_id = utc_now().strftime("%Y%m%dT%H%M%S%fZ")
     policy = read_json(POLICY_PATH, {})
     result: Dict[str, Any] = {
         "schema_version": "session_processor_result_v1",
@@ -606,11 +627,11 @@ def main() -> int:
     sessions, sessions_meta = fetch_sessions(args.season)
     catalog_observed_at_utc = iso_now()  # Response observed now, not at later publication.
     result["sessions_fetch"] = sessions_meta
-    if not sessions:
-        result.update({"status": "late", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
+    if not sessions or sessions_meta.get("ok") is not True:
+        result.update({"status": "HOLD", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
         write_json(RUNTIME / "session_processor_result.json", result)
         print(json.dumps(result, indent=2, sort_keys=True))
-        return 0
+        return 2
 
     lookback = int(policy.get("recent_session_lookback_hours", 36))
     session = select_recent_completed_session(sessions, utc_now(), lookback, args.session_filter)
@@ -626,8 +647,8 @@ def main() -> int:
     session_slug = slugify(f"{session.get('session_name')}_{session.get('session_key')}")
     latest_root = ROOT / "latest" / "session_data_processor" / event_id / session_slug
     history_root = ROOT / "history" / "session_data_processor" / event_id / run_id / session_slug
-    for p in [latest_root, history_root]:
-        p.mkdir(parents=True, exist_ok=True)
+    history_root.mkdir(parents=True, exist_ok=False)
+    latest_root.mkdir(parents=True, exist_ok=True)
 
     endpoint_list = list(policy.get("openf1_endpoints") or DEFAULT_ENDPOINTS)
     if args.include_heavy:
@@ -669,6 +690,7 @@ def main() -> int:
         write_json(history_root / "raw" / f"openf1_{endpoint}.json", rows)
         rows_to_csv(history_root / "raw" / f"openf1_{endpoint}.csv", rows)
         report = analyze_rows(endpoint, rows, source_session, meta)
+        report["observed_at_utc"] = observed_at_utc
         report["json_path"] = str(raw_json.relative_to(ROOT))
         report["csv_path"] = str(raw_csv.relative_to(ROOT))
         report["json_sha256"] = sha256_file(raw_json)
@@ -822,6 +844,7 @@ def main() -> int:
         "history_output": str(history_root.relative_to(ROOT)),
         "source_counts": {k: v.get("rows") for k, v in sources.items()},
         "source_statuses": {k: v.get("status") for k, v in sources.items()},
+        "provider_budget": REQUEST_BUDGET.evidence() if REQUEST_BUDGET is not None else None,
     })
     write_json(RUNTIME / "session_processor_result.json", result)
     print(json.dumps(result, indent=2, sort_keys=True))
