@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-14T19:54:23Z
+Generated UTC: 2026-11-14T20:38:04Z
 Event: Brazil - São Paulo - Interlagos
 Session: Race
 Source status: needs_manual_review
