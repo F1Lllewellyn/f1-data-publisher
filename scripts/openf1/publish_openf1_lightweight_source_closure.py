@@ -2451,11 +2451,63 @@ def create_zip(folder: Path, zip_path: Path) -> str:
         zip_path.unlink()
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for p in folder.rglob("*"):
-            if p.is_file() and p != zip_path:
+            if p.is_file() and p not in {zip_path, zip_path.with_suffix(zip_path.suffix + '.sha256.txt')}:
                 z.write(p, p.relative_to(folder))
     digest = hashlib.sha256(zip_path.read_bytes()).hexdigest()
     (zip_path.with_suffix(zip_path.suffix + ".sha256.txt")).write_text(f"{digest}  {zip_path.name}\n", encoding="utf-8")
     return digest
+
+
+def select_event_sessions(sessions, meeting_key, expected_session_key, now):
+    """Bound acquisition to one explicitly identified event, without archive promotion."""
+    reasons = []
+    if 'meeting_key' not in sessions.columns:
+        return sessions.iloc[0:0].copy(), ['event_session_discovery_missing']
+    selected = sessions[sessions['meeting_key'].astype(str) == meeting_key].copy()
+    if selected.empty:
+        return selected, ['event_not_in_verified_discovery']
+    eligible = []
+    for _, row in selected.iterrows():
+        end = _normal_utc(row.get('date_end'))
+        ready = end is not None and end + dt.timedelta(minutes=30) <= now
+        eligible.append(ready)
+        if end is not None and end <= now and not ready:
+            reasons.append('event_session_historical_window_pending:' + str(row['session_key']))
+    selected = selected[eligible].copy()
+    if selected.empty:
+        reasons.append('event_no_historical_sessions_available')
+    if expected_session_key and expected_session_key not in set(selected['session_key'].astype(str)):
+        reasons.append('expected_event_session_not_available:' + expected_session_key)
+    return selected, reasons
+
+
+def event_driver_integrity(sessions, frames, now):
+    """Check supplied event rows against the supplied roster; never invent roster authority."""
+    reasons = []
+    for _, session in sessions.iterrows():
+        key = session['session_key']
+        roster = _frame_for_session(frames['drivers'], key)
+        if 'driver_number' not in roster.columns:
+            reasons.append(f'event_driver_roster_missing:{key}')
+            continue
+        numbers = [_canonical_positive_integer(n) for n in roster['driver_number']]
+        if None in numbers or len(set(numbers)) != len(numbers):
+            reasons.append(f'event_driver_roster_invalid:{key}')
+        for lane, frame in frames.items():
+            scoped = _frame_for_session(frame, key)
+            if 'driver_number' in scoped.columns:
+                observed = {_canonical_positive_integer(n) for n in scoped['driver_number'] if not _missing_optional_value(n)}
+                if not observed.issubset(set(numbers)):
+                    reasons.append(f'event_driver_identity_mismatch:{key}:{lane}')
+                if lane == 'position' and observed != set(numbers):
+                    reasons.append(f'event_driver_position_coverage_incomplete:{key}')
+            if 'date' in scoped.columns:
+                for value in scoped['date']:
+                    stamp = _normal_utc(value)
+                    if stamp is None or stamp > now:
+                        reasons.append(f'event_row_clock_invalid:{key}:{lane}')
+                        break
+    return sorted(set(reasons))
 
 
 def main() -> int:
@@ -2463,6 +2515,8 @@ def main() -> int:
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--completed-only", default="true")
     parser.add_argument("--output-root", default=".")
+    parser.add_argument("--meeting-key", default="", help="Explicit event scope; never substitutes for historical season closure")
+    parser.add_argument("--expected-session-key", default="", help="Require this completed session in the explicit event scope")
     parser.add_argument("--provenance-shadow-session-key", default="")
     parser.add_argument("--provenance-shadow-endpoint", default=SHADOW_ENDPOINT)
     parser.add_argument("--github-repository", default="")
@@ -2477,6 +2531,10 @@ def main() -> int:
     season = int(args.season)
     completed_only = str(args.completed_only).lower() not in {"false", "0", "no"}
     output_root = Path(args.output_root).resolve()
+    if args.meeting_key and (_canonical_positive_integer(args.meeting_key) is None or not completed_only or args.provenance_shadow_session_key):
+        parser.error('event collection requires a canonical meeting key, completed-only and no shadow mode')
+    if args.expected_session_key and (not args.meeting_key or _canonical_positive_integer(args.expected_session_key) is None):
+        parser.error('expected session requires explicit event scope and a canonical session key')
     try:
         selected_shadow_endpoint = _selected_shadow_endpoint(
             args.provenance_shadow_endpoint
@@ -2517,10 +2575,11 @@ def main() -> int:
         return 0
 
     policy = load_policy()
-    latest_root = output_root / "latest" / "openf1_lightweight_source_closure"
+    collection_rel = Path('openf1_event_source_closure') / args.meeting_key if args.meeting_key else Path('openf1_lightweight_source_closure')
+    latest_root = output_root / "latest" / collection_rel
     history_root = (
-        output_root / "history" / "openf1_lightweight_source_closure"
-        / utc_now().strftime("%Y%m%d_%H%M%S")
+        output_root / "history" / collection_rel
+        / utc_now().strftime("%Y%m%d_%H%M%S_%f" if args.meeting_key else "%Y%m%d_%H%M%S")
     )
     data_latest = latest_root / "data"
     data_history = history_root / "data"
@@ -2542,7 +2601,7 @@ def main() -> int:
         )
 
     latest_root.mkdir(parents=True, exist_ok=True)
-    history_root.mkdir(parents=True, exist_ok=True)
+    history_root.mkdir(parents=True, exist_ok=False)
 
     request_log: List[Dict[str, Any]] = []
     budget = NormalRequestBudget(
@@ -2576,11 +2635,14 @@ def main() -> int:
             previous_target_keys = set()
 
     sessions = get_sessions(season, completed_only, request_log, budget)
+    event_reasons = []
+    if args.meeting_key:
+        sessions, event_reasons = select_event_sessions(sessions, args.meeting_key, args.expected_session_key, utc_now())
     discovery_status = (
         str(request_log[0].get("status") or "unknown")
         if request_log else "not_observed"
     )
-    source_quality_reasons: List[str] = []
+    source_quality_reasons: List[str] = list(event_reasons)
     if discovery_status not in {"pass", "zero_rows", "not_observed"}:
         source_quality_reasons.append(_availability_reason(
             "session_discovery", discovery_status
@@ -2596,7 +2658,7 @@ def main() -> int:
         cache_evidence.get("known_target_session_keys") or []
     )
     missing_cache_targets = sorted(known_cache_target_keys - current_target_keys)
-    if missing_cache_targets:
+    if missing_cache_targets and not args.meeting_key:
         source_quality_reasons.append(
             "verified_cache_session_coverage_regression:"
             + ",".join(missing_cache_targets[:20])
@@ -2784,6 +2846,8 @@ def main() -> int:
         source_quality_reasons.append(
             f"required_lane_session_failures:{fail_count}"
         )
+    if args.meeting_key:
+        source_quality_reasons.extend(event_driver_integrity(sessions, combined_frames, utc_now()))
     source_quality_reasons = list(dict.fromkeys(source_quality_reasons))
     publication_eligible = not source_quality_reasons
     source_quality_status = (
@@ -2849,6 +2913,13 @@ def main() -> int:
         "latest_zip": "openf1_lightweight_source_closure.zip",
         "history_path": str(history_root.relative_to(output_root)),
         "normal_collection": normal_collection,
+        "collection_scope": "event" if args.meeting_key else "historical_season",
+        "meeting_key": args.meeting_key or None,
+        "expected_session_key": args.expected_session_key or None,
+        "historical_archive_complete": publication_eligible if not args.meeting_key else False,
+        "official_roster_verified": False,
+        "official_final_grid_verified": False,
+        "scientific_readiness": "HOLD_NO_AUTHENTICATED_FORECAST_INPUT_CONTRACT",
     }
     (latest_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (history_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
@@ -2903,6 +2974,9 @@ def main() -> int:
     print(f"History output: {history_root}")
     print(f"Latest ZIP SHA256: {zip_digest}")
     print(f"Pass lanes: {pass_count}; Pass with warnings lanes: {warning_count}; Fail lanes: {fail_count}")
+    print(json.dumps({'source_quality_reasons': source_quality_reasons,
+                      'cache_evidence': cache_evidence,
+                      'request_budget': budget.evidence()}, sort_keys=True))
     return 0 if publication_eligible else 1
 
 
