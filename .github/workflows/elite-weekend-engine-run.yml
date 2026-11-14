@@ -1,4 +1,4 @@
-﻿name: Elite Weekend Engine Run
+name: Elite Weekend Engine Run
 
 on:
   workflow_dispatch:
@@ -40,6 +40,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests pandas pyarrow numpy python-dateutil tabulate
 
+      - name: Restore quarantine transfer cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ env.ELITE_INPUT_DIR }}/downloads/*.zip
+            ${{ env.ELITE_INPUT_DIR }}/downloads/*.identity.json
+          key: elite-quarantine-${{ hashFiles('scripts/elite/download_latest_openf1_artifacts.py') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            elite-quarantine-${{ hashFiles('scripts/elite/download_latest_openf1_artifacts.py') }}-
+
       - name: Download latest OpenF1 autopilot artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,6 +57,15 @@ jobs:
           python scripts/elite/download_latest_openf1_artifacts.py \
             --output-dir "$ELITE_INPUT_DIR" \
             --include-post-race-warning
+
+      - name: Preserve verified transfer cache on scientific HOLD
+        if: ${{ always() && hashFiles('output/elite_weekend_engine_v2/downloads/*.identity.json') != '' }}
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.ELITE_INPUT_DIR }}/downloads/*.zip
+            ${{ env.ELITE_INPUT_DIR }}/downloads/*.identity.json
+          key: elite-quarantine-${{ hashFiles('scripts/elite/download_latest_openf1_artifacts.py') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Build Elite Weekend Engine v2 outputs
         run: |

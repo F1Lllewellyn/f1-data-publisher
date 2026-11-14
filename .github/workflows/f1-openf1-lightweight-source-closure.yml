@@ -105,13 +105,14 @@ jobs:
             --github-run-attempt "${{ github.run_attempt }}"
 
       - name: Upload legacy source closure artifact
-        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        if: ${{ always() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
         uses: actions/upload-artifact@v6
         with:
           name: openf1-lightweight-source-closure
           path: |
             latest/openf1_lightweight_source_closure/**
           retention-days: 30
+          if-no-files-found: warn
 
       - name: Upload historical REST provenance shadow artifact
         if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.provenance_shadow_session_key != '' && github.ref == 'refs/heads/main' }}
