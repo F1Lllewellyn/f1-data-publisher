@@ -36,14 +36,21 @@ STATIC_TOKENS: Dict[str, List[str]] = {
         "safe_git_push_rebase_retry.sh",
     ],
     ".github/workflows/f1-1b-output-contract-after-control-room-v22.yml": [
-        "latest/workbook_kpi_refresh_applier/**",
-        "history/workbook_kpi_refresh_applier/**",
-        "latest/session_data_processor/**",
-        "history/session_data_processor/**",
-        "F1_Workbook_KPI_SANDBOX_*.xlsx",
-        "git add -f",
-        "PROTECTED_PATTERN",
-        "safe_git_push_rebase_retry.sh",
+        # Bridge-owned outputs only. Since PR #364 the bridge MUST NOT stage
+        # upstream session and workbook archives; their producer owns those.
+        '_runtime/1b_output_contract/start.marker',
+        'MARKER=',
+        'latest/1b_output_contract',
+        'latest/readiness_handoff',
+        'latest/downstream_consumers',
+        'history_roots=(',
+        'find "$root" -type f -newer "$MARKER" -print0',
+        'git add -- "$p"',
+        'git add -- "$f"',
+        'git check-ignore -q',
+        'PROTECTED_PATTERN',
+        'git diff --cached --name-only',
+        'safe_git_push_rebase_retry.sh',
     ],
 }
 
@@ -105,6 +112,32 @@ def static_checks(repo: Path) -> Dict[str, Any]:
             if protected_force_adds:
                 check["protected_force_add_violation"] = protected_force_adds
                 issue_count += len(protected_force_adds)
+            # Distinguish an old, harmful all-history staging contract from
+            # the intentionally bounded v22 bridge introduced in PR #364.
+            if rel == ".github/workflows/f1-1b-output-contract-after-control-room-v22.yml":
+                commit_step = text.split(
+                    "- name: Commit v25 output-contract bridge", 1
+                )
+                blocked = []
+                if len(commit_step) != 2:
+                    blocked.append("missing_output_contract_commit_step")
+                else:
+                    staging = commit_step[1]
+                    forbidden = (
+                        "git add -f",
+                        "git add latest/session_data_processor",
+                        "git add history/session_data_processor",
+                        "git add latest/workbook_kpi_refresh_applier",
+                        "git add history/workbook_kpi_refresh_applier",
+                        '"history/session_data_processor"',
+                        '"history/workbook_kpi_refresh_applier"',
+                    )
+                    blocked.extend(token for token in forbidden if token in staging)
+                    if "find \"$root\" -type f -newer \"$MARKER\" -print0" not in staging:
+                        blocked.append("unbounded_historical_staging")
+                if blocked:
+                    check["unsafe_bridge_staging"] = blocked
+                    issue_count += len(blocked)
         checks.append(check)
     return {"status": "pass" if issue_count == 0 else "fail", "issue_count": issue_count, "checks": checks}
 
