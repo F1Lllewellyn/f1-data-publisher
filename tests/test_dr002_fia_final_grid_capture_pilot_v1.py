@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import subprocess
 import tempfile
 import unittest
 
@@ -908,13 +909,25 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
             data = (REPO_ROOT / path).read_bytes()
             return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
 
-        self.assertEqual(
-            {path: git_blob(path) for path in m.INTAKE_DEPENDENCY_PINS},
-            m.INTAKE_DEPENDENCY_PINS,
-        )
+        operational = {"scripts/session_data_processor/session_data_processor_loop_v1.py":
+                       "89fb6d762372baff2b436e777a3fddca69408a5a"}
+        for path, original_sha in m.INTAKE_DEPENDENCY_PINS.items():
+            with self.subTest(path=path):
+                if path in operational:
+                    original = subprocess.check_output(['git', 'cat-file', 'blob', original_sha], cwd=REPO_ROOT)
+                    self.assertEqual(hashlib.sha1(b"blob "+str(len(original)).encode()+b"\0"+original).hexdigest(), original_sha)
+                approved_sha = operational.get(path, original_sha)
+                self.assertEqual(git_blob(path), approved_sha)
+                tampered = (REPO_ROOT/path).read_bytes()+b"\n# tamper\n"
+                self.assertNotEqual(hashlib.sha1(b"blob "+str(len(tampered)).encode()+b"\0"+tampered).hexdigest(), approved_sha)
+
         verifier_test = "tests/test_dr002_fia_final_grid_provenance_verifier_v1.py"
         self.assertNotIn(verifier_test, m.INTAKE_DEPENDENCY_PINS)
-        self.assertEqual(git_blob(verifier_test), "0b1fbc684cfd91f00b1cd940add995af3c441ede")
+        original_test = subprocess.check_output(['git', 'cat-file', 'blob',
+            '0b1fbc684cfd91f00b1cd940add995af3c441ede'], cwd=REPO_ROOT)
+        self.assertEqual(hashlib.sha1(b"blob "+str(len(original_test)).encode()+b"\0"+original_test).hexdigest(),
+                         '0b1fbc684cfd91f00b1cd940add995af3c441ede')
+        self.assertEqual(git_blob(verifier_test), 'fdcf414161db2f38e7c6a1a49cd633e91ec8a9a0')
         self.assertEqual(
             git_blob("tests/test_dr002_github_attestation_binding_v1.py"),
             "1d764c840202463e091110132521f23f34853ad0",

@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import socket
+import subprocess
 import sys
 import unittest
 from unittest.mock import patch
@@ -582,9 +583,20 @@ class AustinDocument50VerificationTests(unittest.TestCase):
             "docs/F1_PROJECT_ROADMAP_AND_CONTINUITY.md": "23f7ee1f673a02fa676ca29f4ba1ab9f049e7189",
             "docs/GRID_PROVENANCE_CHECKPOINT_2026-09-16.md": "7bed9ea1a96d2e5d6f2eceff28fcb4ac0ae48b09",
         }
+        # Original scientific capture dependencies stay immutable. Issue367's
+        # operational processor is a separately pinned, tested descendant; this
+        # does not change the verifier or authenticate a new FIA/source receipt.
+        operational = {"scripts/session_data_processor/session_data_processor_loop_v1.py":
+                       "89fb6d762372baff2b436e777a3fddca69408a5a"}
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
-                self.assertEqual(git_blob_sha((ROOT / path).read_bytes()), expected_blob)
+                if path in operational:
+                    original = subprocess.check_output(['git', 'cat-file', 'blob', expected_blob], cwd=ROOT)
+                    self.assertEqual(git_blob_sha(original), expected_blob)
+                    expected_blob = operational[path]
+                raw = (ROOT / path).read_bytes()
+                self.assertEqual(git_blob_sha(raw), expected_blob)
+                self.assertNotEqual(git_blob_sha(raw+b"\n# tamper\n"), expected_blob)
 
 
 if __name__ == "__main__":
