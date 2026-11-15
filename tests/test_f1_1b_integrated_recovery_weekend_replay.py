@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 import shutil
 import sys
+import subprocess
+import textwrap
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -33,7 +35,7 @@ context = fixtures.load_module('weekend_context', 'scripts/session_data_processo
 
 class WeekendPipelineTests(unittest.TestCase):
     def setUp(self):
-        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup); self.root = Path(temp.name)
+        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup); self.root = Path(temp.name)/'checkout'; self.root.mkdir()
         self.sessions = gate_tests.catalog()
         (self.root/'Engine_2026-06-07_STABLE').write_text('protected immutable sentinel')
         self.protected_sha = hashlib.sha256((self.root/'Engine_2026-06-07_STABLE').read_bytes()).hexdigest()
@@ -44,6 +46,26 @@ class WeekendPipelineTests(unittest.TestCase):
                             ('POLICY_PATH',self.root/'configs/session_data_processor/session_data_processor_policy_v1.json')):
             self.enterContext(patch.object(processor,name,value))
         self.output = io.StringIO()
+        helper=self.root/'scripts/ops/safe_git_push_rebase_retry.sh'
+        helper.parent.mkdir(parents=True); shutil.copyfile(ROOT/'scripts/ops/safe_git_push_rebase_retry.sh',helper)
+        (self.root/'.gitignore').write_text('_runtime/\n__pycache__/\n*.xlsx\n')
+        self.remote=Path(temp.name)/'remote.git'
+        self.git('init','--bare',str(self.remote)); self.git('init','-b','main')
+        self.git('config','user.name','Sandbox replay'); self.git('config','user.email','replay@example.invalid')
+        self.git('add','.'); self.git('commit','-m','synthetic replay base')
+        self.git('remote','add','origin',str(self.remote)); self.git('push','-u','origin','main')
+
+    def git(self,*args):
+        return subprocess.run(['git',*args],cwd=self.root,text=True,capture_output=True,check=True).stdout.strip()
+
+    def publish(self, workflow, step):
+        text=(ROOT/'.github/workflows'/workflow).read_text()
+        shell=textwrap.dedent(text.split('- name: '+step,1)[1].split('run: |',1)[1]).replace('${{ inputs.commit_outputs }}','true')
+        r=subprocess.run(['bash','-c',shell],cwd=self.root,text=True,capture_output=True,
+            env=dict(os.environ,GITHUB_REF_NAME='main',F1_SAFE_PUSH_SLEEP_SECONDS='0'),timeout=20)
+        self.assertEqual(r.returncode,0,r.stdout+r.stderr)
+        self.assertEqual(self.git('rev-parse','HEAD'),self.git('--git-dir='+str(self.remote),'rev-parse','main'))
+        return self.git('rev-parse','HEAD')
 
     def payload(self, session, endpoint):
         if endpoint in ('pit','intervals'):
@@ -55,6 +77,8 @@ class WeekendPipelineTests(unittest.TestCase):
                 for i in range(1,23)]
 
     def capture(self, index, mutate=None):
+        marker=self.root/'_runtime/peak_elite/start.marker'
+        marker.parent.mkdir(parents=True,exist_ok=True); marker.touch()
         session=self.sessions[index]
         now=processor.parse_time(session['date_end'])+timedelta(minutes=35)
         def response(url, **kwargs):
@@ -90,12 +114,26 @@ class WeekendPipelineTests(unittest.TestCase):
             steps=[dict(label=s,ok=True,started_utc=(self.now-timedelta(seconds=1)).isoformat()) for s in
                 ('session_data_processor_run_now','workbook_kpi_refresh_apply','dashboard_readiness_publish')])
         fixtures.write(self.root/'latest/peak_elite/orchestrator_status.json',status)
+        peak_head=self.publish('f1-peak-elite-control-room-one-click-v1.yml','Commit safe repaired workflows')
+        published=json.loads(self.git('show',peak_head+':latest/latest_manifest.json'))
+        self.assertEqual(published['session_key'],state['session_key'])
         marker=self.root/'_runtime/1b_output_contract/start.marker'; marker.parent.mkdir(parents=True,exist_ok=True); marker.touch(); os.utime(marker,(1,1))
         with patch.object(contract,'utc_now',return_value=self.now), \
              patch.object(downstream,'utc_now_iso',return_value=self.now.isoformat()), \
              patch.object(context,'utc_now_iso',return_value=self.now.isoformat()), contextlib.redirect_stdout(self.output):
             contract.run(self.root); downstream.run(self.root); context.run(self.root)
-        return peak.verify_bridge_output(self.root,reference_time=self.now)
+        receipt=peak.verify_bridge_output(self.root,reference_time=self.now)
+        if receipt['status']=='VERIFIED_CONTEXT_ONLY':
+            fixtures.write(self.root/'latest/1b_output_contract/verified_context_custody.json',receipt)
+            head=self.publish('f1-1b-output-contract-after-control-room-v22.yml','Commit v25 output-contract bridge')
+            saved=json.loads(self.git('show',head+':latest/1b_output_contract/verified_context_custody.json'))
+            self.assertEqual(saved,receipt)
+            self.assertEqual(self.publish('f1-1b-output-contract-after-control-room-v22.yml','Commit v25 output-contract bridge'),head)
+            # Independent reader of the published commit verifies every consumed byte.
+            for rel,digest in {**saved['consumed_fingerprints'],**saved['output_fingerprints']}.items():
+                raw=subprocess.check_output(['git','show',head+':'+rel],cwd=self.root)
+                self.assertEqual(hashlib.sha256(raw).hexdigest(),digest,rel)
+        return receipt
 
     def assert_scientific_hold(self, gate='post_qualifying'):
         mod=gate_tests.gate
