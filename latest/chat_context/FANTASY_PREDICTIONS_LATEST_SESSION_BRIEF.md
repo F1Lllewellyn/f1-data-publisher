@@ -1,11 +1,11 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-15T17:28:47Z
-Event: Brazil - São Paulo - Interlagos
-Session: Race
+Generated UTC: 2026-11-15T19:51:57Z
+Event: unknown event
+Session: unknown session
 Source status: needs_manual_review
 Dashboard readiness: NOT READY
-Readiness reasons: ['required_source_status_needs_manual_review', 'readiness_blocking_issues', 'readiness_requires_manual_review', 'required_source_evidence_unverified']
+Readiness reasons: ['stale_authoritative_session', 'required_source_status_needs_manual_review', 'readiness_blocking_issues', 'readiness_requires_manual_review', 'required_source_evidence_unverified']
 Diagnostic publishing allowed: true
 
 ## Governance
