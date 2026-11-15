@@ -85,6 +85,63 @@ class PeakHandoffTests(unittest.TestCase):
                 self.assertEqual(self.observe(status)['status'], 'HOLD')
 
 
+class ConsumerOutputCustodyTests(unittest.TestCase):
+    def setUp(self):
+        setup = PeakHandoffTests(); setup.setUp()
+        self.addCleanup(setup.doCleanups)
+        self.setup = setup; self.root = setup.root
+        self.output = fixtures.load_module('real_output_contract', 'scripts/session_data_processor/f1_1b_output_contract_v16.py')
+        self.downstream = fixtures.load_module('real_downstream', 'scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py')
+        self.context = fixtures.load_module('real_context', 'scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py')
+        setup.observe()
+        marker = self.root/'_runtime/1b_output_contract/start.marker'
+        marker.parent.mkdir(parents=True); marker.touch(); os.utime(marker, (1, 1))
+        with patch.object(self.output, 'utc_now', return_value=setup.now), \
+             patch.object(self.downstream, 'utc_now_iso', return_value=setup.now.isoformat()), \
+             patch.object(self.context, 'utc_now_iso', return_value=setup.now.isoformat()):
+            self.output.run(self.root)
+            self.downstream.run(self.root)
+            self.context.run(self.root)
+
+    def observe(self):
+        with patch.dict(os.environ, self.setup.env):
+            return peak_mod.verify_bridge_output(self.root, reference_time=self.setup.now)
+
+    def test_real_consumers_receive_exact_context_and_output_hash_receipt(self):
+        r = self.observe()
+        self.assertEqual(r['status'], 'VERIFIED_CONTEXT_ONLY', r)
+        self.assertEqual(len(r['output_fingerprints']), 9)
+        self.assertFalse(r['stable_engine_executed']); self.assertFalse(r['prediction_locked'])
+
+    def test_each_wrong_event_or_session_consumer_is_rejected(self):
+        r = self.observe()
+        for relative in r['output_fingerprints']:
+            path=self.root/relative; raw=path.read_bytes(); data=json.loads(raw)
+            with self.subTest(path=relative):
+                data['event']['session_key']=999
+                write(path, data)
+                self.assertIn('HOLD_CONSUMER_SESSION_MISMATCH:'+relative, self.observe()['reasons'])
+                path.write_bytes(raw)
+
+    def test_actual_selection_mismatch_or_missing_stage_rejects_publication(self):
+        path=self.root/'latest/forecast_bundle_ledger/latest_bundle_snapshot.json'
+        data=json.loads(path.read_text()); data['source']['manifest_path']='latest/old/manifest.json'; write(path,data)
+        self.assertIn('HOLD_CONSUMER_INPUT_SELECTION:source', self.observe()['reasons'])
+        (self.root/'latest/chat_context/combined_context_index.json').unlink()
+        self.assertEqual(self.observe()['status'], 'HOLD')
+
+    def test_legacy_duplicate_overwrites_are_detectable_before_publication(self):
+        # Existing legacy consumers use the bundle run ID as a history directory;
+        # a duplicate re-evaluation must not be represented as immutable success.
+        history=list((self.root/'history/downstream_consumers').rglob('combined_downstream_consumer_manifest.json'))
+        before=history[0].read_bytes()
+        with patch.object(self.downstream, 'utc_now_iso', return_value='2026-11-07T18:01:00Z'):
+            self.downstream.run(self.root)
+        self.assertNotEqual(history[0].read_bytes(), before)
+        self.assertEqual(self.observe()['status'], 'HOLD')
+        # Workflow publication independently rejects *any* tracked history delta.
+
+
 class PeakPublicationTests(unittest.TestCase):
     git = publication.BridgePublicationTests.git
     write = publication.BridgePublicationTests.write

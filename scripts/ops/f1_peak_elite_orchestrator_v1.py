@@ -176,6 +176,58 @@ def verify_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
             "stable_engine_executed": False, "promotion_allowed": False}
 
 
+def verify_bridge_output(repo: Path, reference_time=None) -> Dict[str, Any]:
+    """Check the actual legacy consumer selections before their outputs publish."""
+    result = verify_bridge_input(repo, reference_time=reference_time)
+    reasons = list(result["reasons"])
+    selector = read_json(repo / "latest/latest_manifest.json", {})
+    selector = selector if isinstance(selector, dict) else {}
+    bundle_path = "latest/forecast_bundle_ledger/latest_bundle_snapshot.json"
+    bundle = read_json(repo / bundle_path, {})
+    bundle = bundle if isinstance(bundle, dict) else {}
+    for field, expected in (("source", selector.get("latest_session_data_processor_manifest")),
+                            ("workbook", "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json")):
+        value = bundle.get(field, {})
+        if not isinstance(value, dict) or value.get("manifest_path") != expected or not expected:
+            reasons.append(f"HOLD_CONSUMER_INPUT_SELECTION:{field}")
+    relatives = [bundle_path, "latest/readiness_handoff/combined_readiness_handoff.json",
+        "latest/downstream_consumers/combined_downstream_consumer_manifest.json",
+        "latest/chat_context/combined_context_index.json",
+        "latest/consumer_trigger_governor/trigger_decision.json",
+        "latest/notification_routing/notification_decision.json"]
+    relatives += [f"latest/downstream_consumers/{c}/consumer_input.json"
+                  for c in ("race_predictions", "fantasy_predictions", "race_reports")]
+    marker = repo / "_runtime/1b_output_contract/start.marker"
+    now = reference_time or dt.datetime.now(dt.timezone.utc)
+    upstream = read_json(repo / "latest/peak_elite/orchestrator_status.json", {})
+    for relative in relatives:
+        path = repo / relative
+        value = read_json(path, {})
+        value = value if isinstance(value, dict) else {}
+        event = value.get("event", {})
+        event = event if isinstance(event, dict) else {}
+        if (event.get("event_id") != result.get("event_id")
+                or str(event.get("session_key")) != str(result.get("session_key"))):
+            reasons.append(f"HOLD_CONSUMER_SESSION_MISMATCH:{relative}")
+        if value.get("promotion_allowed") is not False or value.get("forecast_gate_activated", False) is not False:
+            reasons.append(f"HOLD_CONSUMER_UNSAFE_AUTHORITY:{relative}")
+        try:
+            created = dt.datetime.fromisoformat(upstream["created_utc"].replace("Z", "+00:00"))
+            observed = dt.datetime.fromisoformat(value["generated_at_utc"].replace("Z", "+00:00"))
+            # Legacy consumer timestamps have second precision; no future time is allowed.
+            if not created.replace(microsecond=0) <= observed <= now:
+                raise ValueError("consumer chronology")
+        except (KeyError, TypeError, ValueError, AttributeError):
+            reasons.append(f"HOLD_CONSUMER_TIME_INVALID:{relative}")
+        if "run_id" in value and value.get("run_id") != bundle.get("run_id"):
+            reasons.append(f"HOLD_CONSUMER_BUNDLE_MISMATCH:{relative}")
+        if not marker.is_file() or not path.is_file() or path.stat().st_mtime_ns <= marker.stat().st_mtime_ns:
+            reasons.append(f"HOLD_CONSUMER_NOT_WRITTEN_THIS_RUN:{relative}")
+    result.update(status="HOLD" if reasons else "VERIFIED_CONTEXT_ONLY", reasons=reasons,
+                  bundle_run_id=bundle.get("run_id"), output_fingerprints=byte_fingerprints(repo, relatives))
+    return result
+
+
 def build_plain_report(result: Dict[str, Any]) -> str:
     steps = result.get("steps", [])
     step_lines = [f"- `{s.get('label')}`: {'PASS' if s.get('ok') else 'FAIL'} (`{s.get('returncode')}`)" for s in steps]
@@ -231,16 +283,18 @@ def latest_state(repo: Path) -> Dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor", "verify_bridge_input"])
+    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor", "verify_bridge_input", "verify_bridge_output"])
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--session-filter", default="auto")
     parser.add_argument("--run-forecast-gate", default="false")
     args = parser.parse_args()
 
     repo = Path(args.repo_root).resolve()
-    if args.operation == "verify_bridge_input":
-        verification = verify_bridge_input(repo)
+    if args.operation in {"verify_bridge_input", "verify_bridge_output"}:
+        verification = (verify_bridge_output if args.operation == "verify_bridge_output" else verify_bridge_input)(repo)
         write_json(repo / "_runtime/1b_output_contract/upstream_verification.json", verification)
+        if args.operation == "verify_bridge_output" and verification["status"] != "HOLD":
+            write_json(repo / "latest/1b_output_contract/verified_context_custody.json", verification)
         print(json.dumps(verification, sort_keys=True))
         return 2 if verification["status"] == "HOLD" else 0
     runtime = repo / "_runtime" / "peak_elite" / "orchestrator"

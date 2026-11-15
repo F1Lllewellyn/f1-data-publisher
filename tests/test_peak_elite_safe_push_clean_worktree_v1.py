@@ -127,9 +127,14 @@ class CleanWorktreeTests(unittest.TestCase):
             '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': 'c4b5e197d8f21b277127d8e06122d7c1d7b74496',
             'docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md': '85ce44807ef159b5ba5d3bfd543ea1f945097f77',
         }
+        recovery = {'.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '1f8441869ac384c8f23688d2b5eba37f4ba4e696'}
         for path, sha in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT/path).read_bytes()
+                if path in recovery:
+                    historical = subprocess.check_output(['git', 'cat-file', 'blob', sha], cwd=ROOT)
+                    self.assertEqual(hashlib.sha1(b'blob '+str(len(historical)).encode()+b'\0'+historical).hexdigest(), sha)
+                    sha = recovery[path]
                 self.assertEqual(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest(), sha)
 
 

@@ -127,7 +127,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_input
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_output
 
       - name: Write bridge completion marker
         shell: bash
