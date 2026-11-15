@@ -908,7 +908,7 @@ class FiaFinalGridEvidenceChainAdversarialTests(unittest.TestCase):
 
         # Only the reviewed operational test lineage changes. The actual FIA
         # verifier, receipt, attestation and source-consumer code stays exact.
-        reviewed_tests = {'tests/test_dr002_fia_final_grid_capture_pilot_v1.py': '8b8be41bddcfa0b822b4793da5ab32d29c9533f1', 'tests/test_dr002_fia_final_grid_provenance_verifier_v1.py': 'fdcf414161db2f38e7c6a1a49cd633e91ec8a9a0'}
+        reviewed_tests = {'tests/test_dr002_fia_final_grid_capture_pilot_v1.py': 'c53a29adb4c50960ac88453542a19e5680b0de99', 'tests/test_dr002_fia_final_grid_provenance_verifier_v1.py': '6956a1a4edc8bc427fcaecb860c5eb4d969b7579'}
         for path, original_sha in DEPENDENCY_BLOBS.items():
             with self.subTest(path=path):
                 if path in reviewed_tests:

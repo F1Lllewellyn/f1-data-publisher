@@ -95,8 +95,43 @@ class ByteCustodyTests(unittest.TestCase):
         path.symlink_to(self.source_path)
         self.assertFalse(self.observe()["downstream_eligible"])
 
+    def test_rehashed_unknown_driver_fails_independent_roster_verification(self):
+        source = json.loads(self.source_path.read_text())
+        report = source['sources']['openf1_position']; path = self.root/report['json_path']
+        rows=json.loads(path.read_text()); rows[0]['driver_number']=999; write(path, rows)
+        report['json_sha256']=hashlib.sha256(path.read_bytes()).hexdigest(); write(self.source_path,source)
+        workbook=json.loads(self.workbook_path.read_text())
+        workbook['authority_fingerprints'][self.source_path.relative_to(self.root).as_posix()] = hashlib.sha256(self.source_path.read_bytes()).hexdigest()
+        write(self.workbook_path,workbook)
+        result=self.observe()
+        self.assertFalse(result['downstream_eligible'])
+        self.assertIn('source_driver_identity_unverified:openf1_position',result['readiness_reasons'])
+
+    def test_manifest_cannot_demote_weather_to_optional(self):
+        source=json.loads(self.source_path.read_text())
+        source['readiness_aggregation']['critical_endpoints'].remove('weather')
+        source['readiness_aggregation']['per_source']['openf1_weather']['role']='optional_context'
+        write(self.source_path,source)
+        workbook=json.loads(self.workbook_path.read_text())
+        workbook['authority_fingerprints'][self.source_path.relative_to(self.root).as_posix()] = hashlib.sha256(self.source_path.read_bytes()).hexdigest()
+        write(self.workbook_path,workbook)
+        result=self.observe()
+        self.assertFalse(result['downstream_eligible'])
+        self.assertIn('required_source_policy_mismatch',result['readiness_reasons'])
+
 
 class ProcessorBoundaryTests(unittest.TestCase):
+    def test_roster_validation_is_order_independent_and_rejects_invalid_numbers(self):
+        for value in (None, True, 0, -1, 1.5, '1.0', 999):
+            reports={f'openf1_{e}':dict(status='clean',anomalies=[]) for e in ('drivers','position')}
+            rows={'position':[dict(driver_number=value)],'drivers':[dict(driver_number=1)]}
+            processor.validate_driver_custody(reports,rows)
+            self.assertEqual(reports['openf1_position']['status'],'conflicting',value)
+        reports={'openf1_drivers':dict(status='clean',anomalies=[])}
+        processor.validate_driver_custody(reports,{'drivers':[dict(driver_number=1,name='A'),dict(driver_number=1,name='B')]})
+        self.assertEqual(reports['openf1_drivers']['status'],'conflicting')
+        self.assertFalse(reports['openf1_drivers']['driver_custody']['official_entry_list_verified'])
+
     def test_missing_end_is_not_completed(self):
         session = dict(session_key=1, meeting_key=2, date_start="2026-11-21T00:00:00Z", session_name="Practice 1")
         now = processor.parse_time("2026-11-21T01:00:00Z")

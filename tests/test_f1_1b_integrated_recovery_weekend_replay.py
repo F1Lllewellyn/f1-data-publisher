@@ -180,6 +180,15 @@ class WeekendPipelineTests(unittest.TestCase):
         self.assertFalse(self.control_room()[1]['downstream_eligible'])
         self.assert_scientific_hold()
 
+    def test_unknown_driver_cannot_pass_source_to_control_room(self):
+        def wrong_driver(endpoint,rows):
+            if endpoint=='position': rows[0]['driver_number']=999
+            return rows
+        result=self.capture(0,wrong_driver)
+        self.assertEqual(result['overall_status'],'conflicting')
+        self.assertFalse(self.control_room()[1]['downstream_eligible'])
+        self.assert_scientific_hold()
+
     def test_restart_history_collision_does_not_overwrite_original_capture(self):
         self.capture(0)
         before={p.relative_to(self.root).as_posix():p.read_bytes() for p in (self.root/'history').rglob('*') if p.is_file()}

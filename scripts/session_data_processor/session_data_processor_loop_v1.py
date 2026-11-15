@@ -343,6 +343,39 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
     }
 
 
+def validate_driver_custody(source_reports, endpoint_rows):
+    """Bind driver-keyed data to this capture's supplied roster, not FIA authority."""
+    def number(value):
+        return int(value) if type(value) in (int, str) and re.fullmatch(r"[1-9][0-9]*", str(value)) else None
+
+    roster_rows = endpoint_rows.get("drivers", [])
+    roster_values = [number(row.get("driver_number")) for row in roster_rows]
+    roster = set(roster_values)
+    roster_valid = bool(roster) and None not in roster and len(roster) == len(roster_values)
+    keyed = {"drivers", "laps", "intervals", "position", "pit", "stints", "session_result", "starting_grid"}
+    for endpoint in keyed:
+        report = source_reports.get(f"openf1_{endpoint}")
+        if not isinstance(report, dict):
+            continue
+        rows = endpoint_rows.get(endpoint, [])
+        issues = []
+        if not roster_valid:
+            issues.append("supplied_driver_roster_missing_invalid_or_duplicated")
+        invalid = sum(number(row.get("driver_number")) is None for row in rows)
+        unknown = sorted({str(row.get("driver_number")) for row in rows
+                          if number(row.get("driver_number")) not in roster})
+        if invalid:
+            issues.append(f"invalid_driver_number_rows={invalid}")
+        if unknown:
+            issues.append("drivers_outside_supplied_roster=" + ",".join(unknown))
+        report["driver_custody"] = {"supplied_roster_verified": roster_valid,
+            "roster_source": "openf1_drivers", "roster_json_sha256": source_reports.get("openf1_drivers", {}).get("json_sha256"),
+            "official_entry_list_verified": False, "issues": issues}
+        if issues and (rows or endpoint == "drivers"):
+            report["anomalies"].extend(issues)
+            report["status"] = "conflicting"
+
+
 def combined_status(source_reports: Dict[str, Dict[str, Any]]) -> str:
     statuses = [v.get("status") for v in source_reports.values()]
     if not statuses:
@@ -656,6 +689,7 @@ def main() -> int:
 
     sources: Dict[str, Dict[str, Any]] = {}
     target_drivers: List[Dict[str, Any]] = []
+    endpoint_rows: Dict[str, List[Dict[str, Any]]] = {}
     for endpoint in endpoint_list:
         source_session = session
         grid_resolution = None
@@ -743,6 +777,11 @@ def main() -> int:
             if source_session is not session and not rows and not meta.get("ok"):
                 report["anomalies"].append("qualifying_grid_unavailable")
         sources[f"openf1_{endpoint}"] = report
+        endpoint_rows[endpoint] = rows
+
+    validate_driver_custody(sources, endpoint_rows)
+    for name, report in sources.items():
+        endpoint = report["endpoint"]
         write_json(latest_root / "validation" / f"openf1_{endpoint}_validation.json", report)
         write_json(history_root / "validation" / f"openf1_{endpoint}_validation.json", report)
 

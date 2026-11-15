@@ -587,12 +587,14 @@ class AustinDocument50VerificationTests(unittest.TestCase):
         # operational processor is a separately pinned, tested descendant; this
         # does not change the verifier or authenticate a new FIA/source receipt.
         operational = {"scripts/session_data_processor/session_data_processor_loop_v1.py":
-                       "89fb6d762372baff2b436e777a3fddca69408a5a"}
+                       "9b33fa3371ce6545691b0b1b4f850512f2d34622"}
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
                 if path in operational:
                     original = subprocess.check_output(['git', 'cat-file', 'blob', expected_blob], cwd=ROOT)
                     self.assertEqual(git_blob_sha(original), expected_blob)
+                    prior = subprocess.check_output(['git','cat-file','blob','89fb6d762372baff2b436e777a3fddca69408a5a'],cwd=ROOT)
+                    self.assertEqual(git_blob_sha(prior),'89fb6d762372baff2b436e777a3fddca69408a5a')
                     expected_blob = operational[path]
                 raw = (ROOT / path).read_bytes()
                 self.assertEqual(git_blob_sha(raw), expected_blob)

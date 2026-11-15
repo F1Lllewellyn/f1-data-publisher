@@ -5,7 +5,7 @@ This connector is intentionally conservative: it reads existing latest/history a
 creates dashboard state files, and never modifies stable predictions or the canonical workbook.
 """
 from __future__ import annotations
-import argparse, hashlib, json, re, sys
+import argparse, hashlib, importlib.util, json, re, sys
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
@@ -123,6 +123,7 @@ def add_reason(reasons: List[str], reason: str) -> None:
 def verify_current_bytes(root, selector, source, workbook, required, reference_time, reasons):
     """Validate the bytes consumers actually use, not just matching labels."""
     fingerprints = {}
+    verified_rows = {}
     pointer = selector.get("latest_session_data_processor_manifest")
     source_root = str(Path(pointer).parent) if isinstance(pointer, str) else ""
     sources = source.get("sources") if isinstance(source.get("sources"), dict) else {}
@@ -158,8 +159,20 @@ def verify_current_bytes(root, selector, source, workbook, required, reference_t
                         if value is None or value > observed:
                             raise ValueError("row_clock")
             fingerprints[expected] = digest
+            verified_rows[name] = rows
         except (OSError, ValueError, TypeError, AttributeError) as exc:
             add_reason(reasons, f"source_bytes_unverified:{name}:{exc}")
+
+    roster_rows = verified_rows.get("openf1_drivers", [])
+    roster_numbers = [positive_int(row.get("driver_number")) for row in roster_rows]
+    roster = set(roster_numbers)
+    if not roster or None in roster or len(roster_numbers) != len(roster):
+        add_reason(reasons, "source_driver_roster_unverified")
+    keyed = {"openf1_drivers", "openf1_laps", "openf1_position", "openf1_session_result", "openf1_starting_grid"}
+    for name in keyed & verified_rows.keys():
+        if any(positive_int(row.get("driver_number")) is None
+               or positive_int(row.get("driver_number")) not in roster for row in verified_rows[name]):
+            add_reason(reasons, f"source_driver_identity_unverified:{name}")
 
     bindings = workbook.get("authority_fingerprints")
     mandatory = {"latest/latest_manifest.json", "latest/data_readiness.json", "latest/combined_source_manifest.json", pointer if isinstance(pointer, str) else ""}
@@ -401,6 +414,15 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
 
     per_source = aggregation.get("per_source") if isinstance(aggregation.get("per_source"), dict) else {}
     critical = aggregation.get("critical_endpoints") if isinstance(aggregation.get("critical_endpoints"), list) else []
+    # Reuse the existing session policy; a manifest cannot demote a required
+    # endpoint to optional and thereby remove it from byte verification.
+    spec = importlib.util.spec_from_file_location("dashboard_source_policy",
+        Path(__file__).resolve().parents[1] / "session_data_processor/source_readiness_aggregation_v2.py")
+    policy = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(policy)
+    expected_critical = policy.policy_for_family(policy.infer_session_family(source_session))["required"]
+    if set(critical) != expected_critical:
+        add_reason(reasons, "required_source_policy_mismatch")
     observed_required = {
         report.get("endpoint")
         for report in per_source.values()
