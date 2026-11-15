@@ -83,13 +83,13 @@ class WorkbookBridgeGuardTests(unittest.TestCase):
     def test_peak_contract_still_required(self):
         path = self.root / PEAK
         self.write(PEAK, path.read_text(encoding="utf-8").replace(
-            "latest/workbook_kpi_refresh_applier/**",
+            "find \"$root\" -type f -newer \"$MARKER\"",
             "removed_workbook_kpi_refresh_path",
         ))
         result = self.result()
         self.assertEqual(result["status"], "fail")
         check = next(x for x in result["checks"] if x["workflow"] == PEAK)
-        self.assertIn("latest/workbook_kpi_refresh_applier/**", check["missing_tokens"])
+        self.assertIn("find \"$root\" -type f -newer \"$MARKER\"", check["missing_tokens"])
 
 
 if __name__ == "__main__":

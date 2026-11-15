@@ -2,7 +2,7 @@
 """F1 Peak-Elite Orchestrator v1.
 
 One-button orchestration layer for the F1 Prediction Engine GitHub automation
-system. It repairs workflow syntax when asked, validates the automation layer,
+system. It checks workflow syntax without modifying code, validates the automation layer,
 runs the source-backed session -> workbook/KPI -> readiness chain, and writes a
 machine-readable status for ChatGPT/Race/Fantasy chats.
 
@@ -14,6 +14,8 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import hashlib
+import importlib.util
 import os
 import shutil
 import subprocess
@@ -72,14 +74,106 @@ def run(repo: Path, label: str, cmd: List[str], timeout: int = 1200, allow_fail:
 def protected_touched(repo: Path) -> List[str]:
     git = shutil.which("git")
     if not git:
-        return []
+        return ["HOLD_GIT_STATUS_UNAVAILABLE"]
     proc = subprocess.run([git, "status", "--porcelain"], cwd=str(repo), text=True, capture_output=True)
+    if proc.returncode:
+        return ["HOLD_GIT_STATUS_UNAVAILABLE"]
     touched: List[str] = []
     for line in proc.stdout.splitlines():
         rel = line[3:].strip() if len(line) > 3 else line.strip()
         if PROTECTED_STABLE.lower() in rel.lower() or any(w.lower() in rel.lower() for w in PROTECTED_WORKBOOKS):
             touched.append(rel)
     return touched
+
+
+def byte_fingerprints(repo: Path, paths) -> Dict[str, str]:
+    result = {}
+    if not isinstance(paths, (dict, list, tuple, set)):
+        return result
+    for relative in sorted({p for p in paths if isinstance(p, str)}):
+        path = repo / relative
+        try:
+            if (not Path(relative).is_absolute() and ".." not in Path(relative).parts
+                    and path.is_file() and not path.is_symlink()
+                    and path.resolve().is_relative_to(repo.resolve())):
+                result[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+        except OSError:
+            continue
+    return result
+
+
+def verify_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
+    """Bind a consumer to a successful recent capture and all committed input bytes.
+
+    This attests operational context only, never engine execution or a forecast.
+    A workflow_run trigger additionally pins the originating run/attempt/code SHA.
+    """
+    upstream = read_json(repo / "latest/peak_elite/orchestrator_status.json", {})
+    upstream = upstream if isinstance(upstream, dict) else {}
+    reasons = []
+    now = reference_time or dt.datetime.now(dt.timezone.utc)
+    try:
+        created = dt.datetime.fromisoformat(upstream["created_utc"].replace("Z", "+00:00"))
+        if created.tzinfo is None or not 0 <= (now - created).total_seconds() <= 90 * 60:
+            raise ValueError("stale or future upstream report")
+    except (KeyError, TypeError, ValueError, AttributeError):
+        reasons.append("HOLD_UPSTREAM_TIME_INVALID_OR_STALE")
+    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_run":
+        for field, env in (("github_run_id", "UPSTREAM_RUN_ID"),
+                           ("github_run_attempt", "UPSTREAM_RUN_ATTEMPT"),
+                           ("workflow_head_sha", "UPSTREAM_HEAD_SHA")):
+            if not os.environ.get(env) or upstream.get(field) != os.environ[env]:
+                reasons.append(f"HOLD_UPSTREAM_RUN_MISMATCH:{field}")
+    if (upstream.get("operation") != "full_run_chain" or upstream.get("failed_steps") != []
+            or upstream.get("downstream_current") is not True
+            or upstream.get("commit_allowed") is not True):
+        reasons.append("HOLD_UPSTREAM_CONTEXT_NOT_VERIFIED")
+    steps = upstream.get("steps", [])
+    steps = steps if isinstance(steps, list) else []
+    required = ("session_data_processor_run_now", "workbook_kpi_refresh_apply", "dashboard_readiness_publish")
+    for label in required:
+        matches = [s for s in steps if isinstance(s, dict) and s.get("label") == label]
+        if len(matches) != 1 or matches[0].get("ok") is not True:
+            reasons.append(f"HOLD_UPSTREAM_STAGE_NOT_VERIFIED:{label}")
+    # An exit-0 processor can be a no-op. Old source bytes cannot become a new capture.
+    selector = read_json(repo / "latest/latest_manifest.json", {})
+    try:
+        capture = next(s for s in steps if s.get("label") == required[0])
+        start = dt.datetime.fromisoformat(capture["started_utc"].replace("Z", "+00:00"))
+        observed = dt.datetime.fromisoformat(selector["updated_utc"].replace("Z", "+00:00"))
+        if not start <= observed <= created <= now:
+            raise ValueError("source was not captured by the declared run")
+    except (KeyError, TypeError, ValueError, AttributeError, StopIteration, UnboundLocalError):
+        reasons.append("HOLD_SOURCE_NOT_CAPTURED_IN_UPSTREAM_RUN")
+    fingerprints = upstream.get("handoff_fingerprints")
+    mandatory = {"latest/latest_manifest.json", "latest/data_readiness.json", "latest/combined_source_manifest.json",
+                 "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+                 "latest/readiness_dashboards/combined_readiness_dashboard.json"}
+    if (not isinstance(fingerprints, dict) or not mandatory.issubset(fingerprints)
+            or byte_fingerprints(repo, fingerprints) != fingerprints):
+        reasons.append("HOLD_UPSTREAM_BYTES_CHANGED_OR_MISSING")
+    spec = importlib.util.spec_from_file_location("bridge_dashboard", Path(__file__).resolve().parents[1] / "dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    try:
+        current = module.discover_state(repo, reference_time=now)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError):
+        current = {}
+    state = upstream.get("latest_state", {})
+    state = state if isinstance(state, dict) else {}
+    if (current.get("downstream_eligible") is not True
+            or current.get("event_id") != state.get("event_id")
+            or str(current.get("session_key")) != str(state.get("session_key"))):
+        reasons.append("HOLD_UPSTREAM_SESSION_NOT_CURRENT")
+    # The originating report must bind every byte required by the current verifier.
+    consumed = current.get("consumed_fingerprints", {})
+    if not isinstance(fingerprints, dict) or any(fingerprints.get(p) != sha for p, sha in consumed.items()):
+        reasons.append("HOLD_UPSTREAM_CUSTODY_INCOMPLETE")
+    return {"status": "HOLD" if reasons else "VERIFIED_CONTEXT_ONLY", "reasons": reasons,
+            "upstream_run_id": upstream.get("github_run_id"), "upstream_run_attempt": upstream.get("github_run_attempt"),
+            "event_id": state.get("event_id"), "session_key": state.get("session_key"),
+            "consumed_fingerprints": fingerprints, "prediction_locked": False,
+            "stable_engine_executed": False, "promotion_allowed": False}
 
 
 def build_plain_report(result: Dict[str, Any]) -> str:
@@ -137,13 +231,18 @@ def latest_state(repo: Path) -> Dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor"])
+    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor", "verify_bridge_input"])
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--session-filter", default="auto")
     parser.add_argument("--run-forecast-gate", default="false")
     args = parser.parse_args()
 
     repo = Path(args.repo_root).resolve()
+    if args.operation == "verify_bridge_input":
+        verification = verify_bridge_input(repo)
+        write_json(repo / "_runtime/1b_output_contract/upstream_verification.json", verification)
+        print(json.dumps(verification, sort_keys=True))
+        return 2 if verification["status"] == "HOLD" else 0
     runtime = repo / "_runtime" / "peak_elite" / "orchestrator"
     latest = repo / "latest" / "peak_elite"
     runtime.mkdir(parents=True, exist_ok=True)
@@ -153,7 +252,7 @@ def main() -> int:
 
     operation = args.operation
     if operation in {"syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor"}:
-        steps.append(run(repo, "workflow_commit_block_repair", [py, "scripts/ops/f1_workflow_commit_block_repair_v1.py", "--repo-root", str(repo), "--apply"], timeout=300))
+        steps.append(run(repo, "workflow_commit_block_check", [py, "scripts/ops/f1_workflow_commit_block_repair_v1.py", "--repo-root", str(repo)], timeout=300))
 
     if operation in {"health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor"}:
         steps.append(run(repo, "workflow_static_validation", [py, "scripts/ops/f1_workflow_static_validator_v2.py", "--repo-root", str(repo)], timeout=300))
@@ -162,7 +261,7 @@ def main() -> int:
 
     if operation in {"health_only", "full_safe_chain", "full_run_chain", "scheduled_monitor"}:
         if (repo / "scripts/ops/f1_repo_canonicalization_v1.py").exists():
-            canon_mode = "safe_apply" if operation in {"full_safe_chain", "full_run_chain"} else "report_only"
+            canon_mode = "report_only"
             steps.append(run(repo, "repo_canonicalization_" + canon_mode, [py, "scripts/ops/f1_repo_canonicalization_v1.py", "--repo-root", str(repo), "--mode", canon_mode], timeout=600, allow_fail=(operation == "scheduled_monitor")))
         if (repo / "scripts/session_data_processor/source_readiness_classifier_v2.py").exists():
             steps.append(run(repo, "source_readiness_classifier_v2_self_test", [py, "scripts/session_data_processor/source_readiness_classifier_v2.py", "--self-test"], timeout=300, allow_fail=(operation == "scheduled_monitor")))
@@ -208,7 +307,7 @@ def main() -> int:
         plain = "The capture-to-dashboard chain did not complete and verify the current source session. Do not treat earlier green readiness as current."
     elif operation == "syntax_repair_only":
         status = "pass"
-        plain = "Workflow syntax repair and validation completed. This fixes the blocker before data-processing work resumes."
+        plain = "Read-only workflow syntax checks completed. Any required code repair must be reviewed through a development PR."
     elif source_status in {"missing", "unknown", "", "None"}:
         status = "pass_with_warnings"
         plain = "Automation health is available, but latest source readiness is not populated. Watchers may be running before source data exists."
@@ -222,6 +321,15 @@ def main() -> int:
     result = {
         "created_utc": iso_now(),
         "operation": operation,
+        "github_run_id": os.environ.get("GITHUB_RUN_ID"),
+        "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
+        "workflow_head_sha": os.environ.get("GITHUB_SHA"),
+        "handoff_fingerprints": byte_fingerprints(repo, [
+            "latest/latest_manifest.json", "latest/data_readiness.json", "latest/combined_source_manifest.json",
+            "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+            "latest/readiness_dashboards/combined_readiness_dashboard.json",
+            *dashboard.get("consumed_fingerprints", {}).keys(),
+        ]),
         "status": status,
         "plain_english": plain,
         "latest_state": state,

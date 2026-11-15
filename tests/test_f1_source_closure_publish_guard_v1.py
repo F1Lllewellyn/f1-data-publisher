@@ -1179,7 +1179,7 @@ class StaticScopeTests(unittest.TestCase):
             ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "c2f8ddc46c52a2be06fcf7f53d03edc2df40f787",
         }
         # #367 makes the gate diagnostics-only while stable execution is absent.
-        recovery_blobs = {".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "0618519ee3fc6c341de48dd1cff94e28960b76ce"}
+        recovery_blobs = {".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "46c1cd483d6b04e98474ef3be498cd8faae007cb", ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "0618519ee3fc6c341de48dd1cff94e28960b76ce"}
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT / path).read_bytes()
