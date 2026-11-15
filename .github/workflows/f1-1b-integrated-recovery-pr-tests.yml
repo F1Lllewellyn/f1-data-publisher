@@ -35,6 +35,15 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_*grid*' -v
           python -m unittest discover -s tests -p 'test_peak_elite_safe_push_clean_worktree_v1.py' -v
+      - name: Verify adjacent publication provider and workbook contracts
+        run: |
+          python -m unittest discover -s tests -p 'test_f1_source_closure_publish_guard_v1.py' -v
+          python -m unittest discover -s tests -p 'test_openf1_normal_incremental_collection_budget_v1.py' -v
+          python -m unittest discover -s tests -p 'test_openf1_lightweight_source_closure_request_quality_v1.py' -v
+          python -m unittest discover -s tests -p 'test_dr002_frozen_producer_attestation_v1.py' -v
+          python -m unittest discover -s tests -p 'test_workbook_kpi_event_selection_v1.py' -v
+          python -m unittest discover -s tests -p 'test_dashboard_event_selection_readiness_v1.py' -v
+          python -m unittest discover -s tests -p 'test_sp2026_integrated_recovery_guard_v1.py' -v
       - name: Retain replay acceptance evidence
         if: always()
         uses: actions/upload-artifact@v4
