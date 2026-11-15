@@ -3,13 +3,17 @@
 Passing a boundary reproduction means the HOLD is proved, not that the legacy
 component is scientifically accepted. All legacy output stays in temporary roots.
 """
+import ast
 import contextlib
 import io
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
+import tempfile
+import types
 import unittest
 from unittest.mock import patch
 
@@ -110,10 +114,47 @@ class ScopeBoundaryTests(unittest.TestCase):
         integrated = (ROOT / '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml').read_text()
         self.assertIn('group: f1-session-data-processor-loop-${{ github.ref }}', standalone)
         self.assertIn('group: f1-main-write-serialization', integrated)
+        manual = (ROOT / '.github/workflows/f1-session-autorepair-integrated-run-now-button-v1.yml').read_text()
+        self.assertIn('group: f1-session-autorepair-integrated-run-now-${{ github.ref }}', manual)
         report('global_provider_scope_boundary', dict(status='HOLD_SCOPE',
             proof='Two real budget instances admit 32 simulated requests within 60 seconds',
             simulated_requests=requests, real_provider_requests=0,
             production_rate_limit_incident_claimed=False, global_coordination_verified=False))
+
+    def test_high_frequency_client_has_no_thirty_per_minute_budget(self):
+        # Compile the exact committed client class without importing unrelated
+        # parquet/report dependencies. No production HTTP request is possible.
+        path = ROOT / 'scripts/openf1/openf1_high_frequency_auto_ingest.py'
+        node = next(n for n in ast.parse(path.read_text()).body
+                    if isinstance(n, ast.ClassDef) and n.name == 'OpenF1Client')
+        clock = incremental.FakeClock()
+        requests = []
+
+        def get(*args, **kwargs):
+            requests.append(clock.monotonic())
+            return types.SimpleNamespace(status_code=200, text='[]',
+                                         raise_for_status=lambda: None, json=lambda: [])
+
+        namespace = dict(BASE_URL='https://provider.invalid',
+                         requests=types.SimpleNamespace(get=get),
+                         time=types.SimpleNamespace(sleep=clock.sleep))
+        exec(compile(ast.Module(body=[node], type_ignores=[]), str(path), 'exec'), namespace)
+        client = namespace['OpenF1Client'](token='', sleep_seconds=0.35)
+        for _ in range(31):
+            self.assertEqual(client.get('sessions')[1]['status_code'], 200)
+        self.assertEqual(len(requests), 31)
+        self.assertLess(requests[-1] - requests[0], 60)
+        workflows = ('openf1-prerace-auto-ingest', 'openf1-post-race-auto-reliability',
+                     'openf1-full-historical-auto-ingest')
+        for name in workflows:
+            text = (ROOT / '.github/workflows' / (name + '.yml')).read_text()
+            self.assertIn('openf1_high_frequency_extract_checkpoint.py', text)
+            self.assertIn('--request-sleep 0.35', text)
+            self.assertNotIn('group: f1-main-write-serialization', text)
+        report('legacy_provider_scope_boundary', dict(status='HOLD_SCOPE',
+            simulated_successful_requests=31, elapsed_request_span_seconds=requests[-1] - requests[0],
+            real_provider_requests=0, live_rate_limit_incident_claimed=False,
+            client=str(path.relative_to(ROOT)), workflows=list(workflows)))
 
     def test_legacy_v25_duplicate_rewrites_history_and_bridge_detects_it(self):
         fixture = handoff.ConsumerOutputCustodyTests()
@@ -170,15 +211,57 @@ class ScopeBoundaryTests(unittest.TestCase):
         fixture = gate_tests.GateCustodyTests()
         fixture.setUp()
         self.addCleanup(fixture.doCleanups)
-        workflow = (ROOT / '.github/workflows/f1-forecast-bundle-locker-v1.yml').read_text()
-        self.assertIn('args+=(--commit-outputs)', workflow)
-        result = subprocess.run([sys.executable, str(ROOT / 'scripts/forecast_bundles/create_forecast_bundles_v1.py'),
-            '--repo-root', str(fixture.root), '--event-id', 'SYNTHETIC_SCOPE_BOUNDARY',
-            '--race-name', 'SYNTHETIC', '--commit-outputs'],
-            cwd=fixture.root, capture_output=True, text=True, timeout=15)
-        self.assertEqual(result.returncode, 2)
-        self.assertIn('unrecognized arguments: --commit-outputs', result.stderr)
-        self.assertEqual(list(fixture.root.iterdir()), [])
+        for workflow_name, script, extra in (
+            ('f1-forecast-bundle-locker-v1', 'create_forecast_bundles_v1.py', ['--race-name', 'SYNTHETIC']),
+            ('f1-forecast-gate-source-writer-v1', 'write_gate_forecast_rows_v1.py', []),
+        ):
+            with self.subTest(workflow=workflow_name):
+                workflow = (ROOT / '.github/workflows' / (workflow_name + '.yml')).read_text()
+                self.assertIn('args+=(--commit-outputs)', workflow)
+                result = subprocess.run([sys.executable, str(ROOT / 'scripts/forecast_bundles' / script),
+                    '--repo-root', str(fixture.root), '--event-id', 'SYNTHETIC_SCOPE_BOUNDARY',
+                    *extra, '--commit-outputs'], cwd=fixture.root,
+                    capture_output=True, text=True, timeout=15)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn('unrecognized arguments: --commit-outputs', result.stderr)
+                self.assertEqual(list(fixture.root.iterdir()), [])
+
+
+class WorkflowPreflightTests(unittest.TestCase):
+    def test_actual_workflow_preflights_pass_without_writing_repository_outputs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            paths = [
+                'scripts/session_data_processor/f1_1b_output_contract_v16.py',
+                'scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py',
+                'scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py',
+                'scripts/ops/f1_canonical_chain_guard_v27.py',
+                'scripts/ops/f1_openf1_live_restriction_guard_v27.py',
+                '.github/workflows/f1-peak-elite-control-room-one-click-v1.yml',
+                '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml',
+                '.github/workflows/f1-1b-output-contract-after-control-room-v22.yml',
+                '.github/workflows/openf1-prerace-auto-ingest.yml',
+            ]
+            for relative in paths:
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            results = []
+            for name in ('f1_1b_v16_acceptance_tests_v1.py', 'f1_1b_v24_acceptance_tests_v1.py',
+                         'f1_1b_v25_acceptance_tests_v1.py',
+                         'f1_1b_v27_legacy_collision_hardening_acceptance_tests.py',
+                         'f1_workbook_persistence_handoff_guard_v1.py'):
+                with self.subTest(script=name):
+                    args = [sys.executable, str(ROOT / 'scripts/ops' / name), '--repo-root', str(root)]
+                    if name.startswith('f1_workbook'):
+                        args += ['--mode', 'static', '--fail-on-issue']
+                    result = subprocess.run(args, capture_output=True, text=True, timeout=30)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    payload = json.loads(result.stdout)
+                    self.assertEqual(payload['status'], 'pass')
+                    results.append(dict(script=name, result=payload))
+            report('workflow_preflights', dict(status='PASS_OFFLINE', results=results,
+                   outputs_only_in_disposable_root=True, production_deployed=False))
 
 
 if __name__ == '__main__':
