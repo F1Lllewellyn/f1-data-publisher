@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   offline-integration:
+    env:
+      F1_RECOVERY_REPORT_DIR: _runtime/issue367_acceptance
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -33,3 +35,11 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_*grid*' -v
           python -m unittest discover -s tests -p 'test_peak_elite_safe_push_clean_worktree_v1.py' -v
+      - name: Retain replay acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-367-offline-replay-evidence
+          path: _runtime/issue367_acceptance/*.json
+          if-no-files-found: warn
+          retention-days: 30

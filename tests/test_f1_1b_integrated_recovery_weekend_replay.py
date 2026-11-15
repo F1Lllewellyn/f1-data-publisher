@@ -150,6 +150,7 @@ class WeekendPipelineTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256((self.root/'Engine_2026-06-07_STABLE').read_bytes()).hexdigest(),self.protected_sha)
 
     def test_all_five_sessions_real_workbook_and_consumers_stop_at_correct_scientific_hold(self):
+        evidence=[]
         for i,session in enumerate(self.sessions):
             with self.subTest(session=session['session_name']):
                 capture=self.capture(i); rc,state=self.control_room()
@@ -165,6 +166,18 @@ class WeekendPipelineTests(unittest.TestCase):
                     self.assertFalse(state['downstream_eligible'])
                     self.assertEqual(capture['overall_status'],'needs_manual_review')
                 self.assert_scientific_hold('race_result' if i==4 else 'post_qualifying')
+                evidence.append(dict(session_name=session['session_name'],synthetic_session_key=session['session_key'],
+                    processor_status=capture['overall_status'],context_eligible=state['downstream_eligible'],
+                    context_hold_reasons=state['readiness_reasons'],
+                    published_git_head=self.git('--git-dir='+str(self.remote),'rev-parse','main'),
+                    prospective_prediction=False,stable_engine_executed=False,prediction_locked=False))
+        if os.environ.get('F1_RECOVERY_REPORT_DIR'):
+            target=Path(os.environ['F1_RECOVERY_REPORT_DIR'])/'synthetic_las_vegas_replay.json'
+            target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_text(json.dumps(dict(replay_type='SYNTHETIC_OFFLINE_ONLY',
+                stage_implementation='actual processor, workbook, dashboard, consumers and publication shell',
+                remote_type='isolated local bare Git; no production deployment',
+                committed_byte_reverification=True,sessions=evidence,protected_sentinel_unchanged=True),indent=2))
 
     def test_new_session_failure_cannot_keep_previous_green_workbook_ready(self):
         self.capture(2); self.assertTrue(self.control_room()[1]['downstream_eligible'])
