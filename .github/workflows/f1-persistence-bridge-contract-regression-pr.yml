@@ -1,0 +1,44 @@
+name: F1 workbook persistence and bounded bridge contract PR regression
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/ops/f1_workbook_persistence_handoff_guard_v1.py'
+      - 'tests/test_f1_persistence_bounded_bridge_guard_v1.py'
+      - '.github/workflows/f1-persistence-bridge-contract-regression-pr.yml'
+      - '.github/workflows/f1-1b-output-contract-after-control-room-v22.yml'
+      - '.github/workflows/f1-peak-elite-control-room-one-click-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  persistence-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout exact proposed PR files
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/f1-peak-elite-control-room-one-click-v1.yml
+            .github/workflows/f1-1b-output-contract-after-control-room-v22.yml
+            scripts/ops/f1_workbook_persistence_handoff_guard_v1.py
+            tests/test_f1_persistence_bounded_bridge_guard_v1.py
+          sparse-checkout-cone-mode: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Compile guard and tests
+        run: |
+          python -m py_compile scripts/ops/f1_workbook_persistence_handoff_guard_v1.py tests/test_f1_persistence_bounded_bridge_guard_v1.py
+      - name: Verify actual live workflows against current guard
+        run: |
+          python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --mode static --repo-root . --fail-on-issue
+      - name: Run adversarial bounded-bridge tests
+        run: |
+          python -m unittest discover -s tests -p test_f1_persistence_bounded_bridge_guard_v1.py -v
