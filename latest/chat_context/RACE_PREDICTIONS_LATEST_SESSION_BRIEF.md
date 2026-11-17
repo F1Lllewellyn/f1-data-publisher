@@ -1,6 +1,6 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-17T12:33:02Z
+Generated UTC: 2026-11-17T21:17:30Z
 Event: unknown event
 Session: unknown session
 Source status: needs_manual_review
