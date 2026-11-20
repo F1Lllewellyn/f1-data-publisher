@@ -44,6 +44,7 @@ class Response:
         self.data = [] if data is None else data
         self.text = text
         self.json_error = json_error
+        self.content = (text if status_code != 200 else json.dumps(self.data)).encode()
 
     def json(self):
         if self.json_error is not None:

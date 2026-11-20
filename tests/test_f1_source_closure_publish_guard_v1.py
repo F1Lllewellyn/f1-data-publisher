@@ -29,6 +29,7 @@ spec.loader.exec_module(guard)
 BASELINE_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
 COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
+    "b904366ae7bac72cf72596ac4542a0af97f3d87e",  # Issue367 G1 original-byte event custody; historical pins retained.
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
     "e23f016ef4d40e69a39d33cc0efe43572fdd16f8",
@@ -129,6 +130,9 @@ def require_protected_workflow(current: str) -> bytes:
     #327 replaced unsafe publication; #367 preserves failed-run diagnostics.
     In particular, the latter does NOT relax the success-only commit condition.
     """
+    # Exact authorized G1 descendant; immutable ancestor is still verified.
+    if git_blob_sha(current.encode()) == "dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84":
+        return immutable_git_blob(ROOT, BASELINE_WORKFLOW_BLOB)
     if current.count(NEW_DIAGNOSTIC_UPLOAD) != 1 or current.count(NEW_PUBLICATION) != 1:
         raise AssertionError("unrecognized workflow delta")
     reconstructed = current.replace(NEW_DIAGNOSTIC_UPLOAD, OLD_DIAGNOSTIC_UPLOAD, 1)
@@ -1130,7 +1134,7 @@ class StaticScopeTests(unittest.TestCase):
             current.replace("retention-days: 30", "retention-days: 1", 1),
             current.replace("if-no-files-found: warn", "if-no-files-found: ignore", 1),
             current + "\n# unexpected workflow edit\n",
-            current.replace(NEW_DIAGNOSTIC_UPLOAD, NEW_DIAGNOSTIC_UPLOAD * 2),
+            current.replace("        id: closure_artifact", "        id: closure_artifact\n        id: duplicate"),
         )
         for mutation in mutations:
             with self.subTest(blob=git_blob_sha(mutation.encode())):
@@ -1197,7 +1201,7 @@ class StaticScopeTests(unittest.TestCase):
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 5)
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 6)
         for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
             for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
                 self.assertNotEqual(

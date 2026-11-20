@@ -1425,10 +1425,27 @@ def openf1_get(
     status = "unknown"
     error = ""
     rows = 0
+    raw_record = None
     try:
         if budget is not None:
             budget.acquire(rate_limit_fallback=rate_limit_fallback)
         r = requests.get(url, params=clean_params, timeout=REQUEST_TIMEOUT)
+        if budget is not None and hasattr(budget, "raw_evidence"):
+            # Retain returned bytes, not a re-serialization of parsed rows. A
+            # later fetch is never substituted for the first observation.
+            raw = r.content
+            digest = hashlib.sha256(raw).hexdigest()
+            relative = f"raw/{digest}.json"
+            target = budget.raw_root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if target.exists() and target.read_bytes() != raw:
+                raise ValueError("raw_response_hash_collision")
+            target.write_bytes(raw)
+            raw_record = dict(endpoint=endpoint, params=clean_params,
+                              status_code=r.status_code, response_observed_utc=iso_now(),
+                              path=relative, sha256=digest, bytes=len(raw),
+                              origin=budget.raw_origin)
+            budget.raw_evidence.append(raw_record)
         status_code = getattr(r, "status_code", None)
         if type(status_code) is not int or not 100 <= status_code <= 599:
             status = "invalid_http_status"
@@ -1478,7 +1495,7 @@ def openf1_get(
         return pd.DataFrame()
     finally:
         request_log.append({
-            "timestamp_utc": iso_now(),
+            "timestamp_utc": raw_record["response_observed_utc"] if raw_record else iso_now(),
             "endpoint": endpoint,
             "strategy": strategy,
             "params_json": json.dumps(clean_params, sort_keys=True),
@@ -2612,6 +2629,25 @@ def main() -> int:
         clock=time.monotonic,
         sleeper=time.sleep,
     )
+    if args.meeting_key:
+        budget.raw_root = latest_root
+        budget.raw_origin = {"repository": args.github_repository,
+                             "head_sha": args.github_sha, "run_id": args.github_run_id,
+                             "run_attempt": args.github_run_attempt}
+        budget.raw_evidence = []
+        previous_raw = latest_root / "raw_evidence.json"
+        if previous_raw.exists():
+            records = json.loads(previous_raw.read_text())
+            for record in records:
+                raw_path = latest_root / record["path"]
+                if (record["path"] != f"raw/{record['sha256']}.json"
+                        or raw_path.is_symlink() or not raw_path.is_file()
+                        or _sha256_path(raw_path) != record["sha256"]):
+                    raise ValueError("event_cache_raw_custody_invalid")
+            budget.raw_evidence.extend(records)
+        else:
+            # A CSV-only historical cache cannot acquire new observation times.
+            session_cache = {}
     previous_manifest_season = _canonical_positive_integer(
         previous_manifest.get("season")
     )
@@ -2884,6 +2920,14 @@ def main() -> int:
             latest_root, snapshot_files
         ),
     }
+    if args.meeting_key:
+        raw_bytes = _json_bytes(budget.raw_evidence)
+        (latest_root / "raw_evidence.json").write_bytes(raw_bytes)
+        (history_root / "raw_evidence.json").write_bytes(raw_bytes)
+        for record in budget.raw_evidence:
+            target = history_root / record["path"]
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((latest_root / record["path"]).read_bytes())
     manifest = {
         "artifact_profile": "openf1-lightweight-source-closure",
         "generated_utc": generated_utc,
@@ -2921,6 +2965,10 @@ def main() -> int:
         "official_final_grid_verified": False,
         "scientific_readiness": "HOLD_NO_AUTHENTICATED_FORECAST_INPUT_CONTRACT",
     }
+    if args.meeting_key:
+        manifest["event_custody_schema"] = "openf1-event-byte-custody-v1"
+        manifest["github_origin"] = budget.raw_origin
+        manifest["raw_evidence_sha256"] = _sha256_path(latest_root / "raw_evidence.json")
     (latest_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (history_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     readiness_payload = {"generated_utc": generated_utc, "lanes": readiness_rows}

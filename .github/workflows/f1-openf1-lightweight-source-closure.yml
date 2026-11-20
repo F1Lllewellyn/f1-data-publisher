@@ -11,6 +11,14 @@ on:
         description: 'Only retrieve completed sessions'
         required: true
         default: 'true'
+      meeting_key:
+        description: 'Optional verified current-event meeting key; blank retains full-season archival contract'
+        required: false
+        default: ''
+      expected_session_key:
+        description: 'Exact completed provider session required for event publication'
+        required: false
+        default: ''
       provenance_shadow_session_key:
         description: 'Optional exact historical session key for manual provenance shadow only'
         required: false
@@ -89,9 +97,13 @@ jobs:
 
       - name: Run lightweight OpenF1 source closure publisher
         env:
+          EVENT_MEETING_KEY: ${{ github.event.inputs.meeting_key }}
+          EXPECTED_SESSION_KEY: ${{ github.event.inputs.expected_session_key }}
           PROVENANCE_SHADOW_ENDPOINT: ${{ github.event.inputs.provenance_shadow_endpoint || 'weather' }}
         run: |
           python scripts/openf1/publish_openf1_lightweight_source_closure.py \
+            --meeting-key "$EVENT_MEETING_KEY" \
+            --expected-session-key "$EXPECTED_SESSION_KEY" \
             --season "${{ github.event.inputs.season || '2026' }}" \
             --completed-only "${{ github.event.inputs.completed_only || 'true' }}" \
             --provenance-shadow-session-key "${{ github.event.inputs.provenance_shadow_session_key || '' }}" \
@@ -105,12 +117,14 @@ jobs:
             --github-run-attempt "${{ github.run_attempt }}"
 
       - name: Upload legacy source closure artifact
+        id: closure_artifact
         if: ${{ always() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
         uses: actions/upload-artifact@v6
         with:
           name: openf1-lightweight-source-closure
           path: |
             latest/openf1_lightweight_source_closure/**
+            latest/openf1_event_source_closure/**
           retention-days: 30
           if-no-files-found: warn
 
@@ -124,6 +138,9 @@ jobs:
           retention-days: 30
 
       - name: Commit source closure outputs
+        env:
+          EVENT_MEETING_KEY: ${{ github.event.inputs.meeting_key }}
+          EXPECTED_SESSION_KEY: ${{ github.event.inputs.expected_session_key }}
         if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
         run: |
           set -euo pipefail
@@ -133,6 +150,11 @@ jobs:
             --repo-root "$GITHUB_WORKSPACE" \
             --remote origin \
             --branch "$GITHUB_REF_NAME" \
+            --meeting-key "$EVENT_MEETING_KEY" \
+            --expected-session-key "$EXPECTED_SESSION_KEY" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-sha "$GITHUB_SHA" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
             --expected-season "${{ github.event.inputs.season || '2026' }}" \
             --expected-completed-only "${{ github.event.inputs.completed_only || 'true' }}" \
             --github-run-id "$GITHUB_RUN_ID" \
