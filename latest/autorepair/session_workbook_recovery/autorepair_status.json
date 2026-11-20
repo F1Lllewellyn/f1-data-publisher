@@ -8,33 +8,33 @@
           "--repo-root",
           "/home/runner/work/f1-data-publisher/f1-data-publisher"
         ],
-        "finished_utc": "2026-11-20T16:35:27.002999+00:00",
+        "finished_utc": "2026-11-20T23:05:01.692925+00:00",
         "ok": true,
         "returncode": 0,
-        "started_utc": "2026-11-20T16:35:26.493989+00:00",
+        "started_utc": "2026-11-20T23:05:01.419592+00:00",
         "stderr_tail": "",
-        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1300_united_states_las_vegas_las_vegas\",\n  \"meeting_key\": 1300,\n  \"session_key\": 11414,\n  \"session_name\": \"Practice 2\",\n  \"session_type\": \"Practice\",\n  \"source_status\": \"clean\",\n  \"readiness_quality\": \"usable_with_optional_context_gaps\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": false,\n    \"data_readiness.source_needs_manual_review\": false,\n    \"combined_source.source_needs_manual_review\": false,\n    \"source_readiness.source_needs_manual_review\": false,\n    \"readiness_aggregation.needs_manual_review\": false\n  },\n  \"manual_review_required\": false,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"2e57d9a61a42c0d93a946e79e5e7bd29f7c8b03b6a66921df67297b2805fe267\",\n    \"latest/data_readiness.json\": \"0a927c7de7023b731aa179f558b34995f3674684d4b5367895063d547a76975a\",\n    \"latest/latest_manifest.json\": \"e6ec9985c3c2258187222dda8d671561a1da5806d65ef1ba25b4f87deb52a4f1\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json\": \"f8ca1f42efc1d1ae5f24887c228bb91a63c2f1f0ae10e330a63f364d37af0fd7\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json\": \"673969a697d50b049e6363a02061368511be842d7c893556d11d9fa3fa591bb4\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json\": \"294d14412b1ee3aa6a5fb1de0b7b398cbad72a8945c5cb147d4e2162a2dcef91\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv\": \"6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json\": \"02967717fecd6a568bc30da7a97530789022d1d343065b789af8a752b262746d\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": true,\n  \"material_change\": true,\n  \"warnings\": [],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261120T163526Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T163526Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
+        "stdout_tail": "{\n  \"status\": \"refresh_applied\",\n  \"commit_allowed\": true,\n  \"event_id\": \"2026_1300_united_states_las_vegas_las_vegas\",\n  \"meeting_key\": 1300,\n  \"session_key\": 11414,\n  \"session_name\": \"Practice 2\",\n  \"session_type\": \"Practice\",\n  \"source_status\": \"clean\",\n  \"readiness_quality\": \"usable_with_optional_context_gaps\",\n  \"manual_review_flags\": {\n    \"data_readiness.needs_manual_review\": false,\n    \"data_readiness.source_needs_manual_review\": false,\n    \"combined_source.source_needs_manual_review\": false,\n    \"source_readiness.source_needs_manual_review\": false,\n    \"readiness_aggregation.needs_manual_review\": false\n  },\n  \"manual_review_required\": false,\n  \"source_manifest_pointer\": \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json\",\n  \"selected_session_processor_root\": \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414\",\n  \"authority_fingerprints\": {\n    \"latest/combined_source_manifest.json\": \"257d51ad25e313a41a003252a66d8e803ed0eae2666748d575afacf0f5e9e70a\",\n    \"latest/data_readiness.json\": \"63a6b4527b2b5190eadba1ebb188f12884ff7bcf6aa47f9e32426557740cdfaf\",\n    \"latest/latest_manifest.json\": \"8708cd7318b5881c9a10fcf0f22b6b1721042cd03ec2061a9d3d6cfe1d150149\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json\": \"f6e521e71566e19ef8aa09a7a10b4168ec3eb41a8bd8ec4fedc314ce966a495d\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json\": \"ba29917f63ad7635b652c1b32c0dbc2450c3567eac1b505bae32e7d2fa3c94af\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json\": \"0b078288e861e661f83d0c786032fce21a8542222d1bca5911abe9c3273bd498\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv\": \"6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044\",\n    \"latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json\": \"c608d0d04f91401750a67bb9cc03528cfea95bce979f0c8ea9b125cac66621cd\"\n  },\n  \"hold_reasons\": [],\n  \"eligibility_reasons\": [],\n  \"diagnostic_publish_allowed\": true,\n  \"downstream_eligible\": true,\n  \"material_change\": true,\n  \"warnings\": [],\n  \"latest_output_root\": \"latest/workbook_kpi_refresh_applier\",\n  \"history_output_root\": \"history/workbook_kpi_refresh_applier/20261120T230501Z\",\n  \"sandbox_workbook\": \"latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T230501Z.xlsx\",\n  \"canonical_workbook_overwrite\": false,\n  \"stable_engine_modified\": false,\n  \"promotion_allowed\": false,\n  \"distributed_atomicity_limitation\": \"This process revalidates checked-out authority bytes immediately before publication; it cannot prevent another commit from advancing remote main during a later push/rebase.\"\n}\n"
       },
       "name": "initial_workbook_kpi_refresh_attempt",
       "status": "passed"
     }
   ],
   "commit_allowed": true,
-  "created_utc": "2026-11-20T16:35:27.857978+00:00",
+  "created_utc": "2026-11-20T23:05:02.749575+00:00",
   "discovered_scripts": {
     "session_processor": "scripts/session_data_processor/session_data_processor_loop_v1.py",
     "workbook_kpi_refresh_applier": "scripts/workbook_kpi_refresh/apply_workbook_kpi_refresh_v1.py"
   },
   "final_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "2e57d9a61a42c0d93a946e79e5e7bd29f7c8b03b6a66921df67297b2805fe267",
-      "latest/data_readiness.json": "0a927c7de7023b731aa179f558b34995f3674684d4b5367895063d547a76975a",
-      "latest/latest_manifest.json": "e6ec9985c3c2258187222dda8d671561a1da5806d65ef1ba25b4f87deb52a4f1",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json": "f8ca1f42efc1d1ae5f24887c228bb91a63c2f1f0ae10e330a63f364d37af0fd7",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json": "673969a697d50b049e6363a02061368511be842d7c893556d11d9fa3fa591bb4",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json": "294d14412b1ee3aa6a5fb1de0b7b398cbad72a8945c5cb147d4e2162a2dcef91",
+      "latest/combined_source_manifest.json": "257d51ad25e313a41a003252a66d8e803ed0eae2666748d575afacf0f5e9e70a",
+      "latest/data_readiness.json": "63a6b4527b2b5190eadba1ebb188f12884ff7bcf6aa47f9e32426557740cdfaf",
+      "latest/latest_manifest.json": "8708cd7318b5881c9a10fcf0f22b6b1721042cd03ec2061a9d3d6cfe1d150149",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json": "f6e521e71566e19ef8aa09a7a10b4168ec3eb41a8bd8ec4fedc314ce966a495d",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json": "ba29917f63ad7635b652c1b32c0dbc2450c3567eac1b505bae32e7d2fa3c94af",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json": "0b078288e861e661f83d0c786032fce21a8542222d1bca5911abe9c3273bd498",
       "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv": "6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "02967717fecd6a568bc30da7a97530789022d1d343065b789af8a752b262746d"
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "c608d0d04f91401750a67bb9cc03528cfea95bce979f0c8ea9b125cac66621cd"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -43,7 +43,7 @@
     "downstream_eligible": true,
     "eligibility_reasons": [],
     "event_id": "2026_1300_united_states_las_vegas_las_vegas",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261120T163526Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261120T230501Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -58,7 +58,7 @@
     "meeting_key": 1300,
     "promotion_allowed": false,
     "readiness_quality": "usable_with_optional_context_gaps",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T163526Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T230501Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414",
     "session_key": 11414,
     "session_name": "Practice 2",
@@ -78,14 +78,14 @@
   },
   "initial_workbook_status": {
     "authority_fingerprints": {
-      "latest/combined_source_manifest.json": "2e57d9a61a42c0d93a946e79e5e7bd29f7c8b03b6a66921df67297b2805fe267",
-      "latest/data_readiness.json": "0a927c7de7023b731aa179f558b34995f3674684d4b5367895063d547a76975a",
-      "latest/latest_manifest.json": "e6ec9985c3c2258187222dda8d671561a1da5806d65ef1ba25b4f87deb52a4f1",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json": "f8ca1f42efc1d1ae5f24887c228bb91a63c2f1f0ae10e330a63f364d37af0fd7",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json": "673969a697d50b049e6363a02061368511be842d7c893556d11d9fa3fa591bb4",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json": "294d14412b1ee3aa6a5fb1de0b7b398cbad72a8945c5cb147d4e2162a2dcef91",
+      "latest/combined_source_manifest.json": "257d51ad25e313a41a003252a66d8e803ed0eae2666748d575afacf0f5e9e70a",
+      "latest/data_readiness.json": "63a6b4527b2b5190eadba1ebb188f12884ff7bcf6aa47f9e32426557740cdfaf",
+      "latest/latest_manifest.json": "8708cd7318b5881c9a10fcf0f22b6b1721042cd03ec2061a9d3d6cfe1d150149",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json": "f6e521e71566e19ef8aa09a7a10b4168ec3eb41a8bd8ec4fedc314ce966a495d",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json": "ba29917f63ad7635b652c1b32c0dbc2450c3567eac1b505bae32e7d2fa3c94af",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json": "0b078288e861e661f83d0c786032fce21a8542222d1bca5911abe9c3273bd498",
       "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv": "6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044",
-      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "02967717fecd6a568bc30da7a97530789022d1d343065b789af8a752b262746d"
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "c608d0d04f91401750a67bb9cc03528cfea95bce979f0c8ea9b125cac66621cd"
     },
     "canonical_workbook_overwrite": false,
     "commit_allowed": true,
@@ -94,7 +94,7 @@
     "downstream_eligible": true,
     "eligibility_reasons": [],
     "event_id": "2026_1300_united_states_las_vegas_las_vegas",
-    "history_output_root": "history/workbook_kpi_refresh_applier/20261120T163526Z",
+    "history_output_root": "history/workbook_kpi_refresh_applier/20261120T230501Z",
     "hold_reasons": [],
     "latest_output_root": "latest/workbook_kpi_refresh_applier",
     "manual_review_flags": {
@@ -109,7 +109,7 @@
     "meeting_key": 1300,
     "promotion_allowed": false,
     "readiness_quality": "usable_with_optional_context_gaps",
-    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T163526Z.xlsx",
+    "sandbox_workbook": "latest/workbook_kpi_refresh_applier/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T230501Z.xlsx",
     "selected_session_processor_root": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414",
     "session_key": 11414,
     "session_name": "Practice 2",
@@ -125,7 +125,7 @@
   "repair_attempted": false,
   "repair_domain": "session_workbook_recovery",
   "repair_succeeded": false,
-  "run_id": "20261120T163526Z",
+  "run_id": "20261120T230501Z",
   "session_processor_status": {
     "classification": null,
     "data_readiness_present": true,
