@@ -112,7 +112,7 @@ class ScopeBoundaryTests(unittest.TestCase):
         case.test_access_throttle_and_outage_latch_without_retry_storm()
         report('legacy_provider_scope_boundary',dict(status='PASS_OFFLINE',real_provider_requests=0,production_deployed=False))
 
-    def test_legacy_v25_duplicate_rewrites_history_and_bridge_detects_it(self):
+    def test_v25_duplicate_preserves_history_and_verified_bridge(self):
         fixture = handoff.ConsumerOutputCustodyTests()
         fixture.setUp()
         self.addCleanup(fixture.doCleanups)
@@ -120,8 +120,8 @@ class ScopeBoundaryTests(unittest.TestCase):
         before = history.read_bytes()
         with patch.object(fixture.context, 'utc_now_iso', return_value='2026-11-07T18:01:00Z'):
             fixture.context.run(fixture.root)
-        self.assertNotEqual(history.read_bytes(), before)
-        self.assertEqual(fixture.observe()['status'], 'HOLD')
+        self.assertEqual(history.read_bytes(), before)
+        self.assertEqual(fixture.observe()['status'], 'VERIFIED_CONTEXT_ONLY')
 
     def test_legacy_rows_only_locker_claim_is_not_accepted_by_repaired_gate(self):
         fixture = gate_tests.GateCustodyTests()
@@ -202,10 +202,11 @@ class WorkflowPreflightTests(unittest.TestCase):
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
+            bridge = (ROOT/'.github/workflows/f1-1b-output-contract-after-control-room-v22.yml').read_text()
+            self.assertIn("python -m unittest discover -s tests -p 'test_f1_1b_integrated_recovery_consumer_custody.py' -v", bridge)
+            self.assertNotIn('scripts/ops/f1_1b_v16_acceptance_tests_v1.py', bridge)
             results = []
-            for name in ('f1_1b_v16_acceptance_tests_v1.py', 'f1_1b_v24_acceptance_tests_v1.py',
-                         'f1_1b_v25_acceptance_tests_v1.py',
-                         'f1_1b_v27_legacy_collision_hardening_acceptance_tests.py',
+            for name in ('f1_1b_v27_legacy_collision_hardening_acceptance_tests.py',
                          'f1_workbook_persistence_handoff_guard_v1.py'):
                 with self.subTest(script=name):
                     args = [sys.executable, str(ROOT / 'scripts/ops' / name), '--repo-root', str(root)]

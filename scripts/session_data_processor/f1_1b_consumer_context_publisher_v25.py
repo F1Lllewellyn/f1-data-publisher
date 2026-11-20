@@ -16,9 +16,15 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+_contract_spec = importlib.util.spec_from_file_location("current_consumer_contract", Path(__file__).with_name("f1_1b_output_contract_v16.py"))
+contract = importlib.util.module_from_spec(_contract_spec)
+_contract_spec.loader.exec_module(contract)
+
 
 SCHEMA_VERSION = "f1_1b_consumer_context_trigger_governor_v25"
 CONSUMERS = ("race_predictions", "fantasy_predictions", "race_reports")
@@ -138,6 +144,15 @@ def load_inputs(root: Path) -> Dict[str, Any]:
     }
     data = {name: load_json(path) for name, path in paths.items()}
     data["paths"] = {name: relpath(path, root) for name, path in paths.items()}
+    data["custody"] = contract.verify_bound_chain(root, [data["bundle"], data["downstream"], data["output_contract"]], dt.datetime.fromisoformat(utc_now_iso().replace("Z", "+00:00")))
+    for name in CONSUMERS:
+        payload = data[name]
+        if payload != data["downstream"].get("consumers", {}).get(name) or payload.get("custody") != data["custody"]:
+            raise RuntimeError("HOLD_CONSUMER_PAYLOAD_MISMATCH:" + name)
+    bindings = data["downstream"].get("input_fingerprints", {})
+    if not bindings or contract.bound_inputs(root, {p:p for p in bindings}) != bindings:
+        raise RuntimeError("HOLD_UPSTREAM_INPUT_BYTES_CHANGED")
+    data["input_fingerprints"] = contract.bound_inputs(root, {k:v for k,v in data["paths"].items() if (root/v).is_file()})
     return data
 
 
@@ -260,7 +275,11 @@ def build_trigger_decisions(inputs: Dict[str, Any]) -> Dict[str, Any]:
     blocked_consumers = [name for name, d in consumer_decisions.items() if d["action"] == "blocked"]
     return {
         "schema_version": SCHEMA_VERSION,
-        "generated_at_utc": utc_now_iso(),
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "status": "blocked" if len(blocked_consumers) == len(CONSUMERS) else "pass",
         "decision_mode": "decision_only_no_external_send",
         "should_notify": bool(should_notify),
@@ -290,7 +309,11 @@ def build_notification_decision(inputs: Dict[str, Any], trigger: Dict[str, Any])
     notify = bool(trigger.get("should_notify"))
     return {
         "schema_version": SCHEMA_VERSION,
-        "generated_at_utc": utc_now_iso(),
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "decision_mode": "decision_only_no_external_send",
         "notification_recommended": notify,
         "send_external_notification": False,
@@ -341,8 +364,14 @@ def notification_summary_md(decision: Dict[str, Any], trigger: Dict[str, Any]) -
 def build_bootstrap(consumer: str, payload: Dict[str, Any], context_path: str, trigger: Dict[str, Any], inputs: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
+        "event": inputs["bundle"]["event"],
+        "run_id": inputs["bundle"]["run_id"],
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
         "consumer": consumer,
-        "generated_at_utc": utc_now_iso(),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "read_only": True,
         "ready": bool(trigger.get("ready")),
         "consumer_readiness": trigger.get("consumer_readiness"),
@@ -361,19 +390,24 @@ def build_bootstrap(consumer: str, payload: Dict[str, Any], context_path: str, t
 
 
 def write_outputs(root: Path, inputs: Dict[str, Any]) -> Dict[str, Any]:
+    contract.verify_bound_chain(root, [inputs["bundle"], inputs["downstream"], inputs["output_contract"]], dt.datetime.fromisoformat(utc_now_iso().replace("Z", "+00:00")))
+    if contract.bound_inputs(root, {k:v for k,v in inputs["paths"].items() if (root/v).is_file()}) != inputs["input_fingerprints"]:
+        raise RuntimeError("HOLD_CONSUMED_BYTES_CHANGED")
+    batch = contract.OutputBatch(root)
+    write_json, write_text = batch.json, batch.text
     trigger = build_trigger_decisions(inputs)
     notification = build_notification_decision(inputs, trigger)
     event = get_event(inputs)
     downstream = inputs.get("downstream", {})
     bundle = inputs.get("bundle", {})
     run_id = downstream.get("run_id") or bundle.get("run_id") or inputs.get("last_good", {}).get("run_id") or "unknown_run"
-    event_id = str(event.get("event_id") or "unknown_event").replace("/", "_").replace(" ", "_")
+    event_id = contract.safe_component(event.get("event_id") or "unknown_event")
     latest_context = root / "latest" / "chat_context"
     latest_governor = root / "latest" / "consumer_trigger_governor"
     latest_notify = root / "latest" / "notification_routing"
-    history_context = root / "history" / "chat_context" / event_id / str(run_id)
-    history_governor = root / "history" / "consumer_trigger_governor" / event_id / str(run_id)
-    history_notify = root / "history" / "notification_routing" / event_id / str(run_id)
+    history_context = root / "history" / "chat_context" / event_id / contract.safe_component(run_id)
+    history_governor = root / "history" / "consumer_trigger_governor" / event_id / contract.safe_component(run_id)
+    history_notify = root / "history" / "notification_routing" / event_id / contract.safe_component(run_id)
 
     context_paths: Dict[str, str] = {}
     for consumer in CONSUMERS:
@@ -386,12 +420,17 @@ def write_outputs(root: Path, inputs: Dict[str, Any]) -> Dict[str, Any]:
         context_path = f"latest/chat_context/{filename}"
         context_paths[consumer] = context_path
         bootstrap = build_bootstrap(consumer, payload, context_path, decision, inputs)
+        bootstrap["context_sha256"] = hashlib.sha256((md.rstrip() + "\n").encode()).hexdigest()
         write_json(root / "latest" / "downstream_consumers" / consumer / "consumer_bootstrap.json", bootstrap)
-        write_json(root / "history" / "downstream_consumers" / event_id / str(run_id) / consumer / "consumer_bootstrap.json", bootstrap)
+        write_json(root / "history" / "downstream_consumers" / event_id / contract.safe_component(run_id) / consumer / "consumer_bootstrap.json", bootstrap)
 
     index = {
         "schema_version": SCHEMA_VERSION,
-        "generated_at_utc": utc_now_iso(),
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "event": event,
         "run_id": run_id,
         "context_paths": context_paths,
@@ -421,8 +460,12 @@ def write_outputs(root: Path, inputs: Dict[str, Any]) -> Dict[str, Any]:
 
     report = {
         "schema_version": SCHEMA_VERSION,
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
         "status": trigger.get("status"),
-        "generated_at_utc": utc_now_iso(),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "event": event,
         "run_id": run_id,
         "outputs": {
@@ -440,6 +483,7 @@ def write_outputs(root: Path, inputs: Dict[str, Any]) -> Dict[str, Any]:
         "forecast_gate_activated": False,
     }
     write_json(latest_governor / "consumer_context_publisher_report.json", report)
+    batch.commit()
     return report
 
 
@@ -453,7 +497,11 @@ def main() -> int:
     parser.add_argument("--repo-root", default=".")
     parser.add_argument("--mode", default="run_now", choices=["run_now", "safe_test"])
     args = parser.parse_args()
-    report = run(Path(args.repo_root).resolve(), mode=args.mode)
+    try:
+        report = run(Path(args.repo_root).resolve(), mode=args.mode)
+    except RuntimeError as exc:
+        print(json.dumps({"status": "HOLD", "reason": str(exc), "promotion_allowed": False, "prediction_locked": False}))
+        return 2
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report.get("status") in {"pass", "blocked"} else 1
 

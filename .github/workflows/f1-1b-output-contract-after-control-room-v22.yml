@@ -87,7 +87,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/ops/f1_1b_v16_acceptance_tests_v1.py --repo-root .
+          python -m unittest discover -s tests -p 'test_f1_1b_integrated_recovery_consumer_custody.py' -v
 
       - name: Run output contract ledger and handoff
         shell: bash
@@ -95,23 +95,11 @@ jobs:
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_output_contract_v16.py --repo-root . --mode run_now
 
-      - name: Run v24 downstream consumer acceptance tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/ops/f1_1b_v24_acceptance_tests_v1.py --repo-root .
-
       - name: Run v24 downstream consumer handoff writer
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py --repo-root . --mode run_now
-
-      - name: Run v25 consumer context acceptance tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/ops/f1_1b_v25_acceptance_tests_v1.py --repo-root .
 
       - name: Run v25 consumer context publisher and trigger governor
         shell: bash

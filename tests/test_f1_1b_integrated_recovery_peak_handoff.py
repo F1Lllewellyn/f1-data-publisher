@@ -22,6 +22,13 @@ class PeakHandoffTests(unittest.TestCase):
         self.addCleanup(fixture.doCleanups)
         self.root = fixture.root
         self.now = datetime(2026, 11, 7, 18, 0, tzinfo=timezone.utc)
+        selector = json.loads((self.root/'latest/latest_manifest.json').read_text())
+        source_path = self.root/selector['latest_session_data_processor_manifest']
+        source = json.loads(source_path.read_text())
+        source['run_id'] = 'synthetic_original_capture'
+        source['capture_origin'] = dict(repository='synthetic/replay', head_sha='a'*40, run_id='1234', run_attempt='1', workflow='Synthetic capture')
+        write(source_path, source)
+        fixtures.bind_synthetic_fixture(self.root)
         current = dashboard_mod.discover_state(self.root, reference_time=self.now)
         write(self.root / 'latest/readiness_dashboards/combined_readiness_dashboard.json', current)
         mandatory = ['latest/latest_manifest.json', 'latest/data_readiness.json',
@@ -130,16 +137,14 @@ class ConsumerOutputCustodyTests(unittest.TestCase):
         (self.root/'latest/chat_context/combined_context_index.json').unlink()
         self.assertEqual(self.observe()['status'], 'HOLD')
 
-    def test_legacy_duplicate_overwrites_are_detectable_before_publication(self):
-        # Existing legacy consumers use the bundle run ID as a history directory;
-        # a duplicate re-evaluation must not be represented as immutable success.
+    def test_duplicate_consumer_write_preserves_immutable_history(self):
         history=list((self.root/'history/downstream_consumers').rglob('combined_downstream_consumer_manifest.json'))
         before=history[0].read_bytes()
         with patch.object(self.downstream, 'utc_now_iso', return_value='2026-11-07T18:01:00Z'):
             self.downstream.run(self.root)
-        self.assertNotEqual(history[0].read_bytes(), before)
-        self.assertEqual(self.observe()['status'], 'HOLD')
-        # Workflow publication independently rejects *any* tracked history delta.
+        self.assertEqual(history[0].read_bytes(), before)
+        self.assertEqual(self.observe()['status'], 'VERIFIED_CONTEXT_ONLY')
+
 
 
 class PeakPublicationTests(unittest.TestCase):
