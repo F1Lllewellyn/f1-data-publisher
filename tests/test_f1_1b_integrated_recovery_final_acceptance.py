@@ -123,64 +123,36 @@ class ScopeBoundaryTests(unittest.TestCase):
         self.assertEqual(history.read_bytes(), before)
         self.assertEqual(fixture.observe()['status'], 'VERIFIED_CONTEXT_ONLY')
 
-    def test_legacy_rows_only_locker_claim_is_not_accepted_by_repaired_gate(self):
-        fixture = gate_tests.GateCustodyTests()
-        fixture.setUp()
-        self.addCleanup(fixture.doCleanups)
-        locker = fixtures.load_module('final_acceptance_legacy_locker',
-            'scripts/forecast_bundles/create_forecast_bundles_v1.py')
-        event, gate_name, lane = 'SYNTHETIC_SCOPE_BOUNDARY', 'post_qualifying', 'stable_baseline'
-        source = fixture.root / 'latest/forecasts' / event / gate_name / lane / 'forecast_rows.csv'
-        source.parent.mkdir(parents=True)
-        source.write_text('driver_name,predicted_race_finish_position\nSYNTHETIC DRIVER,1\n')
-        checked = subprocess.run([sys.executable, str(ROOT / 'scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py'),
-            '--repo', str(fixture.root), '--event-id', event, '--gate', gate_name,
-            '--lane', lane, '--strict'], capture_output=True, text=True, timeout=15)
-        self.assertEqual(checked.returncode, 0, checked.stderr)
-        self.assertEqual(json.loads(checked.stdout)['status'], 'pass')
-        with patch.object(locker, 'utcnow', return_value='2026-11-21T05:30:00Z'):
-            created = locker.create_bundle(fixture.root, event, '2026', '', 'SYNTHETIC',
-                gate_name, lane, fixture.root, False, include_existing_bundles=False)
-        directory = Path(created['history_dir'])
-        manifest = json.loads((directory / 'bundle_lock_manifest.json').read_text())
-        config = json.loads((directory / 'engine_lane_config.json').read_text())
-        self.assertTrue(manifest['blind_validation_eligible'])
-        self.assertFalse(config['stable_engine_execution_proven'])
-        original = {p: p.read_bytes() for p in directory.iterdir()}
-        gate_module = gate_tests.gate
-        with patch.object(sys, 'argv', ['gate', '--event-id', event]), \
-             patch.object(gate_module, 'fetch_openf1_sessions', return_value=gate_tests.catalog()), \
-             patch.object(gate_module, 'utc_now', return_value=gate_module.parse_time('2026-11-21T05:30:00Z')), \
-             patch.object(gate_module, 'run_command') as commands, contextlib.redirect_stdout(io.StringIO()):
-            self.assertEqual(gate_module.main(), 2)
-        commands.assert_not_called()
-        result = json.loads((gate_module.RUNTIME / 'orchestrator_result.json').read_text())
-        self.assertEqual(result['reason'], 'HOLD_STABLE_ENGINE_NOT_EXECUTED')
-        self.assertFalse(result['prediction_locked'])
-        self.assertEqual(original, {p: p.read_bytes() for p in directory.iterdir()})
-        report('direct_locker_scope_boundary', dict(status='HOLD_SCOPE',
-            legacy_validator_status='pass', legacy_blind_validation_eligible=True,
-            stable_engine_execution_proven=False, repaired_gate=result['reason'],
-            scientific_prediction_locked=False, generated_only_in_disposable_test_root=True))
+    def test_rows_only_direct_validator_and_locker_fail_closed(self):
+        fixture = gate_tests.GateCustodyTests(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
+        locker = fixtures.load_module('final_acceptance_locker','scripts/forecast_bundles/create_forecast_bundles_v1.py')
+        event,gate_name,lane='SYNTHETIC_SCOPE_BOUNDARY','post_qualifying','stable_baseline'
+        source=fixture.root/'latest/forecasts'/event/gate_name/lane/'forecast_rows.csv'
+        source.parent.mkdir(parents=True);source.write_text('driver_name,predicted_race_finish_position\nSYNTHETIC DRIVER,1\n')
+        original=source.read_bytes()
+        checked=subprocess.run([sys.executable,str(ROOT/'scripts/forecast_bundles/validate_forecast_chain_readiness_v1.py'),
+            '--repo',str(fixture.root),'--event-id',event,'--gate',gate_name,'--lane',lane,'--strict'],capture_output=True,text=True,timeout=15)
+        self.assertEqual(checked.returncode,2,checked.stderr)
+        self.assertEqual(json.loads(checked.stdout)['reason'],'HOLD_STABLE_ENGINE_NOT_EXECUTED')
+        with self.assertRaisesRegex(RuntimeError,'HOLD_STABLE_ENGINE_NOT_EXECUTED'):
+            locker.create_bundle(fixture.root,event,'2026','','SYNTHETIC',gate_name,lane,fixture.root,True)
+        self.assertEqual(source.read_bytes(),original);self.assertFalse((fixture.root/'history').exists())
+        report('direct_locker_scope_boundary',dict(status='PASS_FAIL_CLOSED',scientific_status='HOLD_STABLE_ENGINE_NOT_EXECUTED',
+            blind_validation_eligible=False,stable_engine_execution_proven=False,scientific_prediction_locked=False))
 
-    def test_direct_locker_workflow_option_is_rejected_before_any_output(self):
-        fixture = gate_tests.GateCustodyTests()
-        fixture.setUp()
-        self.addCleanup(fixture.doCleanups)
-        for workflow_name, script, extra in (
-            ('f1-forecast-bundle-locker-v1', 'create_forecast_bundles_v1.py', ['--race-name', 'SYNTHETIC']),
-            ('f1-forecast-gate-source-writer-v1', 'write_gate_forecast_rows_v1.py', []),
-        ):
+    def test_direct_workflow_options_reach_scientific_hold_not_argparse_failure(self):
+        fixture=gate_tests.GateCustodyTests();fixture.setUp();self.addCleanup(fixture.doCleanups)
+        for workflow_name,script,extra in (
+            ('f1-forecast-bundle-locker-v1','create_forecast_bundles_v1.py',['--race-name','SYNTHETIC','--commit-latest']),
+            ('f1-forecast-gate-source-writer-v1','write_gate_forecast_rows_v1.py',[])):
             with self.subTest(workflow=workflow_name):
-                workflow = (ROOT / '.github/workflows' / (workflow_name + '.yml')).read_text()
-                self.assertIn('args+=(--commit-outputs)', workflow)
-                result = subprocess.run([sys.executable, str(ROOT / 'scripts/forecast_bundles' / script),
-                    '--repo-root', str(fixture.root), '--event-id', 'SYNTHETIC_SCOPE_BOUNDARY',
-                    *extra, '--commit-outputs'], cwd=fixture.root,
-                    capture_output=True, text=True, timeout=15)
-                self.assertEqual(result.returncode, 2)
-                self.assertIn('unrecognized arguments: --commit-outputs', result.stderr)
-                self.assertEqual(list(fixture.root.iterdir()), [])
+                workflow=(ROOT/'.github/workflows'/(workflow_name+'.yml')).read_text()
+                self.assertNotIn('--commit-outputs',workflow);self.assertIn('contents: read',workflow)
+                result=subprocess.run([sys.executable,str(ROOT/'scripts/forecast_bundles'/script),'--repo-root',str(fixture.root),
+                    '--event-id','SYNTHETIC_SCOPE_BOUNDARY',*extra],cwd=fixture.root,capture_output=True,text=True,timeout=15)
+                self.assertEqual(result.returncode,2);self.assertNotIn('unrecognized arguments',result.stderr)
+                self.assertIn('HOLD_STABLE_ENGINE_NOT_EXECUTED',result.stdout)
+                self.assertFalse((fixture.root/'latest').exists());self.assertFalse((fixture.root/'history').exists())
 
 
 class WorkflowPreflightTests(unittest.TestCase):

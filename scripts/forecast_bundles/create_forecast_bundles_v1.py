@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""F1 forecast bundle locker v1 with scheduler guard.
+"""Direct forecast custody boundary and exclusive candidate storage.
 
-Creates immutable saved forecast bundles for all engine lanes at a requested gate.
-It never fabricates forecasts: if a lane forecast source is missing during a manual
-or detected-gate lock, the bundle is structurally complete but marked
-missing_forecast_source. Scheduled runs are guarded: they do not create or commit
-placeholder bundles unless actual forecast source rows are detected first.
-Manual runs are also guarded by default after validation: they will not create
-missing-source placeholder bundles unless --allow-structural-placeholders is set.
+An original authenticated execution and separate prospective lock authorization
+are required before any write. Neither currently exists for the protected model.
+Self-supplied receipts, lane labels, row presence and placeholder flags do not
+satisfy that boundary. Historical predictions are never re-locked or overwritten.
+Candidate storage helpers do not grant scientific lock or blind eligibility.
 """
 from __future__ import annotations
 import argparse, csv, datetime as dt, hashlib, json, os, shutil
 from pathlib import Path
+
+def load_custody_guard():
+    import importlib.util
+    path=Path(__file__).resolve().with_name('validate_forecast_chain_readiness_v1.py')
+    spec=importlib.util.spec_from_file_location('direct_forecast_custody',path)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    return module
+
+custody_guard=load_custody_guard()
+
 
 GATES = ["pre_weekend", "post_fp3", "post_qualifying", "race_result", "post_event"]
 LANES = {
@@ -169,52 +177,49 @@ def load_forecast_rows(path: Path|None, bundle_id: str, event_id: str, season: s
 
 
 def create_bundle(repo: Path, event_id: str, season: str, round_no: str, race_name: str, gate: str, lane: str, source_root: Path, commit_latest: bool, include_existing_bundles: bool=True):
-    lock_time=utcnow()
-    config=LANES[lane]
-    bundle_id=f'{event_id}__{gate}__{lane}__{lock_time.replace(":","").replace("-","")}'
-    history_dir=repo/'history'/'forecast_bundles'/event_id/lock_time.replace(':','').replace('-','')/gate/lane
-    latest_dir=repo/'latest'/'forecast_bundles'/event_id/gate/lane
-    bdir=history_dir
-    bdir.mkdir(parents=True, exist_ok=True)
-    found_path=None
-    for cand in candidate_sources(source_root, event_id, gate, lane, include_existing_bundles=include_existing_bundles):
-        if count_csv_rows(cand) > 0:
-            found_path=cand
-            break
-    forecast_rows, source_found = load_forecast_rows(found_path, bundle_id, event_id, season, round_no, race_name, gate, lane, config, lock_time)
-    if not source_found:
-        forecast_rows=[{c:'' for c in FORECAST_COLS}]
-        forecast_rows[0].update({'bundle_id':bundle_id,'bundle_status':'missing_forecast_source','event_id':event_id,'season':season,'round':round_no,'race_name':race_name,'gate':gate,'engine_lane':lane,'engine_lane_config':config,'forecast_lock_utc':lock_time,'promotion_gate_eligible':'False','notes':'No source forecast rows found. Bundle complete structurally but not valid for non-proxy validation.'})
-    write_csv(bdir/'forecast_rows.csv', FORECAST_COLS, forecast_rows)
-    src_rows=[{'source_id':'forecast_source','source_name':str(found_path) if found_path else 'missing','source_type':'csv' if found_path else 'missing','source_path_or_uri':str(found_path) if found_path else '', 'source_timestamp_utc':lock_time, 'source_sha256':sha(found_path) if found_path else '', 'source_role':'forecast_source','gate_allowed':str(source_found),'notes':'Actual forecast source copied into immutable bundle.' if source_found else 'Missing source blocks validation.'}]
-    write_csv(bdir/'source_snapshot_manifest.csv', ['source_id','source_name','source_type','source_path_or_uri','source_timestamp_utc','source_sha256','source_role','gate_allowed','notes'], src_rows)
-    (bdir/'engine_lane_config.json').write_text(json.dumps({
-        'engine_lane':lane,
-        'engine_lane_config':config,
-        'stable_engine_touched':False,
-        'canonical_workbook_touched':False,
-        'stable_engine_execution_proven':False,
-        'historical_stable_engine_execution_claimed':False,
-    }, indent=2), encoding='utf-8')
-    write_csv(bdir/'forecast_attribution.csv', ['attribution_id','gate','engine_lane','feature_family','input_source','directional_effect','weight_class','confidence','proof_loop_status','notes'], [{'attribution_id':bundle_id+'__ATTR','gate':gate,'engine_lane':lane,'feature_family':'bundle_lock','input_source':str(found_path) if found_path else 'missing','directional_effect':'locked' if source_found else 'blocked','weight_class':'source','confidence':'high' if source_found else 'none','proof_loop_status':'ready_for_scoring' if source_found else 'blocked','notes':''}])
-    write_csv(bdir/'stable_vs_challenger_delta.csv', ['event_id','gate','metric','stable_baseline_value','control_room_overlay_value','experimental_challenger_value','overlay_delta_vs_stable','challenger_delta_vs_stable','promotion_gate_relevance','notes'], [{'event_id':event_id,'gate':gate,'metric':'pending_cross_lane_delta','promotion_gate_relevance':'pending','notes':'Computed after all lane bundles are present.'}])
-    (bdir/'method_e_proof_loop_gate_record.json').write_text(json.dumps({'bundle_id':bundle_id,'gate':gate,'engine_lane':lane,'source_found':source_found,'proof_loop_status':'ready_for_post_event_scoring' if source_found else 'blocked_missing_forecast_source'}, indent=2), encoding='utf-8')
-    (bdir/'promotion_gate_metadata.json').write_text(json.dumps({'bundle_id':bundle_id,'promotion_gate_status':'blocked','reason':'Promotion requires scored blind/session-gated performance improvement. Bundle lock alone is not enough.'}, indent=2), encoding='utf-8')
-    write_csv(bdir/'scoring_placeholder.csv', ['event_id','gate','engine_lane','score_timestamp_utc','actual_source','mae_position','winner_hit','podium_overlap','top10_overlap','dnf_auc','dnf_brier','actual_dnf_count','expected_dnf_count','scoring_status','notes'], [{'event_id':event_id,'gate':gate,'engine_lane':lane,'scoring_status':'pending_outcome'}])
-    manifest={'bundle_id':bundle_id,'bundle_status':'locked' if source_found else 'missing_forecast_source','event_id':event_id,'season':season,'round':round_no,'race_name':race_name,'gate':gate,'engine_lane':lane,'engine_lane_config':config,'forecast_lock_utc':lock_time,'blind_validation_eligible':source_found,'source_forecast_found':source_found,'promotion_gate_status':'blocked'}
-    (bdir/'bundle_lock_manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
-    (bdir/'README.md').write_text(f'# Forecast bundle {bundle_id}\n\nStatus: {manifest["bundle_status"]}\n', encoding='utf-8')
-    completeness=[]
-    for f in REQUIRED:
-        p=bdir/f
-        completeness.append({'bundle_id':bundle_id,'event_id':event_id,'gate':gate,'engine_lane':lane,'required_file':f,'present':p.exists(),'status':'Pass' if p.exists() else 'Fail','notes':''})
-    write_csv(bdir/'bundle_completeness_check.csv', ['bundle_id','event_id','gate','engine_lane','required_file','present','status','notes'], completeness)
-    if commit_latest:
-        if latest_dir.exists():
-            shutil.rmtree(latest_dir)
-        latest_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(bdir, latest_dir)
-    return {'bundle_id':bundle_id,'gate':gate,'engine_lane':lane,'source_found':source_found,'history_dir':str(history_dir),'latest_dir':str(latest_dir) if commit_latest else ''}
+    # Every direct caller crosses the same boundary before any mkdir/write.
+    custody_guard.require_forecast_authority(event_id,gate,lane)
+    found_path=next((p for p in candidate_sources(source_root,event_id,gate,lane,False) if count_csv_rows(p)>0),None)
+    if found_path is None:raise custody_guard.ScientificHold('HOLD_FORECAST_SOURCE_MISSING')
+    custody=custody_guard.verify_candidate(source_root,found_path,event_id,gate,lane,utcnow())
+    doc=custody['manifest']; original=found_path.read_bytes()
+    if sha(found_path)!=custody['source_sha256']:raise custody_guard.ScientificHold('HOLD_FORECAST_CHANGED_BEFORE_LOCK')
+    key=custody_guard.digest(json.dumps(custody,sort_keys=True,separators=(',',':')).encode())
+    bundle_id=f'{event_id}__{gate}__{lane}__{key}'
+    history_dir=repo/'history/forecast_bundles'/event_id/key/gate/lane
+    latest_dir=repo/'latest/forecast_bundles'/event_id/gate/lane
+    # A retry retains the first actual storage time. It never changes generation
+    # or source-observation times and cannot acquire scientific lock authority.
+    old=history_dir/'bundle_lock_manifest.json'
+    lock_time=json.loads(old.read_text())['preserved_at_utc'] if old.is_file() else utcnow()
+    def raw(value):return (json.dumps(value,indent=2,sort_keys=True)+'\n').encode()
+    manifest=dict(bundle_id=bundle_id,bundle_status='CANDIDATE_PRESERVED_NOT_SCIENTIFIC_LOCK',
+        event_id=event_id,gate=gate,engine_lane=lane,engine_lane_config=LANES[lane],
+        preserved_at_utc=lock_time,forecast_generation_utc=doc['forecast_generation_utc'],
+        forecast_lock_utc=None,source_forecast_found=True,blind_validation_eligible=False,
+        prediction_locked=False,promotion_gate_status='blocked',custody=custody)
+    files={
+        'forecast_rows.csv':original,
+        'forecast_execution_manifest.json':found_path.with_name('forecast_execution_manifest.json').read_bytes(),
+        'bundle_lock_manifest.json':raw(manifest),
+        'source_snapshot_manifest.json':raw(doc['inputs']),
+        'engine_lane_config.json':raw(dict(engine_lane=lane,engine_lane_config=LANES[lane],
+            stable_engine_touched=False,canonical_workbook_touched=False,
+            stable_engine_execution_proven=False,historical_stable_engine_execution_claimed=False)),
+        'promotion_gate_metadata.json':raw(dict(promotion_gate_status='blocked',reason='Separate execution and lock authority required.')),
+        'README.md':b'Preserved candidate bytes only. No scientific forecast lock or blind eligibility.\n',
+    }
+    # Check latest conflicts before creating any history; neither path may erase
+    # an existing forecast or restore old evidence under a new observation time.
+    if commit_latest and latest_dir.exists():
+        actual={p.relative_to(latest_dir).as_posix():p.read_bytes() for p in latest_dir.rglob('*') if p.is_file()}
+        if actual!=files:raise custody_guard.ScientificHold('HOLD_IMMUTABLE_FORECAST_COLLISION')
+    if custody_guard.verify_candidate(source_root,found_path,event_id,gate,lane,utcnow()) != custody:
+        raise custody_guard.ScientificHold('HOLD_FORECAST_CHANGED_BEFORE_LOCK')
+    custody_guard.immutable_directory(history_dir,files)
+    if commit_latest:custody_guard.immutable_directory(latest_dir,files)
+    return dict(bundle_id=bundle_id,gate=gate,engine_lane=lane,source_found=True,
+        history_dir=str(history_dir),latest_dir=str(latest_dir) if commit_latest else '',prediction_locked=False)
 
 
 def main():
@@ -234,6 +239,11 @@ def main():
     repo=Path(args.repo_root).resolve()
     source_root=Path(args.source_root).resolve()
     gates=GATES if args.gate=='all' else [args.gate]
+
+    try:
+        custody_guard.require_forecast_authority(args.event_id,gates[0],'stable_baseline')
+    except custody_guard.ScientificHold as exc:
+        return custody_guard.hold_report(repo,args.event_id,args.gate,'all',str(exc))
 
     # Scheduled guard: never create placeholder bundles on a timer unless actual forecast rows exist.
     if args.scheduled_run and args.require_scheduled_source:
@@ -274,4 +284,4 @@ def main():
     print(json.dumps({'created':len(rows),'source_found':sum(1 for r in rows if r['source_found']),'summary':str(out)}, indent=2))
 
 if __name__=='__main__':
-    main()
+    raise SystemExit(main())

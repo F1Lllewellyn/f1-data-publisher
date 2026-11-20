@@ -47,6 +47,7 @@ class StableLaneMetadataTruthTests(unittest.TestCase):
         row.update(
             {
                 "engine_lane_config": config,
+                "forecast_timestamp_utc": "2026-10-05T14:00:00Z",
                 "predicted_qualifying_position": "3",
                 "predicted_race_finish_position": "2",
                 "predicted_points_band": "18-25",
@@ -126,45 +127,13 @@ class StableLaneMetadataTruthTests(unittest.TestCase):
                 output = csv.DictWriter(handle, fieldnames=writer.REQUIRED_COLUMNS)
                 output.writeheader()
                 output.writerow(original)
-            with patch.object(locker, "utcnow", return_value="2026-10-05T15:00:00Z"):
-                result = locker.create_bundle(
-                    root / "repo",
-                    "event",
-                    "2026",
-                    "1",
-                    "Synthetic",
-                    "post_qualifying",
-                    "stable_baseline",
-                    root / "source",
-                    False,
-                    include_existing_bundles=False,
-                )
-            bundle = Path(result["history_dir"])
-            config = json.loads((bundle / "engine_lane_config.json").read_text())
-            self.assertEqual(config["engine_lane"], "stable_baseline")
-            self.assertEqual(config["engine_lane_config"], STABLE_CONFIG)
-            self.assertIs(config["stable_engine_touched"], False)
-            self.assertIs(config["stable_engine_execution_proven"], False)
-            self.assertIs(
-                config["historical_stable_engine_execution_claimed"], False
-            )
-            with (bundle / "forecast_rows.csv").open(newline="", encoding="utf-8") as handle:
-                row = next(csv.DictReader(handle))
-            self.assertEqual(row["engine_lane_config"], STABLE_CONFIG)
-            for key, value in original.items():
-                if key.startswith("predicted_"):
-                    self.assertEqual(row[key], value, key)
-            promotion = json.loads(
-                (bundle / "promotion_gate_metadata.json").read_text()
-            )
-            self.assertEqual(promotion["promotion_gate_status"], "blocked")
-            self.assertEqual(row["promotion_gate_eligible"], "False")
-            self.assertFalse(
-                any(
-                    "engine_execution" in path.name or "receipt" in path.name
-                    for path in bundle.iterdir()
-                )
-            )
+            # G5 closes the direct scientific bypass. Label-only source rows
+            # cannot create a bundle, even with a truthful lane configuration.
+            before=source.read_bytes()
+            with self.assertRaisesRegex(RuntimeError,'HOLD_STABLE_ENGINE_NOT_EXECUTED'):
+                locker.create_bundle(root/'repo','event','2026','1','Synthetic','post_qualifying','stable_baseline',root/'source',False,include_existing_bundles=False)
+            self.assertEqual(source.read_bytes(),before)
+            self.assertFalse((root/'repo').exists())
 
     def test_locker_non_stable_configs_remain_unchanged(self):
         self.assertEqual(
