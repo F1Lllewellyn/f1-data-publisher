@@ -15,11 +15,135 @@ Guardrails:
 """
 
 import argparse
+import hashlib
+import importlib.util
 import json
+import os
+import zipfile
 from pathlib import Path
 from datetime import datetime, timezone
 
 import pandas as pd
+
+
+def load_verifier(name, relative):
+    path = Path(__file__).resolve().parents[1] / relative
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def current_identity(repo, now):
+    dashboard = load_verifier('elite_current_authority', 'dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py')
+    state = dashboard.discover_state(repo, reference_time=now)
+    if state.get('downstream_eligible') is not True:
+        raise RuntimeError('HOLD_ELITE_CURRENT_SOURCE:' + ','.join(state.get('readiness_reasons', [])))
+    return {key: state[key] for key in ('event_id', 'meeting_key', 'session_key')}
+
+
+def verify_profile_custody(profile, profile_dir, artifact_row, expected, now):
+    """Authenticate the archive independently; a local found/verified flag is no proof.
+
+    Legacy high-frequency archives lack original response/observation custody.
+    They remain quarantined. This consumes an original source_custody.json only
+    when it is itself inside the authenticated archive; it never creates one.
+    """
+    intake = load_verifier('elite_transfer_verifier', 'elite/download_latest_openf1_artifacts.py')
+    if not expected:
+        raise RuntimeError('HOLD_ELITE_CURRENT_IDENTITY_UNVERIFIED')
+    if artifact_row.get('quarantined_to') or artifact_row.get('event_session_provenance_verified') is not True:
+        raise RuntimeError('HOLD_ELITE_SOURCE_PROVENANCE_UNVERIFIED')
+    repo, token = os.environ.get('GITHUB_REPOSITORY', ''), os.environ.get('GITHUB_TOKEN', '')
+    if not repo or not token:
+        raise RuntimeError('HOLD_ELITE_AUTHENTICATED_INTAKE_UNAVAILABLE')
+    artifact_id = artifact_row.get('artifact_id')
+    if not str(artifact_id).isdigit() or int(artifact_id) <= 0:
+        raise RuntimeError('HOLD_ELITE_ARTIFACT_IDENTITY')
+    metadata = intake.gh_get_json(f'https://api.github.com/repos/{repo}/actions/artifacts/{artifact_id}', token)
+    intake.validate_artifact(metadata, repo, intake.PROFILES[profile])
+    origin = intake.verify_originating_workflow_run(metadata, profile, repo, token)
+    if (str(metadata['id']) != str(artifact_id) or metadata['name'] != artifact_row.get('artifact_name')
+            or str(origin['id']) != str(artifact_row.get('workflow_run_id'))
+            or str(origin['run_attempt']) != str(artifact_row.get('workflow_run_attempt'))
+            or origin['head_sha'] != artifact_row.get('workflow_run_head_sha')
+            or origin['path'] != artifact_row.get('workflow_path')):
+        raise RuntimeError('HOLD_ELITE_ORIGINAL_RUN_MISMATCH')
+    root = profile_dir.parent.parent.resolve()
+    archive_path = root / 'downloads' / f'{profile}_{artifact_id}.zip'
+    for path in (archive_path, profile_dir):
+        if any(p.is_symlink() for p in (path, *path.parents)) or not path.resolve().is_relative_to(root):
+            raise RuntimeError('HOLD_ELITE_INPUT_PATH')
+    if not archive_path.is_file() or archive_path.stat().st_size != metadata['size_in_bytes']:
+        raise RuntimeError('HOLD_ELITE_ARCHIVE_MISSING_OR_INCOMPLETE')
+    archive_sha = intake._file_sha256(archive_path)
+    if metadata.get('digest') != 'sha256:' + archive_sha:
+        raise RuntimeError('HOLD_ELITE_AUTHENTICATED_ARCHIVE_DIGEST')
+    with zipfile.ZipFile(archive_path) as archive:
+        infos = archive.infolist()
+        names = [i.filename for i in infos if not i.is_dir()]
+        if (len(infos) > intake.MAX_ZIP_MEMBERS or len(names) != len(set(names))
+                or sum(i.file_size for i in infos) > intake.MAX_EXTRACTED_BYTES or archive.testzip()):
+            raise RuntimeError('HOLD_ELITE_ARCHIVE_INTEGRITY')
+        # Verify every extracted byte, including feature/checkpoint summaries.
+        for name in names:
+            path = profile_dir / name
+            if ('\\' in name or '..' in Path(name).parts or Path(name).is_absolute()
+                    or not path.resolve().is_relative_to(profile_dir.resolve())
+                    or any(p.is_symlink() for p in (path, *path.parents))
+                    or not path.is_file() or path.read_bytes() != archive.read(name)):
+                raise RuntimeError('HOLD_ELITE_EXTRACTED_BYTES')
+        if set(names) != {p.relative_to(profile_dir).as_posix() for p in profile_dir.rglob('*') if p.is_file()}:
+            raise RuntimeError('HOLD_ELITE_UNBOUND_EXTRACTED_FILES')
+        if 'source_custody.json' not in names:
+            raise RuntimeError('HOLD_ELITE_ORIGINAL_SOURCE_CUSTODY_NOT_RETAINED')
+        custody = json.loads(archive.read('source_custody.json'))
+        if (custody.get('schema') != 'elite-source-custody-v1' or custody.get('profile') != profile
+                or custody.get('capture_origin') != origin
+                or any(custody.get(k) != v for k, v in expected.items())):
+            raise RuntimeError('HOLD_ELITE_EVENT_SESSION_OR_ORIGIN')
+        sources = custody.get('sources')
+        if not isinstance(sources, list) or not sources:
+            raise RuntimeError('HOLD_ELITE_ORIGINAL_SOURCE_CUSTODY_NOT_RETAINED')
+        endpoints, hashes, clocks, driver_rows, observed_rows = set(), {}, {}, [], []
+        for source in sources:
+            endpoint, name = source.get('endpoint'), source.get('path')
+            if endpoint not in {'drivers', 'laps', 'position', 'weather', 'car_data', 'location', 'stints', 'pit', 'race_control', 'team_radio', 'intervals'} or name not in names or name in hashes:
+                raise RuntimeError('HOLD_ELITE_SOURCE_ENDPOINT')
+            raw = archive.read(name)
+            if hashlib.sha256(raw).hexdigest() != source.get('sha256') or source.get('http_status') != 200:
+                raise RuntimeError('HOLD_ELITE_SOURCE_BYTES')
+            from urllib.parse import urlparse, parse_qs
+            request = urlparse(source.get('request_url', ''))
+            if (request.scheme != 'https' or request.netloc != 'api.openf1.org'
+                    or request.path != '/v1/' + endpoint or request.fragment
+                    or parse_qs(request.query).get('session_key') != [str(expected['session_key'])]):
+                raise RuntimeError('HOLD_ELITE_SOURCE_REQUEST_IDENTITY')
+            observed = intake._parse_utc(source.get('observed_at_utc'), 'source observation')
+            if not observed <= intake._parse_utc(metadata['created_at'], 'created_at') <= now:
+                raise RuntimeError('HOLD_ELITE_SOURCE_AVAILABILITY')
+            rows = json.loads(raw)
+            if not isinstance(rows, list) or not rows or len(rows) != source.get('rows'):
+                raise RuntimeError('HOLD_ELITE_SOURCE_COVERAGE')
+            for row in rows:
+                if not isinstance(row, dict) or row.get('meeting_key') != expected['meeting_key'] or row.get('session_key') != expected['session_key']:
+                    raise RuntimeError('HOLD_ELITE_SOURCE_ROW_IDENTITY')
+                if row.get('date') and intake._parse_utc(row['date'], 'source row') > observed:
+                    raise RuntimeError('HOLD_ELITE_SOURCE_AVAILABILITY')
+            if endpoint == 'drivers':
+                driver_rows.extend(rows)
+            observed_rows.extend(rows)
+            endpoints.add(endpoint); hashes[name] = source['sha256']; clocks[name] = source['observed_at_utc']
+        if not {'drivers', 'laps', 'position', 'weather'}.issubset(endpoints):
+            raise RuntimeError('HOLD_ELITE_REQUIRED_SOURCE_COVERAGE')
+        drivers = [r.get('driver_number') for r in driver_rows]
+        if not drivers or len(drivers) != len(set(drivers)) or any(type(d) is not int or d <= 0 for d in drivers):
+            raise RuntimeError('HOLD_ELITE_DRIVER_ROSTER')
+        if any(r.get('driver_number') is not None and r['driver_number'] not in drivers for r in observed_rows):
+            raise RuntimeError('HOLD_ELITE_DRIVER_MEMBERSHIP')
+    return dict(expected, archive_sha256=archive_sha, capture_origin=origin,
+                source_hashes=hashes, source_availability=clocks,
+                context_verified=True, forecast_eligible=False, prediction_locked=False)
 
 
 def find_first(root: Path, pattern: str):
@@ -48,7 +172,23 @@ def read_csv(path: Path) -> pd.DataFrame:
     return pd.DataFrame()
 
 
-def profile_summary(profile: str, profile_dir: Path, artifact_row: dict) -> dict:
+def profile_summary(profile: str, profile_dir: Path, artifact_row: dict, expected=None, now=None) -> dict:
+    custody, hold_reason = {}, ''
+    found = artifact_row.get('found') is True
+    if found:
+        try:
+            custody = verify_profile_custody(profile, profile_dir, artifact_row, expected, now or datetime.now(timezone.utc))
+        except Exception as exc:
+            # Exception text can contain signed URLs/credentials from transport.
+            hold_reason = str(exc) if str(exc).startswith('HOLD_ELITE_') else 'HOLD_ELITE_INTAKE_' + type(exc).__name__
+    else:
+        hold_reason = 'HOLD_ELITE_SOURCE_PROVENANCE_UNVERIFIED' if artifact_row.get('quarantined_to') else 'HOLD_ELITE_ARTIFACT_MISSING'
+    if not custody:
+        return dict(profile=profile, artifact_found=False, artifact_name=artifact_row.get('artifact_name',''),
+                    artifact_id=artifact_row.get('artifact_id',''), updated_at=artifact_row.get('updated_at',''),
+                    checkpoint_status='', selected_sessions=0, high_frequency_rows=0, normal_feature_rows=0,
+                    fallback_feature_builder_used=False, feature_rows=0, status='HOLD' if found else 'MISSING',
+                    hold_reason=hold_reason, custody={}, forecast_eligible=False)
     checkpoint = read_json(find_first(profile_dir, "extraction_checkpoint_summary.json") or Path(""))
     manifest = read_csv(find_first(profile_dir, "high_frequency_extraction_manifest.csv") or Path(""))
     feature_manifest = read_csv(find_first(profile_dir, "feature_manifest.csv") or Path(""))
@@ -62,7 +202,6 @@ def profile_summary(profile: str, profile_dir: Path, artifact_row: dict) -> dict
     if not feature_rows and not feature_manifest.empty and "rows_30s" in feature_manifest.columns:
         feature_rows = int(pd.to_numeric(feature_manifest["rows_30s"], errors="coerce").fillna(0).sum())
 
-    found = bool(artifact_row.get("found", False))
     status = "MISSING"
     if found and high_freq_rows > 0 and feature_rows > 0:
         status = "PASS"
@@ -84,6 +223,9 @@ def profile_summary(profile: str, profile_dir: Path, artifact_row: dict) -> dict
         "fallback_feature_builder_used": bool(checkpoint.get("fallback_feature_builder_used", False)),
         "feature_rows": int(feature_rows or 0),
         "status": status,
+        "hold_reason": hold_reason,
+        "custody": custody,
+        "forecast_eligible": False,
     }
 
 
@@ -102,6 +244,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--input-dir", required=True)
     p.add_argument("--output-dir", required=True)
+    p.add_argument("--repo-root", default=".")
     args = p.parse_args()
 
     input_root = Path(args.input_dir)
@@ -114,8 +257,14 @@ def main():
     profile_by_name = {r.get("profile"): r for r in profile_rows}
 
     profiles = ["pre_race", "full_historical", "post_race"]
+    now = datetime.now(timezone.utc)
+    try:
+        expected = current_identity(Path(args.repo_root).resolve(), now)
+        current_hold = ''
+    except Exception:
+        expected, current_hold = None, 'HOLD_ELITE_CURRENT_IDENTITY_UNVERIFIED'
     summaries = [
-        profile_summary(profile, input_root / "inputs" / profile, profile_by_name.get(profile, {}))
+        profile_summary(profile, input_root / "inputs" / profile, profile_by_name.get(profile, {}), expected, now)
         for profile in profiles
     ]
 
@@ -140,6 +289,9 @@ def main():
         elite_status = "PARTIAL_READY_PRERACE_ONLY"
     else:
         elite_status = "NOT_READY"
+    # Source context is not an executed stable engine or an eligible forecast.
+    if elite_status != 'NOT_READY':
+        elite_status = 'CONTEXT_ONLY'
 
     reliability_rows = []
     for s in summaries:
@@ -151,7 +303,7 @@ def main():
             "normal_feature_rows": s["normal_feature_rows"],
             "fallback_feature_builder_used": s["fallback_feature_builder_used"],
             "feature_rows": s["feature_rows"],
-            "reliability_signal_available": s["feature_rows"] > 0,
+            "reliability_signal_available": bool(s.get('custody', {}).get('context_verified') and s["feature_rows"] > 0),
             "usage": "risk/fantasy/reporting only",
             "stable_rank_change_allowed": False,
         })
@@ -199,6 +351,9 @@ def main():
     promotion = pd.DataFrame([{
         "gate": "automatic_promotion_demotion_controller",
         "elite_status": elite_status,
+        "prediction_locked": False,
+        "stable_engine_executed": False,
+        "forecast_eligible": False,
         "promotion_action": promotion_action,
         "stable_race_p1_p20_change_allowed": False,
         "qualifying_p1_p5_change_allowed": False,
@@ -303,6 +458,11 @@ def main():
     validation = {
         "validation_status": "PASS" if elite_status != "NOT_READY" else "FAIL",
         "elite_status": elite_status,
+        "current_identity": expected,
+        "current_identity_hold": current_hold,
+        "forecast_eligible": False,
+        "stable_engine_executed": False,
+        "prediction_locked": False,
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "required_profiles": profiles,
         "profiles": summaries,

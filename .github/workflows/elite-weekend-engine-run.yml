@@ -68,6 +68,9 @@ jobs:
           key: elite-quarantine-${{ hashFiles('scripts/elite/download_latest_openf1_artifacts.py') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Build Elite Weekend Engine v2 outputs
+        if: ${{ always() && !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python scripts/elite/elite_weekend_engine_v2.py \
             --input-dir "$ELITE_INPUT_DIR" \
