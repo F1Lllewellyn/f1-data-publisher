@@ -1,6 +1,6 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-20T08:24:07Z
+Generated UTC: 2026-11-20T17:12:19Z
 Event: United States - Las Vegas - Las Vegas
 Session: Practice 2
 Source status: clean
