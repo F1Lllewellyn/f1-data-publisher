@@ -1,0 +1,635 @@
+{
+  "canonical_workbook_modified": false,
+  "created_utc": "2026-11-20T15:37:44.899817Z",
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-11-20T15:37:44.902335Z",
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "forecast_state_changed": false,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "United States - Las Vegas - Las Vegas",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-11-20T05:00:00+00:00",
+      "date_start": "2026-11-20T04:00:00+00:00",
+      "gate": "post_fp2",
+      "meeting_key": 1300,
+      "session_key": 11414,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    "source_readiness_materially_improved": false,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 492.67,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "eea3cbfc68563be1a07b27ae4c14715f35adaa2d8b05d0269f7e656a8b7ceb2d",
+      "size_bytes": 707,
+      "timestamp_utc": "2026-11-20T07:25:04.411934Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 492.67,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "361c056b5536286565e370c78c75bb40771626162375c2665316cbe23ab4241d",
+      "size_bytes": 1577,
+      "timestamp_utc": "2026-11-20T07:25:04.411754Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 492.67,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "ef0fdc1f0c9fcb6da5852bfb3e837fe7f72e72a61fbf36577238d37acfd031eb",
+      "size_bytes": 814,
+      "timestamp_utc": "2026-11-20T07:25:04.411623Z"
+    }
+  },
+  "material_readiness_improved": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "United States - Las Vegas - Las Vegas",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [
+      "starting_grid"
+    ],
+    "expected_empty_sources": [
+      {
+        "endpoint": "starting_grid",
+        "reason": "expected_empty_for_session_type",
+        "rows": 0,
+        "source": "openf1_starting_grid",
+        "status": "needs_manual_review"
+      }
+    ],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "session_result",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 413
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 72
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 785
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 118
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "expected_empty",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [
+          "session_key",
+          "meeting_key"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "expected_empty_for_session_type",
+        "role": "expected_empty",
+        "rows": 0
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 72
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 84
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "practice",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261120T153733Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-11-20T05:00:00+00:00",
+    "date_start": "2026-11-20T04:00:00+00:00",
+    "gate": "post_fp2",
+    "meeting_key": 1300,
+    "session_key": 11414,
+    "session_name": "Practice 2",
+    "session_type": "Practice"
+  },
+  "session_schedule_sha256": "a83dee34484598fe52911193515748cd3c6cd5d436fc48935b56a5dcfd626adb",
+  "session_schedule_snapshot": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/session_schedule_snapshot.json",
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9024,
+        "ok": true,
+        "sha256": "e267f284f54fccedafc494079eecfe876e6d79eb861fbd336de82cd3171cfd25",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_drivers.json",
+      "json_sha256": "924fc4d9c36559b26404ac359989c29079bcedbbabfab844581d84c37b89d9d2",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 195288,
+        "ok": true,
+        "sha256": "fed30e4c131125eb58182ccd23f3074474f04c806df15296304469ec40cec4a2",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_laps.json",
+      "json_sha256": "69a29b1e0c1451c53d86173fcb82b34dd8c807de38896dd597303c91af93f4f7",
+      "max_lap_number": 28.0,
+      "missing_required_columns": [],
+      "rows": 413,
+      "status": "clean",
+      "timestamp_rows": 412
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 13013,
+        "ok": true,
+        "sha256": "e3e37e06762205703cf6ce41950e49550b86b80ad210db71141db5ea0eefea17",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_pit.json",
+      "json_sha256": "ae5af13983db8e86f4804e477696b5af4ec3f9830b8a3ca77fa4e03c0e78e8bd",
+      "max_lap_number": 23.0,
+      "missing_required_columns": [],
+      "rows": 72,
+      "status": "clean",
+      "timestamp_rows": 72
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_position.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 90553,
+        "ok": true,
+        "sha256": "b0e08063e8cf7303529a60e444a4068fd06b3c03bdbb00e8413ae507c3677bf8",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_position.json",
+      "json_sha256": "ec252942c183a16bbba0fc2b5b5dbd961757a57edaa4dcdf0ae8a951b7b9933a",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 785,
+      "status": "clean",
+      "timestamp_rows": 785
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 29904,
+        "ok": true,
+        "sha256": "321e5164079894923333427fdadd7c79c4ed2a530901c343b22b370310c830d1",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_race_control.json",
+      "json_sha256": "323ac27988b849e281f1b37eb3c4b581932ad7e69a934d1cdc61aeecb3593159",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 118,
+      "status": "clean",
+      "timestamp_rows": 118
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 3744,
+        "ok": true,
+        "sha256": "75b49cf61b4f5d2bb413a5b21cde645a817128398750aceb6cae6ae150ae59c9",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_session_result.json",
+      "json_sha256": "562da3ef358be52bc0f164a6a211e54d0a277a911cef1cdb249d6dde0134ef08",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 406,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_sessions.json",
+      "json_sha256": "4796ceead229bc079756ef448691a154978784fe5700753c64aca34545e5b4e4",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_starting_grid.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 0,
+        "error": "<HTTPError 404: 'Not Found'>",
+        "ok": false
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_starting_grid.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "session_key",
+        "meeting_key"
+      ],
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 10703,
+        "ok": true,
+        "sha256": "f8990b82561d8b9b9a7019ce0f097cd4d00301cd06c8faf62b2df77ef40af39c",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_stints.json",
+      "json_sha256": "c79a6f30ecf781d9c626f6609850f28b909f26d77fdd69387cfcbf35f17a9b76",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 72,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 18060,
+        "ok": true,
+        "sha256": "b88fbf796b36831362b3091327aef55a41b270f7f0a17cd8f616779066ab64ce",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_weather.json",
+      "json_sha256": "5ba97bdc00b3bc91078d929e0ede70eb16f766c05dca1d130171d4b8f7c35499",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "rows": 84,
+      "status": "clean",
+      "timestamp_rows": 84
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 9,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 2,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json"
+  }
+}

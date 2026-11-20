@@ -1,0 +1,33 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 29904,
+    "ok": true,
+    "sha256": "321e5164079894923333427fdadd7c79c4ed2a530901c343b22b370310c830d1",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_race_control.json",
+  "json_sha256": "323ac27988b849e281f1b37eb3c4b581932ad7e69a934d1cdc61aeecb3593159",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 118,
+  "status": "clean",
+  "timestamp_rows": 118
+}

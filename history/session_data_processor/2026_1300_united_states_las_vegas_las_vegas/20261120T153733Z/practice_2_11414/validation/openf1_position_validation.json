@@ -1,0 +1,27 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_position.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "position",
+  "fetch": {
+    "bytes": 90553,
+    "ok": true,
+    "sha256": "b0e08063e8cf7303529a60e444a4068fd06b3c03bdbb00e8413ae507c3677bf8",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_position.json",
+  "json_sha256": "ec252942c183a16bbba0fc2b5b5dbd961757a57edaa4dcdf0ae8a951b7b9933a",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 785,
+  "status": "clean",
+  "timestamp_rows": 785
+}
