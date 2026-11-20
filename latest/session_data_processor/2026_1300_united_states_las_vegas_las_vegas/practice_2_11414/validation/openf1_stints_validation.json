@@ -1,0 +1,30 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 10703,
+    "ok": true,
+    "sha256": "f8990b82561d8b9b9a7019ce0f097cd4d00301cd06c8faf62b2df77ef40af39c",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_stints.json",
+  "json_sha256": "c79a6f30ecf781d9c626f6609850f28b909f26d77fdd69387cfcbf35f17a9b76",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "rows": 72,
+  "status": "clean",
+  "timestamp_rows": 0
+}

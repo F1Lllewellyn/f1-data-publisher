@@ -1,0 +1,57 @@
+{
+  "catalog_entries_valid": true,
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "meeting_key": 1300,
+  "observed_at_utc": "2026-11-20T06:21:11.154289Z",
+  "official_final_grid_verified": false,
+  "promotion_allowed": false,
+  "schema_version": "meeting_schedule_snapshot_v1",
+  "sessions": [
+    {
+      "date_end": "2026-11-20T01:30:00Z",
+      "date_start": "2026-11-20T00:30:00Z",
+      "meeting_key": 1300,
+      "session_key": 11413,
+      "session_name": "Practice 1",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-20T05:00:00Z",
+      "date_start": "2026-11-20T04:00:00Z",
+      "meeting_key": 1300,
+      "session_key": 11414,
+      "session_name": "Practice 2",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-21T01:30:00Z",
+      "date_start": "2026-11-21T00:30:00Z",
+      "meeting_key": 1300,
+      "session_key": 11415,
+      "session_name": "Practice 3",
+      "session_type": "Practice"
+    },
+    {
+      "date_end": "2026-11-21T05:00:00Z",
+      "date_start": "2026-11-21T04:00:00Z",
+      "meeting_key": 1300,
+      "session_key": 11416,
+      "session_name": "Qualifying",
+      "session_type": "Qualifying"
+    },
+    {
+      "date_end": "2026-11-22T06:00:00Z",
+      "date_start": "2026-11-22T04:00:00Z",
+      "meeting_key": 1300,
+      "session_key": 11420,
+      "session_name": "Race",
+      "session_type": "Race"
+    }
+  ],
+  "skipped_invalid_same_meeting_entries": 0,
+  "source": "OpenF1 sessions catalog",
+  "source_fetch": {
+    "ok": true,
+    "status_code": 200
+  }
+}

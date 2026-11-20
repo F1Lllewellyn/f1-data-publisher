@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 195288,
+    "ok": true,
+    "sha256": "fed30e4c131125eb58182ccd23f3074474f04c806df15296304469ec40cec4a2",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/raw/openf1_laps.json",
+  "json_sha256": "69a29b1e0c1451c53d86173fcb82b34dd8c807de38896dd597303c91af93f4f7",
+  "max_lap_number": 28.0,
+  "missing_required_columns": [],
+  "rows": 413,
+  "status": "clean",
+  "timestamp_rows": 412
+}
