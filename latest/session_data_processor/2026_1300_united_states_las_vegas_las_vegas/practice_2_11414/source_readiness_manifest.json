@@ -1,9 +1,9 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-20T15:37:44.899817Z",
+  "created_utc": "2026-11-20T22:23:03.586272Z",
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-20T15:37:44.902335Z",
+    "created_utc": "2026-11-20T22:23:03.588098Z",
     "event_id": "2026_1300_united_states_las_vegas_las_vegas",
     "forecast_state_changed": false,
     "overall_status": "clean",
@@ -26,28 +26,28 @@
   "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 492.67,
+      "age_minutes": 405.31,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "eea3cbfc68563be1a07b27ae4c14715f35adaa2d8b05d0269f7e656a8b7ceb2d",
+      "sha256": "2e57d9a61a42c0d93a946e79e5e7bd29f7c8b03b6a66921df67297b2805fe267",
       "size_bytes": 707,
-      "timestamp_utc": "2026-11-20T07:25:04.411934Z"
+      "timestamp_utc": "2026-11-20T15:37:44.904605Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 492.67,
+      "age_minutes": 405.31,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "361c056b5536286565e370c78c75bb40771626162375c2665316cbe23ab4241d",
+      "sha256": "0a927c7de7023b731aa179f558b34995f3674684d4b5367895063d547a76975a",
       "size_bytes": 1577,
-      "timestamp_utc": "2026-11-20T07:25:04.411754Z"
+      "timestamp_utc": "2026-11-20T15:37:44.904304Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 492.67,
+      "age_minutes": 405.31,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "ef0fdc1f0c9fcb6da5852bfb3e837fe7f72e72a61fbf36577238d37acfd031eb",
+      "sha256": "e6ec9985c3c2258187222dda8d671561a1da5806d65ef1ba25b4f87deb52a4f1",
       "size_bytes": 814,
-      "timestamp_utc": "2026-11-20T07:25:04.411623Z"
+      "timestamp_utc": "2026-11-20T15:37:44.904015Z"
     }
   },
   "material_readiness_improved": false,
@@ -263,7 +263,7 @@
     "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261120T153733Z",
+  "run_id": "20261120T222251Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-11-20T05:00:00+00:00",
@@ -274,7 +274,7 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "session_schedule_sha256": "a83dee34484598fe52911193515748cd3c6cd5d436fc48935b56a5dcfd626adb",
+  "session_schedule_sha256": "03bfba66518e417606d31589d0ed02611df21a47d2202bc7a9c750156d7fbede",
   "session_schedule_snapshot": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/session_schedule_snapshot.json",
   "source_needs_manual_review": false,
   "sources": {
