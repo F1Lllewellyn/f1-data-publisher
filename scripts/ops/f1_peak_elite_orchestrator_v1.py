@@ -200,6 +200,25 @@ def verify_bridge_output(repo: Path, reference_time=None) -> Dict[str, Any]:
     marker = repo / "_runtime/1b_output_contract/start.marker"
     now = reference_time or dt.datetime.now(dt.timezone.utc)
     upstream = read_json(repo / "latest/peak_elite/orchestrator_status.json", {})
+    output_fingerprints = byte_fingerprints(repo, relatives)
+    previous = read_json(repo / "latest/1b_output_contract/verified_context_custody.json", {})
+    # G3 intentionally leaves identical outputs untouched. A retry can reuse
+    # them only when the complete earlier verification receipt binds these exact
+    # bytes to the same still-current original capture. Missing/changed receipts
+    # do not waive the normal same-run modification-time requirement.
+    verified_retry = (
+        not reasons and isinstance(previous, dict)
+        and previous.get("status") == "VERIFIED_CONTEXT_ONLY"
+        and previous.get("reasons") == []
+        and all(previous.get(key) == result.get(key) for key in
+                ("upstream_run_id", "upstream_run_attempt", "event_id", "session_key", "consumed_fingerprints"))
+        and previous.get("bundle_run_id") == bundle.get("run_id")
+        and bool(bundle.get("run_id"))
+        and set(output_fingerprints) == set(relatives)
+        and previous.get("output_fingerprints") == output_fingerprints
+        and all(previous.get(key) is False for key in
+                ("prediction_locked", "stable_engine_executed", "promotion_allowed"))
+    )
     for relative in relatives:
         path = repo / relative
         value = read_json(path, {})
@@ -221,10 +240,11 @@ def verify_bridge_output(repo: Path, reference_time=None) -> Dict[str, Any]:
             reasons.append(f"HOLD_CONSUMER_TIME_INVALID:{relative}")
         if "run_id" in value and value.get("run_id") != bundle.get("run_id"):
             reasons.append(f"HOLD_CONSUMER_BUNDLE_MISMATCH:{relative}")
-        if not marker.is_file() or not path.is_file() or path.stat().st_mtime_ns <= marker.stat().st_mtime_ns:
+        if (not marker.is_file() or not path.is_file()
+                or (path.stat().st_mtime_ns <= marker.stat().st_mtime_ns and not verified_retry)):
             reasons.append(f"HOLD_CONSUMER_NOT_WRITTEN_THIS_RUN:{relative}")
     result.update(status="HOLD" if reasons else "VERIFIED_CONTEXT_ONLY", reasons=reasons,
-                  bundle_run_id=bundle.get("run_id"), output_fingerprints=byte_fingerprints(repo, relatives))
+                  bundle_run_id=bundle.get("run_id"), output_fingerprints=output_fingerprints)
     return result
 
 

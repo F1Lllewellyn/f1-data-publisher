@@ -1,6 +1,7 @@
 """Actual v16/v24/v25 execution, synthetic sources, no provider or production writes."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -30,6 +31,51 @@ class ConsumerCustodyTests(unittest.TestCase):
         self.run_chain()
         self.assertEqual(self.files(),before)
         self.assertTrue(all(p.stat().st_mtime_ns==v for p,v in mtimes.items()))
+
+    def verified_retry(self):
+        receipt = self.fixture.observe()
+        self.assertEqual(receipt['status'], 'VERIFIED_CONTEXT_ONLY', receipt)
+        path = self.root/'latest/1b_output_contract/verified_context_custody.json'
+        path.write_text(json.dumps(receipt))
+        marker = self.root/'_runtime/1b_output_contract/start.marker'
+        newest = max(p.stat().st_mtime_ns for p in self.root.rglob('*') if p.is_file())
+        os.utime(marker, ns=(newest+1, newest+1))
+        return path
+
+    def test_bridge_retry_accepts_exact_prior_receipt_without_rewriting_outputs(self):
+        self.verified_retry()
+        before = self.files()
+        self.run_chain()
+        receipt = self.fixture.observe()
+        self.assertEqual(receipt['status'], 'VERIFIED_CONTEXT_ONLY', receipt)
+        self.assertEqual(before, self.files())
+        self.assertFalse(receipt['prediction_locked'])
+        self.assertFalse(receipt['stable_engine_executed'])
+
+    def test_bridge_retry_requires_complete_original_receipt(self):
+        path = self.verified_retry()
+        original = path.read_bytes()
+        mutations = [lambda r: r.update(upstream_run_attempt='99'),
+                     lambda r: r.update(status='HOLD'),
+                     lambda r: r.update(prediction_locked=True),
+                     lambda r: r['output_fingerprints'].pop(next(iter(r['output_fingerprints'])))]
+        for mutate in mutations:
+            receipt = json.loads(original); mutate(receipt); path.write_text(json.dumps(receipt))
+            self.assertEqual(self.fixture.observe()['status'], 'HOLD')
+        path.unlink()
+        self.assertEqual(self.fixture.observe()['status'], 'HOLD')
+
+    def test_bridge_retry_rechecks_bytes_and_current_session(self):
+        self.verified_retry()
+        path = self.root/'latest/downstream_consumers/race_predictions/consumer_input.json'
+        original = path.read_bytes()
+        value = json.loads(original); value['capture_origin']['run_attempt'] = '99'
+        path.write_text(json.dumps(value))
+        self.assertEqual(self.fixture.observe()['status'], 'HOLD')
+        path.write_bytes(original)
+        source = self.root/'latest/combined_source_manifest.json'
+        source.write_bytes(source.read_bytes()+b' ')
+        self.assertEqual(self.fixture.observe()['status'], 'HOLD')
 
     def test_restart_restores_missing_latest_without_rewriting_history(self):
         before=self.files()

@@ -129,6 +129,16 @@ class WeekendPipelineTests(unittest.TestCase):
             saved=json.loads(self.git('show',head+':latest/1b_output_contract/verified_context_custody.json'))
             self.assertEqual(saved,receipt)
             self.assertEqual(self.publish('f1-1b-output-contract-after-control-room-v22.yml','Commit v25 output-contract bridge'),head)
+            # A fresh bridge retry must verify its immutable no-op outputs, not
+            # require G3 to rewrite them just to obtain newer modification times.
+            newest=max(p.stat().st_mtime_ns for p in self.root.rglob('*') if p.is_file())
+            os.utime(marker,ns=(newest+1,newest+1))
+            with patch.object(contract,'utc_now',return_value=self.now), \
+                 patch.object(downstream,'utc_now_iso',return_value=self.now.isoformat()), \
+                 patch.object(context,'utc_now_iso',return_value=self.now.isoformat()), contextlib.redirect_stdout(self.output):
+                contract.run(self.root); downstream.run(self.root); context.run(self.root)
+            self.assertEqual(peak.verify_bridge_output(self.root,reference_time=self.now),saved)
+            self.assertEqual(self.publish('f1-1b-output-contract-after-control-room-v22.yml','Commit v25 output-contract bridge'),head)
             # Independent reader of the published commit verifies every consumed byte.
             for rel,digest in {**saved['consumed_fingerprints'],**saved['output_fingerprints']}.items():
                 raw=subprocess.check_output(['git','show',head+':'+rel],cwd=self.root)
