@@ -62,47 +62,36 @@ def dt_to_openf1(dt):
 
 class OpenF1Client:
     def __init__(self, token="", sleep_seconds=0.35, max_retries=5):
-        self.headers = {}
-        if token:
-            self.headers["Authorization"] = f"Bearer {token}"
+        from publish_openf1_lightweight_source_closure import NormalRequestBudget
+        self.headers = {"Authorization": f"Bearer {token}"} if token else {}
+        # Reuse the accepted policy, including process handover, dual windows,
+        # whole-run bounds and a latched provider failure. Never retry per driver.
+        self.budget = NormalRequestBudget(clock=time.monotonic, sleeper=time.sleep)
         self.sleep_seconds = sleep_seconds
         self.max_retries = max_retries
 
     def get(self, endpoint, params=None, timeout=120):
+        from publish_openf1_lightweight_source_closure import NormalCollectionDeferred
         url = f"{BASE_URL}/{endpoint.lstrip('/')}"
-        params = params or {}
-        last_status = None
-        last_text = ""
-
-        for attempt in range(self.max_retries):
-            try:
-                r = requests.get(url, params=params, headers=self.headers, timeout=timeout)
-                last_status = r.status_code
-                last_text = r.text[:300]
-
-                if r.status_code == 404:
-                    return [], {"status_code": 404, "note": "not_found"}
-                if r.status_code == 429:
-                    sleep = min(90, 2 ** attempt) + 1
-                    print(f"429 rate limit: sleeping {sleep}s")
-                    time.sleep(sleep)
-                    continue
-                if r.status_code >= 500:
-                    sleep = min(90, 2 ** attempt)
-                    print(f"{r.status_code} server error on {endpoint} {params}; sleeping {sleep}s")
-                    time.sleep(sleep)
-                    continue
-
-                r.raise_for_status()
-                time.sleep(self.sleep_seconds)
-                return r.json(), {"status_code": r.status_code, "note": "ok"}
-
-            except Exception as e:
-                sleep = min(90, 2 ** attempt)
-                print(f"Request error on {endpoint} {params}: {e}; sleeping {sleep}s")
-                time.sleep(sleep)
-
-        return None, {"status_code": last_status, "note": "failed_after_retries", "text": last_text}
+        try:
+            self.budget.acquire()
+        except NormalCollectionDeferred as exc:
+            return None, {"status_code": None, "note": "HOLD_PROVIDER_BUDGET:" + str(exc)}
+        try:
+            r = requests.get(url, params=params or {}, headers=self.headers, timeout=timeout)
+            status = r.status_code
+            if status == 404:
+                return [], {"status_code": status, "note": "not_found"}
+            if status != 200:
+                self.budget.block(f"provider_http_{status}")
+                return None, {"status_code": status, "note": f"HOLD_PROVIDER_HTTP_{status}", "text": r.text[:300]}
+            rows = r.json()
+            if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+                raise ValueError("invalid_response_schema")
+            return rows, {"status_code": status, "note": "ok"}
+        except Exception as exc:
+            self.budget.block("provider_transport_or_schema_failure")
+            return None, {"status_code": None, "note": "HOLD_PROVIDER:" + type(exc).__name__}
 
 
 def write_frame(df, path):

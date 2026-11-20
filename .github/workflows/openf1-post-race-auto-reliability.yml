@@ -1,4 +1,4 @@
-﻿name: OpenF1 Post-Race Auto Reliability
+name: OpenF1 Post-Race Auto Reliability
 
 on:
   workflow_dispatch:
@@ -10,10 +10,11 @@ permissions:
   actions: read
 
 concurrency:
-  group: openf1-post-race-auto-${{ github.ref }}
+  group: f1-main-write-serialization
   cancel-in-progress: false
 
 env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
   YEAR: "2026"
   MODE: "race"
   FETCH_MODE: "driver_full_session"
@@ -26,7 +27,9 @@ jobs:
   extract_and_checkpoint:
     name: Extract OpenF1 data and upload checkpoint
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 30
+    outputs:
+      deferred: ${{ steps.extract.outputs.deferred }}
 
     steps:
       - name: Checkout repo
@@ -43,7 +46,14 @@ jobs:
           pip install requests pandas pyarrow tqdm python-dateutil numpy tabulate
 
       - name: Extract and build checkpoint
+        id: extract
         run: |
+          if [ "$(date -u +%u)" -ge 4 ]; then
+            echo 'HOLD_OPTIONAL_TELEMETRY_DEFERRED_FOR_WEEKEND_CAPTURE; owner=Peak Elite' >> "$GITHUB_STEP_SUMMARY"
+            echo "deferred=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "deferred=false" >> "$GITHUB_OUTPUT"
           python scripts/openf1/openf1_high_frequency_extract_checkpoint.py \
             --year "$YEAR" \
             --mode "$MODE" \
@@ -57,7 +67,7 @@ jobs:
 
       - name: Upload extraction checkpoint artifact
         uses: actions/upload-artifact@v6
-        if: success()
+        if: ${{ always() && steps.extract.outputs.deferred != 'true' }}
         with:
           name: ${{ env.CHECKPOINT_ARTIFACT }}-${{ env.YEAR }}-${{ github.run_number }}
           path: ${{ env.OUTPUT_DIR }}
@@ -69,6 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     needs: extract_and_checkpoint
+    if: ${{ needs.extract_and_checkpoint.outputs.deferred != 'true' }}
 
     steps:
       - name: Checkout repo

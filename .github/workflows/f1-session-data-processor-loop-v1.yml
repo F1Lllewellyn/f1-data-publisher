@@ -1,4 +1,4 @@
-﻿name: F1 Session Data Processor Loop v1
+name: F1 Session Data Processor Loop v1
 
 on:
   workflow_dispatch:
@@ -13,23 +13,23 @@ on:
         description: 'Optional. Leave auto, or use practice 1, practice 2, practice 3, qualifying, race.'
         required: false
         default: 'auto'
-  schedule:
-    # Runs shortly after the existing readiness watchers. Processor exits safely if no completed session is found.
-    - cron: '5,20,35,50 * * * 5,6,0'
 
 permissions:
   contents: write
   actions: read
 
 concurrency:
-  group: f1-session-data-processor-loop-${{ github.ref }}
+  group: f1-main-write-serialization
   cancel-in-progress: false
+
+env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
 
 jobs:
   session-data-processor:
     runs-on: ubuntu-latest
     env:
-      MODE: ${{ github.event_name == 'schedule' && 'run_now' || github.event.inputs.mode || 'run_now' }}
+      MODE: ${{ github.event_name == 'schedule' && 'manifest_audit' || github.event.inputs.mode || 'run_now' }}
       SESSION_FILTER: ${{ github.event.inputs.session_filter || 'auto' }}
     steps:
       - name: Checkout repository
@@ -37,6 +37,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Mark standalone capture custody
+        run: |
+          mkdir -p _runtime/session_data_processor
+          touch _runtime/session_data_processor/start.marker
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -79,12 +83,20 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit session processor outputs
-        if: ${{ success() }}
+        if: ${{ success() && env.MODE == 'run_now' }}
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          MARKER="_runtime/session_data_processor/start.marker"
+          test -f "$MARKER"
+          git diff --cached --quiet || { echo HOLD_PRESTAGED_INPUT; exit 1; }
+          git diff --quiet HEAD -- history || { echo HOLD_HISTORICAL_EVIDENCE_MUTATION; exit 1; }
+          git diff --quiet HEAD -- .github scripts configs docs .gitignore || { echo HOLD_UNREVIEWED_CODE_MUTATION; exit 1; }
+          if git status --porcelain | grep -E 'Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook.*xlsx'; then
+            echo HOLD_PROTECTED_ASSET_MUTATION; exit 1
+          fi
           candidates=(
             "latest/session_data_processor"
             "history/session_data_processor"
@@ -101,7 +113,9 @@ jobs:
                 echo "Skipping ignored path: $p"
                 continue
               fi
-              git add "$p"
+              while IFS= read -r -d '' f; do
+                if ! git check-ignore -q "$f"; then git add -- "$f"; fi
+              done < <(find "$p" -type f -newer "$MARKER" -print0)
               added=1
             fi
           done

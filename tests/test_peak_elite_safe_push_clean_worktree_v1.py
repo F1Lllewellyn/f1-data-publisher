@@ -45,8 +45,10 @@ class CleanWorktreeTests(unittest.TestCase):
         old = baseline.replace(ADDED_LINES, '', 1).encode()
         blob = lambda raw: hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
         self.assertEqual(blob(old), '42c107142e076ac4d056f2e33e93dab4163f3b72')
-        self.assertEqual(blob(self.text.encode()), '46c1cd483d6b04e98474ef3be498cd8faae007cb')
-        self.assertNotEqual(blob((self.text+'# tamper').encode()), '46c1cd483d6b04e98474ef3be498cd8faae007cb')
+        self.assertEqual(blob(self.text.encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
+        prior = subprocess.check_output(['git', 'cat-file', 'blob', '46c1cd483d6b04e98474ef3be498cd8faae007cb'], cwd=ROOT)
+        self.assertEqual(self.text.replace('  F1_OPENF1_HANDOVER_REQUIRED: \"true\"\n', '', 1).encode(), prior)
+        self.assertNotEqual(blob((self.text+'# tamper').encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
         for path in READINESS:
             self.assertEqual(candidates(self.text).count(path), 1)
 
@@ -128,13 +130,14 @@ class CleanWorktreeTests(unittest.TestCase):
             'docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md': '85ce44807ef159b5ba5d3bfd543ea1f945097f77',
         }
         recovery = {'.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '1f8441869ac384c8f23688d2b5eba37f4ba4e696'}
+        coordinated = {'.github/workflows/f1-session-data-processor-loop-v1.yml': '77fc7c31bf381c60290ebf818bd45c9ed6992499', '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '4f72cf38bf8767cbfcc2b52c1d1d168c13ca884d'}
         for path, sha in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT/path).read_bytes()
-                if path in recovery:
+                if path in recovery or path in coordinated:
                     historical = subprocess.check_output(['git', 'cat-file', 'blob', sha], cwd=ROOT)
                     self.assertEqual(hashlib.sha1(b'blob '+str(len(historical)).encode()+b'\0'+historical).hexdigest(), sha)
-                    sha = recovery[path]
+                    sha = coordinated.get(path, recovery.get(path))
                 self.assertEqual(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest(), sha)
 
 

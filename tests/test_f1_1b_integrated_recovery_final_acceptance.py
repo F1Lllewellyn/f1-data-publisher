@@ -98,63 +98,19 @@ class PublicationRaceTests(unittest.TestCase):
 
 
 class ScopeBoundaryTests(unittest.TestCase):
-    def test_two_independent_provider_budgets_do_not_form_a_global_budget(self):
-        clock = incremental.FakeClock()
-        budgets = [incremental.m.NormalRequestBudget(clock=clock.monotonic,
-                    sleeper=clock.sleep) for _ in range(2)]
-        requests = []
-        for _ in range(16):
-            for index, budget in enumerate(budgets):
-                budget.acquire()
-                requests.append((index, clock.monotonic()))
-        self.assertEqual([b.total_requests for b in budgets], [16, 16])
-        self.assertEqual(len(requests), 32)
-        self.assertLess(requests[-1][1] - requests[0][1], 60)
-        standalone = (ROOT / '.github/workflows/f1-session-data-processor-loop-v1.yml').read_text()
-        integrated = (ROOT / '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml').read_text()
-        self.assertIn('group: f1-session-data-processor-loop-${{ github.ref }}', standalone)
-        self.assertIn('group: f1-main-write-serialization', integrated)
-        manual = (ROOT / '.github/workflows/f1-session-autorepair-integrated-run-now-button-v1.yml').read_text()
-        self.assertIn('group: f1-session-autorepair-integrated-run-now-${{ github.ref }}', manual)
-        report('global_provider_scope_boundary', dict(status='HOLD_SCOPE',
-            proof='Two real budget instances admit 32 simulated requests within 60 seconds',
-            simulated_requests=requests, real_provider_requests=0,
-            production_rate_limit_incident_claimed=False, global_coordination_verified=False))
+    def test_global_provider_repair_contract(self):
+        from test_f1_1b_integrated_recovery_provider_coordination import ProviderCoordinationTests
+        case=ProviderCoordinationTests()
+        case.test_cancelled_or_finished_process_handover_protects_both_windows()
+        case.test_actual_entry_points_share_admission_and_single_scheduled_capture_owner()
+        report('global_provider_scope_boundary',dict(status='PASS_OFFLINE',global_coordination_verified=True,real_provider_requests=0,production_deployed=False))
 
-    def test_high_frequency_client_has_no_thirty_per_minute_budget(self):
-        # Compile the exact committed client class without importing unrelated
-        # parquet/report dependencies. No production HTTP request is possible.
-        path = ROOT / 'scripts/openf1/openf1_high_frequency_auto_ingest.py'
-        node = next(n for n in ast.parse(path.read_text()).body
-                    if isinstance(n, ast.ClassDef) and n.name == 'OpenF1Client')
-        clock = incremental.FakeClock()
-        requests = []
-
-        def get(*args, **kwargs):
-            requests.append(clock.monotonic())
-            return types.SimpleNamespace(status_code=200, text='[]',
-                                         raise_for_status=lambda: None, json=lambda: [])
-
-        namespace = dict(BASE_URL='https://provider.invalid',
-                         requests=types.SimpleNamespace(get=get),
-                         time=types.SimpleNamespace(sleep=clock.sleep))
-        exec(compile(ast.Module(body=[node], type_ignores=[]), str(path), 'exec'), namespace)
-        client = namespace['OpenF1Client'](token='', sleep_seconds=0.35)
-        for _ in range(31):
-            self.assertEqual(client.get('sessions')[1]['status_code'], 200)
-        self.assertEqual(len(requests), 31)
-        self.assertLess(requests[-1] - requests[0], 60)
-        workflows = ('openf1-prerace-auto-ingest', 'openf1-post-race-auto-reliability',
-                     'openf1-full-historical-auto-ingest')
-        for name in workflows:
-            text = (ROOT / '.github/workflows' / (name + '.yml')).read_text()
-            self.assertIn('openf1_high_frequency_extract_checkpoint.py', text)
-            self.assertIn('--request-sleep 0.35', text)
-            self.assertNotIn('group: f1-main-write-serialization', text)
-        report('legacy_provider_scope_boundary', dict(status='HOLD_SCOPE',
-            simulated_successful_requests=31, elapsed_request_span_seconds=requests[-1] - requests[0],
-            real_provider_requests=0, live_rate_limit_incident_claimed=False,
-            client=str(path.relative_to(ROOT)), workflows=list(workflows)))
+    def test_high_frequency_client_reuses_accepted_provider_budget(self):
+        from test_f1_1b_integrated_recovery_provider_coordination import ProviderCoordinationTests
+        case=ProviderCoordinationTests()
+        case.test_actual_high_frequency_client_respects_limits_and_preserves_token()
+        case.test_access_throttle_and_outage_latch_without_retry_storm()
+        report('legacy_provider_scope_boundary',dict(status='PASS_OFFLINE',real_provider_requests=0,production_deployed=False))
 
     def test_legacy_v25_duplicate_rewrites_history_and_bridge_detects_it(self):
         fixture = handoff.ConsumerOutputCustodyTests()

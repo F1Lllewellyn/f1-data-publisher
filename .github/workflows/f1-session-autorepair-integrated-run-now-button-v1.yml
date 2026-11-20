@@ -8,8 +8,11 @@ permissions:
   actions: read
 
 concurrency:
-  group: f1-session-autorepair-integrated-run-now-${{ github.ref }}
+  group: f1-main-write-serialization
   cancel-in-progress: false
+
+env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
 
 jobs:
   run-now:
@@ -19,6 +22,10 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Mark integrated run custody
+        run: |
+          mkdir -p _runtime/autorepair_integrated_health
+          touch _runtime/autorepair_integrated_health/start.marker
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -36,6 +43,9 @@ jobs:
           python scripts/autorepair/health_check_autorepair_scheduled_integration_v1.py
           python scripts/session_data_processor/session_data_processor_loop_v1.py --mode run_now --season 2026 --session-filter auto
           python scripts/autorepair/f1_autorepair_orchestrator_v1.py --mode run_now --repo-root "$GITHUB_WORKSPACE" --timeout 1200
+      - name: Refresh downstream readiness after every attempted capture
+        if: always()
+        run: python scripts/dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py --mode run_now
       - name: Print Auto-Repair plain-English report
         if: always()
         shell: bash
@@ -61,31 +71,84 @@ jobs:
             latest/workbook_kpi_refresh_applier/**
             latest/autorepair/**
           if-no-files-found: ignore
-      - name: Commit source-backed integrated outputs only
+      - name: Commit source-backed integrated outputs or explicit diagnostic HOLD
         if: always()
         shell: bash
         run: |
           set -euo pipefail
+          MARKER="_runtime/autorepair_integrated_health/start.marker"
+          test -f "$MARKER" || { echo "HOLD_MISSING_RUN_MARKER"; exit 1; }
+          PROTECTED_PATTERN='Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'
+          if git status --porcelain | grep -E "$PROTECTED_PATTERN"; then
+            echo "HOLD_PROTECTED_ASSET_MUTATION"; exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            echo "HOLD_PRESTAGED_INPUT"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- history; then
+            echo "HOLD_HISTORICAL_EVIDENCE_MUTATION"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- .github scripts configs docs .gitignore; then
+            echo "HOLD_UNREVIEWED_CODE_MUTATION"; exit 1
+          fi
           COMMIT_ALLOWED="false"
           if [ -f "_runtime/autorepair/session_workbook_recovery/commit_allowed.txt" ]; then
             COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
           fi
-          echo "commit_allowed=$COMMIT_ALLOWED"
-          if [ "$COMMIT_ALLOWED" != "true" ]; then
-            echo "No source-backed integrated outputs to commit."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for p in latest/session_data_processor history/session_data_processor latest/latest_manifest.json latest/data_readiness.json latest/combined_source_manifest.json latest/forecast_bundle_ledger history/forecast_bundle_ledger latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier latest/autorepair history/autorepair; do
+          candidates=(
+            "latest/session_data_processor"
+            "history/session_data_processor"
+            "latest/latest_manifest.json"
+            "latest/data_readiness.json"
+            "latest/combined_source_manifest.json"
+            "latest/forecast_bundle_ledger/session_data_processor"
+            "history/forecast_bundle_ledger/session_data_processor"
+            "latest/workbook_kpi_refresh_applier"
+            "history/workbook_kpi_refresh_applier"
+            "latest/autorepair"
+            "history/autorepair"
+            "latest/legacy_workflow_hardening"
+            "latest/readiness_dashboards"
+            "history/readiness_dashboards"
+            "latest/chat_context"
+            "history/chat_context"
+          )
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('latest/readiness_dashboards/combined_readiness_dashboard.json').read_text())
+          if d.get('downstream_eligible') is not False or d.get('prediction_locked') is not False:
+              raise SystemExit('HOLD_DIAGNOSTIC_NOT_HOLD')
+          PYCODE
+            candidates=(latest/readiness_dashboards history/readiness_dashboards latest/chat_context history/chat_context)
+          fi
+          for p in "${candidates[@]}"; do
             if [ -e "$p" ] && ! git check-ignore -q "$p"; then
-              git add "$p"
+              while IFS= read -r -d '' f; do
+                if ! git check-ignore -q "$f"; then
+                  git add -- "$f"
+                fi
+              done < <(find "$p" -type f -newer "$MARKER" -print0)
             fi
           done
+          if [ "$COMMIT_ALLOWED" = "true" ]; then
+            for root in latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier; do
+              if [ -d "$root" ]; then
+                while IFS= read -r -d '' f; do
+                  git add -f -- "$f"
+                done < <(find "$root" -type f -newer "$MARKER" -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -print0)
+              fi
+            done
+          fi
+          if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then
+            echo "HOLD_PROTECTED_ASSET_STAGED"; exit 1
+          fi
           if git diff --cached --quiet; then
-            echo "No integrated Auto-Repair changes to commit."
+            echo "No fresh integrated output changes to commit."
           else
-            git commit -m "chore: integrated session auto-repair workbook KPI refresh"
+            git commit -m "chore: publish bounded integrated session context or explicit HOLD"
             bash scripts/ops/safe_git_push_rebase_retry.sh
-
           fi

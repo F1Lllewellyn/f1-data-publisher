@@ -13,14 +13,13 @@ on:
         description: 'Optional. Leave auto, or use practice 1, practice 2, practice 3, qualifying, race.'
         required: false
         default: 'auto'
-  schedule:
-    - cron: '8,23,38,53 * * * 5,6,0'
 
 permissions:
   contents: write
   actions: read
 
 env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 concurrency:

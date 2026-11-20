@@ -169,6 +169,11 @@ class NormalRequestBudget:
         self.restriction_events: List[str] = []
         self._rate_limit_fallback_pending = False
         self._rate_limit_fallback_consumed = False
+        # Actions entry points share a non-cancelling provider admission group.
+        # Every new process waits out the previous process's complete window,
+        # including a cancelled runner whose final request time is unknowable.
+        self.handover_seconds = 61.0 if (os.environ.get("F1_OPENF1_HANDOVER_REQUIRED") == "true" or os.environ.get("GITHUB_WORKFLOW") == "F1 Session Data Processor - Run Now Button") else 0.0
+        self.handover_complete = False
 
     def block(self, reason: str) -> None:
         if reason not in self.restriction_events:
@@ -202,6 +207,15 @@ class NormalRequestBudget:
             self.block_reason = "provider_rate_limited_http_429"
 
     def acquire(self, *, rate_limit_fallback: bool = False) -> None:
+        if not self.handover_complete:
+            remaining = self.handover_seconds
+            while remaining > 0:
+                wait = min(remaining, 30.5)
+                self.sleeper(wait)
+                self.total_wait_seconds += wait
+                remaining -= wait
+            self.logical_now = max(float(self.clock()), self.started + self.handover_seconds)
+            self.handover_complete = True
         fallback_authorized = (
             rate_limit_fallback
             and self._rate_limit_fallback_pending
@@ -267,6 +281,7 @@ class NormalRequestBudget:
             "rate_wait_seconds": round(self.total_wait_seconds, 3),
             "deferred_reason": self.block_reason,
             "restriction_events": list(self.restriction_events),
+            "cross_process_handover_seconds": self.handover_seconds,
             "credentials_or_paid_live_access_used": False,
         }
 

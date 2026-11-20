@@ -29,6 +29,7 @@ spec.loader.exec_module(guard)
 BASELINE_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
 COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
+    "43b742c644a8858313834174575a2af00b4ffe42",  # Issue367 G2 dual-window process handover; original pins retained.
     "b904366ae7bac72cf72596ac4542a0af97f3d87e",  # Issue367 G1 original-byte event custody; historical pins retained.
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
@@ -131,7 +132,7 @@ def require_protected_workflow(current: str) -> bytes:
     In particular, the latter does NOT relax the success-only commit condition.
     """
     # Exact authorized G1 descendant; immutable ancestor is still verified.
-    if git_blob_sha(current.encode()) == "dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84":
+    if git_blob_sha(current.encode()) in {"dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84", "cc0137daad3dba01c56956958cd7efdc7d097c88"}:
         return immutable_git_blob(ROOT, BASELINE_WORKFLOW_BLOB)
     if current.count(NEW_DIAGNOSTIC_UPLOAD) != 1 or current.count(NEW_PUBLICATION) != 1:
         raise AssertionError("unrecognized workflow delta")
@@ -1184,16 +1185,20 @@ class StaticScopeTests(unittest.TestCase):
         }
         # #367 makes the gate diagnostics-only while stable execution is absent.
         recovery_blobs = {".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "46c1cd483d6b04e98474ef3be498cd8faae007cb", ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "0618519ee3fc6c341de48dd1cff94e28960b76ce"}
+        coordinated_blobs = {
+            ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "2f87902b9fa17a14377c84dfaf716e276a10e53c",
+            ".github/workflows/f1-session-data-processor-loop-v1.yml": "77fc7c31bf381c60290ebf818bd45c9ed6992499",
+        }
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT / path).read_bytes()
                 actual = hashlib.sha1(
                     b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
                 ).hexdigest()
-                if path in recovery_blobs:
+                if path in recovery_blobs or path in coordinated_blobs:
                     self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
-                    self.assertEqual(actual, recovery_blobs[path])
-                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"), (expected_blob, recovery_blobs[path]))
+                    self.assertEqual(actual, coordinated_blobs.get(path, recovery_blobs.get(path)))
+                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"), (expected_blob, recovery_blobs.get(path), coordinated_blobs.get(path)))
                 else:
                     self.assertEqual(actual, expected_blob)
 
@@ -1201,7 +1206,7 @@ class StaticScopeTests(unittest.TestCase):
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 6)
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 7)
         for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
             for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
                 self.assertNotEqual(

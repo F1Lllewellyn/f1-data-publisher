@@ -48,6 +48,9 @@ concurrency:
   group: f1-main-write-serialization
   cancel-in-progress: false
 
+env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
+
 jobs:
   openf1-lightweight-source-closure:
     runs-on: ubuntu-latest

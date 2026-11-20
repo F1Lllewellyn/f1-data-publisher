@@ -123,15 +123,22 @@ def http_json(url: str, timeout: int = 30, retries: int = 2, sleep_seconds: floa
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             raw = resp.read()
             status = getattr(resp, "status", 200)
-        data = json.loads(raw.decode("utf-8"))
+        receipt = {"status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now(), "request_url": url, "_response_hex": raw.hex()}
+        try:
+            data = json.loads(raw.decode("utf-8"))
+        except (ValueError, UnicodeError):
+            data = None
         if status != 200 or not isinstance(data, list) or any(not isinstance(row, dict) for row in data):
-            return [], {"ok": False, "status_code": status, "error": "invalid_endpoint_response", "bytes": len(raw)}
-        return data, {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now()}
+            REQUEST_BUDGET.block("invalid_endpoint_response")
+            return [], dict(receipt, ok=False, error="invalid_endpoint_response")
+        return data, dict(receipt, ok=True)
     except urllib.error.HTTPError as exc:
         if exc.code in (401, 403, 429) or exc.code >= 500:
             REQUEST_BUDGET.block(f"provider_http_{exc.code}")
-        return [], {"ok": False, "status_code": exc.code, "error": f"HOLD_PROVIDER_HTTP_{exc.code}", "bytes": 0}
+        raw = exc.read()
+        return [], {"ok": False, "status_code": exc.code, "error": f"HOLD_PROVIDER_HTTP_{exc.code}", "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now(), "request_url": url, "_response_hex": raw.hex()}
     except Exception as exc:
+        REQUEST_BUDGET.block("provider_transport_or_budget_failure")
         return [], {"ok": False, "error": f"HOLD_PROVIDER:{type(exc).__name__}:{exc}", "bytes": 0}
 
 
@@ -658,7 +665,11 @@ def main() -> int:
         return 0
 
     sessions, sessions_meta = fetch_sessions(args.season)
-    catalog_observed_at_utc = iso_now()  # Response observed now, not at later publication.
+    catalog_wire = sessions_meta.pop("_response_hex", None)
+    catalog_observed_at_utc = sessions_meta.get("observed_at_utc") or iso_now()
+    if catalog_wire is not None:
+        # Preserve diagnostics even when discovery is denied or malformed.
+        (RUNTIME / "session_catalog_response.bin").write_bytes(bytes.fromhex(catalog_wire))
     result["sessions_fetch"] = sessions_meta
     if not sessions or sessions_meta.get("ok") is not True:
         result.update({"status": "HOLD", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
@@ -682,6 +693,9 @@ def main() -> int:
     history_root = ROOT / "history" / "session_data_processor" / event_id / run_id / session_slug
     history_root.mkdir(parents=True, exist_ok=False)
     latest_root.mkdir(parents=True, exist_ok=True)
+    if catalog_wire is not None:
+        for destination in (latest_root, history_root):
+            (destination / "session_catalog_response.bin").write_bytes(bytes.fromhex(catalog_wire))
 
     endpoint_list = list(policy.get("openf1_endpoints") or DEFAULT_ENDPOINTS)
     if args.include_heavy:
@@ -713,21 +727,33 @@ def main() -> int:
                     if candidate is not None:
                         source_session = candidate
                         rows, meta = http_json(openf1_url(endpoint, {"session_key": candidate["session_key"]}), timeout=args.timeout)
-        observed_at_utc = iso_now()
+        observed_at_utc = meta.get("observed_at_utc") or (catalog_observed_at_utc if endpoint == "sessions" else iso_now())
+        response_hex = meta.pop("_response_hex", None)
         if endpoint == "drivers":
             target_drivers = rows
         raw_json = latest_root / "raw" / f"openf1_{endpoint}.json"
         raw_csv = latest_root / "raw" / f"openf1_{endpoint}.csv"
-        write_json(raw_json, rows)
+        if response_hex is not None and meta.get("ok"):
+            raw_json.parent.mkdir(parents=True, exist_ok=True)
+            raw_json.write_bytes(bytes.fromhex(response_hex))
+        else:
+            write_json(raw_json, rows)
+        if response_hex is not None and not meta.get("ok"):
+            for destination in (latest_root, history_root):
+                (destination / "raw").mkdir(parents=True, exist_ok=True)
+                (destination / "raw" / f"openf1_{endpoint}_error.bin").write_bytes(bytes.fromhex(response_hex))
         rows_to_csv(raw_csv, rows)
         # mirror to history
-        write_json(history_root / "raw" / f"openf1_{endpoint}.json", rows)
+        history_json = history_root / "raw" / f"openf1_{endpoint}.json"
+        history_json.parent.mkdir(parents=True, exist_ok=True)
+        history_json.write_bytes(raw_json.read_bytes())
         rows_to_csv(history_root / "raw" / f"openf1_{endpoint}.csv", rows)
         report = analyze_rows(endpoint, rows, source_session, meta)
         report["observed_at_utc"] = observed_at_utc
         report["json_path"] = str(raw_json.relative_to(ROOT))
         report["csv_path"] = str(raw_csv.relative_to(ROOT))
         report["json_sha256"] = sha256_file(raw_json)
+        report["original_response_bytes_retained"] = response_hex is not None or (endpoint == "sessions" and catalog_wire is not None)
         if endpoint == "starting_grid" and grid_resolution is not None:
             start = parse_time(session.get("date_start"))
             observed = parse_time(observed_at_utc)
@@ -846,6 +872,22 @@ def main() -> int:
         "stable_engine_modified": False,
         "canonical_workbook_modified": False,
         "promotion_allowed": False,
+    }
+
+    # Keep the original workflow identity alongside the local capture identifier.
+    # Missing Actions identity remains missing for isolated/local captures.
+    manifest["capture_origin"] = {
+        "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+        "head_sha": os.environ.get("GITHUB_SHA", ""),
+        "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+        "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+        "workflow": os.environ.get("GITHUB_WORKFLOW", ""),
+    }
+    manifest["session_catalog_custody"] = {
+        "path": str((latest_root / "session_catalog_response.bin").relative_to(ROOT)) if catalog_wire is not None else None,
+        "sha256": sha256_bytes(bytes.fromhex(catalog_wire)) if catalog_wire is not None else None,
+        "observed_at_utc": catalog_observed_at_utc,
+        "original_response_bytes_retained": catalog_wire is not None,
     }
 
     schedule_snapshot_path = write_session_schedule_snapshot(
