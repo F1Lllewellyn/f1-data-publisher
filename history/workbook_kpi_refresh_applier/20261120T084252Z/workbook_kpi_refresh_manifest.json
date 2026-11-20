@@ -1,0 +1,73 @@
+{
+  "authority_fingerprints": {
+    "latest/combined_source_manifest.json": "eea3cbfc68563be1a07b27ae4c14715f35adaa2d8b05d0269f7e656a8b7ceb2d",
+    "latest/data_readiness.json": "361c056b5536286565e370c78c75bb40771626162375c2665316cbe23ab4241d",
+    "latest/latest_manifest.json": "ef0fdc1f0c9fcb6da5852bfb3e837fe7f72e72a61fbf36577238d37acfd031eb",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json": "d60669af1607e7463e7a66dcbfddd20838f7f03a2fdfb35a0883a260224aa50b",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json": "03f2747b3ac58c197d566cafe85a2c63cea3f94a737045378a9b703a53b73283",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json": "e8b3185344d2eb2433117c02b00c3a2e100f8d7f4122cfbe01925ed20d4bf778",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv": "6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "5a5f27d6ffbece5bdd505f916cb7c29befe7a4e4f80f7d5446cc009a7cd78116"
+  },
+  "commit_allowed": true,
+  "created_utc": "2026-11-20T08:42:52.931731+00:00",
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": true,
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "governance": {
+    "canonical_workbook_overwrite": false,
+    "delete_authority": false,
+    "promotion_allowed": false,
+    "stable_engine": "Engine_2026-06-07_STABLE",
+    "stable_engine_modified": false
+  },
+  "material_change": true,
+  "meeting_key": 1300,
+  "outputs": [
+    {
+      "bytes": 990,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "4ac8e87e28fb019ab7e12e03c6da548b93a01c12ead4b089639422475afd2c07"
+    },
+    {
+      "bytes": 414,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/refreshed_workbook_kpi_readiness.csv",
+      "sha256": "6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044"
+    },
+    {
+      "bytes": 11079,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T084252Z.xlsx",
+      "sha256": "f089e19ce4b8afdc3905e8d72f5f902aabf9a7c18cf2a302c6fc6f37ef95e16f"
+    },
+    {
+      "bytes": 815,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "cca0de9ec10e184599a0af0a5e0bf8bb95eb7fb2ace89c57cd39448e5459bd0c"
+    },
+    {
+      "bytes": 1578,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/upstream_data_readiness_snapshot.json",
+      "sha256": "0b5f8f791c02b24c483c3d5404c5ac27619a239bd212709069aaf9d25da1bfba"
+    },
+    {
+      "bytes": 708,
+      "path": "history/workbook_kpi_refresh_applier/20261120T084252Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "159f9cfecc1e616f0a598f3325227296303d57e1542052a411f3b97619a54af5"
+    }
+  ],
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261120T084252Z",
+  "session_key": 11414,
+  "session_name": "Practice 2",
+  "session_type": "Practice",
+  "source_artifacts": [
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/sandbox_workbook_update_plan.json",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.csv",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/forecast_bundle_ledger_snapshot.json"
+  ],
+  "source_manifest_pointer": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json",
+  "source_processor_root": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414",
+  "source_status": "clean",
+  "warnings": []
+}
