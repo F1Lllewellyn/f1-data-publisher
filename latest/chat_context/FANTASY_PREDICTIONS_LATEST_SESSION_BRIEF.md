@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-20T07:25:05Z
+Generated UTC: 2026-11-20T08:24:07Z
 Event: United States - Las Vegas - Las Vegas
 Session: Practice 2
 Source status: clean
