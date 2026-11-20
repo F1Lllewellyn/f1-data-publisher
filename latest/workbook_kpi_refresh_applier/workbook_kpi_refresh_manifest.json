@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/workbook_kpi_readiness.json": "c608d0d04f91401750a67bb9cc03528cfea95bce979f0c8ea9b125cac66621cd"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-20T23:05:01.617936+00:00",
+  "created_utc": "2026-11-20T23:32:38.475808+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 990,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "a4bc600c5662069b0b8f8b575ffdd7b02d11a92af848d8dc6eed11a55bf90430"
     },
     {
       "bytes": 414,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "6914b2ce29de4865c93898d4fc8a5b9970992cf48c020cef8a26262a18560044"
     },
     {
       "bytes": 11081,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T230501Z.xlsx",
-      "sha256": "0d3e41d66f43b2f0b629ff1058fac983fce1029d056bf921f741c7666b7a859b"
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_2_20261120T233238Z.xlsx",
+      "sha256": "11aee1c97f94a2f9904f9cdae39e95aab4d9225d149c5731f60084d168982d15"
     },
     {
       "bytes": 815,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/upstream_latest_manifest_snapshot.json",
       "sha256": "54adc9d0989eaae2b81ed6bc6c3370798bb60d4e2218f491df34eb21eaba490f"
     },
     {
       "bytes": 1578,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/upstream_data_readiness_snapshot.json",
       "sha256": "3f51657333a42ce10ba31d6c41299318f1365c1d522de674ff2684ec2d484406"
     },
     {
       "bytes": 708,
-      "path": "history/workbook_kpi_refresh_applier/20261120T230501Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261120T233238Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "480947380f615b623251bae0115a6222d73192b82f80a4e87a687fdbb656df5b"
     }
   ],
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261120T230501Z",
+  "run_id": "20261120T233238Z",
   "session_key": 11414,
   "session_name": "Practice 2",
   "session_type": "Practice",
