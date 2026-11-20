@@ -1,15 +1,15 @@
 {
   "canonical_workbook_modified": false,
-  "event_id": "2026_1299_brazil_s_o_paulo_interlagos",
-  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/race_11412/source_readiness_manifest.json",
-  "overall_status": "needs_manual_review",
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "latest_session_data_processor_manifest": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_2_11414/source_readiness_manifest.json",
+  "overall_status": "clean",
   "producer": "session_data_processor_loop_v1",
   "promotion_allowed": false,
   "schema_version": "latest_manifest_v2_session_processor",
-  "session_key": 11412,
-  "session_name": "Race",
-  "session_schedule_sha256": "4b3ef6d1d7117cfad14021794f167245565203bce6be36764cba2867dbbee4ff",
-  "session_schedule_snapshot": "latest/session_data_processor/2026_1299_brazil_s_o_paulo_interlagos/session_schedule_snapshot.json",
+  "session_key": 11414,
+  "session_name": "Practice 2",
+  "session_schedule_sha256": "4b4880ba758f87eb063845f97b5561a02d19edb9884edb7303f066f5493a48d3",
+  "session_schedule_snapshot": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/session_schedule_snapshot.json",
   "stable_engine_modified": false,
-  "updated_utc": "2026-11-09T02:20:56.164745Z"
+  "updated_utc": "2026-11-20T07:25:04.411623Z"
 }

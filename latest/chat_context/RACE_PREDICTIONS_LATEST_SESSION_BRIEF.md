@@ -1,11 +1,11 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-20T00:54:25Z
-Event: unknown event
-Session: unknown session
-Source status: needs_manual_review
-Dashboard readiness: NOT READY
-Readiness reasons: ['stale_authoritative_session', 'required_source_status_needs_manual_review', 'readiness_blocking_issues', 'readiness_requires_manual_review', 'required_source_evidence_unverified']
+Generated UTC: 2026-11-20T07:25:05Z
+Event: United States - Las Vegas - Las Vegas
+Session: Practice 2
+Source status: clean
+Dashboard readiness: READY
+Readiness reasons: ['verified_current_session_evidence']
 Diagnostic publishing allowed: true
 
 ## Governance

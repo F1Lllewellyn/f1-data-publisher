@@ -1,11 +1,11 @@
 {
   "canonical_workbook_modified": false,
-  "created_utc": "2026-11-20T06:21:23.985018Z",
+  "created_utc": "2026-11-20T07:25:04.408389Z",
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
   "forecast_bundle_ledger_snapshot": {
-    "created_utc": "2026-11-20T06:21:23.986193Z",
+    "created_utc": "2026-11-20T07:25:04.410135Z",
     "event_id": "2026_1300_united_states_las_vegas_las_vegas",
-    "forecast_state_changed": true,
+    "forecast_state_changed": false,
     "overall_status": "clean",
     "promotion_allowed": false,
     "race_name": "United States - Las Vegas - Las Vegas",
@@ -20,37 +20,37 @@
       "session_name": "Practice 2",
       "session_type": "Practice"
     },
-    "source_readiness_materially_improved": true,
+    "source_readiness_materially_improved": false,
     "stable_order_overwrite_allowed": false
   },
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "manifest_staleness_before_update": {
     "latest/combined_source_manifest.json": {
-      "age_minutes": 16080.46,
+      "age_minutes": 63.67,
       "exists": true,
       "schema_version": "combined_source_manifest_v2_session_processor",
-      "sha256": "7316e8be95c8a960451c6270f717301932ca9e8db0eb039c3d9387ae33211d8e",
-      "size_bytes": 706,
-      "timestamp_utc": "2026-11-09T02:20:56.165176Z"
+      "sha256": "a2b4c666e2645a8c1a4d73276efab2dedf069eccd38f97e7717bb96a18000cf3",
+      "size_bytes": 707,
+      "timestamp_utc": "2026-11-20T06:21:23.987831Z"
     },
     "latest/data_readiness.json": {
-      "age_minutes": 16080.46,
+      "age_minutes": 63.67,
       "exists": true,
       "schema_version": "data_readiness_v2_session_processor",
-      "sha256": "c26e82820a280e04eb7c2eadb24bb42c5f2b3f1e3f6b58bd62de95a68f63f6c2",
-      "size_bytes": 1572,
-      "timestamp_utc": "2026-11-09T02:20:56.164947Z"
+      "sha256": "962bd9d01d9c170327dc919e790256aa85b47b9736a312d2ffe0e28fcce5b5d3",
+      "size_bytes": 1575,
+      "timestamp_utc": "2026-11-20T06:21:23.987540Z"
     },
     "latest/latest_manifest.json": {
-      "age_minutes": 16080.46,
+      "age_minutes": 63.67,
       "exists": true,
       "schema_version": "latest_manifest_v2_session_processor",
-      "sha256": "1111b0704e87dfafaf7dd9c0b665c0f66caa9f63dbf18bae3307c96178c03f25",
-      "size_bytes": 798,
-      "timestamp_utc": "2026-11-09T02:20:56.164745Z"
+      "sha256": "225ff62b89551385503a7bc5a7d6203fd3af7adae95445db3c5011d11e9d8d09",
+      "size_bytes": 814,
+      "timestamp_utc": "2026-11-20T06:21:23.987254Z"
     }
   },
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "United States - Las Vegas - Las Vegas",
@@ -258,12 +258,12 @@
   "readiness_delta": {
     "current_score": 1.0,
     "current_status": "clean",
-    "delta": 1.0,
-    "previous_score": 0.0,
-    "previous_status": null
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
   },
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261120T062110Z",
+  "run_id": "20261120T072453Z",
   "schema_version": "session_readiness_manifest_v1",
   "session": {
     "date_end": "2026-11-20T05:00:00+00:00",
@@ -274,7 +274,7 @@
     "session_name": "Practice 2",
     "session_type": "Practice"
   },
-  "session_schedule_sha256": "966f0bf0617eb7205d20beac144d1a6199bf19be30a96b77f09778f8664cc7f6",
+  "session_schedule_sha256": "4b4880ba758f87eb063845f97b5561a02d19edb9884edb7303f066f5493a48d3",
   "session_schedule_snapshot": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/session_schedule_snapshot.json",
   "source_needs_manual_review": false,
   "sources": {
