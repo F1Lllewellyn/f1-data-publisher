@@ -1,16 +1,16 @@
 {
   "authority_fingerprints": {
-    "latest/combined_source_manifest.json": "9de6a64772fd8a5bf4d1aa173b2d950c66dee12826c113f6fc7bb243c18e841e",
-    "latest/data_readiness.json": "3190443de4b39ed3a2219b07f251edb03c25b7a0461eb8e90330645064e8520c",
-    "latest/latest_manifest.json": "5304ead7aa523f9210bfd8b53136d514a74d81afb6717f4d7ce80eb0206f9116",
-    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "b6a7ac7a5e4d50297185a04add1f36fdf188b47346e68ec1d444580c9632cc6f",
-    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "4340562736121ccf13ce911db8f9c43307836a43fcde2dd1a9a7c92b5f9b0373",
-    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "498625d71807a388e5d19ef989e79e38db32adf69aa83c65758eb1df86d6c3f6",
+    "latest/combined_source_manifest.json": "d6b29b02b8f6bead7a19a939beb9805443e4e018190a99805bd5d81976ecfe00",
+    "latest/data_readiness.json": "d2799f0353af13e0a7d663b14d6f8c058ac60c9efffd5e48d7a61262bdf20074",
+    "latest/latest_manifest.json": "4772de61d8bc19fe453933dd8afdac4c7255f6648d1af67478a5d09366333977",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "0381dee89f3c56c0b51cec64d29ded0b29a9acfbb4ffb62fb1bb76032291f6ba",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "ada1a0f07a5916f658a5bd9443425844259f7d85bcff267ed637cf8db9e4fa6e",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "287fb097f3293be177f32c171dbdc5f20d750b719b3443f0f13ef0dda44a7c44",
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
-    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "68a1b52c7a7fb86c00bb13a372459708bbb7550e6652240bc46dacdbd5c5e32c"
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "0d953b263c162f0878d65ffaa37de42d0197fa1aee41b4270ac19ec0b3881ca2"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-21T23:29:33.380233+00:00",
+  "created_utc": "2026-11-21T23:48:43.633266+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": true,
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 990,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/sandbox_workbook_update_plan_applied.json",
-      "sha256": "0d87e79fe7aeb4f04427aa6f32ec83f7e76485e8e75e6e1409fe43ec5d14ba10"
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/sandbox_workbook_update_plan_applied.json",
+      "sha256": "3f0509d3c7dbb6478879ea52ee437c3143dd7ceef154671ef2154d2185a6912c"
     },
     {
       "bytes": 402,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb"
     },
     {
-      "bytes": 11070,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T232933Z.xlsx",
-      "sha256": "adb1db9bd65c14f85bf2409f4f9da068bc86c948d71e7c4e3cb65ff28a6c536b"
+      "bytes": 11072,
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T234843Z.xlsx",
+      "sha256": "4d65fa003425e1c90f1e2aa60efdbaab2c0b35e347c8f06b82373538efca8af4"
     },
     {
       "bytes": 815,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/upstream_latest_manifest_snapshot.json",
-      "sha256": "45738c0d643ef6186685ff9e2c1a4b72195b57c7645c6298ae4b3bee3d7d39dc"
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_latest_manifest_snapshot.json",
+      "sha256": "7a7385645bf3efc099dc371695b402b0762600c63c5583120c6b6f1a9710e40f"
     },
     {
       "bytes": 1574,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/upstream_data_readiness_snapshot.json",
-      "sha256": "21152380a8de067ee0e46b82b4d0d479da147d77b16f217e25a519fd4c88694d"
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_data_readiness_snapshot.json",
+      "sha256": "4d8cdc30278d703cdb9ac4e4c7075c83453cd206a385c45ea79cfd12449dc348"
     },
     {
       "bytes": 708,
-      "path": "history/workbook_kpi_refresh_applier/20261121T232933Z/upstream_combined_source_manifest_snapshot.json",
-      "sha256": "940a819ce568e35bf05ae8e6d4c2e424fe8616f7b780ed6152a31e1a04eaf064"
+      "path": "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_combined_source_manifest_snapshot.json",
+      "sha256": "145494e0346f82760600ac84d5cfdbd29ced535a33aa78b0e47a95bb56802d9d"
     }
   ],
   "readiness_quality": "usable_with_optional_context_gaps",
-  "run_id": "20261121T232933Z",
+  "run_id": "20261121T234843Z",
   "session_key": 11416,
   "session_name": "Qualifying",
   "session_type": "Qualifying",

@@ -1,0 +1,49 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date_start",
+    "driver_number",
+    "duration_sector_1",
+    "duration_sector_2",
+    "duration_sector_3",
+    "i1_speed",
+    "i2_speed",
+    "is_pit_out_lap",
+    "lap_duration",
+    "lap_number",
+    "meeting_key",
+    "segments_sector_1",
+    "segments_sector_2",
+    "segments_sector_3",
+    "session_key",
+    "st_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.csv",
+  "driver_count": 22,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "laps",
+  "fetch": {
+    "bytes": 187083,
+    "observed_at_utc": "2026-11-21T23:48:38.156103Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/laps?session_key=11416",
+    "sha256": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json",
+  "json_sha256": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+  "max_lap_number": 26.0,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-21T23:48:38.156103Z",
+  "original_response_bytes_retained": true,
+  "rows": 395,
+  "status": "clean",
+  "timestamp_rows": 393
+}

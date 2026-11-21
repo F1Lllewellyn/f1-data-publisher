@@ -1,0 +1,740 @@
+{
+  "canonical_workbook_modified": false,
+  "capture_origin": {
+    "head_sha": "cd0302b44c0f1efce5cc122951c61cec96c7932f",
+    "repository": "F1Lllewellyn/f1-data-publisher",
+    "run_attempt": "1",
+    "run_id": "44963374253",
+    "workflow": "F1 Peak Elite Control Room - One Click v1"
+  },
+  "created_utc": "2026-11-21T23:48:43.373793Z",
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "forecast_bundle_ledger_snapshot": {
+    "created_utc": "2026-11-21T23:48:43.376032Z",
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "forecast_state_changed": false,
+    "overall_status": "clean",
+    "promotion_allowed": false,
+    "race_name": "United States - Las Vegas - Las Vegas",
+    "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+    "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+    "session": {
+      "date_end": "2026-11-21T05:00:00+00:00",
+      "date_start": "2026-11-21T04:00:00+00:00",
+      "gate": "post_qualifying",
+      "meeting_key": 1300,
+      "session_key": 11416,
+      "session_name": "Qualifying",
+      "session_type": "Qualifying"
+    },
+    "source_readiness_materially_improved": false,
+    "stable_order_overwrite_allowed": false
+  },
+  "forecast_state_changed": false,
+  "manifest_staleness_before_update": {
+    "latest/combined_source_manifest.json": {
+      "age_minutes": 279.66,
+      "exists": true,
+      "schema_version": "combined_source_manifest_v2_session_processor",
+      "sha256": "9de6a64772fd8a5bf4d1aa173b2d950c66dee12826c113f6fc7bb243c18e841e",
+      "size_bytes": 707,
+      "timestamp_utc": "2026-11-21T19:09:03.950754Z"
+    },
+    "latest/data_readiness.json": {
+      "age_minutes": 279.66,
+      "exists": true,
+      "schema_version": "data_readiness_v2_session_processor",
+      "sha256": "3190443de4b39ed3a2219b07f251edb03c25b7a0461eb8e90330645064e8520c",
+      "size_bytes": 1573,
+      "timestamp_utc": "2026-11-21T19:09:03.950568Z"
+    },
+    "latest/latest_manifest.json": {
+      "age_minutes": 279.66,
+      "exists": true,
+      "schema_version": "latest_manifest_v2_session_processor",
+      "sha256": "5304ead7aa523f9210bfd8b53136d514a74d81afb6717f4d7ce80eb0206f9116",
+      "size_bytes": 814,
+      "timestamp_utc": "2026-11-21T19:09:03.950469Z"
+    }
+  },
+  "material_readiness_improved": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "United States - Las Vegas - Las Vegas",
+  "readiness_aggregation": {
+    "blocking_issues": [],
+    "critical_endpoints": [
+      "drivers",
+      "laps",
+      "position",
+      "session_result",
+      "weather"
+    ],
+    "critical_late": [],
+    "critical_partial": [],
+    "expected_empty_endpoints": [],
+    "expected_empty_sources": [],
+    "missing_required_endpoints": [],
+    "needs_manual_review": false,
+    "optional_context_endpoints": [
+      "intervals",
+      "pit",
+      "race_control",
+      "starting_grid",
+      "stints"
+    ],
+    "optional_context_gaps": [
+      {
+        "endpoint": "intervals",
+        "reason": "optional_source_warning_non_blocking",
+        "rows": 0,
+        "source": "openf1_intervals",
+        "status": "needs_manual_review"
+      }
+    ],
+    "overall_status": "clean",
+    "per_source": {
+      "openf1_drivers": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "drivers",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_intervals": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_context_warning",
+        "effective_status": "partial",
+        "endpoint": "intervals",
+        "missing_required_columns": [
+          "driver_number",
+          "session_key",
+          "meeting_key",
+          "date"
+        ],
+        "raw_status": "needs_manual_review",
+        "reason": "optional_source_warning_non_blocking",
+        "role": "optional_context",
+        "rows": 0
+      },
+      "openf1_laps": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "laps",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 395
+      },
+      "openf1_pit": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "pit",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 75
+      },
+      "openf1_position": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "position",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 1459
+      },
+      "openf1_race_control": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "race_control",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 81
+      },
+      "openf1_session_result": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "session_result",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 22
+      },
+      "openf1_sessions": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "sessions",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "observed_optional",
+        "rows": 1
+      },
+      "openf1_starting_grid": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "starting_grid",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 22
+      },
+      "openf1_stints": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "optional_observed",
+        "effective_status": "clean",
+        "endpoint": "stints",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "optional_source_observed",
+        "role": "optional_context",
+        "rows": 75
+      },
+      "openf1_weather": {
+        "anomalies": [],
+        "blocking": false,
+        "classification": "critical_clean",
+        "effective_status": "clean",
+        "endpoint": "weather",
+        "missing_required_columns": [],
+        "raw_status": "clean",
+        "reason": "required_source_clean",
+        "role": "required",
+        "rows": 78
+      }
+    },
+    "promotion_allowed": false,
+    "readiness_quality": "usable_with_optional_context_gaps",
+    "schema_version": "source_readiness_aggregation_v2",
+    "session_family": "qualifying",
+    "source_effective_statuses": {
+      "openf1_drivers": "clean",
+      "openf1_intervals": "partial",
+      "openf1_laps": "clean",
+      "openf1_pit": "clean",
+      "openf1_position": "clean",
+      "openf1_race_control": "clean",
+      "openf1_session_result": "clean",
+      "openf1_sessions": "clean",
+      "openf1_starting_grid": "clean",
+      "openf1_stints": "clean",
+      "openf1_weather": "clean"
+    }
+  },
+  "readiness_delta": {
+    "current_score": 1.0,
+    "current_status": "clean",
+    "delta": 0.0,
+    "previous_score": 1.0,
+    "previous_status": "clean"
+  },
+  "readiness_quality": "usable_with_optional_context_gaps",
+  "run_id": "20261121T234734074446Z",
+  "schema_version": "session_readiness_manifest_v1",
+  "session": {
+    "date_end": "2026-11-21T05:00:00+00:00",
+    "date_start": "2026-11-21T04:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1300,
+    "session_key": 11416,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "session_catalog_custody": {
+    "observed_at_utc": "2026-11-21T23:48:36.438438Z",
+    "original_response_bytes_retained": true,
+    "path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/session_catalog_response.bin",
+    "sha256": "f76bc38e3326eec1d43b5108e323dc197f1b690cd9e505c47210414de819e61b"
+  },
+  "session_schedule_sha256": "d2af22259f52d32ac12e0bbea5bdde565ec2b038903b20593f9aaa66321e8bc2",
+  "session_schedule_snapshot": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/session_schedule_snapshot.json",
+  "source_needs_manual_review": false,
+  "sources": {
+    "openf1_drivers": {
+      "anomalies": [],
+      "columns": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "meeting_key",
+        "name_acronym",
+        "session_key",
+        "team_colour",
+        "team_name"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "drivers",
+      "fetch": {
+        "bytes": 9024,
+        "observed_at_utc": "2026-11-21T23:48:37.098587Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/drivers?session_key=11416",
+        "sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.json",
+      "json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:37.098587Z",
+      "original_response_bytes_retained": true,
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_intervals": {
+      "anomalies": [],
+      "columns": [],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_intervals.csv",
+      "driver_count": 0,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "intervals",
+      "fetch": {
+        "bytes": 30,
+        "error": "HOLD_PROVIDER_HTTP_404",
+        "observed_at_utc": "2026-11-21T23:48:38.694044Z",
+        "ok": false,
+        "request_url": "https://api.openf1.org/v1/intervals?session_key=11416",
+        "sha256": "79e458c7f1cd32213fb418a50acca1646db353c29a8775154e0fbf8bc6ebd79d",
+        "status_code": 404
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_intervals.json",
+      "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "max_lap_number": null,
+      "missing_required_columns": [
+        "driver_number",
+        "session_key",
+        "meeting_key",
+        "date"
+      ],
+      "observed_at_utc": "2026-11-21T23:48:38.694044Z",
+      "original_response_bytes_retained": true,
+      "rows": 0,
+      "status": "needs_manual_review",
+      "timestamp_rows": 0
+    },
+    "openf1_laps": {
+      "anomalies": [],
+      "columns": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "i1_speed",
+        "i2_speed",
+        "is_pit_out_lap",
+        "lap_duration",
+        "lap_number",
+        "meeting_key",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3",
+        "session_key",
+        "st_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "laps",
+      "fetch": {
+        "bytes": 187083,
+        "observed_at_utc": "2026-11-21T23:48:38.156103Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/laps?session_key=11416",
+        "sha256": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json",
+      "json_sha256": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+      "max_lap_number": 26.0,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:38.156103Z",
+      "original_response_bytes_retained": true,
+      "rows": 395,
+      "status": "clean",
+      "timestamp_rows": 393
+    },
+    "openf1_pit": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "lane_duration",
+        "lap_number",
+        "meeting_key",
+        "pit_duration",
+        "session_key",
+        "stop_duration"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_pit.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "pit",
+      "fetch": {
+        "bytes": 13539,
+        "observed_at_utc": "2026-11-21T23:48:40.330592Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/pit?session_key=11416",
+        "sha256": "ac943d07efa08a142c0f088e6701a9d5fedfe26b7e11d425086b529bf196c693",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_pit.json",
+      "json_sha256": "ac943d07efa08a142c0f088e6701a9d5fedfe26b7e11d425086b529bf196c693",
+      "max_lap_number": 23.0,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:40.330592Z",
+      "original_response_bytes_retained": true,
+      "rows": 75,
+      "status": "clean",
+      "timestamp_rows": 75
+    },
+    "openf1_position": {
+      "anomalies": [],
+      "columns": [
+        "date",
+        "driver_number",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "position",
+      "fetch": {
+        "bytes": 168159,
+        "observed_at_utc": "2026-11-21T23:48:39.645075Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/position?session_key=11416",
+        "sha256": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.json",
+      "json_sha256": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:39.645075Z",
+      "original_response_bytes_retained": true,
+      "rows": 1459,
+      "status": "clean",
+      "timestamp_rows": 1459
+    },
+    "openf1_race_control": {
+      "anomalies": [],
+      "columns": [
+        "category",
+        "date",
+        "driver_number",
+        "flag",
+        "lap_number",
+        "meeting_key",
+        "message",
+        "qualifying_phase",
+        "scope",
+        "sector",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_race_control.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "race_control",
+      "fetch": {
+        "bytes": 21327,
+        "observed_at_utc": "2026-11-21T23:48:41.533630Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/race_control?session_key=11416",
+        "sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_race_control.json",
+      "json_sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:41.533630Z",
+      "original_response_bytes_retained": true,
+      "rows": 81,
+      "status": "clean",
+      "timestamp_rows": 81
+    },
+    "openf1_session_result": {
+      "anomalies": [],
+      "columns": [
+        "dnf",
+        "dns",
+        "driver_number",
+        "dsq",
+        "duration",
+        "gap_to_leader",
+        "meeting_key",
+        "number_of_laps",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "session_result",
+      "fetch": {
+        "bytes": 4317,
+        "observed_at_utc": "2026-11-21T23:48:42.890116Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/session_result?session_key=11416",
+        "sha256": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.json",
+      "json_sha256": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:42.890116Z",
+      "original_response_bytes_retained": true,
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_sessions": {
+      "anomalies": [],
+      "columns": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_key",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "is_cancelled",
+        "location",
+        "meeting_key",
+        "session_key",
+        "session_name",
+        "session_type",
+        "year"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_sessions.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "sessions",
+      "fetch": {
+        "bytes": 408,
+        "ok": true,
+        "source": "sessions_prefetch"
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_sessions.json",
+      "json_sha256": "737a5ab4ad4e66041e05f88c85255b8a85e1cbf26a3064c35a41da2f0bae02e9",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:36.438438Z",
+      "original_response_bytes_retained": true,
+      "rows": 1,
+      "status": "clean",
+      "timestamp_rows": 1
+    },
+    "openf1_starting_grid": {
+      "anomalies": [],
+      "columns": [
+        "driver_number",
+        "lap_duration",
+        "meeting_key",
+        "position",
+        "session_key"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_starting_grid.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "starting_grid",
+      "fetch": {
+        "bytes": 2095,
+        "observed_at_utc": "2026-11-21T23:48:43.362741Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/starting_grid?session_key=11416",
+        "sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_starting_grid.json",
+      "json_sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:43.362741Z",
+      "original_response_bytes_retained": true,
+      "rows": 22,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_stints": {
+      "anomalies": [],
+      "columns": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "meeting_key",
+        "session_key",
+        "stint_number",
+        "tyre_age_at_start"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_stints.csv",
+      "driver_count": 22,
+      "driver_custody": {
+        "issues": [],
+        "official_entry_list_verified": false,
+        "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "roster_source": "openf1_drivers",
+        "supplied_roster_verified": true
+      },
+      "duplicate_rows": 0,
+      "endpoint": "stints",
+      "fetch": {
+        "bytes": 10804,
+        "observed_at_utc": "2026-11-21T23:48:40.854327Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/stints?session_key=11416",
+        "sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_stints.json",
+      "json_sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:40.854327Z",
+      "original_response_bytes_retained": true,
+      "rows": 75,
+      "status": "clean",
+      "timestamp_rows": 0
+    },
+    "openf1_weather": {
+      "anomalies": [],
+      "columns": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "meeting_key",
+        "pressure",
+        "rainfall",
+        "session_key",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ],
+      "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.csv",
+      "driver_count": 0,
+      "duplicate_rows": 0,
+      "endpoint": "weather",
+      "fetch": {
+        "bytes": 16768,
+        "observed_at_utc": "2026-11-21T23:48:42.361687Z",
+        "ok": true,
+        "request_url": "https://api.openf1.org/v1/weather?session_key=11416",
+        "sha256": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+        "status_code": 200
+      },
+      "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.json",
+      "json_sha256": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+      "max_lap_number": null,
+      "missing_required_columns": [],
+      "observed_at_utc": "2026-11-21T23:48:42.361687Z",
+      "original_response_bytes_retained": true,
+      "rows": 78,
+      "status": "clean",
+      "timestamp_rows": 78
+    }
+  },
+  "stable_engine_modified": false,
+  "validation_summary": {
+    "clean_sources": 10,
+    "conflicting_sources": 0,
+    "late_sources": 0,
+    "manual_review_sources": 1,
+    "partial_sources": 0
+  },
+  "workbook_kpi_update": {
+    "canonical_workbook_modified": false,
+    "mode": "sandbox_artifact",
+    "path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json"
+  }
+}

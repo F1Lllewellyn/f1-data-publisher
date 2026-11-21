@@ -1,0 +1,41 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 10804,
+    "observed_at_utc": "2026-11-21T23:48:40.854327Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/stints?session_key=11416",
+    "sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_stints.json",
+  "json_sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-21T23:48:40.854327Z",
+  "original_response_bytes_retained": true,
+  "rows": 75,
+  "status": "clean",
+  "timestamp_rows": 0
+}

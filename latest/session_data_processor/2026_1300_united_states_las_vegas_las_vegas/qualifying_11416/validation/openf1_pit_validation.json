@@ -23,7 +23,7 @@
   "endpoint": "pit",
   "fetch": {
     "bytes": 13539,
-    "observed_at_utc": "2026-11-21T19:09:02.170071Z",
+    "observed_at_utc": "2026-11-21T23:48:40.330592Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/pit?session_key=11416",
     "sha256": "ac943d07efa08a142c0f088e6701a9d5fedfe26b7e11d425086b529bf196c693",
@@ -33,7 +33,7 @@
   "json_sha256": "ac943d07efa08a142c0f088e6701a9d5fedfe26b7e11d425086b529bf196c693",
   "max_lap_number": 23.0,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T19:09:02.170071Z",
+  "observed_at_utc": "2026-11-21T23:48:40.330592Z",
   "original_response_bytes_retained": true,
   "rows": 75,
   "status": "clean",
