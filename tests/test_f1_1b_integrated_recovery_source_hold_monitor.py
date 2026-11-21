@@ -102,6 +102,20 @@ class SourceHoldMonitorTests(unittest.TestCase):
         with self.assertRaises(monitor.UnsafeSourceHold):
             monitor.assess(self.root)
 
+    def test_grid_404_does_not_hide_missing_required_weather(self):
+        p = self.root / "zero_lane_diagnostics.csv"
+        p.write_text(
+            p.read_text() + "weather,11254,fail,required_session_http_404,http_404\\n"
+        )
+        self.manifest["normal_collection"]["zero_lane_diagnostics_sha256"] = (
+            hashlib.sha256(p.read_bytes()).hexdigest())
+        self.manifest["lanes"].append({"lane": "weather", "result": "fail"})
+        self.manifest["fail_count"] = 2
+        self.manifest["source_quality_reasons"] = ["required_lane_session_failures:2"]
+        self.save()
+        with self.assertRaises(monitor.UnsafeSourceHold):
+            monitor.assess(self.root)
+
     def test_no_forecast_or_archive_promotion(self):
         self.manifest["normal_collection"]["source_readiness_promoted"] = True
         self.save()
