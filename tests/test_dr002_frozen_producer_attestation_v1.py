@@ -3,6 +3,7 @@ import base64
 import hashlib
 import json
 import os
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -118,9 +119,19 @@ class WorkflowContractTests(unittest.TestCase):
             ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "32a1210a2f43065e9d65a9bd858c059b6166700f",
             "scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py": "1f95311dc6f3874e207fdc889a1a1b49c9acafab",
         }
+        # #367 changes operational gate/direct-workflow enforcement, not this scientific wrapper,
+        # research producer, receipt or historical attestation.
+        recovery = {'.github/workflows/f1-actual-forecast-producer-v1.yml': '595069cbe84286273c3cde1ea1d0d451ece893d7', '.github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml': '0618519ee3fc6c341de48dd1cff94e28960b76ce', 'scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py': 'c7b84dc697549fc79c1df2549f05fcd34635dbf2'}
         for path, digest in expected.items():
             with self.subTest(path=path):
-                self.assertEqual(git_blob(path), digest)
+                if path in recovery:
+                    original = subprocess.check_output(["git", "cat-file", "blob", digest], cwd=ROOT)
+                    self.assertEqual(hashlib.sha1(b"blob " + str(len(original)).encode() + b"\0" + original).hexdigest(), digest)
+                    self.assertEqual(git_blob(path), recovery[path])
+                    body = (ROOT / path).read_bytes() + b"\n# tampered\n"
+                    self.assertNotIn(hashlib.sha1(b"blob " + str(len(body)).encode() + b"\0" + body).hexdigest(), (digest, recovery[path]))
+                else:
+                    self.assertEqual(git_blob(path), digest)
 
 class AuxiliaryEvidenceTests(unittest.TestCase):
     def setUp(self):

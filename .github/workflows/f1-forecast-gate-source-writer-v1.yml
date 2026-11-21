@@ -18,10 +18,10 @@ on:
       commit_outputs:
         description: "Commit outputs to the repo"
         required: false
-        default: "true"
+        default: "false"
 
 permissions:
-  contents: write
+  contents: read
   actions: read
 
 concurrency:
@@ -35,12 +35,13 @@ jobs:
       EVENT_ID: ${{ github.event.inputs.event_id || 'manual_forecast_producer_validation' }}
       GATE: ${{ github.event.inputs.gate || 'all' }}
       LANE: ${{ github.event.inputs.lane || 'all' }}
-      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'false' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -56,9 +57,6 @@ jobs:
       - name: Run forecast gate source writer
         run: |
           args=(--event-id "${EVENT_ID}" --gate "${GATE}" --lane "${LANE}")
-          if [ "${COMMIT_OUTPUTS}" = "true" ]; then
-            args+=(--commit-outputs)
-          fi
           python scripts/forecast_bundles/write_gate_forecast_rows_v1.py "${args[@]}"
 
       - name: Upload source-writer artifacts
@@ -67,24 +65,5 @@ jobs:
         with:
           name: f1-forecast-gate-source-writer-v1
           path: |
-            latest/forecast_outputs/${{ env.EVENT_ID }}/**
-            history/forecast_outputs/${{ env.EVENT_ID }}/**
-            _runtime/**
+            _runtime/forecast_scientific_hold/**
           if-no-files-found: ignore
-
-      - name: Commit outputs
-        if: ${{ env.COMMIT_OUTPUTS == 'true' }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          paths=()
-          [ -d "latest/forecast_outputs/${EVENT_ID}" ] && paths+=("latest/forecast_outputs/${EVENT_ID}")
-          [ -d "history/forecast_outputs/${EVENT_ID}" ] && paths+=("history/forecast_outputs/${EVENT_ID}")
-          [ ${#paths[@]} -gt 0 ] && git add "${paths[@]}" || true
-          if git diff --cached --quiet; then
-            echo "No forecast source-writer changes to commit."
-          else
-            git commit -m "forecast: write gate source rows for ${EVENT_ID}"
-            bash scripts/ops/safe_git_push_rebase_retry.sh
-
-          fi

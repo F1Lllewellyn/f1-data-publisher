@@ -152,6 +152,8 @@ def install_fixture(root: Path, payloads: dict[str, dict] | None = None) -> dict
     workbook = root / payloads["workbook"]["outputs"][0]["path"]
     workbook.parent.mkdir(parents=True, exist_ok=True)
     workbook.write_bytes(b"synthetic workbook")
+    from test_sp2026_integrated_recovery_guard_v1 import bind_synthetic_fixture
+    bind_synthetic_fixture(root)
     return payloads
 
 

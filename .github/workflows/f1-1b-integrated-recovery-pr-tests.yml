@@ -1,0 +1,54 @@
+name: F1 1B Integrated Recovery PR Tests
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'configs/**'
+      - '.github/workflows/**'
+      - 'tests/**'
+permissions:
+  contents: read
+concurrency:
+  group: f1-1b-recovery-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  offline-integration:
+    env:
+      F1_RECOVERY_REPORT_DIR: _runtime/issue367_acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install requests pandas openpyxl PyYAML
+      - name: Run offline integration and custody regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_f1_1b_integrated_recovery_*.py' -v
+          python -m unittest discover -s tests -p 'test_f1_producer_lock_custody_*.py' -v
+      - name: Verify retained FIA grid and immutable dependency lineage
+        run: |
+          python -m unittest discover -s tests -p 'test_*grid*' -v
+          python -m unittest discover -s tests -p 'test_peak_elite_safe_push_clean_worktree_v1.py' -v
+      - name: Verify adjacent publication provider and workbook contracts
+        run: |
+          python -m unittest discover -s tests -p 'test_f1_source_closure_publish_guard_v1.py' -v
+          python -m unittest discover -s tests -p 'test_openf1_normal_incremental_collection_budget_v1.py' -v
+          python -m unittest discover -s tests -p 'test_openf1_lightweight_source_closure_request_quality_v1.py' -v
+          python -m unittest discover -s tests -p 'test_dr002_frozen_producer_attestation_v1.py' -v
+          python -m unittest discover -s tests -p 'test_workbook_kpi_event_selection_v1.py' -v
+          python -m unittest discover -s tests -p 'test_dashboard_event_selection_readiness_v1.py' -v
+          python -m unittest discover -s tests -p 'test_sp2026_integrated_recovery_guard_v1.py' -v
+      - name: Retain replay acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-367-offline-replay-evidence
+          path: _runtime/issue367_acceptance/*.json
+          if-no-files-found: warn
+          retention-days: 30

@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import subprocess
 import tempfile
 import unittest
 
@@ -908,13 +909,31 @@ class FiaFinalGridReusableIntakeTests(unittest.TestCase):
             data = (REPO_ROOT / path).read_bytes()
             return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
 
-        self.assertEqual(
-            {path: git_blob(path) for path in m.INTAKE_DEPENDENCY_PINS},
-            m.INTAKE_DEPENDENCY_PINS,
-        )
+        operational = {"scripts/session_data_processor/session_data_processor_loop_v1.py":
+                       "2545a029817cb8da37e2e10475e041b75a81be02"}
+        for path, original_sha in m.INTAKE_DEPENDENCY_PINS.items():
+            with self.subTest(path=path):
+                if path in operational:
+                    accepted367 = subprocess.check_output(['git','cat-file','blob','9b33fa3371ce6545691b0b1b4f850512f2d34622'], cwd=REPO_ROOT)
+                    self.assertEqual(hashlib.sha1(b'blob '+str(len(accepted367)).encode()+b'\0'+accepted367).hexdigest(), '9b33fa3371ce6545691b0b1b4f850512f2d34622')
+                    original = subprocess.check_output(['git', 'cat-file', 'blob', original_sha], cwd=REPO_ROOT)
+                    self.assertEqual(hashlib.sha1(b"blob "+str(len(original)).encode()+b"\0"+original).hexdigest(), original_sha)
+                    prior = subprocess.check_output(['git','cat-file','blob','89fb6d762372baff2b436e777a3fddca69408a5a'],cwd=REPO_ROOT)
+                    self.assertEqual(hashlib.sha1(b"blob "+str(len(prior)).encode()+b"\0"+prior).hexdigest(),'89fb6d762372baff2b436e777a3fddca69408a5a')
+                approved_sha = operational.get(path, original_sha)
+                self.assertEqual(git_blob(path), approved_sha)
+                tampered = (REPO_ROOT/path).read_bytes()+b"\n# tamper\n"
+                self.assertNotEqual(hashlib.sha1(b"blob "+str(len(tampered)).encode()+b"\0"+tampered).hexdigest(), approved_sha)
+
         verifier_test = "tests/test_dr002_fia_final_grid_provenance_verifier_v1.py"
         self.assertNotIn(verifier_test, m.INTAKE_DEPENDENCY_PINS)
-        self.assertEqual(git_blob(verifier_test), "0b1fbc684cfd91f00b1cd940add995af3c441ede")
+        original_test = subprocess.check_output(['git', 'cat-file', 'blob',
+            '0b1fbc684cfd91f00b1cd940add995af3c441ede'], cwd=REPO_ROOT)
+        self.assertEqual(hashlib.sha1(b"blob "+str(len(original_test)).encode()+b"\0"+original_test).hexdigest(),
+                         '0b1fbc684cfd91f00b1cd940add995af3c441ede')
+        accepted_test = subprocess.check_output(['git', 'cat-file', 'blob', '6956a1a4edc8bc427fcaecb860c5eb4d969b7579'], cwd=REPO_ROOT)
+        self.assertEqual(hashlib.sha1(b'blob '+str(len(accepted_test)).encode()+b'\0'+accepted_test).hexdigest(), '6956a1a4edc8bc427fcaecb860c5eb4d969b7579')
+        self.assertEqual(git_blob(verifier_test), '456626e877e363905115aa5270b70c7444ae7c59')
         self.assertEqual(
             git_blob("tests/test_dr002_github_attestation_binding_v1.py"),
             "1d764c840202463e091110132521f23f34853ad0",

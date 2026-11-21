@@ -22,10 +22,10 @@ on:
       commit_outputs:
         description: "Commit locked bundles when actual forecast rows exist"
         required: false
-        default: "true"
+        default: "false"
 
 permissions:
-  contents: write
+  contents: read
   actions: read
 
 concurrency:
@@ -40,12 +40,13 @@ jobs:
       RACE_NAME: ${{ github.event.inputs.race_name || 'Manual Forecast Producer Validation' }}
       GATE: ${{ github.event.inputs.gate || 'all' }}
       ALLOW_STRUCTURAL_PLACEHOLDERS: ${{ github.event.inputs.allow_structural_placeholders || 'false' }}
-      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'false' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -66,7 +67,7 @@ jobs:
             args+=(--allow-structural-placeholders)
           fi
           if [ "${COMMIT_OUTPUTS}" = "true" ]; then
-            args+=(--commit-outputs)
+            args+=(--commit-latest)
           fi
           python scripts/forecast_bundles/create_forecast_bundles_v1.py "${args[@]}"
 
@@ -76,24 +77,5 @@ jobs:
         with:
           name: f1-forecast-bundle-locker-v1
           path: |
-            latest/forecast_bundles/${{ env.EVENT_ID }}/**
-            history/forecast_bundles/${{ env.EVENT_ID }}/**
-            _runtime/**
+            _runtime/forecast_scientific_hold/**
           if-no-files-found: ignore
-
-      - name: Commit locked bundles only when present
-        if: ${{ env.COMMIT_OUTPUTS == 'true' }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          paths=()
-          [ -d "latest/forecast_bundles/${EVENT_ID}" ] && paths+=("latest/forecast_bundles/${EVENT_ID}")
-          [ -d "history/forecast_bundles/${EVENT_ID}" ] && paths+=("history/forecast_bundles/${EVENT_ID}")
-          [ ${#paths[@]} -gt 0 ] && git add "${paths[@]}" || true
-          if git diff --cached --quiet; then
-            echo "No forecast bundle changes to commit."
-          else
-            git commit -m "forecast: lock bundles for ${EVENT_ID}"
-            bash scripts/ops/safe_git_push_rebase_retry.sh
-
-          fi

@@ -36,18 +36,21 @@ class CleanWorktreeTests(unittest.TestCase):
     def setUp(self):
         self.text = (ROOT/WORKFLOW).read_text()
 
-    def test_exact_three_additions_and_no_other_workflow_change(self):
-        self.assertEqual(self.text.count(ADDED_LINES), 1)
-        baseline = self.text.replace(ADDED_LINES, '', 1).encode()
-        self.assertEqual(hashlib.sha1(b'blob '+str(len(baseline)).encode()+b'\0'+baseline).hexdigest(),
-                         '42c107142e076ac4d056f2e33e93dab4163f3b72')
-        old = candidates(baseline.decode()); new = candidates(self.text)
+    def test_accepted_three_additions_and_reviewed_recovery_lineage(self):
+        # Preserve the exact earlier repair while adding one explicitly pinned
+        # integrated recovery. Arbitrary workflow mutation remains rejected.
+        baseline = subprocess.check_output(['git', 'cat-file', 'blob',
+            'c2f8ddc46c52a2be06fcf7f53d03edc2df40f787'], cwd=ROOT).decode()
+        self.assertEqual(baseline.count(ADDED_LINES), 1)
+        old = baseline.replace(ADDED_LINES, '', 1).encode()
+        blob = lambda raw: hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+        self.assertEqual(blob(old), '42c107142e076ac4d056f2e33e93dab4163f3b72')
+        self.assertEqual(blob(self.text.encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
+        prior = subprocess.check_output(['git', 'cat-file', 'blob', '46c1cd483d6b04e98474ef3be498cd8faae007cb'], cwd=ROOT)
+        self.assertEqual(self.text.replace('  F1_OPENF1_HANDOVER_REQUIRED: \"true\"\n', '', 1).encode(), prior)
+        self.assertNotEqual(blob((self.text+'# tamper').encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
         for path in READINESS:
-            self.assertEqual(new.count(path), 1)
-            self.assertNotIn(path, old)
-        self.assertEqual([p for p in new if p not in READINESS], old)
-        # Reconstructing the exact baseline proves all guards/cache/roots/force-add,
-        # commit message/concurrency/input behavior and other workflow bytes unchanged.
+            self.assertEqual(candidates(self.text).count(path), 1)
 
     def test_established_session_workflow_candidate_outputs(self):
         for path in ['.github/workflows/f1-session-data-processor-loop-v1.yml',
@@ -73,7 +76,13 @@ class CleanWorktreeTests(unittest.TestCase):
             helper.write_text('set -euo pipefail\nmkdir -p _runtime\n'
                               'git status --porcelain=v1 --untracked-files=no > _runtime/status_at_safe_push.txt\n')
             git(root, 'add', '.'); git(root, 'commit', '-m', 'synthetic baseline')
-            for path in changed_paths:
+            marker = root/'_runtime/peak_elite/start.marker'
+            marker.parent.mkdir(parents=True); marker.touch()
+            os.utime(marker, (1, 1))
+            report = root/'latest/peak_elite/orchestrator_status.json'
+            report.parent.mkdir(parents=True); report.write_text('{"commit_allowed":true}')
+            changed_paths.append('latest/peak_elite/orchestrator_status.json')
+            for path in changed_paths[:-1]:
                 (root/path).write_text('{"version":2}\n')
             original = git(root, 'rev-parse', 'HEAD')
             script = commit_script(self.text).replace('${{ inputs.commit_outputs }}', 'true')
@@ -90,7 +99,7 @@ class CleanWorktreeTests(unittest.TestCase):
     def test_protected_guards_surround_staging(self):
         script = commit_script(self.text)
         first = script.index('if git status --porcelain | grep -E "$PROTECTED_PATTERN"; then')
-        staging = script.index('git add "$p"')
+        staging = script.index('git add -- "$f"')
         second = script.index('if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then')
         self.assertLess(first, staging)
         self.assertLess(staging, second)
@@ -117,12 +126,18 @@ class CleanWorktreeTests(unittest.TestCase):
         expected = {
             'scripts/ops/safe_git_push_rebase_retry.sh': '85f85bb540cf8442827a1586d5ccf0c5602d7a75',
             '.github/workflows/f1-session-data-processor-loop-v1.yml': 'cfbed6cbedac9c7e601802c38c6eb5770d09004d',
-            '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '3392539856cda53cb29652f5ada4988ce74fb779',
+            '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': 'c4b5e197d8f21b277127d8e06122d7c1d7b74496',
             'docs/control/F1_AGENT_HANDOFF_CONTRACT_v1.md': '85ce44807ef159b5ba5d3bfd543ea1f945097f77',
         }
+        recovery = {'.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '1f8441869ac384c8f23688d2b5eba37f4ba4e696'}
+        coordinated = {'.github/workflows/f1-session-data-processor-loop-v1.yml': '77fc7c31bf381c60290ebf818bd45c9ed6992499', '.github/workflows/f1-session-autorepair-integrated-loop-v1.yml': '4f72cf38bf8767cbfcc2b52c1d1d168c13ca884d'}
         for path, sha in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT/path).read_bytes()
+                if path in recovery or path in coordinated:
+                    historical = subprocess.check_output(['git', 'cat-file', 'blob', sha], cwd=ROOT)
+                    self.assertEqual(hashlib.sha1(b'blob '+str(len(historical)).encode()+b'\0'+historical).hexdigest(), sha)
+                    sha = coordinated.get(path, recovery.get(path))
                 self.assertEqual(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest(), sha)
 
 

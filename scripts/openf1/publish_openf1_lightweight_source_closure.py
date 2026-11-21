@@ -169,6 +169,11 @@ class NormalRequestBudget:
         self.restriction_events: List[str] = []
         self._rate_limit_fallback_pending = False
         self._rate_limit_fallback_consumed = False
+        # Actions entry points share a non-cancelling provider admission group.
+        # Every new process waits out the previous process's complete window,
+        # including a cancelled runner whose final request time is unknowable.
+        self.handover_seconds = 61.0 if (os.environ.get("F1_OPENF1_HANDOVER_REQUIRED") == "true" or os.environ.get("GITHUB_WORKFLOW") == "F1 Session Data Processor - Run Now Button") else 0.0
+        self.handover_complete = False
 
     def block(self, reason: str) -> None:
         if reason not in self.restriction_events:
@@ -202,6 +207,15 @@ class NormalRequestBudget:
             self.block_reason = "provider_rate_limited_http_429"
 
     def acquire(self, *, rate_limit_fallback: bool = False) -> None:
+        if not self.handover_complete:
+            remaining = self.handover_seconds
+            while remaining > 0:
+                wait = min(remaining, 30.5)
+                self.sleeper(wait)
+                self.total_wait_seconds += wait
+                remaining -= wait
+            self.logical_now = max(float(self.clock()), self.started + self.handover_seconds)
+            self.handover_complete = True
         fallback_authorized = (
             rate_limit_fallback
             and self._rate_limit_fallback_pending
@@ -267,6 +281,7 @@ class NormalRequestBudget:
             "rate_wait_seconds": round(self.total_wait_seconds, 3),
             "deferred_reason": self.block_reason,
             "restriction_events": list(self.restriction_events),
+            "cross_process_handover_seconds": self.handover_seconds,
             "credentials_or_paid_live_access_used": False,
         }
 
@@ -1425,10 +1440,27 @@ def openf1_get(
     status = "unknown"
     error = ""
     rows = 0
+    raw_record = None
     try:
         if budget is not None:
             budget.acquire(rate_limit_fallback=rate_limit_fallback)
         r = requests.get(url, params=clean_params, timeout=REQUEST_TIMEOUT)
+        if budget is not None and hasattr(budget, "raw_evidence"):
+            # Retain returned bytes, not a re-serialization of parsed rows. A
+            # later fetch is never substituted for the first observation.
+            raw = r.content
+            digest = hashlib.sha256(raw).hexdigest()
+            relative = f"raw/{digest}.json"
+            target = budget.raw_root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if target.exists() and target.read_bytes() != raw:
+                raise ValueError("raw_response_hash_collision")
+            target.write_bytes(raw)
+            raw_record = dict(endpoint=endpoint, params=clean_params,
+                              status_code=r.status_code, response_observed_utc=iso_now(),
+                              path=relative, sha256=digest, bytes=len(raw),
+                              origin=budget.raw_origin)
+            budget.raw_evidence.append(raw_record)
         status_code = getattr(r, "status_code", None)
         if type(status_code) is not int or not 100 <= status_code <= 599:
             status = "invalid_http_status"
@@ -1478,7 +1510,7 @@ def openf1_get(
         return pd.DataFrame()
     finally:
         request_log.append({
-            "timestamp_utc": iso_now(),
+            "timestamp_utc": raw_record["response_observed_utc"] if raw_record else iso_now(),
             "endpoint": endpoint,
             "strategy": strategy,
             "params_json": json.dumps(clean_params, sort_keys=True),
@@ -2451,11 +2483,63 @@ def create_zip(folder: Path, zip_path: Path) -> str:
         zip_path.unlink()
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for p in folder.rglob("*"):
-            if p.is_file() and p != zip_path:
+            if p.is_file() and p not in {zip_path, zip_path.with_suffix(zip_path.suffix + '.sha256.txt')}:
                 z.write(p, p.relative_to(folder))
     digest = hashlib.sha256(zip_path.read_bytes()).hexdigest()
     (zip_path.with_suffix(zip_path.suffix + ".sha256.txt")).write_text(f"{digest}  {zip_path.name}\n", encoding="utf-8")
     return digest
+
+
+def select_event_sessions(sessions, meeting_key, expected_session_key, now):
+    """Bound acquisition to one explicitly identified event, without archive promotion."""
+    reasons = []
+    if 'meeting_key' not in sessions.columns:
+        return sessions.iloc[0:0].copy(), ['event_session_discovery_missing']
+    selected = sessions[sessions['meeting_key'].astype(str) == meeting_key].copy()
+    if selected.empty:
+        return selected, ['event_not_in_verified_discovery']
+    eligible = []
+    for _, row in selected.iterrows():
+        end = _normal_utc(row.get('date_end'))
+        ready = end is not None and end + dt.timedelta(minutes=30) <= now
+        eligible.append(ready)
+        if end is not None and end <= now and not ready:
+            reasons.append('event_session_historical_window_pending:' + str(row['session_key']))
+    selected = selected[eligible].copy()
+    if selected.empty:
+        reasons.append('event_no_historical_sessions_available')
+    if expected_session_key and expected_session_key not in set(selected['session_key'].astype(str)):
+        reasons.append('expected_event_session_not_available:' + expected_session_key)
+    return selected, reasons
+
+
+def event_driver_integrity(sessions, frames, now):
+    """Check supplied event rows against the supplied roster; never invent roster authority."""
+    reasons = []
+    for _, session in sessions.iterrows():
+        key = session['session_key']
+        roster = _frame_for_session(frames['drivers'], key)
+        if 'driver_number' not in roster.columns:
+            reasons.append(f'event_driver_roster_missing:{key}')
+            continue
+        numbers = [_canonical_positive_integer(n) for n in roster['driver_number']]
+        if None in numbers or len(set(numbers)) != len(numbers):
+            reasons.append(f'event_driver_roster_invalid:{key}')
+        for lane, frame in frames.items():
+            scoped = _frame_for_session(frame, key)
+            if 'driver_number' in scoped.columns:
+                observed = {_canonical_positive_integer(n) for n in scoped['driver_number'] if not _missing_optional_value(n)}
+                if not observed.issubset(set(numbers)):
+                    reasons.append(f'event_driver_identity_mismatch:{key}:{lane}')
+                if lane == 'position' and observed != set(numbers):
+                    reasons.append(f'event_driver_position_coverage_incomplete:{key}')
+            if 'date' in scoped.columns:
+                for value in scoped['date']:
+                    stamp = _normal_utc(value)
+                    if stamp is None or stamp > now:
+                        reasons.append(f'event_row_clock_invalid:{key}:{lane}')
+                        break
+    return sorted(set(reasons))
 
 
 def main() -> int:
@@ -2463,6 +2547,8 @@ def main() -> int:
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--completed-only", default="true")
     parser.add_argument("--output-root", default=".")
+    parser.add_argument("--meeting-key", default="", help="Explicit event scope; never substitutes for historical season closure")
+    parser.add_argument("--expected-session-key", default="", help="Require this completed session in the explicit event scope")
     parser.add_argument("--provenance-shadow-session-key", default="")
     parser.add_argument("--provenance-shadow-endpoint", default=SHADOW_ENDPOINT)
     parser.add_argument("--github-repository", default="")
@@ -2477,6 +2563,10 @@ def main() -> int:
     season = int(args.season)
     completed_only = str(args.completed_only).lower() not in {"false", "0", "no"}
     output_root = Path(args.output_root).resolve()
+    if args.meeting_key and (_canonical_positive_integer(args.meeting_key) is None or not completed_only or args.provenance_shadow_session_key):
+        parser.error('event collection requires a canonical meeting key, completed-only and no shadow mode')
+    if args.expected_session_key and (not args.meeting_key or _canonical_positive_integer(args.expected_session_key) is None):
+        parser.error('expected session requires explicit event scope and a canonical session key')
     try:
         selected_shadow_endpoint = _selected_shadow_endpoint(
             args.provenance_shadow_endpoint
@@ -2517,10 +2607,11 @@ def main() -> int:
         return 0
 
     policy = load_policy()
-    latest_root = output_root / "latest" / "openf1_lightweight_source_closure"
+    collection_rel = Path('openf1_event_source_closure') / args.meeting_key if args.meeting_key else Path('openf1_lightweight_source_closure')
+    latest_root = output_root / "latest" / collection_rel
     history_root = (
-        output_root / "history" / "openf1_lightweight_source_closure"
-        / utc_now().strftime("%Y%m%d_%H%M%S")
+        output_root / "history" / collection_rel
+        / utc_now().strftime("%Y%m%d_%H%M%S_%f" if args.meeting_key else "%Y%m%d_%H%M%S")
     )
     data_latest = latest_root / "data"
     data_history = history_root / "data"
@@ -2542,7 +2633,7 @@ def main() -> int:
         )
 
     latest_root.mkdir(parents=True, exist_ok=True)
-    history_root.mkdir(parents=True, exist_ok=True)
+    history_root.mkdir(parents=True, exist_ok=False)
 
     request_log: List[Dict[str, Any]] = []
     budget = NormalRequestBudget(
@@ -2553,6 +2644,25 @@ def main() -> int:
         clock=time.monotonic,
         sleeper=time.sleep,
     )
+    if args.meeting_key:
+        budget.raw_root = latest_root
+        budget.raw_origin = {"repository": args.github_repository,
+                             "head_sha": args.github_sha, "run_id": args.github_run_id,
+                             "run_attempt": args.github_run_attempt}
+        budget.raw_evidence = []
+        previous_raw = latest_root / "raw_evidence.json"
+        if previous_raw.exists():
+            records = json.loads(previous_raw.read_text())
+            for record in records:
+                raw_path = latest_root / record["path"]
+                if (record["path"] != f"raw/{record['sha256']}.json"
+                        or raw_path.is_symlink() or not raw_path.is_file()
+                        or _sha256_path(raw_path) != record["sha256"]):
+                    raise ValueError("event_cache_raw_custody_invalid")
+            budget.raw_evidence.extend(records)
+        else:
+            # A CSV-only historical cache cannot acquire new observation times.
+            session_cache = {}
     previous_manifest_season = _canonical_positive_integer(
         previous_manifest.get("season")
     )
@@ -2576,11 +2686,14 @@ def main() -> int:
             previous_target_keys = set()
 
     sessions = get_sessions(season, completed_only, request_log, budget)
+    event_reasons = []
+    if args.meeting_key:
+        sessions, event_reasons = select_event_sessions(sessions, args.meeting_key, args.expected_session_key, utc_now())
     discovery_status = (
         str(request_log[0].get("status") or "unknown")
         if request_log else "not_observed"
     )
-    source_quality_reasons: List[str] = []
+    source_quality_reasons: List[str] = list(event_reasons)
     if discovery_status not in {"pass", "zero_rows", "not_observed"}:
         source_quality_reasons.append(_availability_reason(
             "session_discovery", discovery_status
@@ -2596,7 +2709,7 @@ def main() -> int:
         cache_evidence.get("known_target_session_keys") or []
     )
     missing_cache_targets = sorted(known_cache_target_keys - current_target_keys)
-    if missing_cache_targets:
+    if missing_cache_targets and not args.meeting_key:
         source_quality_reasons.append(
             "verified_cache_session_coverage_regression:"
             + ",".join(missing_cache_targets[:20])
@@ -2784,6 +2897,8 @@ def main() -> int:
         source_quality_reasons.append(
             f"required_lane_session_failures:{fail_count}"
         )
+    if args.meeting_key:
+        source_quality_reasons.extend(event_driver_integrity(sessions, combined_frames, utc_now()))
     source_quality_reasons = list(dict.fromkeys(source_quality_reasons))
     publication_eligible = not source_quality_reasons
     source_quality_status = (
@@ -2820,6 +2935,14 @@ def main() -> int:
             latest_root, snapshot_files
         ),
     }
+    if args.meeting_key:
+        raw_bytes = _json_bytes(budget.raw_evidence)
+        (latest_root / "raw_evidence.json").write_bytes(raw_bytes)
+        (history_root / "raw_evidence.json").write_bytes(raw_bytes)
+        for record in budget.raw_evidence:
+            target = history_root / record["path"]
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((latest_root / record["path"]).read_bytes())
     manifest = {
         "artifact_profile": "openf1-lightweight-source-closure",
         "generated_utc": generated_utc,
@@ -2849,7 +2972,18 @@ def main() -> int:
         "latest_zip": "openf1_lightweight_source_closure.zip",
         "history_path": str(history_root.relative_to(output_root)),
         "normal_collection": normal_collection,
+        "collection_scope": "event" if args.meeting_key else "historical_season",
+        "meeting_key": args.meeting_key or None,
+        "expected_session_key": args.expected_session_key or None,
+        "historical_archive_complete": publication_eligible if not args.meeting_key else False,
+        "official_roster_verified": False,
+        "official_final_grid_verified": False,
+        "scientific_readiness": "HOLD_NO_AUTHENTICATED_FORECAST_INPUT_CONTRACT",
     }
+    if args.meeting_key:
+        manifest["event_custody_schema"] = "openf1-event-byte-custody-v1"
+        manifest["github_origin"] = budget.raw_origin
+        manifest["raw_evidence_sha256"] = _sha256_path(latest_root / "raw_evidence.json")
     (latest_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (history_root / "latest_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     readiness_payload = {"generated_utc": generated_utc, "lanes": readiness_rows}
@@ -2903,6 +3037,9 @@ def main() -> int:
     print(f"History output: {history_root}")
     print(f"Latest ZIP SHA256: {zip_digest}")
     print(f"Pass lanes: {pass_count}; Pass with warnings lanes: {warning_count}; Fail lanes: {fail_count}")
+    print(json.dumps({'source_quality_reasons': source_quality_reasons,
+                      'cache_evidence': cache_evidence,
+                      'request_budget': budget.evidence()}, sort_keys=True))
     return 0 if publication_eligible else 1
 
 

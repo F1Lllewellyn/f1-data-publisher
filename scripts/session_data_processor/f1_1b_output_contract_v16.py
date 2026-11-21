@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""F1 1B Processor Output Contract v20 status normalization fix.
+"""F1 1B current-authority output contract with immutable context custody.
 
 Purpose:
-- Prefer the newest clean/usable processor readiness state instead of stale blocked manifests.
-- Normalize stale source/workbook statuses when readiness quality proves the run is source-backed and usable.
+- Revalidate the authoritative current session and its exact source/workbook bytes.
+- Retain original capture identity and fail closed on missing or stale evidence.
 - Create Forecast Bundle Ledger snapshots, last-good state, material-change reports, and downstream handoffs.
 
 Safety:
@@ -19,7 +19,11 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
+import importlib.util
 import json
+import os
+import re
+import uuid
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -27,6 +31,107 @@ SCHEMA_VERSION = "f1_1b_output_contract_v20"
 CLEANISH_SOURCE_STATES = {"clean", "usable", "source_backed", "partial"}
 CLEANISH_WORKBOOK_STATES = {"clean", "usable", "source_backed", "refresh_applied", "partial"}
 PROTECTED_MARKERS = ("Engine_2026-06-07_STABLE", "F1_2026_Prediction_Model_Data_Workbook")
+
+
+def current_custody(root: Path, now: dt.datetime) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Reverify authoritative current bytes; never rank old green manifests."""
+    path = Path(__file__).resolve().parents[1] / "dashboard_connector/publish_forecast_fantasy_readiness_dashboards_v1.py"
+    spec = importlib.util.spec_from_file_location("consumer_current_dashboard", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    state = module.discover_state(root, reference_time=now)
+    source = load_json(root / state["session_manifest"]) if state.get("session_manifest") else {}
+    source = source or {}
+    custody = {
+        "schema": "current-context-custody-v1",
+        "event_id": state.get("event_id"), "meeting_key": state.get("meeting_key"),
+        "session_key": state.get("session_key"), "expected_session_key": state.get("expected_session_key"),
+        "source_run_id": source.get("run_id"),
+        "capture_origin": source.get("capture_origin", {}),
+        "source_availability": {name: report.get("observed_at_utc") for name, report in source.get("sources", {}).items() if isinstance(report, dict)},
+        "input_fingerprints": state.get("consumed_fingerprints", {}),
+        "context_eligible": state.get("downstream_eligible") is True,
+        "prediction_locked": False, "stable_engine_executed": False,
+    }
+    return state, custody
+
+
+def safe_component(value: Any) -> str:
+    text = str(value)
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", text):
+        raise RuntimeError("HOLD_INVALID_OUTPUT_IDENTITY")
+    return text
+
+
+def bound_inputs(root: Path, paths: Dict[str, str]) -> Dict[str, str]:
+    result = {}
+    for relative in paths.values():
+        path = root / relative
+        if not path.is_file() or any(p.is_symlink() for p in (path, *path.parents)) or not path.resolve().is_relative_to(root.resolve()):
+            raise RuntimeError("HOLD_CONSUMER_INPUT_CUSTODY:" + relative)
+        result[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return result
+
+
+def verify_bound_chain(root: Path, documents: List[Dict[str, Any]], now: dt.datetime) -> Dict[str, Any]:
+    state, custody = current_custody(root, now)
+    if not custody["context_eligible"]:
+        raise RuntimeError("HOLD_CURRENT_CONTEXT:" + ",".join(state["readiness_reasons"]))
+    run_id = "context_" + sha256_json(custody)[:32]
+    for document in documents:
+        if document.get("custody") != custody or document.get("run_id") != run_id:
+            raise RuntimeError("HOLD_UPSTREAM_CONTEXT_IDENTITY")
+        event = document.get("event")
+        if event is not None and any(event.get(key) != custody[key] for key in ("event_id", "meeting_key", "session_key")):
+            raise RuntimeError("HOLD_UPSTREAM_EVENT_IDENTITY")
+    return custody
+
+
+class OutputBatch:
+    """Preflight every historical collision before publishing any latest file."""
+    def __init__(self, root: Path):
+        self.root = root.resolve()
+        self.outputs = {}
+
+    def add(self, path: Path, raw: bytes) -> None:
+        safe_write_path(path)
+        if not path.resolve().is_relative_to(self.root) or any(p.is_symlink() for p in (path, *path.parents)):
+            raise RuntimeError("HOLD_OUTPUT_PATH_CUSTODY")
+        if path in self.outputs and self.outputs[path] != raw:
+            raise RuntimeError("HOLD_CONFLICTING_OUTPUT_BATCH")
+        self.outputs[path] = raw
+
+    def json(self, path: Path, data: Any) -> None:
+        self.add(path, (json.dumps(data, indent=2, sort_keys=True) + "\n").encode())
+
+    def text(self, path: Path, data: str) -> None:
+        self.add(path, (data.rstrip() + "\n").encode())
+
+    def csv(self, path: Path, rows: List[Dict[str, Any]]) -> None:
+        import io
+        text = io.StringIO(newline="")
+        fields = list(dict.fromkeys(k for row in rows for k in row))
+        writer = csv.DictWriter(text, fieldnames=fields)
+        writer.writeheader(); writer.writerows(rows)
+        self.add(path, text.getvalue().encode())
+
+    def commit(self) -> None:
+        historical = lambda p: p.relative_to(self.root).parts[0] == "history"
+        for path, raw in self.outputs.items():
+            if historical(path) and path.exists() and path.read_bytes() != raw:
+                raise RuntimeError("HOLD_IMMUTABLE_HISTORY_COLLISION:" + str(path.relative_to(self.root)))
+        for path, raw in sorted(self.outputs.items(), key=lambda item: not historical(item[0])):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if path.exists() and path.read_bytes() == raw:
+                continue
+            if historical(path):
+                with path.open("xb") as out:
+                    out.write(raw)
+            else:
+                temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
+                with temporary.open("xb") as out:
+                    out.write(raw)
+                os.replace(temporary, path)
 
 
 def utc_now() -> dt.datetime:
@@ -294,33 +399,8 @@ def newest_by_score(paths: Iterable[Path], root: Path, kind: str) -> Tuple[Optio
 
 
 def find_latest_dashboard_manifest(root: Path) -> Tuple[Optional[Path], Dict[str, Any], List[Dict[str, Any]]]:
-    names = [
-        "combined_readiness_dashboard.json",
-        "forecast_fantasy_readiness_dashboard.json",
-        "dashboard_state.json",
-        "readiness_dashboard.json",
-        "forecast_fantasy_readiness_manifest.json",
-    ]
-    candidates: List[Path] = []
-    for name in names:
-        candidates += list((root / "latest").glob(f"**/{name}"))
-    rows: List[Dict[str, Any]] = []
-    best: Tuple[int, str, str, Optional[Path], Dict[str, Any]] = (-999, "", "", None, {})
-    for p in candidates:
-        data = load_json(p) or {}
-        score = 0
-        if normalize_status(data.get("source_status")) == "clean": score += 100
-        if bool(data.get("source_backed", False)): score += 50
-        if data.get("session_manifest"): score += 20
-        if data.get("workbook_manifest"): score += 20
-        if data.get("workbook_artifact"): score += 10
-        run_id = parse_run_id(data.get("run_id") or data.get("generated_at_utc") or data.get("created_utc"))
-        mtime = str(int(p.stat().st_mtime)) if p.exists() else ""
-        rows.append({"path": relpath(p, root), "score": score, "source_status": data.get("source_status"), "source_backed": data.get("source_backed"), "run_id": run_id})
-        key = (score, run_id, mtime, p, data)
-        if key[:3] > best[:3]:
-            best = key
-    return best[3], best[4], rows
+    path = root / "latest/readiness_dashboards/combined_readiness_dashboard.json"
+    return path if path.exists() else None, load_json(path) or {}, []
 
 
 def path_from_manifest_ref(root: Path, ref: Any) -> Optional[Path]:
@@ -364,75 +444,22 @@ def apply_dashboard_workbook_overlay(workbook: Dict[str, Any], dashboard: Dict[s
 
 
 def find_latest_session_manifest(root: Path) -> Tuple[Optional[Path], Dict[str, Any], Dict[str, Any]]:
-    dashboard_path, dashboard, dash_rows = find_latest_dashboard_manifest(root)
-    candidates: List[Path] = list((root / "latest" / "session_data_processor").glob("**/source_readiness_manifest.json"))
-    _, _, rows = newest_by_score(candidates, root, "source")
-    referenced = dashboard.get("session_manifest")
-    if referenced:
-        # An explicit reference identifies the session being handed off. Do
-        # not replace a blocked race with a higher-scoring qualifying session.
-        source_path = path_from_manifest_ref(root, referenced)
-        allowed_root = (root / "latest" / "session_data_processor").resolve()
-        if source_path and source_path.name == "source_readiness_manifest.json" and source_path.resolve().is_relative_to(allowed_root):
-            source = load_json(source_path) or {}
-            expected = dashboard.get("session_name") if isinstance(dashboard.get("session_name"), dict) else {}
-            actual = source.get("session") if isinstance(source.get("session"), dict) else source
-            expected_key, actual_key = expected.get("session_key"), actual.get("session_key")
-            expected_event, actual_event = dashboard.get("event_name"), source.get("race_name")
-            if (expected_key is not None and str(expected_key) != str(actual_key)) or (
-                expected_event and actual_event and str(expected_event).strip().lower() != str(actual_event).strip().lower()
-            ):
-                source = {"overall_status": "blocked", "source_needs_manual_review": True,
-                          "readiness_quality": "blocked_session_identity_mismatch",
-                          "session": expected, "race_name": expected_event,
-                          "source_identity_error": {"expected_session_key": expected_key, "actual_session_key": actual_key,
-                                                    "expected_event": expected_event, "actual_event": actual_event}}
-        else:
-            source_path = None
-            source = {"overall_status": "blocked", "source_needs_manual_review": True,
-                      "readiness_quality": "blocked_missing_session_manifest", "session": dashboard.get("session_name"),
-                      "source_identity_error": {"session_manifest": referenced, "reason": "missing_or_invalid_reference"}}
-        selection_rule = "follow_dashboard_session_manifest_or_block"
-    else:
-        # Legacy cases without an explicit session reference retain the v20
-        # clean-first selection rule until their producers supply identity.
-        source_path, source, _ = newest_by_score(candidates, root, "source")
-        selection_rule = "legacy_best_source_manifest_no_session_reference"
-    # A clean dashboard can resolve stale outward status only when the selected
-    # processor manifest has no critical gap for that same session.
-    if dashboard and normalize_status(dashboard.get("source_status")) == "clean" and not source.get("source_identity_error"):
-        source = apply_dashboard_source_overlay(source, dashboard)
-    selection = {
-        "dashboard_path": relpath(dashboard_path, root),
-        "dashboard_candidates": dash_rows,
-        "selected_source_manifest": relpath(source_path, root),
-        "source_candidates": rows,
-        "selection_rule": selection_rule,
-    }
-    return source_path, source, selection
+    state, custody = current_custody(root, utc_now())
+    path = root / state["session_manifest"] if state.get("session_manifest") else None
+    source = load_json(path) or {}
+    if not custody["context_eligible"]:
+        source.update(overall_status="blocked", source_needs_manual_review=True,
+                      source_identity_error={"reasons": state["readiness_reasons"]})
+    return path, source, {"selection_rule": "verified_current_authority_only", "custody": custody}
 
 
 def find_latest_workbook_manifest(root: Path) -> Tuple[Optional[Path], Dict[str, Any], Dict[str, Any]]:
-    dashboard_path, dashboard, dash_rows = find_latest_dashboard_manifest(root)
-    candidates: List[Path] = []
-    direct = root / "latest" / "workbook_kpi_refresh_applier" / "workbook_kpi_refresh_manifest.json"
-    if direct.exists():
-        candidates.append(direct)
-    candidates += list((root / "latest").glob("**/workbook_kpi_refresh_manifest.json"))
-    dp = path_from_manifest_ref(root, dashboard.get("workbook_manifest"))
-    if dp and dp not in candidates:
-        candidates.append(dp)
-    workbook_path, workbook, rows = newest_by_score(candidates, root, "workbook")
-    if dashboard:
-        workbook = apply_dashboard_workbook_overlay(workbook, dashboard)
-    selection = {
-        "dashboard_path": relpath(dashboard_path, root),
-        "dashboard_candidates": dash_rows,
-        "selected_workbook_manifest": relpath(workbook_path, root),
-        "workbook_candidates": rows,
-        "selection_rule": "prefer_clean_dashboard_backed_workbook_state_then_best_workbook_manifest",
-    }
-    return workbook_path, workbook, selection
+    state, custody = current_custody(root, utc_now())
+    path = root / state["workbook_manifest"] if state.get("workbook_manifest") else None
+    workbook = load_json(path) or {}
+    if not custody["context_eligible"]:
+        workbook.update(status="blocked", source_status="blocked", workbook_source_status="blocked")
+    return path, workbook, {"selection_rule": "verified_current_authority_only", "custody": custody}
 
 
 def classify_handoffs(source_manifest: Dict[str, Any], workbook_manifest: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
@@ -516,6 +543,14 @@ def build_snapshot(root: Path, run_id: str) -> Dict[str, Any]:
         "input_selection": {"source": source_selection, "workbook": workbook_selection, "dashboard_candidates": dash_rows},
         "handoffs": handoffs,
     }
+    snapshot["custody"] = source_selection["custody"]
+    snapshot["event"]["meeting_key"] = snapshot["custody"]["meeting_key"]
+    snapshot["original_capture_run_id"] = snapshot["custody"]["source_run_id"]
+    snapshot["capture_origin"] = snapshot["custody"]["capture_origin"]
+    snapshot["run_id"] = "context_" + sha256_json(snapshot["custody"])[:32]
+    previous = load_json(root / "history/forecast_bundle_ledger" / safe_component(event_id) / snapshot["run_id"] / "bundle_snapshot.json") or {}
+    if previous.get("custody") == snapshot["custody"]:
+        snapshot["generated_at_utc"] = previous.get("generated_at_utc", snapshot["generated_at_utc"])
     snapshot["signature"] = sha256_json({"status": snapshot["status"], "event": snapshot["event"], "source": snapshot["source"], "workbook": snapshot["workbook"], "handoffs": snapshot["handoffs"]})
     return snapshot
 
@@ -538,19 +573,25 @@ def detect_material_change(root: Path, snapshot: Dict[str, Any]) -> Dict[str, An
         "status": snapshot.get("status"),
         "promotion_allowed": False,
     }
-    write_json(root / "latest" / "material_change" / "material_change_report.json", report)
-    write_json(sig_path, {"signature": current_sig, "updated_at_utc": report["generated_at_utc"], "event": snapshot.get("event", {})})
+    history = root / "history/forecast_bundle_ledger" / safe_component(snapshot["event"]["event_id"]) / safe_component(snapshot["run_id"]) / "material_change_report.json"
+    previous_report = load_json(history)
+    if previous_report and previous_report.get("current_signature") == current_sig:
+        return previous_report
     return report
 
 
 def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str, Any]) -> Dict[str, Any]:
-    event_id = str(snapshot.get("event", {}).get("event_id") or "unknown_event").replace("/", "_").replace(" ", "_")
-    run_id = str(snapshot.get("run_id"))
+    batch = OutputBatch(root)
+    write_json, write_csv = batch.json, batch.csv
+    event_id = safe_component(snapshot.get("event", {}).get("event_id") or "unknown_event")
+    run_id = safe_component(snapshot.get("run_id"))
     latest_ledger = root / "latest" / "forecast_bundle_ledger"
     history_ledger = root / "history" / "forecast_bundle_ledger" / event_id / run_id
     handoff_root = root / "latest" / "readiness_handoff"
     output_root = root / "latest" / "1b_output_contract"
 
+    write_json(root / "latest/material_change/material_change_report.json", change_report)
+    write_json(root / "latest/material_change/last_signature.json", {"signature": snapshot["signature"], "updated_at_utc": change_report["generated_at_utc"], "event": snapshot["event"]})
     write_json(latest_ledger / "latest_bundle_snapshot.json", snapshot)
     write_json(history_ledger / "bundle_snapshot.json", snapshot)
     write_json(history_ledger / "material_change_report.json", change_report)
@@ -562,6 +603,8 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
         write_json(handoff_root / f"{name}_readiness.json", item)
     write_json(handoff_root / "combined_readiness_handoff.json", {
         "schema_version": "f1_1b_combined_readiness_handoff_v20",
+        "custody": snapshot["custody"],
+        "run_id": snapshot["run_id"],
         "generated_at_utc": snapshot.get("generated_at_utc"),
         "event": snapshot.get("event"),
         "source_status": snapshot.get("source", {}).get("status"),
@@ -588,6 +631,7 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
 
     contract_report = {
         "schema_version": "f1_1b_output_contract_report_v20",
+        "custody": snapshot["custody"],
         "status": "pass" if snapshot.get("source_backed") else "blocked",
         "generated_at_utc": snapshot.get("generated_at_utc"),
         "run_id": snapshot.get("run_id"),
@@ -612,6 +656,10 @@ def write_outputs(root: Path, snapshot: Dict[str, Any], change_report: Dict[str,
         },
     }
     write_json(output_root / "output_contract_report.json", contract_report)
+    _, fresh_custody = current_custody(root, utc_now())
+    if fresh_custody != snapshot.get("custody"):
+        raise RuntimeError("HOLD_CURRENT_CONTEXT_CHANGED_BEFORE_PUBLICATION")
+    batch.commit()
     return contract_report
 
 
@@ -628,7 +676,11 @@ def main() -> int:
     ap.add_argument("--mode", default="run_now", choices=["run_now", "safe_test"])
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
-    report = run(root, mode=args.mode)
+    try:
+        report = run(root, mode=args.mode)
+    except RuntimeError as exc:
+        print(json.dumps({"status": "HOLD", "reason": str(exc), "promotion_allowed": False, "prediction_locked": False}))
+        return 2
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report.get("status") in {"pass", "blocked"} else 1
 

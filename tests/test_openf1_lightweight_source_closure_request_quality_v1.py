@@ -686,8 +686,12 @@ class SourceClosureRequestQualityTests(unittest.TestCase):
                 "2026_1297_austin", "Austin", "post_event", True, 2026, False
             )
         self.assertEqual(len(steps), 1)
-        self.assertEqual(steps[0]["returncode"], 1)
-        self.assertEqual(len(calls), 1)
+        # #367 closes the scientific execution gate before any acquisition or
+        # producer call; a failed source therefore cannot reach writer/locker.
+        self.assertEqual(steps[0]["returncode"], 2)
+        self.assertEqual(steps[0]["reason"], "HOLD_POST_OUTCOME_NOT_PROSPECTIVE")
+        self.assertEqual(len(calls), 0)
+        self.assertFalse(steps[0]["prediction_locked"])
 
     def test_manual_shadow_entry_points_remain_separate(self):
         source = SCRIPT.read_text()

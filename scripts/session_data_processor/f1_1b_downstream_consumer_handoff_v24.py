@@ -18,9 +18,15 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
+
+_contract_spec = importlib.util.spec_from_file_location("current_consumer_contract", Path(__file__).with_name("f1_1b_output_contract_v16.py"))
+contract = importlib.util.module_from_spec(_contract_spec)
+_contract_spec.loader.exec_module(contract)
+
 
 SCHEMA_VERSION = "f1_1b_downstream_consumer_wiring_v24"
 PROTECTED_MARKERS = ("Engine_2026-06-07_STABLE", "F1_2026_Prediction_Model_Data_Workbook")
@@ -117,6 +123,8 @@ def load_contract_inputs(root: Path) -> Dict[str, Any]:
     }
     loaded = {name: load_json(path) for name, path in paths.items()}
     loaded["paths"] = {name: relpath(path, root) for name, path in paths.items()}
+    loaded["custody"] = contract.verify_bound_chain(root, [loaded["bundle"], loaded["combined_handoff"], loaded["output_contract"]], dt.datetime.fromisoformat(utc_now_iso().replace("Z", "+00:00")))
+    loaded["input_fingerprints"] = contract.bound_inputs(root, {k:v for k,v in loaded["paths"].items() if (root/v).is_file()})
     return loaded
 
 
@@ -165,8 +173,12 @@ def consumer_base_payload(root: Path, inputs: Dict[str, Any], consumer: str) -> 
     }
     common = {
         "schema_version": SCHEMA_VERSION,
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
         "consumer": consumer,
-        "generated_at_utc": utc_now_iso(),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "event": event,
         "run_id": run_id,
         "source_status": status["source_status"],
@@ -232,12 +244,17 @@ def build_consumer_payload(root: Path, inputs: Dict[str, Any], consumer: str) ->
 
 
 def write_outputs(root: Path, consumer_payloads: Dict[str, Dict[str, Any]], inputs: Dict[str, Any]) -> Dict[str, Any]:
+    contract.verify_bound_chain(root, [inputs["bundle"], inputs["combined_handoff"], inputs["output_contract"]], dt.datetime.fromisoformat(utc_now_iso().replace("Z", "+00:00")))
+    if contract.bound_inputs(root, {k:v for k,v in inputs["paths"].items() if (root/v).is_file()}) != inputs["input_fingerprints"]:
+        raise RuntimeError("HOLD_CONSUMED_BYTES_CHANGED")
+    batch = contract.OutputBatch(root)
+    write_json, write_csv = batch.json, batch.csv
     latest_root = root / "latest" / "downstream_consumers"
     bundle = inputs.get("bundle", {})
     event = bundle.get("event") or inputs.get("last_good", {}).get("event") or {}
-    event_id = str(event.get("event_id") or "unknown_event").replace("/", "_").replace(" ", "_")
+    event_id = contract.safe_component(event.get("event_id") or "unknown_event")
     run_id = str(bundle.get("run_id") or inputs.get("last_good", {}).get("run_id") or "unknown_run")
-    history_root = root / "history" / "downstream_consumers" / event_id / run_id
+    history_root = root / "history" / "downstream_consumers" / event_id / contract.safe_component(run_id)
     rows: List[Dict[str, Any]] = []
     for name, payload in consumer_payloads.items():
         write_json(latest_root / name / "consumer_input.json", payload)
@@ -254,7 +271,11 @@ def write_outputs(root: Path, consumer_payloads: Dict[str, Dict[str, Any]], inpu
         })
     combined = {
         "schema_version": SCHEMA_VERSION,
-        "generated_at_utc": utc_now_iso(),
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
+        "generated_at_utc": inputs["bundle"]["generated_at_utc"],
         "status": "pass" if any(p.get("consumer_readiness") != "blocked" for p in consumer_payloads.values()) else "blocked",
         "event": event,
         "run_id": run_id,
@@ -270,6 +291,10 @@ def write_outputs(root: Path, consumer_payloads: Dict[str, Dict[str, Any]], inpu
     write_json(history_root / "combined_downstream_consumer_manifest.json", combined)
     report = {
         "schema_version": SCHEMA_VERSION,
+        "custody": inputs["custody"],
+        "input_fingerprints": inputs["input_fingerprints"],
+        "original_capture_run_id": inputs["custody"].get("source_run_id"),
+        "capture_origin": inputs["custody"].get("capture_origin"),
         "status": combined["status"],
         "generated_at_utc": combined["generated_at_utc"],
         "event": event,
@@ -291,6 +316,7 @@ def write_outputs(root: Path, consumer_payloads: Dict[str, Dict[str, Any]], inpu
         "forecast_gate_activated": False,
     }
     write_json(latest_root / "downstream_consumer_wiring_report.json", report)
+    batch.commit()
     return report
 
 
@@ -305,7 +331,11 @@ def main() -> int:
     parser.add_argument("--repo-root", default=".")
     parser.add_argument("--mode", default="run_now", choices=["run_now", "safe_test"])
     args = parser.parse_args()
-    report = run(Path(args.repo_root).resolve(), mode=args.mode)
+    try:
+        report = run(Path(args.repo_root).resolve(), mode=args.mode)
+    except RuntimeError as exc:
+        print(json.dumps({"status": "HOLD", "reason": str(exc), "promotion_allowed": False, "prediction_locked": False}))
+        return 2
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report.get("status") in {"pass", "blocked"} else 1
 

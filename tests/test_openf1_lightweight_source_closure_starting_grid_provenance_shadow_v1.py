@@ -58,6 +58,9 @@ MODIFIED = {
 HISTORICAL_WORKFLOW_BLOB = "d277ceaaffbb148dbde4b0c32bfbbcd8664e4329"
 PREDECESSOR_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
 SUCCESSOR_WORKFLOW_BLOB = "bf56b47b3325458384bbb60148e3bb65030c41e6"
+RECOVERY_WORKFLOW_BLOB = "d543c2952b2803a03bda971a3121414e7268f399"
+COORDINATED_WORKFLOW_BLOB = "cc0137daad3dba01c56956958cd7efdc7d097c88"
+EVENT_CUSTODY_WORKFLOW_BLOB = "dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84"
 PREDECESSOR_PUBLICATION_BLOCK = b'''      - name: Commit source closure outputs
         if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
         run: |
@@ -125,6 +128,12 @@ def assert_authorized_workflow_compatibility(testcase, workflow):
     )
 
     active_blob = git_blob_sha(workflow)
+    if active_blob in {RECOVERY_WORKFLOW_BLOB, EVENT_CUSTODY_WORKFLOW_BLOB, COORDINATED_WORKFLOW_BLOB}:
+        # Reuse the exact reversible upload-only delta proof, rather than accept
+        # arbitrary new bytes or relax manual-shadow/publication safety controls.
+        from test_f1_source_closure_publish_guard_v1 import require_protected_workflow
+        testcase.assertEqual(require_protected_workflow(workflow.decode()), predecessor)
+        return active_blob
     testcase.assertIn(active_blob, {
         PREDECESSOR_WORKFLOW_BLOB, SUCCESSOR_WORKFLOW_BLOB,
     })
@@ -1033,7 +1042,10 @@ class StartingGridProvenanceShadowTests(unittest.TestCase):
     def test_workflow_compatibility_rejects_unauthorized_mutations(self):
         predecessor = git_blob_bytes(PREDECESSOR_WORKFLOW_BLOB)
         successor = git_blob_bytes(SUCCESSOR_WORKFLOW_BLOB)
+        recovery = WORKFLOW.read_bytes()
         cases = {
+            "recovery_publication_gate": recovery.replace(b"if: ${{ success()", b"if: ${{ always()", 1),
+            "recovery_custody": recovery.replace(b"--artifact-uploaded-for-run", b"--artifact-not-bound", 1),
             "manual_input": predecessor.replace(
                 b"          - weather\n", b"          - weather_changed\n", 1
             ),

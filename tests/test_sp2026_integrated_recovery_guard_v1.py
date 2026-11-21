@@ -50,6 +50,51 @@ processor_mod = load_module(
 peak_mod = load_module("sp2026_peak", "scripts/ops/f1_peak_elite_orchestrator_v1.py")
 
 
+def write(path, obj):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, sort_keys=True))
+
+
+def bind_synthetic_fixture(root):
+    """Complete older label-only fixtures with explicit synthetic raw-byte custody."""
+    selector_path = root / "latest/latest_manifest.json"
+    selector = json.loads(selector_path.read_text())
+    pointer = selector["latest_session_data_processor_manifest"]
+    source_path = root / pointer
+    source = json.loads(source_path.read_text())
+    session = source["session"]
+    schedule_rel = selector.get("session_schedule_snapshot")
+    if not schedule_rel:
+        schedule_rel = f"latest/session_data_processor/{selector['event_id']}/session_schedule_snapshot.json"
+        write(root / schedule_rel, dict(schema_version="meeting_schedule_snapshot_v1",
+              source="OpenF1 sessions catalog", event_id=selector["event_id"], meeting_key=session["meeting_key"],
+              observed_at_utc=selector["updated_utc"], source_fetch=dict(ok=True, status_code=200),
+              catalog_entries_valid=True, sessions=[session]))
+        selector["session_schedule_snapshot"] = schedule_rel
+        selector["session_schedule_sha256"] = hashlib.sha256((root / schedule_rel).read_bytes()).hexdigest()
+        write(selector_path, selector)
+    source["sources"] = {}
+    for name, summary in source["readiness_aggregation"]["per_source"].items():
+        raw_path = source_path.parent / "raw" / f"{name}.json"
+        rows = [dict(session_key=session["session_key"], meeting_key=session["meeting_key"],
+                     driver_number=i + 1, date=session["date_start"], fixture="SYNTHETIC")
+                for i in range(summary["rows"])]
+        write(raw_path, rows)
+        source["sources"][name] = dict(json_path=raw_path.relative_to(root).as_posix(),
+            json_sha256=hashlib.sha256(raw_path.read_bytes()).hexdigest(), observed_at_utc=selector["updated_utc"])
+    write(source_path, source)
+    workbook_path = root / "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json"
+    workbook = json.loads(workbook_path.read_text())
+    for output in workbook["outputs"]:
+        raw = (root / output["path"]).read_bytes()
+        output.update(sha256=hashlib.sha256(raw).hexdigest(), bytes=len(raw))
+    workbook["authority_fingerprints"] = {
+        relative: hashlib.sha256((root / relative).read_bytes()).hexdigest()
+        for relative in ("latest/latest_manifest.json", "latest/data_readiness.json", "latest/combined_source_manifest.json", pointer)
+    }
+    write(workbook_path, workbook)
+
+
 class CurrentSessionReadinessTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -119,6 +164,7 @@ class CurrentSessionReadinessTests(unittest.TestCase):
         selector = json.loads((self.root / "latest/latest_manifest.json").read_text(encoding="utf-8"))
         selector["session_schedule_sha256"] = hashlib.sha256((self.root / SCHEDULE_REL).read_bytes()).hexdigest()
         self.put("latest/latest_manifest.json", selector)
+        bind_synthetic_fixture(self.root)
 
     def observe(self, iso_time):
         t = datetime.fromisoformat(iso_time.replace("Z", "+00:00"))

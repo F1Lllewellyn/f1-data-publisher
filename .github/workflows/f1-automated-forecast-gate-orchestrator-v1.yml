@@ -54,11 +54,11 @@ on:
     - cron: '7,22,37,52 * * * 5,6,0'
 
 permissions:
-  contents: write
+  contents: read
   actions: read
 
 concurrency:
-  group: f1-automated-forecast-gate-orchestrator-${{ github.ref }}
+  group: f1-main-write-serialization
   cancel-in-progress: false
 
 jobs:
@@ -76,7 +76,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -113,62 +114,4 @@ jobs:
           name: f1-automated-forecast-gate-orchestrator-v1
           path: |
             _runtime/forecast_gate_orchestrator/**
-            latest/openf1_lightweight_source_closure/**
-            latest/forecasts/**
-            latest/forecast_outputs/**
-            latest/forecast_chain_readiness/**
-            latest/forecast_bundles/**
-            history/openf1_lightweight_source_closure/**
-            history/forecasts/**
-            history/forecast_outputs/**
-            history/forecast_chain_readiness/**
-            history/forecast_bundles/**
-          if-no-files-found: ignore
-
-      - name: Commit orchestrator outputs
-        if: ${{ success() && env.COMMIT_OUTPUTS == 'true' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          candidates=(
-            "latest/openf1_lightweight_source_closure"
-            "history/openf1_lightweight_source_closure"
-            "latest/forecasts"
-            "latest/forecast_outputs"
-            "latest/forecast_chain_readiness"
-            "latest/forecast_bundles"
-            "history/forecasts"
-            "history/forecast_outputs"
-            "history/forecast_chain_readiness"
-            "history/forecast_bundles"
-          )
-
-          echo "Runtime diagnostics are uploaded as artifacts and intentionally not committed because _runtime is gitignored."
-
-          added=0
-          for p in "${candidates[@]}"; do
-            if [ -e "$p" ]; then
-              if git check-ignore -q "$p"; then
-                echo "Skipping ignored path: $p"
-                continue
-              fi
-              git add "$p"
-              added=1
-            fi
-          done
-
-          if [ "$added" = "0" ]; then
-            echo "No orchestrator output paths exist to commit."
-            exit 0
-          fi
-
-          if git diff --cached --quiet; then
-            echo "No orchestrator changes to commit."
-            exit 0
-          fi
-
-          git commit -m "chore: automated forecast gate orchestration outputs"
-          bash scripts/ops/safe_git_push_rebase_retry.sh
+          if-no-files-found: warn

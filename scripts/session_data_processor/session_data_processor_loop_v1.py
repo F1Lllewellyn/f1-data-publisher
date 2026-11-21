@@ -21,12 +21,14 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 ROOT = Path.cwd()
 POLICY_PATH = ROOT / "configs" / "session_data_processor" / "session_data_processor_policy_v1.json"
 RUNTIME = ROOT / "_runtime" / "session_data_processor"
+REQUEST_BUDGET = None
 DEFAULT_ENDPOINTS = ["drivers", "laps", "intervals", "position", "pit", "stints", "race_control", "weather", "session_result", "starting_grid"]
 GATE_BY_SESSION_NAME = {
     "practice 1": "post_fp1",
@@ -87,7 +89,7 @@ def parse_time(value: Any) -> Optional[dt.datetime]:
         text = str(value).replace("Z", "+00:00")
         d = dt.datetime.fromisoformat(text)
         if d.tzinfo is None:
-            d = d.replace(tzinfo=dt.timezone.utc)
+            return None
         return d.astimezone(dt.timezone.utc)
     except Exception:
         return None
@@ -106,24 +108,38 @@ def sha256_file(path: Path) -> str:
 
 
 def http_json(url: str, timeout: int = 30, retries: int = 2, sleep_seconds: float = 1.0) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    last_error = None
-    for attempt in range(retries + 1):
+    # Reuse the accepted dual-window limiter. Do not retry authentication,
+    # throttling or outages once per endpoint across an entire meeting.
+    global REQUEST_BUDGET
+    if REQUEST_BUDGET is None:
+        helper = str(Path(__file__).resolve().parents[1] / "openf1")
+        if helper not in sys.path:
+            sys.path.insert(0, helper)
+        from publish_openf1_lightweight_source_closure import NormalRequestBudget
+        REQUEST_BUDGET = NormalRequestBudget(max_requests=64, max_elapsed_seconds=300)
+    try:
+        REQUEST_BUDGET.acquire()
+        req = urllib.request.Request(url, headers={"User-Agent": "F1-Prediction-Engine-SessionProcessor/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read()
+            status = getattr(resp, "status", 200)
+        receipt = {"status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now(), "request_url": url, "_response_hex": raw.hex()}
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "F1-Prediction-Engine-SessionProcessor/1.0"})
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                raw = resp.read()
-                status = getattr(resp, "status", 200)
             data = json.loads(raw.decode("utf-8"))
-            if isinstance(data, list):
-                return data, {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw)}
-            if isinstance(data, dict):
-                return [data], {"ok": True, "status_code": status, "bytes": len(raw), "sha256": sha256_bytes(raw), "wrapped_dict": True}
-            return [], {"ok": False, "status_code": status, "error": "unexpected_json_type", "bytes": len(raw)}
-        except Exception as exc:
-            last_error = repr(exc)
-            if attempt < retries:
-                time.sleep(sleep_seconds)
-    return [], {"ok": False, "error": last_error or "unknown_error", "bytes": 0}
+        except (ValueError, UnicodeError):
+            data = None
+        if status != 200 or not isinstance(data, list) or any(not isinstance(row, dict) for row in data):
+            REQUEST_BUDGET.block("invalid_endpoint_response")
+            return [], dict(receipt, ok=False, error="invalid_endpoint_response")
+        return data, dict(receipt, ok=True)
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403, 429) or exc.code >= 500:
+            REQUEST_BUDGET.block(f"provider_http_{exc.code}")
+        raw = exc.read()
+        return [], {"ok": False, "status_code": exc.code, "error": f"HOLD_PROVIDER_HTTP_{exc.code}", "bytes": len(raw), "sha256": sha256_bytes(raw), "observed_at_utc": iso_now(), "request_url": url, "_response_hex": raw.hex()}
+    except Exception as exc:
+        REQUEST_BUDGET.block("provider_transport_or_budget_failure")
+        return [], {"ok": False, "error": f"HOLD_PROVIDER:{type(exc).__name__}:{exc}", "bytes": 0}
 
 
 def openf1_url(endpoint: str, params: Dict[str, Any]) -> str:
@@ -184,18 +200,28 @@ def grid_integrity_anomalies(rows: List[Dict[str, Any]], drivers: List[Dict[str,
 def select_recent_completed_session(sessions: List[Dict[str, Any]], now: dt.datetime, lookback_hours: int, forced_session: str = "auto") -> Optional[Dict[str, Any]]:
     forced = (forced_session or "auto").lower().strip()
     candidates: List[Tuple[dt.datetime, Dict[str, Any]]] = []
+    seen = set()
     for s in sessions:
+        if not isinstance(s, dict):
+            return None
+        key = str(s.get("session_key", ""))
+        if (key in seen or not re.fullmatch(r"[1-9][0-9]*", key)
+                or not re.fullmatch(r"[1-9][0-9]*", str(s.get("meeting_key", "")))):
+            return None
+        seen.add(key)
         start = parse_time(s.get("date_start"))
-        end = parse_time(s.get("date_end")) or start
-        if not end:
+        end = parse_time(s.get("date_end"))
+        if not start or not end or end <= start:
             continue
         name = str(s.get("session_name") or "").lower()
         if forced not in {"", "auto", "latest"} and forced not in name:
             continue
-        # Completed or near-completed sessions in recent lookback.
+        # Only an explicitly ended session is a completed-session candidate.
         if end <= now and now - end <= dt.timedelta(hours=lookback_hours):
             candidates.append((end, s))
     candidates.sort(key=lambda x: x[0], reverse=True)
+    if len(candidates) > 1 and candidates[0][0] == candidates[1][0]:
+        return None
     return candidates[0][1] if candidates else None
 
 
@@ -269,9 +295,9 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
     future_timestamps = 0
     now = utc_now()
     for r in rows:
-        if "session_key" in r and session_key is not None and str(r.get("session_key")) != str(session_key):
+        if session_key is None or str(r.get("session_key")) != str(session_key):
             wrong_session += 1
-        if "meeting_key" in r and meeting_key is not None and str(r.get("meeting_key")) != str(meeting_key):
+        if meeting_key is None or str(r.get("meeting_key")) != str(meeting_key):
             wrong_meeting += 1
         if r.get("driver_number") not in (None, ""):
             driver_numbers.add(str(r.get("driver_number")))
@@ -284,7 +310,7 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
                 t = parse_time(r.get(tk))
                 if not t:
                     bad_timestamps += 1
-                elif t > now + dt.timedelta(minutes=5):
+                elif t > now:
                     future_timestamps += 1
                 break
 
@@ -322,6 +348,39 @@ def analyze_rows(endpoint: str, rows: List[Dict[str, Any]], session: Dict[str, A
         "anomalies": anomalies,
         "fetch": fetch_meta,
     }
+
+
+def validate_driver_custody(source_reports, endpoint_rows):
+    """Bind driver-keyed data to this capture's supplied roster, not FIA authority."""
+    def number(value):
+        return int(value) if type(value) in (int, str) and re.fullmatch(r"[1-9][0-9]*", str(value)) else None
+
+    roster_rows = endpoint_rows.get("drivers", [])
+    roster_values = [number(row.get("driver_number")) for row in roster_rows]
+    roster = set(roster_values)
+    roster_valid = bool(roster) and None not in roster and len(roster) == len(roster_values)
+    keyed = {"drivers", "laps", "intervals", "position", "pit", "stints", "session_result", "starting_grid"}
+    for endpoint in keyed:
+        report = source_reports.get(f"openf1_{endpoint}")
+        if not isinstance(report, dict):
+            continue
+        rows = endpoint_rows.get(endpoint, [])
+        issues = []
+        if not roster_valid:
+            issues.append("supplied_driver_roster_missing_invalid_or_duplicated")
+        invalid = sum(number(row.get("driver_number")) is None for row in rows)
+        unknown = sorted({str(row.get("driver_number")) for row in rows
+                          if number(row.get("driver_number")) not in roster})
+        if invalid:
+            issues.append(f"invalid_driver_number_rows={invalid}")
+        if unknown:
+            issues.append("drivers_outside_supplied_roster=" + ",".join(unknown))
+        report["driver_custody"] = {"supplied_roster_verified": roster_valid,
+            "roster_source": "openf1_drivers", "roster_json_sha256": source_reports.get("openf1_drivers", {}).get("json_sha256"),
+            "official_entry_list_verified": False, "issues": issues}
+        if issues and (rows or endpoint == "drivers"):
+            report["anomalies"].extend(issues)
+            report["status"] = "conflicting"
 
 
 def combined_status(source_reports: Dict[str, Dict[str, Any]]) -> str:
@@ -548,6 +607,8 @@ def write_ledger_snapshot(out_root: Path, manifest: Dict[str, Any]) -> Dict[str,
 
 
 def main() -> int:
+    global REQUEST_BUDGET
+    REQUEST_BUDGET = None
     ap = argparse.ArgumentParser(description="Sandbox Session Data Processor Loop v1")
     ap.add_argument("--mode", default="run_now", choices=["safe_test", "run_now", "manual_session", "manifest_audit"])
     ap.add_argument("--season", type=int, default=2026)
@@ -561,7 +622,7 @@ def main() -> int:
     args = ap.parse_args()
 
     RUNTIME.mkdir(parents=True, exist_ok=True)
-    run_id = utc_now().strftime("%Y%m%dT%H%M%SZ")
+    run_id = utc_now().strftime("%Y%m%dT%H%M%S%fZ")
     policy = read_json(POLICY_PATH, {})
     result: Dict[str, Any] = {
         "schema_version": "session_processor_result_v1",
@@ -604,13 +665,17 @@ def main() -> int:
         return 0
 
     sessions, sessions_meta = fetch_sessions(args.season)
-    catalog_observed_at_utc = iso_now()  # Response observed now, not at later publication.
+    catalog_wire = sessions_meta.pop("_response_hex", None)
+    catalog_observed_at_utc = sessions_meta.get("observed_at_utc") or iso_now()
+    if catalog_wire is not None:
+        # Preserve diagnostics even when discovery is denied or malformed.
+        (RUNTIME / "session_catalog_response.bin").write_bytes(bytes.fromhex(catalog_wire))
     result["sessions_fetch"] = sessions_meta
-    if not sessions:
-        result.update({"status": "late", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
+    if not sessions or sessions_meta.get("ok") is not True:
+        result.update({"status": "HOLD", "reason": "openf1_sessions_unavailable_or_empty", "manifest_staleness": staleness_scan()})
         write_json(RUNTIME / "session_processor_result.json", result)
         print(json.dumps(result, indent=2, sort_keys=True))
-        return 0
+        return 2
 
     lookback = int(policy.get("recent_session_lookback_hours", 36))
     session = select_recent_completed_session(sessions, utc_now(), lookback, args.session_filter)
@@ -626,8 +691,11 @@ def main() -> int:
     session_slug = slugify(f"{session.get('session_name')}_{session.get('session_key')}")
     latest_root = ROOT / "latest" / "session_data_processor" / event_id / session_slug
     history_root = ROOT / "history" / "session_data_processor" / event_id / run_id / session_slug
-    for p in [latest_root, history_root]:
-        p.mkdir(parents=True, exist_ok=True)
+    history_root.mkdir(parents=True, exist_ok=False)
+    latest_root.mkdir(parents=True, exist_ok=True)
+    if catalog_wire is not None:
+        for destination in (latest_root, history_root):
+            (destination / "session_catalog_response.bin").write_bytes(bytes.fromhex(catalog_wire))
 
     endpoint_list = list(policy.get("openf1_endpoints") or DEFAULT_ENDPOINTS)
     if args.include_heavy:
@@ -635,6 +703,7 @@ def main() -> int:
 
     sources: Dict[str, Dict[str, Any]] = {}
     target_drivers: List[Dict[str, Any]] = []
+    endpoint_rows: Dict[str, List[Dict[str, Any]]] = {}
     for endpoint in endpoint_list:
         source_session = session
         grid_resolution = None
@@ -658,20 +727,33 @@ def main() -> int:
                     if candidate is not None:
                         source_session = candidate
                         rows, meta = http_json(openf1_url(endpoint, {"session_key": candidate["session_key"]}), timeout=args.timeout)
-        observed_at_utc = iso_now()
+        observed_at_utc = meta.get("observed_at_utc") or (catalog_observed_at_utc if endpoint == "sessions" else iso_now())
+        response_hex = meta.pop("_response_hex", None)
         if endpoint == "drivers":
             target_drivers = rows
         raw_json = latest_root / "raw" / f"openf1_{endpoint}.json"
         raw_csv = latest_root / "raw" / f"openf1_{endpoint}.csv"
-        write_json(raw_json, rows)
+        if response_hex is not None and meta.get("ok"):
+            raw_json.parent.mkdir(parents=True, exist_ok=True)
+            raw_json.write_bytes(bytes.fromhex(response_hex))
+        else:
+            write_json(raw_json, rows)
+        if response_hex is not None and not meta.get("ok"):
+            for destination in (latest_root, history_root):
+                (destination / "raw").mkdir(parents=True, exist_ok=True)
+                (destination / "raw" / f"openf1_{endpoint}_error.bin").write_bytes(bytes.fromhex(response_hex))
         rows_to_csv(raw_csv, rows)
         # mirror to history
-        write_json(history_root / "raw" / f"openf1_{endpoint}.json", rows)
+        history_json = history_root / "raw" / f"openf1_{endpoint}.json"
+        history_json.parent.mkdir(parents=True, exist_ok=True)
+        history_json.write_bytes(raw_json.read_bytes())
         rows_to_csv(history_root / "raw" / f"openf1_{endpoint}.csv", rows)
         report = analyze_rows(endpoint, rows, source_session, meta)
+        report["observed_at_utc"] = observed_at_utc
         report["json_path"] = str(raw_json.relative_to(ROOT))
         report["csv_path"] = str(raw_csv.relative_to(ROOT))
         report["json_sha256"] = sha256_file(raw_json)
+        report["original_response_bytes_retained"] = response_hex is not None or (endpoint == "sessions" and catalog_wire is not None)
         if endpoint == "starting_grid" and grid_resolution is not None:
             start = parse_time(session.get("date_start"))
             observed = parse_time(observed_at_utc)
@@ -721,6 +803,11 @@ def main() -> int:
             if source_session is not session and not rows and not meta.get("ok"):
                 report["anomalies"].append("qualifying_grid_unavailable")
         sources[f"openf1_{endpoint}"] = report
+        endpoint_rows[endpoint] = rows
+
+    validate_driver_custody(sources, endpoint_rows)
+    for name, report in sources.items():
+        endpoint = report["endpoint"]
         write_json(latest_root / "validation" / f"openf1_{endpoint}_validation.json", report)
         write_json(history_root / "validation" / f"openf1_{endpoint}_validation.json", report)
 
@@ -787,6 +874,22 @@ def main() -> int:
         "promotion_allowed": False,
     }
 
+    # Keep the original workflow identity alongside the local capture identifier.
+    # Missing Actions identity remains missing for isolated/local captures.
+    manifest["capture_origin"] = {
+        "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+        "head_sha": os.environ.get("GITHUB_SHA", ""),
+        "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+        "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+        "workflow": os.environ.get("GITHUB_WORKFLOW", ""),
+    }
+    manifest["session_catalog_custody"] = {
+        "path": str((latest_root / "session_catalog_response.bin").relative_to(ROOT)) if catalog_wire is not None else None,
+        "sha256": sha256_bytes(bytes.fromhex(catalog_wire)) if catalog_wire is not None else None,
+        "observed_at_utc": catalog_observed_at_utc,
+        "original_response_bytes_retained": catalog_wire is not None,
+    }
+
     schedule_snapshot_path = write_session_schedule_snapshot(
         sessions, session, event_id, run_id,
         catalog_observed_at_utc=catalog_observed_at_utc, sessions_fetch=sessions_meta,
@@ -822,6 +925,7 @@ def main() -> int:
         "history_output": str(history_root.relative_to(ROOT)),
         "source_counts": {k: v.get("rows") for k, v in sources.items()},
         "source_statuses": {k: v.get("status") for k, v in sources.items()},
+        "provider_budget": REQUEST_BUDGET.evidence() if REQUEST_BUDGET is not None else None,
     })
     write_json(RUNTIME / "session_processor_result.json", result)
     print(json.dumps(result, indent=2, sort_keys=True))

@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   output-contract-after-control-room:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -44,6 +44,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Verify committed upstream run and current session bytes
+        env:
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_input
 
       - name: Write bridge trigger report
         shell: bash
@@ -77,7 +87,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/ops/f1_1b_v16_acceptance_tests_v1.py --repo-root .
+          python -m unittest discover -s tests -p 'test_f1_1b_integrated_recovery_consumer_custody.py' -v
 
       - name: Run output contract ledger and handoff
         shell: bash
@@ -85,23 +95,11 @@ jobs:
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_output_contract_v16.py --repo-root . --mode run_now
 
-      - name: Run v24 downstream consumer acceptance tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/ops/f1_1b_v24_acceptance_tests_v1.py --repo-root .
-
       - name: Run v24 downstream consumer handoff writer
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py --repo-root . --mode run_now
-
-      - name: Run v25 consumer context acceptance tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/ops/f1_1b_v25_acceptance_tests_v1.py --repo-root .
 
       - name: Run v25 consumer context publisher and trigger governor
         shell: bash
@@ -109,9 +107,19 @@ jobs:
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py --repo-root . --mode run_now
 
+      - name: Reverify upstream bytes after downstream consumption
+        env:
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_output
+
       - name: Write bridge completion marker
         shell: bash
-        if: always()
+        if: success()
         run: |
           set -euo pipefail
           mkdir -p latest/1b_output_contract
@@ -137,29 +145,14 @@ jobs:
           path: |
             latest/1b_output_contract/**
             latest/1b_validation/**
-            latest/session_data_processor/**
-            history/session_data_processor/**
-            latest/workbook_kpi_refresh_applier/**
-            history/workbook_kpi_refresh_applier/**
-            latest/readiness_dashboards/**
-            history/readiness_dashboards/**
-            latest/forecast_bundle_ledger/**
-            latest/material_change/**
+            _runtime/1b_output_contract/**
             latest/readiness_handoff/**
-            latest/last_good_state.json
             latest/downstream_consumers/**
-            latest/chat_context/**
             latest/consumer_trigger_governor/**
-            latest/notification_routing/**
-            history/forecast_bundle_ledger/**
-            history/downstream_consumers/**
-            history/chat_context/**
-            history/consumer_trigger_governor/**
-            history/notification_routing/**
           if-no-files-found: ignore
 
       - name: Commit v25 output-contract bridge, downstream, context, and trigger artifacts
-        if: ${{ github.event_name == 'workflow_run' || github.event.inputs.commit_outputs == 'true' }}
+        if: ${{ success() && (github.event_name == 'workflow_run' || github.event.inputs.commit_outputs == 'true') }}
         shell: bash
         run: |
           set -euo pipefail
@@ -173,6 +166,15 @@ jobs:
           if git status --porcelain --untracked-files=no | grep -E "$PROTECTED_PATTERN"; then
             echo "Protected stable engine or canonical workbook touched. Blocking commit."
             exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            echo "HOLD_PRESTAGED_INPUT"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- history; then
+            echo "HOLD_HISTORICAL_EVIDENCE_MUTATION"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- .github scripts configs docs .gitignore; then
+            echo "HOLD_UNREVIEWED_CODE_MUTATION"; exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

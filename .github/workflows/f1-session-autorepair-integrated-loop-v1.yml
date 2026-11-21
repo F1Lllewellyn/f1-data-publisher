@@ -13,14 +13,13 @@ on:
         description: 'Optional. Leave auto, or use practice 1, practice 2, practice 3, qualifying, race.'
         required: false
         default: 'auto'
-  schedule:
-    - cron: '8,23,38,53 * * * 5,6,0'
 
 permissions:
   contents: write
   actions: read
 
 env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 concurrency:
@@ -40,6 +39,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
 
+      - name: Mark integrated run custody
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _runtime/autorepair_integrated_health
+          touch _runtime/autorepair_integrated_health/start.marker
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -55,12 +61,13 @@ jobs:
             --mode legacy_yield \
             --workflow-name "F1 Session Processor + Auto-Repair Integrated Loop v1" \
             --recent-minutes 90
-          if grep -q '"should_yield": true' latest/legacy_workflow_hardening/f1-session-processor-plus-auto-repair-integrated-loop-v1_guard.json; then
+          if grep -q '"should_yield": true' latest/legacy_workflow_hardening/f1-session-processor-plus-auto-repair-integrated-loop-v1_guard.json &&
+             python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root "$GITHUB_WORKSPACE" --operation verify_bridge_input; then
             echo "should_yield=true" >> "$GITHUB_OUTPUT"
-            echo "Legacy integrated loop yielded to recent canonical Control Room chain."
+            echo "Integrated loop yielded to verified current canonical capture bytes."
           else
             echo "should_yield=false" >> "$GITHUB_OUTPUT"
-            echo "Legacy integrated loop allowed; no recent canonical run detected."
+            echo "Integrated capture allowed; no verified current canonical capture."
           fi
 
       - name: Install dependencies
@@ -144,34 +151,35 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          MARKER="_runtime/autorepair_integrated_health/start.marker"
+          test -f "$MARKER" || { echo "HOLD_MISSING_RUN_MARKER"; exit 1; }
+          PROTECTED_PATTERN='Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook\.xlsx|F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated\.xlsx'
+          if git status --porcelain | grep -E "$PROTECTED_PATTERN"; then
+            echo "HOLD_PROTECTED_ASSET_MUTATION"; exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            echo "HOLD_PRESTAGED_INPUT"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- history; then
+            echo "HOLD_HISTORICAL_EVIDENCE_MUTATION"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- .github scripts configs docs .gitignore; then
+            echo "HOLD_UNREVIEWED_CODE_MUTATION"; exit 1
+          fi
           COMMIT_ALLOWED="false"
           if [ -f "_runtime/autorepair/session_workbook_recovery/commit_allowed.txt" ]; then
             COMMIT_ALLOWED=$(cat _runtime/autorepair/session_workbook_recovery/commit_allowed.txt | tr '[:upper:]' '[:lower:]')
           fi
-          echo "commit_allowed=$COMMIT_ALLOWED"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ "$COMMIT_ALLOWED" != "true" ]; then
-            echo "Source output commit held; publishing only diagnostic readiness/HOLD state."
-            for p in latest/readiness_dashboards history/readiness_dashboards latest/chat_context history/chat_context; do
-              if [ -e "$p" ] && ! git check-ignore -q "$p"; then
-                git add "$p"
-              fi
-            done
-            if ! git diff --cached --quiet; then
-              git commit -m "chore: publish diagnostic readiness hold without stale source promotion"
-              bash scripts/ops/safe_git_push_rebase_retry.sh
-            fi
-            exit 0
-          fi
           candidates=(
             "latest/session_data_processor"
             "history/session_data_processor"
             "latest/latest_manifest.json"
             "latest/data_readiness.json"
             "latest/combined_source_manifest.json"
-            "latest/forecast_bundle_ledger"
-            "history/forecast_bundle_ledger"
+            "latest/forecast_bundle_ledger/session_data_processor"
+            "history/forecast_bundle_ledger/session_data_processor"
             "latest/workbook_kpi_refresh_applier"
             "history/workbook_kpi_refresh_applier"
             "latest/autorepair"
@@ -182,18 +190,40 @@ jobs:
             "latest/chat_context"
             "history/chat_context"
           )
+          if [ "$COMMIT_ALLOWED" != "true" ]; then
+            python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('latest/readiness_dashboards/combined_readiness_dashboard.json').read_text())
+          if d.get('downstream_eligible') is not False or d.get('prediction_locked') is not False:
+              raise SystemExit('HOLD_DIAGNOSTIC_NOT_HOLD')
+          PYCODE
+            candidates=(latest/readiness_dashboards history/readiness_dashboards latest/chat_context history/chat_context)
+          fi
           for p in "${candidates[@]}"; do
-            if [ -e "$p" ]; then
-              if git check-ignore -q "$p"; then
-                echo "Skipping ignored path: $p"
-              else
-                git add "$p"
-              fi
+            if [ -e "$p" ] && ! git check-ignore -q "$p"; then
+              while IFS= read -r -d '' f; do
+                if ! git check-ignore -q "$f"; then
+                  git add -- "$f"
+                fi
+              done < <(find "$p" -type f -newer "$MARKER" -print0)
             fi
           done
+          if [ "$COMMIT_ALLOWED" = "true" ]; then
+            for root in latest/workbook_kpi_refresh_applier history/workbook_kpi_refresh_applier; do
+              if [ -d "$root" ]; then
+                while IFS= read -r -d '' f; do
+                  git add -f -- "$f"
+                done < <(find "$root" -type f -newer "$MARKER" -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -print0)
+              fi
+            done
+          fi
+          if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then
+            echo "HOLD_PROTECTED_ASSET_STAGED"; exit 1
+          fi
           if git diff --cached --quiet; then
-            echo "No integrated Auto-Repair changes to commit."
+            echo "No fresh integrated output changes to commit."
           else
-            git commit -m "chore: integrated session processor auto-repair workbook KPI refresh"
+            git commit -m "chore: publish bounded integrated session context or explicit HOLD"
             bash scripts/ops/safe_git_push_rebase_retry.sh
           fi

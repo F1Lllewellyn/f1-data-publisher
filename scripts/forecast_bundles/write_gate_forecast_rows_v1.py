@@ -9,6 +9,16 @@ it writes an audit record and exits cleanly without creating false actual bundle
 """
 import argparse, csv, json, hashlib, os, sys
 from pathlib import Path
+
+def load_custody_guard():
+    import importlib.util
+    path=Path(__file__).resolve().with_name('validate_forecast_chain_readiness_v1.py')
+    spec=importlib.util.spec_from_file_location('direct_forecast_custody',path)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    return module
+
+custody_guard=load_custody_guard()
+
 from datetime import datetime, timezone
 
 GATES = ['pre_weekend','post_fp3','post_qualifying','race_result','post_event']
@@ -53,8 +63,14 @@ def write_csv(path, rows, fieldnames):
 
 def normalize_rows(rows, event_id, gate, lane):
     out=[]
-    ts=utcnow()
+    # Normalization preserves original generation time; it cannot observe the past.
+    ts=None
     for i,r in enumerate(rows, start=1):
+        ts=r.get('forecast_timestamp_utc')
+        custody_guard.clock(ts)
+        for key,value in dict(event_id=event_id,gate=gate,engine_lane=lane).items():
+            if r.get(key) not in (None,'',value):raise custody_guard.ScientificHold('HOLD_FORECAST_ROW_IDENTITY_OR_CLOCK')
+        if r.get('forecast_lock_utc'):raise custody_guard.ScientificHold('HOLD_EXISTING_LOCK_CANNOT_BE_RELOCKED')
         nr={c:'' for c in REQUIRED_COLUMNS}
         # pass through common fields if present
         for c in REQUIRED_COLUMNS:
@@ -71,7 +87,7 @@ def normalize_rows(rows, event_id, gate, lane):
             nr['engine_lane_config']=LANE_CONFIG[lane]
         else:
             nr['engine_lane_config']=nr['engine_lane_config'] or LANE_CONFIG[lane]
-        nr['forecast_timestamp_utc']=nr['forecast_timestamp_utc'] or ts
+        nr['forecast_timestamp_utc']=ts
         nr['forecast_lock_utc']=''  # Set by Forecast Bundle Locker, not source writer.
         nr['driver_number']=nr['driver_number'] or r.get('driver','') or r.get('driver_id','')
         nr['driver_name']=nr['driver_name'] or r.get('full_name','') or r.get('name','') or r.get('driver','')
@@ -93,7 +109,6 @@ def candidate_paths(repo, event_id, gate, lane):
         'latest/forecasts/{event_id}/{gate}/{lane}/forecast_rows.csv',
         'latest/forecast_outputs/{event_id}/{gate}/{lane}/forecast_rows.csv',
         'latest/method_e_control_room/forecasts/{event_id}/{gate}/{lane}.csv',
-        'history/forecast_outputs/{event_id}/{gate}/{lane}/forecast_rows.csv'
     ]
     return [repo / t.format(event_id=event_id, gate=gate, lane=lane) for t in templates]
 
@@ -108,6 +123,10 @@ def main():
     repo=Path(args.repo_root).resolve()
     gates=GATES if args.gate=='all' else [args.gate]
     lanes=LANES if args.lane=='all' else [args.lane]
+    try:
+        custody_guard.require_forecast_authority(args.event_id,gates[0],lanes[0])
+    except custody_guard.ScientificHold as exc:
+        return custody_guard.hold_report(repo,args.event_id,args.gate,args.lane,str(exc))
     audit=[]; wrote=[]
     for gate in gates:
         for lane in lanes:
@@ -123,10 +142,16 @@ def main():
             if source is None:
                 audit.append({'event_id':args.event_id,'gate':gate,'engine_lane':lane,'status':'missing_forecast_source_rows','source_path':'','output_path':str(outpath),'rows_written':0,'blind_validation_eligible':False,'note':'No actual forecast source rows found. No false bundle created.'})
                 continue
-            norm=normalize_rows(source_rows,args.event_id,gate,lane)
-            write_csv(outpath,norm,REQUIRED_COLUMNS)
+            verified=custody_guard.verify_candidate(repo,source,args.event_id,gate,lane,utcnow())
+            # Preserve authenticated payload bytes. Transforming rows would need
+            # its own independently verified normalization receipt.
+            original=source.read_bytes()
+            if sha256_file(source)!=verified['source_sha256']:
+                raise custody_guard.ScientificHold('HOLD_FORECAST_CHANGED_BEFORE_WRITE')
+            custody_guard.immutable_directory(outpath.parent,{'forecast_rows.csv':original,
+                'forecast_execution_manifest.json':source.with_name('forecast_execution_manifest.json').read_bytes()})
             wrote.append(outpath)
-            audit.append({'event_id':args.event_id,'gate':gate,'engine_lane':lane,'status':'forecast_rows_normalized','source_path':str(source),'output_path':str(outpath),'rows_written':len(norm),'blind_validation_eligible':True,'note':'Rows are eligible only if this workflow ran before outcome and locker records gate lock time.'})
+            audit.append({'event_id':args.event_id,'gate':gate,'engine_lane':lane,'status':'candidate_bytes_preserved','source_path':str(source),'output_path':str(outpath),'rows_written':len(source_rows),'blind_validation_eligible':False,'note':'Rows are eligible only if this workflow ran before outcome and locker records gate lock time.'})
     audit_path=repo / f'latest/forecast_bundle_gap_closure/{args.event_id}/forecast_gate_source_writer_audit.csv'
     write_csv(audit_path,audit, list(audit[0].keys()) if audit else ['event_id','gate','engine_lane','status'])
     manifest={
@@ -136,7 +161,7 @@ def main():
         'audit_path':str(audit_path),
         'promotion_gate_eligible':False,
         'stable_exact_output_overwrite_allowed':False,
-        'next_step':'Run F1 Forecast Bundle Locker v1 after forecast rows exist.'
+        'next_step':'HOLD until independently authenticated execution and lock authority exist.'
     }
     mpath=repo / f'latest/forecast_bundle_gap_closure/{args.event_id}/forecast_gate_source_writer_manifest.json'
     mpath.parent.mkdir(parents=True, exist_ok=True)

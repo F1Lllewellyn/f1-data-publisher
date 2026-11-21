@@ -96,6 +96,8 @@ class Candidate:
     generated_utc: dt.datetime
     tree_sha256: str
     sessions: Mapping[str, SessionIdentity]
+    latest_rel: PurePosixPath = LATEST_REL
+    files: frozenset[str] = EXPECTED_FILES
 
 
 @dataclass(frozen=True)
@@ -234,7 +236,8 @@ def _regular_tree_files(root: Path, reason: str) -> set[str]:
     return files
 
 
-def _validate_zip(root: Path) -> None:
+def _validate_zip(root: Path, files=EXPECTED_FILES) -> None:
+    tracked = files - {ZIP_NAME}
     try:
         archive = root / ZIP_NAME
         checksum = (root / ZIP_SHA_NAME).read_text(encoding="utf-8")
@@ -251,7 +254,7 @@ def _validate_zip(root: Path) -> None:
             names = [item.filename for item in infos]
             _require(len(names) == len(set(names)), "zip_duplicate_member")
             _require(bundle.testzip() is None, "zip_crc_failure")
-            allowed = TRACKED_FILES
+            allowed = tracked
             for item in infos:
                 pure = PurePosixPath(item.filename)
                 _require(
@@ -263,7 +266,7 @@ def _validate_zip(root: Path) -> None:
                 )
                 mode = item.external_attr >> 16
                 _require(not stat.S_ISLNK(mode), "zip_member_symlink")
-            required = TRACKED_FILES - {ZIP_SHA_NAME}
+            required = tracked - {ZIP_SHA_NAME}
             _require(required.issubset(names), "zip_required_member_missing")
             for name in required:
                 _require(bundle.read(name) == (root / name).read_bytes(), "zip_member_bytes_mismatch")
@@ -304,6 +307,7 @@ def _validate_manifest(
     expected_completed_only: bool,
     now: dt.datetime,
     candidate: bool,
+    meeting_key: str = "",
 ) -> tuple[dt.datetime, PurePosixPath, dict[str, Mapping[str, Any]]]:
     prefix = "candidate" if candidate else "remote"
     _require(type(manifest) is dict, f"{prefix}_manifest_invalid")
@@ -312,11 +316,12 @@ def _validate_manifest(
     _require(manifest.get("completed_only") is expected_completed_only, f"{prefix}_completed_only_mismatch")
     generated = _parse_utc(manifest.get("generated_utc"), f"{prefix}_generated_utc_invalid")
     _require(generated <= now + dt.timedelta(minutes=5), f"{prefix}_generated_utc_in_future")
+    pattern = (re.compile(r"history/openf1_event_source_closure/" + re.escape(meeting_key) + r"/([0-9]{8}_[0-9]{6}_[0-9]{6})") if meeting_key else HISTORY_PATTERN)
     history_value = manifest.get("history_path")
-    _require(type(history_value) is str and HISTORY_PATTERN.fullmatch(history_value), f"{prefix}_history_path_invalid")
+    _require(type(history_value) is str and pattern.fullmatch(history_value), f"{prefix}_history_path_invalid")
     history_rel = PurePosixPath(history_value)
     history_clock = dt.datetime.strptime(
-        HISTORY_PATTERN.fullmatch(history_value).group(1), "%Y%m%d_%H%M%S"
+        pattern.fullmatch(history_value).group(1), "%Y%m%d_%H%M%S_%f" if meeting_key else "%Y%m%d_%H%M%S"
     ).replace(tzinfo=dt.timezone.utc)
     _require(history_clock <= generated, f"{prefix}_history_clock_after_generation")
     _integer(manifest.get("target_session_count"), f"{prefix}_target_count_invalid")
@@ -340,6 +345,13 @@ def _validate_manifest(
     if previous is not None:
         previous_utc = _parse_utc(previous, f"{prefix}_previous_generated_utc_invalid")
         _require(previous_utc < generated, f"{prefix}_previous_generation_not_older")
+    if meeting_key:
+        _require(manifest.get("collection_scope") == "event" and manifest.get("meeting_key") == meeting_key, "event_scope_mismatch")
+        _require(manifest.get("publication_eligible") is True and manifest.get("source_quality_status") == "complete" and manifest.get("source_quality_reasons") == [], "event_quality_hold")
+        _require(manifest.get("historical_archive_complete") is False and manifest.get("official_final_grid_verified") is False, "event_scientific_boundary_invalid")
+        _require(manifest.get("event_custody_schema") == "openf1-event-byte-custody-v1", "event_custody_schema_missing")
+    else:
+        _require(manifest.get("collection_scope", "historical_season") == "historical_season", "season_scope_mismatch")
     return generated, history_rel, lanes
 
 
@@ -481,6 +493,109 @@ def _tree_digest(root: Path, names: Iterable[str]) -> str:
     return digest.hexdigest()
 
 
+def _latest_rel(meeting_key: str) -> PurePosixPath:
+    if not meeting_key:
+        return LATEST_REL
+    _require(POSITIVE_INTEGER.fullmatch(meeting_key) is not None, "event_meeting_key_invalid")
+    return PurePosixPath("latest/openf1_event_source_closure") / meeting_key
+
+
+def _event_file_names(records: Any) -> frozenset[str]:
+    _require(type(records) is list and bool(records), "event_raw_index_missing")
+    names = set(EXPECTED_FILES) | {"raw_evidence.json"}
+    for record in records:
+        _require(type(record) is dict, "event_raw_record_invalid")
+        digest = record.get("sha256")
+        _require(type(digest) is str and re.fullmatch(r"[0-9a-f]{64}", digest), "event_raw_sha_invalid")
+        _require(record.get("path") == f"raw/{digest}.json", "event_raw_path_invalid")
+        names.add(record["path"])
+    return frozenset(names)
+
+
+def _event_files(root: Path) -> frozenset[str]:
+    return _event_file_names(_read_json(root / "raw_evidence.json", "event_raw_index_invalid"))
+
+
+def _validate_event_evidence(root, manifest, sessions, generated, expected_session_key):
+    """Verify actual retained response bytes and their projection, not row presence.
+
+    This establishes context custody only. GitHub scientific attestation and an
+    authenticated executable model remain separate requirements.
+    """
+    from decimal import Decimal, InvalidOperation
+
+    def norm(value):
+        if value is None or value == "":
+            return ""
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, sort_keys=True)
+        try:
+            return Decimal(str(value)).normalize()
+        except InvalidOperation:
+            return str(value)
+
+    _require(bool(sessions), "event_sessions_empty")
+    meeting = manifest["meeting_key"]
+    _require(all(s.meeting_key == meeting for s in sessions.values()), "event_session_meeting_mismatch")
+    if expected_session_key:
+        _require(manifest.get("expected_session_key") == expected_session_key and expected_session_key in sessions,
+                 "event_expected_session_mismatch")
+    _require(manifest.get("expected_session_key") in sessions, "event_expected_session_missing")
+    _require(manifest.get("raw_evidence_sha256") == _sha256(root / "raw_evidence.json"), "event_raw_index_sha_mismatch")
+    records = _read_json(root / "raw_evidence.json", "event_raw_index_invalid")
+    _event_file_names(records)
+    observed_requests = {}
+    source_rows = {lane: [] for lane in (*LANES, "sessions")}
+    for record in records:
+        origin = record.get("origin", {})
+        _require(type(origin) is dict and origin.get("repository") == manifest.get("github_origin", {}).get("repository")
+                 and re.fullmatch(r"[^/\s]+/[^/\s]+", str(origin.get("repository", "")))
+                 and SHA_PATTERN.fullmatch(str(origin.get("head_sha", "")))
+                 and POSITIVE_INTEGER.fullmatch(str(origin.get("run_id", "")))
+                 and POSITIVE_INTEGER.fullmatch(str(origin.get("run_attempt", ""))), "event_original_run_invalid")
+        observed = _parse_utc(record.get("response_observed_utc"), "event_raw_clock_invalid")
+        _require(observed <= generated, "event_raw_clock_after_generation")
+        raw = (root / record["path"]).read_bytes()
+        _require(len(raw) == record.get("bytes") and hashlib.sha256(raw).hexdigest() == record["sha256"], "event_raw_bytes_mismatch")
+        endpoint, params = record.get("endpoint"), record.get("params")
+        _require(endpoint in source_rows and type(params) is dict, "event_request_identity_invalid")
+        status = record.get("status_code")
+        _require(type(status) is int and 100 <= status <= 599, "event_http_status_invalid")
+        if status != 200:
+            continue
+        rows = _strict_json_bytes(raw, "event_raw_json_invalid")
+        _require(type(rows) is list and all(type(row) is dict for row in rows), "event_raw_schema_invalid")
+        for row in rows:
+            if endpoint != "sessions":
+                if "session_key" in params:
+                    _require(str(row.get("session_key")) == str(params["session_key"]), "event_response_wrong_session")
+                if "meeting_key" in params:
+                    _require(str(row.get("meeting_key")) == str(params["meeting_key"]), "event_response_wrong_meeting")
+        identity = (endpoint, json.dumps(params, sort_keys=True), record["response_observed_utc"], len(rows))
+        _require(identity not in observed_requests or observed_requests[identity] == rows, "event_request_identity_collision")
+        observed_requests[identity] = rows
+    _, requests = _csv_rows(root / "request_log.csv", "event_request_log_invalid")
+    for request in requests:
+        if request.get("status") in {"pass", "zero_rows"}:
+            identity = (request["endpoint"], json.dumps(json.loads(request["params_json"]), sort_keys=True), request["timestamp_utc"], int(request["rows"]))
+            _require(identity in observed_requests, "event_request_original_bytes_missing")
+            source_rows[request["endpoint"]].extend(observed_requests[identity])
+    for endpoint in (*LANES, "sessions"):
+        name = "data/target_sessions.csv" if endpoint == "sessions" else f"data/openf1_{endpoint}.csv"
+        _, rows = _csv_rows(root / name, "event_projection_invalid")
+        for row in rows:
+            originals = [x for x in source_rows[endpoint] if str(x.get("session_key")) == row.get("session_key")]
+            _require(any(all(norm(row.get(k)) == norm(v) for k, v in original.items()) for original in originals),
+                     "event_projection_not_in_original_response:" + endpoint)
+        if endpoint != "sessions":
+            originals = [r for r in source_rows[endpoint] if str(r.get("session_key")) in sessions]
+            keys = set().union(*(set(r) for r in originals)) if originals else set()
+            _require(all(set(r) <= keys | {"source_closure_retrieved_utc"} for r in rows), "event_projection_extra_fields")
+            keys = sorted(keys)
+            normalized = lambda items: {tuple(norm(r.get(k)) for k in keys) for r in items}
+            _require(normalized(rows) == normalized(originals), "event_projection_coverage_loss:" + endpoint)
+
+
 def _snapshot_candidate(candidate: Candidate, destination: Path) -> Candidate:
     latest = destination / "latest"
     history = destination / "history"
@@ -490,20 +605,20 @@ def _snapshot_candidate(candidate: Candidate, destination: Path) -> Candidate:
     except OSError as exc:
         raise PublicationHold("candidate_snapshot_failed") from exc
     _require(
-        _regular_tree_files(latest, "candidate_snapshot_unsafe") == EXPECTED_FILES,
+        _regular_tree_files(latest, "candidate_snapshot_unsafe") == candidate.files,
         "candidate_snapshot_file_set_invalid",
     )
     _require(
-        _regular_tree_files(history, "candidate_snapshot_unsafe") == EXPECTED_FILES,
+        _regular_tree_files(history, "candidate_snapshot_unsafe") == candidate.files,
         "candidate_snapshot_file_set_invalid",
     )
     _require(
-        _tree_digest(latest, EXPECTED_FILES) == candidate.tree_sha256,
+        _tree_digest(latest, candidate.files) == candidate.tree_sha256,
         "candidate_snapshot_latest_mismatch",
     )
     _require(
-        _tree_digest(history, EXPECTED_FILES)
-        == _tree_digest(candidate.history_root, EXPECTED_FILES),
+        _tree_digest(history, candidate.files)
+        == _tree_digest(candidate.history_root, candidate.files),
         "candidate_snapshot_history_mismatch",
     )
     return Candidate(
@@ -514,6 +629,8 @@ def _snapshot_candidate(candidate: Candidate, destination: Path) -> Candidate:
         generated_utc=candidate.generated_utc,
         tree_sha256=candidate.tree_sha256,
         sessions=candidate.sessions,
+        latest_rel=candidate.latest_rel,
+        files=candidate.files,
     )
 
 
@@ -523,11 +640,15 @@ def validate_candidate(
     expected_season: int,
     expected_completed_only: bool,
     now: dt.datetime,
+    meeting_key: str = "",
+    expected_session_key: str = "",
 ) -> Candidate:
     root = repo_root.resolve(strict=True)
-    latest = root.joinpath(*LATEST_REL.parts)
+    latest_rel = _latest_rel(meeting_key)
+    latest = root.joinpath(*latest_rel.parts)
+    expected_files = _event_files(latest) if meeting_key else EXPECTED_FILES
     files = _regular_tree_files(latest, "candidate_latest_tree_unsafe")
-    _require(files == EXPECTED_FILES, "candidate_latest_file_set_invalid")
+    _require(files == expected_files, "candidate_latest_file_set_invalid")
     manifest = _read_json(latest / "latest_manifest.json", "candidate_manifest_invalid")
     generated, history_rel, lanes = _validate_manifest(
         manifest,
@@ -535,11 +656,12 @@ def validate_candidate(
         expected_completed_only=expected_completed_only,
         now=now,
         candidate=True,
+        meeting_key=meeting_key,
     )
     history = root.joinpath(*history_rel.parts)
     _path_inside(root, history.resolve(strict=True), "candidate_history_outside_repository")
     history_files = _regular_tree_files(history, "candidate_history_tree_unsafe")
-    _require(history_files == EXPECTED_FILES, "candidate_history_file_set_invalid")
+    _require(history_files == expected_files, "candidate_history_file_set_invalid")
     history_manifest = _read_json(history / "latest_manifest.json", "candidate_history_manifest_invalid")
     _require(history_manifest == manifest, "candidate_history_manifest_mismatch")
 
@@ -556,9 +678,11 @@ def validate_candidate(
         sessions=sessions,
         generated=generated,
     )
-    _validate_zip(latest)
-    _validate_zip(history)
-    for name in TRACKED_FILES - {"data_readiness.json", ZIP_SHA_NAME}:
+    if meeting_key:
+        _validate_event_evidence(latest, manifest, sessions, generated, expected_session_key)
+    _validate_zip(latest, expected_files)
+    _validate_zip(history, expected_files)
+    for name in expected_files - {ZIP_NAME} - {"data_readiness.json", ZIP_SHA_NAME}:
         _require((latest / name).read_bytes() == (history / name).read_bytes(), "candidate_history_bytes_mismatch")
     history_readiness = _read_json(history / "data_readiness.json", "candidate_history_readiness_invalid")
     _require(history_readiness.get("lanes") == manifest.get("lanes"), "candidate_history_readiness_mismatch")
@@ -572,8 +696,10 @@ def validate_candidate(
         history_rel=history_rel,
         manifest=manifest,
         generated_utc=generated,
-        tree_sha256=_tree_digest(latest, EXPECTED_FILES),
+        tree_sha256=_tree_digest(latest, expected_files),
         sessions=sessions,
+        latest_rel=latest_rel,
+        files=expected_files,
     )
 
 
@@ -651,7 +777,7 @@ def _validate_candidate_only_dirt(root: Path, candidate: Candidate) -> None:
     _require(bool(paths), "candidate_worktree_has_no_changes")
     for path in paths:
         _require(
-            _is_under(path, LATEST_REL) or _is_under(path, candidate.history_rel),
+            _is_under(path, candidate.latest_rel) or _is_under(path, candidate.history_rel),
             f"unexpected_worktree_change:{path}",
         )
 
@@ -702,24 +828,30 @@ def _remote_latest(
     expected_season: int,
     expected_completed_only: bool,
     now: dt.datetime,
+    meeting_key: str = "",
 ) -> RemoteLatest | None:
-    path = LATEST_REL / "latest_manifest.json"
+    latest_rel = _latest_rel(meeting_key)
+    path = latest_rel / "latest_manifest.json"
     probe = _git(root, "cat-file", "-e", f"{revision}:{path.as_posix()}", check=False)
     if probe.returncode:
-        names = _git_tree_names(root, revision, LATEST_REL)
+        names = _git_tree_names(root, revision, latest_rel)
         _require(not names, "remote_latest_manifest_missing_from_nonempty_tree")
         return None
     try:
+        tracked = TRACKED_FILES
+        if meeting_key:
+            records = _strict_json_bytes(_git_blob(root, revision, latest_rel / "raw_evidence.json"), "remote_raw_index_invalid")
+            tracked = _event_file_names(records) - {ZIP_NAME}
         _require(
-            _git_tree_names(root, revision, LATEST_REL) == TRACKED_FILES,
+            _git_tree_names(root, revision, latest_rel) == tracked,
             "remote_latest_file_set_invalid",
         )
         with tempfile.TemporaryDirectory(prefix="f1-source-closure-remote-") as directory:
             remote_root = Path(directory)
-            for name in TRACKED_FILES:
+            for name in tracked:
                 target = remote_root / name
                 target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_bytes(_git_blob(root, revision, LATEST_REL / name))
+                target.write_bytes(_git_blob(root, revision, latest_rel / name))
 
             manifest = _read_json(
                 remote_root / "latest_manifest.json",
@@ -731,6 +863,7 @@ def _remote_latest(
                 expected_completed_only=expected_completed_only,
                 now=now,
                 candidate=False,
+                meeting_key=meeting_key,
             )
             sessions = _validate_target_sessions(
                 remote_root / "data/target_sessions.csv",
@@ -745,10 +878,12 @@ def _remote_latest(
                 sessions=sessions,
                 generated=generated,
             )
+            if meeting_key:
+                _validate_event_evidence(remote_root, manifest, sessions, generated, "")
             return RemoteLatest(
                 manifest=manifest,
                 generated_utc=generated,
-                tracked_tree_sha256=_tree_digest(remote_root, TRACKED_FILES),
+                tracked_tree_sha256=_tree_digest(remote_root, tracked),
                 sessions=sessions,
             )
     except PublicationHold as exc:
@@ -777,22 +912,24 @@ def _tree_matches_candidate(
     revision: str,
     relative: PurePosixPath,
     candidate_root: Path,
+    files=EXPECTED_FILES,
 ) -> bool:
-    if _git_tree_names(root, revision, relative) != TRACKED_FILES:
+    tracked = files - {ZIP_NAME}
+    if _git_tree_names(root, revision, relative) != tracked:
         return False
-    for name in TRACKED_FILES:
+    for name in tracked:
         if _git_blob(root, revision, relative / name) != (candidate_root / name).read_bytes():
             return False
     return True
 
 
-def _copy_tracked_tree(source: Path, destination: Path) -> None:
+def _copy_tracked_tree(source: Path, destination: Path, files=EXPECTED_FILES) -> None:
     _require(not destination.is_symlink(), "publication_destination_symlink")
     if destination.exists():
         _require(destination.is_dir(), "publication_destination_not_directory")
         shutil.rmtree(destination)
     destination.mkdir(parents=True, exist_ok=False)
-    for name in TRACKED_FILES:
+    for name in files - {ZIP_NAME}:
         source_file = source / name
         target = destination / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -837,6 +974,9 @@ def run_guard(
     artifact_uploaded_for_run: str,
     clock: Callable[[], dt.datetime] = lambda: dt.datetime.now(dt.timezone.utc),
     before_push: Callable[[], None] | None = None,
+    meeting_key: str = "",
+    expected_session_key: str = "",
+    expected_origin: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     audit = _base_audit(github_run_id)
     worktree: Path | None = None
@@ -857,7 +997,12 @@ def run_guard(
             expected_season=expected_season,
             expected_completed_only=expected_completed_only,
             now=now,
+            meeting_key=meeting_key,
+            expected_session_key=expected_session_key,
         )
+        if meeting_key:
+            _require(bool(expected_session_key), "event_expected_session_required")
+            _require(candidate.manifest.get("github_origin") == expected_origin and expected_origin.get("run_id") == github_run_id, "event_origin_mismatch")
         audit["candidate"] = {
             "generated_utc": _utc_text(candidate.generated_utc),
             "history_path": candidate.history_rel.as_posix(),
@@ -892,6 +1037,7 @@ def run_guard(
             expected_season=expected_season,
             expected_completed_only=expected_completed_only,
             now=now,
+            meeting_key=meeting_key,
         )
         audit["remote"] = {
             "head_sha": remote_sha,
@@ -926,7 +1072,7 @@ def run_guard(
             publish_latest = False
         else:
             _require(
-                _tree_matches_candidate(root, remote_sha, LATEST_REL, candidate.latest_root),
+                _tree_matches_candidate(root, remote_sha, candidate.latest_rel, candidate.latest_root, candidate.files),
                 "equal_generation_clock_with_different_latest_bytes",
             )
             latest_decision = "IDENTICAL_REMOTE_LATEST"
@@ -941,6 +1087,7 @@ def run_guard(
                     remote_sha,
                     candidate.history_rel,
                     candidate.history_root,
+                    candidate.files,
                 ),
                 "immutable_history_path_collision",
             )
@@ -957,15 +1104,15 @@ def run_guard(
         worktree = worktree_parent / "worktree"
         _git(root, "worktree", "add", "--detach", str(worktree), remote_sha)
         if publish_latest:
-            _copy_tracked_tree(candidate.latest_root, worktree.joinpath(*LATEST_REL.parts))
+            _copy_tracked_tree(candidate.latest_root, worktree.joinpath(*candidate.latest_rel.parts), candidate.files)
         if publish_history:
             history_destination = worktree.joinpath(*candidate.history_rel.parts)
             _require(not history_destination.exists() and not history_destination.is_symlink(), "immutable_history_path_collision")
-            _copy_tracked_tree(candidate.history_root, history_destination)
+            _copy_tracked_tree(candidate.history_root, history_destination, candidate.files)
 
         stage_paths: list[str] = []
         if publish_latest:
-            stage_paths.append(LATEST_REL.as_posix())
+            stage_paths.append(candidate.latest_rel.as_posix())
         if publish_history:
             stage_paths.append(candidate.history_rel.as_posix())
         if stage_paths:
@@ -985,13 +1132,13 @@ def run_guard(
         }
         for path in staged:
             _require(
-                (publish_latest and _is_under(path, LATEST_REL))
+                (publish_latest and _is_under(path, candidate.latest_rel))
                 or (publish_history and _is_under(path, candidate.history_rel)),
                 f"staged_path_outside_publication_scope:{path}",
             )
         if not publish_latest:
             _require(
-                not any(_is_under(path, LATEST_REL) for path in staged),
+                not any(_is_under(path, candidate.latest_rel) for path in staged),
                 "non_authoritative_latest_was_staged",
             )
 
@@ -1068,6 +1215,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--expected-completed-only", type=_completed_only, required=True)
     parser.add_argument("--github-run-id", required=True)
     parser.add_argument("--artifact-uploaded-for-run", required=True)
+    parser.add_argument("--meeting-key", default="")
+    parser.add_argument("--expected-session-key", default="")
+    parser.add_argument("--github-repository", default="")
+    parser.add_argument("--github-sha", default="")
+    parser.add_argument("--github-run-attempt", default="")
     args = parser.parse_args(argv)
     result = run_guard(
         repo_root=Path(args.repo_root),
@@ -1077,6 +1229,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         expected_completed_only=args.expected_completed_only,
         github_run_id=args.github_run_id,
         artifact_uploaded_for_run=args.artifact_uploaded_for_run,
+        meeting_key=args.meeting_key,
+        expected_session_key=args.expected_session_key,
+        expected_origin=dict(repository=args.github_repository, head_sha=args.github_sha,
+                             run_id=args.github_run_id, run_attempt=args.github_run_attempt),
     )
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["status"] in {

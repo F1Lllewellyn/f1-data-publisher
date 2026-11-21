@@ -5,7 +5,7 @@ This connector is intentionally conservative: it reads existing latest/history a
 creates dashboard state files, and never modifies stable predictions or the canonical workbook.
 """
 from __future__ import annotations
-import argparse, hashlib, json, re, sys
+import argparse, hashlib, importlib.util, json, re, sys
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
@@ -22,7 +22,7 @@ EVENT_ID_RE = re.compile(r"^(?P<season>[0-9]{4})_(?P<meeting>[1-9][0-9]*)_.+$")
 
 
 def now_id() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
 
 
 def now_iso() -> str:
@@ -118,6 +118,97 @@ def workbook_artifact(root: Path, manifest: Dict[str, Any]) -> Optional[Path]:
 def add_reason(reasons: List[str], reason: str) -> None:
     if reason not in reasons:
         reasons.append(reason)
+
+
+def verify_current_bytes(root, selector, source, workbook, required, reference_time, reasons):
+    """Validate the bytes consumers actually use, not just matching labels."""
+    fingerprints = {}
+    verified_rows = {}
+    pointer = selector.get("latest_session_data_processor_manifest")
+    source_root = str(Path(pointer).parent) if isinstance(pointer, str) else ""
+    sources = source.get("sources") if isinstance(source.get("sources"), dict) else {}
+    for name, summary in required.items():
+        if not isinstance(summary, dict) or summary.get("role") != "required":
+            continue
+        report = sources.get(name, {})
+        relative = report.get("json_path") if isinstance(report, dict) else None
+        expected = f"{source_root}/raw/{name}.json"
+        path = root / expected
+        try:
+            if relative != expected or relpath(path, root) != expected or path.is_symlink():
+                raise ValueError("unsafe_path")
+            raw = path.read_bytes()
+            digest = hashlib.sha256(raw).hexdigest()
+            rows = json.loads(raw)
+            if digest != report.get("json_sha256"):
+                raise ValueError("digest")
+            if not isinstance(rows, list) or len(rows) != summary.get("rows"):
+                raise ValueError("row_count")
+            session = source.get("session", {})
+            observed = parse_utc(report.get("observed_at_utc"))
+            if observed is None or observed > reference_time:
+                raise ValueError("availability_clock")
+            for row in rows:
+                if (not isinstance(row, dict)
+                        or positive_int(row.get("meeting_key")) != positive_int(session.get("meeting_key"))
+                        or positive_int(row.get("session_key")) != positive_int(session.get("session_key"))):
+                    raise ValueError("row_identity")
+                for clock in ("date", "date_start"):
+                    if row.get(clock) is not None:
+                        value = parse_utc(row[clock])
+                        if value is None or value > observed:
+                            raise ValueError("row_clock")
+            fingerprints[expected] = digest
+            verified_rows[name] = rows
+        except (OSError, ValueError, TypeError, AttributeError) as exc:
+            add_reason(reasons, f"source_bytes_unverified:{name}:{exc}")
+
+    roster_rows = verified_rows.get("openf1_drivers", [])
+    roster_numbers = [positive_int(row.get("driver_number")) for row in roster_rows]
+    roster = set(roster_numbers)
+    if not roster or None in roster or len(roster_numbers) != len(roster):
+        add_reason(reasons, "source_driver_roster_unverified")
+    keyed = {"openf1_drivers", "openf1_laps", "openf1_position", "openf1_session_result", "openf1_starting_grid"}
+    for name in keyed & verified_rows.keys():
+        if any(positive_int(row.get("driver_number")) is None
+               or positive_int(row.get("driver_number")) not in roster for row in verified_rows[name]):
+            add_reason(reasons, f"source_driver_identity_unverified:{name}")
+
+    bindings = workbook.get("authority_fingerprints")
+    mandatory = {"latest/latest_manifest.json", "latest/data_readiness.json", "latest/combined_source_manifest.json", pointer if isinstance(pointer, str) else ""}
+    if not isinstance(bindings, dict) or not mandatory.issubset(bindings):
+        add_reason(reasons, "workbook_authority_fingerprints_missing")
+    else:
+        for relative, digest in bindings.items():
+            path = root / relative
+            try:
+                if not relative.startswith("latest/") or relpath(path, root) != relative or path.is_symlink():
+                    raise ValueError("unsafe_path")
+                if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+                    raise ValueError("digest")
+                fingerprints[relative] = digest
+            except (OSError, ValueError, TypeError):
+                add_reason(reasons, "workbook_authority_bytes_changed")
+    outputs = workbook.get("outputs")
+    if not isinstance(outputs, list) or not outputs:
+        add_reason(reasons, "workbook_outputs_unverified")
+    else:
+        seen = set()
+        for output in outputs:
+            try:
+                relative = output["path"]
+                path = root / relative
+                if (relative in seen or relpath(path, root) != relative or path.is_symlink()
+                        or not relative.startswith(("history/workbook_kpi_refresh_applier/", "latest/workbook_kpi_refresh_applier/"))):
+                    raise ValueError("unsafe_output")
+                seen.add(relative)
+                raw = path.read_bytes()
+                if not raw or hashlib.sha256(raw).hexdigest() != output.get("sha256") or len(raw) != output.get("bytes"):
+                    raise ValueError("output_integrity")
+                fingerprints[relative] = output["sha256"]
+            except (OSError, ValueError, TypeError, KeyError):
+                add_reason(reasons, "workbook_output_integrity_failed")
+    return fingerprints
 
 
 def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dict[str, Any]:
@@ -323,6 +414,15 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
 
     per_source = aggregation.get("per_source") if isinstance(aggregation.get("per_source"), dict) else {}
     critical = aggregation.get("critical_endpoints") if isinstance(aggregation.get("critical_endpoints"), list) else []
+    # Reuse the existing session policy; a manifest cannot demote a required
+    # endpoint to optional and thereby remove it from byte verification.
+    spec = importlib.util.spec_from_file_location("dashboard_source_policy",
+        Path(__file__).resolve().parents[1] / "session_data_processor/source_readiness_aggregation_v2.py")
+    policy = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(policy)
+    expected_critical = policy.policy_for_family(policy.infer_session_family(source_session))["required"]
+    if set(critical) != expected_critical:
+        add_reason(reasons, "required_source_policy_mismatch")
     observed_required = {
         report.get("endpoint")
         for report in per_source.values()
@@ -345,6 +445,10 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
             or norm_status(summary.get("status")) != norm_status(report.get("raw_status"))
         ):
             add_reason(reasons, "required_source_summary_mismatch")
+
+    consumed_fingerprints = verify_current_bytes(
+        root, selector, session_state, workbook_state, per_source, reference_time, reasons,
+    )
 
     identity_or_time_failure = any(
         "mismatch" in reason
@@ -392,6 +496,11 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
         "commit_allowed": True,
         "diagnostic_publish_allowed": True,
         "downstream_eligible": downstream_eligible,
+        "readiness_scope": "source_and_workbook_context_only",
+        "stable_engine_executed": False,
+        "prediction_locked": False,
+        "scientific_status": "HOLD_STABLE_ENGINE_NOT_EXECUTED",
+        "consumed_fingerprints": consumed_fingerprints,
         "readiness_reasons": reasons or ["verified_current_session_evidence"],
         "event_id": event_id if verified_identity else None,
         "meeting_key": event_meeting if verified_identity else None,
@@ -424,7 +533,7 @@ def discover_state(root: Path, reference_time: Optional[datetime] = None) -> Dic
 
 
 def brief(title: str, dashboard: Dict[str, Any], audience: str) -> str:
-    ready = "READY" if dashboard.get("downstream_eligible") else "NOT READY"
+    ready = "CONTEXT READY" if dashboard.get("downstream_eligible") else "CONTEXT HOLD"
     lines = [
         f"# {title}",
         "",
@@ -433,6 +542,7 @@ def brief(title: str, dashboard: Dict[str, Any], audience: str) -> str:
         f"Session: {dashboard.get('session_name')}",
         f"Source status: {dashboard.get('source_status')}",
         f"Dashboard readiness: {ready}",
+        f"Prediction status: {dashboard.get('scientific_status')}",
         f"Readiness reasons: {dashboard.get('readiness_reasons')}",
         f"Diagnostic publishing allowed: {str(bool(dashboard.get('diagnostic_publish_allowed'))).lower()}",
         "",
@@ -466,7 +576,11 @@ def main() -> int:
     latest_chat = root / "latest" / "chat_context"
     hist_dash = root / "history" / "readiness_dashboards" / stamp
     hist_chat = root / "history" / "chat_context" / stamp
-    for p in [latest_dash, latest_chat, hist_dash, hist_chat]:
+    if hist_dash.exists() or hist_chat.exists():
+        raise ValueError("HOLD_IMMUTABLE_DASHBOARD_HISTORY_COLLISION")
+    for p in [hist_dash, hist_chat]:
+        p.mkdir(parents=True, exist_ok=False)
+    for p in [latest_dash, latest_chat]:
         p.mkdir(parents=True, exist_ok=True)
 
     race_state = dict(dashboard.get("race_predictions", {}), generated_at_utc=dashboard["generated_at_utc"], source_status=dashboard["source_status"], event_name=dashboard["event_name"], session_name=dashboard["session_name"])

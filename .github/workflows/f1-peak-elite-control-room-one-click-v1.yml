@@ -15,7 +15,7 @@ on:
           - full_run_chain
           - scheduled_monitor
       commit_outputs:
-        description: 'Commit repaired workflows/status outputs when safe'
+        description: 'Commit only bounded generated context outputs when safe'
         required: true
         default: 'true'
         type: choice
@@ -38,6 +38,7 @@ permissions:
   actions: read
 
 env:
+  F1_OPENF1_HANDOVER_REQUIRED: "true"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 concurrency:
@@ -53,6 +54,13 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
+
+      - name: Mark current run output custody
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _runtime/peak_elite
+          touch _runtime/peak_elite/start.marker
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -141,23 +149,12 @@ jobs:
             latest/peak_elite/**
             latest/repo_canonicalization/**
             latest/session_data_processor/**
-            history/session_data_processor/**
-            latest/workbook_kpi_refresh_applier/**
-            history/workbook_kpi_refresh_applier/**
+            _runtime/workbook_persistence_handoff_guard/**
             latest/readiness_dashboards/**
-            history/readiness_dashboards/**
-            latest/chat_context/**
-            history/chat_context/**
-            latest/forecast_bundle_ledger/session_data_processor/**
-            history/forecast_bundle_ledger/session_data_processor/**
-            latest/session_gate_watch_v27/**
-            history/session_gate_watch_v27/**
-            latest/legacy_workflow_hardening/**
-            latest/1b_validation/**
           if-no-files-found: ignore
 
       - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts
-        if: always()
+        if: success()
         shell: bash
         run: |
           set -euo pipefail
@@ -176,30 +173,29 @@ jobs:
             exit 1
           fi
 
+          if ! git diff --cached --quiet; then
+            echo "HOLD_PRESTAGED_INPUT"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- history; then
+            echo "HOLD_HISTORICAL_EVIDENCE_MUTATION"; exit 1
+          fi
+          if ! git diff --quiet HEAD -- .github scripts configs docs .gitignore; then
+            echo "HOLD_UNREVIEWED_CODE_MUTATION"; exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          echo "Removing generated Python cache files before staging."
-          find . -type d -name .git -prune -o -type d -name "__pycache__" -print -exec rm -rf {} + || true
-          find . -type d -name .git -prune -o -type f \( -name "*.pyc" -o -name "*.pyo" -o -name "*.pyd" \) -print -exec rm -f {} + || true
-          CACHE_TRACKED="$(git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$|\.pyd$' || true)"
-          if [ -n "$CACHE_TRACKED" ]; then
-            echo "$CACHE_TRACKED" | while IFS= read -r f; do
-              git rm --cached --ignore-unmatch "$f" || true
-            done
-          fi
+          MARKER="_runtime/peak_elite/start.marker"
+          test -f "$MARKER" || { echo "HOLD_MISSING_RUN_MARKER"; exit 1; }
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          status = json.loads(Path('latest/peak_elite/orchestrator_status.json').read_text())
+          if status.get('commit_allowed') is not True:
+              raise SystemExit('HOLD_PEAK_PUBLICATION_NOT_ALLOWED')
+          PYCODE
 
           candidates=(
-            ".gitignore"
-            ".github/workflows"
-            "scripts/ops"
-            "scripts/session_data_processor"
-            "scripts/workbook_kpi_refresh"
-            "scripts/dashboard_connector"
-            "configs/peak_elite"
-            "configs/session_data_processor"
-            "docs/F1_PEAK_ELITE_SYSTEM_2026-06-13.md"
-            "docs/F1_REPO_CANONICALIZATION_AND_SOURCE_CLASSIFIER_2026-06-13.md"
             "latest/peak_elite"
             "latest/repo_canonicalization"
             "latest/session_data_processor"
@@ -228,8 +224,12 @@ jobs:
                 echo "Skipping ignored path: $p"
                 continue
               fi
-              git add "$p"
-              added=1
+              while IFS= read -r -d '' f; do
+                if ! git check-ignore -q "$f"; then
+                  git add -- "$f"
+                  added=1
+                fi
+              done < <(find "$p" -type f -newer "$MARKER" -print0)
             fi
           done
 
@@ -245,13 +245,12 @@ jobs:
                     added=1
                     ;;
                 esac
-              done < <(find "$root" -type f \( -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -o -name '*.json' -o -name '*.csv' -o -name '*.md' \) -print0)
+              done < <(find "$root" -type f -newer "$MARKER" \( -name 'F1_Workbook_KPI_SANDBOX_*.xlsx' -o -name '*.json' -o -name '*.csv' -o -name '*.md' \) -print0)
             fi
           done
 
           if git diff --cached --name-only | grep -E "$PROTECTED_PATTERN"; then
             echo "Protected stable engine or canonical workbook entered the staged set. Blocking commit."
-            git reset
             exit 1
           fi
 

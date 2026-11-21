@@ -29,11 +29,26 @@ spec.loader.exec_module(guard)
 BASELINE_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
 COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
+    "43b742c644a8858313834174575a2af00b4ffe42",  # Issue367 G2 dual-window process handover; original pins retained.
+    "b904366ae7bac72cf72596ac4542a0af97f3d87e",  # Issue367 G1 original-byte event custody; historical pins retained.
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
     "e23f016ef4d40e69a39d33cc0efe43572fdd16f8",
     "902aef436b59ca1145f449cc535a580e833e8d22",
+    # Issue #367, commit58e205: separate event namespace and failure diagnostics.
+    # Historical collector identities remain immutable; this is not a wildcard.
+    "4859c27c9a32fe05d01117bfa6a9d9aef88986ea",
 )
+OLD_DIAGNOSTIC_UPLOAD = '''      - name: Upload legacy source closure artifact
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: openf1-lightweight-source-closure
+          path: |
+            latest/openf1_lightweight_source_closure/**
+          retention-days: 30
+'''
+NEW_DIAGNOSTIC_UPLOAD = OLD_DIAGNOSTIC_UPLOAD.replace("success()", "always()") + "          if-no-files-found: warn\n"
 OLD_PUBLICATION = '''        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -108,6 +123,24 @@ def require_approved_collector(payload: bytes) -> str:
     if actual not in APPROVED_COLLECTOR_BLOBS:
         raise AssertionError(f"unrecognized collector blob: {actual}")
     return actual
+
+
+def require_protected_workflow(current: str) -> bytes:
+    """Undo only the two exact reviewed deltas, then prove the original bytes.
+
+    #327 replaced unsafe publication; #367 preserves failed-run diagnostics.
+    In particular, the latter does NOT relax the success-only commit condition.
+    """
+    # Exact authorized G1 descendant; immutable ancestor is still verified.
+    if git_blob_sha(current.encode()) in {"dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84", "cc0137daad3dba01c56956958cd7efdc7d097c88"}:
+        return immutable_git_blob(ROOT, BASELINE_WORKFLOW_BLOB)
+    if current.count(NEW_DIAGNOSTIC_UPLOAD) != 1 or current.count(NEW_PUBLICATION) != 1:
+        raise AssertionError("unrecognized workflow delta")
+    reconstructed = current.replace(NEW_DIAGNOSTIC_UPLOAD, OLD_DIAGNOSTIC_UPLOAD, 1)
+    reconstructed = reconstructed.replace(NEW_PUBLICATION, OLD_PUBLICATION, 1).encode("utf-8")
+    if git_blob_sha(reconstructed) != BASELINE_WORKFLOW_BLOB:
+        raise AssertionError("unrecognized protected workflow bytes")
+    return reconstructed
 
 
 def configure(root: Path) -> None:
@@ -1091,12 +1124,31 @@ class CandidateValidationTests(unittest.TestCase):
 class StaticScopeTests(unittest.TestCase):
     def test_workflow_reconstructs_exact_protected_baseline(self):
         current = WORKFLOW_PATH.read_text(encoding="utf-8")
-        self.assertEqual(current.count(NEW_PUBLICATION), 1)
-        reconstructed = current.replace(NEW_PUBLICATION, OLD_PUBLICATION, 1).encode("utf-8")
-        blob = hashlib.sha1(
-            b"blob " + str(len(reconstructed)).encode("ascii") + b"\0" + reconstructed
-        ).hexdigest()
-        self.assertEqual(blob, BASELINE_WORKFLOW_BLOB)
+        reconstructed = require_protected_workflow(current)
+        self.assertEqual(reconstructed, immutable_git_blob(ROOT, BASELINE_WORKFLOW_BLOB))
+
+    def test_workflow_rejects_tampering_outside_exact_diagnostic_delta(self):
+        current = WORKFLOW_PATH.read_text(encoding="utf-8")
+        mutations = (
+            current.replace("success()", "always()"),  # would publish failed inputs
+            current.replace("--artifact-uploaded-for-run", "--unverified-artifact"),
+            current.replace("retention-days: 30", "retention-days: 1", 1),
+            current.replace("if-no-files-found: warn", "if-no-files-found: ignore", 1),
+            current + "\n# unexpected workflow edit\n",
+            current.replace("        id: closure_artifact", "        id: closure_artifact\n        id: duplicate"),
+        )
+        for mutation in mutations:
+            with self.subTest(blob=git_blob_sha(mutation.encode())):
+                with self.assertRaisesRegex(AssertionError, "unrecognized"):
+                    require_protected_workflow(mutation)
+
+    def test_each_immutable_collector_is_accepted_and_tampering_rejected(self):
+        for sha in APPROVED_COLLECTOR_BLOBS:
+            with self.subTest(sha=sha):
+                payload = immutable_git_blob(ROOT, sha)
+                self.assertEqual(require_approved_collector(payload), sha)
+                with self.assertRaisesRegex(AssertionError, "unrecognized collector blob"):
+                    require_approved_collector(payload + b"\n# tampered\n")
 
     def test_dispatch_schema_and_manual_shadow_jobs_remain_protected(self):
         text = WORKFLOW_PATH.read_text(encoding="utf-8")
@@ -1131,19 +1183,30 @@ class StaticScopeTests(unittest.TestCase):
             ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "32a1210a2f43065e9d65a9bd858c059b6166700f",
             ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "c2f8ddc46c52a2be06fcf7f53d03edc2df40f787",
         }
+        # #367 makes the gate diagnostics-only while stable execution is absent.
+        recovery_blobs = {".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "46c1cd483d6b04e98474ef3be498cd8faae007cb", ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml": "0618519ee3fc6c341de48dd1cff94e28960b76ce"}
+        coordinated_blobs = {
+            ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml": "2f87902b9fa17a14377c84dfaf716e276a10e53c",
+            ".github/workflows/f1-session-data-processor-loop-v1.yml": "77fc7c31bf381c60290ebf818bd45c9ed6992499",
+        }
         for path, expected_blob in expected.items():
             with self.subTest(path=path):
                 raw = (ROOT / path).read_bytes()
                 actual = hashlib.sha1(
                     b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
                 ).hexdigest()
-                self.assertEqual(actual, expected_blob)
+                if path in recovery_blobs or path in coordinated_blobs:
+                    self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
+                    self.assertEqual(actual, coordinated_blobs.get(path, recovery_blobs.get(path)))
+                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"), (expected_blob, recovery_blobs.get(path), coordinated_blobs.get(path)))
+                else:
+                    self.assertEqual(actual, expected_blob)
 
         immutable_collectors = {
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 4)
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 7)
         for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
             for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
                 self.assertNotEqual(
