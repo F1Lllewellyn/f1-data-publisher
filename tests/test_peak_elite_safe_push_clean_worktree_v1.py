@@ -138,6 +138,24 @@ class CleanWorktreeTests(unittest.TestCase):
                     historical = subprocess.check_output(['git', 'cat-file', 'blob', sha], cwd=ROOT)
                     self.assertEqual(hashlib.sha1(b'blob '+str(len(historical)).encode()+b'\0'+historical).hexdigest(), sha)
                     sha = coordinated.get(path, recovery.get(path))
+                if path == '.github/workflows/f1-session-data-processor-loop-v1.yml':
+                    # Issue #367 / PR #383: accept ONLY the explicitly reviewed
+                    # one-line-to-multiline Bash guard transformation. Preserve
+                    # the earlier pinned dependency bytes and reject any other
+                    # content mutation, including staging, history and git guards.
+                    before = subprocess.check_output(
+                        ['git', 'cat-file', 'blob', coordinated[path]], cwd=ROOT)
+                    original_line = (
+                        b'                if ! git check-ignore -q "$f"; then git add -- "$f"; fi\n'
+                    )
+                    corrected_lines = (
+                        b'                if ! git check-ignore -q "$f"; then\n'
+                        b'                  git add -- "$f"\n'
+                        b'                fi\n'
+                    )
+                    self.assertEqual(before.count(original_line), 1)
+                    self.assertEqual(raw, before.replace(original_line, corrected_lines, 1))
+                    sha = '9f65c356ad5353b555ff01527ac9cb8e072881b5'
                 self.assertEqual(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest(), sha)
 
 

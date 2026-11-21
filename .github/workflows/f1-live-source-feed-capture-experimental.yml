@@ -111,7 +111,9 @@ jobs:
             # Each capture owns only these three bounded source/diagnostic namespaces.
             # A failed source recording must persist its red verdict, not just history.
             for folder in latest/live_source_feed_capture latest/live_source_feed_capture_status history/live_source_feed_capture; do
-              if [ -d "$folder" ]; then git add -- "$folder"; fi
+              if [ -d "$folder" ]; then
+                git add -- "$folder"
+              fi
             done
             if ! git diff --cached --quiet; then
               git commit -m "Add live source feed capture outputs"
