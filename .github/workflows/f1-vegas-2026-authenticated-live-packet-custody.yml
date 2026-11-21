@@ -1,0 +1,75 @@
+name: F1 Vegas 2026 Authenticated Qualifying/Race Packet Custody
+
+# Exact 2026 dates only. GitHub schedule can be delayed or skipped; each run
+# independently checks the actual UTC window before touching the live feed.
+on:
+  schedule:
+    - cron: '55 3 21 11 *'
+    - cron: '10,30,50 4 21 11 *'
+    - cron: '10 5 21 11 *'
+    - cron: '55 3 22 11 *'
+    - cron: '15,45 4 22 11 *'
+    - cron: '15,45 5 22 11 *'
+    - cron: '10 6 22 11 *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-vegas-2026-authenticated-live-packet-custody.yml'
+      - 'scripts/live_capture/f1_vegas_2026_live_packet_probe_v1.py'
+      - 'tests/test_f1_vegas_2026_live_packet_probe_v1.py'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-probe-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install minimal module dependencies
+        run: python -m pip install 'requests>=2.31' 'fastf1==3.9.2'
+      - name: Verify source-only event guards and no false readiness
+        run: python -m unittest discover -s tests -p test_f1_vegas_2026_live_packet_probe_v1.py -v
+
+  authenticated-live-source-probe:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    concurrency:
+      group: f1-vegas-2026-original-live-source-proof-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install supported authenticated SignalR Core version
+        run: python -m pip install 'fastf1==3.9.2' 'requests>=2.31'
+      - name: Capture up to five minutes of original authenticated packet bytes
+        shell: bash
+        env:
+          FASTF1_AUTH_METHOD: password
+          F1_USERNAME: ${{ secrets.F1_USERNAME }}
+          F1_PASSWORD: ${{ secrets.F1_PASSWORD }}
+        run: |
+          set -euo pipefail
+          python scripts/live_capture/f1_vegas_2026_live_packet_probe_v1.py \
+            --duration-minutes 5 \
+            --output-dir _runtime/f1_vegas_live_packet_probe
+      - name: Retain exact original bytes and time/boundary manifest, including HOLDs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-vegas-2026-live-packets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/f1_vegas_live_packet_probe/**
+          if-no-files-found: warn
+          retention-days: 90
