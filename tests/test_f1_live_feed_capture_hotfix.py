@@ -253,5 +253,59 @@ class LiveFeedRepairTests(unittest.TestCase):
                 os.chdir(old_cwd)
 
 
+    def test_las_vegas_fp3_uses_only_pinned_session_after_live_catalog_http401(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        now=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)
+        with patch.object(capture,"now_utc",return_value=now), \
+             patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")) as get:
+            result=capture.choose_active_window(policy,"auto_window","",None)
+        get.assert_called_once_with(2026)
+        self.assertTrue(result["should_capture"])
+        self.assertEqual(result["session_key"],11415)
+        self.assertEqual(result["meeting_key"],1300)
+        self.assertEqual(result["schedule_origin"],"verified_2026_las_vegas_timetable_only")
+        self.assertEqual(result["provider_catalog_lookup_hold"],"PermissionError")
+        self.assertTrue(result["schedule_is_not_source_authentication"])
+        self.assertEqual(result["reason"],"active_schedule_window")
+
+    def test_las_vegas_qualifying_and_race_exact_date_fallback(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        for now,key in ((dt.datetime(2026,11,21,4,5,tzinfo=capture.UTC),11416),
+                        (dt.datetime(2026,11,22,4,5,tzinfo=capture.UTC),11420)):
+            with self.subTest(key=key),patch.object(capture,"now_utc",return_value=now), \
+                 patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+                decision=capture.choose_active_window(policy,"auto_window","",None)
+                self.assertTrue(decision["should_capture"])
+                self.assertEqual(decision["session_key"],key)
+                self.assertEqual(decision["meeting_key"],1300)
+
+    def test_no_recording_outside_pinned_2026_f1_window_or_for_wrong_identity(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        for now in (dt.datetime(2026,11,20,17,0,tzinfo=capture.UTC),
+                    dt.datetime(2026,11,23,4,0,tzinfo=capture.UTC),
+                    dt.datetime(2027,11,21,0,45,tzinfo=capture.UTC)):
+            with self.subTest(now=now),patch.object(capture,"now_utc",return_value=now), \
+                 patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+                self.assertFalse(capture.choose_active_window(policy,"auto_window","",None)["should_capture"])
+        # A source event mismatch cannot authorize an alternative recording.
+        policy["schedule_detection"]["verified_fallback_sessions"][0]["meeting_key"]=999
+        with patch.object(capture,"now_utc",return_value=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)), \
+             patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+            self.assertFalse(capture.choose_active_window(policy,"auto_window","",None)["should_capture"])
+
+    def test_provider_catalog_success_remains_authority_over_fallback(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        now=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)
+        with patch.object(capture,"now_utc",return_value=now), \
+             patch.object(capture,"fetch_openf1_sessions",return_value=[]):
+            result=capture.choose_active_window(policy,"auto_window","",None)
+        self.assertFalse(result["should_capture"])
+        self.assertEqual(result["reason"],"no_active_capture_window")
+
+
 if __name__ == "__main__":
     unittest.main()
