@@ -71,6 +71,8 @@ jobs:
       GATE: ${{ github.event.inputs.gate || 'auto' }}
       RUN_SOURCE_CLOSURE: ${{ github.event.inputs.run_source_closure || 'true' }}
       COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}
+      # Monitoring success does not authorize any forecast; manual callers stay strict.
+      EXIT_POLICY: ${{ github.event_name == 'schedule' && 'monitor' || 'strict' }}
 
     steps:
       - name: Checkout repository
@@ -105,6 +107,7 @@ jobs:
             --race-name "${RACE_NAME}" \
             --gate "${GATE}" \
             --run-source-closure "${RUN_SOURCE_CLOSURE}" \
+            --exit-policy "${EXIT_POLICY}" \
             --season 2026
 
       - name: Upload orchestrator artifacts
