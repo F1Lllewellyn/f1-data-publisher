@@ -1,0 +1,90 @@
+name: F1 Vegas FP3 Event Scoped Source Closure Sandbox One Shot
+
+# First merge invokes the existing G1 event-scoped collector in a SANDBOX,
+# never committing any source or forecast. Read-only candidate validation.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-vegas-fp3-event-scope-closure-sandbox-one-shot.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/f1-vegas-fp3-event-scope-closure-sandbox-one-shot.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pr-offline-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify candidate code and read-only sandbox workflow
+        run: |
+          python -m py_compile scripts/openf1/publish_openf1_lightweight_source_closure.py
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/f1-vegas-fp3-event-scope-closure-sandbox-one-shot.yml').read_text()
+          assert 'contents: read' in p
+          assert '--meeting-key 1300' in p and '--expected-session-key 11415' in p
+          assert '--output-root "_runtime/fp3_event_source_closure_sandbox"' in p
+          assert '2026,11,21,3,25' in p
+          assert not any(s.strip().startswith(('git push ','git add ','git commit ')) for s in p.splitlines())
+          print('Exact event, sandbox, cutoff and no Git write contract: PASS')
+          PY
+
+  event-scoped-original-source-sandbox:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 29
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original publisher dependencies
+        run: python -m pip install pandas requests openpyxl
+      - name: Block late requests during paid qualifying live window
+        shell: bash
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          left=dt.datetime(2026,11,21,2,0,tzinfo=dt.timezone.utc)
+          right=dt.datetime(2026,11,21,3,25,tzinfo=dt.timezone.utc)
+          if not left <= now < right:
+              raise SystemExit('HOLD_FP3_EVENT_SOURCE_COLLECTION_OUTSIDE_FREE_PREQUALIFYING_WINDOW')
+          print('Safe FP3 historical event-source collection before new qualifying live window')
+          PY
+      - name: Collect existing exact meeting/session event source under sandbox only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/openf1/publish_openf1_lightweight_source_closure.py \
+            --season 2026 --completed-only true \
+            --meeting-key 1300 --expected-session-key 11415 \
+            --output-root "_runtime/fp3_event_source_closure_sandbox" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-workflow "$GITHUB_WORKFLOW" \
+            --github-workflow-ref "$GITHUB_WORKFLOW_REF" \
+            --github-ref "$GITHUB_REF" \
+            --github-sha "$GITHUB_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT"
+      - name: Preserve exact original source/availability evidence even on HOLD
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-vegas-fp3-event-source-sandbox-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/fp3_event_source_closure_sandbox/**
+          if-no-files-found: warn
+          retention-days: 90
