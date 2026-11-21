@@ -1198,6 +1198,22 @@ class StaticScopeTests(unittest.TestCase):
                 if path in recovery_blobs or path in coordinated_blobs:
                     self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
                     previous = coordinated_blobs.get(path, recovery_blobs.get(path))
+                    if path == ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml":
+                        # Post-release #367 monitoring changes only exit reporting.
+                        # Reconstruct from the exact accepted bytes, preserving
+                        # every original scientific/dependency pin above.
+                        prior = immutable_git_blob(ROOT, previous)
+                        self.assertEqual(git_blob_sha(prior), previous)
+                        anchor = b"      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}\n"
+                        addition = (b"      # Monitoring success does not authorize any forecast; manual callers stay strict.\n"
+                                    b"      EXIT_POLICY: ${{ github.event_name == 'schedule' && 'monitor' || 'strict' }}\n")
+                        invocation = b'            --season 2026\n'
+                        self.assertEqual(prior.count(anchor), 1)
+                        self.assertEqual(prior.count(invocation), 1)
+                        revised = prior.replace(anchor, anchor + addition).replace(
+                            invocation, b'            --exit-policy "${EXIT_POLICY}" \\\n' + invocation)
+                        self.assertEqual(raw, revised)
+                        previous = "b3123e4a76af251f20bc27cda09bf1c7d6594a22"
                     if path == ".github/workflows/f1-session-data-processor-loop-v1.yml":
                         # Issue #367: preserve the immutable source-closure pin
                         # while accepting ONLY PR #383's one-line Bash if/fi
