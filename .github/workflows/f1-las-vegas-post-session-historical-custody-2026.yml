@@ -1,0 +1,61 @@
+name: F1 Las Vegas 2026 Post-Session Historical Original Source Custody
+
+# Time-scoped contingency for FP3 / Qualifying / Race.
+# GitHub cron does not support a year; the script rejects every date except
+# the exact 2026 windows. The watch can later be retired by reviewed deletion.
+on:
+  schedule:
+    - cron: '15,45 2 21 11 *'   # FP3 after its free historical-window boundary
+    - cron: '15,45 6 21 11 *'   # Qualifying post-session
+    - cron: '15,45 7 22 11 *'   # Race post-session
+  pull_request:
+    paths:
+      - '.github/workflows/f1-las-vegas-post-session-historical-custody-2026.yml'
+      - 'scripts/ops/f1_las_vegas_2026_post_session_custody_v1.py'
+      - 'tests/test_f1_las_vegas_2026_post_session_custody_v1.py'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Regress exact time guard and source-only status
+        run: python -m unittest discover -s tests -p test_f1_las_vegas_2026_post_session_custody_v1.py -v
+
+  live-historical-observation:
+    if: ${{ github.event_name == 'schedule' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    concurrency:
+      group: f1-las-vegas-historical-source-custody-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Retrieve original post-session provider bytes and independent timing
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_las_vegas_2026_post_session_custody_v1.py
+      - name: Retain every original HTTP response and decision (including HOLD)
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-lv2026-original-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/las_vegas_2026_post_session_custody/**
+          if-no-files-found: ignore
+          retention-days: 90
