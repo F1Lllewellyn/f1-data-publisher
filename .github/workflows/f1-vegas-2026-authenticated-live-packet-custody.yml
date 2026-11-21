@@ -98,3 +98,48 @@ jobs:
           path: _runtime/f1_vegas_live_packet_probe/**
           if-no-files-found: warn
           retention-days: 90
+
+  # The repository's schedule events have stopped appearing for several
+  # hours. A second prearmed, push-only job protects the no-cost OpenF1
+  # historical observation AFTER the paid live window, even if cron drops.
+  post-qualifying-openf1-original-source:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 290
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Prearm historical qualifying source after live access period
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt, time
+          utc=dt.timezone.utc
+          target=dt.datetime(2026,11,21,6,5,tzinfo=utc)
+          now=dt.datetime.now(utc)
+          remaining=max(0,(target-now).total_seconds())
+          print('Original OpenF1 qualifying read is prearmed for the post-live source boundary',flush=True)
+          if remaining:
+              time.sleep(remaining)
+          PY
+      - name: Retain exact original free-historical provider responses
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_live_session_source_custody_canary_v1.py \
+            --meeting-key 1300 \
+            --session-key 11416 \
+            --output-dir _runtime/f1_vegas_qualifying_historical_source
+      - name: Retain original HTTP responses, hashes and observation clocks even on HOLD
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-vegas-qualifying-original-openf1-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/f1_vegas_qualifying_historical_source/**
+          if-no-files-found: warn
+          retention-days: 90
