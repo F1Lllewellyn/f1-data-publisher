@@ -22,6 +22,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 import zipfile
@@ -30,10 +31,8 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-# Python compatibility:
-# - Python 3.11+ exposes datetime.UTC
-# - FastF1 live timing compatibility currently drives us toward Python 3.9,
-#   where datetime.UTC does not exist. Use timezone.utc as fallback.
+# FastF1 3.9.2 requires Python >=3.10 and authenticated SignalR Core;
+# timezone.utc fallback remains safe for retained compatibility fixtures.
 UTC = getattr(dt, "UTC", dt.timezone.utc)
 
 OPENF1_SESSIONS_URL = "https://api.openf1.org/v1/sessions"
@@ -176,69 +175,97 @@ def choose_active_window(policy: Dict[str, Any], capture_mode: str, manual_label
 
 
 def record_live_timing(raw_path: Path, duration_minutes: int) -> Dict[str, Any]:
-    """Record using FastF1 SignalRClient with defensive handling."""
+    """Bounded, authenticated modern FastF1 SignalR Core recorder.
+
+    SignalRClient.start() is BLOCKING and the client exposes no public stop().
+    An isolated child process must be supervised instead of calling start()
+    on the Action's main thread. No secrets or provider auth responses are
+    printed, stored in artifacts, or passed as command-line arguments.
+    """
     result = {
-        "recording_attempted": True,
-        "recording_started_utc": iso_now(),
+        "recording_attempted": False,
+        "recording_requested_utc": iso_now(),
+        "recording_started_utc": None,
         "recording_finished_utc": None,
         "duration_minutes_requested": duration_minutes,
         "raw_path": str(raw_path),
         "python_version": sys.version,
         "fastf1_installed_version": get_package_version("fastf1"),
         "fastf1_import_ok": False,
+        "auth_credentials_configured": False,
         "recording_status": "not_started",
         "error": None,
         "diagnostic_hint": None,
     }
     try:
-        from fastf1.livetiming.client import SignalRClient  # type: ignore
-        result["fastf1_import_ok"] = True
-    except Exception as exc:
-        result["recording_status"] = "fastf1_import_failed"
-        result["error"] = repr(exc)
-        result["diagnostic_hint"] = (
-            "FastF1 import failed before live capture could start. "
-            "For Python 3.9, use a FastF1 version known to be Python-3.9 compatible "
-            "(the workflow pins fastf1>=3.3,<3.7). If this still fails, inspect "
-            "fastf1_installed_version and Python version in diagnostics."
-        )
-        result["recording_finished_utc"] = iso_now()
-        return result
-
-    client = None
-    try:
-        raw_path.parent.mkdir(parents=True, exist_ok=True)
-        client = SignalRClient(filename=str(raw_path), filemode="w")
-        client.start()
-        result["recording_status"] = "running"
-        end_time = time.time() + max(1, duration_minutes) * 60
-        while time.time() < end_time:
-            time.sleep(5)
-        result["recording_status"] = "completed"
-    except Exception as exc:
-        # FastF1/SignalR can raise JSONDecodeError when the upstream live timing negotiation
-        # returns an empty/non-JSON response. Outside an active F1 live-timing window, this is
-        # usually a source-feed availability/handshake condition, not a workflow plumbing failure.
-        if exc.__class__.__name__ == "JSONDecodeError":
-            result["recording_status"] = "source_feed_handshake_unavailable"
-            result["error"] = repr(exc)
+        # GitHub runners are ephemeral, so there is no persisted FastF1 login
+        # token. The documented password flow uses these two secret env vars.
+        auth_ok = bool(os.environ.get("F1_USERNAME", "").strip()
+                       and os.environ.get("F1_PASSWORD", "").strip())
+        result["auth_credentials_configured"] = auth_ok
+        if not auth_ok:
+            result["recording_status"] = "f1_auth_missing"
+            result["error"] = "HOLD_F1TV_AUTH_NOT_CONFIGURED"
             result["diagnostic_hint"] = (
-                "FastF1 imported and started, but the live timing source-feed handshake returned "
-                "an empty/non-JSON response. For manual tests outside a live F1 session this is "
-                "expected/pass-with-warnings. During an active session it may indicate upstream "
-                "blocking, endpoint unavailability, or a FastF1 live timing compatibility issue."
+                "An eligible F1TV account is required for the current Formula 1 "
+                "SignalR Core endpoint. Set F1_USERNAME and F1_PASSWORD as "
+                "GitHub Actions repository secrets; never commit credentials."
             )
-        else:
-            result["recording_status"] = "recording_error"
-            result["error"] = repr(exc)
-    finally:
+            return result
+        if result["fastf1_installed_version"] != "3.9.2":
+            result["recording_status"] = "fastf1_version_unsupported"
+            result["error"] = "HOLD_FASTF1_SIGNALR_CORE_VERSION"
+            return result
+        from fastf1.livetiming.client import SignalRClient  # noqa: F401
+        result["fastf1_import_ok"] = True
+        raw_path.parent.mkdir(parents=True, exist_ok=True)
+        # Data and headers are written by the child, under the original
+        # provider's observation clock; stop after the requested budget.
+        child_code = (
+            "import sys\n"
+            "from fastf1.livetiming.client import SignalRClient\n"
+            "client=SignalRClient(filename=sys.argv[1],filemode='w',timeout=60)\n"
+            "client.start()\n"
+        )
+        result["recording_attempted"] = True
+        result["recording_started_utc"] = iso_now()
         try:
-            if client is not None:
-                client.stop()
-        except Exception as exc:
-            result["stop_error"] = repr(exc)
+            completed = subprocess.run(
+                [sys.executable, "-c", child_code, str(raw_path)],
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=max(1, int(duration_minutes)) * 60,
+                env=os.environ.copy(),
+            )
+            # Keep sensitive login/connection output OUT of logs/artifacts.
+            result["child_exit_code"] = completed.returncode
+            if completed.returncode == 0 and raw_path.exists() and raw_path.stat().st_size > 0:
+                result["recording_status"] = "completed"
+            elif completed.returncode == 0:
+                result["recording_status"] = "source_feed_handshake_unavailable"
+                result["error"] = "HOLD_F1_SIGNALR_NO_SOURCE_BYTES"
+            else:
+                result["recording_status"] = "source_feed_handshake_unavailable"
+                result["error"] = "HOLD_F1_SIGNALR_AUTH_OR_CONNECT_FAILED"
+        except subprocess.TimeoutExpired:
+            # subprocess.run kills and reaps the child; SignalRClient writes
+            # and flushes each received message before this cutoff.
+            result["timeboxed"] = True
+            if raw_path.exists() and raw_path.stat().st_size > 0:
+                result["recording_status"] = "completed"
+            else:
+                result["recording_status"] = "source_feed_handshake_unavailable"
+                result["error"] = "HOLD_F1_SIGNALR_NO_SOURCE_BYTES"
+        return result
+    except Exception as exc:
+        result["recording_status"] = "recording_error"
+        # Never retain arbitrary third-party exception text: auth stack
+        # exceptions may include private headers, token or credentials.
+        result["error"] = "HOLD_F1_SIGNALR_RUNTIME_" + type(exc).__name__
+        return result
+    finally:
         result["recording_finished_utc"] = iso_now()
-    return result
 
 
 def build_packet_index(raw_path: Path, index_path: Path) -> Dict[str, Any]:
@@ -446,7 +473,7 @@ def main() -> int:
                 verdict = "Pass with warnings"
             else:
                 verdict = "Fail"
-        elif status in {"fastf1_import_failed", "recording_error"}:
+        elif status in {"fastf1_import_failed", "fastf1_version_unsupported", "f1_auth_missing", "recording_error"}:
             verdict = "Fail"
         else:
             verdict = "Fail" if decision.get("reason") == "active_schedule_window" else "Pass with warnings"
