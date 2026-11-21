@@ -1163,7 +1163,11 @@ class StaticScopeTests(unittest.TestCase):
             self.assertEqual(dispatch.count(f"      {name}"), 1)
         self.assertEqual(text.count("openf1-manual-shadow-custody-attestation:"), 1)
         self.assertEqual(text.count("dr002-pre2b7k4r28-openf1-manual-shadow-custody"), 1)
-        self.assertIn("if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}", text)
+        self.assertIn("if: ${{ success() && steps.source_closure.outputs.publish_eligible == 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}", text)
+        self.assertIn("id: source_closure", text)
+        self.assertIn("if [ \"$publisher_rc\" -eq 0 ]; then", text)
+        self.assertIn("echo \"publish_eligible=true\" >> \"$GITHUB_OUTPUT\"", text)
+        self.assertIn("python scripts/ops/f1_openf1_scheduled_source_hold_monitor_v1.py", text)
         self.assertLess(text.index("Upload legacy source closure artifact"), text.index("f1_source_closure_publish_guard_v1.py"))
 
     def test_guard_has_one_plain_push_and_no_provider_or_retry_path(self):
