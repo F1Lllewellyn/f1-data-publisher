@@ -1197,8 +1197,24 @@ class StaticScopeTests(unittest.TestCase):
                 ).hexdigest()
                 if path in recovery_blobs or path in coordinated_blobs:
                     self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
-                    self.assertEqual(actual, coordinated_blobs.get(path, recovery_blobs.get(path)))
-                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"), (expected_blob, recovery_blobs.get(path), coordinated_blobs.get(path)))
+                    previous = coordinated_blobs.get(path, recovery_blobs.get(path))
+                    if path == ".github/workflows/f1-session-data-processor-loop-v1.yml":
+                        # Issue #367: preserve the immutable source-closure pin
+                        # while accepting ONLY PR #383's one-line Bash if/fi
+                        # formatting correction. No other code change qualifies.
+                        prior = immutable_git_blob(ROOT, previous)
+                        self.assertEqual(git_blob_sha(prior), previous)
+                        inline = b'                if ! git check-ignore -q "$f"; then git add -- "$f"; fi\n'
+                        expanded = (b'                if ! git check-ignore -q "$f"; then\n'
+                                    b'                  git add -- "$f"\n'
+                                    b'                fi\n')
+                        self.assertEqual(prior.count(inline), 1)
+                        self.assertEqual(raw, prior.replace(inline, expanded, 1))
+                        previous = "9f65c356ad5353b555ff01527ac9cb8e072881b5"
+                    self.assertEqual(actual, previous)
+                    self.assertNotIn(git_blob_sha(raw + b"\n# tamper\n"),
+                                     (expected_blob, recovery_blobs.get(path),
+                                      coordinated_blobs.get(path), previous))
                 else:
                     self.assertEqual(actual, expected_blob)
 
