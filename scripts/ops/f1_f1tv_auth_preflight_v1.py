@@ -66,7 +66,7 @@ def main(argv=None) -> int:
         "original_source_bytes_verified": False,
         "stable_engine_executed": False,
         "prospective_forecast_authorized": False,
-        "credentials_or_token_retained": False,
+        "credentials_or_token_exported_in_repository_or_artifact": False,
     }
     (out / "status.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print("F1TV authentication preflight result:", status)
