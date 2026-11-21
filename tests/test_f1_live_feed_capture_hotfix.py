@@ -142,6 +142,8 @@ class LiveFeedRepairTests(unittest.TestCase):
                 self.assertIn("SignalRClient", args[2])
                 self.assertNotIn("SYNTHETIC_NOT_A_SECRET", str(args))
                 self.assertEqual(kwargs["timeout"], 60)
+                self.assertEqual(kwargs["stdout"], subprocess.DEVNULL)
+                self.assertEqual(kwargs["stderr"], subprocess.DEVNULL)
                 path.write_bytes(b"synthetic-signalr-original-packets")
                 return subprocess.CompletedProcess(args=args, returncode=0, stdout=b"", stderr=b"")
             with patch.object(capture.subprocess, "run", side_effect=fake_run):
