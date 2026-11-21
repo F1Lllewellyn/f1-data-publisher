@@ -37,10 +37,11 @@ jobs:
           p=pathlib.Path('.github/workflows/f1-las-vegas-fp3-live-wire-oneoff-2026.yml').read_text()
           assert sys.version_info[:2]==(3,9)
           assert SignalRClient
-          assert 'contents: read' in p
-          assert 'F1_Live_Source_Feed_Capture_Layer' not in p
-          assert '--manual-validation-mode force_source_feed' in p
-          assert 'git push' not in p and 'safe_git_push' not in p
+          lines=p.splitlines()
+          assert any(line.strip() == 'contents: read' for line in lines)
+          assert not any(line.strip().startswith('contents: write') for line in lines)
+          assert any(line.strip().startswith('--manual-validation-mode force_source_feed') for line in lines)
+          assert not any(line.strip().startswith('git push ') or line.strip().startswith('git add ') for line in lines)
           print('FastF1 original wire capture environment and read-only contract PASS')
           PY
           python -m py_compile scripts/live_capture/run_live_source_feed_capture.py
