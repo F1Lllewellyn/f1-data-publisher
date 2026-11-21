@@ -1,0 +1,29 @@
+timestamp_utc,endpoint,strategy,params_json,rows,status,error,elapsed_seconds
+2026-11-21T02:42:21.239289Z,sessions,sessions_by_year,"{""year"": 2026}",131,pass,,0.448
+2026-11-21T02:42:21.591425Z,weather,weather_by_session_key,"{""session_key"": 11413}",84,pass,,0.33
+2026-11-21T02:42:21.950887Z,race_control,race_control_by_session_key,"{""session_key"": 11413}",26,pass,,0.357
+2026-11-21T02:42:22.271021Z,intervals,intervals_by_session_key,"{""session_key"": 11413}",0,http_404,"{""detail"":""No results found.""}",0.318
+2026-11-21T02:42:22.611797Z,position,position_by_session_key,"{""session_key"": 11413}",160,pass,,0.34
+2026-11-21T02:42:22.960570Z,stints,stints_by_session_key,"{""session_key"": 11413}",18,pass,,0.346
+2026-11-21T02:42:22.962747Z,pit,skip_non_race_like_session,"{""session_key"": 11413}",0,skipped_not_applicable,pit endpoint is only treated as required for race/sprint-like sessions,0.0
+2026-11-21T02:42:23.319902Z,starting_grid,starting_grid_by_session_key,"{""session_key"": 11413}",0,http_404,"{""detail"":""No results found.""}",0.357
+2026-11-21T02:42:23.647687Z,drivers,drivers_by_session_key,"{""session_key"": 11413}",22,pass,,0.327
+2026-11-21T02:42:23.967888Z,team_radio,team_radio_by_session_key_opportunistic,"{""session_key"": 11413}",5,pass,,0.318
+2026-11-21T02:42:24.479985Z,weather,weather_by_session_key,"{""session_key"": 11414}",84,pass,,0.511
+2026-11-21T02:42:24.809099Z,race_control,race_control_by_session_key,"{""session_key"": 11414}",118,pass,,0.327
+2026-11-21T02:42:25.335948Z,intervals,intervals_by_session_key,"{""session_key"": 11414}",0,http_404,"{""detail"":""No results found.""}",0.524
+2026-11-21T02:42:25.716729Z,position,position_by_session_key,"{""session_key"": 11414}",785,pass,,0.381
+2026-11-21T02:42:26.260138Z,stints,stints_by_session_key,"{""session_key"": 11414}",72,pass,,0.535
+2026-11-21T02:42:26.262932Z,pit,skip_non_race_like_session,"{""session_key"": 11414}",0,skipped_not_applicable,pit endpoint is only treated as required for race/sprint-like sessions,0.0
+2026-11-21T02:42:26.734876Z,starting_grid,starting_grid_by_session_key,"{""session_key"": 11414}",0,http_404,"{""detail"":""No results found.""}",0.472
+2026-11-21T02:42:27.055348Z,drivers,drivers_by_session_key,"{""session_key"": 11414}",22,pass,,0.32
+2026-11-21T02:42:27.483424Z,team_radio,team_radio_by_session_key_opportunistic,"{""session_key"": 11414}",13,pass,,0.426
+2026-11-21T02:42:27.808670Z,weather,weather_by_session_key,"{""session_key"": 11415}",82,pass,,0.324
+2026-11-21T02:42:28.135666Z,race_control,race_control_by_session_key,"{""session_key"": 11415}",145,pass,,0.325
+2026-11-21T02:42:28.458315Z,intervals,intervals_by_session_key,"{""session_key"": 11415}",0,http_404,"{""detail"":""No results found.""}",0.319
+2026-11-21T02:42:28.943505Z,position,position_by_session_key,"{""session_key"": 11415}",1028,pass,,0.487
+2026-11-21T02:42:29.273991Z,stints,stints_by_session_key,"{""session_key"": 11415}",72,pass,,0.319
+2026-11-21T02:42:29.276713Z,pit,skip_non_race_like_session,"{""session_key"": 11415}",0,skipped_not_applicable,pit endpoint is only treated as required for race/sprint-like sessions,0.0
+2026-11-21T02:42:29.591777Z,starting_grid,starting_grid_by_session_key,"{""session_key"": 11415}",0,http_404,"{""detail"":""No results found.""}",0.315
+2026-11-21T02:42:30.111537Z,drivers,drivers_by_session_key,"{""session_key"": 11415}",22,pass,,0.519
+2026-11-21T02:42:30.447068Z,team_radio,team_radio_by_session_key_opportunistic,"{""session_key"": 11415}",11,pass,,0.334
