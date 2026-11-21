@@ -44,13 +44,16 @@ env:
   LIVE_CAPTURE_POLICY: configs/live_capture/live_source_feed_capture_policy.json
 
 concurrency:
-  group: f1-main-write-serialization
+  # Long-lived experimental live capture must not hold the production source/write lock.
+  # One running feed at a time; the pending run may be superseded by GitHub's scheduler.
+  group: f1-experimental-live-source-feed
   cancel-in-progress: false
 
 jobs:
   live-source-feed-capture:
     name: live-source-feed-capture-experimental
-    runs-on: ubuntu-latest
+    # FastF1 SignalRClient uses Python 3.9; no 3.9 toolcache build exists on Ubuntu 26.04.
+    runs-on: ubuntu-24.04
     timeout-minutes: 240
     concurrency:
       group: f1-live-source-feed-capture-${{ github.ref }}-${{ github.run_id }}
