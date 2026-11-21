@@ -414,7 +414,8 @@ def main() -> int:
         if status == "completed" and raw_bytes > 0:
             verdict = "Pass"
         elif status == "completed" and raw_bytes == 0:
-            verdict = "Pass with warnings"
+            # A scheduled capture without a single source byte is not a successful capture.
+            verdict = "Fail" if decision.get("reason") == "active_schedule_window" else "Pass with warnings"
         elif status == "source_feed_handshake_unavailable":
             # Manual forced-feed attempts outside a true live F1 timing window should not be treated
             # as an engine failure. In scheduled active windows, however, a source-feed handshake
@@ -426,9 +427,10 @@ def main() -> int:
         elif status in {"fastf1_import_failed", "recording_error"}:
             verdict = "Fail"
         else:
-            verdict = "Pass with warnings"
+            verdict = "Fail" if decision.get("reason") == "active_schedule_window" else "Pass with warnings"
     else:
-        verdict = "Pass with warnings"
+        # Provider discovery failed: do not disguise a genuine scheduling outage as success.
+        verdict = "Fail" if str(decision.get("reason", "")).startswith("schedule_lookup_failed") else "Pass with warnings"
         # Still write a no-capture manifest so schedule runs are auditable.
         packet_summary = {"raw_exists": False, "raw_size_bytes": 0, "line_count": 0, "topic_counts": {}, "index_created": False}
         recording_result = {
@@ -494,7 +496,8 @@ def main() -> int:
     evidence_bearing = packet_summary.get("raw_size_bytes", 0) > 0
     # Preserve latest evidence for non-evidence validation/no-window runs.
     # Manual infrastructure tests prove plumbing only and should not delete the last live capture.
-    update_latest = bool(evidence_bearing)
+    # Partial/error captures are retained as diagnostics in history, not promoted as latest.
+    update_latest = bool(evidence_bearing and verdict == "Pass")
     copy_result = copy_to_latest_and_history(
         work_dir,
         policy,
@@ -525,7 +528,8 @@ def main() -> int:
         "copy_result": copy_result,
         "work_dir": str(work_dir),
     }, indent=2, default=str))
-    return 0
+    # Source capture failures must remain red in Actions; artifacts and audit are still retained.
+    return 1 if verdict == "Fail" else 0
 
 
 if __name__ == "__main__":
