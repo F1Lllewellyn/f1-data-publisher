@@ -1,0 +1,165 @@
+name: F1 Issue 367 Original v22 Consumer Handoff Recovery Once
+
+# A successful authentic Peak was dispatched using the workflow GITHUB_TOKEN;
+# the downstream workflow_run event is not guaranteed to fire for this chain.
+# Reuse the ORIGINAL v22 workflow_dispatch without touching its verification,
+# consumer logic, engine or historical source. Only first deployment executes.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-issue367-v22-postpeak-original-dispatch-once.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-issue367-v22-postpeak-original-dispatch-once.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  real-upstream-bridge-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Verify original Peak and source byte-bound bridge input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_input
+      - name: Check exact one-time dispatch interface and no independent engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          w=Path('.github/workflows/f1-issue367-v22-postpeak-original-dispatch-once.yml').read_text()
+          def step(name):
+              lines=w.splitlines()
+              marker='      - name: '+name
+              locations=[i for i,line in enumerate(lines) if line==marker]
+              assert len(locations)==1, 'HOLD_DUPLICATE_OR_MISSING_STEP'
+              start=locations[0]+1
+              end=next((i for i in range(start,len(lines))
+                        if lines[i].startswith('      - name: ')),len(lines))
+              return '\\n'.join(lines[start:end])
+          actual=step('Dispatch ORIGINAL v22 downstream consumers once')
+          verification=step('Verify original completed Peak and avoid duplicate automatic v22')
+          assert 'gh workflow run f1-1b-output-contract-after-control-room-v22.yml' in actual
+          assert '-f commit_outputs=true' in actual
+          assert '44904714460' in verification and 'b59c4837d1512940282a3c48530f8785fa14cf42' in verification
+          assert 'dt.datetime(2026,11,21,21,30' in verification
+          assert not any(line.strip().startswith(('git add ', 'git push ', 'git commit '))
+                         for line in w.splitlines())
+          assert 'scripts/forecasts/produce_actual_forecast_rows' not in actual
+          print('Original immutable upstream identity and existing v22 only: PASS')
+          PY
+
+  dispatch-existing-v22-after-verified-peak:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Verify original completed Peak and avoid duplicate automatic v22
+        id: verify_upstream
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir -p _runtime/issue367_v22_postpeak
+          python - <<'PY'
+          import datetime as dt, json, os, subprocess
+          from pathlib import Path
+
+          def load_api(endpoint):
+              return json.loads(subprocess.check_output(
+                  ['gh','api',endpoint], text=True, stderr=subprocess.DEVNULL))
+          utc=dt.timezone.utc
+          now=dt.datetime.now(utc)
+          start=dt.datetime(2026,11,21,12,30,tzinfo=utc)
+          end=dt.datetime(2026,11,21,21,30,tzinfo=utc)
+          if not start <= now < end:
+              raise SystemExit('HOLD_V22_CUSTODY_RESCUE_OUTSIDE_2026_WINDOW')
+          upstream=load_api('repos/'+os.environ['GH_REPO']+'/actions/runs/44904714460')
+          assert upstream.get('status')=='completed' and upstream.get('conclusion')=='success', 'HOLD_ORIGINAL_PEAK_NOT_SUCCESSFUL'
+          assert upstream.get('head_sha')=='b59c4837d1512940282a3c48530f8785fa14cf42', 'HOLD_ORIGINAL_PEAK_CODE_IDENTITY'
+          assert upstream.get('head_branch')=='main' and upstream.get('event')=='workflow_dispatch', 'HOLD_WRONG_PEAK_TRIGGER'
+          original=json.loads(Path('latest/peak_elite/orchestrator_status.json').read_text())
+          selector=json.loads(Path('latest/latest_manifest.json').read_text())
+          if not (original.get('github_run_id')=='44904714460'
+                  and original.get('workflow_head_sha')=='b59c4837d1512940282a3c48530f8785fa14cf42'
+                  and original.get('status')=='pass'
+                  and original.get('failed_steps')==[]
+                  and original.get('downstream_current') is True
+                  and original.get('commit_allowed') is True
+                  and original.get('stable_engine_modified') is False
+                  and selector.get('event_id')=='2026_1300_united_states_las_vegas_las_vegas'
+                  and str(selector.get('session_key'))=='11416'):
+              raise SystemExit('HOLD_CURRENT_PEAK_OR_QUALIFYING_PROVENANCE_NOT_VERIFIED')
+          runs=load_api('repos/'+os.environ['GH_REPO']+'/actions/runs?event=workflow_run&per_page=100').get('workflow_runs',[])
+          later=[r for r in runs if r.get('name')=='F1 1B Output Contract After Control Room v22'
+              and r.get('created_at','') > '2026-11-21T12:39:09Z' and r.get('conclusion')!='skipped']
+          dispatch=not bool(later)
+          report={
+              'schema':'issue367-existing-v22-manual-fallback-v1',
+              'checked_utc':now.isoformat(),
+              'verified_original_peak_run_id':'44904714460',
+              'verified_original_peak_sha':'b59c4837d1512940282a3c48530f8785fa14cf42',
+              'verified_current_event':selector.get('event_id'),
+              'verified_current_session':selector.get('session_key'),
+              'existing_automatic_v22_runs':[r['id'] for r in later],
+              'dispatch_existing_v22':dispatch,
+              'bridge_mode':'manual_fallback_existing_original_workflow',
+              'original_workflow_run_trigger_proof_claimed':False,
+              'forecast_eligible':False,
+              'stable_engine_executed':False,
+              'prediction_locked':False,
+          }
+          Path('_runtime/issue367_v22_postpeak/decision.json').write_text(
+              json.dumps(report,indent=2,sort_keys=True)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('dispatch='+('true' if dispatch else 'false')+'\n')
+          print('Original successful source-backed Peak validated; fallback dispatch:',dispatch)
+          PY
+      - name: Verify original byte-bound bridge input before any fallback
+        if: ${{ steps.verify_upstream.outputs.dispatch == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_input
+      - name: Dispatch ORIGINAL v22 downstream consumers once
+        if: ${{ steps.verify_upstream.outputs.dispatch == 'true' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run f1-1b-output-contract-after-control-room-v22.yml \
+            --ref main -f commit_outputs=true
+          echo 'Original v22 workflow_dispatch requested; independently verify the resulting run, consumer bytes and commit.'
+      - name: Retain factual original Peak provenance and dispatch/skip decision
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-issue367-v22-trigger-decision-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/issue367_v22_postpeak/**
+          if-no-files-found: warn
+          retention-days: 90
