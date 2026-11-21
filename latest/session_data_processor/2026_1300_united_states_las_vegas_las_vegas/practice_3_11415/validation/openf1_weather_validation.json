@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [
+    "air_temperature",
+    "date",
+    "humidity",
+    "meeting_key",
+    "pressure",
+    "rainfall",
+    "session_key",
+    "track_temperature",
+    "wind_direction",
+    "wind_speed"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/raw/openf1_weather.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "weather",
+  "fetch": {
+    "bytes": 17625,
+    "observed_at_utc": "2026-11-21T02:58:33.353373Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/weather?session_key=11415",
+    "sha256": "608b33e16cdd5ebd36c0a568aa1aea9510c07c3c5d47518406310385d7ce2ddd",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/raw/openf1_weather.json",
+  "json_sha256": "608b33e16cdd5ebd36c0a568aa1aea9510c07c3c5d47518406310385d7ce2ddd",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-21T02:58:33.353373Z",
+  "original_response_bytes_retained": true,
+  "rows": 82,
+  "status": "clean",
+  "timestamp_rows": 82
+}

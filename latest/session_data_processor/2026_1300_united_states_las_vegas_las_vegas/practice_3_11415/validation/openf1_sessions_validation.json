@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 406,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/raw/openf1_sessions.json",
+  "json_sha256": "eb2faa1673dc166cce7fef8a0d9c823a46613194ee093c47d3fe39efb577ffc0",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-21T02:58:28.342094Z",
+  "original_response_bytes_retained": true,
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}
