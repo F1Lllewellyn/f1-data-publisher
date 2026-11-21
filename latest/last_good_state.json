@@ -1,16 +1,17 @@
 {
   "event": {
-    "event_id": "2026_1297_united_states_austin_austin",
-    "race_name": "United States - Austin - Austin",
-    "session_key": 11392,
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "meeting_key": 1300,
+    "race_name": "United States - Las Vegas - Las Vegas",
+    "session_key": 11416,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1297_united_states_austin_austin/20261025T181155Z/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1300_united_states_las_vegas_las_vegas/context_bfd468248db9a113be454a5166a90c25/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "20261025T181155Z",
+  "run_id": "context_bfd468248db9a113be454a5166a90c25",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "08750cf98b9be726f9cbe9071f2cf78df5ba800c2d5dcb450dbbe7bfee400b67",
+  "signature": "c1b9c5d4b39e38cec7c5ee5bf3365dd840f8ebe5c9ca8ca05beb3b85804d8035",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-10-25T18:11:55Z"
+  "updated_at_utc": "2026-11-21T12:49:15Z"
 }

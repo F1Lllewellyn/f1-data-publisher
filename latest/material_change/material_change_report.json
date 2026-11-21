@@ -1,17 +1,18 @@
 {
-  "change_reason": "no_material_change",
-  "current_signature": "db423d15a8e66aa8c5c97eb4b658a25c67c7268c26a88d75ce3305c1d7e202d3",
+  "change_reason": "signature_changed",
+  "current_signature": "c1b9c5d4b39e38cec7c5ee5bf3365dd840f8ebe5c9ca8ca05beb3b85804d8035",
   "event": {
-    "event_id": "2026_1297_united_states_austin_austin",
-    "race_name": "United States - Austin - Austin",
-    "session_key": 11396,
-    "session_name": "Race"
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "meeting_key": 1300,
+    "race_name": "United States - Las Vegas - Las Vegas",
+    "session_key": 11416,
+    "session_name": "Qualifying"
   },
-  "generated_at_utc": "2026-10-27T10:53:53Z",
-  "material_change_detected": false,
-  "notification_recommended": false,
+  "generated_at_utc": "2026-11-21T12:49:15Z",
+  "material_change_detected": true,
+  "notification_recommended": true,
   "previous_signature": "db423d15a8e66aa8c5c97eb4b658a25c67c7268c26a88d75ce3305c1d7e202d3",
   "promotion_allowed": false,
   "schema_version": "f1_1b_material_change_v20",
-  "status": "blocked"
+  "status": "usable_with_optional_context_gaps"
 }

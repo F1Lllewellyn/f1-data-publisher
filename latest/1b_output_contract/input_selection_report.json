@@ -1,361 +1,113 @@
 {
-  "dashboard_candidates": [
-    {
-      "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-      "run_id": "2026-10-27T10:28:58Z",
-      "score": 50,
-      "source_backed": false,
-      "source_status": "needs_manual_review"
-    }
-  ],
+  "dashboard_candidates": [],
   "source": {
-    "dashboard_candidates": [
-      {
-        "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-27T10:28:58Z",
-        "score": 50,
-        "source_backed": false,
-        "source_status": "needs_manual_review"
-      }
-    ],
-    "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-    "selected_source_manifest": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/source_readiness_manifest.json",
-    "selection_rule": "follow_dashboard_session_manifest_or_block",
-    "source_candidates": [
-      {
-        "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/race_11396/source_readiness_manifest.json",
-        "run_id": "20261027T045604Z",
-        "score": -130,
-        "status": "needs_manual_review"
+    "custody": {
+      "capture_origin": {
+        "head_sha": "b59c4837d1512940282a3c48530f8785fa14cf42",
+        "repository": "F1Lllewellyn/f1-data-publisher",
+        "run_attempt": "1",
+        "run_id": "44904714460",
+        "workflow": "F1 Peak Elite Control Room - One Click v1"
       },
-      {
-        "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_1_11389/source_readiness_manifest.json",
-        "run_id": "20261023T190409Z",
-        "score": 130,
-        "status": "clean"
+      "context_eligible": true,
+      "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+      "expected_session_key": 11416,
+      "input_fingerprints": {
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T123835Z.xlsx": "93ed54f6e0aa10bf850b7586f695af98889f75c56f228cc41bf8524bfe74232b",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/refreshed_workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/sandbox_workbook_update_plan_applied.json": "c7edbd1d9ccfc1ae3bf65c57caaf00347468625e209f085ca4a856749cb4493c",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_combined_source_manifest_snapshot.json": "eefa1a17197ed368d080cfcdef6d63051c431b557dc6d2aa5936a413af5f1fa9",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_data_readiness_snapshot.json": "430a36ca2d65072e194f43786ef59e0836620832681f96c9be80df89cc5ddd47",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_latest_manifest_snapshot.json": "74bfea320b073c2666b3088cb7dae018a57ebcbc0e4f262ac01818834976227e",
+        "latest/combined_source_manifest.json": "4f654f93566b1499a8e1ecc53f806ef529d5c4999e24ccc6738fd918352eb8a6",
+        "latest/data_readiness.json": "839c2540c57a9168b60a4eb256c9388bee8dc2abc90f62afd9cdda01f558d175",
+        "latest/latest_manifest.json": "9675809a2359247bf9991b70067c4fb591c24961b6da70186d58adb3f31401f7",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "80eee540a4d304104bd7e8f7b21a5d97f40a806737f33d1ac037fbe61bc53245",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.json": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.json": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.json": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.json": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "d95e26d8b2e1d7d1bebb68727b4b51216995ce0597e7bf88e9d442f5fc16b834",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "417121d20a01878669cfa13cc80026f574e3ace0e1541a5ac954c74661717d47",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "f16ca511e218e8e87cab544620bcba57e9790f0bdd7b7d0d237b2f113dd2df17"
       },
-      {
-        "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/qualifying_11392/source_readiness_manifest.json",
-        "run_id": "20261025T184835Z",
-        "score": 130,
-        "status": "clean"
+      "meeting_key": 1300,
+      "prediction_locked": false,
+      "schema": "current-context-custody-v1",
+      "session_key": 11416,
+      "source_availability": {
+        "openf1_drivers": "2026-11-21T12:38:29.549833Z",
+        "openf1_intervals": "2026-11-21T12:38:30.955307Z",
+        "openf1_laps": "2026-11-21T12:38:30.515692Z",
+        "openf1_pit": "2026-11-21T12:38:32.359154Z",
+        "openf1_position": "2026-11-21T12:38:31.786073Z",
+        "openf1_race_control": "2026-11-21T12:38:33.405864Z",
+        "openf1_session_result": "2026-11-21T12:38:34.385219Z",
+        "openf1_sessions": "2026-11-21T12:38:29.088920Z",
+        "openf1_starting_grid": "2026-11-21T12:38:34.838967Z",
+        "openf1_stints": "2026-11-21T12:38:32.826179Z",
+        "openf1_weather": "2026-11-21T12:38:33.927328Z"
       },
-      {
-        "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_2_11390/source_readiness_manifest.json",
-        "run_id": "20261024T165618Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1297_united_states_austin_austin/practice_3_11391/source_readiness_manifest.json",
-        "run_id": "20261024T192819Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_2_11728/source_readiness_manifest.json",
-        "run_id": "20261003T004347Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/race_11731/source_readiness_manifest.json",
-        "run_id": "20261005T155659Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/practice_3_11729/source_readiness_manifest.json",
-        "run_id": "20261003T062538Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1308_bahrain_kuala_lumpur_kuala_lumpur/qualifying_11730/source_readiness_manifest.json",
-        "run_id": "20261004T060439Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/qualifying_11303/source_readiness_manifest.json",
-        "run_id": "20260614T103048Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_3_11302/source_readiness_manifest.json",
-        "run_id": "20260613T125438Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/race_11307/source_readiness_manifest.json",
-        "run_id": "20260615T162911Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1287_spain_barcelona_catalunya/practice_2_11301/source_readiness_manifest.json",
-        "run_id": "20260612T230452Z",
-        "score": -50,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1293_italy_monza_monza/race_11361/source_readiness_manifest.json",
-        "run_id": "20260907T234447Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_1_11354/source_readiness_manifest.json",
-        "run_id": "20260904T132808Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1293_italy_monza_monza/qualifying_11357/source_readiness_manifest.json",
-        "run_id": "20260906T094155Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_3_11356/source_readiness_manifest.json",
-        "run_id": "20260905T124454Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1293_italy_monza_monza/practice_2_11355/source_readiness_manifest.json",
-        "run_id": "20260905T091434Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_1_11327/source_readiness_manifest.json",
-        "run_id": "20260717T141656Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/qualifying_11330/source_readiness_manifest.json",
-        "run_id": "20260719T115229Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/race_11334/source_readiness_manifest.json",
-        "run_id": "20260721T010331Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_2_11328/source_readiness_manifest.json",
-        "run_id": "20260718T094539Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/practice_3_11329/source_readiness_manifest.json",
-        "run_id": "20260718T123906Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_3_11364/source_readiness_manifest.json",
-        "run_id": "20260912T130638Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_1_11362/source_readiness_manifest.json",
-        "run_id": "20260911T133352Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/race_11369/source_readiness_manifest.json",
-        "run_id": "20260915T012415Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/practice_2_11363/source_readiness_manifest.json",
-        "run_id": "20260912T091441Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1294_spain_madrid_madring/qualifying_11365/source_readiness_manifest.json",
-        "run_id": "20260913T115906Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/practice_2_11371/source_readiness_manifest.json",
-        "run_id": "20260925T074244Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/race_11377/source_readiness_manifest.json",
-        "run_id": "20260927T231854Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1295_azerbaijan_baku_baku/qualifying_11373/source_readiness_manifest.json",
-        "run_id": "20260926T101348Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/qualifying_11311/source_readiness_manifest.json",
-        "run_id": "20260628T101203Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_2_11309/source_readiness_manifest.json",
-        "run_id": "20260627T081235Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/practice_3_11310/source_readiness_manifest.json",
-        "run_id": "20260627T125759Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1288_austria_spielberg_spielberg/race_11315/source_readiness_manifest.json",
-        "run_id": "20260629T192645Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_1_11335/source_readiness_manifest.json",
-        "run_id": "20260724T140656Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/race_11342/source_readiness_manifest.json",
-        "run_id": "20260727T234117Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/practice_2_11336/source_readiness_manifest.json",
-        "run_id": "20260725T083503Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1291_hungary_budapest_hungaroring/qualifying_11338/source_readiness_manifest.json",
-        "run_id": "20260726T121732Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/qualifying_11384/source_readiness_manifest.json",
-        "run_id": "20261011T084848Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/practice_1_11378/source_readiness_manifest.json",
-        "run_id": "20261009T115546Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/sprint_qualifying_11379/source_readiness_manifest.json",
-        "run_id": "20261010T081422Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1296_singapore_marina_bay_singapore/race_11388/source_readiness_manifest.json",
-        "run_id": "20261012T194737Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/practice_1_11343/source_readiness_manifest.json",
-        "run_id": "20260821T135555Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_11348/source_readiness_manifest.json",
-        "run_id": "20260822T132010Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/race_11353/source_readiness_manifest.json",
-        "run_id": "20260825T014848Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/sprint_qualifying_11344/source_readiness_manifest.json",
-        "run_id": "20260822T090423Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1292_netherlands_zandvoort_zandvoort/qualifying_11349/source_readiness_manifest.json",
-        "run_id": "20260823T120043Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/qualifying_11322/source_readiness_manifest.json",
-        "run_id": "20260705T125443Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/sprint_qualifying_11317/source_readiness_manifest.json",
-        "run_id": "20260704T093025Z",
-        "score": 130,
-        "status": "clean"
-      },
-      {
-        "path": "latest/session_data_processor/2026_1289_united_kingdom_silverstone_silverstone/race_11326/source_readiness_manifest.json",
-        "run_id": "20260706T192023Z",
-        "score": -130,
-        "status": "needs_manual_review"
-      }
-    ]
+      "source_run_id": "20261121T123727168485Z",
+      "stable_engine_executed": false
+    },
+    "selection_rule": "verified_current_authority_only"
   },
   "workbook": {
-    "dashboard_candidates": [
-      {
-        "path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-        "run_id": "2026-10-27T10:28:58Z",
-        "score": 50,
-        "source_backed": false,
-        "source_status": "needs_manual_review"
-      }
-    ],
-    "dashboard_path": "latest/readiness_dashboards/combined_readiness_dashboard.json",
-    "selected_workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-    "selection_rule": "prefer_clean_dashboard_backed_workbook_state_then_best_workbook_manifest",
-    "workbook_candidates": [
-      {
-        "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261027T102858Z",
-        "score": -50,
-        "status": "needs_manual_review"
+    "custody": {
+      "capture_origin": {
+        "head_sha": "b59c4837d1512940282a3c48530f8785fa14cf42",
+        "repository": "F1Lllewellyn/f1-data-publisher",
+        "run_attempt": "1",
+        "run_id": "44904714460",
+        "workflow": "F1 Peak Elite Control Room - One Click v1"
       },
-      {
-        "path": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
-        "run_id": "20261027T102858Z",
-        "score": -50,
-        "status": "needs_manual_review"
-      }
-    ]
+      "context_eligible": true,
+      "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+      "expected_session_key": 11416,
+      "input_fingerprints": {
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T123835Z.xlsx": "93ed54f6e0aa10bf850b7586f695af98889f75c56f228cc41bf8524bfe74232b",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/refreshed_workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/sandbox_workbook_update_plan_applied.json": "c7edbd1d9ccfc1ae3bf65c57caaf00347468625e209f085ca4a856749cb4493c",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_combined_source_manifest_snapshot.json": "eefa1a17197ed368d080cfcdef6d63051c431b557dc6d2aa5936a413af5f1fa9",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_data_readiness_snapshot.json": "430a36ca2d65072e194f43786ef59e0836620832681f96c9be80df89cc5ddd47",
+        "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_latest_manifest_snapshot.json": "74bfea320b073c2666b3088cb7dae018a57ebcbc0e4f262ac01818834976227e",
+        "latest/combined_source_manifest.json": "4f654f93566b1499a8e1ecc53f806ef529d5c4999e24ccc6738fd918352eb8a6",
+        "latest/data_readiness.json": "839c2540c57a9168b60a4eb256c9388bee8dc2abc90f62afd9cdda01f558d175",
+        "latest/latest_manifest.json": "9675809a2359247bf9991b70067c4fb591c24961b6da70186d58adb3f31401f7",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "80eee540a4d304104bd7e8f7b21a5d97f40a806737f33d1ac037fbe61bc53245",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.json": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.json": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.json": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.json": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "d95e26d8b2e1d7d1bebb68727b4b51216995ce0597e7bf88e9d442f5fc16b834",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "417121d20a01878669cfa13cc80026f574e3ace0e1541a5ac954c74661717d47",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+        "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "f16ca511e218e8e87cab544620bcba57e9790f0bdd7b7d0d237b2f113dd2df17"
+      },
+      "meeting_key": 1300,
+      "prediction_locked": false,
+      "schema": "current-context-custody-v1",
+      "session_key": 11416,
+      "source_availability": {
+        "openf1_drivers": "2026-11-21T12:38:29.549833Z",
+        "openf1_intervals": "2026-11-21T12:38:30.955307Z",
+        "openf1_laps": "2026-11-21T12:38:30.515692Z",
+        "openf1_pit": "2026-11-21T12:38:32.359154Z",
+        "openf1_position": "2026-11-21T12:38:31.786073Z",
+        "openf1_race_control": "2026-11-21T12:38:33.405864Z",
+        "openf1_session_result": "2026-11-21T12:38:34.385219Z",
+        "openf1_sessions": "2026-11-21T12:38:29.088920Z",
+        "openf1_starting_grid": "2026-11-21T12:38:34.838967Z",
+        "openf1_stints": "2026-11-21T12:38:32.826179Z",
+        "openf1_weather": "2026-11-21T12:38:33.927328Z"
+      },
+      "source_run_id": "20261121T123727168485Z",
+      "stable_engine_executed": false
+    },
+    "selection_rule": "verified_current_authority_only"
   }
 }
