@@ -1,0 +1,120 @@
+name: F1 Vegas FP3 Dispatch Existing Peak Control Room Once
+
+# Exact current FP3 custody only. No direct script invocation or forecast
+# producer; preserve the trusted Peak and v22 workflow_run bridge.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-vegas-fp3-peak-control-room-dispatch-once.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/f1-vegas-fp3-peak-control-room-dispatch-once.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  review-peak-dispatch:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check existing Peak and downstream scientific guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('.github/workflows/f1-vegas-fp3-peak-control-room-dispatch-once.yml').read_text()
+          p=Path('.github/workflows/f1-peak-elite-control-room-one-click-v1.yml').read_text()
+          b=Path('.github/workflows/f1-1b-output-contract-after-control-room-v22.yml').read_text()
+          assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in s
+          assert 'operation=full_run_chain' in s
+          assert 'run_forecast_gate=false' in s
+          assert 'session_key' in s and '11415' in s and '2026,11,21,3,20' in s
+          assert 'HOLD_FP3_PRODUCTION_PROCESSOR_NOT_COMMITTED' in s
+          assert 'contents: read' in s and 'actions: write' in s
+          assert 'f1_workbook_persistence_handoff_guard_v1.py' in p
+          assert 'F1 Peak Elite Control Room - One Click v1' in b
+          assert 'f1_1b_output_contract_v16.py' in b and 'f1_1b_consumer_context_publisher_v25.py' in b
+          assert not any(l.strip().startswith(('git add ', 'git push ', 'git commit ')) for l in s.splitlines())
+          print('Exact authentic FP3, original Peak, original v22 bridge and no forecast dispatch: PASS')
+          PY
+
+  dispatch-original-peak:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Read-only checkout of real published session chain
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Enforce prequalifying source observation and live timing window
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          lower=dt.datetime(2026,11,21,2,0,tzinfo=dt.timezone.utc)
+          upper=dt.datetime(2026,11,21,3,20,tzinfo=dt.timezone.utc)
+          if not lower<=now<upper:
+              raise SystemExit('HOLD_FP3_PEAK_DISPATCH_OUTSIDE_PREQUALIFYING_SOURCE_WINDOW')
+          print('Eligible UTC window for original trusted source-to-Control Room invocation')
+          PY
+      - name: Verify true committed FP3 source and processor chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('latest/openf1_event_source_closure/1300/latest_manifest.json')
+          g=json.loads(base.read_text())
+          if not (g.get('collection_scope')=='event'
+                  and g.get('meeting_key')=='1300'
+                  and g.get('expected_session_key')=='11415'
+                  and g.get('publication_eligible') is True
+                  and g.get('source_quality_status')=='complete'
+                  and g.get('source_quality_reasons')==[]):
+              raise SystemExit('HOLD_FP3_G1_ORIGINAL_SOURCE_NOT_CURRENT')
+          p=Path('latest/latest_manifest.json')
+          d=Path('latest/data_readiness.json')
+          r=Path('latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/source_readiness_manifest.json')
+          if not p.is_file() or not d.is_file() or not r.is_file():
+              raise SystemExit('HOLD_FP3_PRODUCTION_PROCESSOR_NOT_COMMITTED')
+          latest=json.loads(p.read_text())
+          session=json.loads(r.read_text())
+          if (str(latest.get('session_key'))!='11415'
+                  or latest.get('event_id')!='2026_1300_united_states_las_vegas_las_vegas'
+                  or str((session.get('session') or {}).get('session_key'))!='11415'
+                  or session.get('overall_status') not in ('clean','partial')
+                  or session.get('promotion_allowed') is not False
+                  or session.get('canonical_workbook_modified') is not False):
+              raise SystemExit('HOLD_FP3_PRODUCTION_PROCESSOR_NOT_COMMITTED')
+          print('Exact published G1 source and committed original FP3 session processor context VERIFIED')
+          PY
+      - name: Dispatch original Peak full chain without speculative forecast gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run f1-peak-elite-control-room-one-click-v1.yml \
+            --ref main \
+            -f operation=full_run_chain \
+            -f commit_outputs=true \
+            -f run_forecast_gate=false
+          echo 'Original Peak workflow DISPATCHED. Its true source, workbook and v22 bridge chain must be checked from live run logs.'
