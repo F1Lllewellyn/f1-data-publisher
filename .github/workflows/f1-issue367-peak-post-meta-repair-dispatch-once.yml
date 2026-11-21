@@ -1,0 +1,145 @@
+name: F1 Issue 367 Peak Production Post-Fix Verification Once
+
+# One-time, path-filtered main push dispatches the UNMODIFIED trusted Peak
+# Control Room only AFTER both original repository validators actually pass.
+# Does not run the scientific forecast gate or generate predictions itself.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-issue367-peak-post-meta-repair-dispatch-once.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-issue367-peak-post-meta-repair-dispatch-once.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  contract-review:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check exact main safety invariants without a provider or forecast
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          w=Path('.github/workflows/f1-issue367-peak-post-meta-repair-dispatch-once.yml').read_text()
+          original=Path('.github/workflows/f1-peak-elite-control-room-one-click-v1.yml').read_text()
+          def actual_step(name):
+              marker='      - name: '+name
+              lines=w.splitlines()
+              indices=[i for i,line in enumerate(lines) if line == marker]
+              assert len(indices)==1, 'HOLD_MISSING_OR_DUPLICATE_APPROVED_STEP'
+              start=indices[0]+1
+              end=next((i for i in range(start,len(lines))
+                        if lines[i].startswith('      - name: ')),len(lines))
+              return '\\n'.join(lines[start:end])
+          dispatch=actual_step('Dispatch ORIGINAL Peak full chain with protected forecast gate disabled')
+          window=actual_step('Restrict to actual pre-race recovery opportunity')
+          assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in dispatch
+          for clause in ('operation=full_run_chain','commit_outputs=true','run_forecast_gate=false'):
+              assert clause in dispatch
+          permitted_python={
+              'python scripts/ops/f1_workflow_meta_health_check_v1.py > _issue367_meta_guard.json',
+              'python scripts/ops/f1_workflow_static_validator_v2.py --repo-root . > _issue367_shell_guard.json',
+          }
+          actual_python={line.strip() for line in w.splitlines()
+                         if line.strip().startswith('python scripts/')}
+          assert actual_python == permitted_python, 'HOLD_UNREVIEWED_WRAPPER_PRODUCER'
+          assert 'f1_workbook_persistence_handoff_guard_v1.py' in original
+          assert 'f1_peak_elite_orchestrator_v1.py' in original
+          assert 'dt.datetime(2026,11,21,21,30' in window
+          assert not any(line.strip().startswith(('git add ', 'git push ', 'git commit '))
+                         for line in w.splitlines())
+          print('Original production Peak + no independent forecast/commit/authority: PASS')
+          PY
+
+  dispatch-existing-production-peak:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exactly the new production main
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Restrict to actual pre-race recovery opportunity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          lo=dt.datetime(2026,11,21,11,0,tzinfo=dt.timezone.utc)
+          hi=dt.datetime(2026,11,21,21,30,tzinfo=dt.timezone.utc)
+          if not lo <= now < hi:
+              raise SystemExit('HOLD_ISSUE367_POSTFIX_PEAK_DISPATCH_OUTSIDE_NOV21_RECOVERY')
+          PY
+      - name: Require REAL fixed shell integrity guards on current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_workflow_meta_health_check_v1.py > _issue367_meta_guard.json
+          python scripts/ops/f1_workflow_static_validator_v2.py --repo-root . > _issue367_shell_guard.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('_issue367_meta_guard.json').read_text())
+          s=json.loads(Path('_issue367_shell_guard.json').read_text())
+          # Original CLI exit codes already fail closed on true violations;
+          # the static validator separately reports pre-existing BOM warnings.
+          assert m.get('status') in ('Pass','Pass with warnings') and not any(
+              issue.get('severity') == 'fail' for issue in m.get('issues',[])), 'HOLD_META_VALIDATOR_NOT_GREEN'
+          assert s.get('status') in ('pass','pass_with_warnings') and not any(
+              issue.get('severity') == 'fail' for issue in s.get('issues',[])), 'HOLD_STATIC_VALIDATOR_NOT_GREEN'
+          print('Both ORIGINAL full-repository shell meta guards PASSED')
+          PY
+      - name: Require original Las Vegas G1 custody and current source scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('latest/openf1_event_source_closure/1300/latest_manifest.json').read_text())
+          b=json.loads(Path('latest/latest_manifest.json').read_text())
+          if not (a.get('meeting_key') == '1300' and
+                  a.get('expected_session_key') == '11415' and
+                  a.get('publication_eligible') is True and
+                  a.get('source_quality_status') == 'complete' and
+                  a.get('source_quality_reasons') == []):
+              raise SystemExit('HOLD_ISSUE367_ORIGINAL_G1_SOURCE_CUSTODY')
+          if (b.get('event_id') != '2026_1300_united_states_las_vegas_las_vegas'
+                  or str(b.get('session_key')) not in ('11415','11416')):
+              raise SystemExit('HOLD_ISSUE367_WRONG_EVENT_OR_STALE_SESSION')
+          print('Original G1 source is verified; latest is same event FP3 or qualifying context')
+          PY
+      - name: Dispatch ORIGINAL Peak full chain with protected forecast gate disabled
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run f1-peak-elite-control-room-one-click-v1.yml \
+            --ref main \
+            -f operation=full_run_chain \
+            -f commit_outputs=true \
+            -f run_forecast_gate=false
+          echo 'Original Peak production full chain dispatched; independent run/result and v22 bridge verification required.'
