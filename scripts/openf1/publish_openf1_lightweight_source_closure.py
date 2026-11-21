@@ -1567,8 +1567,27 @@ def _missing_optional_value(value: Any) -> bool:
         return False
 
 
+def _explicitly_cancelled_session(row: pd.Series) -> bool:
+    """A past scheduled end is not evidence a canceled session took place."""
+    for field in ("is_cancelled", "is_canceled", "cancelled", "canceled"):
+        value = row.get(field)
+        if str(value).strip().lower() in {"true", "1", "yes", "cancelled", "canceled"}:
+            return True
+    for field in ("status", "session_status"):
+        if str(row.get(field, "")).strip().lower() in {"cancelled", "canceled"}:
+            return True
+    return False
+
+
+def _unexplained_missing_session_keys(known, current, documented_cancelled):
+    """Only provider-confirmed cancellations may explain loss of old coverage."""
+    return sorted(set(known) - set(current) - set(documented_cancelled))
+
+
 def is_completed_session(row: pd.Series) -> bool:
-    # Unknown end time is an incomplete schedule record, never proof of completion.
+    # A known cancellation never becomes completed when its scheduled end passes.
+    if _explicitly_cancelled_session(row):
+        return False
     end_ts = _normal_utc(row.get("date_end"))
     return end_ts is not None and end_ts < utc_now()
 
@@ -1699,9 +1718,16 @@ def get_sessions(
     sessions["meeting_key"] = canonical_meeting_keys
     sessions["year"] = canonical_years
     sessions["_completed_session"] = sessions.apply(is_completed_session, axis=1)
+    cancelled_session_keys = sorted(
+        str(row["session_key"])
+        for _, row in sessions.iterrows()
+        if _explicitly_cancelled_session(row)
+    )
     if completed_only:
         sessions = sessions[sessions["_completed_session"]].copy()
-    return sessions.sort_values([c for c in ["date_start", "meeting_key", "session_key"] if c in sessions.columns])
+    sessions = sessions.sort_values([c for c in ["date_start", "meeting_key", "session_key"] if c in sessions.columns])
+    sessions.attrs["provider_confirmed_cancelled_session_keys"] = cancelled_session_keys
+    return sessions
 
 
 def collect_observed_driver_numbers(
@@ -2686,6 +2712,9 @@ def main() -> int:
             previous_target_keys = set()
 
     sessions = get_sessions(season, completed_only, request_log, budget)
+    provider_confirmed_cancelled_keys = set(
+        sessions.attrs.get("provider_confirmed_cancelled_session_keys", [])
+    ) if completed_only else set()
     event_reasons = []
     if args.meeting_key:
         sessions, event_reasons = select_event_sessions(sessions, args.meeting_key, args.expected_session_key, utc_now())
@@ -2708,14 +2737,18 @@ def main() -> int:
     known_cache_target_keys = set(
         cache_evidence.get("known_target_session_keys") or []
     )
-    missing_cache_targets = sorted(known_cache_target_keys - current_target_keys)
+    missing_cache_targets = _unexplained_missing_session_keys(
+        known_cache_target_keys, current_target_keys, provider_confirmed_cancelled_keys
+    )
     if missing_cache_targets and not args.meeting_key:
         source_quality_reasons.append(
             "verified_cache_session_coverage_regression:"
             + ",".join(missing_cache_targets[:20])
         )
     if previous_coverage_compatible:
-        missing_previous = sorted(previous_target_keys - current_target_keys)
+        missing_previous = _unexplained_missing_session_keys(
+            previous_target_keys, current_target_keys, provider_confirmed_cancelled_keys
+        )
         if missing_previous:
             source_quality_reasons.append(
                 "completed_session_coverage_regression:"
@@ -2728,10 +2761,15 @@ def main() -> int:
     if (
         previous_coverage_compatible
         and previous_count > 0
-        and len(sessions) < previous_count
+        and len(sessions) < (
+            previous_count - len(previous_target_keys & provider_confirmed_cancelled_keys)
+        )
     ):
+        adjusted_previous_count = (
+            previous_count - len(previous_target_keys & provider_confirmed_cancelled_keys)
+        )
         source_quality_reasons.append(
-            f"completed_session_count_regression:{previous_count}->{len(sessions)}"
+            f"completed_session_count_regression:{adjusted_previous_count}->{len(sessions)}"
         )
     write_df(sessions, data_latest / "target_sessions.csv")
     write_df(sessions, data_history / "target_sessions.csv")
