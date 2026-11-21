@@ -1,0 +1,107 @@
+name: F1 Vegas FP3 Dispatch Existing Session Processor Once
+
+# A one-time workflow_dispatch to the existing, already tested ORIGINAL
+# production processor. No copy/reimplementation of raw source writer.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-vegas-fp3-current-session-processor-dispatch-once.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/f1-vegas-fp3-current-session-processor-dispatch-once.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  review-dispatch-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check exact original processor dispatch and scientific protections
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          x=Path('.github/workflows/f1-vegas-fp3-current-session-processor-dispatch-once.yml').read_text()
+          y=Path('.github/workflows/f1-session-data-processor-loop-v1.yml').read_text()
+          assert 'gh workflow run f1-session-data-processor-loop-v1.yml' in x
+          assert 'mode=run_now' in x
+          assert 'session_filter="practice 3"' in x
+          assert '2026,11,21,3,25' in x
+          assert 'contents: read' in x and 'actions: write' in x
+          assert 'HOLD_STALE_OR_UNVERIFIED_G1_FP3_SOURCE' in x
+          assert 'git diff --quiet HEAD -- history' in y
+          assert 'HOLD_UNREVIEWED_CODE_MUTATION' in y
+          assert 'safe_git_push_rebase_retry.sh' in y
+          assert not any(a.strip().startswith(('git push ', 'git add ', 'git commit ')) for a in x.splitlines())
+          print('Original existing protected session writer, exact FP3 and single-dispatch cutoff contract: PASS')
+          PY
+
+  dispatch-protected-original-processor:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Read-only checkout of real published G1 FP3 original source
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Reject late source collection during paid qualifying live window
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          start=dt.datetime(2026,11,21,2,0,tzinfo=dt.timezone.utc)
+          end=dt.datetime(2026,11,21,3,25,tzinfo=dt.timezone.utc)
+          if not start<=now<end:
+              raise SystemExit('HOLD_FP3_PRODUCTION_PROCESSOR_OUTSIDE_PREQUALIFYING_HISTORICAL_WINDOW')
+          print('Original processor can read completed FP3 while source is anonymous historical')
+          PY
+      - name: Verify official original event-source quality before dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('latest/openf1_event_source_closure/1300/latest_manifest.json')
+          m=json.loads(p.read_text())
+          if not (
+              m.get('collection_scope')=='event'
+              and m.get('meeting_key')=='1300'
+              and m.get('expected_session_key')=='11415'
+              and m.get('publication_eligible') is True
+              and m.get('source_quality_status')=='complete'
+              and m.get('source_quality_reasons')==[]
+              and m.get('target_session_count')==3
+          ):
+              raise SystemExit('HOLD_STALE_OR_UNVERIFIED_G1_FP3_SOURCE')
+          print('Original immutable G1 current event FP3 publication is verified')
+          PY
+      - name: Dispatch original production session processor on exact Practice 3
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh workflow run f1-session-data-processor-loop-v1.yml \
+            --ref main \
+            -f mode=run_now \
+            -f session_filter="practice 3"
+          echo 'Existing protected production session processor DISPATCHED. Downstream run/result must be verified independently.'
