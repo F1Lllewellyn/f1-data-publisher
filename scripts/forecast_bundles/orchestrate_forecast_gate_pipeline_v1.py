@@ -305,6 +305,72 @@ def run_pipeline(event_id: str, race_name: str, gate: str, run_source_closure: b
     }]
 
 
+def finish_result(result: Dict[str, Any], strict_exit: int, exit_policy: str) -> int:
+    """Monitoring success attests only completed detection/preflight, never a forecast.
+
+    Only the two known, fully evaluated scientific stops can be successful
+    monitoring. Provider, custody, dependency and implementation failures remain
+    nonzero. Direct callers retain their strict HOLD exit contract.
+    """
+    steps = result.get("steps", [])
+    scientific_stop = (
+        result.get("status") == "HOLD"
+        and result.get("reason") in {
+            "HOLD_STABLE_ENGINE_NOT_EXECUTED", "HOLD_POST_OUTCOME_NOT_PROSPECTIVE"}
+        and len(steps) == 1
+        and steps[0].get("label") == "Protected stable engine execution preflight"
+        and steps[0].get("status") == "HOLD"
+        and steps[0].get("returncode") == 2
+        and steps[0].get("reason") == result["reason"]
+        and all(steps[0].get(k) is False for k in
+                ("stable_engine_executed", "prediction_locked", "source_refresh_executed"))
+    )
+    # A missing dependency is not the established scientific limitation. Do not
+    # let a broken checkout silently become a green monitoring run.
+    dependencies = steps[0].get("dependency_sha256", {}) if scientific_stop else {}
+    dependencies_present = bool(dependencies) and all(
+        isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+        for value in dependencies.values())
+    operational_pass = result.get("status") == "no_action" or (scientific_stop and dependencies_present)
+    reason = result.get("reason", "HOLD_PIPELINE_NOT_PROVEN")
+    if scientific_stop and not dependencies_present:
+        failure_class = "IMPLEMENTATION_DEPENDENCY_MISSING"
+    elif str(reason).startswith("HOLD_SCHEDULE_HTTP_") or str(reason).startswith("HOLD_SCHEDULE_UNAVAILABLE"):
+        failure_class = "EXTERNAL_PROVIDER_RESTRICTION"
+    elif str(reason).startswith("HOLD_SCHEDULE_") or reason == "HOLD_EXISTING_BUNDLE_NOT_AUTHENTICATED":
+        failure_class = "SOURCE_OR_CUSTODY_NOT_VERIFIED"
+    else:
+        failure_class = None if operational_pass else "OPERATIONAL_FAILURE"
+    result.update(
+        operational_status="OPERATIONAL_PASS" if operational_pass else "OPERATIONAL_FAIL",
+        operational_scope="schedule_detection_and_scientific_preflight_only",
+        scientific_classification="SCIENTIFIC_HOLD",
+        forecast_eligible=False, failure_class=failure_class, exit_policy=exit_policy,
+    )
+    code = strict_exit
+    if exit_policy == "monitor":
+        code = 0 if operational_pass else (strict_exit or 1)
+    result["exit_code"] = code
+    write_json(RUNTIME / "orchestrator_result.json", result)
+    report = (
+        "# Forecast gate monitoring\n\n"
+        f"Operational status: **{result['operational_status']}**\n\n"
+        "Scope: schedule detection and scientific preflight only; source refresh, "
+        "engine execution and prediction locking were not performed.\n\n"
+        f"Scientific status: **SCIENTIFIC_HOLD** — `{result.get('scientific_status')}`.\n\n"
+        f"Boundary: `{reason}`. Failure class: `{failure_class}`.\n\n"
+        "Forecast eligible: **false**. Prediction locked: **false**. Promotion allowed: **false**.\n"
+    )
+    (RUNTIME / "OPERATOR_STATUS.md").write_text(report, encoding="utf-8")
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+            summary.write(report)
+    if scientific_stop and operational_pass and exit_policy == "monitor":
+        print(f"::warning title=Scientific HOLD::{reason}; forecast_eligible=false; prediction_locked=false")
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return code
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Automate F1 forecast gate production and bundle locking.")
     parser.add_argument("--mode", default="auto", choices=["auto", "force_validation", "dry_run"])
@@ -313,6 +379,7 @@ def main() -> int:
     parser.add_argument("--gate", default="auto", choices=["auto", "all", *GATES])
     parser.add_argument("--run-source-closure", default="true")
     parser.add_argument("--season", type=int, default=2026)
+    parser.add_argument("--exit-policy", choices=["strict", "monitor"], default="strict")
     args = parser.parse_args()
 
     RUNTIME.mkdir(parents=True, exist_ok=True)
@@ -347,9 +414,7 @@ def main() -> int:
             detection = detect_gate_from_schedule(args.season, utc_now(), policy)
         except ScheduleHold as exc:
             result.update(status="HOLD", reason=str(exc))
-            write_json(RUNTIME / "orchestrator_result.json", result)
-            print(json.dumps(result, indent=2, sort_keys=True))
-            return 2
+            return finish_result(result, 2, args.exit_policy)
         if args.event_id != "auto":
             detection["event_id"] = args.event_id
         if args.race_name != "auto":
@@ -364,9 +429,7 @@ def main() -> int:
 
     if not detection.get("should_run"):
         result.update({"status": "no_action", "reason": detection.get("reason", "not_detected")})
-        write_json(RUNTIME / "orchestrator_result.json", result)
-        print(json.dumps(result, indent=2, sort_keys=True))
-        return 0
+        return finish_result(result, 0, args.exit_policy)
 
     event_id = str(detection.get("event_id") or "manual_forecast_producer_validation")
     race_name = str(detection.get("race_name") or "Manual Forecast Producer Validation")
@@ -374,9 +437,7 @@ def main() -> int:
 
     if gate != "all" and existing_bundle_for(event_id, gate):
         result.update({"status": "HOLD", "reason": "HOLD_EXISTING_BUNDLE_NOT_AUTHENTICATED", "event_id": event_id, "gate": gate})
-        write_json(RUNTIME / "orchestrator_result.json", result)
-        print(json.dumps(result, indent=2, sort_keys=True))
-        return 2
+        return finish_result(result, 2, args.exit_policy)
 
     try:
         steps = run_pipeline(event_id, race_name, gate, run_source_closure, args.season, dry_run=dry_run)
@@ -387,14 +448,10 @@ def main() -> int:
         result["gate"] = gate
         result["status"] = "HOLD"
         result["reason"] = failed[0].get("reason", "HOLD_PIPELINE_NOT_PROVEN") if failed else "HOLD_PIPELINE_NOT_PROVEN"
-        write_json(RUNTIME / "orchestrator_result.json", result)
-        print(json.dumps(result, indent=2, sort_keys=True))
-        return 2
+        return finish_result(result, 2, args.exit_policy)
     except Exception as exc:
         result.update({"status": "fail", "reason": "exception", "error": repr(exc)})
-        write_json(RUNTIME / "orchestrator_result.json", result)
-        print(json.dumps(result, indent=2, sort_keys=True))
-        return 1
+        return finish_result(result, 1, args.exit_policy)
 
 
 if __name__ == "__main__":
