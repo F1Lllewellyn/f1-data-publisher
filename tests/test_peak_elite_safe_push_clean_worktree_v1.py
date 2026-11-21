@@ -146,12 +146,12 @@ class CleanWorktreeTests(unittest.TestCase):
                     before = subprocess.check_output(
                         ['git', 'cat-file', 'blob', coordinated[path]], cwd=ROOT)
                     original_line = (
-                        b'                if ! git check-ignore -q "$f"; then git add -- "$f"; fi\\n'
+                        b'                if ! git check-ignore -q "$f"; then git add -- "$f"; fi\n'
                     )
                     corrected_lines = (
-                        b'                if ! git check-ignore -q "$f"; then\\n'
-                        b'                  git add -- "$f"\\n'
-                        b'                fi\\n'
+                        b'                if ! git check-ignore -q "$f"; then\n'
+                        b'                  git add -- "$f"\n'
+                        b'                fi\n'
                     )
                     self.assertEqual(before.count(original_line), 1)
                     self.assertEqual(raw, before.replace(original_line, corrected_lines, 1))
