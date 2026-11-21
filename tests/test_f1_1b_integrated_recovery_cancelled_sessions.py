@@ -87,6 +87,19 @@ class CancelledSessionDiscoveryTests(unittest.TestCase):
             ["11255"],
         )
 
+    def test_provider_cancellation_field_aliases_are_checked(self):
+        for alias, value in (
+            ("is_cancelled", True), ("is_canceled", True),
+            ("cancelled", "yes"), ("canceled", "1"),
+            ("session_status", "canceled"), ("status", "cancelled"),
+        ):
+            with self.subTest(field=alias):
+                self.assertTrue(collector._explicitly_cancelled_session(
+                    pd.Series({alias: value})))
+        self.assertFalse(collector._explicitly_cancelled_session(pd.Series({
+            "is_cancelled": False, "status": "finished",
+        })))
+
     def test_sprint_qualifying_does_not_require_race_pit_data(self):
         self.assertFalse(collector.is_race_like_session(pd.Series({
             "session_name": "Sprint Qualifying", "session_type": "Qualifying",
