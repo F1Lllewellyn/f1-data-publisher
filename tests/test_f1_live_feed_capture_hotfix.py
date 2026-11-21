@@ -22,11 +22,14 @@ spec.loader.exec_module(capture)
 
 
 class LiveFeedRepairTests(unittest.TestCase):
-    def test_runner_is_python39_compatible_and_does_not_block_main_serialization(self):
+    def test_runner_is_modern_signalr_core_and_does_not_block_main_serialization(self):
         text = WORKFLOW_PATH.read_text(encoding="utf-8-sig")
         self.assertIn("runs-on: ubuntu-24.04", text)
-        self.assertIn('python-version: "3.9"', text)
+        self.assertIn('python-version: "3.11"', text)
         self.assertIn("group: f1-experimental-live-source-feed", text)
+        self.assertIn("fastf1==3.9.2", text)
+        self.assertIn("F1_USERNAME: ${{ secrets.F1_USERNAME }}", text)
+        self.assertIn("F1_PASSWORD: ${{ secrets.F1_PASSWORD }}", text)
         self.assertNotIn("group: f1-main-write-serialization", text)
         self.assertIn("cancel-in-progress: false", text)
 
@@ -101,6 +104,83 @@ class LiveFeedRepairTests(unittest.TestCase):
 
     def test_scheduled_import_failure_is_failure(self):
         self.exercise("active_schedule_window", True, "fastf1_import_failed", b"", 1)
+
+    def test_missing_f1tv_auth_fails_without_attempted_source(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "", "F1_PASSWORD": ""}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"), \
+             patch.object(capture.subprocess, "run") as exec_source:
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "f1_auth_missing")
+            self.assertEqual(result["error"], "HOLD_F1TV_AUTH_NOT_CONFIGURED")
+            self.assertFalse(result["recording_attempted"])
+            self.assertFalse(result["auth_credentials_configured"])
+            exec_source.assert_not_called()
+        self.exercise("active_schedule_window", True, "f1_auth_missing", b"", 1)
+
+    def test_obsolete_fastf1_is_explicitly_rejected_before_source(self):
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.6.1"), \
+             patch.object(capture.subprocess, "run") as exec_source:
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "fastf1_version_unsupported")
+            self.assertEqual(result["error"], "HOLD_FASTF1_SIGNALR_CORE_VERSION")
+            exec_source.assert_not_called()
+
+    def test_authenticated_child_records_real_bytes_without_leaking_secrets(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"):
+            path = Path(td) / "raw.txt"
+            def fake_run(args, **kwargs):
+                self.assertEqual(args[0], sys.executable)
+                self.assertIn("SignalRClient", args[2])
+                self.assertNotIn("SYNTHETIC_NOT_A_SECRET", str(args))
+                self.assertEqual(kwargs["timeout"], 60)
+                path.write_bytes(b"synthetic-signalr-original-packets")
+                return subprocess.CompletedProcess(args=args, returncode=0, stdout=b"", stderr=b"")
+            with patch.object(capture.subprocess, "run", side_effect=fake_run):
+                result = capture.record_live_timing(path, 1)
+            self.assertEqual(result["recording_status"], "completed")
+            self.assertTrue(result["recording_attempted"])
+            self.assertTrue(result["fastf1_import_ok"])
+            self.assertTrue(result["auth_credentials_configured"])
+            self.assertEqual(path.read_bytes(), b"synthetic-signalr-original-packets")
+            self.assertNotIn("SYNTHETIC_NOT_A_SECRET", json.dumps(result))
+
+    def test_timeboxed_child_retains_flushed_original_bytes(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"):
+            path = Path(td) / "raw.txt"
+            def timeout(args, **kwargs):
+                path.write_bytes(b"bounded-original-packets")
+                raise subprocess.TimeoutExpired(cmd=args, timeout=60)
+            with patch.object(capture.subprocess, "run", side_effect=timeout):
+                result = capture.record_live_timing(path, 1)
+            self.assertEqual(result["recording_status"], "completed")
+            self.assertTrue(result["timeboxed"])
+            self.assertEqual(path.read_bytes(), b"bounded-original-packets")
+
+    def test_auth_error_does_not_log_private_child_output(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"), \
+             patch.object(capture.subprocess, "run", return_value=subprocess.CompletedProcess(
+                 [], 1, b"private-subprocess-output", b"token=SYNTHETIC_NOT_A_SECRET")):
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "source_feed_handshake_unavailable")
+            self.assertEqual(result["error"], "HOLD_F1_SIGNALR_AUTH_OR_CONNECT_FAILED")
+            self.assertNotIn("SYNTHETIC_NOT_A_SECRET", json.dumps(result))
 
     def test_scheduled_handshake_unavailable_is_failure(self):
         self.exercise("active_schedule_window", True, "source_feed_handshake_unavailable", b"", 1)
