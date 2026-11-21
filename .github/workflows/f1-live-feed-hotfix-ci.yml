@@ -1,4 +1,4 @@
-name: F1 Live Feed Python 3.9 Runner and Capture Regression
+name: F1 Live Feed Authenticated SignalR Core and Capture Regression
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  python39-live-feed-contract:
+  python311-live-feed-contract:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -24,19 +24,20 @@ jobs:
       - name: Set up actual capture Python runtime
         uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Install actual capture dependencies and verify FastF1 import
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install "fastf1>=3.3,<3.7" pandas requests python-dateutil
+          python -m pip install 'fastf1==3.9.2' pandas requests python-dateutil
           python - <<'PY'
           import sys, fastf1
           from fastf1.livetiming.client import SignalRClient
-          assert sys.version_info[:2] == (3, 9), sys.version
+          assert sys.version_info[:2] == (3, 11), sys.version
           assert SignalRClient is not None
-          print("Python 3.9 and FastF1 SignalRClient import: PASS")
+          assert fastf1.__version__ == "3.9.2", fastf1.__version__
+          print("Python 3.11 and authenticated FastF1 3.9.2 SignalR Core import: PASS")
           PY
 
       - name: Test scheduled failures and latest evidence custody
