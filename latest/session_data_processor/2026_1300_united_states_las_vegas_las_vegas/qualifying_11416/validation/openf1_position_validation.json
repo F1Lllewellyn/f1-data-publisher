@@ -20,7 +20,7 @@
   "endpoint": "position",
   "fetch": {
     "bytes": 168159,
-    "observed_at_utc": "2026-11-21T12:38:31.786073Z",
+    "observed_at_utc": "2026-11-21T19:09:01.765835Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/position?session_key=11416",
     "sha256": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
@@ -30,7 +30,7 @@
   "json_sha256": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T12:38:31.786073Z",
+  "observed_at_utc": "2026-11-21T19:09:01.765835Z",
   "original_response_bytes_retained": true,
   "rows": 1459,
   "status": "clean",

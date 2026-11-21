@@ -18,7 +18,7 @@
   "endpoint": "weather",
   "fetch": {
     "bytes": 16768,
-    "observed_at_utc": "2026-11-21T12:38:33.927328Z",
+    "observed_at_utc": "2026-11-21T19:09:03.318905Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/weather?session_key=11416",
     "sha256": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
@@ -28,7 +28,7 @@
   "json_sha256": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T12:38:33.927328Z",
+  "observed_at_utc": "2026-11-21T19:09:03.318905Z",
   "original_response_bytes_retained": true,
   "rows": 78,
   "status": "clean",

@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-11-21T19:09:03.949394Z",
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "forecast_state_changed": false,
+  "overall_status": "clean",
+  "promotion_allowed": false,
+  "race_name": "United States - Las Vegas - Las Vegas",
+  "recommended_forecast_action": "refresh readiness/confidence/risk state only",
+  "schema_version": "forecast_bundle_ledger_session_snapshot_v1",
+  "session": {
+    "date_end": "2026-11-21T05:00:00+00:00",
+    "date_start": "2026-11-21T04:00:00+00:00",
+    "gate": "post_qualifying",
+    "meeting_key": 1300,
+    "session_key": 11416,
+    "session_name": "Qualifying",
+    "session_type": "Qualifying"
+  },
+  "source_readiness_materially_improved": false,
+  "stable_order_overwrite_allowed": false
+}

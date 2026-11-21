@@ -19,7 +19,7 @@
   "endpoint": "race_control",
   "fetch": {
     "bytes": 21327,
-    "observed_at_utc": "2026-11-21T12:38:33.405864Z",
+    "observed_at_utc": "2026-11-21T19:09:02.900313Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/race_control?session_key=11416",
     "sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
@@ -29,7 +29,7 @@
   "json_sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T12:38:33.405864Z",
+  "observed_at_utc": "2026-11-21T19:09:02.900313Z",
   "original_response_bytes_retained": true,
   "rows": 81,
   "status": "clean",

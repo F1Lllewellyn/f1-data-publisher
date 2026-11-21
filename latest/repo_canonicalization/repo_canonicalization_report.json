@@ -1,14 +1,14 @@
 {
   "category_counts": {
-    "active_architecture": 119395,
+    "active_architecture": 119524,
     "active_or_unknown": 52,
     "archive": 690,
     "generated_python_cache": 1,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-11-21T12:37:26.754876Z",
+  "created_utc": "2026-11-21T19:07:57.161227Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 120195,
+  "file_count": 120324,
   "generated_cleanup": {
     "failures": [],
     "removed_cache_dirs": [],
@@ -221,13 +221,13 @@
   ],
   "recommended_action_counts": {
     "delete_safe": 1,
-    "keep": 120137,
+    "keep": 120266,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 8181894467,
+  "total_bytes": 8183707354,
   "utf8_bom_files_sample": [
     ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml",
     ".github/workflows/f1-automation-baseline-snapshot.yml",
@@ -302,5 +302,5 @@
     "requirements-f1-engine-automation.txt",
     "requirements-openf1-ingest.txt"
   ],
-  "workflow_count": 76
+  "workflow_count": 77
 }

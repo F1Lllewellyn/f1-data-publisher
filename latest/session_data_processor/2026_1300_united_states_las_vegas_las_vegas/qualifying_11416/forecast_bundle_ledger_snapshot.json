@@ -1,7 +1,7 @@
 {
-  "created_utc": "2026-11-21T12:38:34.845556Z",
+  "created_utc": "2026-11-21T19:09:03.949340Z",
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
-  "forecast_state_changed": true,
+  "forecast_state_changed": false,
   "overall_status": "clean",
   "promotion_allowed": false,
   "race_name": "United States - Las Vegas - Las Vegas",
@@ -16,6 +16,6 @@
     "session_name": "Qualifying",
     "session_type": "Qualifying"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }

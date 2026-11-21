@@ -15,7 +15,7 @@
   "fetch": {
     "bytes": 30,
     "error": "HOLD_PROVIDER_HTTP_404",
-    "observed_at_utc": "2026-11-21T12:38:30.955307Z",
+    "observed_at_utc": "2026-11-21T19:09:01.076008Z",
     "ok": false,
     "request_url": "https://api.openf1.org/v1/intervals?session_key=11416",
     "sha256": "79e458c7f1cd32213fb418a50acca1646db353c29a8775154e0fbf8bc6ebd79d",
@@ -30,7 +30,7 @@
     "meeting_key",
     "date"
   ],
-  "observed_at_utc": "2026-11-21T12:38:30.955307Z",
+  "observed_at_utc": "2026-11-21T19:09:01.076008Z",
   "original_response_bytes_retained": true,
   "rows": 0,
   "status": "needs_manual_review",

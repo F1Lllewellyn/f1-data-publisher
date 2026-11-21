@@ -23,7 +23,7 @@
   "endpoint": "stints",
   "fetch": {
     "bytes": 10804,
-    "observed_at_utc": "2026-11-21T12:38:32.826179Z",
+    "observed_at_utc": "2026-11-21T19:09:02.492773Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/stints?session_key=11416",
     "sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
@@ -33,7 +33,7 @@
   "json_sha256": "29b7caba904290cb40ebefdc5ff4c7437224cd5f07b7da9d9e2f72ebf1521dfe",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T12:38:32.826179Z",
+  "observed_at_utc": "2026-11-21T19:09:02.492773Z",
   "original_response_bytes_retained": true,
   "rows": 75,
   "status": "clean",

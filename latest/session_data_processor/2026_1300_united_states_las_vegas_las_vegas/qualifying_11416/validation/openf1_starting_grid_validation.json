@@ -20,7 +20,7 @@
   "endpoint": "starting_grid",
   "fetch": {
     "bytes": 2095,
-    "observed_at_utc": "2026-11-21T12:38:34.838967Z",
+    "observed_at_utc": "2026-11-21T19:09:03.942038Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/starting_grid?session_key=11416",
     "sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
@@ -30,7 +30,7 @@
   "json_sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-21T12:38:34.838967Z",
+  "observed_at_utc": "2026-11-21T19:09:03.942038Z",
   "original_response_bytes_retained": true,
   "rows": 22,
   "status": "clean",
