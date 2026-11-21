@@ -41,7 +41,7 @@ jobs:
           assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in w
           for clause in ('operation=full_run_chain','commit_outputs=true','run_forecast_gate=false'):
               assert clause in w
-          assert '--repo-root . --mode runtime --fail-on-issue' not in w
+          assert not any(line.strip().startswith('python scripts/') for line in w.splitlines())
           assert 'f1_workbook_persistence_handoff_guard_v1.py' in original
           assert 'f1_peak_elite_orchestrator_v1.py' in original
           assert '2026,11,21,21,30' in w
