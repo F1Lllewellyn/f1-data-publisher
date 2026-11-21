@@ -87,6 +87,25 @@ class CancelledSessionDiscoveryTests(unittest.TestCase):
             ["11255"],
         )
 
+    def test_sprint_qualifying_does_not_require_race_pit_data(self):
+        self.assertFalse(collector.is_race_like_session(pd.Series({
+            "session_name": "Sprint Qualifying", "session_type": "Qualifying",
+        })))
+        self.assertFalse(collector.is_race_like_session(pd.Series({
+            "session_name": "Sprint Shootout", "session_type": "Qualifying",
+        })))
+        self.assertFalse(collector.is_race_like_session(pd.Series({
+            "session_name": "Practice 1", "session_type": "Practice",
+        })))
+
+    def test_real_sprint_and_race_require_pit_data(self):
+        for name, kind in (("Sprint", "Race"), ("Race", "Race"),
+                           ("Sprint Race", "Race")):
+            with self.subTest(name=name):
+                self.assertTrue(collector.is_race_like_session(pd.Series({
+                    "session_name": name, "session_type": kind,
+                })))
+
     def test_future_and_unknown_end_do_not_qualify(self):
         with patch.object(collector, "utc_now", return_value=self.now):
             self.assertFalse(collector.is_completed_session(pd.Series(
