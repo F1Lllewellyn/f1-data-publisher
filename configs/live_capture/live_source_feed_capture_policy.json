@@ -34,7 +34,46 @@
       "Sprint",
       "Race"
     ],
-    "scheduled_runs_exit_if_no_active_window": true
+    "scheduled_runs_exit_if_no_active_window": true,
+    "verified_fallback_sessions": [
+      {
+        "meeting_key": 1300,
+        "session_key": 11415,
+        "session_name": "Practice 3",
+        "session_type": "Practice",
+        "country_name": "United States",
+        "date_start": "2026-11-21T00:30:00Z",
+        "date_end": "2026-11-21T01:30:00Z",
+        "schedule_basis": "official_F1_Las_Vegas_2026",
+        "identity_basis": "original_OpenF1_sessions_catalog_HTTP200_2026-11-20T07:51:37Z",
+        "date_end_basis": "official_session_timetable"
+      },
+      {
+        "meeting_key": 1300,
+        "session_key": 11416,
+        "session_name": "Qualifying",
+        "session_type": "Qualifying",
+        "country_name": "United States",
+        "date_start": "2026-11-21T04:00:00Z",
+        "date_end": "2026-11-21T05:00:00Z",
+        "schedule_basis": "official_F1_Las_Vegas_2026",
+        "identity_basis": "original_OpenF1_sessions_catalog_HTTP200_2026-11-20T07:51:37Z",
+        "date_end_basis": "official_session_timetable"
+      },
+      {
+        "meeting_key": 1300,
+        "session_key": 11420,
+        "session_name": "Race",
+        "session_type": "Race",
+        "country_name": "United States",
+        "date_start": "2026-11-22T04:00:00Z",
+        "date_end": "2026-11-22T06:00:00Z",
+        "schedule_basis": "official_F1_Las_Vegas_2026",
+        "identity_basis": "original_OpenF1_sessions_catalog_HTTP200_2026-11-20T07:51:37Z",
+        "date_end_basis": "approximate_two_hour_recording_window_not_actual_race_end"
+      }
+    ],
+    "fallback_guardrails": "Fallback is only used if provider session catalog is unavailable, only for exact preapproved 2026 Las Vegas windows, with expected meeting/session identities and source attribution. This is scheduler context, not authenticated source-event provenance or forecast evidence."
   },
   "outputs": {
     "latest_dir": "latest/live_source_feed_capture",
