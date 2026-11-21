@@ -1,0 +1,126 @@
+name: F1 Vegas FP3 Session Processor Real Data Read-Only One Shot
+
+# Active G1 authentic event source exists on main. Validate the existing
+# standalone processor on true FP3 OpenF1 data; never commit test outputs.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-vegas-fp3-session-processor-readonly-one-shot.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/f1-vegas-fp3-session-processor-readonly-one-shot.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  static-processor-scope:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check exact FP3 source, no-commit and no-model invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/session_data_processor/session_data_processor_loop_v1.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('.github/workflows/f1-vegas-fp3-session-processor-readonly-one-shot.yml').read_text()
+          assert '--session-filter "practice 3"' in s
+          assert '--write-public-latest false' in s
+          assert '2026,11,21,3,25' in s
+          assert 'contents: read' in s
+          assert not any(l.strip().startswith(('git push','git add','git commit')) for l in s.splitlines())
+          print('Real FP3 session processor scope, source-time cutoff, and no Git writes: PASS')
+          PY
+
+  collect-and-test-real-fp3-session:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - name: Read-only checkout of deployed source event publication
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install processor dependencies
+        run: python -m pip install pandas requests openpyxl
+      - name: Enforce actual FP3 original historical-source observation window
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          start=dt.datetime(2026,11,21,2,0,tzinfo=dt.timezone.utc)
+          end=dt.datetime(2026,11,21,3,25,tzinfo=dt.timezone.utc)
+          if not start<=now<end:
+              raise SystemExit('HOLD_FP3_PROCESSOR_OUTSIDE_REAL_PREQUALIFYING_SOURCE_WINDOW')
+          print('FP3 post-session original source access is now historical, before qualifying paid window')
+          PY
+      - name: Independently verify deployed G1 event and original exact FP3 scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('latest/openf1_event_source_closure/1300/latest_manifest.json')
+          manifest=json.loads(p.read_text())
+          assert manifest['collection_scope']=='event'
+          assert manifest['meeting_key']=='1300'
+          assert manifest['expected_session_key']=='11415'
+          assert manifest['source_quality_status']=='complete'
+          assert manifest['publication_eligible'] is True
+          assert manifest['source_quality_reasons']==[]
+          print('Real main G1 event source original custody: VERIFIED')
+          PY
+      - name: Run existing standalone processor on authentic FP3 source in ephemeral checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/session_data_processor/session_data_processor_loop_v1.py \
+            --mode run_now --season 2026 \
+            --session-filter "practice 3" \
+            --write-public-latest false
+      - name: Verify session identity, original observation and scientific no-promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('_runtime/session_data_processor/session_processor_result.json')
+          if not base.is_file():
+              raise SystemExit('HOLD_FP3_SESSION_PROCESSOR_NO_RESULT')
+          r=json.loads(base.read_text())
+          print(json.dumps({k:r.get(k) for k in ('status','reason','session_key','session_name','overall_status','event_id','gate','promotion_allowed','canonical_workbook_modified')},sort_keys=True))
+          if str(r.get('session_key'))!='11415':
+              raise SystemExit('HOLD_FP3_PROCESSOR_STALE_SESSION_IDENTITY')
+          if r.get('promotion_allowed') is not False or r.get('canonical_workbook_modified') is not False:
+              raise SystemExit('HOLD_FP3_PROCESSOR_UNSAFE_SCIENTIFIC_PROMOTION')
+          print('Current FP3 consumer source selection and scientific separation: VERIFIED_CONTEXT_ONLY')
+          PY
+      - name: Preserve all session source bytes, result, custody and downstream diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-vegas-fp3-real-session-processor-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            _runtime/session_data_processor/**
+            latest/session_data_processor/**
+            history/session_data_processor/**
+          if-no-files-found: warn
+          retention-days: 90
