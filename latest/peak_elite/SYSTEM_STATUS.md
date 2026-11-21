@@ -1,11 +1,11 @@
 # F1 Peak-Elite System Health
 
-Created UTC: `2026-11-08T13:16:27.397378Z`
-Status: **pass**
+Created UTC: `2026-11-21T00:50:13.272522Z`
+Status: **fail**
 
 ## Confirmed Data
-- Latest event: `Brazil - São Paulo - Interlagos`
-- Latest session: `Qualifying`
+- Latest event: `United States - Las Vegas - Las Vegas`
+- Latest session: `Practice 2`
 - Source status: `clean`
 - Workbook/KPI commit allowed: `True`
 - Workbook source status: `clean`
@@ -18,7 +18,8 @@ Status: **pass**
 - `governance_guard`: **pass**
 
 ## Failed steps
-- None
+- `workflow_static_validator`
+- `workflow_meta_health_v1`
 
 ## Governance
 - Stable engine modified: `false`

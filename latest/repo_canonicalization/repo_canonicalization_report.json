@@ -1,18 +1,17 @@
 {
   "category_counts": {
-    "active_architecture": 117406,
+    "active_architecture": 119132,
     "active_or_unknown": 51,
     "archive": 690,
+    "generated_python_cache": 1,
     "legacy_installer_or_patch_artifact": 57
   },
-  "created_utc": "2026-11-08T13:16:16.317483Z",
+  "created_utc": "2026-11-21T00:50:09.993085Z",
   "deletion_policy": "safe_apply deletes only generated Python caches/bytecode. Legacy installers/reports are inventoried for a later reviewed archive move.",
-  "file_count": 118204,
+  "file_count": 119931,
   "generated_cleanup": {
     "failures": [],
-    "removed_cache_dirs": [
-      "scripts/ops/__pycache__"
-    ],
+    "removed_cache_dirs": [],
     "removed_cache_files": []
   },
   "gitignore_added": [],
@@ -212,7 +211,7 @@
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260719T115229Z/qualifying_11330/validation/openf1_session_result_validation.json",
     "history/session_data_processor/2026_1290_belgium_spa_francorchamps_spa_francorchamps/20260719T115229Z/qualifying_11330/validation/openf1_starting_grid_validation.json"
   ],
-  "mode": "safe_apply",
+  "mode": "report_only",
   "phase2_recommendation": "After source classifier stabilizes, move legacy installer/patch/report artifacts into _archive/repository_canonicalization/ using a reviewed manifest, not blind deletion.",
   "protected_assets_touched": false,
   "protected_markers": [
@@ -221,16 +220,15 @@
     "F1_2026_Prediction_Model_Data_Workbook_updated_2026-06-06_v15_fastf1_kpi_integrated.xlsx"
   ],
   "recommended_action_counts": {
-    "keep": 118147,
+    "delete_safe": 1,
+    "keep": 119873,
     "recommend_archive_only": 57
   },
   "repo_root": "/home/runner/work/f1-data-publisher/f1-data-publisher",
   "schema_version": "repo_canonicalization_v1",
   "status": "pass",
-  "total_bytes": 8123748749,
+  "total_bytes": 8178040624,
   "utf8_bom_files_sample": [
-    ".github/workflows/elite-weekend-engine-run.yml",
-    ".github/workflows/f1-actual-forecast-producer-v1.yml",
     ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml",
     ".github/workflows/f1-automation-baseline-snapshot.yml",
     ".github/workflows/f1-create-automation-baseline-tag.yml",
@@ -242,11 +240,8 @@
     ".github/workflows/f1-post-race-scoring-loop.yml",
     ".github/workflows/f1-race-weekend-operating-rhythm.yml",
     ".github/workflows/f1-season-archive-publisher.yml",
-    ".github/workflows/f1-session-data-processor-loop-v1.yml",
     ".github/workflows/f1-session-data-processor-run-now-button-v1.yml",
     ".github/workflows/f1-workbook-control-room-bridge.yml",
-    ".github/workflows/openf1-full-historical-auto-ingest.yml",
-    ".github/workflows/openf1-post-race-auto-reliability.yml",
     "F1_1A_CUMULATIVE_VALIDATION_HOTFIX_INSTALL_REPORT_2026-06-11.md",
     "F1_FORECAST_BUNDLE_LOCKER_NO_SOURCE_COMMIT_GUARD_INSTALL_REPORT_2026-06-11.md",
     "F1_FORECAST_GATE_ORCHESTRATOR_V1_INSTALL_REPORT.md",
@@ -307,5 +302,5 @@
     "requirements-f1-engine-automation.txt",
     "requirements-openf1-ingest.txt"
   ],
-  "workflow_count": 60
+  "workflow_count": 63
 }
