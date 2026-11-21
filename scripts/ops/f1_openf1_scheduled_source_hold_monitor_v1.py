@@ -70,6 +70,8 @@ def assess(root: Path) -> dict:
     failures = [row for row in diagnostics if row.get("status") == "fail"]
     require(bool(failures), "no_original_required_lane_failures")
     for row in failures:
+        require(row.get("lane") in {"starting_grid", "pit"},
+                "required_live_evidence_lane_missing:" + str(row.get("lane")))
         require(
             row.get("reason") == "required_session_http_404"
             and "http_404" in row.get("request_statuses", "").split(","),
