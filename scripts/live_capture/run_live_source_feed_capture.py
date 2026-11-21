@@ -130,10 +130,39 @@ def choose_active_window(policy: Dict[str, Any], capture_mode: str, manual_label
     max_minutes = int(capture_cfg.get("max_capture_minutes", 170))
     current = now_utc()
 
+    lookup_failure = None
+    schedule_origin = "live_openf1_provider_catalog"
     try:
         sessions = fetch_openf1_sessions(season)
     except Exception as exc:
-        return {"should_capture": False, "reason": f"schedule_lookup_failed: {exc}"}
+        # Live unauthenticated OpenF1 lookups return HTTP401 during the paid
+        # window. A confirmed event timetable, pinned before the race, may
+        # schedule a recording; it does NOT authenticate original source bytes.
+        lookup_failure = type(exc).__name__
+        sessions = []
+        for entry in sched_cfg.get("verified_fallback_sessions", []):
+            if not isinstance(entry, dict):
+                continue
+            try:
+                start = parse_dt(entry.get("date_start"))
+                end = parse_dt(entry.get("date_end"))
+                meeting = entry.get("meeting_key")
+                session = entry.get("session_key")
+                if (entry.get("schedule_basis") != "official_F1_Las_Vegas_2026"
+                        or not str(entry.get("identity_basis", "")).startswith("original_OpenF1_sessions_catalog_HTTP200_")
+                        or type(meeting) is not int or meeting != 1300
+                        or type(session) is not int or session not in (11415, 11416, 11420)
+                        or not start or not end or not start < end
+                        or start.year != 2026 or start.month != 11
+                        or end - start > dt.timedelta(hours=3)):
+                    continue
+            except (TypeError, ValueError, OverflowError):
+                continue
+            sessions.append(entry)
+        if not sessions:
+            return {"should_capture": False,
+                    "reason": f"schedule_lookup_failed:{lookup_failure}:no_verified_fallback"}
+        schedule_origin = "verified_2026_las_vegas_timetable_only"
 
     candidates = []
     for sess in sessions:
@@ -163,6 +192,9 @@ def choose_active_window(policy: Dict[str, Any], capture_mode: str, manual_label
     return {
         "should_capture": True,
         "reason": "active_schedule_window",
+        "schedule_origin": schedule_origin,
+        "provider_catalog_lookup_hold": lookup_failure,
+        "schedule_is_not_source_authentication": True,
         "session_label": label,
         "duration_minutes": duration,
         "session_key": sess.get("session_key"),
