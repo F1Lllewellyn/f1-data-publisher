@@ -43,11 +43,21 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           w=Path('.github/workflows/f1-issue367-v22-postpeak-original-dispatch-once.yml').read_text()
-          actual=w.split('      - name: Dispatch ORIGINAL v22 downstream consumers once',1)[1]
+          def step(name):
+              lines=w.splitlines()
+              marker='      - name: '+name
+              locations=[i for i,line in enumerate(lines) if line==marker]
+              assert len(locations)==1, 'HOLD_DUPLICATE_OR_MISSING_STEP'
+              start=locations[0]+1
+              end=next((i for i in range(start,len(lines))
+                        if lines[i].startswith('      - name: ')),len(lines))
+              return '\\n'.join(lines[start:end])
+          actual=step('Dispatch ORIGINAL v22 downstream consumers once')
+          verification=step('Verify original completed Peak and avoid duplicate automatic v22')
           assert 'gh workflow run f1-1b-output-contract-after-control-room-v22.yml' in actual
           assert '-f commit_outputs=true' in actual
-          assert '44904714460' in w and 'b59c4837d1512940282a3c48530f8785fa14cf42' in w
-          assert '2026,11,21,21,30' in w
+          assert '44904714460' in verification and 'b59c4837d1512940282a3c48530f8785fa14cf42' in verification
+          assert 'dt.datetime(2026,11,21,21,30' in verification
           assert not any(line.strip().startswith(('git add ', 'git push ', 'git commit '))
                          for line in w.splitlines())
           assert 'scripts/forecasts/produce_actual_forecast_rows' not in actual
