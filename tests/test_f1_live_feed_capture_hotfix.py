@@ -22,11 +22,14 @@ spec.loader.exec_module(capture)
 
 
 class LiveFeedRepairTests(unittest.TestCase):
-    def test_runner_is_python39_compatible_and_does_not_block_main_serialization(self):
+    def test_runner_is_modern_signalr_core_and_does_not_block_main_serialization(self):
         text = WORKFLOW_PATH.read_text(encoding="utf-8-sig")
         self.assertIn("runs-on: ubuntu-24.04", text)
-        self.assertIn('python-version: "3.9"', text)
+        self.assertIn('python-version: "3.11"', text)
         self.assertIn("group: f1-experimental-live-source-feed", text)
+        self.assertIn("fastf1==3.9.2", text)
+        self.assertIn("F1_USERNAME: ${{ secrets.F1_USERNAME }}", text)
+        self.assertIn("F1_PASSWORD: ${{ secrets.F1_PASSWORD }}", text)
         self.assertNotIn("group: f1-main-write-serialization", text)
         self.assertIn("cancel-in-progress: false", text)
 
@@ -102,6 +105,85 @@ class LiveFeedRepairTests(unittest.TestCase):
     def test_scheduled_import_failure_is_failure(self):
         self.exercise("active_schedule_window", True, "fastf1_import_failed", b"", 1)
 
+    def test_missing_f1tv_auth_fails_without_attempted_source(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "", "F1_PASSWORD": ""}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"), \
+             patch.object(capture.subprocess, "run") as exec_source:
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "f1_auth_missing")
+            self.assertEqual(result["error"], "HOLD_F1TV_AUTH_NOT_CONFIGURED")
+            self.assertFalse(result["recording_attempted"])
+            self.assertFalse(result["auth_credentials_configured"])
+            exec_source.assert_not_called()
+        self.exercise("active_schedule_window", True, "f1_auth_missing", b"", 1)
+
+    def test_obsolete_fastf1_is_explicitly_rejected_before_source(self):
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.6.1"), \
+             patch.object(capture.subprocess, "run") as exec_source:
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "fastf1_version_unsupported")
+            self.assertEqual(result["error"], "HOLD_FASTF1_SIGNALR_CORE_VERSION")
+            exec_source.assert_not_called()
+
+    def test_authenticated_child_records_real_bytes_without_leaking_secrets(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"):
+            path = Path(td) / "raw.txt"
+            def fake_run(args, **kwargs):
+                self.assertEqual(args[0], sys.executable)
+                self.assertIn("SignalRClient", args[2])
+                self.assertNotIn("SYNTHETIC_NOT_A_SECRET", str(args))
+                self.assertEqual(kwargs["timeout"], 60)
+                self.assertEqual(kwargs["stdout"], subprocess.DEVNULL)
+                self.assertEqual(kwargs["stderr"], subprocess.DEVNULL)
+                path.write_bytes(b"synthetic-signalr-original-packets")
+                return subprocess.CompletedProcess(args=args, returncode=0, stdout=b"", stderr=b"")
+            with patch.object(capture.subprocess, "run", side_effect=fake_run):
+                result = capture.record_live_timing(path, 1)
+            self.assertEqual(result["recording_status"], "completed")
+            self.assertTrue(result["recording_attempted"])
+            self.assertTrue(result["fastf1_import_ok"])
+            self.assertTrue(result["auth_credentials_configured"])
+            self.assertEqual(path.read_bytes(), b"synthetic-signalr-original-packets")
+            self.assertNotIn("SYNTHETIC_NOT_A_SECRET", json.dumps(result))
+
+    def test_timeboxed_child_retains_flushed_original_bytes(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"):
+            path = Path(td) / "raw.txt"
+            def timeout(args, **kwargs):
+                path.write_bytes(b"bounded-original-packets")
+                raise subprocess.TimeoutExpired(cmd=args, timeout=60)
+            with patch.object(capture.subprocess, "run", side_effect=timeout):
+                result = capture.record_live_timing(path, 1)
+            self.assertEqual(result["recording_status"], "completed")
+            self.assertTrue(result["timeboxed"])
+            self.assertEqual(path.read_bytes(), b"bounded-original-packets")
+
+    def test_auth_error_does_not_log_private_child_output(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td, \
+             patch.dict(os.environ, {"F1_USERNAME": "synthetic@example.invalid",
+                                     "F1_PASSWORD": "SYNTHETIC_NOT_A_SECRET"}), \
+             patch.object(capture, "get_package_version", return_value="3.9.2"), \
+             patch.object(capture.subprocess, "run", return_value=subprocess.CompletedProcess(
+                 [], 1, b"private-subprocess-output", b"token=SYNTHETIC_NOT_A_SECRET")):
+            result = capture.record_live_timing(Path(td) / "raw.txt", 1)
+            self.assertEqual(result["recording_status"], "source_feed_handshake_unavailable")
+            self.assertEqual(result["error"], "HOLD_F1_SIGNALR_AUTH_OR_CONNECT_FAILED")
+            self.assertNotIn("SYNTHETIC_NOT_A_SECRET", json.dumps(result))
+
     def test_scheduled_handshake_unavailable_is_failure(self):
         self.exercise("active_schedule_window", True, "source_feed_handshake_unavailable", b"", 1)
 
@@ -169,6 +251,60 @@ class LiveFeedRepairTests(unittest.TestCase):
                     self.assertEqual((hist / raw.name).read_bytes(), original)
             finally:
                 os.chdir(old_cwd)
+
+
+    def test_las_vegas_fp3_uses_only_pinned_session_after_live_catalog_http401(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        now=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)
+        with patch.object(capture,"now_utc",return_value=now), \
+             patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")) as get:
+            result=capture.choose_active_window(policy,"auto_window","",None)
+        get.assert_called_once_with(2026)
+        self.assertTrue(result["should_capture"])
+        self.assertEqual(result["session_key"],11415)
+        self.assertEqual(result["meeting_key"],1300)
+        self.assertEqual(result["schedule_origin"],"verified_2026_las_vegas_timetable_only")
+        self.assertEqual(result["provider_catalog_lookup_hold"],"PermissionError")
+        self.assertTrue(result["schedule_is_not_source_authentication"])
+        self.assertEqual(result["reason"],"active_schedule_window")
+
+    def test_las_vegas_qualifying_and_race_exact_date_fallback(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        for now,key in ((dt.datetime(2026,11,21,4,5,tzinfo=capture.UTC),11416),
+                        (dt.datetime(2026,11,22,4,5,tzinfo=capture.UTC),11420)):
+            with self.subTest(key=key),patch.object(capture,"now_utc",return_value=now), \
+                 patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+                decision=capture.choose_active_window(policy,"auto_window","",None)
+                self.assertTrue(decision["should_capture"])
+                self.assertEqual(decision["session_key"],key)
+                self.assertEqual(decision["meeting_key"],1300)
+
+    def test_no_recording_outside_pinned_2026_f1_window_or_for_wrong_identity(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        for now in (dt.datetime(2026,11,20,17,0,tzinfo=capture.UTC),
+                    dt.datetime(2026,11,23,4,0,tzinfo=capture.UTC),
+                    dt.datetime(2027,11,21,0,45,tzinfo=capture.UTC)):
+            with self.subTest(now=now),patch.object(capture,"now_utc",return_value=now), \
+                 patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+                self.assertFalse(capture.choose_active_window(policy,"auto_window","",None)["should_capture"])
+        # A source event mismatch cannot authorize an alternative recording.
+        policy["schedule_detection"]["verified_fallback_sessions"][0]["meeting_key"]=999
+        with patch.object(capture,"now_utc",return_value=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)), \
+             patch.object(capture,"fetch_openf1_sessions",side_effect=PermissionError("HTTP 401")):
+            self.assertFalse(capture.choose_active_window(policy,"auto_window","",None)["should_capture"])
+
+    def test_provider_catalog_success_remains_authority_over_fallback(self):
+        import datetime as dt
+        policy=json.loads((ROOT/"configs/live_capture/live_source_feed_capture_policy.json").read_text())
+        now=dt.datetime(2026,11,21,0,45,tzinfo=capture.UTC)
+        with patch.object(capture,"now_utc",return_value=now), \
+             patch.object(capture,"fetch_openf1_sessions",return_value=[]):
+            result=capture.choose_active_window(policy,"auto_window","",None)
+        self.assertFalse(result["should_capture"])
+        self.assertEqual(result["reason"],"no_active_capture_window")
 
 
 if __name__ == "__main__":
