@@ -31,6 +31,7 @@ COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
     "43b742c644a8858313834174575a2af00b4ffe42",  # Issue367 G2 dual-window process handover; original pins retained.
     "0cc606120618fb2ad239f3ea31c8329cfd405bf3",  # Issue367 canceled-session exclusion, exact reviewed test-only descendant.
+    "f8649ee2c56bf8f2ee8ecf099e101838c1bf6952",  # Issue367 sprint qualifying pit-data classification, exact descendant.
     "b904366ae7bac72cf72596ac4542a0af97f3d87e",  # Issue367 G1 original-byte event custody; historical pins retained.
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
@@ -1243,7 +1244,7 @@ class StaticScopeTests(unittest.TestCase):
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 8)
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 9)
         for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
             for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
                 self.assertNotEqual(
