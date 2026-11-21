@@ -1,0 +1,37 @@
+{
+  "anomalies": [],
+  "columns": [
+    "category",
+    "date",
+    "driver_number",
+    "flag",
+    "lap_number",
+    "meeting_key",
+    "message",
+    "qualifying_phase",
+    "scope",
+    "sector",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_race_control.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "race_control",
+  "fetch": {
+    "bytes": 21327,
+    "observed_at_utc": "2026-11-21T12:38:33.405864Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/race_control?session_key=11416",
+    "sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_race_control.json",
+  "json_sha256": "24955f3470700d5959079f96d90ea4301a2d082bd80c16ae76d4d17bc6bd2de0",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-21T12:38:33.405864Z",
+  "original_response_bytes_retained": true,
+  "rows": 81,
+  "status": "clean",
+  "timestamp_rows": 81
+}

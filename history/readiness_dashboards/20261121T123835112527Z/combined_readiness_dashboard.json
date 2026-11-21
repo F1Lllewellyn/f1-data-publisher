@@ -1,0 +1,63 @@
+{
+  "generated_at_utc": "2026-11-21T12:38:35Z",
+  "status": "dashboard_refreshed",
+  "source_status": "clean",
+  "source_backed": true,
+  "commit_allowed": true,
+  "diagnostic_publish_allowed": true,
+  "downstream_eligible": true,
+  "readiness_scope": "source_and_workbook_context_only",
+  "stable_engine_executed": false,
+  "prediction_locked": false,
+  "scientific_status": "HOLD_STABLE_ENGINE_NOT_EXECUTED",
+  "consumed_fingerprints": {
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.json": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.json": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.json": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.json": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+    "latest/combined_source_manifest.json": "4f654f93566b1499a8e1ecc53f806ef529d5c4999e24ccc6738fd918352eb8a6",
+    "latest/data_readiness.json": "839c2540c57a9168b60a4eb256c9388bee8dc2abc90f62afd9cdda01f558d175",
+    "latest/latest_manifest.json": "9675809a2359247bf9991b70067c4fb591c24961b6da70186d58adb3f31401f7",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "80eee540a4d304104bd7e8f7b21a5d97f40a806737f33d1ac037fbe61bc53245",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "d95e26d8b2e1d7d1bebb68727b4b51216995ce0597e7bf88e9d442f5fc16b834",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "417121d20a01878669cfa13cc80026f574e3ace0e1541a5ac954c74661717d47",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+    "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "f16ca511e218e8e87cab544620bcba57e9790f0bdd7b7d0d237b2f113dd2df17",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/sandbox_workbook_update_plan_applied.json": "c7edbd1d9ccfc1ae3bf65c57caaf00347468625e209f085ca4a856749cb4493c",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/refreshed_workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T123835Z.xlsx": "93ed54f6e0aa10bf850b7586f695af98889f75c56f228cc41bf8524bfe74232b",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_latest_manifest_snapshot.json": "74bfea320b073c2666b3088cb7dae018a57ebcbc0e4f262ac01818834976227e",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_data_readiness_snapshot.json": "430a36ca2d65072e194f43786ef59e0836620832681f96c9be80df89cc5ddd47",
+    "history/workbook_kpi_refresh_applier/20261121T123835Z/upstream_combined_source_manifest_snapshot.json": "eefa1a17197ed368d080cfcdef6d63051c431b557dc6d2aa5936a413af5f1fa9"
+  },
+  "readiness_reasons": [
+    "verified_current_session_evidence"
+  ],
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "meeting_key": 1300,
+  "session_key": 11416,
+  "expected_session_key": 11416,
+  "session_schedule_verified": true,
+  "event_name": "United States - Las Vegas - Las Vegas",
+  "session_name": "Qualifying",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261121T123835Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T123835Z.xlsx",
+  "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
+  "session_manifest": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json",
+  "autorepair_report": null,
+  "stable_engine_modified": false,
+  "canonical_workbook_overwrite": false,
+  "promotion_allowed": false,
+  "race_predictions": {
+    "ready_for_use": true,
+    "blocked": false,
+    "latest_session_state": "clean",
+    "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
+  },
+  "fantasy_predictions": {
+    "ready_for_use": true,
+    "blocked": false,
+    "latest_session_state": "clean",
+    "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
+  }
+}
