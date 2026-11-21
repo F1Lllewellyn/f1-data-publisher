@@ -30,6 +30,8 @@ BASELINE_WORKFLOW_BLOB = "6768b09449905cd61281386d6fc147f0fa18d01c"
 COLLECTOR_PATH = "scripts/openf1/publish_openf1_lightweight_source_closure.py"
 APPROVED_COLLECTOR_BLOBS = (
     "43b742c644a8858313834174575a2af00b4ffe42",  # Issue367 G2 dual-window process handover; original pins retained.
+    "0cc606120618fb2ad239f3ea31c8329cfd405bf3",  # Issue367 canceled-session exclusion, exact reviewed test-only descendant.
+    "f8649ee2c56bf8f2ee8ecf099e101838c1bf6952",  # Issue367 sprint qualifying pit-data classification, exact descendant.
     "b904366ae7bac72cf72596ac4542a0af97f3d87e",  # Issue367 G1 original-byte event custody; historical pins retained.
     "dbbc36dc01737084f2b1ff332e26c6c270be0049",
     "851625a5c333afc65f330e823d943c80b7b77121",
@@ -132,7 +134,7 @@ def require_protected_workflow(current: str) -> bytes:
     In particular, the latter does NOT relax the success-only commit condition.
     """
     # Exact authorized G1 descendant; immutable ancestor is still verified.
-    if git_blob_sha(current.encode()) in {"dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84", "cc0137daad3dba01c56956958cd7efdc7d097c88"}:
+    if git_blob_sha(current.encode()) in {"dc32511cf7e0e9ff5b9b69ece2040da6e3a12d84", "cc0137daad3dba01c56956958cd7efdc7d097c88", "5d90c5c739e0dca0ef4bffc4ba77a3e6ff823453"}:
         return immutable_git_blob(ROOT, BASELINE_WORKFLOW_BLOB)
     if current.count(NEW_DIAGNOSTIC_UPLOAD) != 1 or current.count(NEW_PUBLICATION) != 1:
         raise AssertionError("unrecognized workflow delta")
@@ -1162,7 +1164,11 @@ class StaticScopeTests(unittest.TestCase):
             self.assertEqual(dispatch.count(f"      {name}"), 1)
         self.assertEqual(text.count("openf1-manual-shadow-custody-attestation:"), 1)
         self.assertEqual(text.count("dr002-pre2b7k4r28-openf1-manual-shadow-custody"), 1)
-        self.assertIn("if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}", text)
+        self.assertIn("if: ${{ success() && steps.source_closure.outputs.publish_eligible == 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.provenance_shadow_session_key == '') }}", text)
+        self.assertIn("id: source_closure", text)
+        self.assertIn("if [ \"$publisher_rc\" -eq 0 ]; then", text)
+        self.assertIn("echo \"publish_eligible=true\" >> \"$GITHUB_OUTPUT\"", text)
+        self.assertIn("python scripts/ops/f1_openf1_scheduled_source_hold_monitor_v1.py", text)
         self.assertLess(text.index("Upload legacy source closure artifact"), text.index("f1_source_closure_publish_guard_v1.py"))
 
     def test_guard_has_one_plain_push_and_no_provider_or_retry_path(self):
@@ -1198,6 +1204,22 @@ class StaticScopeTests(unittest.TestCase):
                 if path in recovery_blobs or path in coordinated_blobs:
                     self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
                     previous = coordinated_blobs.get(path, recovery_blobs.get(path))
+                    if path == ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml":
+                        # Post-release #367 monitoring changes only exit reporting.
+                        # Reconstruct from the exact accepted bytes, preserving
+                        # every original scientific/dependency pin above.
+                        prior = immutable_git_blob(ROOT, previous)
+                        self.assertEqual(git_blob_sha(prior), previous)
+                        anchor = b"      COMMIT_OUTPUTS: ${{ github.event.inputs.commit_outputs || 'true' }}\n"
+                        addition = (b"      # Monitoring success does not authorize any forecast; manual callers stay strict.\n"
+                                    b"      EXIT_POLICY: ${{ github.event_name == 'schedule' && 'monitor' || 'strict' }}\n")
+                        invocation = b'            --season 2026\n'
+                        self.assertEqual(prior.count(anchor), 1)
+                        self.assertEqual(prior.count(invocation), 1)
+                        revised = prior.replace(anchor, anchor + addition).replace(
+                            invocation, b'            --exit-policy "${EXIT_POLICY}" \\\n' + invocation)
+                        self.assertEqual(raw, revised)
+                        previous = "b3123e4a76af251f20bc27cda09bf1c7d6594a22"
                     if path == ".github/workflows/f1-session-data-processor-loop-v1.yml":
                         # Issue #367: preserve the immutable source-closure pin
                         # while accepting ONLY PR #383's one-line Bash if/fi
@@ -1222,7 +1244,7 @@ class StaticScopeTests(unittest.TestCase):
             blob_sha: immutable_git_blob(ROOT, blob_sha)
             for blob_sha in APPROVED_COLLECTOR_BLOBS
         }
-        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 7)
+        self.assertEqual(len(set(APPROVED_COLLECTOR_BLOBS)), 9)
         for index, left in enumerate(APPROVED_COLLECTOR_BLOBS):
             for right in APPROVED_COLLECTOR_BLOBS[index + 1:]:
                 self.assertNotEqual(

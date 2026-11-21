@@ -11,7 +11,11 @@ on:
         options:
           - "true"
           - "false"
+  schedule:
+    # Reconcile a persisted successful Peak receipt if its native event was omitted.
+    - cron: '17,47 * * * *'
   workflow_run:
+    branches: [main]
     workflows:
       - "F1 Peak Elite Control Room - One Click v1"
     types:
@@ -30,9 +34,13 @@ concurrency:
 
 jobs:
   output-contract-after-control-room:
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+      UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+      UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
     steps:
       - name: Checkout repository latest main
         uses: actions/checkout@v4
@@ -45,17 +53,24 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Verify committed upstream run and current session bytes
+      - name: Reconcile exact original Peak completion and consumer custody
+        id: reconcile
         env:
-          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
-          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation reconcile_bridge_input
+
+      - name: Verify committed upstream run and current session bytes
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_input
 
       - name: Write bridge trigger report
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
@@ -78,48 +93,59 @@ jobs:
           cat latest/1b_output_contract/control_room_bridge_v25_trigger_report.json
 
       - name: Run workbook persistence handoff static guard
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root . --mode static --fail-on-issue
 
       - name: Run output-contract acceptance tests
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_f1_1b_integrated_recovery_consumer_custody.py' -v
 
       - name: Run output contract ledger and handoff
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_output_contract_v16.py --repo-root . --mode run_now
 
       - name: Run v24 downstream consumer handoff writer
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_downstream_consumer_handoff_v24.py --repo-root . --mode run_now
 
       - name: Run v25 consumer context publisher and trigger governor
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/session_data_processor/f1_1b_consumer_context_publisher_v25.py --repo-root . --mode run_now
 
       - name: Reverify upstream bytes after downstream consumption
-        env:
-          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
-          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        if: steps.reconcile.outputs.action == 'PROCESS'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_output
 
+      - name: Revalidate original completion before publication
+        if: steps.reconcile.outputs.action == 'PROCESS'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_peak_elite_orchestrator_v1.py --repo-root . --operation verify_bridge_origin
+
       - name: Write bridge completion marker
         shell: bash
-        if: success()
+        if: success() && steps.reconcile.outputs.action == 'PROCESS'
         run: |
           set -euo pipefail
           mkdir -p latest/1b_output_contract
@@ -152,7 +178,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit v25 output-contract bridge, downstream, context, and trigger artifacts
-        if: ${{ success() && (github.event_name == 'workflow_run' || github.event.inputs.commit_outputs == 'true') }}
+        if: ${{ success() && steps.reconcile.outputs.action == 'PROCESS' && (github.event_name == 'workflow_run' || github.event_name == 'schedule' || github.event.inputs.commit_outputs == 'true') }}
         shell: bash
         run: |
           set -euo pipefail

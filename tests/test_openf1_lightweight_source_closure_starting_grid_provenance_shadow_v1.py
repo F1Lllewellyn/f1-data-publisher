@@ -128,7 +128,7 @@ def assert_authorized_workflow_compatibility(testcase, workflow):
     )
 
     active_blob = git_blob_sha(workflow)
-    if active_blob in {RECOVERY_WORKFLOW_BLOB, EVENT_CUSTODY_WORKFLOW_BLOB, COORDINATED_WORKFLOW_BLOB}:
+    if active_blob in {RECOVERY_WORKFLOW_BLOB, EVENT_CUSTODY_WORKFLOW_BLOB, COORDINATED_WORKFLOW_BLOB, "5d90c5c739e0dca0ef4bffc4ba77a3e6ff823453"}:
         # Reuse the exact reversible upload-only delta proof, rather than accept
         # arbitrary new bytes or relax manual-shadow/publication safety controls.
         from test_f1_source_closure_publish_guard_v1 import require_protected_workflow

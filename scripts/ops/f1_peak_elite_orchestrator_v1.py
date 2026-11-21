@@ -17,9 +17,12 @@ import json
 import hashlib
 import importlib.util
 import os
+import re
 import shutil
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -118,7 +121,8 @@ def verify_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
             raise ValueError("stale or future upstream report")
     except (KeyError, TypeError, ValueError, AttributeError):
         reasons.append("HOLD_UPSTREAM_TIME_INVALID_OR_STALE")
-    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_run":
+    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_run" or any(
+            os.environ.get(key) for key in ("UPSTREAM_RUN_ID", "UPSTREAM_RUN_ATTEMPT", "UPSTREAM_HEAD_SHA")):
         for field, env in (("github_run_id", "UPSTREAM_RUN_ID"),
                            ("github_run_attempt", "UPSTREAM_RUN_ATTEMPT"),
                            ("workflow_head_sha", "UPSTREAM_HEAD_SHA")):
@@ -248,6 +252,104 @@ def verify_bridge_output(repo: Path, reference_time=None) -> Dict[str, Any]:
     return result
 
 
+def fetch_original_run(run_id: str) -> Dict[str, Any]:
+    """One bounded authenticated GitHub read; never dispatch or retry a provider."""
+    repository = os.environ.get("GITHUB_REPOSITORY", "")
+    token = os.environ.get("GH_TOKEN", "")
+    if repository != "F1Lllewellyn/f1-data-publisher" or not token:
+        raise ValueError("HOLD_UPSTREAM_API_AUTH_OR_REPOSITORY")
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repository}/actions/runs/{run_id}",
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
+                 "X-GitHub-Api-Version": "2022-11-28"})
+    with urllib.request.urlopen(request, timeout=25) as response:
+        if response.status != 200:
+            raise ValueError(f"HOLD_UPSTREAM_API_HTTP_{response.status}")
+        raw = response.read(1024 * 1024 + 1)
+    if len(raw) > 1024 * 1024:
+        raise ValueError("HOLD_UPSTREAM_API_RESPONSE_TOO_LARGE")
+    return json.loads(raw)
+
+
+def verify_bridge_origin(repo: Path, reference_time=None) -> Dict[str, Any]:
+    """A committed status alone does not prove the originating workflow completed."""
+    result = verify_bridge_input(repo, reference_time=reference_time)
+    if result["reasons"]:
+        return result
+    status = read_json(repo / "latest/peak_elite/orchestrator_status.json", {})
+    reasons = result["reasons"]
+    run_id, attempt, head = (status.get(k, "") for k in
+                             ("github_run_id", "github_run_attempt", "workflow_head_sha"))
+    if (not re.fullmatch(r"[1-9][0-9]*", str(run_id))
+            or not re.fullmatch(r"[1-9][0-9]*", str(attempt))
+            or not re.fullmatch(r"[0-9a-f]{40}", str(head))):
+        reasons.append("HOLD_UPSTREAM_ORIGIN_IDENTITY")
+    else:
+        try:
+            run_info = fetch_original_run(str(run_id))
+            expected_repo = "F1Lllewellyn/f1-data-publisher"
+            if (not isinstance(run_info, dict)
+                    or str(run_info.get("id")) != str(run_id)
+                    or str(run_info.get("run_attempt")) != str(attempt)
+                    or run_info.get("head_sha") != head
+                    or run_info.get("head_branch") != "main"
+                    or run_info.get("path") != ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml"
+                    or run_info.get("repository", {}).get("full_name") != expected_repo
+                    or run_info.get("head_repository", {}).get("full_name") != expected_repo
+                    or run_info.get("event") not in {"schedule", "workflow_dispatch"}):
+                reasons.append("HOLD_UPSTREAM_ORIGINAL_RUN_MISMATCH")
+            elif run_info.get("status") != "completed" or run_info.get("conclusion") != "success":
+                reasons.append("HOLD_UPSTREAM_ORIGINAL_RUN_NOT_SUCCESSFUL")
+            else:
+                times = [dt.datetime.fromisoformat(value.replace("Z", "+00:00")) for value in
+                         (run_info["run_started_at"], status["created_utc"], run_info["updated_at"])]
+                now = reference_time or dt.datetime.now(dt.timezone.utc)
+                if not all(t.tzinfo is not None for t in times) or not times[0] <= times[1] <= times[2] <= now:
+                    reasons.append("HOLD_UPSTREAM_ORIGINAL_RUN_CHRONOLOGY")
+                result["original_event"] = run_info["event"]
+                result["original_completed_utc"] = run_info["updated_at"]
+        except urllib.error.HTTPError as exc:
+            reasons.append(f"HOLD_UPSTREAM_API_HTTP_{exc.code}")
+        except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
+            # Exception messages can include network details. No credentials or
+            # arbitrary response body may enter an operator report.
+            reasons.append(f"HOLD_UPSTREAM_API_UNVERIFIED:{type(exc).__name__}")
+    result.update(status="HOLD" if reasons else "VERIFIED_CONTEXT_ONLY", upstream_head_sha=head)
+    return result
+
+
+def reconcile_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
+    """Recover omitted triggers from exact original completion, or verify a no-op.
+
+    Scheduling is just an opportunity to check a receipt. It never establishes
+    completion, data freshness or model authority. Delayed native triggers keep
+    their own run pins and cannot silently select a newer run.
+    """
+    marker = repo / "_runtime/1b_output_contract/start.marker"
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    marker.touch()
+    result = verify_bridge_origin(repo, reference_time=reference_time)
+    result["action"] = "HOLD"
+    if result["reasons"]:
+        return result
+    previous_path = repo / "latest/1b_output_contract/verified_context_custody.json"
+    previous = read_json(previous_path, None)
+    if previous_path.exists() and not isinstance(previous, dict):
+        result["reasons"].append("HOLD_PRIOR_CONSUMER_RECEIPT_INVALID")
+    elif (isinstance(previous, dict) and previous.get("upstream_run_id") == result["upstream_run_id"]
+          and previous.get("upstream_run_attempt") == result["upstream_run_attempt"]):
+        verified = verify_bridge_output(repo, reference_time=reference_time)
+        if verified["reasons"]:
+            result["reasons"] += verified["reasons"]
+        else:
+            result["action"] = "NOOP_ALREADY_VERIFIED"
+    else:
+        result["action"] = "PROCESS"
+    if result["reasons"]:
+        result["status"] = "HOLD"
+    return result
+
+
 def build_plain_report(result: Dict[str, Any]) -> str:
     steps = result.get("steps", [])
     step_lines = [f"- `{s.get('label')}`: {'PASS' if s.get('ok') else 'FAIL'} (`{s.get('returncode')}`)" for s in steps]
@@ -303,13 +405,32 @@ def latest_state(repo: Path) -> Dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor", "verify_bridge_input", "verify_bridge_output"])
+    parser.add_argument("--operation", default="full_safe_chain", choices=["health_only", "syntax_repair_only", "full_safe_chain", "full_run_chain", "scheduled_monitor", "verify_bridge_input", "verify_bridge_output", "reconcile_bridge_input", "verify_bridge_origin"])
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--session-filter", default="auto")
     parser.add_argument("--run-forecast-gate", default="false")
     args = parser.parse_args()
 
     repo = Path(args.repo_root).resolve()
+    if args.operation in {"reconcile_bridge_input", "verify_bridge_origin"}:
+        function = reconcile_bridge_input if args.operation == "reconcile_bridge_input" else verify_bridge_origin
+        verification = function(repo)
+        write_json(repo / f"_runtime/1b_output_contract/{args.operation}.json", verification)
+        if args.operation == "reconcile_bridge_input" and verification["status"] != "HOLD":
+            if os.environ.get("GITHUB_OUTPUT"):
+                with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                    output.write(f"action={verification['action']}\n")
+            if os.environ.get("GITHUB_ENV"):
+                with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+                    for field, name in (("upstream_run_id", "UPSTREAM_RUN_ID"),
+                                        ("upstream_run_attempt", "UPSTREAM_RUN_ATTEMPT"),
+                                        ("upstream_head_sha", "UPSTREAM_HEAD_SHA")):
+                        output.write(f"{name}={verification[field]}\n")
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
+                output.write("## Context handoff reconciliation\n\n```json\n" + json.dumps(verification, indent=2) + "\n```\n")
+        print(json.dumps(verification, sort_keys=True))
+        return 2 if verification["status"] == "HOLD" else 0
     if args.operation in {"verify_bridge_input", "verify_bridge_output"}:
         verification = (verify_bridge_output if args.operation == "verify_bridge_output" else verify_bridge_input)(repo)
         write_json(repo / "_runtime/1b_output_contract/upstream_verification.json", verification)

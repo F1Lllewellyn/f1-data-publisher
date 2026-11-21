@@ -122,14 +122,24 @@ class WorkflowContractTests(unittest.TestCase):
         # #367 changes operational gate/direct-workflow enforcement, not this scientific wrapper,
         # research producer, receipt or historical attestation.
         recovery = {'.github/workflows/f1-actual-forecast-producer-v1.yml': '595069cbe84286273c3cde1ea1d0d451ece893d7', '.github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml': '0618519ee3fc6c341de48dd1cff94e28960b76ce', 'scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py': 'c7b84dc697549fc79c1df2549f05fcd34635dbf2'}
+        # Issue #367 post-release e4e9a81: monitoring classification only.
+        # Retain and independently verify both original and accepted recovery
+        # bytes; accept only these exact additional operational revisions.
+        monitoring = {
+            '.github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml': 'b3123e4a76af251f20bc27cda09bf1c7d6594a22',
+            'scripts/forecast_bundles/orchestrate_forecast_gate_pipeline_v1.py': '96431f25727f2dbf01a9415f62d68724f2a95619',
+        }
         for path, digest in expected.items():
             with self.subTest(path=path):
                 if path in recovery:
                     original = subprocess.check_output(["git", "cat-file", "blob", digest], cwd=ROOT)
                     self.assertEqual(hashlib.sha1(b"blob " + str(len(original)).encode() + b"\0" + original).hexdigest(), digest)
-                    self.assertEqual(git_blob(path), recovery[path])
+                    prior = subprocess.check_output(["git", "cat-file", "blob", recovery[path]], cwd=ROOT)
+                    self.assertEqual(hashlib.sha1(b"blob " + str(len(prior)).encode() + b"\0" + prior).hexdigest(), recovery[path])
+                    current = monitoring.get(path, recovery[path])
+                    self.assertEqual(git_blob(path), current)
                     body = (ROOT / path).read_bytes() + b"\n# tampered\n"
-                    self.assertNotIn(hashlib.sha1(b"blob " + str(len(body)).encode() + b"\0" + body).hexdigest(), (digest, recovery[path]))
+                    self.assertNotIn(hashlib.sha1(b"blob " + str(len(body)).encode() + b"\0" + body).hexdigest(), (digest, recovery[path], current))
                 else:
                     self.assertEqual(git_blob(path), digest)
 
