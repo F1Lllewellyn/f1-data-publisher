@@ -114,7 +114,9 @@ jobs:
                 continue
               fi
               while IFS= read -r -d '' f; do
-                if ! git check-ignore -q "$f"; then git add -- "$f"; fi
+                if ! git check-ignore -q "$f"; then
+                  git add -- "$f"
+                fi
               done < <(find "$p" -type f -newer "$MARKER" -print0)
               added=1
             fi
