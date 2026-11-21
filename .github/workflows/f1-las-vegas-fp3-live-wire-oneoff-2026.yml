@@ -1,0 +1,112 @@
+name: F1 Las Vegas FP3 FastF1 Experimental Live Wire One-Shot
+
+# Scoped one-shot source validation during FP3. Creation on main triggers once.
+# No stable model execution, no canonical workbook and no repository output commit.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-las-vegas-fp3-live-wire-oneoff-2026.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-las-vegas-fp3-live-wire-oneoff-2026.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
+      - name: Verify real source runtime and one-shot workflow safety
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'fastf1>=3.3,<3.7' requests python-dateutil pandas
+          python - <<'PY'
+          import pathlib, sys
+          from fastf1.livetiming.client import SignalRClient
+          p=pathlib.Path('.github/workflows/f1-las-vegas-fp3-live-wire-oneoff-2026.yml').read_text()
+          assert sys.version_info[:2]==(3,9)
+          assert SignalRClient
+          lines=p.splitlines()
+          assert any(line.strip() == 'contents: read' for line in lines)
+          assert not any(line.strip().startswith('contents: write') for line in lines)
+          assert any(line.strip().startswith('--manual-validation-mode force_source_feed') for line in lines)
+          assert not any(line.strip().startswith('git push ') or line.strip().startswith('git add ') for line in lines)
+          print('FastF1 original wire capture environment and read-only contract PASS')
+          PY
+          python -m py_compile scripts/live_capture/run_live_source_feed_capture.py
+
+  oneoff-fp3-source-wire:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    concurrency:
+      group: f1-lv2026-fp3-live-wire-once-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
+      - name: Install actual FastF1/SignalR runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'fastf1>=3.3,<3.7' requests python-dateutil pandas
+          python - <<'PY'
+          from fastf1.livetiming.client import SignalRClient
+          assert SignalRClient
+          PY
+      - name: Attempt bounded source feed capture with original observation clock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/live_capture/run_live_source_feed_capture.py \
+            --policy configs/live_capture/live_source_feed_capture_policy.json \
+            --capture-mode manual \
+            --manual-validation-mode force_source_feed \
+            --duration-minutes 11 \
+            --session-label Las_Vegas_FP3_20261121_experimental_signalr \
+            --github-run-id "${{ github.run_id }}" \
+            --github-run-attempt "${{ github.run_attempt }}"
+      - name: Verify original raw bytes and report source acquisition honestly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,pathlib,sys
+          roots=list(pathlib.Path('_live_source_feed_capture_work').glob('*/live_source_feed_capture_manifest.json'))
+          if len(roots)!=1:
+              print('HOLD_EXPERIMENTAL_WIRE_MANIFEST_MISSING_OR_AMBIGUOUS'); sys.exit(2)
+          manifest=json.loads(roots[0].read_text())
+          folder=roots[0].parent
+          raw=folder/'live_timing_raw.txt'
+          status=manifest.get('recording_status')
+          n=int(manifest.get('raw_size_bytes') or 0)
+          print(json.dumps({'status':status,'observed_start':manifest.get('recording_started_utc'),
+              'observed_end':manifest.get('recording_finished_utc'),
+              'source_bytes':n,'source_sha256':hashlib.sha256(raw.read_bytes()).hexdigest() if raw.exists() else None,
+              'identity_claim':'experimental_source_only_NOT_session_verified'},indent=2))
+          if status!='completed' or not raw.is_file() or n<=0 or raw.stat().st_size!=n:
+              print('HOLD_EXPERIMENTAL_LIVE_WIRE_NOT_CAPTURED');sys.exit(2)
+          PY
+      - name: Preserve source bytes, manifest and errors even if capture fails
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-lv2026-fp3-live-wire-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _live_source_feed_capture_work/**
+          if-no-files-found: warn
+          retention-days: 90
