@@ -38,9 +38,17 @@ jobs:
           from pathlib import Path
           w=Path('.github/workflows/f1-issue367-peak-post-meta-repair-dispatch-once.yml').read_text()
           original=Path('.github/workflows/f1-peak-elite-control-room-one-click-v1.yml').read_text()
-          dispatch=w.split('      - name: Dispatch ORIGINAL Peak full chain with protected forecast gate disabled',1)[1]
-          window=w.split('      - name: Restrict to actual pre-race recovery opportunity',1)[1].split(
-              '      - name: Require REAL fixed shell integrity guards on current main',1)[0]
+          def actual_step(name):
+              marker='      - name: '+name
+              lines=w.splitlines()
+              indices=[i for i,line in enumerate(lines) if line == marker]
+              assert len(indices)==1, 'HOLD_MISSING_OR_DUPLICATE_APPROVED_STEP'
+              start=indices[0]+1
+              end=next((i for i in range(start,len(lines))
+                        if lines[i].startswith('      - name: ')),len(lines))
+              return '\\n'.join(lines[start:end])
+          dispatch=actual_step('Dispatch ORIGINAL Peak full chain with protected forecast gate disabled')
+          window=actual_step('Restrict to actual pre-race recovery opportunity')
           assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in dispatch
           for clause in ('operation=full_run_chain','commit_outputs=true','run_forecast_gate=false'):
               assert clause in dispatch
