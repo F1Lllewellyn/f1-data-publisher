@@ -1598,8 +1598,14 @@ def session_kind(row: pd.Series) -> str:
 
 
 def is_race_like_session(row: pd.Series) -> bool:
-    kind = session_kind(row)
-    return any(h in kind for h in RACE_LIKE_HINTS)
+    # Sprint Qualifying is not a Sprint Race: no race pit-stop lane is required.
+    session_type = str(row.get("session_type", "")).strip().lower()
+    session_name = str(row.get("session_name", "")).strip().lower()
+    if (session_type in {"practice", "qualifying"}
+            or "qualifying" in session_name or "shootout" in session_name):
+        return False
+    return (session_type in {"race", "sprint"}
+            or session_name in {"race", "sprint", "sprint race"})
 
 
 def read_existing_latest(latest_root: Path) -> Dict[str, Any]:
