@@ -1,0 +1,41 @@
+name: F1 Peak Workflow Bash Meta Health Parity Regression
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-live-source-feed-capture-experimental.yml'
+      - '.github/workflows/f1-session-data-processor-loop-v1.yml'
+      - '.github/workflows/f1-peak-meta-bash-parity-regression-ci.yml'
+      - 'scripts/ops/f1_workflow_meta_health_check_v1.py'
+      - 'scripts/ops/f1_workflow_static_validator_v2.py'
+
+permissions:
+  contents: read
+
+jobs:
+  meta-and-bash-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Verify full-workflow if/fi balance and no new unsafe shell syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_workflow_meta_health_check_v1.py
+          python scripts/ops/f1_workflow_static_validator_v2.py --repo-root .
+      - name: Preserve exact full-repository diagnostic scans even on failure
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-peak-meta-bash-parity-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            _runtime/workflow_meta_health/**
+            _runtime/peak_elite/workflow_static_validation/**
+          if-no-files-found: warn
+          retention-days: 30
