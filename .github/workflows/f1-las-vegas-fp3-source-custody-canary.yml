@@ -1,0 +1,77 @@
+name: F1 Las Vegas FP3 Read-Only Original Source Custody Canary
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-las-vegas-fp3-source-custody-canary.yml'
+      - 'scripts/ops/f1_live_session_source_custody_canary_v1.py'
+      - 'tests/test_f1_live_session_source_custody_canary_v1.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/f1-las-vegas-fp3-source-custody-canary.yml'
+  workflow_dispatch:
+    inputs:
+      session_key:
+        description: 'Exact OpenF1 provider session key; independently verify before dispatch'
+        required: true
+        default: '11415'
+        type: string
+      meeting_key:
+        description: 'Exact OpenF1 meeting identity'
+        required: true
+        default: '1300'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract-regression:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Run original wire-byte and session identity tests
+        run: python -m unittest discover -s tests -p test_f1_live_session_source_custody_canary_v1.py -v
+
+  read-only-live-source-evidence:
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    concurrency:
+      group: f1-standalone-source-canary-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Capture authentic provider bytes with observation times
+        shell: bash
+        env:
+          SESSION_KEY: ${{ github.event.inputs.session_key || '11415' }}
+          MEETING_KEY: ${{ github.event.inputs.meeting_key || '1300' }}
+        run: |
+          set -euo pipefail
+          python scripts/ops/f1_live_session_source_custody_canary_v1.py \
+            --meeting-key "$MEETING_KEY" \
+            --session-key "$SESSION_KEY" \
+            --output-dir "_runtime/fp3_source_canary"
+
+      - name: Preserve original response bytes and manifest, including failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-las-vegas-source-canary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/fp3_source_canary/**
+          if-no-files-found: error
+          retention-days: 90
