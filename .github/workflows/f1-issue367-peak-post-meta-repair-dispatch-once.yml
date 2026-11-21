@@ -38,13 +38,22 @@ jobs:
           from pathlib import Path
           w=Path('.github/workflows/f1-issue367-peak-post-meta-repair-dispatch-once.yml').read_text()
           original=Path('.github/workflows/f1-peak-elite-control-room-one-click-v1.yml').read_text()
-          assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in w
+          dispatch=w.split('      - name: Dispatch ORIGINAL Peak full chain with protected forecast gate disabled',1)[1]
+          window=w.split('      - name: Restrict to actual pre-race recovery opportunity',1)[1].split(
+              '      - name: Require REAL fixed shell integrity guards on current main',1)[0]
+          assert 'gh workflow run f1-peak-elite-control-room-one-click-v1.yml' in dispatch
           for clause in ('operation=full_run_chain','commit_outputs=true','run_forecast_gate=false'):
-              assert clause in w
-          assert not any(line.strip().startswith('python scripts/') for line in w.splitlines())
+              assert clause in dispatch
+          permitted_python={
+              'python scripts/ops/f1_workflow_meta_health_check_v1.py > _issue367_meta_guard.json',
+              'python scripts/ops/f1_workflow_static_validator_v2.py --repo-root . > _issue367_shell_guard.json',
+          }
+          actual_python={line.strip() for line in w.splitlines()
+                         if line.strip().startswith('python scripts/')}
+          assert actual_python == permitted_python, 'HOLD_UNREVIEWED_WRAPPER_PRODUCER'
           assert 'f1_workbook_persistence_handoff_guard_v1.py' in original
           assert 'f1_peak_elite_orchestrator_v1.py' in original
-          assert '2026,11,21,21,30' in w
+          assert 'dt.datetime(2026,11,21,21,30' in window
           assert not any(line.strip().startswith(('git add ', 'git push ', 'git commit '))
                          for line in w.splitlines())
           print('Original production Peak + no independent forecast/commit/authority: PASS')
