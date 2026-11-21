@@ -6,12 +6,12 @@
     "session_key": 11416,
     "session_name": "Qualifying"
   },
-  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1300_united_states_las_vegas_las_vegas/context_b8be5f2f3d294117a5442c7bcaab8532/bundle_snapshot.json",
+  "history_snapshot_path": "history/forecast_bundle_ledger/2026_1300_united_states_las_vegas_las_vegas/context_c4d8d0859b71e6d6dc2be235d961b3c6/bundle_snapshot.json",
   "promotion_allowed": false,
-  "run_id": "context_b8be5f2f3d294117a5442c7bcaab8532",
+  "run_id": "context_c4d8d0859b71e6d6dc2be235d961b3c6",
   "schema_version": "f1_1b_last_good_state_v20",
-  "signature": "c507f282db69126894de2eae0714a00b7671bbb61ebd10a94ec1e7085c54043c",
+  "signature": "9ec4067cebd14caa0c5d5ce2352d26475c762d4b6e0818da376714276f046f6e",
   "snapshot_path": "latest/forecast_bundle_ledger/latest_bundle_snapshot.json",
   "status": "usable_with_optional_context_gaps",
-  "updated_at_utc": "2026-11-21T19:11:07Z"
+  "updated_at_utc": "2026-11-21T23:50:46Z"
 }

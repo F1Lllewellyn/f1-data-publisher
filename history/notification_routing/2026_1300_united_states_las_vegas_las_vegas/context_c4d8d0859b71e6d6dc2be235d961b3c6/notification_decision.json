@@ -1,0 +1,99 @@
+{
+  "canonical_workbook_overwrite": false,
+  "capture_origin": {
+    "head_sha": "cd0302b44c0f1efce5cc122951c61cec96c7932f",
+    "repository": "F1Lllewellyn/f1-data-publisher",
+    "run_attempt": "1",
+    "run_id": "44963374253",
+    "workflow": "F1 Peak Elite Control Room - One Click v1"
+  },
+  "custody": {
+    "capture_origin": {
+      "head_sha": "cd0302b44c0f1efce5cc122951c61cec96c7932f",
+      "repository": "F1Lllewellyn/f1-data-publisher",
+      "run_attempt": "1",
+      "run_id": "44963374253",
+      "workflow": "F1 Peak Elite Control Room - One Click v1"
+    },
+    "context_eligible": true,
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "expected_session_key": 11416,
+    "input_fingerprints": {
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Qualifying_20261121T234843Z.xlsx": "4d65fa003425e1c90f1e2aa60efdbaab2c0b35e347c8f06b82373538efca8af4",
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/refreshed_workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/sandbox_workbook_update_plan_applied.json": "3f0509d3c7dbb6478879ea52ee437c3143dd7ceef154671ef2154d2185a6912c",
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_combined_source_manifest_snapshot.json": "145494e0346f82760600ac84d5cfdbd29ced535a33aa78b0e47a95bb56802d9d",
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_data_readiness_snapshot.json": "4d8cdc30278d703cdb9ac4e4c7075c83453cd206a385c45ea79cfd12449dc348",
+      "history/workbook_kpi_refresh_applier/20261121T234843Z/upstream_latest_manifest_snapshot.json": "7a7385645bf3efc099dc371695b402b0762600c63c5583120c6b6f1a9710e40f",
+      "latest/combined_source_manifest.json": "d6b29b02b8f6bead7a19a939beb9805443e4e018190a99805bd5d81976ecfe00",
+      "latest/data_readiness.json": "d2799f0353af13e0a7d663b14d6f8c058ac60c9efffd5e48d7a61262bdf20074",
+      "latest/latest_manifest.json": "4772de61d8bc19fe453933dd8afdac4c7255f6648d1af67478a5d09366333977",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/forecast_bundle_ledger_snapshot.json": "0381dee89f3c56c0b51cec64d29ded0b29a9acfbb4ffb62fb1bb76032291f6ba",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_drivers.json": "6e937f1f8f2d0a8bd0ab4e2f1b10ea93ab6875f436e729170cbc032b8abbf38f",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_laps.json": "e9c2395b5c817591a682ba626b491b90e24cf96b02c257a1ec4789b5da185103",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_position.json": "00732d1ca83f8a88cf284c14103ddf3828c07ae37dbc7c290cb6ab3bb636cf10",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_session_result.json": "c934dbebcfa8a912dbecda4acc9e199044f55c46caa1f4b9c26a196c2d7c39ca",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/raw/openf1_weather.json": "e23ffdd50193debbe0cd02874d9fa23f38121b24fc4bc8e6b03de2d771ab50de",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/sandbox_workbook_update_plan.json": "ada1a0f07a5916f658a5bd9443425844259f7d85bcff267ed637cf8db9e4fa6e",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/source_readiness_manifest.json": "287fb097f3293be177f32c171dbdc5f20d750b719b3443f0f13ef0dda44a7c44",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.csv": "4c9d8a496794cdfda0c74ba8f6effe4d6939911688cea05ce0c82392f4106bfb",
+      "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/qualifying_11416/workbook_kpi_readiness.json": "0d953b263c162f0878d65ffaa37de42d0197fa1aee41b4270ac19ec0b3881ca2"
+    },
+    "meeting_key": 1300,
+    "prediction_locked": false,
+    "schema": "current-context-custody-v1",
+    "session_key": 11416,
+    "source_availability": {
+      "openf1_drivers": "2026-11-21T23:48:37.098587Z",
+      "openf1_intervals": "2026-11-21T23:48:38.694044Z",
+      "openf1_laps": "2026-11-21T23:48:38.156103Z",
+      "openf1_pit": "2026-11-21T23:48:40.330592Z",
+      "openf1_position": "2026-11-21T23:48:39.645075Z",
+      "openf1_race_control": "2026-11-21T23:48:41.533630Z",
+      "openf1_session_result": "2026-11-21T23:48:42.890116Z",
+      "openf1_sessions": "2026-11-21T23:48:36.438438Z",
+      "openf1_starting_grid": "2026-11-21T23:48:43.362741Z",
+      "openf1_stints": "2026-11-21T23:48:40.854327Z",
+      "openf1_weather": "2026-11-21T23:48:42.361687Z"
+    },
+    "source_run_id": "20261121T234734074446Z",
+    "stable_engine_executed": false
+  },
+  "decision_mode": "decision_only_no_external_send",
+  "event": {
+    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+    "meeting_key": 1300,
+    "race_name": "United States - Las Vegas - Las Vegas",
+    "session_key": 11416,
+    "session_name": "Qualifying"
+  },
+  "forecast_gate_activated": false,
+  "generated_at_utc": "2026-11-21T23:50:46Z",
+  "input_fingerprints": {
+    "latest/1b_output_contract/output_contract_report.json": "56e428a6bfb5ec90b7d539c8203c552631a9ec021cf2f75403d5f9252aa98611",
+    "latest/downstream_consumers/combined_downstream_consumer_manifest.json": "f8b73a107ca661fc0f131cb73cda0a8ea0c65a2e53740df817b3820215fca9a0",
+    "latest/downstream_consumers/fantasy_predictions/consumer_input.json": "4cb1140988d140ebb29a6b31c40974d5b0b661d14a3a84800a016e4812ea12bb",
+    "latest/downstream_consumers/race_predictions/consumer_input.json": "a95e2216c99403759fb468dc09d8b269efdc4102d08d098d63c98cb419247e15",
+    "latest/downstream_consumers/race_reports/consumer_input.json": "dd291b7936f46625a3e748fdb276cc61b1b74ee3e2cc414dd853c17b290f1337",
+    "latest/forecast_bundle_ledger/latest_bundle_snapshot.json": "6577b81df6ba3cb0910cefde832b0c39705c049d5331f13c1ed7b4dbafe47343",
+    "latest/last_good_state.json": "101478a67d56eaad19c69e44e28a928213c2d037907d290eeb12d0559f1f7ab4",
+    "latest/material_change/material_change_report.json": "2427c3ca6167b79e381a15b37f6450a596ddedee743c6c8174a2ec422f322a1c",
+    "latest/readiness_handoff/combined_readiness_handoff.json": "ba136e6f8f1d9780d0505976f24ff4a4108ed77ad6e8d802f6cf868f206b792f"
+  },
+  "notification_recommended": true,
+  "original_capture_run_id": "20261121T234734074446Z",
+  "promotion_allowed": false,
+  "reasons": [
+    "material_change_detected",
+    "consumer_trigger_recommends_notification"
+  ],
+  "routes": {
+    "fantasy_predictions_context": "latest/chat_context/fantasy_predictions_context.md",
+    "race_predictions_context": "latest/chat_context/race_predictions_context.md",
+    "race_reports_context": "latest/chat_context/race_reports_context.md",
+    "trigger_decision": "latest/consumer_trigger_governor/trigger_decision.json"
+  },
+  "schema_version": "f1_1b_consumer_context_trigger_governor_v25",
+  "send_external_notification": false,
+  "stable_engine_modified": false
+}
