@@ -1,11 +1,11 @@
 {
-  "generated_at_utc": "2026-11-21T04:02:22Z",
+  "generated_at_utc": "2026-11-21T12:29:10Z",
   "status": "dashboard_refreshed",
   "source_status": "clean",
-  "source_backed": true,
+  "source_backed": false,
   "commit_allowed": true,
   "diagnostic_publish_allowed": true,
-  "downstream_eligible": true,
+  "downstream_eligible": false,
   "readiness_scope": "source_and_workbook_context_only",
   "stable_engine_executed": false,
   "prediction_locked": false,
@@ -23,24 +23,24 @@
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/source_readiness_manifest.json": "ec99516085a48b83bd2e1ffbec64af151e8a09a0c4615e45f33156ab69db8c4a",
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/workbook_kpi_readiness.csv": "15ad6b6fb45f779b1bc5f6372fc36bb3999fab2f5765c36e88d82e428085861b",
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/workbook_kpi_readiness.json": "3f3a5b3ca6893d8263ed1aa6ec13006d2baa21d1a9c4e8c5b9879628f8dd639d",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/sandbox_workbook_update_plan_applied.json": "2b9a4c9f9349b8fb1db4cf547bb8c7f2f53e788cc2e86cc2bf046dce148e95b4",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/refreshed_workbook_kpi_readiness.csv": "15ad6b6fb45f779b1bc5f6372fc36bb3999fab2f5765c36e88d82e428085861b",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_3_20261121T033441Z.xlsx": "b1219e3b51c2a640df63f7f7674407ca32f291ad315421e93652124efc86ffa1",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/upstream_latest_manifest_snapshot.json": "d200f18b6fbfe892f69eb3eee05cce094aabdf14e06def1d7dfbd8ab978bd50b",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/upstream_data_readiness_snapshot.json": "86ec761f73dfc6a24e4688ef207183cdbf218681d04778ad5c1a5d8a5160f234",
-    "history/workbook_kpi_refresh_applier/20261121T033441Z/upstream_combined_source_manifest_snapshot.json": "52313a949dc43718ab6d67e777bfff12cefb788a234f29e28eb5221114c5e5c3"
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/sandbox_workbook_update_plan_applied.json": "2b9a4c9f9349b8fb1db4cf547bb8c7f2f53e788cc2e86cc2bf046dce148e95b4",
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/refreshed_workbook_kpi_readiness.csv": "15ad6b6fb45f779b1bc5f6372fc36bb3999fab2f5765c36e88d82e428085861b",
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_3_20261121T114712Z.xlsx": "4de36564e9e1d19668df67ad63989019d3a84476b629e36e93dc8d68cbf5f451",
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/upstream_latest_manifest_snapshot.json": "d200f18b6fbfe892f69eb3eee05cce094aabdf14e06def1d7dfbd8ab978bd50b",
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/upstream_data_readiness_snapshot.json": "86ec761f73dfc6a24e4688ef207183cdbf218681d04778ad5c1a5d8a5160f234",
+    "history/workbook_kpi_refresh_applier/20261121T114712Z/upstream_combined_source_manifest_snapshot.json": "52313a949dc43718ab6d67e777bfff12cefb788a234f29e28eb5221114c5e5c3"
   },
   "readiness_reasons": [
-    "verified_current_session_evidence"
+    "hold_stale_session_newer_completed"
   ],
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
   "meeting_key": 1300,
   "session_key": 11415,
-  "expected_session_key": 11415,
+  "expected_session_key": 11416,
   "session_schedule_verified": true,
   "event_name": "United States - Las Vegas - Las Vegas",
   "session_name": "Practice 3",
-  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261121T033441Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_3_20261121T033441Z.xlsx",
+  "workbook_artifact": "history/workbook_kpi_refresh_applier/20261121T114712Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Practice_3_20261121T114712Z.xlsx",
   "workbook_manifest": "latest/workbook_kpi_refresh_applier/workbook_kpi_refresh_manifest.json",
   "session_manifest": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/practice_3_11415/source_readiness_manifest.json",
   "autorepair_report": null,
@@ -48,14 +48,14 @@
   "canonical_workbook_overwrite": false,
   "promotion_allowed": false,
   "race_predictions": {
-    "ready_for_use": true,
-    "blocked": false,
+    "ready_for_use": false,
+    "blocked": true,
     "latest_session_state": "clean",
     "allowed_effect": "confidence/risk/readiness context only; stable P1-P20 not overwritten"
   },
   "fantasy_predictions": {
-    "ready_for_use": true,
-    "blocked": false,
+    "ready_for_use": false,
+    "blocked": true,
     "latest_session_state": "clean",
     "allowed_effect": "readiness/value/risk context only; no automatic fantasy transfer execution"
   }
