@@ -1,0 +1,46 @@
+name: F1 Live Feed Python 3.9 Runner and Capture Regression
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-live-source-feed-capture-experimental.yml'
+      - '.github/workflows/f1-live-feed-hotfix-ci.yml'
+      - 'scripts/live_capture/run_live_source_feed_capture.py'
+      - 'tests/test_f1_live_feed_capture_hotfix.py'
+
+permissions:
+  contents: read
+
+jobs:
+  python39-live-feed-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up actual capture Python runtime
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
+
+      - name: Install actual capture dependencies and verify FastF1 import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install "fastf1>=3.3,<3.7" pandas requests python-dateutil
+          python - <<'PY'
+          import sys, fastf1
+          from fastf1.livetiming.client import SignalRClient
+          assert sys.version_info[:2] == (3, 9), sys.version
+          assert SignalRClient is not None
+          print("Python 3.9 and FastF1 SignalRClient import: PASS")
+          PY
+
+      - name: Test scheduled failures and latest evidence custody
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p test_f1_live_feed_capture_hotfix.py -v
