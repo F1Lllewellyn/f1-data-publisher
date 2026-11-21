@@ -123,5 +123,53 @@ class LiveFeedRepairTests(unittest.TestCase):
                       b'{"partial":true}\\n', 1)
 
 
+    def test_failed_capture_diagnostic_status_is_uploaded_and_committed(self):
+        workflow = WORKFLOW_PATH.read_text(encoding="utf-8-sig")
+        self.assertIn("latest/live_source_feed_capture_status/**", workflow)
+        self.assertIn("for folder in latest/live_source_feed_capture latest/live_source_feed_capture_status history/live_source_feed_capture", workflow)
+        self.assertIn('git add -- "$folder"', workflow)
+
+    def test_run_attempt_archive_duplicate_is_noop_and_conflict_is_hold(self):
+        policy = {"outputs": {
+            "latest_dir": "latest/live_source_feed_capture",
+            "history_dir": "history/live_source_feed_capture"}}
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            source = root / "work"
+            source.mkdir()
+            raw = source / "live_timing_raw.txt"
+            raw.write_bytes(b"first-original-capture")
+            old_cwd = Path.cwd()
+            fixed = capture.dt.datetime(2026, 11, 21, 0, 30, tzinfo=capture.UTC)
+            try:
+                os.chdir(root)
+                with patch.object(capture, "now_utc", return_value=fixed):
+                    first = capture.copy_to_latest_and_history(
+                        source, policy, "Las_Vegas_Practice_3", False,
+                        {"github_run_id": "789", "github_run_attempt": "1", "verdict": "Fail"})
+                    hist = Path(first["history_output_dir"])
+                    original = (hist / raw.name).read_bytes()
+                    original_mtime = (hist / raw.name).stat().st_mtime_ns
+                    second = capture.copy_to_latest_and_history(
+                        source, policy, "Las_Vegas_Practice_3", False,
+                        {"github_run_id": "789", "github_run_attempt": "1", "verdict": "Fail"})
+                    self.assertEqual(first["history_output_dir"], second["history_output_dir"])
+                    self.assertEqual((hist / raw.name).read_bytes(), original)
+                    self.assertEqual((hist / raw.name).stat().st_mtime_ns, original_mtime)
+                    raw.write_bytes(b"conflicting-retry")
+                    with self.assertRaisesRegex(RuntimeError, "HOLD_IMMUTABLE_LIVE_CAPTURE_HISTORY_COLLISION"):
+                        capture.copy_to_latest_and_history(
+                            source, policy, "Las_Vegas_Practice_3", False,
+                            {"github_run_id": "789", "github_run_attempt": "1", "verdict": "Fail"})
+                    self.assertEqual((hist / raw.name).read_bytes(), original)
+                    other = capture.copy_to_latest_and_history(
+                        source, policy, "Las_Vegas_Practice_3", False,
+                        {"github_run_id": "790", "github_run_attempt": "1", "verdict": "Fail"})
+                    self.assertNotEqual(first["history_output_dir"], other["history_output_dir"])
+                    self.assertEqual((hist / raw.name).read_bytes(), original)
+            finally:
+                os.chdir(old_cwd)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -337,12 +337,34 @@ def copy_to_latest_and_history(
     history_root = Path(policy["outputs"]["history_dir"])
     status_dir = latest_dir.parent / "live_source_feed_capture_status"
     stamp = now_utc().strftime("%Y%m%d_%H%M%S")
-    hist_dir = history_root / f"{stamp}_{safe_slug(session_label)}"
+    # Bind each archived capture to its original Actions run/attempt. The
+    # second-resolution clock alone must never authorize historical replacement.
+    identity = latest_status_payload or {}
+    run_id = safe_slug(str(identity.get("github_run_id") or "manual"))
+    run_attempt = safe_slug(str(identity.get("github_run_attempt") or "1"))
+    hist_dir = history_root / f"{stamp}_{safe_slug(session_label)}_run{run_id}_attempt{run_attempt}"
 
+    if hist_dir.is_symlink():
+        raise RuntimeError("HOLD_IMMUTABLE_LIVE_CAPTURE_HISTORY_COLLISION")
     if hist_dir.exists():
-        shutil.rmtree(hist_dir)
-    hist_dir.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(work_dir, hist_dir)
+        if not hist_dir.is_dir():
+            raise RuntimeError("HOLD_IMMUTABLE_LIVE_CAPTURE_HISTORY_COLLISION")
+        original = {
+            p.relative_to(hist_dir).as_posix(): sha256_file(p)
+            for p in hist_dir.rglob("*") if p.is_file() and not p.is_symlink()
+        }
+        proposed = {
+            p.relative_to(work_dir).as_posix(): sha256_file(p)
+            for p in work_dir.rglob("*") if p.is_file() and not p.is_symlink()
+        }
+        if (original != proposed or
+                any(p.is_symlink() for p in hist_dir.rglob("*")) or
+                any(p.is_symlink() for p in work_dir.rglob("*"))):
+            raise RuntimeError("HOLD_IMMUTABLE_LIVE_CAPTURE_HISTORY_COLLISION")
+        # Identical retry: no write, no mtime change, no historical mutation.
+    else:
+        hist_dir.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(work_dir, hist_dir)
 
     latest_updated = False
     latest_preserved = False
@@ -504,6 +526,8 @@ def main() -> int:
         session_label,
         update_latest=update_latest,
         latest_status_payload={
+            "github_run_id": args.github_run_id,
+            "github_run_attempt": args.github_run_attempt,
             "verdict": verdict,
             "reason": decision.get("reason"),
             "recording_status": recording_result.get("recording_status"),

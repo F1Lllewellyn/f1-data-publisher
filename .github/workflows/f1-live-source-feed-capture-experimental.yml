@@ -94,6 +94,7 @@ jobs:
           name: f1-live-source-feed-capture-experimental
           path: |
             latest/live_source_feed_capture/**
+            latest/live_source_feed_capture_status/**
             history/live_source_feed_capture/**
           if-no-files-found: warn
           retention-days: 30
@@ -101,10 +102,14 @@ jobs:
       - name: Commit live source feed outputs
         if: ${{ always() && (github.event.inputs.commit_outputs == 'true' || github.event_name == 'schedule') }}
         run: |
-          if [ -d "latest/live_source_feed_capture" ] || [ -d "history/live_source_feed_capture" ]; then
+          if [ -d "latest/live_source_feed_capture" ] || [ -d "history/live_source_feed_capture" ] || [ -d "latest/live_source_feed_capture_status" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add latest/live_source_feed_capture history/live_source_feed_capture || true
+            # Each capture owns only these three bounded source/diagnostic namespaces.
+            # A failed source recording must persist its red verdict, not just history.
+            for folder in latest/live_source_feed_capture latest/live_source_feed_capture_status history/live_source_feed_capture; do
+              if [ -d "$folder" ]; then git add -- "$folder"; fi
+            done
             if ! git diff --cached --quiet; then
               git commit -m "Add live source feed capture outputs"
               bash scripts/ops/safe_git_push_rebase_retry.sh
