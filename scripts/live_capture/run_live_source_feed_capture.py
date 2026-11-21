@@ -233,8 +233,10 @@ def record_live_timing(raw_path: Path, duration_minutes: int) -> Dict[str, Any]:
             completed = subprocess.run(
                 [sys.executable, "-c", child_code, str(raw_path)],
                 check=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                # Prevent an hours-long recording from buffering sensitive
+                # authentication or SignalR diagnostics in process memory.
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
                 timeout=max(1, int(duration_minutes)) * 60,
                 env=os.environ.copy(),
             )
