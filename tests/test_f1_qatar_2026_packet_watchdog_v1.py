@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 import unittest
 import zipfile
+import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/live_capture"))
@@ -132,6 +133,22 @@ class QatarWatchdogTests(unittest.TestCase):
         for changed, raw in alterations:
             with self.subTest(changed=changed, raw=raw):
                 self.assertFalse(watch.artifact_verified(self.archive(changed, raw), "fp1"))
+
+    def test_github_auth_never_leaks_to_signed_artifact_redirect(self):
+        original = urllib.request.Request(
+            watch.BASE + "/actions/artifacts/999/zip",
+            headers={"Authorization": "Bearer SECRET-DO-NOT-LEAK"})
+        handler = watch.StripCrossHostToken()
+        signed = handler.redirect_request(
+            original, None, 302, "found", {},
+            "https://storage.blob.core.windows.net/download?sig=example")
+        self.assertIsNone(signed.get_header("Authorization"))
+        same_host = handler.redirect_request(
+            original, None, 302, "found", {}, watch.BASE + "/actions/artifacts/999/zip")
+        self.assertEqual(same_host.get_header("Authorization"), "Bearer SECRET-DO-NOT-LEAK")
+        with self.assertRaisesRegex(ValueError, "FAIL_GITHUB_UNSAFE_ARTIFACT_REDIRECT"):
+            handler.redirect_request(original, None, 302, "found", {},
+                                     "http://storage.blob.core.windows.net/download")
 
     def test_missing_artifact_causes_failure_even_on_green_workflow(self):
         def fake(url, *, token):
