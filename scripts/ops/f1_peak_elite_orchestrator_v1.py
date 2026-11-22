@@ -105,6 +105,16 @@ def byte_fingerprints(repo: Path, paths) -> Dict[str, str]:
     return result
 
 
+def execution_authority(operation, protected, hard_failed, soft_failed, downstream_current):
+    """Diagnostic permission is not a verified context or forecast receipt."""
+    operational_pass = not (protected or hard_failed or soft_failed)
+    context_verified = operational_pass and operation == "full_run_chain" and downstream_current
+    return dict(operational_execution="OPERATIONAL_PASS" if operational_pass else "OPERATIONAL_FAIL",
+                diagnostic_commit_allowed=not (protected or hard_failed),
+                context_verified=bool(context_verified), consumer_eligible=bool(context_verified),
+                scientific_eligible=False, scientific_status="HOLD_STABLE_ENGINE_NOT_EXECUTED")
+
+
 def verify_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
     """Bind a consumer to a successful recent capture and all committed input bytes.
 
@@ -514,6 +524,7 @@ def main() -> int:
         plain = "Workflow health, source readiness, and workbook/KPI handoff are aligned. Stable engine remains protected."
 
     result = {
+        **execution_authority(operation, protected, hard_failed, soft_failed, downstream_current),
         "created_utc": iso_now(),
         "operation": operation,
         "github_run_id": os.environ.get("GITHUB_RUN_ID"),

@@ -81,6 +81,7 @@ jobs:
           python scripts/ops/f1_workbook_persistence_handoff_guard_v1.py --repo-root "$GITHUB_WORKSPACE" --mode static --fail-on-issue
 
       - name: Write v27 scheduled session-gate decision
+        id: admission
         shell: bash
         run: |
           set -euo pipefail
@@ -91,6 +92,7 @@ jobs:
             --recent-minutes 20
 
       - name: Run peak-elite orchestrator
+        if: steps.admission.outputs.action == 'RUN'
         shell: bash
         run: |
           set -euo pipefail
@@ -121,7 +123,7 @@ jobs:
             --run-forecast-gate "$RUN_FORECAST_GATE"
 
       - name: Verify workbook/session persistence handoff
-        if: always()
+        if: always() && steps.admission.outputs.action == 'RUN'
         shell: bash
         run: |
           set -euo pipefail
@@ -154,7 +156,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts
-        if: success()
+        if: success() && steps.admission.outputs.action == 'RUN'
         shell: bash
         run: |
           set -euo pipefail
