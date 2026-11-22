@@ -123,7 +123,8 @@ def assess(*, now=None, token=None, fetch=get, expected_session=None):
                 and run.get("path") == WORKFLOW_PATH
                 and run.get("head_repository", {}).get("full_name") == REPO):
             continue
-        if type(run.get("id")) is int and type(run.get("run_attempt")) is int:
+        if (type(run.get("id")) is int and run["id"] > 0
+                and type(run.get("run_attempt")) is int and run["run_attempt"] > 0):
             candidates.append((run["id"], run["run_attempt"]))
     for run_id, attempt in candidates:
         artifact_url = BASE + f"/actions/runs/{run_id}/artifacts?per_page=100"
