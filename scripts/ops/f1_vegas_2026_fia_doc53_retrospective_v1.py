@@ -33,6 +33,7 @@ QUALIFYING = "11416"
 PUBLISHED_UTC = "2026-11-22T03:00:00Z"
 RACE_START_UTC = "2026-11-22T04:00:00Z"
 GRID_DIGEST = "9d6790b907891890cd95c6325f72e012f466fab77b98151b839f0b6c49a741eb"
+EXPECTED_DOCUMENT_SHA256 = "a3e1d32f5ff648ed2b5b4d1505d3e87f7e622ae0d61a487441f60b9e02c15467"
 MAX_PDF_BYTES = 10 * 1024 * 1024
 
 
@@ -170,6 +171,8 @@ def observe(*, clock=None, reader=retrieve, parser=extract_positions_from_pdf):
         original = reader(PDF, MAX_PDF_BYTES)
         if not original.startswith(b"%PDF-"):
             raise ValueError("FIA_AUTHORITY_HOLD_NOT_A_PDF")
+        if digest(original) != EXPECTED_DOCUMENT_SHA256:
+            raise ValueError("FIA_AUTHORITY_HOLD_DOCUMENT_REVISION_HASH_MISMATCH")
         grid = parser(original)
         if grid != GRID_DIGEST:
             raise ValueError("FIA_AUTHORITY_HOLD_GRID_REVISION_MISMATCH")
@@ -207,13 +210,53 @@ def observe(*, clock=None, reader=retrieve, parser=extract_positions_from_pdf):
     return status
 
 
+def emit_immutable_retrospective_receipt(root, report):
+    """Append the exact independently observed source identity, no PDF or grid."""
+    if (report.get("status") != "FIA_FINAL_GRID_VERIFIED_RETROSPECTIVE_ONLY"
+            or report.get("source_authority_verified") is not True
+            or report.get("original_pdf_sha256") != EXPECTED_DOCUMENT_SHA256
+            or report.get("observed_grid_digest") != GRID_DIGEST
+            or report.get("race_session_key") != RACE
+            or report.get("meeting_key") != MEETING
+            or report.get("event_id") != EVENT
+            or any(report.get(key) is not False for key in (
+                "forecast_eligible", "stable_engine_executed", "prediction_locked", "promotion_allowed"))):
+        raise ValueError("FIA_AUTHORITY_HOLD_RECEIPT_GUARD")
+    root = Path(root)
+    path = root / "history/fia_grid_authority/2026_1300/11420/doc53_source_receipt.json"
+    current = root / "latest/fia_grid_authority/2026_1300_race_11420.json"
+    receipt = {key: report[key] for key in (
+        "schema", "status", "event_id", "meeting_key", "race_session_key",
+        "qualifying_session_key", "document_number", "document_title",
+        "fia_published_utc", "first_observed_utc", "source_index",
+        "source_document", "official_index_sha256", "original_pdf_sha256",
+        "original_pdf_size_bytes", "observed_grid_digest", "retrieval_mode",
+        "source_authority_verified", "forecast_eligible",
+        "stable_engine_executed", "prediction_locked", "promotion_allowed",
+    )}
+    raw = (json.dumps(receipt, sort_keys=True, indent=2) + "\n").encode()
+    for destination in (path, current):
+        if destination.is_symlink():
+            raise ValueError("FIA_AUTHORITY_HOLD_RECEIPT_SYMLINK")
+        if destination.exists() and destination.read_bytes() != raw:
+            raise ValueError("FIA_AUTHORITY_HOLD_IMMUTABLE_RECEIPT_COLLISION")
+    for destination in (path, current):
+        if not destination.exists():
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(raw)
+    return [path.relative_to(root).as_posix(), current.relative_to(root).as_posix()]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--publish-to-repo", type=Path, default=None)
     opts = parser.parse_args(argv)
     result = observe()
     opts.output.parent.mkdir(parents=True, exist_ok=True)
     opts.output.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
+    if result["source_authority_verified"] and opts.publish_to_repo is not None:
+        result["retained_source_receipts"] = emit_immutable_retrospective_receipt(opts.publish_to_repo, result)
     print(json.dumps(result, sort_keys=True))
     return 0 if result["source_authority_verified"] else 2
 
