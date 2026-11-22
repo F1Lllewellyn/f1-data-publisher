@@ -1,0 +1,38 @@
+{
+  "anomalies": [],
+  "columns": [
+    "circuit_key",
+    "circuit_short_name",
+    "country_code",
+    "country_key",
+    "country_name",
+    "date_end",
+    "date_start",
+    "gmt_offset",
+    "is_cancelled",
+    "location",
+    "meeting_key",
+    "session_key",
+    "session_name",
+    "session_type",
+    "year"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_sessions.csv",
+  "driver_count": 0,
+  "duplicate_rows": 0,
+  "endpoint": "sessions",
+  "fetch": {
+    "bytes": 396,
+    "ok": true,
+    "source": "sessions_prefetch"
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_sessions.json",
+  "json_sha256": "a23d620e0c7809af497320b703b58f055e01fe03de71eb764b583d2b59d955fd",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-22T06:37:38.982465Z",
+  "original_response_bytes_retained": true,
+  "rows": 1,
+  "status": "clean",
+  "timestamp_rows": 1
+}

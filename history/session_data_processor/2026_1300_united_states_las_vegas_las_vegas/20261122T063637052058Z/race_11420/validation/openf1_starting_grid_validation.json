@@ -1,0 +1,66 @@
+{
+  "anomalies": [
+    "fia_final_grid_unverified"
+  ],
+  "columns": [
+    "driver_number",
+    "lap_duration",
+    "meeting_key",
+    "position",
+    "session_key"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_starting_grid.csv",
+  "driver_count": 22,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "fd4722c229338af96b1c81563eb56e21b5190f2c1ee86b647397e78d12c88a8e",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 2095,
+    "observed_at_utc": "2026-11-22T06:37:46.353339Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/starting_grid?session_key=11416",
+    "sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_starting_grid.json",
+  "json_sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-22T06:37:46.353339Z",
+  "original_response_bytes_retained": true,
+  "provenance": {
+    "changed_since_prior_target_snapshot": null,
+    "changed_since_qualifying_snapshot": false,
+    "direct_target_fetch": {
+      "_response_hex": "7b2264657461696c223a224e6f20726573756c747320666f756e642e227d",
+      "bytes": 30,
+      "error": "HOLD_PROVIDER_HTTP_404",
+      "observed_at_utc": "2026-11-22T06:37:45.958456Z",
+      "ok": false,
+      "request_url": "https://api.openf1.org/v1/starting_grid?session_key=11420",
+      "sha256": "79e458c7f1cd32213fb418a50acca1646db353c29a8775154e0fbf8bc6ebd79d",
+      "status_code": 404
+    },
+    "forecast_as_of_eligible": false,
+    "meeting_key": 1300,
+    "observed_at_utc": "2026-11-22T06:37:46.353339Z",
+    "observed_before_target_start": false,
+    "official_final_grid_verified": false,
+    "openf1_row_status": "clean",
+    "prior_qualifying_snapshot_sha256": "b9bb2b00ef1f022a5674117822ab737db60616d764decec595a071bfdd9a8288",
+    "prior_target_snapshot_sha256": null,
+    "resolution": "unique_same_meeting_qualifying_before_target",
+    "source_session_key": 11416,
+    "source_session_name": "Qualifying",
+    "target_session_key": 11420
+  },
+  "rows": 22,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}
