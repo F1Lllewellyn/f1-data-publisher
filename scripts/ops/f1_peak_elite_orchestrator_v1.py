@@ -281,9 +281,9 @@ def fetch_original_run(run_id: str) -> Dict[str, Any]:
     return json.loads(raw)
 
 
-def verify_bridge_origin(repo: Path, reference_time=None) -> Dict[str, Any]:
+def verify_bridge_origin(repo: Path, reference_time=None, input_result=None) -> Dict[str, Any]:
     """A committed status alone does not prove the originating workflow completed."""
-    result = verify_bridge_input(repo, reference_time=reference_time)
+    result = verify_bridge_input(repo, reference_time=reference_time) if input_result is None else input_result
     if result["reasons"]:
         return result
     status = read_json(repo / "latest/peak_elite/orchestrator_status.json", {})
@@ -338,6 +338,9 @@ def reconcile_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
     marker = repo / "_runtime/1b_output_contract/start.marker"
     marker.parent.mkdir(parents=True, exist_ok=True)
     marker.touch()
+    if (repo / '.git').exists():
+        return receipt_custody().reconcile(repo, sys.modules.get(__name__) or _module_api(),
+            reference_time or dt.datetime.now(dt.timezone.utc))
     result = verify_bridge_origin(repo, reference_time=reference_time)
     result["action"] = "HOLD"
     if result["reasons"]:
@@ -358,6 +361,19 @@ def reconcile_bridge_input(repo: Path, reference_time=None) -> Dict[str, Any]:
     if result["reasons"]:
         result["status"] = "HOLD"
     return result
+
+
+def _module_api():
+    # importlib fixtures need not insert their loaded module into sys.modules.
+    from types import SimpleNamespace
+    return SimpleNamespace(**globals())
+
+
+def receipt_custody():
+    spec = importlib.util.spec_from_file_location('peak_receipt_custody', Path(__file__).with_name('f1_peak_receipt_custody_v1.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def build_plain_report(result: Dict[str, Any]) -> str:
@@ -426,11 +442,11 @@ def main() -> int:
         function = reconcile_bridge_input if args.operation == "reconcile_bridge_input" else verify_bridge_origin
         verification = function(repo)
         write_json(repo / f"_runtime/1b_output_contract/{args.operation}.json", verification)
-        if args.operation == "reconcile_bridge_input" and verification["status"] != "HOLD":
+        if args.operation == "reconcile_bridge_input":
             if os.environ.get("GITHUB_OUTPUT"):
                 with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
                     output.write(f"action={verification['action']}\n")
-            if os.environ.get("GITHUB_ENV"):
+            if os.environ.get("GITHUB_ENV") and verification.get("action") == "PROCESS":
                 with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
                     for field, name in (("upstream_run_id", "UPSTREAM_RUN_ID"),
                                         ("upstream_run_attempt", "UPSTREAM_RUN_ATTEMPT"),
@@ -445,6 +461,7 @@ def main() -> int:
         verification = (verify_bridge_output if args.operation == "verify_bridge_output" else verify_bridge_input)(repo)
         write_json(repo / "_runtime/1b_output_contract/upstream_verification.json", verification)
         if args.operation == "verify_bridge_output" and verification["status"] != "HOLD":
+            receipt_custody().append_receipt(repo, verification, consumer=True)
             write_json(repo / "latest/1b_output_contract/verified_context_custody.json", verification)
         print(json.dumps(verification, sort_keys=True))
         return 2 if verification["status"] == "HOLD" else 0
@@ -551,6 +568,9 @@ def main() -> int:
     }
     write_json(runtime / "peak_elite_orchestrator_result.json", result)
     write_json(latest / "orchestrator_status.json", result)
+    if (operation == "full_run_chain" and not result["failed_steps"] and not protected
+            and os.environ.get("GITHUB_RUN_ID") and os.environ.get("GITHUB_RUN_ATTEMPT")):
+        receipt_custody().append_receipt(repo, result)
     report_md = build_plain_report(result)
     (runtime / "PEAK_ELITE_ORCHESTRATOR_REPORT.md").write_text(report_md, encoding="utf-8")
     (latest / "ORCHESTRATOR_STATUS.md").write_text(report_md, encoding="utf-8")
@@ -558,7 +578,7 @@ def main() -> int:
     chat_dir.mkdir(parents=True, exist_ok=True)
     (chat_dir / "PEAK_ELITE_ORCHESTRATOR_BRIEF.md").write_text(report_md, encoding="utf-8")
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if status == "fail" else 0
+    return 1 if status == "fail" or result["operational_execution"] == "OPERATIONAL_FAIL" else 0
 
 
 if __name__ == "__main__":

@@ -199,6 +199,7 @@ jobs:
 
           candidates=(
             "latest/peak_elite"
+            "history/peak_elite_receipts"
             "latest/repo_canonicalization"
             "latest/session_data_processor"
             "history/session_data_processor"
