@@ -91,7 +91,7 @@ def extract_positions_from_pdf(raw):
         ("DOCUMENT_53", re.search(r"Document\s*:?\s*53\b", header, re.I)),
         ("DATE", "21 November 2026" in header),
         ("TITLE", re.search(r"Final\s+Starting\s+Grid", header, re.I)),
-        ("EVENT", bool(re.search(r"(?:2026\\s+LAS\\s+VEGAS\\s+GRAND\\s+PRIX|LAS\\s+VEGAS\\s+GRAND\\s+PRIX\\s+2026)", header + " " + body, re.I))),
+        ("EVENT", bool(re.search(r"(?:2026\s+LAS\s+VEGAS\s+GRAND\s+PRIX|LAS\s+VEGAS\s+GRAND\s+PRIX\s+2026)", header + " " + body, re.I))),
         ("GRID_TITLE", "Final Starting Grid" in body),
         ("CAR_87_PERMISSION", "Car 87" in body),
         ("CAR_12_PENALTY", "Car 12" in body),
