@@ -85,15 +85,22 @@ def extract_positions_from_pdf(raw):
         width = float(pdf[1].rect.width)
     except (ImportError, AttributeError, RuntimeError, TypeError, ValueError) as exc:
         raise ValueError("FIA_AUTHORITY_HOLD_PDF_EXTRACTION") from exc
-    if (not re.search(r"Document\s*:?\s*53\b", header, re.I)
-            or "21 November 2026" not in header
-            or not re.search(r"Final\s+Starting\s+Grid", header, re.I)
-            or "LAS VEGAS GRAND PRIX 2026" not in body.upper()
-            or "Final Starting Grid" not in body
-            or "Car 87" not in body or "Car 12" not in body
-            or not re.search(r"35\s*place\s*grid\s*penalt", body, re.I)
-            or not re.search(r"5\s*place\s*grid\s*penalt", body, re.I)):
-        raise ValueError("FIA_AUTHORITY_HOLD_DOCUMENT_IDENTITY_OR_PENALTIES")
+    # Report a precise bounded reason instead of one opaque combined HOLD;
+    # no copyrighted FIA grid text or page content enters diagnostics.
+    required_document_fields = (
+        ("DOCUMENT_53", re.search(r"Document\s*:?\s*53\b", header, re.I)),
+        ("DATE", "21 November 2026" in header),
+        ("TITLE", re.search(r"Final\s+Starting\s+Grid", header, re.I)),
+        ("EVENT", "LAS VEGAS GRAND PRIX 2026" in body.upper()),
+        ("GRID_TITLE", "Final Starting Grid" in body),
+        ("CAR_87_PERMISSION", "Car 87" in body),
+        ("CAR_12_PENALTY", "Car 12" in body),
+        ("CAR_87_35_PLACE", re.search(r"35\s*place\s*grid\s*penalt", body, re.I)),
+        ("CAR_12_5_PLACE", re.search(r"5\s*place\s*grid\s*penalt", body, re.I)),
+    )
+    for label, valid in required_document_fields:
+        if not valid:
+            raise ValueError("FIA_AUTHORITY_HOLD_DOCUMENT_" + label)
     notes = [w for w in words if str(w[4]).lower().startswith("notes")]
     if not notes:
         raise ValueError("FIA_AUTHORITY_HOLD_NOTES_UNAVAILABLE")
