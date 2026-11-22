@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   offline-contract:
@@ -40,7 +40,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false
+          fetch-depth: 0
+          persist-credentials: ${{ github.event_name == 'push' }}
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
@@ -49,8 +50,39 @@ jobs:
       - name: Authenticate official index, original document and retrospective grid
         run: |
           set -euo pipefail
-          python scripts/ops/f1_vegas_2026_fia_doc53_retrospective_v1.py \
-            --output _runtime/f1_fia_doc53_retro/authority_report.json
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            python scripts/ops/f1_vegas_2026_fia_doc53_retrospective_v1.py \
+              --output _runtime/f1_fia_doc53_retro/authority_report.json \
+              --publish-to-repo .
+          else
+            python scripts/ops/f1_vegas_2026_fia_doc53_retrospective_v1.py \
+              --output _runtime/f1_fia_doc53_retro/authority_report.json
+          fi
+      - name: Commit append-only Doc53 original-source identity (main push only)
+        if: ${{ success() && github.event_name == 'push' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet HEAD -- .github scripts configs docs .gitignore history; then
+            echo "HOLD_UNAUTHORIZED_SOURCE_OR_HISTORY_MUTATION"
+            exit 2
+          fi
+          test -f history/fia_grid_authority/2026_1300/11420/doc53_source_receipt.json
+          test -f latest/fia_grid_authority/2026_1300_race_11420.json
+          if git status --porcelain | grep -E 'Engine_2026-06-07_STABLE|F1_2026_Prediction_Model_Data_Workbook.*xlsx'; then
+            echo "HOLD_PROTECTED_ASSET_MUTATION"; exit 2
+          fi
+          git diff --cached --quiet || { echo HOLD_PRESTAGED_INPUT; exit 2; }
+          git add -- history/fia_grid_authority/2026_1300/11420/doc53_source_receipt.json                     latest/fia_grid_authority/2026_1300_race_11420.json
+          if git diff --cached --quiet; then
+            echo "Exact FIA source receipt already committed"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: retain immutable FIA Vegas Doc53 retrospective authority receipt"
+            bash scripts/ops/safe_git_push_rebase_retry.sh
+          fi
+
       - name: Retain only FIA source receipt metadata, never raw copyrighted grid
         if: always()
         uses: actions/upload-artifact@v6
