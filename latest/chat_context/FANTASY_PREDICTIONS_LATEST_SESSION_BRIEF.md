@@ -1,12 +1,12 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-21T23:58:30Z
+Generated UTC: 2026-11-22T06:31:54Z
 Event: United States - Las Vegas - Las Vegas
 Session: Qualifying
 Source status: clean
-Dashboard readiness: CONTEXT READY
+Dashboard readiness: CONTEXT HOLD
 Prediction status: HOLD_STABLE_ENGINE_NOT_EXECUTED
-Readiness reasons: ['verified_current_session_evidence']
+Readiness reasons: ['hold_stale_session_newer_completed']
 Diagnostic publishing allowed: true
 
 ## Governance
