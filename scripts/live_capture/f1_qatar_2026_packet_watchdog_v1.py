@@ -87,9 +87,17 @@ def session_due(now):
     return None
 
 
-def assess(*, now=None, token=None, fetch=get):
+def assess(*, now=None, token=None, fetch=get, expected_session=None):
     now = now or dt.datetime.now(UTC)
     session = session_due(now)
+    if expected_session:
+        matches = [w for w in WINDOWS if w[0] == expected_session]
+        if len(matches) != 1:
+            raise ValueError("FAIL_UNKNOWN_EXPECTED_SESSION")
+        name, start, end, _ = matches[0]
+        if now.astimezone(UTC) < timestamp(end) + dt.timedelta(minutes=35):
+            raise ValueError("FAIL_WATCHDOG_BEFORE_SESSION_CLOSE")
+        session = name, start, end
     if not session:
         return {"status": "HOLD_WATCHDOG_NOT_DUE",
                 "source_complete": False, "forecast_eligible": False}
@@ -141,9 +149,10 @@ def assess(*, now=None, token=None, fetch=get):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--expected-session", default=None)
     opts = parser.parse_args(argv)
     try:
-        result = assess()
+        result = assess(expected_session=opts.expected_session)
     except (OSError, ValueError, TypeError, KeyError, urllib.error.HTTPError) as exc:
         # No exception message: GitHub/provider errors may carry credentials.
         result = {"status": "FAIL_CAPTURE_WATCHDOG_API_OR_CUSTODY",
