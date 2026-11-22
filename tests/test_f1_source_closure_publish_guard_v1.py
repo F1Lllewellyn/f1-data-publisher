@@ -1211,16 +1211,16 @@ class StaticScopeTests(unittest.TestCase):
                         prior = immutable_git_blob(ROOT, previous)
                         self.assertEqual(git_blob_sha(prior), previous)
                         edits = (
-                            (b"      - name: Write v27 scheduled session-gate decision\\n",
-                             b"      - name: Write v27 scheduled session-gate decision\\n        id: admission\\n"),
-                            (b"      - name: Run peak-elite orchestrator\\n",
-                             b"      - name: Run peak-elite orchestrator\\n        if: steps.admission.outputs.action == 'RUN'\\n"),
-                            (b"      - name: Verify workbook/session persistence handoff\\n        if: always()\\n",
-                             b"      - name: Verify workbook/session persistence handoff\\n        if: always() && steps.admission.outputs.action == 'RUN'\\n"),
-                            (b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\\n        if: success()\\n",
-                             b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\\n        if: success() && steps.admission.outputs.action == 'RUN'\\n"),
-                            (b'            "latest/peak_elite"\\n',
-                             b'            "latest/peak_elite"\\n            "history/peak_elite_receipts"\\n'),
+                            (b"      - name: Write v27 scheduled session-gate decision\n",
+                             b"      - name: Write v27 scheduled session-gate decision\n        id: admission\n"),
+                            (b"      - name: Run peak-elite orchestrator\n",
+                             b"      - name: Run peak-elite orchestrator\n        if: steps.admission.outputs.action == 'RUN'\n"),
+                            (b"      - name: Verify workbook/session persistence handoff\n        if: always()\n",
+                             b"      - name: Verify workbook/session persistence handoff\n        if: always() && steps.admission.outputs.action == 'RUN'\n"),
+                            (b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success()\n",
+                             b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success() && steps.admission.outputs.action == 'RUN'\n"),
+                            (b'            "latest/peak_elite"\n',
+                             b'            "latest/peak_elite"\n            "history/peak_elite_receipts"\n'),
                         )
                         for old, new in edits:
                             self.assertEqual(prior.count(old), 1)
