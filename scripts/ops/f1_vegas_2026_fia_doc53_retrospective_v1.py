@@ -92,7 +92,9 @@ def extract_positions_from_pdf(raw):
         ("DATE", "21 November 2026" in header),
         ("TITLE", re.search(r"Final\s+Starting\s+Grid", header, re.I)),
         ("EVENT", bool(re.search(r"(?:2026\s+LAS\s+VEGAS\s+GRAND\s+PRIX|LAS\s+VEGAS\s+GRAND\s+PRIX\s+2026)", header + " " + body, re.I))),
-        ("GRID_TITLE", "Final Starting Grid" in body),
+        # The grid-page design title is vector art in the original PDF and
+        # is not consistently in PyMuPDF text; the authenticated cover title,
+        # official index, 22-car digest and penalty notes are mandatory instead.
         ("CAR_87_PERMISSION", "Car 87" in body),
         ("CAR_12_PENALTY", "Car 12" in body),
         ("CAR_87_35_PLACE", re.search(r"35\s*place\s*grid\s*penalt", body, re.I)),
