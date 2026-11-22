@@ -96,6 +96,20 @@ class QatarWatchdogTests(unittest.TestCase):
                                             fetch=fake)["status"],
                                  "FAIL_NO_AUTHENTIC_ORIGINAL_CAPTURE_IN_SESSION")
 
+    def test_delayed_cron_still_checks_the_explicit_original_session(self):
+        result = watch.assess(
+            now=dt.datetime(2026, 11, 29, 22, 30, tzinfo=UTC),
+            token="test-token", fetch=self.fetch, expected_session="fp1")
+        self.assertEqual(result["status"], "ORIGINAL_PACKETS_RETAINED_SESSION_UNBOUND")
+
+    def test_early_and_unknown_explicit_sessions_are_errors(self):
+        with self.assertRaisesRegex(ValueError, "FAIL_WATCHDOG_BEFORE_SESSION_CLOSE"):
+            watch.assess(now=dt.datetime(2026,11,27,14,56,tzinfo=UTC),
+                         token="test-token", fetch=self.fetch, expected_session="fp1")
+        with self.assertRaisesRegex(ValueError, "FAIL_UNKNOWN_EXPECTED_SESSION"):
+            watch.assess(now=self.now, token="test-token", fetch=self.fetch,
+                         expected_session="wrong")
+
     def test_missing_auth_is_failure_not_source_hold(self):
         with self.assertRaisesRegex(ValueError, "FAIL_GITHUB_AUTH_UNAVAILABLE"):
             watch.get(watch.BASE+"/actions/runs", token="")
