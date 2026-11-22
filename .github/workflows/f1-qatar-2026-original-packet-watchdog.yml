@@ -1,0 +1,83 @@
+name: F1 Qatar 2026 Original Packet Missed-Window Watchdog
+
+# A separate Actions workflow reports missed source opportunities.
+# Scheduled watchdogs may themselves be delayed: the explicit expected session
+# is fixed by the triggering cron, not dynamically selected from latest/*.
+on:
+  workflow_dispatch:
+    inputs:
+      expected_session:
+        required: true
+        type: choice
+        options: [fp1, fp2, fp3, qualifying, race]
+  pull_request:
+    paths:
+      - '.github/workflows/f1-qatar-2026-original-packet-watchdog.yml'
+      - 'scripts/live_capture/f1_qatar_2026_packet_watchdog_v1.py'
+      - 'tests/test_f1_qatar_2026_packet_watchdog_v1.py'
+  schedule:
+    - cron: '40 15 27 11 *'  # FP1 completed plus 45 minutes
+    - cron: '10 19 27 11 *'  # FP2 completed plus 45 minutes
+    - cron: '40 16 28 11 *'  # FP3 completed plus 45 minutes
+    - cron: '10 20 28 11 *'  # Qualifying completed plus 45 minutes
+    - cron: '20 19 29 11 *'  # Race completed plus 45 minutes
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  offline-watchdog-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Verify original run and packet custody without network
+        run: python -m unittest discover -s tests -p test_f1_qatar_2026_packet_watchdog_v1.py -v
+
+  original-source-watchdog:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Require original completed session packets or report actionable failure
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SCHEDULE: ${{ github.event.schedule }}
+          DISPATCH_SESSION: ${{ inputs.expected_session || '' }}
+        run: |
+          set -euo pipefail
+          case "${SCHEDULE}" in
+            "40 15 27 11 *") SESSION=fp1 ;;
+            "10 19 27 11 *") SESSION=fp2 ;;
+            "40 16 28 11 *") SESSION=fp3 ;;
+            "10 20 28 11 *") SESSION=qualifying ;;
+            "20 19 29 11 *") SESSION=race ;;
+            "") SESSION="${DISPATCH_SESSION}" ;;
+            *) echo 'Unexpected Qatar watchdog trigger'; exit 2 ;;
+          esac
+          test -n "${SESSION}"
+          python scripts/live_capture/f1_qatar_2026_packet_watchdog_v1.py \
+            --expected-session "${SESSION}" \
+            --report _runtime/f1_qatar_2026_packet_watchdog/watchdog_report.json
+      - name: Retain original watchdog decision even on source failure
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-qatar-2026-packet-watchdog-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/f1_qatar_2026_packet_watchdog/**
+          if-no-files-found: warn
+          retention-days: 90
