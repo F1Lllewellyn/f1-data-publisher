@@ -4,6 +4,8 @@ from __future__ import annotations
 import datetime as dt
 import importlib.util
 from pathlib import Path
+import tempfile
+import json
 import unittest
 from unittest.mock import patch
 
@@ -28,6 +30,13 @@ def reader(url, maximum):
 
 
 class FIAAuthorityTests(unittest.TestCase):
+    def setUp(self):
+        # The PDF in this unit test is a synthetic envelope; original
+        # production byte identity is exercised by the actual PR source job.
+        pinned = patch.object(module, "EXPECTED_DOCUMENT_SHA256", module.digest(DOCUMENT))
+        pinned.start()
+        self.addCleanup(pinned.stop)
+
     def test_fia_original_index_and_pdf_candidate_never_promote_pre_outcome(self):
         self.assertEqual(module.PUBLISHED_UTC, "2026-11-22T03:00:00Z")
         result = module.observe(clock=POST, reader=reader,
@@ -42,6 +51,36 @@ class FIAAuthorityTests(unittest.TestCase):
             self.assertIs(result[key], False)
         self.assertEqual(result["reason_codes"],
                          ["OBSERVED_AFTER_RACE_START", "NO_PROSPECTIVE_SOURCE_AUTHORITY"])
+
+    def test_immutable_historical_doc53_receipt_is_nonpromoting_and_idempotent(self):
+        report = module.observe(clock=POST, reader=reader,
+                                parser=lambda raw: module.GRID_DIGEST)
+        self.assertTrue(report["source_authority_verified"])
+        with tempfile.TemporaryDirectory() as d:
+            paths = module.emit_immutable_retrospective_receipt(d, report)
+            self.assertEqual(len(paths), 2)
+            self.assertEqual(paths, module.emit_immutable_retrospective_receipt(d, report))
+            data = json.loads((Path(d)/paths[0]).read_text())
+            self.assertEqual(data["race_session_key"], "11420")
+            self.assertEqual(data["original_pdf_sha256"], module.digest(DOCUMENT))
+            self.assertFalse(data["prediction_locked"])
+            self.assertFalse(data["forecast_eligible"])
+            self.assertNotIn("raw_pdf_bytes", data)
+            self.assertNotIn("conventional_grid", data)
+            with self.assertRaisesRegex(ValueError, "FIA_AUTHORITY_HOLD_IMMUTABLE_RECEIPT_COLLISION"):
+                module.emit_immutable_retrospective_receipt(
+                    d, dict(report, first_observed_utc="2026-11-22T15:00:00Z"))
+            with self.assertRaisesRegex(ValueError, "FIA_AUTHORITY_HOLD_RECEIPT_GUARD"):
+                module.emit_immutable_retrospective_receipt(
+                    d, dict(report, forecast_eligible=True))
+
+    def test_real_document_revision_hash_is_a_strict_negative(self):
+        with patch.object(module, "EXPECTED_DOCUMENT_SHA256", "0"*64):
+            result = module.observe(clock=POST, reader=reader,
+                                    parser=lambda raw: module.GRID_DIGEST)
+        self.assertEqual(result["status"], "FIA_AUTHORITY_HOLD")
+        self.assertIn("FIA_AUTHORITY_HOLD_DOCUMENT_REVISION_HASH_MISMATCH",
+                      result["reason_codes"])
 
     def test_missing_index_cannot_grant_grid_authority(self):
         def wrong(url, max_bytes):
