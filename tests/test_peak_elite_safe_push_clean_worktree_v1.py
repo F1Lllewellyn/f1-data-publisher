@@ -45,10 +45,32 @@ class CleanWorktreeTests(unittest.TestCase):
         old = baseline.replace(ADDED_LINES, '', 1).encode()
         blob = lambda raw: hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
         self.assertEqual(blob(old), '42c107142e076ac4d056f2e33e93dab4163f3b72')
-        self.assertEqual(blob(self.text.encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
+        self.assertEqual(blob(self.text.encode()), '7bcdf1e5f88391494238d7ae515e9d3c3edce23f')
+        accepted = subprocess.check_output(
+            ['git', 'cat-file', 'blob', '2f87902b9fa17a14377c84dfaf716e276a10e53c'],
+            cwd=ROOT)
+        # Reconstruct the exact pre-surgery original; all five edits must be
+        # present exactly once. This is not a broad SHA allowlist.
+        before = self.text
+        reversals = (
+            ("      - name: Write v27 scheduled session-gate decision\n        id: admission\n",
+             "      - name: Write v27 scheduled session-gate decision\n"),
+            ("      - name: Run peak-elite orchestrator\n        if: steps.admission.outputs.action == 'RUN'\n",
+             "      - name: Run peak-elite orchestrator\n"),
+            ("      - name: Verify workbook/session persistence handoff\n        if: always() && steps.admission.outputs.action == 'RUN'\n",
+             "      - name: Verify workbook/session persistence handoff\n        if: always()\n"),
+            ("      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success() && steps.admission.outputs.action == 'RUN'\n",
+             "      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success()\n"),
+            ('            "latest/peak_elite"\n            "history/peak_elite_receipts"\n',
+             '            "latest/peak_elite"\n'),
+        )
+        for new, original in reversals:
+            self.assertEqual(before.count(new), 1)
+            before = before.replace(new, original, 1)
+        self.assertEqual(before.encode(), accepted)
         prior = subprocess.check_output(['git', 'cat-file', 'blob', '46c1cd483d6b04e98474ef3be498cd8faae007cb'], cwd=ROOT)
-        self.assertEqual(self.text.replace('  F1_OPENF1_HANDOVER_REQUIRED: \"true\"\n', '', 1).encode(), prior)
-        self.assertNotEqual(blob((self.text+'# tamper').encode()), '2f87902b9fa17a14377c84dfaf716e276a10e53c')
+        self.assertEqual(before.replace('  F1_OPENF1_HANDOVER_REQUIRED: \"true\"\n', '', 1).encode(), prior)
+        self.assertNotEqual(blob((self.text+'# tamper').encode()), '7bcdf1e5f88391494238d7ae515e9d3c3edce23f')
         for path in READINESS:
             self.assertEqual(candidates(self.text).count(path), 1)
 
