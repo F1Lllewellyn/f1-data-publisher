@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-11-22T06:37:46.385041Z",
+  "created_utc": "2026-11-22T14:55:16.024305Z",
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
   "forecast_state_changed": false,
   "overall_status": "needs_manual_review",
@@ -16,6 +16,6 @@
     "session_name": "Race",
     "session_type": "Race"
   },
-  "source_readiness_materially_improved": true,
+  "source_readiness_materially_improved": false,
   "stable_order_overwrite_allowed": false
 }

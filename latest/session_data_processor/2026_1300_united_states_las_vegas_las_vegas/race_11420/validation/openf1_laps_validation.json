@@ -31,7 +31,7 @@
   "endpoint": "laps",
   "fetch": {
     "bytes": 470067,
-    "observed_at_utc": "2026-11-22T06:37:40.302157Z",
+    "observed_at_utc": "2026-11-22T14:55:09.965399Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/laps?session_key=11420",
     "sha256": "958ce5c370074a890c767abe8385839db8e9eb8933c5b1fb85dfccf0b08c177d",
@@ -41,7 +41,7 @@
   "json_sha256": "958ce5c370074a890c767abe8385839db8e9eb8933c5b1fb85dfccf0b08c177d",
   "max_lap_number": 50.0,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-22T06:37:40.302157Z",
+  "observed_at_utc": "2026-11-22T14:55:09.965399Z",
   "original_response_bytes_retained": true,
   "rows": 989,
   "status": "clean",

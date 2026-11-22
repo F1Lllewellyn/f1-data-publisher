@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-22T14:51:45Z
+Generated UTC: 2026-11-22T14:55:16Z
 Event: United States - Las Vegas - Las Vegas
 Session: Race
 Source status: needs_manual_review

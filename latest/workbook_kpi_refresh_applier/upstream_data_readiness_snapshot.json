@@ -1,7 +1,7 @@
 {
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
   "forecast_state_changed": false,
-  "material_readiness_improved": true,
+  "material_readiness_improved": false,
   "needs_manual_review": true,
   "overall_status": "needs_manual_review",
   "race_name": "United States - Las Vegas - Las Vegas",
@@ -63,5 +63,5 @@
       "status": "clean"
     }
   },
-  "updated_utc": "2026-11-22T06:37:46.386500Z"
+  "updated_utc": "2026-11-22T14:55:16.026444Z"
 }

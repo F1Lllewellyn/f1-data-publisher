@@ -27,7 +27,7 @@
   "endpoint": "drivers",
   "fetch": {
     "bytes": 9024,
-    "observed_at_utc": "2026-11-22T06:37:39.360845Z",
+    "observed_at_utc": "2026-11-22T14:55:08.654939Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/drivers?session_key=11420",
     "sha256": "fd4722c229338af96b1c81563eb56e21b5190f2c1ee86b647397e78d12c88a8e",
@@ -37,7 +37,7 @@
   "json_sha256": "fd4722c229338af96b1c81563eb56e21b5190f2c1ee86b647397e78d12c88a8e",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-22T06:37:39.360845Z",
+  "observed_at_utc": "2026-11-22T14:55:08.654939Z",
   "original_response_bytes_retained": true,
   "rows": 22,
   "status": "clean",

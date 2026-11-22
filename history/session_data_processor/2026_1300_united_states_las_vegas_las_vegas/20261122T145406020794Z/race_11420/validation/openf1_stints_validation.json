@@ -1,0 +1,41 @@
+{
+  "anomalies": [],
+  "columns": [
+    "compound",
+    "driver_number",
+    "lap_end",
+    "lap_start",
+    "meeting_key",
+    "session_key",
+    "stint_number",
+    "tyre_age_at_start"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_stints.csv",
+  "driver_count": 22,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "fd4722c229338af96b1c81563eb56e21b5190f2c1ee86b647397e78d12c88a8e",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "stints",
+  "fetch": {
+    "bytes": 6532,
+    "observed_at_utc": "2026-11-22T14:55:13.733368Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/stints?session_key=11420",
+    "sha256": "1027e947960a4b40b2ecfdf641d52e4871a73e87afe4901b887aa984ecd3af69",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/raw/openf1_stints.json",
+  "json_sha256": "1027e947960a4b40b2ecfdf641d52e4871a73e87afe4901b887aa984ecd3af69",
+  "max_lap_number": null,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-22T14:55:13.733368Z",
+  "original_response_bytes_retained": true,
+  "rows": 45,
+  "status": "clean",
+  "timestamp_rows": 0
+}

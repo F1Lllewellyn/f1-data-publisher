@@ -21,7 +21,7 @@
   "endpoint": "intervals",
   "fetch": {
     "bytes": 2986905,
-    "observed_at_utc": "2026-11-22T06:37:42.147479Z",
+    "observed_at_utc": "2026-11-22T14:55:11.797722Z",
     "ok": true,
     "request_url": "https://api.openf1.org/v1/intervals?session_key=11420",
     "sha256": "262ba4b0647382a0640c8af04910de7c6ac9d94357ea754c097005356e57f447",
@@ -31,7 +31,7 @@
   "json_sha256": "262ba4b0647382a0640c8af04910de7c6ac9d94357ea754c097005356e57f447",
   "max_lap_number": null,
   "missing_required_columns": [],
-  "observed_at_utc": "2026-11-22T06:37:42.147479Z",
+  "observed_at_utc": "2026-11-22T14:55:11.797722Z",
   "original_response_bytes_retained": true,
   "rows": 21166,
   "status": "clean",
