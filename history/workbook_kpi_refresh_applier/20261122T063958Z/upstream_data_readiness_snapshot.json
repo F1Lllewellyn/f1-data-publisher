@@ -1,0 +1,67 @@
+{
+  "event_id": "2026_1300_united_states_las_vegas_las_vegas",
+  "forecast_state_changed": false,
+  "material_readiness_improved": true,
+  "needs_manual_review": true,
+  "overall_status": "needs_manual_review",
+  "race_name": "United States - Las Vegas - Las Vegas",
+  "readiness_quality": "blocked_manual_review_required_source",
+  "schema_version": "data_readiness_v2_session_processor",
+  "session": {
+    "date_end": "2026-11-22T06:00:00+00:00",
+    "date_start": "2026-11-22T04:00:00+00:00",
+    "gate": "race_result",
+    "meeting_key": 1300,
+    "session_key": 11420,
+    "session_name": "Race",
+    "session_type": "Race"
+  },
+  "source_needs_manual_review": true,
+  "sources": {
+    "openf1_drivers": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_intervals": {
+      "rows": 21166,
+      "status": "clean"
+    },
+    "openf1_laps": {
+      "rows": 989,
+      "status": "clean"
+    },
+    "openf1_pit": {
+      "rows": 23,
+      "status": "clean"
+    },
+    "openf1_position": {
+      "rows": 708,
+      "status": "clean"
+    },
+    "openf1_race_control": {
+      "rows": 110,
+      "status": "clean"
+    },
+    "openf1_session_result": {
+      "rows": 22,
+      "status": "clean"
+    },
+    "openf1_sessions": {
+      "rows": 1,
+      "status": "clean"
+    },
+    "openf1_starting_grid": {
+      "rows": 22,
+      "status": "needs_manual_review"
+    },
+    "openf1_stints": {
+      "rows": 45,
+      "status": "clean"
+    },
+    "openf1_weather": {
+      "rows": 148,
+      "status": "clean"
+    }
+  },
+  "updated_utc": "2026-11-22T06:37:46.386500Z"
+}
