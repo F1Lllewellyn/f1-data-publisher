@@ -17,6 +17,7 @@ import os
 from pathlib import Path
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 import zipfile
 
 from f1_qatar_2026_original_packet_custody_v1 import WINDOWS, timestamp, UTC
@@ -25,6 +26,18 @@ REPO = "F1Lllewellyn/f1-data-publisher"
 WORKFLOW_PATH = ".github/workflows/f1-qatar-2026-original-packet-custody.yml"
 BASE = "https://api.github.com/repos/" + REPO
 MAX_ZIP = 48 * 1024 * 1024
+
+
+class StripCrossHostToken(urllib.request.HTTPRedirectHandler):
+    """GitHub artifact ZIPs redirect to signed object storage; never send GH_TOKEN there."""
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        result = super().redirect_request(req, fp, code, msg, headers, newurl)
+        target = urlsplit(newurl)
+        if target.scheme != "https" or not target.hostname:
+            raise ValueError("FAIL_GITHUB_UNSAFE_ARTIFACT_REDIRECT")
+        if result is not None and urlsplit(req.full_url).hostname != target.hostname:
+            result.remove_header("Authorization")
+        return result
 
 
 def get(url, *, token):
@@ -36,7 +49,7 @@ def get(url, *, token):
         "Authorization": "Bearer " + token,
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"})
-    with urllib.request.urlopen(request, timeout=25) as response:
+    with urllib.request.build_opener(StripCrossHostToken()).open(request, timeout=25) as response:
         payload = response.read(MAX_ZIP + 1)
     if len(payload) > MAX_ZIP:
         raise ValueError("FAIL_GITHUB_ARTIFACT_OVERSIZED")
