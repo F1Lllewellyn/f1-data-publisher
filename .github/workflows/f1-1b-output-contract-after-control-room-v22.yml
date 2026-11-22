@@ -222,6 +222,7 @@ jobs:
             fi
           done
           history_roots=(
+            "history/1b_output_contract_receipts"
             "history/forecast_bundle_ledger"
             "history/downstream_consumers"
             "history/chat_context"

@@ -10,6 +10,7 @@ Engine_2026-06-07_STABLE, and never activates forecast/promotion gates.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 from datetime import datetime, timezone
@@ -138,6 +139,53 @@ def latest_canonical_signal(repo_root: Path, now: datetime) -> Dict[str, Any]:
     }
 
 
+def scheduled_admission(repo_root: Path, now: datetime, catalog=None) -> Dict[str, Any]:
+    """A catalog read discovers a completed session; a timestamp is not a receipt.
+
+    Only the accepted budgeted collector reads OpenF1. Existing standalone routes
+    remain available to refresh partial evidence; unchanged HOLDs do not repeatedly
+    rebuild the workbook or manufacture successful downstream completions.
+    """
+    spec = importlib.util.spec_from_file_location("peak_admission_processor",
+        Path(__file__).resolve().parents[1] / "session_data_processor/session_data_processor_loop_v1.py")
+    processor = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(processor)
+    sessions, meta = catalog if catalog is not None else processor.fetch_sessions(now.year)
+    result = dict(action="HOLD_NO_NEW_ELIGIBLE_SOURCE", operational_status="OPERATIONAL_PASS",
+                  consumer_eligible=False, scientific_eligible=False, promotion_allowed=False)
+    if meta.get("ok") is not True or not sessions:
+        return dict(result, action="HOLD_PROVIDER", operational_status="OPERATIONAL_FAIL",
+                    reason="Source catalog unavailable; preserve the last verified context.")
+    selected = processor.select_recent_completed_session(sessions, now, 36)
+    if not selected:
+        return dict(result, reason="No unambiguous recently completed provider session.")
+    result.update(session_key=selected["session_key"], meeting_key=selected["meeting_key"])
+    status = load_json(repo_root / "latest/peak_elite/orchestrator_status.json")
+    state = status.get("latest_state", {})
+    if str(state.get("session_key")) != str(selected["session_key"]):
+        return dict(result, action="RUN", reason="New completed provider session requires capture and verification.")
+    selector = load_json(repo_root / "latest/latest_manifest.json")
+    if str(selector.get("session_key")) != str(selected["session_key"]):
+        return dict(result, action="RUN", reason="Authoritative current session is not selected in published source.")
+    import hashlib
+    source_path = repo_root / "latest/latest_manifest.json"
+    expected = status.get("handoff_fingerprints", {}).get("latest/latest_manifest.json")
+    if source_path.is_file() and hashlib.sha256(source_path.read_bytes()).hexdigest() != expected:
+        return dict(result, action="RUN", reason="New source publication requires workbook and context verification.")
+    if (status.get("downstream_current") is True and status.get("failed_steps") == []
+            and status.get("operation") == "full_run_chain"):
+        # Rehash all original inputs before deciding this session was processed.
+        for relative, sha in status.get("handoff_fingerprints", {}).items():
+            p = repo_root / relative
+            if (Path(relative).is_absolute() or ".." in Path(relative).parts or p.is_symlink()
+                    or not p.resolve().is_relative_to(repo_root.resolve()) or not p.is_file()
+                    or hashlib.sha256(p.read_bytes()).hexdigest() != sha):
+                return dict(result, action="HOLD_INPUT_INTEGRITY", operational_status="OPERATIONAL_FAIL",
+                            reason="Previously verified input changed without a new source publication.")
+        return dict(result, action="NOOP_ALREADY_PROCESSED", reason="Exact source/session already processed; no new capture receipt.")
+    return dict(result, reason="Same source remains held; await a new verified source publication.")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo-root", default=".")
@@ -157,9 +205,11 @@ def main() -> int:
         action = "yield_to_canonical_control_room" if should_yield else "legacy_allowed_no_recent_canonical_run"
         reason = "Recent canonical Control Room/output-contract state exists; avoid duplicate processor/workbook push collision." if should_yield else "No recent canonical state detected inside guard window."
     elif args.mode == "scheduled_gate":
-        should_yield = False
-        action = "scheduled_full_run_chain_enabled"
-        reason = "Control Room scheduled runs may execute full_run_chain with forecast gate off; orchestrator/session filter still determines if new source data exists."
+        admission = (scheduled_admission(repo_root, now) if os.environ.get("GITHUB_EVENT_NAME") == "schedule"
+                     else {"action": "RUN", "operational_status": "OPERATIONAL_PASS",
+                           "reason": "Explicit operation; existing runtime guards remain authoritative."})
+        action, reason = admission["action"], admission["reason"]
+        should_yield = action != "RUN"
     else:
         should_yield = False
         action = "static_validation_only"
@@ -182,10 +232,15 @@ def main() -> int:
     }
 
     if args.mode == "scheduled_gate":
-        out_path = repo_root / "latest" / "session_gate_watch_v27" / "gate_decision.json"
-        hist_path = repo_root / "history" / "session_gate_watch_v27" / now.strftime("%Y%m%dT%H%M%SZ") / "gate_decision.json"
+        out.update(admission)
+        out_path = repo_root / "_runtime" / "peak_elite" / "gate_decision.json"
         write_json(out_path, out)
-        write_json(hist_path, out)
+        if os.environ.get("GITHUB_OUTPUT"):
+            with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
+                handle.write(f"action={action}\n")
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as handle:
+                handle.write("## Peak admission\n\n```json\n" + json.dumps(out, indent=2) + "\n```\n")
     else:
         slug = args.workflow_name.lower().replace(" ", "-").replace("+", "plus").replace("/", "-")
         slug = "".join(ch if ch.isalnum() or ch in "-_" else "-" for ch in slug).strip("-") or "unknown"
@@ -193,6 +248,8 @@ def main() -> int:
         write_json(out_path, out)
 
     print(json.dumps({"should_yield": should_yield, "action": action, "reason": reason}, sort_keys=True))
+    if args.mode == "scheduled_gate" and out.get("operational_status") == "OPERATIONAL_FAIL":
+        return 2
     if args.fail_on_issue and args.mode == "static" and not repo_root.exists():
         return 1
     return 0

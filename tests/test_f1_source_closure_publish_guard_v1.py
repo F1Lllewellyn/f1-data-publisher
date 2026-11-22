@@ -1204,6 +1204,29 @@ class StaticScopeTests(unittest.TestCase):
                 if path in recovery_blobs or path in coordinated_blobs:
                     self.assertEqual(git_blob_sha(immutable_git_blob(ROOT, expected_blob)), expected_blob)
                     previous = coordinated_blobs.get(path, recovery_blobs.get(path))
+                    if path == ".github/workflows/f1-peak-elite-control-room-one-click-v1.yml":
+                        # Surgical Issue #367: reconstruct only accepted scheduled
+                        # admission and bounded receipt-staging edits from
+                        # immutable original, preserving all legacy safeguards.
+                        prior = immutable_git_blob(ROOT, previous)
+                        self.assertEqual(git_blob_sha(prior), previous)
+                        edits = (
+                            (b"      - name: Write v27 scheduled session-gate decision\n",
+                             b"      - name: Write v27 scheduled session-gate decision\n        id: admission\n"),
+                            (b"      - name: Run peak-elite orchestrator\n",
+                             b"      - name: Run peak-elite orchestrator\n        if: steps.admission.outputs.action == 'RUN'\n"),
+                            (b"      - name: Verify workbook/session persistence handoff\n        if: always()\n",
+                             b"      - name: Verify workbook/session persistence handoff\n        if: always() && steps.admission.outputs.action == 'RUN'\n"),
+                            (b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success()\n",
+                             b"      - name: Commit safe repaired workflows, status outputs, and refreshed workbook handoff artifacts\n        if: success() && steps.admission.outputs.action == 'RUN'\n"),
+                            (b'            "latest/peak_elite"\n',
+                             b'            "latest/peak_elite"\n            "history/peak_elite_receipts"\n'),
+                        )
+                        for old, new in edits:
+                            self.assertEqual(prior.count(old), 1)
+                            prior = prior.replace(old, new, 1)
+                        self.assertEqual(raw, prior)
+                        previous = "7bcdf1e5f88391494238d7ae515e9d3c3edce23f"
                     if path == ".github/workflows/f1-automated-forecast-gate-orchestrator-v1.yml":
                         # Post-release #367 monitoring changes only exit reporting.
                         # Reconstruct from the exact accepted bytes, preserving

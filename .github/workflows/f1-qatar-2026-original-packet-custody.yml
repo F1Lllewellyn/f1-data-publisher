@@ -1,0 +1,83 @@
+name: F1 Qatar 2026 Original Authenticated Packet Custody
+
+# F1 published UTC schedule; GitHub cron may delay or omit an event.
+# A separately scheduled watchdog checks for missing actual retained packets.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/f1-qatar-2026-original-packet-custody.yml'
+      - 'scripts/live_capture/f1_qatar_2026_original_packet_custody_v1.py'
+      - 'tests/test_f1_qatar_2026_original_packet_custody_v1.py'
+  schedule:
+    # Friday FP1 13:30Z, FP2 17:00Z (Nov 27).
+    - cron: '20,40 13 27 11 *'
+    - cron: '0,20,40 14 27 11 *'
+    - cron: '50 16 27 11 *'
+    - cron: '10,30,50 17 27 11 *'
+    - cron: '10 18 27 11 *'
+    # Saturday FP3 14:30Z, Qualifying 18:00Z (Nov 28).
+    - cron: '20,40 14 28 11 *'
+    - cron: '0,20,40 15 28 11 *'
+    - cron: '50 17 28 11 *'
+    - cron: '10,30,50 18 28 11 *'
+    - cron: '10 19 28 11 *'
+    # Sunday Race 16:00Z (Nov 29); bounded 5-minute segments.
+    - cron: '50 15 29 11 *'
+    - cron: '10,30,50 16 29 11 *'
+    - cron: '10,30,50 17 29 11 *'
+    - cron: '10,30 18 29 11 *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: f1-qatar-2026-source-only-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  offline-contract:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Run original source custody regression with no provider call
+        run: python -m unittest discover -s tests -p test_f1_qatar_2026_original_packet_custody_v1.py -v
+
+  original-source-observer:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install the accepted authenticated F1 source client
+        run: python -m pip install 'fastf1==3.9.2' 'requests>=2.31'
+      - name: Read verified UTC session admission and capture original bytes
+        env:
+          FASTF1_AUTH_METHOD: password
+          F1_USERNAME: ${{ secrets.F1_USERNAME }}
+          F1_PASSWORD: ${{ secrets.F1_PASSWORD }}
+        run: |
+          set -euo pipefail
+          python scripts/live_capture/f1_qatar_2026_original_packet_custody_v1.py \
+            --duration-minutes 5 \
+            --output-dir _runtime/f1_qatar_2026_packet_custody
+      - name: Retain exact original source bytes even when recording fails
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: f1-qatar-2026-original-packets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: _runtime/f1_qatar_2026_packet_custody/**
+          if-no-files-found: warn
+          retention-days: 90
