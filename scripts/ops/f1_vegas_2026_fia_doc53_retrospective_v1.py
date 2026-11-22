@@ -179,7 +179,7 @@ def observe(*, clock=None, reader=retrieve, parser=extract_positions_from_pdf):
         # observation. A matching PDF/document is NOT an observed pre-race grid.
         if (candidate_result.get("status") != "HOLD"
                 or "first_observed_after_forecast_cutoff" not in
-                candidate_result.get("reasons", [])):
+                candidate_result.get("reason_codes", [])):
             raise ValueError("FIA_AUTHORITY_HOLD_PRE_CUTOFF_BOUNDARY")
         status.update(source_authority_verified=True,
                       status="FIA_FINAL_GRID_VERIFIED_RETROSPECTIVE_ONLY",
