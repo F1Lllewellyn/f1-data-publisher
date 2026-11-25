@@ -1,6 +1,6 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-25T09:18:20Z
+Generated UTC: 2026-11-25T19:29:44Z
 Event: United States - Las Vegas - Las Vegas
 Session: Race
 Source status: needs_manual_review
