@@ -10,7 +10,7 @@
     "latest/session_data_processor/2026_1300_united_states_las_vegas_las_vegas/race_11420/workbook_kpi_readiness.json": "d6ce9a73209499d1fc76daa7f7291764c5c2ca5714f99b8b769aac2cc567f351"
   },
   "commit_allowed": true,
-  "created_utc": "2026-11-26T11:09:16.062800+00:00",
+  "created_utc": "2026-11-26T19:54:15.793198+00:00",
   "diagnostic_publish_allowed": true,
   "downstream_eligible": false,
   "event_id": "2026_1300_united_states_las_vegas_las_vegas",
@@ -26,37 +26,37 @@
   "outputs": [
     {
       "bytes": 1009,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/sandbox_workbook_update_plan_applied.json",
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/sandbox_workbook_update_plan_applied.json",
       "sha256": "56c022a6086795171ee93019656b266cc8ca6a0921edb1e6e2788e78f4311c4d"
     },
     {
       "bytes": 412,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/refreshed_workbook_kpi_readiness.csv",
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/refreshed_workbook_kpi_readiness.csv",
       "sha256": "e8714617e4ef7d2b69ed5bdd305dc25c826db765b80b657e4d89004b8d4945af"
     },
     {
-      "bytes": 11138,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Race_20261126T110916Z.xlsx",
-      "sha256": "2f1a2ecafe9d7e9a41669bce4c683f253928fb7cb4545f20e6c9c9109efe834c"
+      "bytes": 11139,
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/F1_Workbook_KPI_SANDBOX_Refresh_United_States_-_Las_Vegas_-_Las_Vegas_Race_20261126T195415Z.xlsx",
+      "sha256": "f8c42ee9988e9528a384aba41a7a358faa6790407bf4cc5a6dd5111cb69ed095"
     },
     {
       "bytes": 817,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/upstream_latest_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/upstream_latest_manifest_snapshot.json",
       "sha256": "88cbf12a5ff62b53388f3c31ef31d157c87e99ca40c5aadd30dc9c24708ca2d7"
     },
     {
       "bytes": 1579,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/upstream_data_readiness_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/upstream_data_readiness_snapshot.json",
       "sha256": "7c7a1137f40c9f28dfbd0495de96f71b7fd69b5e338fa676dd6ebe4a847aa997"
     },
     {
       "bytes": 719,
-      "path": "history/workbook_kpi_refresh_applier/20261126T110916Z/upstream_combined_source_manifest_snapshot.json",
+      "path": "history/workbook_kpi_refresh_applier/20261126T195415Z/upstream_combined_source_manifest_snapshot.json",
       "sha256": "42f78ddc4ee2c79c7bf690a73f0be5e962c0166ee74d51b88ef75f98f6383930"
     }
   ],
   "readiness_quality": "blocked_manual_review_required_source",
-  "run_id": "20261126T110916Z",
+  "run_id": "20261126T195415Z",
   "session_key": 11420,
   "session_name": "Race",
   "session_type": "Race",
