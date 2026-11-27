@@ -1,10 +1,10 @@
 # F1 1B Race Reports Context v25
 
 ## Confirmed Data
-- Event: United States - Las Vegas - Las Vegas
-- Session: Qualifying / key 11416
-- Run ID: context_c4d8d0859b71e6d6dc2be235d961b3c6
-- Consumer readiness: full_report_ready
+- Event: Qatar - Lusail - Lusail
+- Session: Practice 2 / key 11422
+- Run ID: context_42352f0116647f05a722db6a7fdbecac
+- Consumer readiness: context_ready
 - Source status: clean
 - Workbook source status: clean
 - Readiness quality: usable_with_optional_context_gaps

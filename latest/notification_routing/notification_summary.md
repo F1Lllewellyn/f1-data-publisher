@@ -6,8 +6,8 @@
 - Mode: decision-only; no ChatGPT automation, email, text, or forecast gate was activated.
 
 ## Event
-- Event: United States - Las Vegas - Las Vegas
-- Session: Qualifying
+- Event: Qatar - Lusail - Lusail
+- Session: Practice 2
 
 ## Consumer Actions
 - race_predictions: notify_and_update_context — material readiness or forecast-relevant state changed

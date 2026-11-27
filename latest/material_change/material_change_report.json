@@ -1,17 +1,17 @@
 {
   "change_reason": "signature_changed",
-  "current_signature": "9ec4067cebd14caa0c5d5ce2352d26475c762d4b6e0818da376714276f046f6e",
+  "current_signature": "52364997c64fd4c2617edeaf408e0fc72856712d97e01a4374497444a4c30d4f",
   "event": {
-    "event_id": "2026_1300_united_states_las_vegas_las_vegas",
-    "meeting_key": 1300,
-    "race_name": "United States - Las Vegas - Las Vegas",
-    "session_key": 11416,
-    "session_name": "Qualifying"
+    "event_id": "2026_1301_qatar_lusail_lusail",
+    "meeting_key": 1301,
+    "race_name": "Qatar - Lusail - Lusail",
+    "session_key": 11422,
+    "session_name": "Practice 2"
   },
-  "generated_at_utc": "2026-11-21T23:50:46Z",
+  "generated_at_utc": "2026-11-27T23:00:07Z",
   "material_change_detected": true,
   "notification_recommended": true,
-  "previous_signature": "c507f282db69126894de2eae0714a00b7671bbb61ebd10a94ec1e7085c54043c",
+  "previous_signature": "9ec4067cebd14caa0c5d5ce2352d26475c762d4b6e0818da376714276f046f6e",
   "promotion_allowed": false,
   "schema_version": "f1_1b_material_change_v20",
   "status": "usable_with_optional_context_gaps"
