@@ -1,0 +1,36 @@
+{
+  "anomalies": [],
+  "columns": [],
+  "csv_path": "latest/session_data_processor/2026_1301_qatar_lusail_lusail/practice_2_11422/raw/openf1_starting_grid.csv",
+  "driver_count": 0,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "bf7f6932eba649808bdd5abf4378ca80313710582111377d604416b4bcd01ea2",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "starting_grid",
+  "fetch": {
+    "bytes": 30,
+    "error": "HOLD_PROVIDER_HTTP_404",
+    "observed_at_utc": "2026-11-27T22:57:52.235880Z",
+    "ok": false,
+    "request_url": "https://api.openf1.org/v1/starting_grid?session_key=11422",
+    "sha256": "79e458c7f1cd32213fb418a50acca1646db353c29a8775154e0fbf8bc6ebd79d",
+    "status_code": 404
+  },
+  "json_path": "latest/session_data_processor/2026_1301_qatar_lusail_lusail/practice_2_11422/raw/openf1_starting_grid.json",
+  "json_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "max_lap_number": null,
+  "missing_required_columns": [
+    "session_key",
+    "meeting_key"
+  ],
+  "observed_at_utc": "2026-11-27T22:57:52.235880Z",
+  "original_response_bytes_retained": true,
+  "rows": 0,
+  "status": "needs_manual_review",
+  "timestamp_rows": 0
+}

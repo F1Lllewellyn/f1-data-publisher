@@ -1,12 +1,12 @@
 # Race Predictions Latest Session Brief
 
-Generated UTC: 2026-11-27T21:42:33Z
-Event: United States - Las Vegas - Las Vegas
-Session: Race
-Source status: needs_manual_review
-Dashboard readiness: CONTEXT HOLD
+Generated UTC: 2026-11-27T22:57:52Z
+Event: Qatar - Lusail - Lusail
+Session: Practice 2
+Source status: clean
+Dashboard readiness: CONTEXT READY
 Prediction status: HOLD_STABLE_ENGINE_NOT_EXECUTED
-Readiness reasons: ['required_source_status_needs_manual_review', 'readiness_blocking_issues', 'readiness_requires_manual_review', 'required_source_evidence_unverified', 'source_bytes_unverified:openf1_starting_grid:row_identity']
+Readiness reasons: ['verified_current_session_evidence']
 Diagnostic publishing allowed: true
 
 ## Governance

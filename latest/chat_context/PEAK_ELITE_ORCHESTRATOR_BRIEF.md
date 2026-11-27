@@ -1,14 +1,14 @@
 # F1 Peak-Elite Orchestrator Report
 
-Created UTC: `2026-11-22T14:55:26.622354Z`
+Created UTC: `2026-11-27T22:58:02.916493Z`
 Operation: `full_run_chain`
-Status: **hold_downstream_not_verified**
+Status: **pass**
 
 ## Latest source state
-- Race/event: `United States - Las Vegas - Las Vegas`
-- Session: `Race`
-- Source status: `needs_manual_review`
-- Workbook source status: `needs_manual_review`
+- Race/event: `Qatar - Lusail - Lusail`
+- Session: `Practice 2`
+- Source status: `clean`
+- Workbook source status: `clean`
 - Workbook commit allowed: `True`
 
 ## Steps
@@ -30,4 +30,4 @@ Status: **hold_downstream_not_verified**
 - 2026 no-DRS rule: active by project governance; this layer does not create DRS assumptions
 
 ## Interpretation
-The capture-to-dashboard chain did not complete and verify the current source session. Do not treat earlier green readiness as current.
+Workflow health, source readiness, and workbook/KPI handoff are aligned. Stable engine remains protected.

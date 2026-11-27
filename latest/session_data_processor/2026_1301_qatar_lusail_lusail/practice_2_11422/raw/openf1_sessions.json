@@ -1,0 +1,19 @@
+[
+  {
+    "circuit_key": 150,
+    "circuit_short_name": "Lusail",
+    "country_code": "QAT",
+    "country_key": 149,
+    "country_name": "Qatar",
+    "date_end": "2026-11-27T18:00:00+00:00",
+    "date_start": "2026-11-27T17:00:00+00:00",
+    "gmt_offset": "03:00:00",
+    "is_cancelled": false,
+    "location": "Lusail",
+    "meeting_key": 1301,
+    "session_key": 11422,
+    "session_name": "Practice 2",
+    "session_type": "Practice",
+    "year": 2026
+  }
+]

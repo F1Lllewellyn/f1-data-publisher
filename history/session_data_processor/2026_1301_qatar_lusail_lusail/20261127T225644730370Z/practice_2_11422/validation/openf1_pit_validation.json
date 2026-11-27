@@ -1,0 +1,41 @@
+{
+  "anomalies": [],
+  "columns": [
+    "date",
+    "driver_number",
+    "lane_duration",
+    "lap_number",
+    "meeting_key",
+    "pit_duration",
+    "session_key",
+    "stop_duration"
+  ],
+  "csv_path": "latest/session_data_processor/2026_1301_qatar_lusail_lusail/practice_2_11422/raw/openf1_pit.csv",
+  "driver_count": 22,
+  "driver_custody": {
+    "issues": [],
+    "official_entry_list_verified": false,
+    "roster_json_sha256": "bf7f6932eba649808bdd5abf4378ca80313710582111377d604416b4bcd01ea2",
+    "roster_source": "openf1_drivers",
+    "supplied_roster_verified": true
+  },
+  "duplicate_rows": 0,
+  "endpoint": "pit",
+  "fetch": {
+    "bytes": 21726,
+    "observed_at_utc": "2026-11-27T22:57:49.807586Z",
+    "ok": true,
+    "request_url": "https://api.openf1.org/v1/pit?session_key=11422",
+    "sha256": "69ddbfd6b0b5cd517d26d53a4fa4cfb7a65e49c08d74b74213a34f00f4a1beaf",
+    "status_code": 200
+  },
+  "json_path": "latest/session_data_processor/2026_1301_qatar_lusail_lusail/practice_2_11422/raw/openf1_pit.json",
+  "json_sha256": "69ddbfd6b0b5cd517d26d53a4fa4cfb7a65e49c08d74b74213a34f00f4a1beaf",
+  "max_lap_number": 31.0,
+  "missing_required_columns": [],
+  "observed_at_utc": "2026-11-27T22:57:49.807586Z",
+  "original_response_bytes_retained": true,
+  "rows": 120,
+  "status": "clean",
+  "timestamp_rows": 120
+}
