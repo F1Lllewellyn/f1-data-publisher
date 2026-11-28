@@ -1,6 +1,6 @@
 # Fantasy Predictions Latest Session Brief
 
-Generated UTC: 2026-11-27T22:57:52Z
+Generated UTC: 2026-11-28T03:35:40Z
 Event: Qatar - Lusail - Lusail
 Session: Practice 2
 Source status: clean
