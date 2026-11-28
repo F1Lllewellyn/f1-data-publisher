@@ -1,5 +1,5 @@
 {
-  "github_run_id": "46124827137",
+  "github_run_id": "46167674024",
   "github_run_attempt": "1",
   "verdict": "Pass with warnings",
   "reason": "no_active_capture_window",
@@ -7,8 +7,8 @@
   "raw_size_bytes": 0,
   "line_count": 0,
   "manual_validation_mode": "infrastructure_only",
-  "generated_utc": "2026-11-28T08:15:17.201293Z",
-  "history_output_dir": "history/live_source_feed_capture/20261128_081517_no_capture_run46124827137_attempt1",
+  "generated_utc": "2026-11-28T16:56:16.641960Z",
+  "history_output_dir": "history/live_source_feed_capture/20261128_165616_no_capture_run46167674024_attempt1",
   "latest_evidence_dir": "latest/live_source_feed_capture",
   "latest_evidence_preserved": true,
   "latest_update_skipped_reason": "non_evidence_bearing_validation_run"
